@@ -1,7 +1,5 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.initializers.base.Tiles.WATER;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,29 +11,22 @@ import heroes.journey.GameCamera;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.BaseActions;
-import heroes.journey.tilemap.tiles.ActionTile;
-import heroes.journey.tilemap.tiles.Tile;
-import heroes.journey.utils.worldgen.CellularAutomata;
+import heroes.journey.tilemap.wavefunction.ActionTerrain;
+import heroes.journey.tilemap.wavefunction.Terrain;
+import heroes.journey.tilemap.wavefunction.Tile;
 
 public class TileMap {
 
     private int width, height;
     private Tile[][] tileMap;
-    private ActionTile[][] environment;
-    private Tile[][] facing;
-    private int[][] variance;
+    private Tile[][] environment;
     private float elapsed = 0;
 
     public TileMap(int mapSize) {
         width = mapSize;
         height = mapSize;
         tileMap = new Tile[width][height];
-        for (Tile[] row : tileMap) {
-            Arrays.fill(row, WATER);
-        }
-        environment = new ActionTile[width][height];
-        facing = new Tile[width][height];
-        variance = new int[width][height];
+        environment = new Tile[width][height];
         GameCamera.get().setZoom();
     }
 
@@ -52,18 +43,20 @@ public class TileMap {
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {
-                tileMap[x][y].render(batch, this, elapsed, x, y, variance[x][y], facing[x][y]);
+                if (tileMap[x][y] != null)
+                    tileMap[x][y].render(batch, elapsed, x, y);
                 if (environment[x][y] != null)
-                    environment[x][y].render(batch, this, elapsed, x, y, variance[x][y], facing[x][y]);
+                    environment[x][y].render(batch, elapsed, x, y);
             }
         }
     }
 
-    public Tile get(int x, int y) {
+    public Terrain get(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) {
-            return tileMap[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
+            return tileMap[Math.max(0, Math.min(width - 1, x))][Math.max(0,
+                Math.min(height - 1, y))].getTerrain();
         } else {
-            return tileMap[x][y];
+            return tileMap[x][y].getTerrain();
         }
     }
 
@@ -75,15 +68,16 @@ public class TileMap {
         return height;
     }
 
-    public void setEnvironment(int x, int y, ActionTile tile) {
+    public void setEnvironment(int x, int y, Tile tile) {
         environment[x][y] = tile;
     }
 
-    public ActionTile getEnvironment(int x, int y) {
+    public ActionTerrain getEnvironment(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) {
-            return environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
+            Tile env = environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
+            return env == null ? null : (ActionTerrain)env.getTerrain();
         } else {
-            return environment[x][y];
+            return environment[x][y] == null ? null : (ActionTerrain)environment[x][y].getTerrain();
         }
     }
 
@@ -91,37 +85,23 @@ public class TileMap {
         tileMap[x][y] = tile;
     }
 
-    public Tile getTerrain(int x, int y) {
-        return tileMap[x][y];
-    }
-
-    public void genFacingAndVariance() {
-        facing = CellularAutomata.getFacingMap(tileMap);
-
-        variance = CellularAutomata.getVarianceMap(tileMap);
-    }
-
     public List<Action> getTileActions(int x, int y) {
-        ActionTile tile = environment[x][y];
+        Tile tile = environment[x][y];
         if (tile == null) {
             ArrayList<Action> options = new ArrayList<Action>(1);
             options.add(BaseActions.wait);
             return options;
         }
-        return tile.getActions();
+        return ((ActionTerrain)tile.getTerrain()).getActions();
     }
 
     public TileMap clone(EntityManager entityManager) {
         TileMap map = new TileMap(width);
         map.tileMap = Arrays.copyOf(tileMap, tileMap.length);
         map.environment = Arrays.copyOf(environment, environment.length);
-        map.variance = Arrays.copyOf(variance, variance.length);
-        map.facing = Arrays.copyOf(facing, facing.length);
         for (int x = 0; x < width; x++) {
             map.tileMap[x] = Arrays.copyOf(tileMap[x], tileMap[x].length);
             map.environment[x] = Arrays.copyOf(environment[x], environment[x].length);
-            map.variance[x] = Arrays.copyOf(variance[x], variance[x].length);
-            map.facing[x] = Arrays.copyOf(facing[x], facing[x].length);
         }
         return map;
     }
@@ -134,7 +114,7 @@ public class TileMap {
         this.tileMap = tileMap;
     }
 
-    public void setEnvironment(ActionTile[][] environment) {
+    public void setEnvironment(Tile[][] environment) {
         this.environment = environment;
     }
 
@@ -142,7 +122,7 @@ public class TileMap {
         return tileMap;
     }
 
-    public ActionTile[][] getEnvironment() {
+    public Tile[][] getEnvironment() {
         return environment;
     }
 }

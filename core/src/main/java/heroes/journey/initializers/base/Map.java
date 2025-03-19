@@ -1,7 +1,5 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Tiles.CAVE;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
@@ -24,15 +22,12 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.ai.MonsterFactionAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.systems.GameEngine;
-import heroes.journey.tilemap.tiles.ActionTile;
-import heroes.journey.tilemap.tiles.Tile;
-import heroes.journey.utils.ai.pathfinding.AStar;
-import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-import heroes.journey.utils.worldgen.CellularAutomata;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationPhase;
+import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
 public class Map implements InitializerInterface {
 
@@ -41,27 +36,32 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 int width = gameState.getWidth();
-                Tile[][] tileMap = CellularAutomata.generateMap(width);
+
+                WaveFunctionCollapse wfc = new WaveFunctionCollapse(width);
+
+                for (int i = 0; i < width; i++) {
+                    /*wfc.collapseTo(0, i, Tiles.WATER);
+                    wfc.collapseTo(i, 0, Tiles.WATER);
+                    wfc.collapseTo(width - 1, i, Tiles.WATER);
+                    wfc.collapseTo(i, width - 1, Tiles.WATER);
+                    wfc.collapseTo(1, i, Tiles.WATER);
+                    wfc.collapseTo(i, 1, Tiles.WATER);
+                    wfc.collapseTo(width - 2, i, Tiles.WATER);
+                    wfc.collapseTo(i, width - 2, Tiles.WATER);*/
+                }/*
+                int center = width / 2;
+                int radius = 10;
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < width; y++) {
+                        if (Math.abs(center - x) < radius && Math.abs(center - y) < radius) {
+                            wfc.collapseTo(x, y, Tiles.HILLS);
+                        }
+                    }
+                }*/
+
+                Tile[][] tileMap = wfc.applyWaveFunctionCollapse();
                 gameState.getMap().setTileMap(tileMap);
-                gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
-            }
-        };
-        new MapGenerationEffect(MapGenerationPhase.SECOND, 1000) {
-            @Override
-            public void applyEffect(GameState gameState) {
-                genHouses(gameState.getMap().getTileMap(), gameState.getMap().getEnvironment());
-            }
-        };
-        new MapGenerationEffect(MapGenerationPhase.SECOND) {
-            @Override
-            public void applyEffect(GameState gameState) {
-                gameState.getMap().getEnvironment()[16][10] = CAVE;
-            }
-        };
-        new MapGenerationEffect(MapGenerationPhase.FINAL) {
-            @Override
-            public void applyEffect(GameState gameState) {
-                gameState.getMap().genFacingAndVariance();
+                //gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
             }
         };
         new MapGenerationEffect(MapGenerationPhase.FINAL) {
@@ -75,7 +75,8 @@ public class Map implements InitializerInterface {
 
                 Entity player = new Entity();
                 player.add(new PlayerComponent(ActionQueue.get().getID()))
-                    .add(new PositionComponent(16, 16))
+                    .add(new PositionComponent(GameState.global().getWidth() / 2,
+                        GameState.global().getHeight() / 2))
                     .add(new GameStateComponent())
                     .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
                     .add(new ActorComponent())
@@ -95,7 +96,7 @@ public class Map implements InitializerInterface {
     private static int houseStart = 0;
     private static int houseEnd = 1;
 
-    public static void genHouses(Tile[][] tileMap, ActionTile[][] environment) {
+    /*public static void genHouses(Tile[][] tileMap, ActionTile[][] environment) {
         houseStart = 0;
         houseEnd = 1;
         for (int i = 0; i < numHouses; i++) {
@@ -129,7 +130,7 @@ public class Map implements InitializerInterface {
             houseEnd = 0;
             houseStart++;
         }
-    }
+    }*/
 
 }
 

@@ -1,15 +1,14 @@
 package heroes.journey.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.BaseActions;
-import heroes.journey.tilemap.tiles.ActionTile;
-import heroes.journey.tilemap.tiles.Tile;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class EntityClass {
 
@@ -43,10 +42,6 @@ public class EntityClass {
 
     public ArrayList<Action> getActions() {
         return actions;
-    }
-
-    public int getTerrainCost(Tile tile, ActionTile actionTile) {
-        return tile.getTerrainCost() + (actionTile == null ? 0 : actionTile.getTerrainCost());
     }
 
     public String getDescription() {

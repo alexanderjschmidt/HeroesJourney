@@ -10,9 +10,9 @@ public class Classes implements InitializerInterface {
     public static final String HERO = "Hero";
     public static EntityClass hero, goblin;
 
-	static {
+    static {
         hero = new EntityClass(HERO, "You", ResourceManager.get(TextureMaps.Sprites)[1][1]);
-        goblin = new EntityClass("Goblin", "Goblin", ResourceManager.get(TextureMaps.Sprites)[8][2]);
-	}
+        goblin = new EntityClass("Goblin", "Goblin", ResourceManager.get(TextureMaps.Sprites)[2][8]);
+    }
 
 }

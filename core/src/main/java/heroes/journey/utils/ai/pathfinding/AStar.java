@@ -5,7 +5,6 @@ import java.util.PriorityQueue;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.entities.EntityManager;
-import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.utils.RangeManager;
 
@@ -106,10 +105,8 @@ public class AStar {
     }
 
     private static int getPathCost(TileMap map, int i, int j) {
-        return map.get(i, j) == Tiles.PATH ?
-            1 :
-            ((map.getTerrain(i, j).getTerrainCost() +
-                (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5);
+        return (map.get(i, j).getTerrainCost() +
+            (map.getEnvironment(i, j) != null ? map.getEnvironment(i, j).getTerrainCost() : 0)) * 5;
     }
 
     public static Cell aStarEntity(

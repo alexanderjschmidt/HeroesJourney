@@ -45,7 +45,7 @@ public class MonsterFactionAI implements AI {
         Entity goblin = new Entity();
         goblin.add(new PositionComponent(position.getX(), position.getY()))
             .add(new GameStateComponent())
-            .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[8][2]))
+            .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[2][8]))
             .add(new ActorComponent())
             .add(new MovementComponent())
             .add(new ActionComponent())
