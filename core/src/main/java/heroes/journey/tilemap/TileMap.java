@@ -56,7 +56,7 @@ public class TileMap {
             return tileMap[Math.max(0, Math.min(width - 1, x))][Math.max(0,
                 Math.min(height - 1, y))].getTerrain();
         } else {
-            return tileMap[x][y].getTerrain();
+            return tileMap[x][y] == null ? null : tileMap[x][y].getTerrain();
         }
     }
 

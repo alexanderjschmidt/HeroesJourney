@@ -13,36 +13,46 @@ public class WaveFunctionCollapse {
 
     private final Tile[][] map;
     private final Tile[][] lockedIn;
-    private final Tile[][] preference;
-    private final int preferenceWeight = 500;
     private final WeightedRandomPicker<Tile>[][] possibleTilesMap;
 
     public WaveFunctionCollapse(int size) {
         map = new Tile[size][size];
         lockedIn = new Tile[size][size];
-        preference = new Tile[size][size];
-        RandomWorldGenerator noiseGen = new RandomWorldGenerator(40, 6, .8f, true);
+        possibleTilesMap = new WeightedRandomPicker[size][size];
+        RandomWorldGenerator noiseGen = new RandomWorldGenerator(40, 6, 1f, true);
         int[][] noiseMap = noiseGen.generateMap(size);
         int max = 0;
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map.length; y++) {
-                preference[x][y] = getTile(noiseMap[x][y]);
+                map[x][y] = getTile(noiseMap[x][y]);
+                possibleTilesMap[x][y] = new WeightedRandomPicker<>();
+                possibleTilesMap[x][y].addItem(map[x][y], 100);
                 if (noiseMap[x][y] > max) {
                     max = noiseMap[x][y];
                 }
             }
         }
         System.out.println(max);
-        printMap(preference);
 
-        possibleTilesMap = new WeightedRandomPicker[size][size];
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map.length; y++) {
-                possibleTilesMap[x][y] = new WeightedRandomPicker<>(possibleTiles);
-                possibleTilesMap[x][y].addItem(preference[x][y], preferenceWeight);
+                if ((isSame(x + 1, y, map[x][y]) + isSame(x - 1, y, map[x][y]) + isSame(x, y + 1, map[x][y]) +
+                    isSame(x, y - 1, map[x][y])) == 4) {
+                    continue;
+                }
+                clearHole(x, y, 0);
             }
         }
         //possibleTiles.testDistribution();
+    }
+
+    private int isSame(int x, int y, Tile tile) {
+        if (x >= 0 && x < map.length && y >= 0 && y < map.length) {
+            if (map[x][y] == null)
+                return 1;
+            return map[x][y] == tile ? 1 : 0;
+        }
+        return 1;
     }
 
     private static Tile getTile(int nextInt) {
@@ -65,7 +75,7 @@ public class WaveFunctionCollapse {
             for (int x = 0; x < map.length; x++) {
                 for (int y = 0; y < map.length; y++) {
                     if (map[x][y] == null && possibleTilesMap[x][y].isEmpty()) {
-                        clearHole(x, y);
+                        clearHole(x, y, 1);
                         continue outer;
                     }
                     if (map[x][y] == null && possibleTilesMap[x][y].size() < minEntropy) {
@@ -89,29 +99,25 @@ public class WaveFunctionCollapse {
         return map;
     }
 
-    private void clearHole(int minEntropyX, int minEntropyY) {
-        int radius = 2;
+    private void clearHole(int x, int y, int radius) {
         //System.out.println("Clear Hole: " + minEntropyX + " " + minEntropyY);
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
-                if (minEntropyX + dx >= 0 && minEntropyX + dx < map.length && minEntropyY + dy >= 0 &&
-                    minEntropyY + dy < map.length && lockedIn[minEntropyX + dx][minEntropyY + dy] == null)
-                    map[minEntropyX + dx][minEntropyY + dy] = null;
+                if (x + dx >= 0 && x + dx < map.length && y + dy >= 0 && y + dy < map.length &&
+                    lockedIn[x + dx][y + dy] == null)
+                    map[x + dx][y + dy] = null;
             }
         }
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
-                if (minEntropyX + dx >= 0 && minEntropyX + dx < map.length && minEntropyY + dy >= 0 &&
-                    minEntropyY + dy < map.length)
-                    possibleTilesMap[minEntropyX + dx][minEntropyY + dy] = getPossibleTiles(minEntropyX + dx,
-                        minEntropyY + dy);
+                if (x + dx >= 0 && x + dx < map.length && y + dy >= 0 && y + dy < map.length)
+                    possibleTilesMap[x + dx][y + dy] = getPossibleTiles(x + dx, y + dy);
             }
         }
     }
 
     private WeightedRandomPicker<Tile> getPossibleTiles(int x, int y) {
         WeightedRandomPicker<Tile> tiles = new WeightedRandomPicker<>(possibleTiles);
-        tiles.addItem(preference[x][y], preferenceWeight);
 
         checkNeighborFresh(tiles, x, y + 1, Direction.NORTH);
         checkNeighborFresh(tiles, x + 1, y, Direction.EAST);
@@ -145,8 +151,8 @@ public class WaveFunctionCollapse {
             // Check neighbors and remove tiles that don’t match edges
             checkNeighbor(x, y + 1, heroes.journey.utils.Direction.NORTH, collapsedTile, propagationQueue);
             checkNeighbor(x + 1, y, heroes.journey.utils.Direction.EAST, collapsedTile, propagationQueue);
-            checkNeighbor(x, y - 1, Direction.SOUTH, collapsedTile, propagationQueue);
-            checkNeighbor(x - 1, y, Direction.WEST, collapsedTile, propagationQueue);
+            checkNeighbor(x, y - 1, heroes.journey.utils.Direction.SOUTH, collapsedTile, propagationQueue);
+            checkNeighbor(x - 1, y, heroes.journey.utils.Direction.WEST, collapsedTile, propagationQueue);
         }
     }
 
