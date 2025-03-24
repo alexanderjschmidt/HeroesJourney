@@ -25,8 +25,8 @@ import heroes.journey.utils.worldgen.NewMapManager;
 
 public class InputManager {
 
-    private Cursor cursor;
-    private GameState gameState;
+    private final Cursor cursor;
+    private final GameState gameState;
 
     private float holdElapsedX, holdElapsedY;
 

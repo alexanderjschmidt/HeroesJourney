@@ -1,10 +1,14 @@
 package heroes.journey.initializers.base;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
+import heroes.journey.tilemap.helpers.WangEdge;
+import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.AnimatedTile;
 import heroes.journey.tilemap.wavefunction.BaseTile;
 import heroes.journey.tilemap.wavefunction.Terrain;
@@ -16,7 +20,10 @@ import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
 public class Tiles implements InitializerInterface {
 
-    public static Tile WATER, SAND, PLAINS, HILLS, CLIFF;
+    public static Tile WATER, SAND, PLAINS, HILLS;
+    public static List<Tile> pathTiles;
+    public static Tile HOUSE;
+    public static ActionTerrain house;
 
     static {
         TextureRegion[][] tiles = ResourceManager.get(TextureMaps.OverworldTileset);
@@ -25,6 +32,10 @@ public class Tiles implements InitializerInterface {
         Terrain plains = new Terrain("Plains", 2);
         Terrain hills = new Terrain("Hills", 2);
         Terrain sand = new Terrain("Sand", 3);
+        Terrain path = new Terrain("Path", 1);
+
+        house = new ActionTerrain("House", 0);
+        HOUSE = new BaseTile(house, 0, tiles[7][12]);
 
         Terrain plainsToHill = new Terrain("Cliff", 10);
         Terrain sandToHill = new Terrain("Cliff", 10);
@@ -55,6 +66,8 @@ public class Tiles implements InitializerInterface {
         WangCornerAnimated.create(sandToWater, sand, water, tiles, 500, 20, 16);
         WangCornerAnimated.cliffTransition(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
         WangCornerAnimated.cliffTransition(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
+
+        pathTiles = WangEdge.create(path, plains, tiles, 1, 12, 0);
     }
 
     public static void baseTile(Tile tile, Terrain terrain) {

@@ -46,6 +46,15 @@ public class Map implements InitializerInterface {
                 //gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
             }
         };
+        new MapGenerationEffect(MapGenerationPhase.SECOND, 1000) {
+            @Override
+            public void applyEffect(GameState gameState) {
+                int width = gameState.getWidth();
+
+                genHouses(gameState.getMap().getTileMap(), gameState.getMap().getEnvironment());
+                //gameState.getMap().setEnvironment(CellularAutomata.generateTrees(tileMap, width));
+            }
+        };
         new MapGenerationEffect(MapGenerationPhase.FINAL) {
             @Override
             public void applyEffect(GameState gameState) {
@@ -78,7 +87,7 @@ public class Map implements InitializerInterface {
     private static int houseStart = 0;
     private static int houseEnd = 1;
 
-    /*public static void genHouses(Tile[][] tileMap, ActionTile[][] environment) {
+    public static void genHouses(Tile[][] tileMap, Tile[][] environment) {
         houseStart = 0;
         houseEnd = 1;
         for (int i = 0; i < numHouses; i++) {
@@ -91,12 +100,13 @@ public class Map implements InitializerInterface {
                     break;
                 }
             }
-        }
+        }/*
         while (houseStart < numHouses) {
             genNextPath();
-        }
+        }*/
     }
 
+    /*
     private static void genNextPath() {
         Cell path = AStar.aStar((int)housePos[houseStart].x, (int)housePos[houseStart].y,
             (int)housePos[houseEnd].x, (int)housePos[houseEnd].y, GameState.global().getMap());

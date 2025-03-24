@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import heroes.journey.GameState;
+import heroes.journey.systems.GameEngine;
+import heroes.journey.tilemap.wavefunction.Tile;
 
 public class NewMapManager {
 
@@ -31,6 +33,8 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState) {
+        GameEngine.get().removeAllEntities();
+        gameState.getMap().setEnvironment(new Tile[gameState.getWidth()][gameState.getHeight()]);
         for (MapGenerationPhase phase : MapGenerationPhase.values()) {
             for (MapGenerationEffect mapGenerationEffect : mapGenerationEffects.get(phase)) {
                 mapGenerationEffect.apply(gameState);

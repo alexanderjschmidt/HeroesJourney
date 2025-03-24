@@ -2,7 +2,8 @@ package heroes.journey.utils.art;
 
 public enum TextureMaps {
 
-    UI("Textures/UI/cursor.png", 32, 32), Sprites("Textures/sprites.png", 16, 16), OverworldTileset("Textures/Overworld_Tileset2.png", 16, 16);
+    UI("Textures/UI/cursor.png", 32, 32), Sprites("Textures/sprites.png", 16, 16), OverworldTileset(
+        "Textures/Overworld_Tileset.png", 16, 16);
 
     private String location;
     private int width, height;

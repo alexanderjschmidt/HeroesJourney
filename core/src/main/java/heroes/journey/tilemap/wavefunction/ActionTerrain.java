@@ -5,7 +5,7 @@ import java.util.List;
 
 import heroes.journey.entities.actions.Action;
 
-public abstract class ActionTerrain extends Terrain {
+public class ActionTerrain extends Terrain {
 
     private final List<Action> actions;
 
