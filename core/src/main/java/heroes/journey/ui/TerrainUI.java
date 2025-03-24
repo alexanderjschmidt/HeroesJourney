@@ -1,7 +1,6 @@
 package heroes.journey.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
@@ -24,7 +23,8 @@ public class TerrainUI extends UI {
 
     @Override
     public void drawUI(Batch batch, float parentAlpha) {
-        String name = tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment));
+        Cursor cursor = HUD.get().getCursor();
+        String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + (" (" + cursor.x + ", " + cursor.y + ")");
         drawText(batch, name, 0, 0);
     }
 

@@ -31,6 +31,8 @@ import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
 public class Map implements InitializerInterface {
 
+    public static int MAP_SIZE = 32;
+
     public void init() {
         new MapGenerationEffect(MapGenerationPhase.INIT) {
             @Override
@@ -38,26 +40,6 @@ public class Map implements InitializerInterface {
                 int width = gameState.getWidth();
 
                 WaveFunctionCollapse wfc = new WaveFunctionCollapse(width);
-
-                for (int i = 0; i < width; i++) {
-                    /*wfc.collapseTo(0, i, Tiles.WATER);
-                    wfc.collapseTo(i, 0, Tiles.WATER);
-                    wfc.collapseTo(width - 1, i, Tiles.WATER);
-                    wfc.collapseTo(i, width - 1, Tiles.WATER);
-                    wfc.collapseTo(1, i, Tiles.WATER);
-                    wfc.collapseTo(i, 1, Tiles.WATER);
-                    wfc.collapseTo(width - 2, i, Tiles.WATER);
-                    wfc.collapseTo(i, width - 2, Tiles.WATER);*/
-                }/*
-                int center = width / 2;
-                int radius = 10;
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < width; y++) {
-                        if (Math.abs(center - x) < radius && Math.abs(center - y) < radius) {
-                            wfc.collapseTo(x, y, Tiles.HILLS);
-                        }
-                    }
-                }*/
 
                 Tile[][] tileMap = wfc.applyWaveFunctionCollapse();
                 gameState.getMap().setTileMap(tileMap);

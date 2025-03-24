@@ -47,6 +47,8 @@ import heroes.journey.utils.art.ResourceManager;
  * Add time
  * Saving
  * Map Generation
+ *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
+ *  Add variation plain tiles
  * 	Generate Dungeons on world map
  * 	Improve road generation some towns roads loop too much
  * 	Improve map generation

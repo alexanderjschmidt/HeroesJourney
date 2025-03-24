@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class WeightedRandomPicker<T> extends ArrayList<T> {
-    private final List<Integer> cumulativeWeights; // Stores cumulative weights
+    public final List<Long> cumulativeWeights; // Stores cumulative weights
     private final Map<T,Integer> indexMap;       // Maps items to their index in `items`
-    private int totalWeight;                   // Sum of all weights
+    private long totalWeight;                   // Sum of all weights
 
     public WeightedRandomPicker() {
         this.cumulativeWeights = new ArrayList<>();
@@ -20,17 +20,38 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
 
     public WeightedRandomPicker(WeightedRandomPicker<T> possibleTiles) {
         this();
-        for (int i = 0; i < possibleTiles.size(); i++) {
-            addItem(possibleTiles.get(i), possibleTiles.cumulativeWeights.get(i));
+        if (possibleTiles.isEmpty()) {
+            return;
+        }
+        addItem(possibleTiles.getFirst(), possibleTiles.cumulativeWeights.getFirst());
+        for (int i = 1; i < possibleTiles.size(); i++) {
+            addItem(possibleTiles.get(i),
+                possibleTiles.cumulativeWeights.get(i) - possibleTiles.cumulativeWeights.get(i - 1));
+        }
+    }
+
+    public WeightedRandomPicker(WeightedRandomPicker<T> possibleTiles, boolean equalWeights) {
+        this();
+        if (possibleTiles.isEmpty()) {
+            return;
+        }
+        addItem(possibleTiles.getFirst(), equalWeights ? 10 : possibleTiles.cumulativeWeights.getFirst());
+        for (int i = 1; i < possibleTiles.size(); i++) {
+            addItem(possibleTiles.get(i), equalWeights ?
+                10 :
+                (possibleTiles.cumulativeWeights.get(i) - possibleTiles.cumulativeWeights.get(i - 1)));
         }
     }
 
     /**
      * Adds an item with a specific weight
      */
-    public void addItem(T item, int weight) {
+    public void addItem(T item, long weight) {
+        if (indexMap.containsKey(item)) {
+            remove(item);
+        }
         if (weight <= 0)
-            throw new IllegalArgumentException("Weight must be positive");
+            throw new IllegalArgumentException("Weight must be positive " + weight);
 
         add(item);
         totalWeight += weight;
@@ -62,7 +83,7 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
         if (index == null)
             return false;
 
-        int weightToRemove =
+        long weightToRemove =
             cumulativeWeights.get(index) - (index > 0 ? cumulativeWeights.get(index - 1) : 0);
 
         // Adjust all following cumulative weights
@@ -92,7 +113,7 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
         if (isEmpty())
             throw new IllegalStateException("No items available");
 
-        int r = (int)(Math.random() * totalWeight);
+        long r = (long)(Math.random() * totalWeight);
         int index = Collections.binarySearch(cumulativeWeights, r);
         if (index < 0)
             index = -index - 1; // Convert negative insertion point
@@ -110,11 +131,24 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
             distribution.put(t.toString(), distribution.get(t.toString()) + 1);
         }
         System.out.println("Total: " + this.totalWeight);
-        int previousWeight = 0;
+        long previousWeight = 0;
         for (int i = 0; i < this.size(); i++) {
-            System.out.println(get(i).toString() + ": " + (cumulativeWeights.get(i) - previousWeight) + ": " +
-                distribution.get(get(i).toString()));
+            System.out.println(
+                get(i).toString().charAt(0) + ": " + (cumulativeWeights.get(i) - previousWeight) + ": " +
+                    distribution.get(get(i).toString()));
             previousWeight = cumulativeWeights.get(i);
         }
+    }
+
+    public long getTotalWeight() {
+        return totalWeight;
+    }
+
+    @Override
+    public void clear() {
+        super.clear();
+        cumulativeWeights.clear();
+        indexMap.clear();
+        totalWeight = 0;
     }
 }

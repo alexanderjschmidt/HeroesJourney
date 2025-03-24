@@ -96,8 +96,8 @@ public class WangCornerAnimated {
             .add(Direction.EAST, adjacentTileOuter)
             .add(Direction.SOUTHEAST, adjacentTileOuter)
             .add(Direction.SOUTH, base)
-            .add(Direction.SOUTHWEST, base)
-            .add(Direction.WEST, adjacentTileInner);
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, base);
         southWest.add(Direction.NORTHWEST, adjacentTileOuter)
             .add(Direction.NORTH, base)
             .add(Direction.NORTHEAST, adjacentTileInner)
@@ -197,5 +197,101 @@ public class WangCornerAnimated {
             .add(Direction.SOUTH, base)
             .add(Direction.SOUTHWEST, adjacentTileOuter)
             .add(Direction.WEST, base);
+    }
+
+    public static void cliffTransition(
+        Terrain cliff1,
+        Terrain cliff2,
+        Terrain adjacentTileOuter1,
+        Terrain adjacentTileOuter2,
+        Terrain adjacentTileInner,
+        TextureRegion[][] tiles,
+        int transitionWeight,
+        int x,
+        int y) {
+        // Setup Tiles
+        // Sides
+        Tile sideNorthWest = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x, y, 4, 4), .2f);
+        Tile sideNorthEast = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 1, y, 4, 4),
+            .2f);
+        Tile sideSouthWest = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x, y + 1, 4, 4),
+            .2f);
+        Tile sideSouthEast = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 1, y + 1, 4, 4),
+            .2f);
+        // Top
+        Tile topNorthWest = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 2, y, 4, 4), .2f);
+        Tile topNorthEast = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 3, y, 4, 4), .2f);
+        Tile topSouthWest = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 2, y + 1, 4, 4),
+            .2f);
+        Tile topSouthEast = new AnimatedTile(cliff1, transitionWeight, getFrames(tiles, x + 3, y + 1, 4, 4),
+            .2f);
+
+        // Add Connections
+        // Side
+        sideNorthWest.add(Direction.NORTHWEST, adjacentTileInner)
+            .add(Direction.NORTH, adjacentTileInner)
+            .add(Direction.NORTHEAST, adjacentTileInner)
+            .add(Direction.EAST, cliff1)
+            .add(Direction.SOUTHEAST, adjacentTileOuter1)
+            .add(Direction.SOUTH, adjacentTileOuter1)
+            .add(Direction.SOUTHWEST, adjacentTileOuter2)
+            .add(Direction.WEST, cliff2);
+        sideNorthEast.add(Direction.NORTHWEST, adjacentTileInner)
+            .add(Direction.NORTH, adjacentTileInner)
+            .add(Direction.NORTHEAST, adjacentTileInner)
+            .add(Direction.EAST, cliff2)
+            .add(Direction.SOUTHEAST, adjacentTileOuter2)
+            .add(Direction.SOUTH, adjacentTileOuter1)
+            .add(Direction.SOUTHWEST, adjacentTileOuter1)
+            .add(Direction.WEST, cliff1);
+        sideSouthWest.add(Direction.NORTHWEST, adjacentTileOuter2)
+            .add(Direction.NORTH, adjacentTileOuter1)
+            .add(Direction.NORTHEAST, adjacentTileOuter1)
+            .add(Direction.EAST, cliff1)
+            .add(Direction.SOUTHEAST, adjacentTileInner)
+            .add(Direction.SOUTH, adjacentTileInner)
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, cliff2);
+        sideSouthEast.add(Direction.NORTHWEST, adjacentTileOuter1)
+            .add(Direction.NORTH, adjacentTileOuter1)
+            .add(Direction.NORTHEAST, adjacentTileOuter2)
+            .add(Direction.EAST, cliff2)
+            .add(Direction.SOUTHEAST, adjacentTileInner)
+            .add(Direction.SOUTH, adjacentTileInner)
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, cliff1);
+        // Top
+        topNorthWest.add(Direction.NORTHWEST, adjacentTileInner)
+            .add(Direction.NORTH, cliff2)
+            .add(Direction.NORTHEAST, adjacentTileOuter2)
+            .add(Direction.EAST, adjacentTileOuter1)
+            .add(Direction.SOUTHEAST, adjacentTileOuter1)
+            .add(Direction.SOUTH, cliff1)
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, adjacentTileInner);
+        topNorthEast.add(Direction.NORTHWEST, adjacentTileOuter2)
+            .add(Direction.NORTH, cliff2)
+            .add(Direction.NORTHEAST, adjacentTileInner)
+            .add(Direction.EAST, adjacentTileInner)
+            .add(Direction.SOUTHEAST, adjacentTileInner)
+            .add(Direction.SOUTH, cliff1)
+            .add(Direction.SOUTHWEST, adjacentTileOuter1)
+            .add(Direction.WEST, adjacentTileOuter1);
+        topSouthWest.add(Direction.NORTHWEST, adjacentTileInner)
+            .add(Direction.NORTH, cliff1)
+            .add(Direction.NORTHEAST, adjacentTileOuter1)
+            .add(Direction.EAST, adjacentTileOuter1)
+            .add(Direction.SOUTHEAST, adjacentTileOuter2)
+            .add(Direction.SOUTH, cliff2)
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, adjacentTileInner);
+        topSouthEast.add(Direction.NORTHWEST, adjacentTileOuter1)
+            .add(Direction.NORTH, cliff1)
+            .add(Direction.NORTHEAST, adjacentTileInner)
+            .add(Direction.EAST, adjacentTileInner)
+            .add(Direction.SOUTHEAST, adjacentTileInner)
+            .add(Direction.SOUTH, cliff2)
+            .add(Direction.SOUTHWEST, adjacentTileOuter2)
+            .add(Direction.WEST, adjacentTileOuter1);
     }
 }

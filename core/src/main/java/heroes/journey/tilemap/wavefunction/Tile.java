@@ -1,54 +1,69 @@
 package heroes.journey.tilemap.wavefunction;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Tile {
 
-    private final Map<Direction,Terrain> neighbors;
+    private final Map<Direction, Terrain> neighbors;
 
     private final Terrain terrain;
 
-    private final int weight;
+    private final int baseWeight;
+    private long weight;
 
-    public Tile(Terrain terrain, int weight) {
+    public Tile(Terrain terrain, int baseWeight) {
         this.terrain = terrain;
         neighbors = new HashMap<>();
-        this.weight = weight;
-    }
-
-    public Tile(Terrain terrain) {
-        this(terrain, 10);
+        this.baseWeight = baseWeight;
     }
 
     public Tile add(Direction direction, Terrain terrain) {
         neighbors.put(direction, terrain);
-        if (neighbors.size() == 8)
+        if (neighbors.size() == 8) {
+            weight = calculateWeight();
+            //System.out.println(weight);
             WaveFunctionCollapse.possibleTiles.addItem(this, weight);
+        }
         return this;
+    }
+
+    private long calculateWeight() {
+        return baseWeight == 0 ? 1 : baseWeight;
     }
 
     public boolean aligns(Direction direction, Tile tile) {
         switch (direction) {
+            case NORTHWEST -> {
+                return tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHWEST);
+            }
             case NORTH -> {
                 return tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHWEST) &&
                     tile.neighbors.get(Direction.SOUTH) == neighbors.get(Direction.NORTH) &&
                     tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHEAST);
+            }
+            case NORTHEAST -> {
+                return tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHEAST);
             }
             case EAST -> {
                 return tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.NORTHEAST) &&
                     tile.neighbors.get(Direction.WEST) == neighbors.get(Direction.EAST) &&
                     tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.SOUTHEAST);
             }
+            case SOUTHEAST -> {
+                return tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHEAST);
+            }
             case SOUTH -> {
                 return tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHWEST) &&
                     tile.neighbors.get(Direction.NORTH) == neighbors.get(Direction.SOUTH) &&
                     tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.SOUTHEAST);
+            }
+            case SOUTHWEST -> {
+                return tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.SOUTHWEST);
             }
             case WEST -> {
                 return tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.NORTHWEST) &&
@@ -65,11 +80,18 @@ public abstract class Tile {
         return terrain;
     }
 
-    public int getWeight() {
+    public long getWeight() {
         return weight;
     }
 
     public String toString() {
-        return terrain.toString();
+        return "" + neighbors.get(Direction.NORTHWEST).toString().charAt(0) +
+            neighbors.get(Direction.NORTH).toString().charAt(0) +
+            neighbors.get(Direction.NORTHEAST).toString().charAt(0) + '\n' +
+            neighbors.get(Direction.WEST).toString().charAt(0) + " " +
+            neighbors.get(Direction.EAST).toString().charAt(0) + '\n' +
+            neighbors.get(Direction.SOUTHWEST).toString().charAt(0) +
+            neighbors.get(Direction.SOUTH).toString().charAt(0) +
+            neighbors.get(Direction.SOUTHEAST).toString().charAt(0);
     }
 }
