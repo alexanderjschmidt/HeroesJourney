@@ -1,25 +1,8 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LoyaltyComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PlayerComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
@@ -31,20 +14,21 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationPhase;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
     public static int MAP_SIZE = 32;
 
-    private static final int numHouses = 15;
-    private static final Position[] housePos = new Position[numHouses];
-    private static int houseStart = 0;
-    private static int houseEnd = 1;
+    private static List<Position> housePos;
 
     public void init() {
         // Generate Smooth Noise
@@ -61,28 +45,34 @@ public class Map implements InitializerInterface {
                 gameState.getMap().setTileMap(tileMap);
             }
         };
-        // Add Houses And Paths
+        // Add Dungeons Houses And Paths
         new MapGenerationEffect(MapGenerationPhase.INIT, 500) {
             @Override
             public void applyEffect(GameState gameState) {
                 Tile[][] tileMap = gameState.getMap().getTileMap();
                 Tile[][] environment = gameState.getMap().getEnvironment();
-                houseStart = 0;
-                houseEnd = 1;
+                housePos = new ArrayList<>();
+
+                // Gen Houses
+                int numHouses = 10;
                 for (int i = 0; i < numHouses; i++) {
                     while (true) {
-                        int x = (int)(Math.random() * tileMap.length);
-                        int y = (int)(Math.random() * tileMap[0].length);
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
-                            housePos[i] = new Position(x, y);
+                            housePos.add(new Position(x, y));
                             environment[x][y] = Tiles.HOUSE;
                             break;
                         }
                     }
                 }
+
+                // Gen Paths between houses
+                int houseStart = 0;
+                int houseEnd = 1;
                 while (houseStart < numHouses) {
-                    Cell path = new RoadPathing().getPath(gameState.getMap(), housePos[houseStart].getX(),
-                        housePos[houseStart].getY(), housePos[houseEnd].getX(), housePos[houseEnd].getY());
+                    Cell path = new RoadPathing().getPath(gameState.getMap(), housePos.get(houseStart).getX(),
+                        housePos.get(houseStart).getY(), housePos.get(houseEnd).getX(), housePos.get(houseEnd).getY());
                     while (path != null) {
                         GameState.global().getMap().setTile(path.i, path.j, Tiles.pathTiles.getFirst());
                         path = path.parent;
@@ -94,6 +84,19 @@ public class Map implements InitializerInterface {
                     if (houseEnd >= numHouses) {
                         houseEnd = 0;
                         houseStart++;
+                    }
+                }
+
+                // Gen Dungeons
+                int numDungeons = 8;
+                for (int i = 0; i < numDungeons; i++) {
+                    while (true) {
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
+                        if (tileMap[x][y] == Tiles.PLAINS) {
+                            environment[x][y] = Tiles.DUNGEON;
+                            break;
+                        }
                     }
                 }
             }
@@ -199,7 +202,7 @@ public class Map implements InitializerInterface {
 
                 Entity player = new Entity();
                 player.add(new PlayerComponent(ActionQueue.get().getID()))
-                    .add(new PositionComponent(housePos[0].getX(), housePos[0].getY()))
+                    .add(new PositionComponent(housePos.getFirst().getX(), housePos.getFirst().getY()))
                     .add(new GameStateComponent())
                     .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
                     .add(new ActorComponent())

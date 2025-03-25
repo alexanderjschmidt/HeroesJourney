@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -50,7 +49,7 @@ import heroes.journey.utils.art.ResourceManager;
  * Map Generation
  *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  *  Add variation plain tiles
- * 	Generate Dungeons on world map
+ * 	Guarantee path to all dungeons
  * 	Improve road generation some towns roads loop too much
  * 	Improve map generation
  * 	Improve Wang tiles for transitions

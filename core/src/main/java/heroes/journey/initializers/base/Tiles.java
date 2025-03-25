@@ -1,22 +1,17 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.tilemap.wavefunction.AnimatedTile;
-import heroes.journey.tilemap.wavefunction.BaseTile;
-import heroes.journey.tilemap.wavefunction.Terrain;
-import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.tilemap.wavefunction.*;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+
+import java.util.List;
 
 public class Tiles implements InitializerInterface {
 
@@ -26,8 +21,8 @@ public class Tiles implements InitializerInterface {
     public static Terrain PATH;
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles, treeTiles;
-    public static Tile HOUSE;
-    public static ActionTerrain house, trees;
+    public static Tile HOUSE, DUNGEON;
+    public static ActionTerrain house, trees, dungeon;
 
     static {
         TextureRegion[][] tiles = ResourceManager.get(TextureMaps.OverworldTileset);
@@ -42,7 +37,10 @@ public class Tiles implements InitializerInterface {
         PATH = new Terrain("Path", 1);
 
         house = new ActionTerrain("House", 0);
-        HOUSE = new BaseTile(house, 0, tiles[7][12]);
+        HOUSE = new BaseTile(house, 0, false, tiles[7][12]);
+
+        dungeon = new ActionTerrain("Dungeon", 1);
+        DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
 
         trees = new ActionTerrain("Trees", 1);
 
