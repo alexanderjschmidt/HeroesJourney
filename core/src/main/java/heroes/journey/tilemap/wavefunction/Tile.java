@@ -1,39 +1,39 @@
 package heroes.journey.tilemap.wavefunction;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.utils.Direction;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import heroes.journey.utils.Direction;
+import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+
 public abstract class Tile {
 
-    private final Map<Direction, Terrain> neighbors;
+    private final Map<Direction,Terrain> neighbors;
+    private final boolean addToDefaultTiles;
 
     private final Terrain terrain;
 
-    private final int baseWeight;
-    private long weight;
+    private final long weight;
 
-    public Tile(Terrain terrain, int baseWeight) {
+    public Tile(Terrain terrain, int baseWeight, boolean addToDefaultTiles) {
         this.terrain = terrain;
         neighbors = new HashMap<>();
-        this.baseWeight = baseWeight;
+        this.weight = baseWeight == 0 ? 1 : baseWeight;
+        this.addToDefaultTiles = addToDefaultTiles;
+    }
+
+    public Tile(Terrain terrain, int baseWeight) {
+        this(terrain, baseWeight, true);
     }
 
     public Tile add(Direction direction, Terrain terrain) {
         neighbors.put(direction, terrain);
-        if (neighbors.size() == 8) {
-            weight = calculateWeight();
-            //System.out.println(weight);
+        if (neighbors.size() == 8 && addToDefaultTiles) {
             WaveFunctionCollapse.possibleTiles.addItem(this, weight);
         }
         return this;
-    }
-
-    private long calculateWeight() {
-        return baseWeight == 0 ? 1 : baseWeight;
     }
 
     public boolean aligns(Direction direction, Tile tile) {

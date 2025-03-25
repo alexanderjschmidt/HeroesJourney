@@ -58,15 +58,6 @@ public class AStar {
         return null;
     }
 
-    public static void printGrid(Cell[][] grid, TileMap tileMap) {
-        for (int j = 0; j < tileMap.getHeight(); j++) {
-            for (int i = 0; i < tileMap.getWidth(); i++) {
-                System.out.print(grid[i][j].h + " | ");
-            }
-            System.out.println();
-        }
-    }
-
     private static void checkAndUpdateCost(
         Cell current,
         Cell target,
@@ -374,5 +365,14 @@ public class AStar {
             path = path.parent;
         }
         System.out.println();
+    }
+
+    public static void printGrid(Cell[][] grid, TileMap tileMap) {
+        for (int j = 0; j < tileMap.getHeight(); j++) {
+            for (int i = 0; i < tileMap.getWidth(); i++) {
+                System.out.print(grid[i][j].h + " | ");
+            }
+            System.out.println();
+        }
     }
 }

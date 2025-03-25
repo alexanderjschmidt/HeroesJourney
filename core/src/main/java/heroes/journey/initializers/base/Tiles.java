@@ -67,7 +67,7 @@ public class Tiles implements InitializerInterface {
         WangCornerAnimated.cliffTransition(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
         WangCornerAnimated.cliffTransition(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
 
-        pathTiles = WangEdge.create(path, plains, tiles, 1, 12, 0);
+        pathTiles = WangEdge.create(path, plains, tiles, 10000, 12, 0);
     }
 
     public static void baseTile(Tile tile, Terrain terrain) {

@@ -9,8 +9,13 @@ public class BaseTile extends Tile {
 
     private final TextureRegion texture;
 
+    public BaseTile(Terrain terrain, int weight, boolean addToDefaultTiles, TextureRegion texture) {
+        super(terrain, weight, addToDefaultTiles);
+        this.texture = texture;
+    }
+
     public BaseTile(Terrain terrain, int weight, TextureRegion texture) {
-        super(terrain, weight);
+        super(terrain, weight, true);
         this.texture = texture;
     }
 

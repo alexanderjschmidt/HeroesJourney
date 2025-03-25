@@ -14,7 +14,6 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
- * Fix Terrain difficulty
  * pull actions from location (and factions?) maybe modify were the open action menu code is
  * comb through all HUD state sets to make sure the player cant input actions while action queue is in process
  * Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns

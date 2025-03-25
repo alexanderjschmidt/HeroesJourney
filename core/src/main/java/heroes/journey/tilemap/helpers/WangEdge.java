@@ -27,30 +27,34 @@ public class WangEdge {
         int x,
         int y) {
         List<Tile> edgeTiles = new ArrayList<>(16);
+
+        int midWeight = weight / 2;
+        int lowWeight = 1;
         // Setup Tiles
         // Corners
-        Tile northWest = new BaseTile(terrain, weight, tiles[x + 1][y]);
-        Tile northEast = new BaseTile(terrain, weight, tiles[x + 3][y]);
-        Tile southWest = new BaseTile(terrain, weight, tiles[x + 1][y + 2]);
-        Tile southEast = new BaseTile(terrain, weight, tiles[x + 3][y + 2]);
+        Tile northWest = new BaseTile(terrain, midWeight, false, tiles[x + 1][y]);
+        Tile northEast = new BaseTile(terrain, midWeight, false, tiles[x + 3][y]);
+        Tile southWest = new BaseTile(terrain, midWeight, false, tiles[x + 1][y + 2]);
+        Tile southEast = new BaseTile(terrain, midWeight, false, tiles[x + 3][y + 2]);
         // 3 Connections (Edges of Circle)
-        Tile north = new BaseTile(terrain, weight, tiles[x + 2][y]);
-        Tile east = new BaseTile(terrain, weight, tiles[x + 3][y + 1]);
-        Tile south = new BaseTile(terrain, weight, tiles[x + 2][y + 2]);
-        Tile west = new BaseTile(terrain, weight, tiles[x + 1][y + 1]);
+        Tile north = new BaseTile(terrain, midWeight, false, tiles[x + 2][y]);
+        Tile east = new BaseTile(terrain, midWeight, false, tiles[x + 3][y + 1]);
+        Tile south = new BaseTile(terrain, midWeight, false, tiles[x + 2][y + 2]);
+        Tile west = new BaseTile(terrain, midWeight, false, tiles[x + 1][y + 1]);
         // 1 Connection (End)
-        Tile northEnd = new BaseTile(terrain, weight, tiles[x][y]);
-        Tile eastEnd = new BaseTile(terrain, weight, tiles[x + 3][y + 3]);
-        Tile southEnd = new BaseTile(terrain, weight, tiles[x][y + 2]);
-        Tile westEnd = new BaseTile(terrain, weight, tiles[x + 1][y + 3]);
+        Tile northEnd = new BaseTile(terrain, lowWeight, false, tiles[x][y]);
+        Tile eastEnd = new BaseTile(terrain, lowWeight, false, tiles[x + 3][y + 3]);
+        Tile southEnd = new BaseTile(terrain, lowWeight, false, tiles[x][y + 2]);
+        Tile westEnd = new BaseTile(terrain, lowWeight, false, tiles[x + 1][y + 3]);
         // 2 Connections (Straights)
-        Tile northSouth = new BaseTile(terrain, weight, tiles[x][y + 1]);
-        Tile eastWest = new BaseTile(terrain, weight, tiles[x + 2][y + 3]);
+        Tile northSouth = new BaseTile(terrain, weight, false, tiles[x][y + 1]);
+        Tile eastWest = new BaseTile(terrain, weight, false, tiles[x + 2][y + 3]);
         // 4 Connections (Center of Circle)
-        Tile fourWay = new BaseTile(terrain, weight, tiles[x + 2][y + 1]);
+        Tile fourWay = new BaseTile(terrain, midWeight, false, tiles[x + 2][y + 1]);
         // 0 Connections (Dot)
-        Tile dot = new BaseTile(terrain, weight, tiles[x][y + 3]);
+        Tile dot = new BaseTile(terrain, lowWeight, false, tiles[x][y + 3]);
 
+        edgeTiles.add(dot);
         edgeTiles.add(northWest);
         edgeTiles.add(northEast);
         edgeTiles.add(southEast);
@@ -66,7 +70,6 @@ public class WangEdge {
         edgeTiles.add(northSouth);
         edgeTiles.add(eastWest);
         edgeTiles.add(fourWay);
-        edgeTiles.add(dot);
 
         // Add connections
         // Corners

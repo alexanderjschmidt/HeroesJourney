@@ -10,6 +10,7 @@ import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD.HUDState;
 import heroes.journey.utils.RangeManager.RangeColor;
@@ -48,7 +49,8 @@ public class Cursor {
         hover = GameState.global().getEntities().get(x, y);
         if (selected != null && GameState.global().getRangeManager().getRange()[x][y] == RangeColor.BLUE &&
             (path == null || (path.i != x || path.j != y))) {
-            int move = 5;
+            StatsComponent statsComponent = StatsComponent.get(hover);
+            int move = statsComponent.getMoveDistance();
             path = AStar.aStarEntity(move, GameState.global().getRangeManager().getRange(), sx, sy, x, y,
                 GameState.global().getMap(), selected);
         }
