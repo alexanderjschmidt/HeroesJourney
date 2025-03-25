@@ -14,7 +14,7 @@ public class Terrain {
     }
 
     public String toString() {
-        return name.substring(0, 1);
+        return name;
     }
 
     public int getTerrainCost() {

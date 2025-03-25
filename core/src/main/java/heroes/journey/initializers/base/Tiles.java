@@ -20,14 +20,20 @@ import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
 public class Tiles implements InitializerInterface {
 
+    public static final Terrain NULL_TERRAIN = new Terrain("NULL", 0);
+    public static final Tile NULL;
+
     public static Terrain PATH;
     public static Tile WATER, SAND, PLAINS, HILLS;
-    public static List<Tile> pathTiles;
+    public static List<Tile> pathTiles, treeTiles;
     public static Tile HOUSE;
-    public static ActionTerrain house;
+    public static ActionTerrain house, trees;
 
     static {
         TextureRegion[][] tiles = ResourceManager.get(TextureMaps.OverworldTileset);
+
+        NULL = new BaseTile(NULL_TERRAIN, 100, tiles[3][0]);
+        baseTile(NULL, NULL_TERRAIN);
 
         Terrain water = new Terrain("Water", 50);
         Terrain plains = new Terrain("Plains", 2);
@@ -37,6 +43,8 @@ public class Tiles implements InitializerInterface {
 
         house = new ActionTerrain("House", 0);
         HOUSE = new BaseTile(house, 0, tiles[7][12]);
+
+        trees = new ActionTerrain("Trees", 1);
 
         Terrain plainsToHill = new Terrain("Cliff", 10);
         Terrain sandToHill = new Terrain("Cliff", 10);
@@ -55,12 +63,12 @@ public class Tiles implements InitializerInterface {
         baseTile(HILLS, hills);
         baseTile(SAND, sand);
 
-        WangCorner.create(plainsToHill, plains, hills, tiles, 500, 0, 10);
-        WangCorner.cliffTransition(plainsToHill, plains, hills, tiles, 1, 5, 9);
-        WangCorner.create(sandToHill, sand, hills, tiles, 50, 0, 13);
-        WangCorner.cliffTransition(sandToHill, sand, hills, tiles, 1, 5, 13);
-        WangCorner.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 1, 5, 17);
-        WangCorner.create(plainsToSand, plains, sand, tiles, 500, 0, 16);
+        WangCorner.create(plainsToHill, plains, hills, tiles, 500, 0, 10, true);
+        WangCorner.cliffTransition(plainsToHill, plains, hills, tiles, 1, 5, 9, true);
+        WangCorner.create(sandToHill, sand, hills, tiles, 50, 0, 13, true);
+        WangCorner.cliffTransition(sandToHill, sand, hills, tiles, 1, 5, 13, true);
+        WangCorner.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 1, 5, 17, true);
+        WangCorner.create(plainsToSand, plains, sand, tiles, 500, 0, 16, true);
         WangCornerAnimated.create(plainsToWater, plains, water, tiles, 300, 20, 10);
         WangCornerAnimated.create(hillToWater, hills, water, tiles, 10, 20, 13);
         WangCornerAnimated.cliffTransition(plainsToWater, hillToWater, plains, hills, water, tiles, 1, 20, 4);
@@ -68,10 +76,12 @@ public class Tiles implements InitializerInterface {
         WangCornerAnimated.cliffTransition(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
         WangCornerAnimated.cliffTransition(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
 
+        treeTiles = WangCorner.create(trees, NULL_TERRAIN, trees, tiles, 500, 0, 7, false);
+
         pathTiles = WangEdge.create(PATH, plains, tiles, 10000, 12, 0);
     }
 
-    public static void baseTile(Tile tile, Terrain terrain) {
+    public static void baseTile(Tile tile, Terrain terrain, boolean addToBaseTiles) {
         tile.add(Direction.NORTHWEST, terrain)
             .add(Direction.NORTH, terrain)
             .add(Direction.NORTHEAST, terrain)
@@ -80,6 +90,11 @@ public class Tiles implements InitializerInterface {
             .add(Direction.SOUTH, terrain)
             .add(Direction.SOUTHWEST, terrain)
             .add(Direction.WEST, terrain);
-        WaveFunctionCollapse.baseTiles.add(tile);
+        if (addToBaseTiles)
+            WaveFunctionCollapse.baseTiles.add(tile);
+    }
+
+    public static void baseTile(Tile tile, Terrain terrain) {
+        baseTile(tile, terrain, true);
     }
 }

@@ -1,5 +1,8 @@
 package heroes.journey.tilemap.helpers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.tilemap.wavefunction.BaseTile;
@@ -16,15 +19,18 @@ public class WangCorner {
      * @param tiles             [y][x]
      * @param x                 top left corner
      * @param y                 top left corner
+     * @return
      */
-    public static void create(
+    public static List<Tile> create(
         Terrain base,
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
         int transitionWeight,
         int x,
-        int y) {
+        int y,
+        boolean addToDefault) {
+        List<Tile> tileSet = new ArrayList<>(14);
         // Center (Not included because it should be one of the adjacent tiles
         // tile.add(new BaseTileRender(tiles[y + 1][x + 1], 0), adjacentTileInner, adjacentTileInner,
         //     adjacentTileInner, adjacentTileInner);
@@ -34,25 +40,40 @@ public class WangCorner {
         int diagonalWeight = (int)(transitionWeight * (1 / 100d));
         // Setup Tiles
         // Corners
-        Tile northWest = new BaseTile(base, cornerWeight, tiles[x][y]);
-        Tile northEast = new BaseTile(base, cornerWeight, tiles[x + 2][y]);
-        Tile southWest = new BaseTile(base, cornerWeight, tiles[x][y + 2]);
-        Tile southEast = new BaseTile(base, cornerWeight, tiles[x + 2][y + 2]);
+        Tile northWest = new BaseTile(base, cornerWeight, addToDefault, tiles[x][y]);
+        Tile northEast = new BaseTile(base, cornerWeight, addToDefault, tiles[x + 2][y]);
+        Tile southWest = new BaseTile(base, cornerWeight, addToDefault, tiles[x][y + 2]);
+        Tile southEast = new BaseTile(base, cornerWeight, addToDefault, tiles[x + 2][y + 2]);
         // Edges
-        Tile north = new BaseTile(base, edgeWeight, tiles[x + 1][y]);
-        Tile east = new BaseTile(base, edgeWeight, tiles[x + 2][y + 1]);
-        Tile south = new BaseTile(base, edgeWeight, tiles[x + 1][y + 2]);
-        Tile west = new BaseTile(base, edgeWeight, tiles[x][y + 1]);
+        Tile north = new BaseTile(base, edgeWeight, addToDefault, tiles[x + 1][y]);
+        Tile east = new BaseTile(base, edgeWeight, addToDefault, tiles[x + 2][y + 1]);
+        Tile south = new BaseTile(base, edgeWeight, addToDefault, tiles[x + 1][y + 2]);
+        Tile west = new BaseTile(base, edgeWeight, addToDefault, tiles[x][y + 1]);
         // Inverse Corners
-        Tile northWestInverse = new BaseTile(base, inverseCornerWeight, tiles[x + 3][y]);
-        Tile northEastInverse = new BaseTile(base, inverseCornerWeight, tiles[x + 4][y]);
-        Tile southWestInverse = new BaseTile(base, inverseCornerWeight, tiles[x + 3][y + 1]);
-        Tile southEastInverse = new BaseTile(base, inverseCornerWeight, tiles[x + 4][y + 1]);
+        Tile northWestInverse = new BaseTile(base, inverseCornerWeight, addToDefault, tiles[x + 3][y]);
+        Tile northEastInverse = new BaseTile(base, inverseCornerWeight, addToDefault, tiles[x + 4][y]);
+        Tile southWestInverse = new BaseTile(base, inverseCornerWeight, addToDefault, tiles[x + 3][y + 1]);
+        Tile southEastInverse = new BaseTile(base, inverseCornerWeight, addToDefault, tiles[x + 4][y + 1]);
         // Diagonal Corners
         // Diagonal with the cliff on the bottom left and top right
-        Tile diagonalSouthWest = new BaseTile(base, diagonalWeight, tiles[x + 3][y + 2]);
+        Tile diagonalSouthWest = new BaseTile(base, diagonalWeight, addToDefault, tiles[x + 3][y + 2]);
         // Diagonal with the cliff on the top left and bottom right
-        Tile diagonalNorthWest = new BaseTile(base, diagonalWeight, tiles[x + 4][y + 2]);
+        Tile diagonalNorthWest = new BaseTile(base, diagonalWeight, addToDefault, tiles[x + 4][y + 2]);
+
+        tileSet.add(northWest);
+        tileSet.add(northEast);
+        tileSet.add(southWest);
+        tileSet.add(southEast);
+        tileSet.add(north);
+        tileSet.add(east);
+        tileSet.add(south);
+        tileSet.add(west);
+        tileSet.add(northWestInverse);
+        tileSet.add(northEastInverse);
+        tileSet.add(southWestInverse);
+        tileSet.add(southEastInverse);
+        tileSet.add(diagonalSouthWest);
+        tileSet.add(diagonalNorthWest);
 
         // Add connections
         // Corners
@@ -171,6 +192,7 @@ public class WangCorner {
             .add(Direction.SOUTH, base)
             .add(Direction.SOUTHWEST, adjacentTileOuter)
             .add(Direction.WEST, base);
+        return tileSet;
     }
 
     public static void cliffTransition(
@@ -180,18 +202,19 @@ public class WangCorner {
         TextureRegion[][] tiles,
         int transitionWeight,
         int x,
-        int y) {
+        int y,
+        boolean addToDefault) {
         // Setup Tiles
         // Sides
-        Tile sideNorthWest = new BaseTile(base, transitionWeight, tiles[x][y]);
-        Tile sideNorthEast = new BaseTile(base, transitionWeight, tiles[x + 1][y]);
-        Tile sideSouthWest = new BaseTile(base, transitionWeight, tiles[x][y + 1]);
-        Tile sideSouthEast = new BaseTile(base, transitionWeight, tiles[x + 1][y + 1]);
+        Tile sideNorthWest = new BaseTile(base, transitionWeight, addToDefault, tiles[x][y]);
+        Tile sideNorthEast = new BaseTile(base, transitionWeight, addToDefault, tiles[x + 1][y]);
+        Tile sideSouthWest = new BaseTile(base, transitionWeight, addToDefault, tiles[x][y + 1]);
+        Tile sideSouthEast = new BaseTile(base, transitionWeight, addToDefault, tiles[x + 1][y + 1]);
         // Top
-        Tile topNorthWest = new BaseTile(base, transitionWeight, tiles[x][y + 2]);
-        Tile topNorthEast = new BaseTile(base, transitionWeight, tiles[x + 1][y + 2]);
-        Tile topSouthWest = new BaseTile(base, transitionWeight, tiles[x][y + 3]);
-        Tile topSouthEast = new BaseTile(base, transitionWeight, tiles[x + 1][y + 3]);
+        Tile topNorthWest = new BaseTile(base, transitionWeight, addToDefault, tiles[x][y + 2]);
+        Tile topNorthEast = new BaseTile(base, transitionWeight, addToDefault, tiles[x + 1][y + 2]);
+        Tile topSouthWest = new BaseTile(base, transitionWeight, addToDefault, tiles[x][y + 3]);
+        Tile topSouthEast = new BaseTile(base, transitionWeight, addToDefault, tiles[x + 1][y + 3]);
 
         // Add Connections
         // Sides
@@ -271,18 +294,19 @@ public class WangCorner {
         TextureRegion[][] tiles,
         int transitionWeight,
         int x,
-        int y) {
+        int y,
+        boolean addToDefault) {
         // Setup Tiles
         // Sides
-        Tile sideNorthWest = new BaseTile(cliff1, transitionWeight, tiles[x][y]);
-        Tile sideNorthEast = new BaseTile(cliff1, transitionWeight, tiles[x + 1][y]);
-        Tile sideSouthWest = new BaseTile(cliff1, transitionWeight, tiles[x][y + 1]);
-        Tile sideSouthEast = new BaseTile(cliff1, transitionWeight, tiles[x + 1][y + 1]);
+        Tile sideNorthWest = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x][y]);
+        Tile sideNorthEast = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 1][y]);
+        Tile sideSouthWest = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x][y + 1]);
+        Tile sideSouthEast = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 1][y + 1]);
         // Top
-        Tile topNorthWest = new BaseTile(cliff1, transitionWeight, tiles[x + 2][y]);
-        Tile topNorthEast = new BaseTile(cliff1, transitionWeight, tiles[x + 3][y]);
-        Tile topSouthWest = new BaseTile(cliff1, transitionWeight, tiles[x + 2][y + 1]);
-        Tile topSouthEast = new BaseTile(cliff1, transitionWeight, tiles[x + 3][y + 1]);
+        Tile topNorthWest = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 2][y]);
+        Tile topNorthEast = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 3][y]);
+        Tile topSouthWest = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 2][y + 1]);
+        Tile topSouthEast = new BaseTile(cliff1, transitionWeight, addToDefault, tiles[x + 3][y + 1]);
 
         // Add Connections
         // Side

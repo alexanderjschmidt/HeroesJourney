@@ -152,6 +152,41 @@ public class Map implements InitializerInterface {
                 gameState.getMap().setTileMap(tileMap);
             }
         };
+        // Create Trees
+        new MapGenerationEffect(MapGenerationPhase.SECOND) {
+            @Override
+            public void applyEffect(GameState gameState) {
+                int width = gameState.getWidth();
+
+                WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
+
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < width; y++) {
+                        possibleTilesMap[x][y] = new WeightedRandomPicker<>();
+                        if (gameState.getMap().getTileMap()[x][y] == Tiles.PLAINS &&
+                            gameState.getMap().getEnvironment()[x][y] == null) {
+                            for (Tile t : Tiles.treeTiles) {
+                                possibleTilesMap[x][y].addItem(t, t.getWeight());
+                            }
+                        }
+                        long totalWeight = possibleTilesMap[x][y].getTotalWeight();
+                        possibleTilesMap[x][y].addItem(Tiles.NULL, totalWeight > 0 ? totalWeight : 100);
+                    }
+                }
+                Tile[][] environment = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
+
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < width; y++) {
+                        if (environment[x][y] == Tiles.NULL)
+                            environment[x][y] = null;
+                        if (gameState.getMap().getEnvironment()[x][y] != null)
+                            environment[x][y] = gameState.getMap().getEnvironment()[x][y];
+                    }
+                }
+
+                gameState.getMap().setEnvironment(environment);
+            }
+        };
         // Add Entities
         new MapGenerationEffect(MapGenerationPhase.FINAL) {
             @Override
@@ -164,8 +199,7 @@ public class Map implements InitializerInterface {
 
                 Entity player = new Entity();
                 player.add(new PlayerComponent(ActionQueue.get().getID()))
-                    .add(new PositionComponent(GameState.global().getWidth() / 2,
-                        GameState.global().getHeight() / 2))
+                    .add(new PositionComponent(housePos[0].getX(), housePos[0].getY()))
                     .add(new GameStateComponent())
                     .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
                     .add(new ActorComponent())
