@@ -21,9 +21,11 @@ import heroes.journey.utils.art.ResourceManager;
  * add cooldown skills
  * Make TextureMaps not Enums?
  * make Map Generation Phases not enums
- * fix far out zoom
- * force zoom if camera would go off screen
- * make camera not go beyond map
+ * make cursor arrow pathfinding favor already followed path.
+ * Camera
+ *  fix far out zoom
+ *  force zoom if camera would go off screen
+ *  make camera not go beyond map
  * Menus
  *  reposition menus on window resize
  * 	Stats Screen

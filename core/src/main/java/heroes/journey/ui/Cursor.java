@@ -14,8 +14,8 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD.HUDState;
 import heroes.journey.utils.RangeManager.RangeColor;
-import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
 
@@ -49,10 +49,8 @@ public class Cursor {
         hover = GameState.global().getEntities().get(x, y);
         if (selected != null && GameState.global().getRangeManager().getRange()[x][y] == RangeColor.BLUE &&
             (path == null || (path.i != x || path.j != y))) {
-            StatsComponent statsComponent = StatsComponent.get(hover);
-            int move = statsComponent.getMoveDistance();
-            path = AStar.aStarEntity(move, GameState.global().getRangeManager().getRange(), sx, sy, x, y,
-                GameState.global().getMap(), selected);
+            StatsComponent statsComponent = StatsComponent.get(selected);
+            path = new EntityCursorPathing().getPath(GameState.global().getMap(), sx, sy, x, y, selected);
         }
     }
 
@@ -257,7 +255,7 @@ public class Cursor {
         if (GameState.global().getEntities().get(path.i, path.j) == null ||
             GameState.global().getEntities().get(path.i, path.j) == selected) {
             hud.setState(HUDState.MOVING);
-            MovementComponent.get(selected).move(AStar.reversePath(path));
+            MovementComponent.get(selected).move(path.reverse());
             GameState.global().getRangeManager().clearRange();
             sx = path.i;
             sy = path.j;

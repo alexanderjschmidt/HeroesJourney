@@ -6,7 +6,6 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
 import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 
 import heroes.journey.GameState;
 import heroes.journey.components.AIComponent;
@@ -28,8 +27,8 @@ import heroes.journey.entities.ai.MonsterFactionAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.wavefunction.Tile;
-import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
@@ -43,7 +42,7 @@ public class Map implements InitializerInterface {
     public static int MAP_SIZE = 32;
 
     private static final int numHouses = 15;
-    private static final Vector2[] housePos = new Vector2[numHouses];
+    private static final Position[] housePos = new Position[numHouses];
     private static int houseStart = 0;
     private static int houseEnd = 1;
 
@@ -75,15 +74,15 @@ public class Map implements InitializerInterface {
                         int x = (int)(Math.random() * tileMap.length);
                         int y = (int)(Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
-                            housePos[i] = new Vector2(x, y);
+                            housePos[i] = new Position(x, y);
                             environment[x][y] = Tiles.HOUSE;
                             break;
                         }
                     }
                 }
                 while (houseStart < numHouses) {
-                    Cell path = AStar.aStar((int)housePos[houseStart].x, (int)housePos[houseStart].y,
-                        (int)housePos[houseEnd].x, (int)housePos[houseEnd].y, GameState.global().getMap());
+                    Cell path = new RoadPathing().getPath(gameState.getMap(), housePos[houseStart].getX(),
+                        housePos[houseStart].getY(), housePos[houseEnd].getX(), housePos[houseEnd].getY());
                     while (path != null) {
                         GameState.global().getMap().setTile(path.i, path.j, Tiles.pathTiles.getFirst());
                         path = path.parent;

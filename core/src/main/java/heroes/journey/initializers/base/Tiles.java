@@ -20,6 +20,7 @@ import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
 public class Tiles implements InitializerInterface {
 
+    public static Terrain PATH;
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles;
     public static Tile HOUSE;
@@ -32,7 +33,7 @@ public class Tiles implements InitializerInterface {
         Terrain plains = new Terrain("Plains", 2);
         Terrain hills = new Terrain("Hills", 2);
         Terrain sand = new Terrain("Sand", 3);
-        Terrain path = new Terrain("Path", 1);
+        PATH = new Terrain("Path", 1);
 
         house = new ActionTerrain("House", 0);
         HOUSE = new BaseTile(house, 0, tiles[7][12]);
@@ -67,7 +68,7 @@ public class Tiles implements InitializerInterface {
         WangCornerAnimated.cliffTransition(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
         WangCornerAnimated.cliffTransition(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
 
-        pathTiles = WangEdge.create(path, plains, tiles, 10000, 12, 0);
+        pathTiles = WangEdge.create(PATH, plains, tiles, 10000, 12, 0);
     }
 
     public static void baseTile(Tile tile, Terrain terrain) {

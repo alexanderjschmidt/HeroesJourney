@@ -19,7 +19,6 @@ import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUD.HUDState;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.ai.pathfinding.AStar;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.worldgen.NewMapManager;
 
@@ -47,7 +46,7 @@ public class InputManager {
 
     private void savePath() {
         Cursor cursor = HUD.get().getCursor();
-        Cell path = AStar.reversePath(cursor.getPath());
+        Cell path = cursor.getPath().reverse();
         Cell temp = null;
         Cell holder = null;
         while (path != null) {
