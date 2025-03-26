@@ -1,24 +1,23 @@
 package heroes.journey.utils.input;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Options {
 
-    public static boolean MAP_BLEND = true, AUTO_END_TURN = true;
+    public static boolean DEBUG = false, AUTO_END_TURN = true;
 
     static {
-        Action mapBlendAction = new Action("Blend Map: " + MAP_BLEND) {
+        Action debugAction = new Action("Debug: " + DEBUG) {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                MAP_BLEND = !MAP_BLEND;
-                this.setName("Blend Map: " + MAP_BLEND);
+                DEBUG = !DEBUG;
+                this.setName("Debug: " + DEBUG);
             }
 
             @Override
@@ -39,7 +38,7 @@ public class Options {
             }
         };
         List<Action> optionsList = new ArrayList<>(2);
-        optionsList.add(mapBlendAction);
+        optionsList.add(debugAction);
         optionsList.add(autoEndTurnAction);
         new Action("Options", true) {
             @Override

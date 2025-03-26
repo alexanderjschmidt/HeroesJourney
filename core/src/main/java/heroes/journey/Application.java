@@ -26,6 +26,8 @@ import heroes.journey.utils.art.ResourceManager;
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Menus
+ *  use a table layout
+ *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
  * 	Stats Screen
  * 		visuals

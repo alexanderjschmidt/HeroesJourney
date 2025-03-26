@@ -1,13 +1,6 @@
 package heroes.journey.utils.input;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -21,6 +14,11 @@ import heroes.journey.ui.HUD.HUDState;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.worldgen.NewMapManager;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputManager {
 
@@ -71,10 +69,10 @@ public class InputManager {
 
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
-            Options.MAP_BLEND = !Options.MAP_BLEND;
+            Options.DEBUG = !Options.DEBUG;
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
-            Random.get().setSeed((int)(Math.random() * 10000000));
+            Random.get().setSeed((int) (Math.random() * 10000000));
             NewMapManager.get().initMapGeneration(GameState.global());
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
@@ -108,17 +106,9 @@ public class InputManager {
                 if (Gdx.input.isKeyJustPressed(KeyManager.UP) ||
                     Gdx.input.isKeyJustPressed(KeyManager.RIGHT)) {
                     gameState.getRangeManager().pointAtTarget(1);
-                    HUD.get()
-                        .getCombatUI()
-                        .setMessage(cursor.getActiveSkill()
-                            .getUIMessage(gameState, cursor.getSelected(), cursor.x, cursor.y));
                 } else if (Gdx.input.isKeyJustPressed(KeyManager.DOWN) ||
                     Gdx.input.isKeyJustPressed(KeyManager.LEFT)) {
                     gameState.getRangeManager().pointAtTarget(-1);
-                    HUD.get()
-                        .getCombatUI()
-                        .setMessage(cursor.getActiveSkill()
-                            .getUIMessage(gameState, cursor.getSelected(), cursor.x, cursor.y));
                 }
             } else {
                 updateFreeMove(delta);
@@ -221,7 +211,7 @@ public class InputManager {
             if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction)) {
                 sendAction();
             } else {
-                HUD.get().getCursor().setActiveSkill((TargetAction)HUD.get().getActionMenu().getSelected());
+                HUD.get().getCursor().setActiveSkill((TargetAction) HUD.get().getActionMenu().getSelected());
             }
             HUD.get().getActionMenu().select();
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||

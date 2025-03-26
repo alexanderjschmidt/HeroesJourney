@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameState;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
+import heroes.journey.utils.input.Options;
 
 public class TerrainUI extends UI {
 
@@ -24,7 +25,8 @@ public class TerrainUI extends UI {
     @Override
     public void drawUI(Batch batch, float parentAlpha) {
         Cursor cursor = HUD.get().getCursor();
-        String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + (" (" + cursor.x + ", " + cursor.y + ")");
+        String location = Options.DEBUG ? " (" + cursor.x + ", " + cursor.y + ")" : "";
+        String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + location;
         drawText(batch, name, 0, 0);
     }
 

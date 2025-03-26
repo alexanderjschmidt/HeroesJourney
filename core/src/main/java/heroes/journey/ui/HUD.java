@@ -13,15 +13,14 @@ public class HUD extends Stage {
 
     public static final int FONT_SIZE = 24;
 
-    private Cursor cursor;
+    private final Cursor cursor;
 
     private HUDState state = HUDState.LOCKED;
-    private ActionMenu actionMenu;
-    private TerrainUI terrainUI;
+    private final ActionMenu actionMenu;
+    private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
-    private CombatUI combatUI;
-    private TurnUI turnUI;
-    private EntityDetailedUI entityDetailedUI;
+    private final TurnUI turnUI;
+    private final StatsUI statsUI;
 
     private static HUD hud;
 
@@ -37,33 +36,24 @@ public class HUD extends Stage {
         actionMenu = new ActionMenu();
         terrainUI = new TerrainUI();
         entityUI = new EntityUI();
-        combatUI = new CombatUI();
         turnUI = new TurnUI();
-        entityDetailedUI = new EntityDetailedUI();
+        statsUI = new StatsUI();
         this.addActor(actionMenu);
         this.addActor(terrainUI);
         this.addActor(entityUI);
-        this.addActor(combatUI);
         this.addActor(turnUI);
-        this.addActor(entityDetailedUI);
+        this.addActor(statsUI);
     }
 
     public void update(float delta) {
         cursor.update(delta);
         act();
-        if (getState() == HUDState.ACTION_SELECT) {
-            actionMenu.setVisible(true);
-        } else {
-            actionMenu.setVisible(false);
-        }
+        actionMenu.setVisible(getState() == HUDState.ACTION_SELECT);
         terrainUI.update();
         entityUI.update();
-        if (selectedEntityUI != null)
+        if (selectedEntityUI != null) {
+            selectedEntityUI.watchSelected();
             selectedEntityUI.update();
-        if (getState() == HUDState.TARGET) {
-            combatUI.setVisible(true);
-        } else {
-            combatUI.setVisible(false);
         }
         turnUI.update();
     }
@@ -91,12 +81,8 @@ public class HUD extends Stage {
         return actionMenu;
     }
 
-    public CombatUI getCombatUI() {
-        return combatUI;
-    }
-
-    public EntityDetailedUI getEntityDetailedUI() {
-        return entityDetailedUI;
+    public StatsUI getEntityDetailedUI() {
+        return statsUI;
     }
 
     public HUDState getState() {

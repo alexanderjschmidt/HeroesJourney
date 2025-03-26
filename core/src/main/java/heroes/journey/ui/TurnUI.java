@@ -1,8 +1,8 @@
 package heroes.journey.ui;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
+import heroes.journey.components.PlayerComponent;
 
 public class TurnUI extends UI {
 
@@ -17,8 +17,10 @@ public class TurnUI extends UI {
     @Override
     public void drawUI(Batch batch, float parentAlpha) {
         GameState gameState = GameState.global();
+        PlayerComponent playerComponent = PlayerComponent.get(gameState.getCurrentEntity());
+        String currentEntity = playerComponent == null ? "Opponent" : "Player";
 
-        drawText(batch, "Day " + gameState.getTurn() + " " + gameState.getCurrentEntity(), 0, 0);
+        drawText(batch, "Day " + gameState.getTurn() + " " + currentEntity, 0, 0);
     }
 
 }

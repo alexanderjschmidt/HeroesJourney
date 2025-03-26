@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.MovementComponent;
@@ -218,7 +217,6 @@ public class Cursor {
 
     public void setActiveSkill(TargetAction skill) {
         this.activeSkill = skill;
-        hud.getCombatUI().setMessage(activeSkill.getUIMessage(GameState.global(), selected, x, y));
     }
 
     public Entity getHover() {
@@ -247,8 +245,8 @@ public class Cursor {
     }
 
     public void turn(float vx, float vy) {
-        this.x = (int)(sx + vx);
-        this.y = (int)(sy + vy);
+        this.x = (int) (sx + vx);
+        this.y = (int) (sy + vy);
     }
 
     public void moveSelected() {
