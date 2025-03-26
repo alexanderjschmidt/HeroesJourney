@@ -1,12 +1,12 @@
 package heroes.journey.systems;
 
-import java.util.UUID;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.systems.listeners.GlobalGameStateListener;
 import heroes.journey.systems.listeners.GlobalPositionListener;
+import heroes.journey.systems.listeners.StatsActionsListener;
+
+import java.util.UUID;
 
 public class GameEngine extends com.badlogic.ashley.core.Engine {
 
@@ -29,6 +29,7 @@ public class GameEngine extends com.badlogic.ashley.core.Engine {
 
         addEntityListener(GlobalGameStateListener.getFamily(), new GlobalGameStateListener());
         addEntityListener(GlobalPositionListener.getFamily(), new GlobalPositionListener());
+        addEntityListener(StatsActionsListener.getFamily(), new StatsActionsListener());
     }
 
     public static UUID getID(Entity e) {

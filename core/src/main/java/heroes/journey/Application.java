@@ -21,6 +21,8 @@ import heroes.journey.utils.art.ResourceManager;
  * Make TextureMaps not Enums?
  * make Map Generation Phases not enums
  * make cursor arrow pathfinding favor already followed path.
+ * GameEngine
+ *  Make Systems and Listeners more dynamic? Auto load them like the initializers?
  * Camera
  *  fix far out zoom
  *  force zoom if camera would go off screen

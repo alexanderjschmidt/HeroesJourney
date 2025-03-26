@@ -1,9 +1,9 @@
 package heroes.journey.initializers.base;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.Application;
 import heroes.journey.GameState;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
@@ -12,6 +12,7 @@ import heroes.journey.systems.GameEngine;
 public class BaseActions implements InitializerInterface {
 
     public static Action wait, end_turn, exit_game, attack;
+    public static Action workout, study;
 
     static {
 		/*end_turn = new Action("End Turn", true) {
@@ -40,6 +41,34 @@ public class BaseActions implements InitializerInterface {
         wait = new Action("Wait") {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return true;
+            }
+        };
+        workout = new Action("Work out") {
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                StatsComponent statsComponent = StatsComponent.get(selected);
+                if (statsComponent == null)
+                    return;
+                statsComponent.setBody(statsComponent.getBody() + 1);
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return true;
+            }
+        };
+        study = new Action("Study") {
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                StatsComponent statsComponent = StatsComponent.get(selected);
+                if (statsComponent == null)
+                    return;
+                statsComponent.setMind(statsComponent.getMind() + 1);
             }
 
             @Override
