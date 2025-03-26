@@ -16,8 +16,8 @@ public class StatsActionsListener implements EntityListener {
     @Override
     public void entityAdded(Entity entity) {
         ActionComponent actionComponent = ActionComponent.get(entity);
-        actionComponent.getActions().add(BaseActions.workout);
-        actionComponent.getActions().add(BaseActions.study);
+        actionComponent.addAction(BaseActions.workout, entity);
+        actionComponent.addAction(BaseActions.study, entity);
     }
 
     @Override

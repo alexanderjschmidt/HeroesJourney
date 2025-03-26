@@ -1,31 +1,19 @@
-package heroes.journey.systems;
+package heroes.journey.systems.endofturnsystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
-
 import heroes.journey.GameState;
 import heroes.journey.components.AIComponent;
 import heroes.journey.components.FactionComponent;
 import heroes.journey.components.GlobalGameStateComponent;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.QueuedAction;
-import heroes.journey.ui.HUD;
+import heroes.journey.systems.EndOfTurnSystem;
 
-public class FactionSystem extends IteratingSystem {
+public class FactionSystem extends EndOfTurnSystem {
 
     public FactionSystem() {
         super(Family.all(FactionComponent.class, AIComponent.class, GlobalGameStateComponent.class).get());
-    }
-
-    @Override
-    public void update(float delta) {
-        System.out.println("Faction System Running");
-        HUD.HUDState previousState = HUD.get().getState();
-        HUD.get().setState(HUD.HUDState.LOCKED);
-        super.update(delta);
-        setProcessing(false);
-        HUD.get().setState(previousState);
     }
 
     @Override

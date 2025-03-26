@@ -1,7 +1,6 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 
 public abstract class Action {
@@ -14,7 +13,7 @@ public abstract class Action {
         this.manaCost = manaCost;
         ActionManager.get().put(name, this);
         if (teamSkill)
-            ActionManager.get().addTeamAction(this);
+            ActionManager.addTeamAction(this);
     }
 
     public Action(String name, int manaCost) {

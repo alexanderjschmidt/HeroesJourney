@@ -1,14 +1,6 @@
 package heroes.journey.entities.actions;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
 import heroes.journey.components.MovementComponent;
@@ -19,6 +11,12 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class ActionQueue extends ArrayList<QueuedAction> {
 
@@ -62,9 +60,9 @@ public class ActionQueue extends ArrayList<QueuedAction> {
         }).on("socketID", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = (JSONObject)args[0];
+                JSONObject data = (JSONObject) args[0];
                 try {
-                    ActionQueue.get().setID(data.getString("id"));
+                    setID(data.getString("id"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -86,13 +84,13 @@ public class ActionQueue extends ArrayList<QueuedAction> {
         }).on("joinGame", new Emitter.Listener() {// change to createGame
             @Override
             public void call(Object... args) {
-                JSONObject gameInfo = (JSONObject)args[0];
+                JSONObject gameInfo = (JSONObject) args[0];
                 mapData.load(gameInfo);
             }
         }).on("startGame", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject players = (JSONObject)args[0];
+                JSONObject players = (JSONObject) args[0];
                 System.out.println(players.toString());
                 JSONObject.getNames(players);
                 for (int i = 0; i < JSONObject.getNames(players).length; i++) {
@@ -104,7 +102,7 @@ public class ActionQueue extends ArrayList<QueuedAction> {
         }).on("actionRecieve", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject action = (JSONObject)args[0];
+                JSONObject action = (JSONObject) args[0];
                 JSONArray xCoords, yCoords;
                 Cell temp = null;
                 Action skill = null;
@@ -123,13 +121,13 @@ public class ActionQueue extends ArrayList<QueuedAction> {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                ActionQueue.get().addAction(new QueuedAction(temp, skill, targetX, targetY));
-                ActionQueue.get().nextAction();
+                addAction(new QueuedAction(temp, skill, targetX, targetY));
+                nextAction();
             }
         }).on("playerDisconnected", new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject p = (JSONObject)args[0];
+                JSONObject p = (JSONObject) args[0];
                 String pid = "";
                 try {
                     pid = p.getString("id");
@@ -195,7 +193,7 @@ public class ActionQueue extends ArrayList<QueuedAction> {
             socket.emit("actionSend", gameAction);
     }
 
-    public void setID(String id) {
+    private void setID(String id) {
         this.id = id;
     }
 

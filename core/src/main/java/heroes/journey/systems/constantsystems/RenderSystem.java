@@ -1,10 +1,9 @@
-package heroes.journey.systems;
+package heroes.journey.systems.constantsystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
-
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.components.ActorComponent;

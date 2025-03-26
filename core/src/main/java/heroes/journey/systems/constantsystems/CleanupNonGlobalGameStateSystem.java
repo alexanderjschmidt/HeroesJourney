@@ -1,11 +1,11 @@
-package heroes.journey.systems;
+package heroes.journey.systems.constantsystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.GlobalGameStateComponent;
+import heroes.journey.systems.GameEngine;
 
 public class CleanupNonGlobalGameStateSystem extends IteratingSystem {
 

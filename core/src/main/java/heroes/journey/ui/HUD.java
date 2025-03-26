@@ -3,6 +3,7 @@ package heroes.journey.ui;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class HUD extends Stage {
@@ -14,6 +15,7 @@ public class HUD extends Stage {
     public static final int FONT_SIZE = 24;
 
     private final Cursor cursor;
+    private final Table layout;
 
     private HUDState state = HUDState.LOCKED;
     private final ActionMenu actionMenu;
@@ -43,6 +45,8 @@ public class HUD extends Stage {
         this.addActor(entityUI);
         this.addActor(turnUI);
         this.addActor(statsUI);
+        layout = new Table();
+        this.addActor(layout);
     }
 
     public void update(float delta) {

@@ -1,17 +1,12 @@
-package heroes.journey.systems;
+package heroes.journey.systems.constantsystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
-
 import heroes.journey.GameState;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.GlobalGameStateComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PositionComponent;
+import heroes.journey.components.*;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;

@@ -14,12 +14,8 @@ import heroes.journey.utils.art.ResourceManager;
 /*
  * TODO List
  * pull actions from location (and factions?) maybe modify were the open action menu code is
- * comb through all HUD state sets to make sure the player cant input actions while action queue is in process
- * Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  * Fold Faction AI into character AI loop for prediction purposes
- * add cooldown skills
  * Make TextureMaps not Enums?
- * make Map Generation Phases not enums
  * make cursor arrow pathfinding favor already followed path.
  * GameEngine
  *  Make Systems and Listeners more dynamic? Auto load them like the initializers?
@@ -28,6 +24,8 @@ import heroes.journey.utils.art.ResourceManager;
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Menus
+ *  replace Hud Stats with Statemachine from libgdx ai
+ *  comb through all HUD state sets to make sure the player cant input actions while action queue is in process
  *  use a table layout
  *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
@@ -48,9 +46,11 @@ import heroes.journey.utils.art.ResourceManager;
  *  Quests
  * Fog of War
  * Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
+ *  darker then redder
  * Add time
  * Saving
  * Map Generation
+ *  make Map Generation Phases not enums
  *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
@@ -65,7 +65,9 @@ import heroes.journey.utils.art.ResourceManager;
  * Sounds
  * 	Background music
  * 	Action Sounds
- * Use a GameEngine Pool for Ashely so AI doesnt keep making new Entities to be deleted
+ * Efficiency
+ *  Use a GameEngine Pool for Ashely so AI doesnt keep making new Entities to be deleted
+ *  Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  */
 public class Application extends Game {
 

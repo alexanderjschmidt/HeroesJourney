@@ -5,6 +5,7 @@ import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.systems.GameEngine;
@@ -48,9 +49,9 @@ public class BaseActions implements InitializerInterface {
                 return true;
             }
         };
-        workout = new Action("Work out") {
+        workout = new CooldownAction("Work out", 2) {
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public void onSelectHelper(GameState gameState, Entity selected) {
                 StatsComponent statsComponent = StatsComponent.get(selected);
                 if (statsComponent == null)
                     return;
@@ -58,13 +59,13 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public boolean requirementsMet(GameState gameState, Entity selected) {
+            public boolean requirementsMetHelper(GameState gameState, Entity selected) {
                 return true;
             }
         };
-        study = new Action("Study") {
+        study = new CooldownAction("Study", 2) {
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public void onSelectHelper(GameState gameState, Entity selected) {
                 StatsComponent statsComponent = StatsComponent.get(selected);
                 if (statsComponent == null)
                     return;
@@ -72,7 +73,7 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public boolean requirementsMet(GameState gameState, Entity selected) {
+            public boolean requirementsMetHelper(GameState gameState, Entity selected) {
                 return true;
             }
         };
