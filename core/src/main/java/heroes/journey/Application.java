@@ -13,7 +13,6 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
- * pull actions from location (and factions?) maybe modify were the open action menu code is
  * Fold Faction AI into character AI loop for prediction purposes
  * Make TextureMaps not Enums?
  * make cursor arrow pathfinding favor already followed path.

@@ -10,6 +10,7 @@ import heroes.journey.components.*;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.ui.HUD;
 
 public class MovementSystem extends IteratingSystem {
 
@@ -46,7 +47,7 @@ public class MovementSystem extends IteratingSystem {
 
     private void updateActions(ActionComponent action, Entity entity) {
         if (action.getAction() == null) {
-            action.openActionMenu(entity);
+            HUD.get().getActionMenu().open();
         } else {
             if (action.getAction() instanceof TargetAction targetAction) {
                 targetAction.targetEffect(GameState.global(), entity, action.getTargetX(),

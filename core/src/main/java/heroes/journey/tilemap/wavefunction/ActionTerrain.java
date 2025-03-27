@@ -1,9 +1,10 @@
 package heroes.journey.tilemap.wavefunction;
 
+import heroes.journey.entities.actions.Action;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import heroes.journey.entities.actions.Action;
 
 public class ActionTerrain extends Terrain {
 
@@ -11,7 +12,7 @@ public class ActionTerrain extends Terrain {
 
     public ActionTerrain(String name, int terrainCost, Action... actions) {
         super(name, terrainCost);
-        this.actions = Arrays.asList(actions);
+        this.actions = new ArrayList<>(Arrays.asList(actions));
     }
 
     public List<Action> getActions() {

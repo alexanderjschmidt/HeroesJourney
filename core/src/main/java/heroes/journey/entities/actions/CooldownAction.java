@@ -43,7 +43,9 @@ public abstract class CooldownAction extends Action {
 
     public abstract boolean requirementsMetHelper(GameState gameState, Entity selected);
 
-    public void onSelectHelper(GameState gameState, Entity selected) {
+    public abstract void onSelectHelper(GameState gameState, Entity selected);
 
+    public int getTurnCooldown() {
+        return turnCooldown;
     }
 }

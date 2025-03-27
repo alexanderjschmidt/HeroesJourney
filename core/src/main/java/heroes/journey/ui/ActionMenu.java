@@ -1,12 +1,18 @@
 package heroes.journey.ui;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameState;
+import heroes.journey.components.ActionComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.TargetAction;
+import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.utils.art.ResourceManager;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -15,6 +21,42 @@ public class ActionMenu extends UI {
 
     public ActionMenu() {
         super(0, 0, 8, 1, true, true);
+    }
+
+    public void open() {
+        Entity selectedEntity = GameState.global().getCurrentEntity();
+        ActionComponent selectedActions = ActionComponent.get(selectedEntity);
+        PositionComponent selectedPosition = PositionComponent.get(selectedEntity);
+        // Get selected Entities Actions
+        List<Action> requirementsMetOptions = selectedActions.stream()
+            .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
+            .toList();
+        if (selectedPosition != null) {
+            // Get Tiles Factions Actions
+            Entity faction = GameState.global().getEntities().getFaction(selectedPosition.getX(), selectedPosition.getY());
+            if (faction != null) {
+                ActionComponent factionActions = ActionComponent.get(faction);
+                if (factionActions != null) {
+                    List<Action> requirementsMetFactionOptions = factionActions.stream()
+                        .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
+                        .toList();
+                    requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(), requirementsMetFactionOptions.stream())
+                        .distinct()
+                        .collect(Collectors.toList());
+                }
+            }
+            // Get Tiles Environment Actions
+            ActionTerrain environment = GameState.global().getMap().getEnvironment(selectedPosition.getX(), selectedPosition.getY());
+            if (environment != null) {
+                List<Action> requirementsMetEnvironmentOptions = environment.getActions().stream()
+                    .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
+                    .toList();
+                requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(), requirementsMetEnvironmentOptions.stream())
+                    .distinct()
+                    .collect(Collectors.toList());
+            }
+        }
+        open(requirementsMetOptions);
     }
 
     public void open(List<Action> options) {

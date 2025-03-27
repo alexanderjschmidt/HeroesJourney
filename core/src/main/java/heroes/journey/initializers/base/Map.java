@@ -226,7 +226,7 @@ public class Map implements InitializerInterface {
         Entity dungeon = new Entity();
         dungeon.add(new FactionComponent(SyllableDungeonNameGenerator.generateName())
                 .addOwnedLocation(GameState.global(), dungeon, new Position(x, y)))
-            .add(new GlobalGameStateComponent());
+            .add(new GlobalGameStateComponent()).add(new ActionComponent().addAction(BaseActions.delve, dungeon)).add(new CooldownComponent());
         GameEngine.get().addEntity(dungeon);
     }
 

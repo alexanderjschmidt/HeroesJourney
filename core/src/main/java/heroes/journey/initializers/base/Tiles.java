@@ -43,6 +43,7 @@ public class Tiles implements InitializerInterface {
         DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
 
         trees = new ActionTerrain("Trees", 1);
+        trees.getActions().add(BaseActions.chopTrees);
 
         Terrain plainsToHill = new Terrain("Cliff", 10);
         Terrain sandToHill = new Terrain("Cliff", 10);

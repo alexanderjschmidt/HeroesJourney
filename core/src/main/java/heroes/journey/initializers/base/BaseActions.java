@@ -3,6 +3,9 @@ package heroes.journey.initializers.base;
 import com.badlogic.ashley.core.Entity;
 import heroes.journey.Application;
 import heroes.journey.GameState;
+import heroes.journey.components.CooldownComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
@@ -13,25 +16,27 @@ import heroes.journey.systems.GameEngine;
 public class BaseActions implements InitializerInterface {
 
     public static Action wait, end_turn, exit_game, attack;
-    public static Action workout, study;
+    public static CooldownAction workout, study;
+    public static CooldownAction delve;
+    public static Action chopTrees;
 
     static {
-		/*end_turn = new Action("End Turn", true) {
-			@Override
-			public void onSelect(GameState gameState, Entity selected) {
-				gameState.nextTurn();
-			}
-
-			@Override
-			public boolean requirementsMet(GameState gameState, Entity selected) {
-				return true;
-			}
-		};*/
         exit_game = new Action("Exit Game", true) {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
                 GameEngine.get().removeAllEntities();
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return true;
+            }
+        };
+        end_turn = new Action("End Turn", true) {
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                gameState.nextTurn();
             }
 
             @Override
@@ -75,6 +80,46 @@ public class BaseActions implements InitializerInterface {
             @Override
             public boolean requirementsMetHelper(GameState gameState, Entity selected) {
                 return true;
+            }
+        };
+        delve = new CooldownAction("Delve", 5) {
+
+            @Override
+            public void onSelect(GameState gameState, Entity entity) {
+                PositionComponent positionComponent = PositionComponent.get(entity);
+                Entity dungeon = gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+                CooldownComponent.get(dungeon).put(this, getTurnCooldown());
+                onSelectHelper(gameState, entity);
+            }
+
+            @Override
+            public void onSelectHelper(GameState gameState, Entity selected) {
+                InventoryComponent inventoryComponent = InventoryComponent.get(selected);
+                inventoryComponent.add(Items.ironOre, 5);
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity entity) {
+                PositionComponent positionComponent = PositionComponent.get(entity);
+                Entity dungeon = gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+                return requirementsMetHelper(gameState, dungeon);
+            }
+
+            @Override
+            public boolean requirementsMetHelper(GameState gameState, Entity dungeon) {
+                return !CooldownComponent.get(dungeon).containsKey(this);
+            }
+        };
+        chopTrees = new Action("Chop Trees") {
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return true;
+            }
+
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                InventoryComponent inventoryComponent = InventoryComponent.get(selected);
+                inventoryComponent.add(Items.wood, 1);
             }
         };
 		/*attack = new TargetAction("Attack", 0, null, RangeColor.RED, true) {
