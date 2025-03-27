@@ -1,15 +1,15 @@
 package heroes.journey.components;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-
+import heroes.journey.GameState;
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.Position;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class FactionComponent implements ClonableComponent<FactionComponent> {
 
@@ -48,8 +48,9 @@ public class FactionComponent implements ClonableComponent<FactionComponent> {
         return mapper.get(entity);
     }
 
-    public Component addOwnedLocation(Position position) {
+    public Component addOwnedLocation(GameState gameState, Entity faction, Position position) {
         this.ownedLocations.add(position);
+        gameState.getEntities().addFaction(faction, position.getX(), position.getY());
         return this;
     }
 }

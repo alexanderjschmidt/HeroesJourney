@@ -1,26 +1,27 @@
 package heroes.journey.entities;
 
-import java.util.HashMap;
-import java.util.UUID;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.systems.GameEngine;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class EntityManager implements Cloneable {
 
-    private int width, height;
-    private Entity[][] entitiesLocations;
+    private final int width, height;
+    private final Entity[][] entitiesLocations;
+    private final Entity[][] factionsLocations;
 
-    private final HashMap<UUID,Entity> entities;
+    private final HashMap<UUID, Entity> entities;
 
     public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
         entitiesLocations = new Entity[width][height];
+        factionsLocations = new Entity[width][height];
         entities = new HashMap<>();
     }
 
@@ -48,18 +49,10 @@ public class EntityManager implements Cloneable {
         return clone;
     }
 
-    public Entity removeEntity(int x, int y) {
-        Entity e = entitiesLocations[x][y];
-        entitiesLocations[x][y] = null;
-        return e;
-    }
-
-    public void registerEntity(UUID id, Entity e) {
-        entities.put(id, e);
-    }
-
-    public void unregisterEntity(UUID id) {
-        entities.remove(id);
+    public Entity get(int x, int y) {
+        if (x < 0 || y < 0 || y >= height || x >= width)
+            return null;
+        return entitiesLocations[x][y];
     }
 
     public void addEntity(Entity e) {
@@ -69,10 +62,43 @@ public class EntityManager implements Cloneable {
         }
     }
 
-    public Entity get(int x, int y) {
+    public Entity moveEntity(Entity e, int x, int y) {
+        PositionComponent position = PositionComponent.get(e);
+        removeEntity(e);
+        position.setPos(x, y);
+        addEntity(e);
+        return e;
+    }
+
+    public Entity removeEntity(Entity e) {
+        PositionComponent position = PositionComponent.get(e);
+        Entity removed = entitiesLocations[position.getX()][position.getY()];
+        entitiesLocations[position.getX()][position.getY()] = null;
+        return removed;
+    }
+
+    // Faction Functions
+    public void addFaction(Entity faction, int x, int y) {
+        factionsLocations[x][y] = faction;
+    }
+
+    public Entity getFaction(int x, int y) {
         if (x < 0 || y < 0 || y >= height || x >= width)
             return null;
-        return entitiesLocations[x][y];
+        return factionsLocations[x][y];
+    }
+
+    // ID Based Functions
+    public Entity getEntity(UUID id) {
+        return entities.get(id);
+    }
+
+    public void registerEntity(UUID id, Entity e) {
+        entities.put(id, e);
+    }
+
+    public void unregisterEntity(UUID id) {
+        entities.remove(id);
     }
 
     public void print() {
@@ -91,17 +117,8 @@ public class EntityManager implements Cloneable {
     }
 
     public void dispose() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                Entity e = entitiesLocations[i][j];
-                if (e != null) {
-                    GameEngine.get().removeEntity(e);
-                }
-            }
+        for (Entity entity : entities.values()) {
+            GameEngine.get().removeEntity(entity);
         }
-    }
-
-    public Entity getEntity(UUID id) {
-        return entities.get(id);
     }
 }

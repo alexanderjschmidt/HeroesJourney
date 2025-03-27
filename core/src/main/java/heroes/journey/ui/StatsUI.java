@@ -18,7 +18,7 @@ public class StatsUI extends UI {
     private boolean toggled;
 
     public StatsUI() {
-        super(11, 3, 27, 20);
+        super(11, 3, 27, 21);
         toggled = false;
         this.setVisible(false);
     }

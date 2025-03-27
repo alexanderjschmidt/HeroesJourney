@@ -33,7 +33,8 @@ public class MovementSystem extends IteratingSystem {
                     @Override
                     public void run() {
                         actor.setPosition(0, 0);
-                        updateMovement(position, movement, entity);
+                        GameState.global().getEntities().moveEntity(entity, movement.getPath().i, movement.getPath().j);
+                        movement.progressPath();
                         if (movement.hasPath() || action == null) {
                             return;
                         }
@@ -41,14 +42,6 @@ public class MovementSystem extends IteratingSystem {
                     }
                 })));
         }
-    }
-
-    private void updateMovement(PositionComponent position, MovementComponent movement, Entity entity) {
-        GameState.global().getEntities().removeEntity(position.getX(), position.getY());
-        position.setX(movement.getPath().i);
-        position.setY(movement.getPath().j);
-        GameState.global().getEntities().addEntity(entity);
-        movement.progressPath();
     }
 
     private void updateActions(ActionComponent action, Entity entity) {

@@ -201,12 +201,10 @@ public class Cursor {
             GameState.global().getRangeManager().clearRange();
             return;
         }
-        Entity e = GameState.global().getEntities().removeEntity(sx, sy);
-        PositionComponent position = PositionComponent.get(e);
-        position.setX(initialX).setY(initialY);
-        GameState.global().getEntities().addEntity(e);
+        GameState.global().getEntities().moveEntity(selected, sx, sy);
+        StatsComponent statsComponent = StatsComponent.get(selected);
         clearSelected();
-        if (5 != 0) {
+        if (statsComponent.getMoveDistance() != 0) {
             update(0);
             setSelectedtoHover();
             GameState.global().getRangeManager().setMoveAndAttackRange(selected);

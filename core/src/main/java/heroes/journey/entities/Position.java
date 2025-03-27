@@ -27,6 +27,12 @@ public class Position {
         return this;
     }
 
+    public Position setPos(int x, int y) {
+        this.x = x;
+        this.y = y;
+        return this;
+    }
+
     public String toString() {
         return "(" + x + ", " + y + ")";
     }

@@ -6,7 +6,6 @@ import heroes.journey.components.*;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
-import heroes.journey.entities.ai.MonsterFactionAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.wavefunction.Tile;
@@ -15,6 +14,8 @@ import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.*;
+import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
+import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,7 @@ public class Map implements InitializerInterface {
                         int x = (int) (Math.random() * tileMap.length);
                         int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
+                            generateHouse(x, y);
                             housePos.add(new Position(x, y));
                             environment[x][y] = Tiles.HOUSE;
                             break;
@@ -95,6 +97,7 @@ public class Map implements InitializerInterface {
                         int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
                             environment[x][y] = Tiles.DUNGEON;
+                            generateDungeon(x, y);
                             break;
                         }
                     }
@@ -194,12 +197,6 @@ public class Map implements InitializerInterface {
         new MapGenerationEffect(MapGenerationPhase.FINAL) {
             @Override
             public void applyEffect(GameState gameState) {
-                Entity goblins = new Entity();
-                goblins.add(new FactionComponent("Goblins").addOwnedLocation(new Position(16, 10)))
-                    .add(new GameStateComponent())
-                    .add(new AIComponent(new MonsterFactionAI()));
-                GameEngine.get().addEntity(goblins);
-
                 Entity player = new Entity();
                 player.add(new PlayerComponent(ActionQueue.get().getID()))
                     .add(new PositionComponent(housePos.getFirst().getX(), housePos.getFirst().getY()))
@@ -211,10 +208,26 @@ public class Map implements InitializerInterface {
                     .add(new AIComponent(new MCTSAI()))
                     .add(new StatsComponent())
                     .add(new InventoryComponent())
-                    .add(new LoyaltyComponent().putLoyalty(goblins, Loyalties.ENEMY));
+                    .add(new LoyaltyComponent());
                 GameEngine.get().addEntity(player);
             }
         };
+    }
+
+    private void generateHouse(int x, int y) {
+        Entity house = new Entity();
+        house.add(new FactionComponent(SyllableTownNameGenerator.generateName())
+                .addOwnedLocation(GameState.global(), house, new Position(x, y)))
+            .add(new GlobalGameStateComponent());
+        GameEngine.get().addEntity(house);
+    }
+
+    private void generateDungeon(int x, int y) {
+        Entity dungeon = new Entity();
+        dungeon.add(new FactionComponent(SyllableDungeonNameGenerator.generateName())
+                .addOwnedLocation(GameState.global(), dungeon, new Position(x, y)))
+            .add(new GlobalGameStateComponent());
+        GameEngine.get().addEntity(dungeon);
     }
 
 }

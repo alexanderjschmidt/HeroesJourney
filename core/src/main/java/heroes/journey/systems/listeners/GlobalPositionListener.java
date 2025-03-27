@@ -3,7 +3,6 @@ package heroes.journey.systems.listeners;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-
 import heroes.journey.GameState;
 import heroes.journey.components.GlobalGameStateComponent;
 import heroes.journey.components.PositionComponent;
@@ -21,7 +20,6 @@ public class GlobalPositionListener implements EntityListener {
 
     @Override
     public void entityRemoved(Entity entity) {
-        PositionComponent position = PositionComponent.get(entity);
-        GameState.global().getEntities().removeEntity(position.getX(), position.getY());
+        GameState.global().getEntities().removeEntity(entity);
     }
 }

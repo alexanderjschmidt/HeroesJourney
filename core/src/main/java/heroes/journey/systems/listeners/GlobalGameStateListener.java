@@ -3,7 +3,6 @@ package heroes.journey.systems.listeners;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-
 import heroes.journey.GameState;
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.GlobalGameStateComponent;
