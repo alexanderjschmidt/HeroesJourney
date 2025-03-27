@@ -1,12 +1,14 @@
 package heroes.journey.utils.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
-
-import java.util.ArrayList;
-import java.util.List;
+import heroes.journey.ui.hudstates.ActionSelectState;
 
 public class Options {
 
@@ -43,7 +45,7 @@ public class Options {
         new Action("Options", true) {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                HUD.get().getActionMenu().open(optionsList);
+                HUD.get().setState(new ActionSelectState(optionsList));
             }
 
             @Override

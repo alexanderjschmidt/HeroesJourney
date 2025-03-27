@@ -1,9 +1,18 @@
 package heroes.journey;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.components.AIComponent;
 import heroes.journey.components.GlobalGameStateComponent;
 import heroes.journey.components.PlayerComponent;
@@ -19,11 +28,9 @@ import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameState implements Cloneable {
 
@@ -147,20 +154,19 @@ public class GameState implements Cloneable {
         Entity currentEntity = incrementTurn();
         System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
 
+        HUD.get().revertToInitialState();
         PlayerComponent player = PlayerComponent.get(currentEntity);
         if (player != null) {
             if (player.getPlayerId().equals(ActionQueue.get().getID())) {
                 HUD.get().getCursor().setPosition(currentEntity);
-                HUD.get().setState(HUD.HUDState.CURSOR_MOVE);
+                HUD.get().setState(States.CURSOR_MOVE);
                 System.out.println("your turn");
             } else {
-                HUD.get().setState(HUD.HUDState.LOCKED);
                 System.out.println("opponent turn");
             }
         } else {
             AIComponent ai = AIComponent.get(currentEntity);
             QueuedAction action = ai.getAI().getMove(this, currentEntity);
-            HUD.get().setState(HUD.HUDState.LOCKED);
             ActionQueue.get().addAction(action);
             System.out.println("ai turn");
         }

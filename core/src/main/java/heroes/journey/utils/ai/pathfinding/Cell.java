@@ -44,6 +44,17 @@ public class Cell implements Comparable<Cell> {
         return f - o.f == 0 ? h - o.h : f - o.f;
     }
 
+    public static Cell clone(Cell path) {
+        Cell holder = null;
+        while (path != null) {
+            Cell holder2 = holder;
+            holder = new Cell(path.i, path.j, 1);
+            holder.parent = holder2;
+            path = path.parent;
+        }
+        return holder;
+    }
+
     public Cell reverse() {
         return reversePath(this);
     }

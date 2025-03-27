@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.HUD.HUDState;
+import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager.RangeColor;
 
 public abstract class TargetAction extends Action {
@@ -36,7 +36,7 @@ public abstract class TargetAction extends Action {
     }
 
     public void onSelect(GameState gameState, Entity selected) {
-        HUD.get().setState(HUDState.TARGET);
+        HUD.get().setState(States.TARGET);
         gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType);
         gameState.getRangeManager().pointAtTarget(0);
     }

@@ -2,7 +2,9 @@ package heroes.journey.systems;
 
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.hudstates.States;
 
 public abstract class EndOfTurnSystem extends IteratingSystem {
 
@@ -20,10 +22,10 @@ public abstract class EndOfTurnSystem extends IteratingSystem {
 
     @Override
     public void update(float delta) {
-        HUD.HUDState previousState = HUD.get().getState();
-        HUD.get().setState(HUD.HUDState.LOCKED);
+        System.out.println(this.getClass() + "");
+        HUD.get().setState(States.LOCKED);
         super.update(delta);
         setProcessing(false);
-        HUD.get().setState(previousState);
+        HUD.get().revertToPreviousState();
     }
 }

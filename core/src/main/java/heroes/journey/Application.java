@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -23,8 +24,6 @@ import heroes.journey.utils.art.ResourceManager;
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Menus
- *  replace Hud Stats with Statemachine from libgdx ai
- *  comb through all HUD state sets to make sure the player cant input actions while action queue is in process
  *  use a table layout
  *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
@@ -55,9 +54,6 @@ import heroes.journey.utils.art.ResourceManager;
  * 	Guarantee path to all dungeons
  * 	Improve road generation some towns roads loop too much
  * 	Improve map generation
- * 	Improve Wang tiles for transitions
- * 	Inner Town Generation
- * 	Inner Dungeon Generation
  * Enter Region
  * 	World Map/Region Map/Local Map ?
  * 	64/16/16

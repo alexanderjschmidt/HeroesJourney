@@ -1,23 +1,23 @@
 package heroes.journey.ui;
 
+import com.badlogic.gdx.ai.fsm.StackStateMachine;
+import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class HUD extends Stage {
+import heroes.journey.ui.hudstates.HUDState;
+import heroes.journey.ui.hudstates.States;
 
-    public enum HUDState {
-        CURSOR_MOVE, MOVING, ACTION_SELECT, TARGET, LOCKED;
-    }
+public class HUD extends Stage {
 
     public static final int FONT_SIZE = 24;
 
     private final Cursor cursor;
     private final Table layout;
 
-    private HUDState state = HUDState.LOCKED;
     private final ActionMenu actionMenu;
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
@@ -25,6 +25,8 @@ public class HUD extends Stage {
     private final StatsUI statsUI;
 
     private static HUD hud;
+    private final StateMachine<HUD,HUDState> stateMachine;
+    private float delta;
 
     public static HUD get() {
         if (hud == null)
@@ -34,6 +36,8 @@ public class HUD extends Stage {
 
     public HUD() {
         super(new ScreenViewport());
+        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.LOCKED);
+        stateMachine.setGlobalState(States.GLOBAL);
         cursor = new Cursor(this);
         actionMenu = new ActionMenu();
         terrainUI = new TerrainUI();
@@ -50,9 +54,9 @@ public class HUD extends Stage {
     }
 
     public void update(float delta) {
-        cursor.update(delta);
+        this.delta = delta;
+        stateMachine.update();
         act();
-        actionMenu.setVisible(getState() == HUDState.ACTION_SELECT);
         terrainUI.update();
         entityUI.update();
         if (selectedEntityUI != null) {
@@ -85,21 +89,35 @@ public class HUD extends Stage {
         return actionMenu;
     }
 
+    public Cursor getCursor() {
+        return cursor;
+    }
+
     public StatsUI getEntityDetailedUI() {
         return statsUI;
     }
 
     public HUDState getState() {
-        return state;
+        return stateMachine.getCurrentState();
     }
 
-    public void setState(HUDState state) {
-        System.out.println(state);
-        this.state = state;
+    public void setState(HUDState newState) {
+        stateMachine.changeState(newState);
+        System.out.println("set to " + stateMachine.getCurrentState());
     }
 
-    public Cursor getCursor() {
-        return cursor;
+    public void revertToInitialState() {
+        while (stateMachine.revertToPreviousState()) {
+        }
+        System.out.println("reset to " + stateMachine.getCurrentState());
     }
 
+    public void revertToPreviousState() {
+        stateMachine.revertToPreviousState();
+        System.out.println("revert to " + stateMachine.getCurrentState());
+    }
+
+    public float getDelta() {
+        return delta;
+    }
 }

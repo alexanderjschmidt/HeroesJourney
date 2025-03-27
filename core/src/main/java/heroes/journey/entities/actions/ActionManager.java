@@ -24,7 +24,7 @@ public class ActionManager extends HashMap<String,Action> {
         teamActions = new ArrayList<Action>();
     }
 
-    public static List<Action> getTeamActions(GameState gameState, int x, int y) {
+    public static List<Action> getTeamActions(GameState gameState) {
         ArrayList<Action> options = new ArrayList<Action>(get().teamActions.size());
         for (Action action : get().teamActions) {
             if (action.requirementsMet(gameState, null))

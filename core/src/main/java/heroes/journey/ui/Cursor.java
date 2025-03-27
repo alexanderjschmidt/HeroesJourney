@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.TargetAction;
-import heroes.journey.ui.HUD.HUDState;
+import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
@@ -26,13 +27,12 @@ public class Cursor {
     private HUD hud;
 
     private Entity selected, hover;
+    // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
     private Cell path;
     private TargetAction activeSkill;
 
     private Animation<TextureRegion> ani;
-
-    private int initialX, initialY;
 
     private float elapsed = 0;
 
@@ -44,11 +44,10 @@ public class Cursor {
         setPosition(10, 15);
     }
 
-    public void update(float delta) {
+    public void update() {
         hover = GameState.global().getEntities().get(x, y);
         if (selected != null && GameState.global().getRangeManager().getRange()[x][y] == RangeColor.BLUE &&
             (path == null || (path.i != x || path.j != y))) {
-            StatsComponent statsComponent = StatsComponent.get(selected);
             path = new EntityCursorPathing().getPath(GameState.global().getMap(), sx, sy, x, y, selected);
         }
     }
@@ -64,8 +63,8 @@ public class Cursor {
 
     public void render(Batch batch, float delta) {
         elapsed += delta;
-        drawPath(batch);
-        if (hud.getState() != HUDState.LOCKED) {
+        drawPath(batch, path);
+        if (hud.getState() == States.CURSOR_MOVE) {
             if (selected != null) {
                 batch.setColor(Color.BLUE);
             } else if (hover != null) {
@@ -77,7 +76,7 @@ public class Cursor {
         batch.setColor(Color.WHITE);
     }
 
-    private void drawPath(Batch batch) {
+    private static void drawPath(Batch batch, Cell path) {
         if (path == null)
             return;
         Cell c = path;
@@ -184,16 +183,12 @@ public class Cursor {
     public void setPosition(int i, int j) {
         x = i;
         y = j;
-        update(0);
+        update();
     }
 
     public void setPosition(Entity e) {
         PositionComponent position = PositionComponent.get(e);
         this.setPosition(position.getX(), position.getY());
-    }
-
-    public Entity getSelected() {
-        return selected;
     }
 
     public void revertSelectedPosition() {
@@ -203,14 +198,14 @@ public class Cursor {
         }
         GameState.global().getEntities().moveEntity(selected, sx, sy);
         StatsComponent statsComponent = StatsComponent.get(selected);
+        setPosition(sx, sy);
         clearSelected();
         if (statsComponent.getMoveDistance() != 0) {
-            update(0);
+            update();
             setSelectedtoHover();
             GameState.global().getRangeManager().setMoveAndAttackRange(selected);
             hud.select();
         }
-
     }
 
     public void setActiveSkill(TargetAction skill) {
@@ -221,16 +216,19 @@ public class Cursor {
         return hover;
     }
 
-    public Cell getPath() {
-        return path;
+    public Entity getSelected() {
+        return selected;
+    }
+
+    // TODO Potentially Remove
+    public void setSelected(Entity selected) {
+        this.selected = selected;
     }
 
     public void setSelectedtoHover() {
         selected = hover;
         sx = x;
         sy = y;
-        initialX = x;
-        initialY = y;
     }
 
     public TargetAction getActiveSkill() {
@@ -242,29 +240,22 @@ public class Cursor {
         //selected.openActionMenu();
     }
 
-    public void turn(float vx, float vy) {
-        this.x = (int) (sx + vx);
-        this.y = (int) (sy + vy);
-    }
-
     public void moveSelected() {
         if (GameState.global().getEntities().get(path.i, path.j) == null ||
             GameState.global().getEntities().get(path.i, path.j) == selected) {
-            hud.setState(HUDState.MOVING);
+            hud.setState(States.LOCKED);
             MovementComponent.get(selected).move(path.reverse());
             GameState.global().getRangeManager().clearRange();
-            sx = path.i;
-            sy = path.j;
             path = null;
         }
     }
 
-    public void setPath(Cell temp) {
-        this.path = temp;
+    public Cell getPath() {
+        return path;
     }
 
-    public void setSelected(Entity selected) {
-        this.selected = selected;
+    public void setPath(Cell temp) {
+        this.path = temp;
     }
 
 }

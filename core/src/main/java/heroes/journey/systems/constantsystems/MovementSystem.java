@@ -5,8 +5,13 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Timer;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
+import heroes.journey.components.ActionComponent;
+import heroes.journey.components.ActorComponent;
+import heroes.journey.components.GlobalGameStateComponent;
+import heroes.journey.components.MovementComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;
@@ -34,11 +39,14 @@ public class MovementSystem extends IteratingSystem {
                     @Override
                     public void run() {
                         actor.setPosition(0, 0);
-                        GameState.global().getEntities().moveEntity(entity, movement.getPath().i, movement.getPath().j);
+                        GameState.global()
+                            .getEntities()
+                            .moveEntity(entity, movement.getPath().i, movement.getPath().j);
                         movement.progressPath();
                         if (movement.hasPath() || action == null) {
                             return;
                         }
+                        HUD.get().revertToPreviousState();
                         updateActions(action, entity);
                     }
                 })));

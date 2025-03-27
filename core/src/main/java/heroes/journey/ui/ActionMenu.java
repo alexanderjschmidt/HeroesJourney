@@ -1,18 +1,20 @@
 package heroes.journey.ui;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
+import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -21,6 +23,7 @@ public class ActionMenu extends UI {
 
     public ActionMenu() {
         super(0, 0, 8, 1, true, true);
+        this.setVisible(false);
     }
 
     public void open() {
@@ -33,38 +36,41 @@ public class ActionMenu extends UI {
             .toList();
         if (selectedPosition != null) {
             // Get Tiles Factions Actions
-            Entity faction = GameState.global().getEntities().getFaction(selectedPosition.getX(), selectedPosition.getY());
+            Entity faction = GameState.global()
+                .getEntities()
+                .getFaction(selectedPosition.getX(), selectedPosition.getY());
             if (faction != null) {
                 ActionComponent factionActions = ActionComponent.get(faction);
                 if (factionActions != null) {
                     List<Action> requirementsMetFactionOptions = factionActions.stream()
                         .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
                         .toList();
-                    requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(), requirementsMetFactionOptions.stream())
-                        .distinct()
-                        .collect(Collectors.toList());
+                    requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
+                        requirementsMetFactionOptions.stream()).distinct().collect(Collectors.toList());
                 }
             }
             // Get Tiles Environment Actions
-            ActionTerrain environment = GameState.global().getMap().getEnvironment(selectedPosition.getX(), selectedPosition.getY());
+            ActionTerrain environment = GameState.global()
+                .getMap()
+                .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
             if (environment != null) {
-                List<Action> requirementsMetEnvironmentOptions = environment.getActions().stream()
+                List<Action> requirementsMetEnvironmentOptions = environment.getActions()
+                    .stream()
                     .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
                     .toList();
-                requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(), requirementsMetEnvironmentOptions.stream())
-                    .distinct()
-                    .collect(Collectors.toList());
+                requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
+                    requirementsMetEnvironmentOptions.stream()).distinct().collect(Collectors.toList());
             }
         }
-        open(requirementsMetOptions);
+        HUD.get().setState(new ActionSelectState(requirementsMetOptions));
     }
 
+    // TODO Make this only accessed by entering the actionSelect State
     public void open(List<Action> options) {
         GameState.global().getRangeManager().clearRange();
-        HUD.get().setState(HUD.HUDState.ACTION_SELECT);
         if (options.isEmpty()) {
             HUD.get().getCursor().clearSelected();
-            HUD.get().setState(HUD.HUDState.CURSOR_MOVE);
+            HUD.get().revertToPreviousState();
             return;
         }
         this.options = options;

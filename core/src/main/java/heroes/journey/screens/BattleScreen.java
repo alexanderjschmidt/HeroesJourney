@@ -3,6 +3,7 @@ package heroes.journey.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
@@ -11,7 +12,6 @@ import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
-import heroes.journey.utils.input.InputManager;
 import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.worldgen.NewMapManager;
 
@@ -26,7 +26,7 @@ public class BattleScreen implements Screen {
     // quickStart constructor
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
-        this.mapData = new MapData((int) (Math.random() * 10000000), Map.MAP_SIZE, 2, false);
+        this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 2, false);
         startGame();
     }
 
@@ -45,7 +45,7 @@ public class BattleScreen implements Screen {
         int teamCount,
         boolean fogOfWar) {
         this.app = app;
-        this.mapData = ActionQueue.get().initSocket((int) (Math.random() * 10000000), 16, 4, false, true);
+        this.mapData = ActionQueue.get().initSocket((int)(Math.random() * 10000000), 16, 4, false, true);
     }
 
     public void startGame() {
@@ -71,7 +71,6 @@ public class BattleScreen implements Screen {
         app.getViewport().setCamera(GameCamera.get());
         batch.setProjectionMatrix(GameCamera.get().combined);
 
-        InputManager.get().update(delta);
         HUD.get().update(delta);
 
         batch.begin();
