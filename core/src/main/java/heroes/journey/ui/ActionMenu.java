@@ -1,5 +1,6 @@
 package heroes.journey.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,10 +21,13 @@ public class ActionMenu extends UI {
 
     private List<Action> options;
     private int selected = 0;
+    private int MAX_HEIGHT = 14;
+    private ActionDetailUI actionDetailUI;
 
-    public ActionMenu() {
+    public ActionMenu(ActionDetailUI actionDetailUI) {
         super(0, 0, 8, 1, true, true);
         this.setVisible(false);
+        this.actionDetailUI = actionDetailUI;
     }
 
     public void open() {
@@ -36,33 +40,45 @@ public class ActionMenu extends UI {
             .toList();
         if (selectedPosition != null) {
             // Get Tiles Factions Actions
-            Entity faction = GameState.global()
-                .getEntities()
-                .getFaction(selectedPosition.getX(), selectedPosition.getY());
-            if (faction != null) {
-                ActionComponent factionActions = ActionComponent.get(faction);
-                if (factionActions != null) {
-                    List<Action> requirementsMetFactionOptions = factionActions.stream()
-                        .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
-                        .toList();
-                    requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                        requirementsMetFactionOptions.stream()).distinct().collect(Collectors.toList());
-                }
-            }
+            requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
+                    getFactionActions(selectedEntity, selectedPosition).stream())
+                .distinct()
+                .collect(Collectors.toList());
             // Get Tiles Environment Actions
-            ActionTerrain environment = GameState.global()
-                .getMap()
-                .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
-            if (environment != null) {
-                List<Action> requirementsMetEnvironmentOptions = environment.getActions()
-                    .stream()
-                    .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
-                    .toList();
-                requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                    requirementsMetEnvironmentOptions.stream()).distinct().collect(Collectors.toList());
-            }
+            requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
+                    getTileActions(selectedEntity, selectedPosition).stream())
+                .distinct()
+                .collect(Collectors.toList());
         }
         HUD.get().setState(new ActionSelectState(requirementsMetOptions));
+    }
+
+    private List<Action> getFactionActions(Entity selectedEntity, PositionComponent selectedPosition) {
+        Entity faction = GameState.global()
+            .getEntities()
+            .getFaction(selectedPosition.getX(), selectedPosition.getY());
+        if (faction != null) {
+            ActionComponent factionActions = ActionComponent.get(faction);
+            if (factionActions != null) {
+                return factionActions.stream()
+                    .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
+                    .toList();
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    private List<Action> getTileActions(Entity selectedEntity, PositionComponent selectedPosition) {
+        ActionTerrain environment = GameState.global()
+            .getMap()
+            .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
+        if (environment != null) {
+            return environment.getActions()
+                .stream()
+                .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
+                .toList();
+        }
+        return new ArrayList<>();
     }
 
     // TODO Make this only accessed by entering the actionSelect State
@@ -76,8 +92,9 @@ public class ActionMenu extends UI {
         this.options = options;
         selected = 0;
         options.get(selected).onHover(GameState.global(), HUD.get().getCursor().getSelected());
-        this.setSize(8, options.size());
+        this.setSize(8, Math.min(MAX_HEIGHT, options.size()));
         this.setPosition(0, 0);
+        actionDetailUI.setAction(options.get(selected));
     }
 
     @Override
@@ -100,6 +117,7 @@ public class ActionMenu extends UI {
         } else {
             selected = 0;
         }
+        actionDetailUI.setAction(options.get(selected));
     }
 
     public void decrement() {
@@ -109,6 +127,7 @@ public class ActionMenu extends UI {
         } else {
             selected = options.size() - 1;
         }
+        actionDetailUI.setAction(options.get(selected));
     }
 
     public void select() {

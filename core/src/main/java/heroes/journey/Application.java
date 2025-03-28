@@ -24,6 +24,7 @@ import heroes.journey.utils.art.ResourceManager;
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Menus
+ *  Action Detail UI flesh out
  *  use a table layout
  *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
@@ -38,6 +39,7 @@ import heroes.journey.utils.art.ResourceManager;
  *      Crafting??
  * 		Equipment
  * 			Equip
+ * Multiplayer
  * Action on Town
  *  Quests
  * Fog of War

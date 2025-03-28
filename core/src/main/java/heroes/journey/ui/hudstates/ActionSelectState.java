@@ -26,6 +26,7 @@ public class ActionSelectState extends HUDState {
     @Override
     public void enter(HUD hud) {
         hud.getActionMenu().setVisible(true);
+        hud.getActionDetailedUI().setVisible(true);
         HUD.get().getActionMenu().open(options);
     }
 
@@ -53,6 +54,7 @@ public class ActionSelectState extends HUDState {
     @Override
     public void exit(HUD hud) {
         hud.getActionMenu().setVisible(false);
+        hud.getActionDetailedUI().setVisible(false);
     }
 
     @Override

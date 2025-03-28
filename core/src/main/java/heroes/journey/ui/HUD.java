@@ -19,6 +19,7 @@ public class HUD extends Stage {
     private final Table layout;
 
     private final ActionMenu actionMenu;
+    private final ActionDetailUI actionDetailUI;
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
     private final TurnUI turnUI;
@@ -38,17 +39,22 @@ public class HUD extends Stage {
         super(new ScreenViewport());
         stateMachine = new StackStateMachine<HUD,HUDState>(this, States.LOCKED);
         stateMachine.setGlobalState(States.GLOBAL);
+
         cursor = new Cursor(this);
-        actionMenu = new ActionMenu();
+
+        actionDetailUI = new ActionDetailUI();
+        actionMenu = new ActionMenu(actionDetailUI);
         terrainUI = new TerrainUI();
         entityUI = new EntityUI();
         turnUI = new TurnUI();
         statsUI = new StatsUI();
         this.addActor(actionMenu);
+        this.addActor(actionDetailUI);
         this.addActor(terrainUI);
         this.addActor(entityUI);
         this.addActor(turnUI);
         this.addActor(statsUI);
+
         layout = new Table();
         this.addActor(layout);
     }
@@ -88,6 +94,10 @@ public class HUD extends Stage {
 
     public ActionMenu getActionMenu() {
         return actionMenu;
+    }
+
+    public ActionDetailUI getActionDetailedUI() {
+        return actionDetailUI;
     }
 
     public Cursor getCursor() {
