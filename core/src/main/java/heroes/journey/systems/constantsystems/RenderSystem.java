@@ -4,12 +4,16 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
+import heroes.journey.GameState;
 import heroes.journey.components.ActorComponent;
 import heroes.journey.components.GlobalGameStateComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RenderComponent;
+import heroes.journey.ui.HUD;
 
 public class RenderSystem extends IteratingSystem {
 
@@ -20,9 +24,15 @@ public class RenderSystem extends IteratingSystem {
 
     @Override
     public void update(float delta) {
-        Application.get().getBatch().begin();
+        SpriteBatch batch = Application.get().getBatch();
+
+        batch.begin();
+
+        GameState.global().render(batch, delta);
         super.update(delta);
-        Application.get().getBatch().end();
+        HUD.get().getCursor().render(batch, delta);
+        
+        batch.end();
     }
 
     @Override

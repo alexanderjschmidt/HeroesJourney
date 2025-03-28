@@ -28,7 +28,6 @@ import heroes.journey.utils.art.ResourceManager;
  *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
  * 	Stats Screen
- * 		visuals
  * 		increment on level up
  * 	Inventory
  * 		Use Item (health potion)
@@ -39,10 +38,11 @@ import heroes.journey.utils.art.ResourceManager;
  *      Crafting??
  * 		Equipment
  * 			Equip
- * 	Wait time selector
  * Action on Town
  *  Quests
  * Fog of War
+ *  fog of unseen tiles
+ *  black on undiscovered tiles
  * Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
  *  darker then redder
  * Add time

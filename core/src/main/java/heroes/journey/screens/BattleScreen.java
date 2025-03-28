@@ -1,6 +1,5 @@
 package heroes.journey.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -12,7 +11,6 @@ import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
-import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.worldgen.NewMapManager;
 
 public class BattleScreen implements Screen {
@@ -61,30 +59,14 @@ public class BattleScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (!ready) {
-            if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE)) {
-                app.setScreen(new MainMenuScreen(app));
-            }
-            return;
-        }
         GameCamera.get().updateGameCamera();
         app.getViewport().setCamera(GameCamera.get());
         batch.setProjectionMatrix(GameCamera.get().combined);
 
+        GameEngine.get().update(delta);
         HUD.get().update(delta);
 
-        batch.begin();
-        GameState.global().render(batch, delta);
-        batch.end();
-
-        GameEngine.get().update(delta);
-
-        batch.begin();
-        HUD.get().getCursor().render(batch, delta);
-        batch.end();
-
-        HUD.get().draw();
-
+        // TODO make this a system in the GameEngine?
         ActionQueue.get().update();
     }
 

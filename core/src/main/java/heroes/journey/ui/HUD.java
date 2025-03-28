@@ -64,6 +64,7 @@ public class HUD extends Stage {
             selectedEntityUI.update();
         }
         turnUI.update();
+        draw();
     }
 
     public void select() {
