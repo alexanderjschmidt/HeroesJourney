@@ -25,6 +25,7 @@ import heroes.journey.utils.art.ResourceManager;
  *  make camera not go beyond map
  * Menus
  *  Action Detail UI flesh out
+ *  Make Options be dynamic so you can add an option from initializers
  *  use a table layout
  *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize

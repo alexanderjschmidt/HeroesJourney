@@ -1,17 +1,26 @@
 package heroes.journey.initializers.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.CooldownAction;
+import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.systems.GameEngine;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.hudstates.ActionSelectState;
 
 public class BaseActions implements InitializerInterface {
 
@@ -19,6 +28,7 @@ public class BaseActions implements InitializerInterface {
     public static CooldownAction workout, study;
     public static CooldownAction delve;
     public static Action chopTrees;
+    public static Action inn;
 
     static {
         exit_game = new Action("Exit Game", true) {
@@ -87,7 +97,8 @@ public class BaseActions implements InitializerInterface {
             @Override
             public void onSelect(GameState gameState, Entity entity) {
                 PositionComponent positionComponent = PositionComponent.get(entity);
-                Entity dungeon = gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+                Entity dungeon = gameState.getEntities()
+                    .getFaction(positionComponent.getX(), positionComponent.getY());
                 CooldownComponent.get(dungeon).put(this, getTurnCooldown());
                 onSelectHelper(gameState, entity);
             }
@@ -101,7 +112,8 @@ public class BaseActions implements InitializerInterface {
             @Override
             public boolean requirementsMet(GameState gameState, Entity entity) {
                 PositionComponent positionComponent = PositionComponent.get(entity);
-                Entity dungeon = gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+                Entity dungeon = gameState.getEntities()
+                    .getFaction(positionComponent.getX(), positionComponent.getY());
                 return requirementsMetHelper(gameState, dungeon);
             }
 
@@ -120,6 +132,25 @@ public class BaseActions implements InitializerInterface {
             public void onSelect(GameState gameState, Entity selected) {
                 InventoryComponent inventoryComponent = InventoryComponent.get(selected);
                 inventoryComponent.add(Items.wood, 1);
+            }
+        };
+        inn = new Action("Inn") {
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                PositionComponent positionComponent = PositionComponent.get(selected);
+                Entity town = gameState.getEntities()
+                    .getFaction(positionComponent.getX(), positionComponent.getY());
+                QuestsComponent questsComponent = QuestsComponent.get(town);
+                List<Action> questActions = new ArrayList<>();
+                for (Quest quest : questsComponent.getQuests()) {
+                    questActions.add(new ClaimQuestAction(quest.toString(), quest));
+                }
+                HUD.get().setState(new ActionSelectState(questActions));
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return true;
             }
         };
 		/*attack = new TargetAction("Attack", 0, null, RangeColor.RED, true) {

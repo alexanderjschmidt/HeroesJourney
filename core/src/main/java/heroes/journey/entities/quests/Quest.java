@@ -1,11 +1,31 @@
 package heroes.journey.entities.quests;
 
-public abstract class Quest {
+public class Quest {
 
-    public abstract void onComplete();
+    private final String name;
 
-    public abstract void onAccept();
+    public Quest(String name) {
+        this.name = name;
+    }
 
-    public abstract void onDrop();
+    public void onComplete() {
 
+    }
+
+    public void onAccept() {
+
+    }
+
+    public boolean canAccept() {
+        return true;
+    }
+
+    public void onDrop() {
+
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
