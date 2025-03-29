@@ -17,6 +17,11 @@ public class Options {
     static {
         Action debugAction = new Action("Debug: " + DEBUG) {
             @Override
+            public boolean isTerminal() {
+                return false;
+            }
+
+            @Override
             public void onSelect(GameState gameState, Entity selected) {
                 DEBUG = !DEBUG;
                 this.setName("Debug: " + DEBUG);
@@ -28,6 +33,11 @@ public class Options {
             }
         };
         Action autoEndTurnAction = new Action("Auto End Turn: " + AUTO_END_TURN) {
+            @Override
+            public boolean isTerminal() {
+                return false;
+            }
+
             @Override
             public void onSelect(GameState gameState, Entity selected) {
                 AUTO_END_TURN = !AUTO_END_TURN;
@@ -43,6 +53,11 @@ public class Options {
         optionsList.add(debugAction);
         optionsList.add(autoEndTurnAction);
         new Action("Options", true) {
+            @Override
+            public boolean isTerminal() {
+                return false;
+            }
+
             @Override
             public void onSelect(GameState gameState, Entity selected) {
                 HUD.get().setState(new ActionSelectState(optionsList));

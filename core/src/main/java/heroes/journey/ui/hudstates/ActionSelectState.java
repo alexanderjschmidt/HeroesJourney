@@ -3,9 +3,9 @@ package heroes.journey.ui.hudstates;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.msg.Telegram;
 
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
@@ -38,10 +38,15 @@ public class ActionSelectState extends HUDState {
             HUD.get().getActionMenu().increment();
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction)) {
-                sendAction();
-            } else {
-                HUD.get().getCursor().setActiveSkill((TargetAction)HUD.get().getActionMenu().getSelected());
+            // TODO this seems to trigger twice when its a nested action menu causing two turns to pass
+            // Need to redo the ActionQueue and selecting options to only end once.
+            // its getting to turn 2 before it resolves the select quest
+            if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction) &&
+                HUD.get().getActionMenu().getSelected().isTerminal()) {
+                ActionQueue.get().sendAction(HUD.get().getActionMenu().getSelected(), pathHolder);
+                pathHolder = null;
+            } else if (HUD.get().getActionMenu().getSelected() instanceof TargetAction targetAction) {
+                HUD.get().getCursor().setActiveSkill(targetAction);
             }
             HUD.get().getActionMenu().select();
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
@@ -57,8 +62,4 @@ public class ActionSelectState extends HUDState {
         hud.getActionDetailedUI().setVisible(false);
     }
 
-    @Override
-    public boolean onMessage(HUD entity, Telegram telegram) {
-        return false;
-    }
 }

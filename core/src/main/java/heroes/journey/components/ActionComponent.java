@@ -1,13 +1,14 @@
 package heroes.journey.components;
 
+import java.util.ArrayList;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.initializers.base.BaseActions;
-
-import java.util.ArrayList;
 
 public class ActionComponent extends ArrayList<Action> implements ClonableComponent<ActionComponent> {
 
@@ -38,8 +39,9 @@ public class ActionComponent extends ArrayList<Action> implements ClonableCompon
 
     public ActionComponent addAction(CooldownAction action, Entity entity) {
         CooldownComponent cooldownComponent = CooldownComponent.get(entity);
-        if (cooldownComponent == null)
+        if (cooldownComponent == null) {
             entity.add(new CooldownComponent());
+        }
         add(action);
         return this;
     }

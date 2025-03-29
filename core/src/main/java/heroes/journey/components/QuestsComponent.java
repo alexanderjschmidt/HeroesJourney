@@ -1,30 +1,28 @@
 package heroes.journey.components;
 
+import java.util.ArrayList;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.quests.Quest;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class QuestsComponent implements ClonableComponent<QuestsComponent> {
-
-    private List<Quest> quests;
+public class QuestsComponent extends ArrayList<Quest> implements ClonableComponent<QuestsComponent> {
 
     public QuestsComponent() {
-        this.quests = new ArrayList<>();
-    }
-
-    public List<Quest> getQuests() {
-        return quests;
+        super();
     }
 
     @Override
     public QuestsComponent clone() {
-        QuestsComponent questsComponent = new QuestsComponent();
-        questsComponent.quests = new ArrayList<>(quests);
-        return questsComponent;
+        QuestsComponent clone = (QuestsComponent)super.clone();
+        return clone;
+    }
+
+    public QuestsComponent addQuest(Quest quest) {
+        this.add(quest);
+        return this;
     }
 
     private static final ComponentMapper<QuestsComponent> mapper = ComponentMapper.getFor(

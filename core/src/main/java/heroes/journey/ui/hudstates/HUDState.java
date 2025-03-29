@@ -1,18 +1,11 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -73,35 +66,6 @@ public abstract class HUDState implements State<HUD> {
 
     private static GameState gameState() {
         return GameState.global();
-    }
-
-    void sendAction() {
-        Cell temp = pathHolder;
-        if (temp == null) {
-            temp = new Cell(cursor().x, cursor().y, 1);
-        }
-        List<Integer> xCoords = new ArrayList<Integer>();
-        List<Integer> yCoords = new ArrayList<Integer>();
-        while (temp != null) {
-            xCoords.add(temp.i);
-            yCoords.add(temp.j);
-            temp = temp.parent;
-        }
-        // System.out.println(HUD.get().getActionMenu().getSelected());
-        // System.out.println(HUD.get().getCursor().x + ", " +
-        // HUD.get().getCursor().y);
-        pathHolder = null;
-        JSONObject gameAction = new JSONObject();
-        try {
-            gameAction.put("skill", HUD.get().getActionMenu().getSelected());
-            gameAction.put("targetX", cursor().x);
-            gameAction.put("targetY", cursor().y);
-            gameAction.put("xCoords", xCoords);
-            gameAction.put("yCoords", yCoords);
-        } catch (JSONException e) {
-            System.out.println(e);
-        }
-        ActionQueue.get().sendAction(gameAction);
     }
 
     void savePath() {

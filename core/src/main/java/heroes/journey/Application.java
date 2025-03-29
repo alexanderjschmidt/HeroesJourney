@@ -42,6 +42,7 @@ import heroes.journey.utils.art.ResourceManager;
  * 			Equip
  * Multiplayer
  * Action on Town
+ *  Add grayed out actions, ie missing a requirement but letting you know its an option
  *  Quests
  * Fog of War
  *  fog of unseen tiles

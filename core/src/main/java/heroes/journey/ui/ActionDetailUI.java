@@ -40,6 +40,7 @@ public class ActionDetailUI extends UI {
     public void setAction(Action action) {
         this.action = action;
         Entity selected = HUD.get().getCursor().getSelected();
-        cooldownComponent = CooldownComponent.get(selected);
+        if (selected != null)
+            cooldownComponent = CooldownComponent.get(selected);
     }
 }

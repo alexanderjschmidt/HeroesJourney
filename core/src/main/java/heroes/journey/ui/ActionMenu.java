@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.art.ResourceManager;
@@ -41,9 +41,7 @@ public class ActionMenu extends UI {
         if (selectedPosition != null) {
             // Get Tiles Factions Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                    getFactionActions(selectedEntity, selectedPosition).stream())
-                .distinct()
-                .collect(Collectors.toList());
+                getFactionActions(selectedEntity).stream()).distinct().collect(Collectors.toList());
             // Get Tiles Environment Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
                     getTileActions(selectedEntity, selectedPosition).stream())
@@ -53,10 +51,8 @@ public class ActionMenu extends UI {
         HUD.get().setState(new ActionSelectState(requirementsMetOptions));
     }
 
-    private List<Action> getFactionActions(Entity selectedEntity, PositionComponent selectedPosition) {
-        Entity faction = GameState.global()
-            .getEntities()
-            .getFaction(selectedPosition.getX(), selectedPosition.getY());
+    private List<Action> getFactionActions(Entity selectedEntity) {
+        Entity faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
         if (faction != null) {
             ActionComponent factionActions = ActionComponent.get(faction);
             if (factionActions != null) {
@@ -131,8 +127,10 @@ public class ActionMenu extends UI {
     }
 
     public void select() {
-        options.get(selected).onSelect(GameState.global(), HUD.get().getCursor().getSelected());
-        if (!(options.get(selected) instanceof TargetAction) && HUD.get().getCursor().getSelected() != null) {
+        Action selectedAction = options.get(selected);
+        selectedAction.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
+        System.out.println("Select " + selectedAction + " " + selectedAction.isTerminal());
+        if (selectedAction.isTerminal()) {
             GameState.global().nextTurn();
         }
     }

@@ -1,6 +1,7 @@
 package heroes.journey.entities.actions;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -173,6 +174,33 @@ public class ActionQueue extends ArrayList<QueuedAction> {
 
     public void addAction(QueuedAction action) {
         actionQueue.add(action);
+    }
+
+    public void sendAction(Action action, Cell path) {
+        if (path == null) {
+            path = new Cell(HUD.get().getCursor().x, HUD.get().getCursor().y, 1);
+        }
+        List<Integer> xCoords = new ArrayList<Integer>();
+        List<Integer> yCoords = new ArrayList<Integer>();
+        while (path != null) {
+            xCoords.add(path.i);
+            yCoords.add(path.j);
+            path = path.parent;
+        }
+        // System.out.println(HUD.get().getActionMenu().getSelected());
+        // System.out.println(HUD.get().getCursor().x + ", " +
+        // HUD.get().getCursor().y);
+        JSONObject gameAction = new JSONObject();
+        try {
+            gameAction.put("skill", action);
+            gameAction.put("targetX", HUD.get().getCursor().x);
+            gameAction.put("targetY", HUD.get().getCursor().y);
+            gameAction.put("xCoords", xCoords);
+            gameAction.put("yCoords", yCoords);
+        } catch (JSONException e) {
+            System.out.println(e);
+        }
+        sendAction(gameAction);
     }
 
     public void endAction() {

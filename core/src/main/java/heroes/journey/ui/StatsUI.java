@@ -1,15 +1,18 @@
 package heroes.journey.ui;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.items.ItemInterface;
-
-import java.util.List;
+import heroes.journey.entities.quests.Quest;
 
 public class StatsUI extends UI {
 
@@ -42,11 +45,13 @@ public class StatsUI extends UI {
             return;
         drawStats(batch, parentAlpha);
         drawInventory(batch, parentAlpha);
+        drawQuests(batch, parentAlpha);
     }
 
     private void drawStats(Batch batch, float parentAlpha) {
         RenderComponent renderComponent = RenderComponent.get(entity);
-        batch.draw(renderComponent.getSprite(), getX() + 12, getY() + 24 + HUD.FONT_SIZE * 9, GameCamera.get().getSize() * 2, GameCamera.get().getSize() * 2);
+        batch.draw(renderComponent.getSprite(), getX() + 12, getY() + 24 + HUD.FONT_SIZE * 9,
+            GameCamera.get().getSize() * 2, GameCamera.get().getSize() * 2);
 
         StatsComponent statsComponent = StatsComponent.get(entity);
         drawText(batch, "===== Stats =====", 0, 0);
@@ -67,6 +72,16 @@ public class StatsUI extends UI {
             ItemInterface item = items.get(i);
             drawText(batch, item.toString(), 13, i + 1);
             drawText(batch, "x" + inventoryComponent.get(item), 22, i + 1);
+        }
+    }
+
+    private void drawQuests(Batch batch, float parentAlpha) {
+        QuestsComponent questsComponent = QuestsComponent.get(entity);
+
+        drawText(batch, "===== Quests =====", 13, 12);
+        for (int i = 0; i < questsComponent.size(); i++) {
+            Quest quest = questsComponent.get(i);
+            drawText(batch, quest.toString(), 13, i + 1 + 12);
         }
     }
 

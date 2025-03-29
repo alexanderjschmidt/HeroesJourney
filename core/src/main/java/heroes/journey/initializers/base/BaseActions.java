@@ -9,9 +9,9 @@ import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.CooldownAction;
@@ -46,7 +46,6 @@ public class BaseActions implements InitializerInterface {
         end_turn = new Action("End Turn", true) {
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                gameState.nextTurn();
             }
 
             @Override
@@ -96,9 +95,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public void onSelect(GameState gameState, Entity entity) {
-                PositionComponent positionComponent = PositionComponent.get(entity);
-                Entity dungeon = gameState.getEntities()
-                    .getFaction(positionComponent.getX(), positionComponent.getY());
+                Entity dungeon = Utils.getLocationsFaction(gameState, entity);
                 CooldownComponent.get(dungeon).put(this, getTurnCooldown());
                 onSelectHelper(gameState, entity);
             }
@@ -111,9 +108,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public boolean requirementsMet(GameState gameState, Entity entity) {
-                PositionComponent positionComponent = PositionComponent.get(entity);
-                Entity dungeon = gameState.getEntities()
-                    .getFaction(positionComponent.getX(), positionComponent.getY());
+                Entity dungeon = Utils.getLocationsFaction(gameState, entity);
                 return requirementsMetHelper(gameState, dungeon);
             }
 
@@ -135,14 +130,18 @@ public class BaseActions implements InitializerInterface {
             }
         };
         inn = new Action("Inn") {
+
+            @Override
+            public boolean isTerminal() {
+                return false;
+            }
+
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                PositionComponent positionComponent = PositionComponent.get(selected);
-                Entity town = gameState.getEntities()
-                    .getFaction(positionComponent.getX(), positionComponent.getY());
+                Entity town = Utils.getLocationsFaction(gameState, selected);
                 QuestsComponent questsComponent = QuestsComponent.get(town);
                 List<Action> questActions = new ArrayList<>();
-                for (Quest quest : questsComponent.getQuests()) {
+                for (Quest quest : questsComponent) {
                     questActions.add(new ClaimQuestAction(quest.toString(), quest));
                 }
                 HUD.get().setState(new ActionSelectState(questActions));
@@ -150,7 +149,9 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public boolean requirementsMet(GameState gameState, Entity selected) {
-                return true;
+                Entity town = Utils.getLocationsFaction(gameState, selected);
+                QuestsComponent questsComponent = QuestsComponent.get(town);
+                return !questsComponent.isEmpty();
             }
         };
 		/*attack = new TargetAction("Attack", 0, null, RangeColor.RED, true) {

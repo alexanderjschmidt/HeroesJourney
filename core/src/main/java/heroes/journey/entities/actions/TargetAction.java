@@ -15,8 +15,8 @@ public abstract class TargetAction extends Action {
     protected int[] range;
     protected RangeColor rangeType;
 
-    public TargetAction(String name, int manaCost, int[] range, RangeColor rangeType, boolean targetEntity) {
-        super(name, manaCost);
+    public TargetAction(String name, int[] range, RangeColor rangeType, boolean targetEntity) {
+        super(name);
         this.targetEntity = targetEntity;
         this.targetEnemy = rangeType == RangeColor.RED;
         this.range = range;
@@ -24,9 +24,7 @@ public abstract class TargetAction extends Action {
     }
 
     public boolean requirementsMet(GameState gameState, Entity selected) {
-        return
-            !gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType).isEmpty() &&
-                this.hasMana(selected);
+        return !gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType).isEmpty();
     }
 
     public void onHover(GameState gameState, Entity hover) {

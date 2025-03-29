@@ -1,31 +1,22 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 
 public abstract class Action {
 
     private String name;
-    private int manaCost;
 
-    public Action(String name, int manaCost, boolean teamSkill) {
+    public Action(String name, boolean teamSkill) {
         this.name = name;
-        this.manaCost = manaCost;
         ActionManager.get().put(name, this);
         if (teamSkill)
             ActionManager.addTeamAction(this);
     }
 
-    public Action(String name, int manaCost) {
-        this(name, manaCost, false);
-    }
-
-    public Action(String name, boolean teamSkill) {
-        this(name, 0, teamSkill);
-    }
-
     public Action(String name) {
-        this(name, 0, false);
+        this(name, false);
     }
 
     public abstract boolean requirementsMet(GameState gameState, Entity selected);
@@ -44,7 +35,7 @@ public abstract class Action {
         this.name = name;
     }
 
-    public boolean hasMana(Entity e) {
+    public boolean isTerminal() {
         return true;
     }
 
