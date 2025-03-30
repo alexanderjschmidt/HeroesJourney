@@ -1,7 +1,6 @@
 package heroes.journey.utils.ai;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 

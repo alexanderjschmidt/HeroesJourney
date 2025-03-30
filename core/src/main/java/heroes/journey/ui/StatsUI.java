@@ -1,18 +1,17 @@
 package heroes.journey.ui;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.entities.quests.Quest;
+
+import java.util.List;
 
 public class StatsUI extends UI {
 

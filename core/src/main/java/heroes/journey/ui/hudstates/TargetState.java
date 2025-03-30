@@ -1,9 +1,7 @@
 package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
-import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 
@@ -23,7 +21,6 @@ class TargetState extends HUDState {
                 updateFreeMove(hud.getDelta());
             }
             if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-                ActionQueue.get().sendAction(HUD.get().getActionMenu().getSelected(), pathHolder);
                 pathHolder = null;
                 hud.getCursor()
                     .getActiveSkill()

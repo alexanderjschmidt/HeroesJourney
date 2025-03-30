@@ -1,14 +1,13 @@
 package heroes.journey.utils.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.utils.Random;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Node {
 

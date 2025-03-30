@@ -1,33 +1,10 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.CooldownComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.GlobalGameStateComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LoyaltyComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PlayerComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.Position;
-import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
@@ -37,13 +14,17 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationPhase;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.*;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -78,8 +59,8 @@ public class Map implements InitializerInterface {
                 int numHouses = 10;
                 for (int i = 0; i < numHouses; i++) {
                     while (true) {
-                        int x = (int)(Math.random() * tileMap.length);
-                        int y = (int)(Math.random() * tileMap[0].length);
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
                             generateHouse(x, y);
                             housePos.add(new Position(x, y));
@@ -114,8 +95,8 @@ public class Map implements InitializerInterface {
                 int numDungeons = 8;
                 for (int i = 0; i < numDungeons; i++) {
                     while (true) {
-                        int x = (int)(Math.random() * tileMap.length);
-                        int y = (int)(Math.random() * tileMap[0].length);
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
                             environment[x][y] = Tiles.DUNGEON;
                             generateDungeon(x, y);
@@ -219,19 +200,31 @@ public class Map implements InitializerInterface {
             @Override
             public void applyEffect(GameState gameState) {
                 Entity player = new Entity();
-                player.add(new PlayerComponent(ActionQueue.get().getID()))
+                player.add(new PlayerComponent(GameState.global().getId()))
                     .add(new PositionComponent(housePos.getFirst().getX(), housePos.getFirst().getY()))
                     .add(new GameStateComponent())
                     .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
                     .add(new ActorComponent())
-                    .add(new MovementComponent())
-                    .add(new ActionComponent())
+                    .add(new PossibleActionsComponent())
                     .add(new AIComponent(new MCTSAI()))
                     .add(new StatsComponent())
                     .add(new InventoryComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());
                 GameEngine.get().addEntity(player);
+
+                Entity opponent = new Entity();
+                opponent.add(new PositionComponent(housePos.getLast().getX(), housePos.getLast().getY()))
+                    .add(new GameStateComponent())
+                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
+                    .add(new ActorComponent())
+                    .add(new PossibleActionsComponent())
+                    .add(new AIComponent(new MCTSAI()))
+                    .add(new StatsComponent())
+                    .add(new InventoryComponent())
+                    .add(new QuestsComponent())
+                    .add(new LoyaltyComponent());
+                GameEngine.get().addEntity(opponent);
             }
         };
     }
@@ -244,7 +237,7 @@ public class Map implements InitializerInterface {
                 GameState.global(), house, new Position(x, y)))
             .add(new GlobalGameStateComponent())
             .add(new QuestsComponent().addQuest(quest))
-            .add(new ActionComponent().addAction(BaseActions.inn));
+            .add(new PossibleActionsComponent().addAction(BaseActions.inn));
         GameEngine.get().addEntity(house);
     }
 
@@ -253,7 +246,7 @@ public class Map implements InitializerInterface {
         dungeon.add(new FactionComponent(SyllableDungeonNameGenerator.generateName()).addOwnedLocation(
                 GameState.global(), dungeon, new Position(x, y)))
             .add(new GlobalGameStateComponent())
-            .add(new ActionComponent().addAction(BaseActions.delve, dungeon))
+            .add(new PossibleActionsComponent().addAction(BaseActions.delve, dungeon))
             .add(new CooldownComponent());
         GameEngine.get().addEntity(dungeon);
     }

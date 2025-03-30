@@ -1,25 +1,12 @@
 package heroes.journey;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.GlobalGameStateComponent;
-import heroes.journey.components.PlayerComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionQueue;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.Initializer;
@@ -31,6 +18,9 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameState implements Cloneable {
 
@@ -91,15 +81,16 @@ public class GameState implements Cloneable {
         Action action = queuedAction.getAction();
 
         Entity e = getEntities().get(path.i, path.j);
+        // Move to the end of the Path
+        // TODO does this remove the entity from the previous location?
         if (e != null) {
-            //e.remove();
             while (path.parent != null) {
                 path = path.parent;
             }
             getEntities().addEntity(e);
         }
 
-        HUD.get().getCursor().setSelected(e);
+        // Apply chosen Action
         if (action instanceof TargetAction targetAction) {
             targetAction.targetEffect(this, e, queuedAction.getTargetX(), queuedAction.getTargetY());
         } else {
@@ -157,7 +148,7 @@ public class GameState implements Cloneable {
         HUD.get().revertToInitialState();
         PlayerComponent player = PlayerComponent.get(currentEntity);
         if (player != null) {
-            if (player.getPlayerId().equals(ActionQueue.get().getID())) {
+            if (player.getPlayerId().equals(getId())) {
                 HUD.get().getCursor().setPosition(currentEntity);
                 HUD.get().setState(States.CURSOR_MOVE);
                 System.out.println("your turn");
@@ -165,10 +156,12 @@ public class GameState implements Cloneable {
                 System.out.println("opponent turn");
             }
         } else {
+            System.out.println("ai turn");
             AIComponent ai = AIComponent.get(currentEntity);
             QueuedAction action = ai.getAI().getMove(this, currentEntity);
-            ActionQueue.get().addAction(action);
-            System.out.println("ai turn");
+
+            currentEntity.add(new MovementComponent(action.getPath()));
+            currentEntity.add(new ActionComponent(action.getAction(), action.getTargetX(), action.getTargetY()));
         }
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
@@ -202,4 +195,7 @@ public class GameState implements Cloneable {
         entities.dispose();
     }
 
+    public String getId() {
+        return "id";
+    }
 }

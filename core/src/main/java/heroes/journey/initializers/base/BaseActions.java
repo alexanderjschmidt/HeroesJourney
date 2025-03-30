@@ -1,16 +1,13 @@
 package heroes.journey.initializers.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.Application;
 import heroes.journey.GameState;
+import heroes.journey.components.ActionComponent;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
@@ -22,16 +19,37 @@ import heroes.journey.systems.GameEngine;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BaseActions implements InitializerInterface {
 
-    public static Action wait, end_turn, exit_game, attack;
+    public static Action openActionMenu, wait, end_turn, exit_game, attack;
     public static CooldownAction workout, study;
     public static CooldownAction delve;
     public static Action chopTrees;
     public static Action inn;
 
     static {
+        openActionMenu = new Action("THIS SHOULD NEVER BE DISPLAYED") {
+
+            @Override
+            public boolean isTerminal() {
+                return false;
+            }
+
+            @Override
+            public void onSelect(GameState gameState, Entity selected) {
+                HUD.get().getActionMenu().open();
+            }
+
+            @Override
+            public boolean requirementsMet(GameState gameState, Entity selected) {
+                return false;
+            }
+        };
         exit_game = new Action("Exit Game", true) {
+
             @Override
             public void onSelect(GameState gameState, Entity selected) {
                 GameEngine.get().removeAllEntities();
@@ -44,8 +62,18 @@ public class BaseActions implements InitializerInterface {
             }
         };
         end_turn = new Action("End Turn", true) {
+
+            @Override
+            public boolean isTerminal() {
+                // This SEEMs contradictory, but its because this is a teamSkill and doesnt have a selected entity to apply to
+                // that will get handled by the assigned wait action
+                return false;
+            }
+
             @Override
             public void onSelect(GameState gameState, Entity selected) {
+                Entity entity = gameState.getCurrentEntity();
+                entity.add(new ActionComponent(wait));
             }
 
             @Override

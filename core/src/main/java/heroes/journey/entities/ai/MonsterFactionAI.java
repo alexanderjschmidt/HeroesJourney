@@ -1,27 +1,16 @@
 package heroes.journey.entities.ai;
 
-import java.util.UUID;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LoyaltyComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.initializers.base.Loyalties;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
+
+import java.util.UUID;
 
 public class MonsterFactionAI implements AI {
 
@@ -47,8 +36,6 @@ public class MonsterFactionAI implements AI {
             .add(new GameStateComponent())
             .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[2][8]))
             .add(new ActorComponent())
-            .add(new MovementComponent())
-            .add(new ActionComponent())
             .add(new AIComponent(new MCTSAI()))
             .add(new StatsComponent())
             .add(new InventoryComponent())

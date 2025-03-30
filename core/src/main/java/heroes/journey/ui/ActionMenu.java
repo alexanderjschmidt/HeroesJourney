@@ -1,21 +1,20 @@
 package heroes.journey.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
-import heroes.journey.components.ActionComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -32,7 +31,7 @@ public class ActionMenu extends UI {
 
     public void open() {
         Entity selectedEntity = GameState.global().getCurrentEntity();
-        ActionComponent selectedActions = ActionComponent.get(selectedEntity);
+        PossibleActionsComponent selectedActions = PossibleActionsComponent.get(selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(selectedEntity);
         // Get selected Entities Actions
         List<Action> requirementsMetOptions = selectedActions.stream()
@@ -54,7 +53,7 @@ public class ActionMenu extends UI {
     private List<Action> getFactionActions(Entity selectedEntity) {
         Entity faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
         if (faction != null) {
-            ActionComponent factionActions = ActionComponent.get(faction);
+            PossibleActionsComponent factionActions = PossibleActionsComponent.get(faction);
             if (factionActions != null) {
                 return factionActions.stream()
                     .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
@@ -77,10 +76,10 @@ public class ActionMenu extends UI {
         return new ArrayList<>();
     }
 
-    // TODO Make this only accessed by entering the actionSelect State
     public void open(List<Action> options) {
         GameState.global().getRangeManager().clearRange();
         if (options.isEmpty()) {
+            System.out.println("Options Empty");
             HUD.get().getCursor().clearSelected();
             HUD.get().revertToPreviousState();
             return;
@@ -128,11 +127,8 @@ public class ActionMenu extends UI {
 
     public void select() {
         Action selectedAction = options.get(selected);
+        System.out.println("Selected " + selectedAction + " " + selectedAction.isTerminal());
         selectedAction.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
-        System.out.println("Select " + selectedAction + " " + selectedAction.isTerminal());
-        if (selectedAction.isTerminal()) {
-            GameState.global().nextTurn();
-        }
     }
 
     public Action getSelected() {

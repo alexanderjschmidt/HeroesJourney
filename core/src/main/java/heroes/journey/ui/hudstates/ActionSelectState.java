@@ -1,14 +1,13 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.List;
-
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-
+import heroes.journey.components.ActionComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionQueue;
-import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.List;
 
 public class ActionSelectState extends HUDState {
 
@@ -38,17 +37,14 @@ public class ActionSelectState extends HUDState {
             HUD.get().getActionMenu().increment();
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            // TODO this seems to trigger twice when its a nested action menu causing two turns to pass
-            // Need to redo the ActionQueue and selecting options to only end once.
-            // its getting to turn 2 before it resolves the select quest
-            if (!(HUD.get().getActionMenu().getSelected() instanceof TargetAction) &&
-                HUD.get().getActionMenu().getSelected().isTerminal()) {
-                ActionQueue.get().sendAction(HUD.get().getActionMenu().getSelected(), pathHolder);
-                pathHolder = null;
-            } else if (HUD.get().getActionMenu().getSelected() instanceof TargetAction targetAction) {
-                HUD.get().getCursor().setActiveSkill(targetAction);
-            }
+            Action selectedAction = HUD.get().getActionMenu().getSelected();
+            // TODO add back TargetAction logic
             HUD.get().getActionMenu().select();
+            if (selectedAction.isTerminal()) {
+                Entity selectedEntity = HUD.get().getCursor().getSelected();
+                selectedEntity.add(new ActionComponent(selectedAction));
+                HUD.get().revertToInitialState();
+            }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
             Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();

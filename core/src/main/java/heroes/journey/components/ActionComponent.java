@@ -1,28 +1,24 @@
 package heroes.journey.components;
 
-import java.util.ArrayList;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.CooldownAction;
-import heroes.journey.initializers.base.BaseActions;
 
-public class ActionComponent extends ArrayList<Action> implements ClonableComponent<ActionComponent> {
+public class ActionComponent implements ClonableComponent<ActionComponent> {
 
+    // Split this into Possible Actions component and actively doing action component
     private Action action;
     private int targetX, targetY;
 
-    public ActionComponent() {
-        add(BaseActions.wait);
-    }
-
-    public void act(Action action, int targetX, int targetY) {
+    public ActionComponent(Action action, int targetX, int targetY) {
         this.action = action;
         this.targetX = targetX;
         this.targetY = targetY;
+    }
+
+    public ActionComponent(Action action) {
+        this(action, -1, -1);
     }
 
     public Action getAction() {
@@ -37,27 +33,12 @@ public class ActionComponent extends ArrayList<Action> implements ClonableCompon
         return targetY;
     }
 
-    public ActionComponent addAction(CooldownAction action, Entity entity) {
-        CooldownComponent cooldownComponent = CooldownComponent.get(entity);
-        if (cooldownComponent == null) {
-            entity.add(new CooldownComponent());
-        }
-        add(action);
-        return this;
-    }
-
-    public ActionComponent addAction(Action action) {
-        add(action);
-        return this;
-    }
-
     public ActionComponent clone() {
-        ActionComponent clone = new ActionComponent();
-        clone.action = action;
-        clone.targetX = targetX;
-        clone.targetY = targetY;
-        clone.addAll(this);
-        return clone;
+        return new ActionComponent(action, targetX, targetY);
+    }
+
+    public String toString() {
+        return action + " (" + targetX + ", " + targetY + ")";
     }
 
     private static final ComponentMapper<ActionComponent> mapper = ComponentMapper.getFor(

@@ -1,10 +1,6 @@
 package heroes.journey.entities.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.QueuedAction;
@@ -12,6 +8,9 @@ import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 import heroes.journey.utils.ai.pathfinding.Cell;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MCTSAI implements AI, Scorer {
 

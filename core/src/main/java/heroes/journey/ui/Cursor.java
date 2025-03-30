@@ -5,13 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.components.ActionComponent;
 import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.TargetAction;
+import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -220,11 +221,6 @@ public class Cursor {
         return selected;
     }
 
-    // TODO Potentially Remove
-    public void setSelected(Entity selected) {
-        this.selected = selected;
-    }
-
     public void setSelectedtoHover() {
         selected = hover;
         sx = x;
@@ -243,8 +239,8 @@ public class Cursor {
     public void moveSelected() {
         if (GameState.global().getEntities().get(path.i, path.j) == null ||
             GameState.global().getEntities().get(path.i, path.j) == selected) {
-            hud.setState(States.LOCKED);
-            MovementComponent.get(selected).move(path.reverse());
+            selected.add(new MovementComponent(path.reverse()));
+            selected.add(new ActionComponent(BaseActions.openActionMenu));
             GameState.global().getRangeManager().clearRange();
             path = null;
         }
