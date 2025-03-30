@@ -4,11 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.systems.EndOfTurnSystem;
+import heroes.journey.systems.GameEngine;
 
 public class CooldownSystem extends EndOfTurnSystem {
 
-    public CooldownSystem() {
-        super(Family.all(CooldownComponent.class).get());
+    public CooldownSystem(GameEngine engine) {
+        super(Family.all(CooldownComponent.class).get(), engine);
     }
 
     @Override

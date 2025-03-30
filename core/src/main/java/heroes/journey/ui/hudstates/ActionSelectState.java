@@ -39,11 +39,12 @@ public class ActionSelectState extends HUDState {
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
             Action selectedAction = HUD.get().getActionMenu().getSelected();
             // TODO add back TargetAction logic
-            HUD.get().getActionMenu().select();
             if (selectedAction.isTerminal()) {
                 Entity selectedEntity = HUD.get().getCursor().getSelected();
                 selectedEntity.add(new ActionComponent(selectedAction));
                 HUD.get().revertToInitialState();
+            } else {
+                HUD.get().getActionMenu().select();
             }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
             Gdx.input.isKeyJustPressed(KeyManager.BACK)) {

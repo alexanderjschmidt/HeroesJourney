@@ -1,27 +1,24 @@
 package heroes.journey.utils.ai.pathfinding;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
+import heroes.journey.entities.Position;
 
-public class Cell implements Comparable<Cell> {
+public class Cell {
 
-    public int f, g, h;
-    public int i;
-    public int j;
-    public int t;
+    public int x;
+    public int y;
     public Cell parent;
 
-    public Cell(int i, int j, int h) {
-        this.i = i;
-        this.j = j;
-        this.h = h;
-        this.f = h;
+    public Cell(int x, int y) {
+        this.x = x;
+        this.y = y;
     }
 
     public static Cell create(GraphPath<TileNode> path) {
         Cell parent = null;
         Cell node = null;
         for (TileNode t : path) {
-            node = new Cell(t.x, t.y, 1);
+            node = new Cell(t.x, t.y);
             node.parent = parent;
             parent = node;
         }
@@ -30,25 +27,22 @@ public class Cell implements Comparable<Cell> {
 
     @Override
     public String toString() {
-        return "(" + this.i + ", " + this.j + ": {" + f + "," + g + "," + h + "," + t + "})";
+        return "(" + this.x + ", " + this.y + ") " + parent;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        Cell obj = (Cell)o;
-        return i == obj.i && j == obj.j;
-    }
-
-    @Override
-    public int compareTo(Cell o) {
-        return f - o.f == 0 ? h - o.h : f - o.f;
+    public Cell getEnd() {
+        Cell next = this;
+        while (next.parent != null) {
+            next = next.parent;
+        }
+        return next;
     }
 
     public static Cell clone(Cell path) {
         Cell holder = null;
         while (path != null) {
             Cell holder2 = holder;
-            holder = new Cell(path.i, path.j, 1);
+            holder = new Cell(path.x, path.y);
             holder.parent = holder2;
             path = path.parent;
         }
@@ -71,5 +65,9 @@ public class Cell implements Comparable<Cell> {
         }
         node = prev;
         return node;
+    }
+
+    public Position toPos() {
+        return new Position(x, y);
     }
 }

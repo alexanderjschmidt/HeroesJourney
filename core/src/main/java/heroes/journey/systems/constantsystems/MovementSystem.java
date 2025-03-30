@@ -6,6 +6,7 @@ import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import heroes.journey.GameState;
 import heroes.journey.components.*;
+import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD;
 
@@ -14,8 +15,7 @@ import static heroes.journey.ui.hudstates.States.LOCKED;
 public class MovementSystem extends IteratingSystem {
 
     public MovementSystem() {
-        super(Family.all(PositionComponent.class, GlobalGameStateComponent.class, ActorComponent.class)
-            .one(MovementComponent.class, ActionComponent.class).get());
+        super(Family.all(PositionComponent.class, ActorComponent.class).one(MovementComponent.class, ActionComponent.class).get());
     }
 
     @Override
@@ -28,18 +28,20 @@ public class MovementSystem extends IteratingSystem {
         if (movement != null) {
             if (movement.hasPath() && !actor.hasActions()) {
                 System.out.println("Moving");
-                if (!movement.hasBegunMoving())
+                if (!movement.hasBegunMoving()) {
                     HUD.get().setState(LOCKED);
+                    GameState.global().getHistory().add(movement.getPath(), GameStateComponent.get(entity).getId());
+                }
                 //TODO Make duration based on move speed
                 actor.addAction(Actions.sequence(
-                    Actions.moveTo(movement.getPath().i - position.getX(), movement.getPath().j - position.getY(),
+                    Actions.moveTo(movement.getPath().x - position.getX(), movement.getPath().y - position.getY(),
                         .2f), Actions.run(new Runnable() {
                         @Override
                         public void run() {
                             actor.setPosition(0, 0);
                             GameState.global()
                                 .getEntities()
-                                .moveEntity(entity, movement.getPath().i, movement.getPath().j);
+                                .moveEntity(entity, movement.getPath().x, movement.getPath().y);
                             movement.progressPath();
                             if (movement.hasPath()) {
                                 return;
@@ -63,7 +65,9 @@ public class MovementSystem extends IteratingSystem {
             action.getAction().onSelect(GameState.global(), entity);
         }
         entity.remove(ActionComponent.class);
-        if (action.getAction().isTerminal())
+        if (action.getAction().isTerminal()) {
+            GameState.global().getHistory().add(action.getAction(), new Position(action.getTargetX(), action.getTargetY()), GameStateComponent.get(entity).getId());
             GameState.global().nextTurn();
+        }
     }
 }

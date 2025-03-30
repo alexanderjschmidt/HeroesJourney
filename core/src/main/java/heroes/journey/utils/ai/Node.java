@@ -76,13 +76,13 @@ public class Node {
     public int rollout(Entity playingEntity) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
-        while (scorer.getScore(gameState, playingEntity) > 0 && depth < 5) {
-            List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
+        while (scorer.getScore(tempState, playingEntity) > 0 && depth < 5) {
+            List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(tempState);
             QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
             tempState = tempState.applyAction(randomQueuedAction);
             depth++;
         }
-        return scorer.getScore(gameState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
+        return scorer.getScore(tempState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
     }
 
     // Backpropagate the result up the tree

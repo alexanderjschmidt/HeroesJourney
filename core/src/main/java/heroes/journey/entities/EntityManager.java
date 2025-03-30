@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.systems.GameEngine;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -12,6 +11,7 @@ import java.util.UUID;
 public class EntityManager implements Cloneable {
 
     private final int width, height;
+    // TODO should this just be the uuid?
     private final Entity[][] entitiesLocations;
     private final Entity[][] factionsLocations;
 
@@ -45,7 +45,6 @@ public class EntityManager implements Cloneable {
                 }
             }
         }
-        GameEngine.get().addEntity(clone);
         return clone;
     }
 
@@ -116,9 +115,7 @@ public class EntityManager implements Cloneable {
         System.out.println();
     }
 
-    public void dispose() {
-        for (Entity entity : entities.values()) {
-            GameEngine.get().removeEntity(entity);
-        }
+    public HashMap<UUID, Entity> getEntites() {
+        return entities;
     }
 }

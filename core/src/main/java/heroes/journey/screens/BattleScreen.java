@@ -6,7 +6,6 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.initializers.base.Map;
-import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.worldgen.NewMapManager;
@@ -43,7 +42,7 @@ public class BattleScreen implements Screen {
         app.getViewport().setCamera(GameCamera.get());
         batch.setProjectionMatrix(GameCamera.get().combined);
 
-        GameEngine.get().update(delta);
+        GameState.global().update(delta);
         HUD.get().update(delta);
     }
 

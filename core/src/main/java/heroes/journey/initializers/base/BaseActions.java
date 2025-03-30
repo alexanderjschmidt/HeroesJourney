@@ -15,7 +15,6 @@ import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
-import heroes.journey.systems.GameEngine;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
@@ -52,7 +51,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public void onSelect(GameState gameState, Entity selected) {
-                GameEngine.get().removeAllEntities();
+                GameState.global().getEngine().removeAllEntities();
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
             }
 

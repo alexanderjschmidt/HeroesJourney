@@ -1,8 +1,9 @@
 package heroes.journey.entities.quests;
 
+import com.badlogic.ashley.core.Entity;
 import heroes.journey.GameState;
 
-public class Quest {
+public abstract class Quest {
 
     private final String name;
 
@@ -10,13 +11,9 @@ public class Quest {
         this.name = name;
     }
 
-    public void onComplete() {
-        // give rewards
-    }
+    public abstract void onComplete(GameState gameState, Entity completer);
 
-    public boolean isComplete(GameState gameState) {
-        return false;
-    }
+    public abstract boolean isComplete(GameState gameState, Entity owner);
 
     public void onAccept() {
         // setup objectives to be watched

@@ -41,7 +41,7 @@ public class MonsterFactionAI implements AI {
             .add(new InventoryComponent())
             .add(new LoyaltyComponent().putLoyalty(faction, Loyalties.ALLY));
         System.out.println(goblin);
-        GameEngine.get().addEntity(goblin);
+        GameState.global().getEngine().addEntity(goblin);
         return goblin;
     }
 }

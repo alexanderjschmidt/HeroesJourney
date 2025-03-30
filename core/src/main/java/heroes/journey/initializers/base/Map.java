@@ -5,10 +5,10 @@ import heroes.journey.GameState;
 import heroes.journey.components.*;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.Position;
+import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
@@ -78,7 +78,7 @@ public class Map implements InitializerInterface {
                         housePos.get(houseStart).getY(), housePos.get(houseEnd).getX(),
                         housePos.get(houseEnd).getY());
                     while (path != null) {
-                        GameState.global().getMap().setTile(path.i, path.j, Tiles.pathTiles.getFirst());
+                        GameState.global().getMap().setTile(path.x, path.y, Tiles.pathTiles.getFirst());
                         path = path.parent;
                     }
                     houseEnd++;
@@ -211,7 +211,7 @@ public class Map implements InitializerInterface {
                     .add(new InventoryComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());
-                GameEngine.get().addEntity(player);
+                GameState.global().getEngine().addEntity(player);
 
                 Entity opponent = new Entity();
                 opponent.add(new PositionComponent(housePos.getLast().getX(), housePos.getLast().getY()))
@@ -224,31 +224,44 @@ public class Map implements InitializerInterface {
                     .add(new InventoryComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());
-                GameEngine.get().addEntity(opponent);
+                GameState.global().getEngine().addEntity(opponent);
             }
         };
     }
 
     private void generateHouse(int x, int y) {
-        Quest quest = new Quest("Delve a dungeon");
+        Quest quest = new Quest("Delve a dungeon") {
+            @Override
+            public void onComplete(GameState gameState, Entity completer) {
+                InventoryComponent inventoryComponent = InventoryComponent.get(completer);
+                if (inventoryComponent != null) {
+                    inventoryComponent.add(Items.sword);
+                }
+            }
+
+            @Override
+            public boolean isComplete(GameState gameState, Entity owner) {
+                return !gameState.getHistory().isEmpty() && gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == BaseActions.delve && gameState.get(record.getEntity()) == owner;
+            }
+        };
 
         Entity house = new Entity();
         house.add(new FactionComponent(SyllableTownNameGenerator.generateName()).addOwnedLocation(
                 GameState.global(), house, new Position(x, y)))
-            .add(new GlobalGameStateComponent())
+            .add(new GameStateComponent())
             .add(new QuestsComponent().addQuest(quest))
             .add(new PossibleActionsComponent().addAction(BaseActions.inn));
-        GameEngine.get().addEntity(house);
+        GameState.global().getEngine().addEntity(house);
     }
 
     private void generateDungeon(int x, int y) {
         Entity dungeon = new Entity();
         dungeon.add(new FactionComponent(SyllableDungeonNameGenerator.generateName()).addOwnedLocation(
                 GameState.global(), dungeon, new Position(x, y)))
-            .add(new GlobalGameStateComponent())
+            .add(new GameStateComponent())
             .add(new PossibleActionsComponent().addAction(BaseActions.delve, dungeon))
             .add(new CooldownComponent());
-        GameEngine.get().addEntity(dungeon);
+        GameState.global().getEngine().addEntity(dungeon);
     }
 
 }

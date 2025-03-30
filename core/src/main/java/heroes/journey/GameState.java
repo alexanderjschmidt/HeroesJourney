@@ -5,10 +5,13 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.components.*;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.TargetAction;
+import heroes.journey.entities.actions.history.History;
+import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.GameEngine;
@@ -26,24 +29,31 @@ public class GameState implements Cloneable {
 
     private int width, height;
     private EntityManager entities;
+    private History history;
     private TileMap map;
+
+    private GameEngine engine;
+
     private RangeManager rangeManager;
 
     private int turn;
 
-    private static GameState gameState;
-
     private UUID currentEntity;
     private List<Entity> entitiesInActionOrder;
 
+    private static GameState gameState;
+
     public static GameState global() {
-        if (gameState == null)
+        if (gameState == null) {
             gameState = new GameState();
+            gameState.engine.initSystems(gameState);
+        }
         return gameState;
     }
 
     private GameState() {
         entitiesInActionOrder = new ArrayList<>();
+        engine = new GameEngine();
     }
 
     private GameState(int width, int height) {
@@ -59,6 +69,7 @@ public class GameState implements Cloneable {
         this.height = mapData.getMapSize();
         map = new TileMap(width);
         entities = new EntityManager(width, height);
+        history = new History();
         rangeManager = new RangeManager(this, width, height);
 
         new Map().init();
@@ -69,6 +80,10 @@ public class GameState implements Cloneable {
     public GameState clone() {
         GameState clone = new GameState(width, height);
         clone.entities = entities.clone();
+        for (Entity e : clone.entities.getEntites().values()) {
+            clone.engine.addEntity(e);
+        }
+        clone.history = history.clone();
         clone.map = map.clone(clone.entities);
         clone.rangeManager = rangeManager.clone(clone);
         clone.turn = turn;
@@ -78,26 +93,30 @@ public class GameState implements Cloneable {
 
     public GameState applyAction(QueuedAction queuedAction) {
         Cell path = queuedAction.getPath();
-        Action action = queuedAction.getAction();
 
-        Entity e = getEntities().get(path.i, path.j);
+        Entity e = entities.get(path.x, path.y);
+        //System.out.println(queuedAction + " " + path + " " + e);
         // Move to the end of the Path
-        // TODO does this remove the entity from the previous location?
         if (e != null) {
-            while (path.parent != null) {
-                path = path.parent;
-            }
-            getEntities().addEntity(e);
+            Cell end = path.getEnd();
+            entities.moveEntity(e, end.x, end.y);
+            history.add(queuedAction.getPath(), GameStateComponent.get(e).getId());
         }
 
         // Apply chosen Action
+        Action action = queuedAction.getAction();
         if (action instanceof TargetAction targetAction) {
             targetAction.targetEffect(this, e, queuedAction.getTargetX(), queuedAction.getTargetY());
         } else {
             action.onSelect(this, e);
+            history.add(queuedAction.getAction(), new PositionComponent(queuedAction.getTargetX(), queuedAction.getTargetY()), GameStateComponent.get(e).getId());
         }
         incrementTurn();
         return this;
+    }
+
+    public void update(float delta) {
+        engine.update(delta);
     }
 
     public void render(SpriteBatch batch, float delta) {
@@ -119,9 +138,9 @@ public class GameState implements Cloneable {
     }
 
     private List<Entity> getEntitiesInActionOrder() {
-        ImmutableArray<Entity> entitiesImmutableArray = GameEngine.get()
+        ImmutableArray<Entity> entitiesImmutableArray = engine
             .getEntitiesFor(
-                Family.all(GlobalGameStateComponent.class, StatsComponent.class, AIComponent.class).get());
+                Family.all(StatsComponent.class, AIComponent.class).get());
         Entity[] array = entitiesImmutableArray.toArray(Entity.class);
         return Arrays.stream(array)
             .filter(Objects::nonNull)
@@ -130,14 +149,31 @@ public class GameState implements Cloneable {
             .collect(Collectors.toList());
     }
 
+    private void processQuests() {
+        Family family = Family.all(QuestsComponent.class).get();
+        ImmutableArray<Entity> entities = engine.getEntitiesFor(family);
+        for (Entity entity : entities) {
+            QuestsComponent quests = QuestsComponent.get(entity);
+            List<Quest> completedQuests = new ArrayList<>();
+            for (Quest quest : quests) {
+                if (quest.isComplete(this, entity)) {
+                    quest.onComplete(this, entity);
+                    completedQuests.add(quest);
+                }
+            }
+            quests.removeAll(completedQuests);
+        }
+    }
+
     private Entity incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
             entitiesInActionOrder = getEntitiesInActionOrder();
             turn++;
             if (GameState.global() == this) {
-                GameEngine.get().enableEndOfTurnSystems();
+                engine.enableEndOfTurnSystems();
             }
         }
+        processQuests();
         return setCurrentEntity(entitiesInActionOrder.removeFirst());
     }
 
@@ -175,6 +211,10 @@ public class GameState implements Cloneable {
         return entities;
     }
 
+    public GameEngine getEngine() {
+        return engine;
+    }
+
     public TileMap getMap() {
         return map;
     }
@@ -192,10 +232,14 @@ public class GameState implements Cloneable {
     }
 
     public void dispose() {
-        entities.dispose();
+        engine.removeAllEntities();
     }
 
     public String getId() {
         return "id";
+    }
+
+    public History getHistory() {
+        return history;
     }
 }
