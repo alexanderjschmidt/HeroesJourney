@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -43,7 +42,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Multiplayer
  * Action on Town
  *  Add grayed out actions, ie missing a requirement but letting you know its an option
- *  Quests
  * Fog of War
  *  fog of unseen tiles
  *  black on undiscovered tiles

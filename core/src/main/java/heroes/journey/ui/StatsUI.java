@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
@@ -43,8 +44,9 @@ public class StatsUI extends UI {
         if (entity == null)
             return;
         drawStats(batch, parentAlpha);
-        drawInventory(batch, parentAlpha);
         drawQuests(batch, parentAlpha);
+        drawInventory(batch, parentAlpha);
+        drawEquipment(batch, parentAlpha);
     }
 
     private void drawStats(Batch batch, float parentAlpha) {
@@ -62,6 +64,16 @@ public class StatsUI extends UI {
         drawText(batch, "Fame: " + statsComponent.getFame(), 0, 6);
     }
 
+    private void drawQuests(Batch batch, float parentAlpha) {
+        QuestsComponent questsComponent = QuestsComponent.get(entity);
+
+        drawText(batch, "===== Quests =====", 0, 12);
+        for (int i = 0; i < questsComponent.size(); i++) {
+            Quest quest = questsComponent.get(i);
+            drawText(batch, quest.toString(), 0, i + 1 + 12);
+        }
+    }
+
     private void drawInventory(Batch batch, float parentAlpha) {
         InventoryComponent inventoryComponent = InventoryComponent.get(entity);
 
@@ -74,14 +86,18 @@ public class StatsUI extends UI {
         }
     }
 
-    private void drawQuests(Batch batch, float parentAlpha) {
-        QuestsComponent questsComponent = QuestsComponent.get(entity);
+    private void drawEquipment(Batch batch, float parentAlpha) {
+        EquipmentComponent equipmentComponent = EquipmentComponent.get(entity);
 
-        drawText(batch, "===== Quests =====", 13, 12);
-        for (int i = 0; i < questsComponent.size(); i++) {
-            Quest quest = questsComponent.get(i);
-            drawText(batch, quest.toString(), 13, i + 1 + 12);
-        }
+        drawText(batch, "===== Equipment =====", 13, 12);
+        drawText(batch, "Head: " + str(equipmentComponent.getHead()), 13, 13);
+        drawText(batch, "Chest: " + str(equipmentComponent.getChest()), 13, 14);
+        drawText(batch, "Legs: " + str(equipmentComponent.getLegs()), 13, 15);
+        drawText(batch, "Boots: " + str(equipmentComponent.getBoots()), 13, 16);
+    }
+
+    private String str(Object o) {
+        return o == null ? "---" : o.toString();
     }
 
 }

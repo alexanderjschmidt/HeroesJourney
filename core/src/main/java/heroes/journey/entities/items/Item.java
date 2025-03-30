@@ -2,32 +2,36 @@ package heroes.journey.entities.items;
 
 public class Item implements ItemInterface {
 
-	private String name;
-	private ItemType type;
-	private int weight, value;
+    private String name;
+    private ItemSubType type;
+    private int weight, value;
 
-	public Item(String name, ItemType type, int weight, int value) {
-		this.name = name;
-		this.type = type;
-		this.weight = weight;
-		this.value = value;
+    public Item(String name, ItemSubType type, int weight, int value) {
+        this.name = name;
+        this.type = type;
+        this.weight = weight;
+        this.value = value;
         ItemManager.get().put(name, this);
-	}
+    }
 
-	public ItemType getType() {
-		return type;
-	}
+    public ItemType getType() {
+        return type.getParentType();
+    }
 
-	public int getWeight() {
-		return weight;
-	}
+    public ItemSubType getSubType() {
+        return type;
+    }
 
-	public int getValue() {
-		return value;
-	}
+    public int getWeight() {
+        return weight;
+    }
 
-	public String toString() {
-		return name;
-	}
+    public int getValue() {
+        return value;
+    }
+
+    public String toString() {
+        return name;
+    }
 
 }

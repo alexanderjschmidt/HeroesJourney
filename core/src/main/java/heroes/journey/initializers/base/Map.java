@@ -209,6 +209,7 @@ public class Map implements InitializerInterface {
                     .add(new AIComponent(new MCTSAI()))
                     .add(new StatsComponent())
                     .add(new InventoryComponent())
+                    .add(new EquipmentComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());
                 GameState.global().getEngine().addEntity(player);
@@ -222,6 +223,7 @@ public class Map implements InitializerInterface {
                     .add(new AIComponent(new MCTSAI()))
                     .add(new StatsComponent())
                     .add(new InventoryComponent())
+                    .add(new EquipmentComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());
                 GameState.global().getEngine().addEntity(opponent);
@@ -235,13 +237,16 @@ public class Map implements InitializerInterface {
             public void onComplete(GameState gameState, Entity completer) {
                 InventoryComponent inventoryComponent = InventoryComponent.get(completer);
                 if (inventoryComponent != null) {
-                    inventoryComponent.add(Items.sword);
+                    inventoryComponent.add(Items.ironSword);
                 }
             }
 
             @Override
             public boolean isComplete(GameState gameState, Entity owner) {
-                return !gameState.getHistory().isEmpty() && gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == BaseActions.delve && gameState.get(record.getEntity()) == owner;
+                return !gameState.getHistory().isEmpty() &&
+                    gameState.getHistory().getLast() instanceof ActionRecord record &&
+                    record.getAction() == BaseActions.delve &&
+                    gameState.get(record.getEntity()) == owner;
             }
         };
 
