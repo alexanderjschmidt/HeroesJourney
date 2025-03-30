@@ -1,9 +1,8 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.quests.Quest;
 
@@ -31,6 +30,5 @@ public class ClaimQuestAction extends Action {
             factionsQuestsComponent.remove(quest);
             QuestsComponent.get(entity).addQuest(quest);
         }
-        gameState.nextTurn();
     }
 }

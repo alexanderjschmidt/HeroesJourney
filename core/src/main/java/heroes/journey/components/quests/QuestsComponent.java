@@ -1,12 +1,11 @@
-package heroes.journey.components;
-
-import java.util.ArrayList;
+package heroes.journey.components.quests;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.quests.Quest;
+
+import java.util.ArrayList;
 
 public class QuestsComponent extends ArrayList<Quest> implements ClonableComponent<QuestsComponent> {
 
@@ -16,7 +15,7 @@ public class QuestsComponent extends ArrayList<Quest> implements ClonableCompone
 
     @Override
     public QuestsComponent clone() {
-        QuestsComponent clone = (QuestsComponent)super.clone();
+        QuestsComponent clone = (QuestsComponent) super.clone();
         return clone;
     }
 
