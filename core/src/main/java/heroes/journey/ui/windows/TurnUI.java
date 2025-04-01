@@ -1,21 +1,19 @@
-package heroes.journey.ui;
+package heroes.journey.ui.windows;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PlayerComponent;
+import heroes.journey.ui.UI;
 
 public class TurnUI extends UI {
 
     public TurnUI() {
-        super(0, 0, 8, 1, true, false);
-    }
-
-    public void update() {
-
+        super();
     }
 
     @Override
-    public void drawUI(Batch batch, float parentAlpha) {
+    public void drawAndUpdate(Batch batch, float parentAlpha) {
         GameState gameState = GameState.global();
         PlayerComponent playerComponent = PlayerComponent.get(gameState.getCurrentEntity());
         String currentEntity = playerComponent == null ? "Opponent" : "Player";

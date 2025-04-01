@@ -1,4 +1,4 @@
-package heroes.journey.ui;
+package heroes.journey.ui.windows;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.UI;
 
 public class ActionDetailUI extends UI {
 
@@ -13,17 +15,12 @@ public class ActionDetailUI extends UI {
     private CooldownComponent cooldownComponent;
 
     public ActionDetailUI() {
-        super(0, 0, 8, 13, false, true);
+        super();
         this.setVisible(false);
     }
 
     @Override
-    public void update() {
-        this.setVisible(action != null);
-    }
-
-    @Override
-    public void drawUI(Batch batch, float parentAlpha) {
+    public void drawAndUpdate(Batch batch, float parentAlpha) {
         String name = action + "";
         drawText(batch, name, 0, 0);
         if (action instanceof CooldownAction cooldownAction) {

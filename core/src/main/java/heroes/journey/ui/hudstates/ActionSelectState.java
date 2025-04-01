@@ -1,13 +1,14 @@
 package heroes.journey.ui.hudstates;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.components.ActionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.List;
 
 public class ActionSelectState extends HUDState {
 
@@ -31,11 +32,7 @@ public class ActionSelectState extends HUDState {
 
     @Override
     public void update(HUD hud) {
-        if (Gdx.input.isKeyJustPressed(KeyManager.UP)) {
-            HUD.get().getActionMenu().decrement();
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.DOWN)) {
-            HUD.get().getActionMenu().increment();
-        }
+        HUD.get().getActionMenu().handleInputs();
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
             Action selectedAction = HUD.get().getActionMenu().getSelected();
             // TODO add back TargetAction logic

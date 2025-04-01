@@ -1,8 +1,11 @@
-package heroes.journey.ui;
+package heroes.journey.ui.windows;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.components.StatsComponent;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.art.TextureMaps;
 
@@ -13,18 +16,8 @@ public class EntityUI extends UI {
 
     public boolean hover = true;
 
-    private Entity entity;
-
     public EntityUI() {
-        super(0, 3, 8, 4);
-    }
-
-    @Override
-    public void update() {
-        if (hover)
-            entity = HUD.get().getCursor().getHover();
-        else
-            entity = HUD.get().getCursor().getSelected();
+        super();
     }
 
     public void watchSelected() {
@@ -32,14 +25,23 @@ public class EntityUI extends UI {
     }
 
     @Override
-    public void drawUI(Batch batch, float parentAlpha) {
+    public void drawAndUpdate(Batch batch, float parentAlpha) {
+        Entity entity;
+        if (hover && HUD.get().getCursor().getHover() != HUD.get().getCursor().getSelected()) {
+            entity = HUD.get().getCursor().getHover();
+        } else if (!hover) {
+            entity = HUD.get().getCursor().getSelected();
+        } else {
+            entity = null;
+        }
+
         if (entity == null)
             return;
         StatsComponent statsComponent = StatsComponent.get(entity);
 
         if (statsComponent != null) {
-            String health = statsComponent.getHealth() + "/" + ((int) (StatsComponent.MAX_HEALTH));
-            String mana = statsComponent.getMana() + "/" + ((int) StatsComponent.MAX_MANA);
+            String health = statsComponent.getHealth() + "/" + ((int)(StatsComponent.MAX_HEALTH));
+            String mana = statsComponent.getMana() + "/" + ((int)StatsComponent.MAX_MANA);
             // replace with labels
 
             batch.draw(ResourceManager.get(TextureMaps.UI)[3][0], getX() + HUD.FONT_SIZE,

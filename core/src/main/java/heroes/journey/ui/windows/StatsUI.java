@@ -1,7 +1,10 @@
-package heroes.journey.ui;
+package heroes.journey.ui.windows;
+
+import java.util.List;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
@@ -11,8 +14,9 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.entities.quests.Quest;
-
-import java.util.List;
+import heroes.journey.ui.Cursor;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.UI;
 
 public class StatsUI extends UI {
 
@@ -21,12 +25,11 @@ public class StatsUI extends UI {
     private boolean toggled;
 
     public StatsUI() {
-        super(11, 3, 27, 21);
+        super();
         toggled = false;
         this.setVisible(false);
     }
 
-    @Override
     public void update() {
         Cursor cursor = HUD.get().getCursor();
         this.entity = GameState.global().getEntities().get(cursor.x, cursor.y);
@@ -40,7 +43,7 @@ public class StatsUI extends UI {
     }
 
     @Override
-    public void drawUI(Batch batch, float parentAlpha) {
+    public void drawAndUpdate(Batch batch, float parentAlpha) {
         if (entity == null)
             return;
         drawStats(batch, parentAlpha);

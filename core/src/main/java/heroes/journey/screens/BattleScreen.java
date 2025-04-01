@@ -54,7 +54,7 @@ public class BattleScreen implements Screen {
     public void resize(int width, int height) {
         if (!ready)
             return;
-        HUD.get().resize(width, height);
+        HUD.get().resize();
     }
 
     @Override
