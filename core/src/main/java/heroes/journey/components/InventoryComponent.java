@@ -11,6 +11,8 @@ import heroes.journey.entities.items.ItemInterface;
 public class InventoryComponent extends HashMap<ItemInterface,Integer>
     implements ClonableComponent<InventoryComponent> {
 
+    public static final int ENTRY_LENGTH = 20;
+
     private int gold;
 
     public int getWeight() {
@@ -21,15 +23,21 @@ public class InventoryComponent extends HashMap<ItemInterface,Integer>
         return weight;
     }
 
-    public void add(ItemInterface item) {
-        this.add(item, 1);
+    public String toString(ItemInterface item) {
+        return String.format("%-" + (ENTRY_LENGTH - 3) + "s x%d", item, get(item));
     }
 
-    public void add(ItemInterface item, int count) {
+    public InventoryComponent add(ItemInterface item) {
+        this.add(item, 1);
+        return this;
+    }
+
+    public InventoryComponent add(ItemInterface item, int count) {
         if (this.containsKey(item))
             this.put(item, this.get(item) + count);
         else
             this.put(item, count);
+        return this;
     }
 
     public void remove(ItemInterface item, int count) {

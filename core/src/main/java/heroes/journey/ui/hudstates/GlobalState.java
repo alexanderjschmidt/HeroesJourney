@@ -1,5 +1,7 @@
 package heroes.journey.ui.hudstates;
 
+import static heroes.journey.ui.hudstates.States.STATS;
+
 import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameCamera;
@@ -21,8 +23,9 @@ class GlobalState extends HUDState {
             Random.get().setSeed((int)(Math.random() * 10000000));
             NewMapManager.get().initMapGeneration(GameState.global());
         }
-        if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO)) {
-            HUD.get().getEntityDetailedUI().update();
+        if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO) && HUD.get().getState() != STATS &&
+            HUD.get().getCursor().getHover() != null) {
+            HUD.get().setState(STATS);
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.ZOOM_IN)) {
             GameCamera.get().zoomIn();

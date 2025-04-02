@@ -155,7 +155,7 @@ public class HUD extends Stage {
         return cursor;
     }
 
-    public StatsUI getEntityDetailedUI() {
+    public StatsUI getStatsUI() {
         return statsUI;
     }
 
@@ -181,9 +181,5 @@ public class HUD extends Stage {
 
     public float getDelta() {
         return delta;
-    }
-
-    private float getHeightPerc(float percentage) {
-        return (Gdx.graphics.getHeight() * percentage) / 100;
     }
 }

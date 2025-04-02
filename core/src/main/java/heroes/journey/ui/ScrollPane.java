@@ -2,6 +2,7 @@ package heroes.journey.ui;
 
 import static heroes.journey.ui.UI.drawText;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -16,9 +17,11 @@ public abstract class ScrollPane<T> extends Widget {
     private List<T> options;
     private int selected = 0;
     private int MAX_HEIGHT = 14;
+    public int offsetX = 0, offsetY = 0;
 
     public ScrollPane() {
         super();
+        options = new ArrayList<T>();
     }
 
     public abstract void select();
@@ -41,11 +44,15 @@ public abstract class ScrollPane<T> extends Widget {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        batch.draw(ResourceManager.get().select, getX() + (0.5f * HUD.FONT_SIZE),
-            getY() + getHeight() - ((selected + 1.5f) * HUD.FONT_SIZE));
+        batch.draw(ResourceManager.get().select, getX() + ((0.5f + offsetX) * HUD.FONT_SIZE),
+            getY() + getHeight() - ((selected + 1.4f + offsetY) * HUD.FONT_SIZE));
         for (int i = 0; i < options.size(); i++) {
-            drawText(this, batch, options.get(i).toString(), 1, i);
+            drawText(this, batch, getText(options.get(i)), 1 + offsetX, i + offsetY);
         }
+    }
+
+    public String getText(T option) {
+        return option.toString();
     }
 
     public T getSelected() {

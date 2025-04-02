@@ -2,10 +2,12 @@ package heroes.journey.entities.items;
 
 public interface ItemInterface {
 
-	public ItemType getType();
+    public ItemType getType();
 
-	public int getWeight();
+    public ItemSubType getSubType();
 
-	public int getValue();
+    public int getWeight();
+
+    public int getValue();
 
 }
