@@ -14,13 +14,6 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
- * Fold Faction AI into character AI loop for prediction purposes
- * make cursor arrow pathfinding favor already followed path.
- * GameEngine
- *  Make Systems and Listeners more dynamic? Auto load them like the initializers?
- * Camera
- *  force zoom if camera would go off screen
- *  make camera not go beyond map
  * Menus
  *  Action Detail UI flesh out
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
@@ -28,21 +21,22 @@ import heroes.journey.utils.art.ResourceManager;
  * 		increment on level up
  * 	Inventory
  * 		Use Item (health potion)
- * 		Show Weight
- * 		Show Gold
+ * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage)
  * 		Scrolling
  * 		Tabs
- * 		Equipment
- * 			Equip
+ * Show Controls on UIs?
+ * Make HUD Locked when players character is moving
+ * Make AI Calculation run in the background (Maybe a system that keeps checking if its ready)
+ * Make Delving use stats
  * Multiplayer
  * Action on Town
  *  Add grayed out actions, ie missing a requirement but letting you know its an option
  * Fog of War
- *  fog of unseen tiles
- *  black on undiscovered tiles
- * Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
- *  darker then redder
+ *  light fog (ie 50% transparent over tiles) on unseen tiles
+ *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
  * Add time
+ *  Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
+ *  darker then redder
  * Saving
  * Map Generation
  *  make Map Generation Phases not enums
@@ -51,12 +45,14 @@ import heroes.journey.utils.art.ResourceManager;
  * 	Guarantee path to all dungeons
  * 	Improve road generation some towns roads loop too much
  * 	Improve map generation
- * Enter Region
- * 	World Map/Region Map/Local Map ?
- * 	64/16/16
  * Sounds
  * 	Background music
  * 	Action Sounds
+ * Fold Faction AI into character AI loop for prediction purposes
+ * make cursor arrow pathfinding favor already followed path.
+ * Camera
+ *  force zoom if camera would go off screen
+ *  make camera not go beyond map
  * Efficiency
  *  Use a GameEngine Pool for Ashely so AI doesnt keep making new Entities to be deleted
  *  Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns

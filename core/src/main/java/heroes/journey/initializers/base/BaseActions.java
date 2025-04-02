@@ -1,6 +1,10 @@
 package heroes.journey.initializers.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
@@ -17,9 +21,6 @@ import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class BaseActions implements InitializerInterface {
 
@@ -38,8 +39,9 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 HUD.get().getActionMenu().open();
+                return null;
             }
 
             @Override
@@ -50,9 +52,10 @@ public class BaseActions implements InitializerInterface {
         exit_game = new Action("Exit Game", true) {
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 GameState.global().getEngine().removeAllEntities();
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
+                return null;
             }
 
             @Override
@@ -70,9 +73,10 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 Entity entity = gameState.getCurrentEntity();
                 entity.add(new ActionComponent(wait));
+                return null;
             }
 
             @Override
@@ -82,7 +86,8 @@ public class BaseActions implements InitializerInterface {
         };
         wait = new Action("Wait") {
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
+                return null;
             }
 
             @Override
@@ -92,11 +97,12 @@ public class BaseActions implements InitializerInterface {
         };
         workout = new CooldownAction("Work out", 2) {
             @Override
-            public void onSelectHelper(GameState gameState, Entity selected) {
+            public String onSelectHelper(GameState gameState, Entity selected) {
                 StatsComponent statsComponent = StatsComponent.get(selected);
                 if (statsComponent == null)
-                    return;
+                    return null;
                 statsComponent.setBody(statsComponent.getBody() + 1);
+                return "Successful Workout! Gain 1 Body";
             }
 
             @Override
@@ -106,11 +112,12 @@ public class BaseActions implements InitializerInterface {
         };
         study = new CooldownAction("Study", 2) {
             @Override
-            public void onSelectHelper(GameState gameState, Entity selected) {
+            public String onSelectHelper(GameState gameState, Entity selected) {
                 StatsComponent statsComponent = StatsComponent.get(selected);
                 if (statsComponent == null)
-                    return;
+                    return null;
                 statsComponent.setMind(statsComponent.getMind() + 1);
+                return "Successful Study Session! Gain 1 Mind";
             }
 
             @Override
@@ -121,16 +128,17 @@ public class BaseActions implements InitializerInterface {
         delve = new CooldownAction("Delve", 5) {
 
             @Override
-            public void onSelect(GameState gameState, Entity entity) {
+            public String onSelect(GameState gameState, Entity entity) {
                 Entity dungeon = Utils.getLocationsFaction(gameState, entity);
                 CooldownComponent.get(dungeon).put(this, getTurnCooldown());
-                onSelectHelper(gameState, entity);
+                return onSelectHelper(gameState, entity);
             }
 
             @Override
-            public void onSelectHelper(GameState gameState, Entity selected) {
+            public String onSelectHelper(GameState gameState, Entity selected) {
                 InventoryComponent inventoryComponent = InventoryComponent.get(selected);
                 inventoryComponent.add(Items.ironOre, 5);
+                return "Successful Delve! You found 5 iron ore";
             }
 
             @Override
@@ -151,9 +159,10 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 InventoryComponent inventoryComponent = InventoryComponent.get(selected);
                 inventoryComponent.add(Items.wood, 1);
+                return "Gained 1 wood";
             }
         };
         inn = new Action("Inn") {
@@ -164,7 +173,7 @@ public class BaseActions implements InitializerInterface {
             }
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 Entity town = Utils.getLocationsFaction(gameState, selected);
                 QuestsComponent questsComponent = QuestsComponent.get(town);
                 List<Action> questActions = new ArrayList<>();
@@ -172,6 +181,7 @@ public class BaseActions implements InitializerInterface {
                     questActions.add(new ClaimQuestAction(quest.toString(), quest));
                 }
                 HUD.get().setState(new ActionSelectState(questActions));
+                return null;
             }
 
             @Override

@@ -16,7 +16,7 @@ class GlobalState extends HUDState {
     @Override
     public void update(HUD hud) {
         HUD.get().getCursor().update();
-        if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
+        if (Gdx.input.isKeyJustPressed(KeyManager.DEV_MODE)) {
             LoadOptions.DEBUG = !LoadOptions.DEBUG;
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {

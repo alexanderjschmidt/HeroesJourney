@@ -224,7 +224,9 @@ public class Map implements InitializerInterface {
                     .add(new PossibleActionsComponent())
                     .add(new AIComponent(new MCTSAI()))
                     .add(new StatsComponent())
-                    .add(new InventoryComponent().add(Items.healthPotion).add(Items.ironIngot, 5))
+                    .add(new InventoryComponent().add(Items.healthPotion, 3)
+                        .add(Items.ironIngot, 5)
+                        .add(Items.chestPlate))
                     .add(new EquipmentComponent())
                     .add(new QuestsComponent())
                     .add(new LoyaltyComponent());

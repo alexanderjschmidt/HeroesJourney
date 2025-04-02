@@ -6,6 +6,7 @@ import com.badlogic.gdx.ai.fsm.StateMachine;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -14,6 +15,7 @@ import heroes.journey.ui.hudstates.States;
 import heroes.journey.ui.windows.ActionDetailUI;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.ui.windows.EntityUI;
+import heroes.journey.ui.windows.PopupUI;
 import heroes.journey.ui.windows.StatsUI;
 import heroes.journey.ui.windows.TerrainUI;
 import heroes.journey.ui.windows.TurnUI;
@@ -30,10 +32,14 @@ public class HUD extends Stage {
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
     private final TurnUI turnUI;
+
+    private final Cell<?> centerWindow;
     private final StatsUI statsUI;
+    private final PopupUI popupUI;
 
     private static HUD hud;
     private final StateMachine<HUD,HUDState> stateMachine;
+    private HUDState baseState;
     private float delta;
 
     public static HUD get() {
@@ -55,13 +61,14 @@ public class HUD extends Stage {
         entityUI = new EntityUI();
         turnUI = new TurnUI();
         statsUI = new StatsUI();
+        popupUI = new PopupUI();
 
         layout = new Table();
         layout.setFillParent(true);
         layout.defaults().pad(5).expand().fill();
         layout.top().left();
 
-        // TODO lock its width, so that the middle column can expland?
+        // TODO lock its width, so that the middle column can expand?
         leftCol = new Table();
         buildLeftCol();
 
@@ -74,7 +81,7 @@ public class HUD extends Stage {
         rightCol.add(actionDetailUI).padTop(2.5f);
 
         layout.add(leftCol);
-        layout.add(statsUI).colspan(3);
+        centerWindow = layout.add(statsUI).colspan(3);
         layout.add(rightCol);
 
         leftCol.debug();
@@ -155,8 +162,36 @@ public class HUD extends Stage {
         return cursor;
     }
 
+    public void setCenterPanel(boolean isStats) {
+        centerWindow.clearActor();
+        if (isStats) {
+            centerWindow.setActor(statsUI).colspan(3).expand().fill();
+        } else {
+            Table popupTable = new Table();
+            popupTable.add().expandY();
+            popupTable.row();
+            popupTable.add().expandX();
+            popupTable.add(popupUI)
+                .colspan(3)
+                .minHeight(FONT_SIZE * 5)
+                .maxHeight(FONT_SIZE * 5)
+                .expand()
+                .fill();
+            popupTable.add().expandX();
+            popupTable.row();
+            popupTable.add().expandY();
+
+            centerWindow.setActor(popupTable).colspan(3).center();
+        }
+        layout.invalidate();
+    }
+
     public StatsUI getStatsUI() {
         return statsUI;
+    }
+
+    public PopupUI getPopupUI() {
+        return popupUI;
     }
 
     public HUDState getState() {
@@ -165,18 +200,35 @@ public class HUD extends Stage {
 
     public void setState(HUDState newState) {
         stateMachine.changeState(newState);
-        System.out.println("set to " + stateMachine.getCurrentState());
+        System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
+            stateMachine.getPreviousState() + " base state " + baseState);
+    }
+
+    public void setInitialState(HUDState state) {
+        baseState = state;
+        if (stateMachine.getPreviousState() == null) {
+            stateMachine.setInitialState(baseState);
+        }
+        System.out.println("current state " + stateMachine.getCurrentState() + " previous state " +
+            stateMachine.getPreviousState() + " base state " + baseState);
     }
 
     public void revertToInitialState() {
         while (stateMachine.revertToPreviousState()) {
         }
-        System.out.println("reset to " + stateMachine.getCurrentState());
+        if (stateMachine.getPreviousState() == null) {
+            stateMachine.setInitialState(baseState);
+        }
+        System.out.println("reset to " + stateMachine.getCurrentState() + " base state " + baseState);
     }
 
     public void revertToPreviousState() {
         stateMachine.revertToPreviousState();
-        System.out.println("revert to " + stateMachine.getCurrentState());
+        if (stateMachine.getPreviousState() == null) {
+            stateMachine.setInitialState(baseState);
+        }
+        System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
+            stateMachine.getPreviousState() + " base state " + baseState);
     }
 
     public float getDelta() {

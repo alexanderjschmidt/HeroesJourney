@@ -21,15 +21,15 @@ public abstract class CooldownAction extends Action {
     }
 
     @Override
-    public void onSelect(GameState gameState, Entity entity) {
+    public String onSelect(GameState gameState, Entity entity) {
         CooldownComponent cooldownComponent = CooldownComponent.get(entity);
         cooldownComponent.put(this, turnCooldown);
-        onSelectHelper(gameState, entity);
+        return onSelectHelper(gameState, entity);
     }
 
     public abstract boolean requirementsMetHelper(GameState gameState, Entity selected);
 
-    public abstract void onSelectHelper(GameState gameState, Entity selected);
+    public abstract String onSelectHelper(GameState gameState, Entity selected);
 
     public int getTurnCooldown() {
         return turnCooldown;

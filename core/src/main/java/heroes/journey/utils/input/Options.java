@@ -22,8 +22,9 @@ public class Options {
             }
 
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 HUD.get().setState(new ActionSelectState(optionsList));
+                return null;
             }
 
             @Override

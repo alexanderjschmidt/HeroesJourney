@@ -14,9 +14,11 @@ public class EquipmentComponent implements ClonableComponent<EquipmentComponent>
     public void equip(Item item) {
         switch (item.getSubType().toString()) {
             case Items.SWORD:
-                handOne = item;
+                handOne = handOne == item ? null : item;
+                break;
             case Items.CHEST_ARMOR:
-                chest = item;
+                chest = chest == item ? null : item;
+                break;
         }
     }
 

@@ -18,6 +18,7 @@ public class StatsUIState extends HUDState {
     @Override
     public void enter(HUD hud) {
         justOpened = true;
+        hud.setCenterPanel(true);
         hud.getStatsUI().setVisible(true);
         Cursor cursor = HUD.get().getCursor();
         hud.getStatsUI().setEntity(GameState.global().getEntities().get(cursor.x, cursor.y));
@@ -26,10 +27,7 @@ public class StatsUIState extends HUDState {
     @Override
     public void update(HUD hud) {
         HUD.get().getStatsUI().handleInputs();
-        if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
-            Gdx.input.isKeyJustPressed(KeyManager.BACK) ||
+        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK) ||
             (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO) && !justOpened)) {
             HUD.get().revertToPreviousState();
         }

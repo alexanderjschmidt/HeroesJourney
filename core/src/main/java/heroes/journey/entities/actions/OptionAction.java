@@ -21,7 +21,7 @@ public abstract class OptionAction extends Action {
 
     }
 
-    public abstract void onSelect(GameState gameState, Entity selected);
+    public abstract String onSelect(GameState gameState, Entity selected);
 
     public boolean isTerminal() {
         return false;

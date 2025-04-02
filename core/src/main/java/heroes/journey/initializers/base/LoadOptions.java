@@ -14,16 +14,18 @@ public class LoadOptions implements InitializerInterface {
     static {
         Action debugAction = new OptionAction("Debug: " + DEBUG) {
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 DEBUG = !DEBUG;
                 this.setName("Debug: " + DEBUG);
+                return null;
             }
         };
         Action autoEndTurnAction = new OptionAction("Auto End Turn: " + AUTO_END_TURN) {
             @Override
-            public void onSelect(GameState gameState, Entity selected) {
+            public String onSelect(GameState gameState, Entity selected) {
                 AUTO_END_TURN = !AUTO_END_TURN;
                 this.setName("Auto End Turn: " + AUTO_END_TURN);
+                return null;
             }
         };
     }

@@ -25,7 +25,12 @@ public abstract class Action {
         gameState.getRangeManager().clearRange();
     }
 
-    public abstract void onSelect(GameState gameState, Entity selected);
+    /**
+     * @param gameState
+     * @param selected
+     * @return the results of the action for a popup window
+     */
+    public abstract String onSelect(GameState gameState, Entity selected);
 
     public String toString() {
         return name;

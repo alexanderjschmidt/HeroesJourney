@@ -15,7 +15,7 @@ import heroes.journey.utils.input.KeyManager;
 public abstract class ScrollPane<T> extends Widget {
 
     private List<T> options;
-    private int selected = 0;
+    public int selected = 0;
     private int MAX_HEIGHT = 14;
     public int offsetX = 0, offsetY = 0;
 
@@ -29,8 +29,12 @@ public abstract class ScrollPane<T> extends Widget {
     public abstract void onHover();
 
     public void open(List<T> options) {
-        this.options = options;
         selected = 0;
+        updateList(options);
+    }
+
+    public void updateList(List<T> options) {
+        this.options = options;
         onHover();
     }
 

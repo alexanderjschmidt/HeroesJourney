@@ -116,7 +116,10 @@ public class ActionMenu extends Stack {
         public void select() {
             Action selectedAction = getSelected();
             System.out.println("Selected " + selectedAction + " " + selectedAction.isTerminal());
-            selectedAction.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
+            String result = selectedAction.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
+            if (result != null) {
+
+            }
         }
 
         @Override

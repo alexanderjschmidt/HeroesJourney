@@ -33,10 +33,11 @@ public abstract class TargetAction extends Action {
         gameState.getRangeManager().setDistanceRangeAt(position.getX(), position.getY(), range, rangeType);
     }
 
-    public void onSelect(GameState gameState, Entity selected) {
+    public String onSelect(GameState gameState, Entity selected) {
         HUD.get().setState(States.TARGET);
         gameState.getRangeManager().updateTargets(selected, targetEnemy, range, rangeType);
         gameState.getRangeManager().pointAtTarget(0);
+        return null;
     }
 
     public abstract void targetEffect(GameState gameState, Entity selected, int targetX, int targetY);

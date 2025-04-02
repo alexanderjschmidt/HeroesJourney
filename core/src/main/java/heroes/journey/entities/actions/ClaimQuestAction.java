@@ -1,6 +1,7 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
@@ -21,7 +22,7 @@ public class ClaimQuestAction extends Action {
     }
 
     @Override
-    public void onSelect(GameState gameState, Entity entity) {
+    public String onSelect(GameState gameState, Entity entity) {
         Entity town = Utils.getLocationsFaction(gameState, entity);
         QuestsComponent factionsQuestsComponent = QuestsComponent.get(town);
         QuestsComponent questsComponent = QuestsComponent.get(town);
@@ -30,5 +31,6 @@ public class ClaimQuestAction extends Action {
             factionsQuestsComponent.remove(quest);
             QuestsComponent.get(entity).addQuest(quest);
         }
+        return null;
     }
 }

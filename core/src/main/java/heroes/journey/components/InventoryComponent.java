@@ -41,12 +41,13 @@ public class InventoryComponent extends HashMap<ItemInterface,Integer>
     }
 
     public void remove(ItemInterface item, int count) {
-        if (this.containsKey(item))
-            if (this.get(item) >= count) {
+        if (this.containsKey(item)) {
+            if (this.get(item) <= count) {
                 this.remove(item);
             } else {
                 this.put(item, this.get(item) - count);
             }
+        }
     }
 
     public InventoryComponent clone() {
