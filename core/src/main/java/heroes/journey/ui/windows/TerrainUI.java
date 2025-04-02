@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
 import heroes.journey.components.FactionComponent;
+import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
-import heroes.journey.utils.input.Options;
 
 public class TerrainUI extends UI {
 
@@ -25,7 +25,7 @@ public class TerrainUI extends UI {
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         ActionTerrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
 
-        String location = Options.DEBUG ? " (" + cursor.x + ", " + cursor.y + ")" : "";
+        String location = LoadOptions.DEBUG ? " (" + cursor.x + ", " + cursor.y + ")" : "";
         String name =
             (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + location;
         if (environment == Tiles.house || environment == Tiles.dungeon) {

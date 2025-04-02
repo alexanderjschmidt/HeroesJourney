@@ -6,7 +6,7 @@ import heroes.journey.GameState;
 
 public abstract class Action {
 
-    private String name;
+    String name;
 
     public Action(String name, boolean teamSkill) {
         this.name = name;
@@ -31,21 +31,8 @@ public abstract class Action {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public boolean isTerminal() {
         return true;
-    }
-
-    /**
-     * @param user of the skill
-     * @param e    the Character being affected by the skill
-     * @return How valuable the skill is seen by the AI
-     */
-    public int utilityFunc(Character user, Character e) {
-        return 1;
     }
 
 }

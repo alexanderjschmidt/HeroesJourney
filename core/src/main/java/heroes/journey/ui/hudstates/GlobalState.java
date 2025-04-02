@@ -6,10 +6,10 @@ import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.input.KeyManager;
-import heroes.journey.utils.input.Options;
 import heroes.journey.utils.worldgen.NewMapManager;
 
 class GlobalState extends HUDState {
@@ -17,7 +17,7 @@ class GlobalState extends HUDState {
     public void update(HUD hud) {
         HUD.get().getCursor().update();
         if (Gdx.input.isKeyJustPressed(KeyManager.DEVMODE)) {
-            Options.DEBUG = !Options.DEBUG;
+            LoadOptions.DEBUG = !LoadOptions.DEBUG;
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
             Random.get().setSeed((int)(Math.random() * 10000000));

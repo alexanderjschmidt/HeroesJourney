@@ -19,13 +19,11 @@ import heroes.journey.utils.art.ResourceManager;
  * GameEngine
  *  Make Systems and Listeners more dynamic? Auto load them like the initializers?
  * Camera
- *  fix far out zoom
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Menus
  *  Action Detail UI flesh out
- *  Make Options be dynamic so you can add an option from initializers
- *  reposition menus on window resize
+ *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
  * 	Stats Screen
  * 		increment on level up
  * 	Inventory
