@@ -9,9 +9,9 @@ import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.art.TextureMaps;
 
 public class RangeManager {
 
@@ -128,27 +128,27 @@ public class RangeManager {
         for (int y = 0; y < range[0].length; y++) {
             for (int x = 0; x < range.length; x++) {
                 if (range[x][y] == RangeColor.YELLOW)
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[3][1], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[3][1], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
                 if (range[x][y] == RangeColor.TEAL)
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[4][1], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[4][1], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
                 if (range[x][y] == RangeColor.PURPLE)
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[4][0], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[4][0], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
                 if (range[x][y] == RangeColor.GREEN)// green
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[3][0], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[3][0], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
                 if (range[x][y] == RangeColor.RED)// red
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[2][0], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[2][0], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
                 if (range[x][y] == RangeColor.BLUE)// blue
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[2][1], x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[2][1], x * GameCamera.get().getSize(),
                         y * GameCamera.get().getSize(), GameCamera.get().getSize(),
                         GameCamera.get().getSize());
             }

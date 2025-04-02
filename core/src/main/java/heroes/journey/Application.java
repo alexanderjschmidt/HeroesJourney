@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
  * Fold Faction AI into character AI loop for prediction purposes
- * Make TextureMaps not Enums?
  * make cursor arrow pathfinding favor already followed path.
  * GameEngine
  *  Make Systems and Listeners more dynamic? Auto load them like the initializers?
@@ -25,8 +25,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Menus
  *  Action Detail UI flesh out
  *  Make Options be dynamic so you can add an option from initializers
- *  use a table layout
- *  use a ScrollPane UI element for action list and inventory
  *  reposition menus on window resize
  * 	Stats Screen
  * 		increment on level up
@@ -36,7 +34,6 @@ import heroes.journey.utils.art.ResourceManager;
  * 		Show Gold
  * 		Scrolling
  * 		Tabs
- *      Crafting??
  * 		Equipment
  * 			Equip
  * Multiplayer

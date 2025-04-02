@@ -15,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import heroes.journey.initializers.base.LoadTextures;
+
 public class ResourceManager extends AssetManager {
 
     private FreeTypeFontGenerator generator;
@@ -34,7 +36,7 @@ public class ResourceManager extends AssetManager {
     public TextureRegion[] bless;
     public TextureRegion[] rally;
 
-    public HashMap<TextureMaps,TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
 
@@ -51,7 +53,8 @@ public class ResourceManager extends AssetManager {
     }
 
     private ResourceManager() {
-        textureRegions = new HashMap<TextureMaps,TextureRegion[][]>(TextureMaps.values().length);
+        textureRegions = new HashMap<TextureMap,TextureRegion[][]>();
+
         initFonts();
         loadSkin("uiskin");
         loadTexture("Textures/UI/cursor.png");
@@ -69,27 +72,26 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/Battle_Animations/Ice 5.png");
         loadTexture("Textures/Battle_Animations/Light 8.png");
         loadTexture("Textures/Battle_Animations/Parameter 10.png");
+    }
 
-        for (TextureMaps textureMap : TextureMaps.values()) {
-            loadTexture(textureMap.getLocation());
-        }
+    public void loadTextureMap(TextureMap textureMap) {
+        loadTexture(textureMap.location());
 
-        for (TextureMaps textureMap : TextureMaps.values()) {
-            TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.getLocation()),
-                textureMap.getWidth(), textureMap.getHeight());
-            // Because fuck [y][x]
-            TextureRegion[][] transposed = new TextureRegion[textures[0].length][textures.length];
-            for (int y = 0; y < textures.length; y++) {
-                for (int x = 0; x < textures[y].length; x++) {
-                    transposed[x][y] = textures[y][x]; // Swap indices
-                }
+        TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.location()),
+            textureMap.width(), textureMap.height());
+        // Because fuck [y][x]
+        TextureRegion[][] transposed = new TextureRegion[textures[0].length][textures.length];
+        for (int y = 0; y < textures.length; y++) {
+            for (int x = 0; x < textures[y].length; x++) {
+                transposed[x][y] = textures[y][x]; // Swap indices
             }
-            textureRegions.put(textureMap, transposed);
         }
+        textureRegions.put(textureMap, transposed);
+
     }
 
     public void splits() {
-        select = get(TextureMaps.UI)[1][3];
+        select = get(LoadTextures.UI)[1][3];
         slash = TextureRegion.split(getTexture("Textures/Battle_Animations/Slashing.png"), 32, 32);
         arrow = arrangeFrames(
             TextureRegion.split(getTexture("Textures/Battle_Animations/Arrow 1.png"), 32, 32));
@@ -197,11 +199,11 @@ public class ResourceManager extends AssetManager {
         font72.dispose();
     }
 
-    public static TextureRegion[][] get(TextureMaps textureMap) {
+    public static TextureRegion[][] get(TextureMap textureMap) {
         return manager.textureRegions.get(textureMap);
     }
 
-    public static TextureRegion get(TextureMaps textureMap, int x, int y) {
+    public static TextureRegion get(TextureMap textureMap, int x, int y) {
         return manager.textureRegions.get(textureMap)[x][y];
     }
 

@@ -4,10 +4,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.components.StatsComponent;
+import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.art.TextureMaps;
 
 public class EntityUI extends UI {
 
@@ -44,10 +44,10 @@ public class EntityUI extends UI {
             String mana = statsComponent.getMana() + "/" + ((int)StatsComponent.MAX_MANA);
             // replace with labels
 
-            batch.draw(ResourceManager.get(TextureMaps.UI)[3][0], getX() + HUD.FONT_SIZE,
+            batch.draw(ResourceManager.get(LoadTextures.UI)[3][0], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((2) * HUD.FONT_SIZE),
                 HEALTH_WIDTH * (statsComponent.getHealth() / StatsComponent.MAX_HEALTH), HEALTH_HEIGHT);
-            batch.draw(ResourceManager.get(TextureMaps.UI)[2][1], getX() + HUD.FONT_SIZE,
+            batch.draw(ResourceManager.get(LoadTextures.UI)[2][1], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((1) * HUD.FONT_SIZE),
                 HEALTH_WIDTH * (statsComponent.getMana() / StatsComponent.MAX_MANA), HEALTH_HEIGHT);
 

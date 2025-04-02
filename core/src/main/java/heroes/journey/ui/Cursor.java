@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
@@ -13,12 +14,12 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.art.TextureMaps;
 
 public class Cursor {
     // coords
@@ -39,8 +40,8 @@ public class Cursor {
 
     public Cursor(HUD hud) {
         this.hud = hud;
-        TextureRegion[] frames = {ResourceManager.get(TextureMaps.UI)[0][0],
-            ResourceManager.get(TextureMaps.UI)[0][0], ResourceManager.get(TextureMaps.UI)[1][0]};
+        TextureRegion[] frames = {ResourceManager.get(LoadTextures.UI)[0][0],
+            ResourceManager.get(LoadTextures.UI)[0][0], ResourceManager.get(LoadTextures.UI)[1][0]};
         ani = new Animation<TextureRegion>(.5f, frames);
         setPosition(10, 15);
     }
@@ -85,25 +86,25 @@ public class Cursor {
         Cell n = c.parent;
         // no path dot
         if (n == null) {
-            batch.draw(ResourceManager.get(TextureMaps.UI)[0][3], c.x * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[0][3], c.x * GameCamera.get().getSize(),
                 c.y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
             return;
         }
         // start
         if (n.x > c.x)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][1], (c.x) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][1], (c.x) * GameCamera.get().getSize(),
                 (c.y + 1) * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 270f);
         else if (n.x < c.x)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][1], (c.x + 1) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][1], (c.x + 1) * GameCamera.get().getSize(),
                 c.y * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 90f);
         else if (n.y < c.y)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][1], (c.x + 1) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][1], (c.x + 1) * GameCamera.get().getSize(),
                 (c.y + 1) * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 180f);
         else if (n.y > c.y)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][1], c.x * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][1], c.x * GameCamera.get().getSize(),
                 c.y * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 0);
         p = c;
@@ -114,47 +115,47 @@ public class Cursor {
             if (p.x != n.x && p.y != n.y) {
                 if (p.y != c.y) {
                     if (p.x < n.x && p.y < n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x) * GameCamera.get().getSize(), (c.y + 1) * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 270);
                     else if (p.x > n.x && p.y < n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x + 1) * GameCamera.get().getSize(), (c.y + 1) * GameCamera.get().getSize(), 0,
                             0, GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 180f);
                     else if (p.x < n.x && p.y > n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             c.x * GameCamera.get().getSize(), c.y * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 0);
                     else if (p.x > n.x && p.y > n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x + 1) * GameCamera.get().getSize(), (c.y) * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 90);
                 } else {
                     if (p.x < n.x && p.y < n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x + 1) * GameCamera.get().getSize(), (c.y) * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 90);
                     else if (p.x > n.x && p.y < n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             c.x * GameCamera.get().getSize(), c.y * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 0);
                     else if (p.x < n.x && p.y > n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x + 1) * GameCamera.get().getSize(), (c.y + 1) * GameCamera.get().getSize(), 0,
                             0, GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 180f);
                     else if (p.x > n.x && p.y > n.y)
-                        batch.draw(ResourceManager.get(TextureMaps.UI)[0][2],
+                        batch.draw(ResourceManager.get(LoadTextures.UI)[0][2],
                             (c.x) * GameCamera.get().getSize(), (c.y + 1) * GameCamera.get().getSize(), 0, 0,
                             GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 270);
                 }
             } else {
                 // straights
                 if (p.y != c.y)
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[0][1], c.x * GameCamera.get().getSize(),
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[0][1], c.x * GameCamera.get().getSize(),
                         c.y * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                         GameCamera.get().getSize(), 1f, 1f, 0);
                 else
-                    batch.draw(ResourceManager.get(TextureMaps.UI)[0][1],
+                    batch.draw(ResourceManager.get(LoadTextures.UI)[0][1],
                         (c.x + 1) * GameCamera.get().getSize(), c.y * GameCamera.get().getSize(), 0, 0,
                         GameCamera.get().getSize(), GameCamera.get().getSize(), 1f, 1f, 90f);
             }
@@ -164,19 +165,19 @@ public class Cursor {
         }
         // arrow
         if (p.y > c.y)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][2], (c.x) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][2], (c.x) * GameCamera.get().getSize(),
                 (c.y + 1) * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 270f);
         else if (p.y < c.y)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][2], (c.x + 1) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][2], (c.x + 1) * GameCamera.get().getSize(),
                 c.y * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 90f);
         else if (p.x > c.x)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][2], (c.x + 1) * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][2], (c.x + 1) * GameCamera.get().getSize(),
                 (c.y + 1) * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 180f);
         else if (p.x < c.x)
-            batch.draw(ResourceManager.get(TextureMaps.UI)[1][2], c.x * GameCamera.get().getSize(),
+            batch.draw(ResourceManager.get(LoadTextures.UI)[1][2], c.x * GameCamera.get().getSize(),
                 c.y * GameCamera.get().getSize(), 0, 0, GameCamera.get().getSize(),
                 GameCamera.get().getSize(), 1f, 1f, 0);
     }

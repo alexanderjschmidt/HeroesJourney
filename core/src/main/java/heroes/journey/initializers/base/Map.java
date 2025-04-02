@@ -34,7 +34,6 @@ import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.art.TextureMaps;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationPhase;
 import heroes.journey.utils.worldgen.RandomWorldGenerator;
@@ -220,7 +219,7 @@ public class Map implements InitializerInterface {
                 player.add(new PlayerComponent(GameState.global().getId()))
                     .add(new PositionComponent(housePos.getFirst().getX(), housePos.getFirst().getY()))
                     .add(new GameStateComponent())
-                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
+                    .add(new RenderComponent(ResourceManager.get(LoadTextures.Sprites)[1][1]))
                     .add(new ActorComponent())
                     .add(new PossibleActionsComponent())
                     .add(new AIComponent(new MCTSAI()))
@@ -234,7 +233,7 @@ public class Map implements InitializerInterface {
                 Entity opponent = new Entity();
                 opponent.add(new PositionComponent(housePos.getLast().getX(), housePos.getLast().getY()))
                     .add(new GameStateComponent())
-                    .add(new RenderComponent(ResourceManager.get(TextureMaps.Sprites)[1][1]))
+                    .add(new RenderComponent(ResourceManager.get(LoadTextures.Sprites)[1][1]))
                     .add(new ActorComponent())
                     .add(new PossibleActionsComponent())
                     .add(new AIComponent(new MCTSAI()))
