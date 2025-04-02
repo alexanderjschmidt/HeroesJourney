@@ -25,6 +25,7 @@ import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.ai.MCTSAI;
@@ -253,10 +254,7 @@ public class Map implements InitializerInterface {
         Quest quest = new Quest("Delve a dungeon") {
             @Override
             public void onComplete(GameState gameState, Entity completer) {
-                InventoryComponent inventoryComponent = InventoryComponent.get(completer);
-                if (inventoryComponent != null) {
-                    inventoryComponent.add(Items.ironSword);
-                }
+                Utils.addItem(completer, Items.ironSword, 1);
             }
 
             @Override

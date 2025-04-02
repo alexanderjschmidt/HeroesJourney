@@ -9,7 +9,6 @@ import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
 import heroes.journey.components.CooldownComponent;
-import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
@@ -136,8 +135,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public String onSelectHelper(GameState gameState, Entity selected) {
-                InventoryComponent inventoryComponent = InventoryComponent.get(selected);
-                inventoryComponent.add(Items.ironOre, 5);
+                Utils.addItem(selected, Items.ironOre, 5);
                 return "Successful Delve! You found 5 iron ore";
             }
 
@@ -160,8 +158,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public String onSelect(GameState gameState, Entity selected) {
-                InventoryComponent inventoryComponent = InventoryComponent.get(selected);
-                inventoryComponent.add(Items.wood, 1);
+                Utils.addItem(selected, Items.wood, 1);
                 return "Gained 1 wood";
             }
         };
