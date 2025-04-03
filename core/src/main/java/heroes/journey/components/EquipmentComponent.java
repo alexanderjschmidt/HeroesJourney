@@ -2,14 +2,13 @@ package heroes.journey.components;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.base.Items;
 
 public class EquipmentComponent implements ClonableComponent<EquipmentComponent> {
 
-    private Item head, chest, legs, boots, handOne, handTwo, accessoryOne, accessoryTwo, accessoryThree;
+    private Item head, chest, legs, boots, handOne, handTwo, accessoryOne, accessoryTwo;
 
     public void equip(Item item) {
         switch (item.getSubType().toString()) {
@@ -54,10 +53,6 @@ public class EquipmentComponent implements ClonableComponent<EquipmentComponent>
         return accessoryTwo;
     }
 
-    public Item getAccessoryThree() {
-        return accessoryThree;
-    }
-
     @Override
     public EquipmentComponent clone() {
         EquipmentComponent clone = new EquipmentComponent();
@@ -69,7 +64,6 @@ public class EquipmentComponent implements ClonableComponent<EquipmentComponent>
         clone.handTwo = handTwo;
         clone.accessoryOne = accessoryOne;
         clone.accessoryTwo = accessoryTwo;
-        clone.accessoryThree = accessoryThree;
         return clone;
     }
 

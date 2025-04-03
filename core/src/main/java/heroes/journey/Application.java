@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -28,6 +27,7 @@ import heroes.journey.utils.art.ResourceManager;
  * Make HUD Locked when players character is moving
  * Make AI Calculation run in the background (Maybe a system that keeps checking if its ready)
  * Make Delving use stats
+ *  Make Dungeons show recover timer
  * Multiplayer
  * Action on Town
  *  Add grayed out actions, ie missing a requirement but letting you know its an option
