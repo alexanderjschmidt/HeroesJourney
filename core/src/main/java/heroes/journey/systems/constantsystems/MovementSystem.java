@@ -12,7 +12,6 @@ import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.Position;
-import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;
 
@@ -61,15 +60,11 @@ public class MovementSystem extends IteratingSystem {
     }
 
     private void updateActions(ActionComponent action, Entity entity) {
-        if (action.getAction() instanceof TargetAction targetAction) {
-            targetAction.targetEffect(GameState.global(), entity, action.getTargetX(), action.getTargetY());
-        } else {
-            String result = action.getAction().onSelect(GameState.global(), entity);
-            if (result != null) {
-                //TODO make it only show up for players its supposed to
-                HUD.get().getPopupUI().setText(result);
-                HUD.get().setState(States.POP_UP);
-            }
+        String result = action.getAction().onSelect(GameState.global(), entity);
+        if (result != null) {
+            //TODO make it only show up for players its supposed to
+            HUD.get().getPopupUI().setText(result);
+            HUD.get().setState(States.POP_UP);
         }
         entity.remove(ActionComponent.class);
         if (action.getAction().isTerminal()) {

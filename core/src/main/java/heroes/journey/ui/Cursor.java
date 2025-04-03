@@ -12,7 +12,6 @@ import heroes.journey.components.ActionComponent;
 import heroes.journey.components.MovementComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.hudstates.States;
@@ -32,7 +31,6 @@ public class Cursor {
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
     private Cell path;
-    private TargetAction activeSkill;
 
     private Animation<TextureRegion> ani;
 
@@ -210,10 +208,6 @@ public class Cursor {
         }
     }
 
-    public void setActiveSkill(TargetAction skill) {
-        this.activeSkill = skill;
-    }
-
     public Entity getHover() {
         return hover;
     }
@@ -226,10 +220,6 @@ public class Cursor {
         selected = hover;
         sx = x;
         sy = y;
-    }
-
-    public TargetAction getActiveSkill() {
-        return activeSkill;
     }
 
     public void revertAction() {

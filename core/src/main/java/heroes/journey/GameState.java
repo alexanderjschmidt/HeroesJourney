@@ -1,15 +1,29 @@
 package heroes.journey;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.components.*;
+
+import heroes.journey.components.AIComponent;
+import heroes.journey.components.ActionComponent;
+import heroes.journey.components.GameStateComponent;
+import heroes.journey.components.MovementComponent;
+import heroes.journey.components.PlayerComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
-import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.Initializer;
@@ -21,9 +35,6 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public class GameState implements Cloneable {
 
@@ -106,14 +117,10 @@ public class GameState implements Cloneable {
 
         // Apply chosen Action
         Action action = queuedAction.getAction();
-        if (action instanceof TargetAction targetAction) {
-            targetAction.targetEffect(this, e, queuedAction.getTargetX(), queuedAction.getTargetY());
-        } else {
-            action.onSelect(this, e);
-            history.add(queuedAction.getAction(),
-                new PositionComponent(queuedAction.getTargetX(), queuedAction.getTargetY()),
-                GameStateComponent.get(e).getId());
-        }
+        action.onSelect(this, e);
+        history.add(queuedAction.getAction(),
+            new PositionComponent(queuedAction.getTargetX(), queuedAction.getTargetY()),
+            GameStateComponent.get(e).getId());
         incrementTurn();
         return this;
     }
