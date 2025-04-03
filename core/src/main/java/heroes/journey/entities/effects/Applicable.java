@@ -1,20 +1,19 @@
 package heroes.journey.entities.effects;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Array;
 
 import heroes.journey.GameState;
 
-public class Applicable<T> {
+public class Applicable {
 
-    private final List<BiConsumer<GameState,Entity>> completionActions = new ArrayList<>();
-    private final T owner;
+    private final ImmutableArray<BiConsumer<GameState,Entity>> completionActions;
 
-    public Applicable(T owner) {
-        this.owner = owner;
+    private Applicable(Array<BiConsumer<GameState,Entity>> completionActionsArray) {
+        completionActions = new ImmutableArray<>(completionActionsArray);
     }
 
     public void apply(GameState gameState, Entity entity) {
@@ -23,14 +22,28 @@ public class Applicable<T> {
         }
     }
 
-    // Add an item, can chain multiple adds
-    public Applicable<T> add(BiConsumer<GameState,Entity> action) {
-        completionActions.add(action);
-        return this;
-    }
+    public static class Builder<B> {
 
-    // Add the end of a chain of adds, you can build and then grab another applicable
-    public T build() {
-        return owner;
+        private final Array<BiConsumer<GameState,Entity>> completionActions = new Array<>();
+        private final B owner;
+
+        public Builder(B owner) {
+            this.owner = owner;
+        }
+
+        // Returns the parent builder for chaining
+        public B owner() {
+            return owner;
+        }
+
+        // Add an item, can chain multiple adds
+        public Builder<B> add(BiConsumer<GameState,Entity> action) {
+            completionActions.add(action);
+            return this;
+        }
+
+        public Applicable build() {
+            return new Applicable(completionActions);
+        }
     }
 }

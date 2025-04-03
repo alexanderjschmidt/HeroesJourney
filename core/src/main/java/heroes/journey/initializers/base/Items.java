@@ -16,19 +16,29 @@ public class Items implements InitializerInterface {
     public static final ConsumableItem healthPotion;
 
     static {
-        rawMaterial = new ItemSubType(RAW_MATERIAL, ItemType.Misc);
-        refinedMaterial = new ItemSubType(REFINED_MATERIAL, ItemType.Misc);
-        sword = new ItemSubType(SWORD, ItemType.Weapon);
-        chestArmor = new ItemSubType(CHEST_ARMOR, ItemType.Armor);
-        potion = new ItemSubType(POTION, ItemType.Consumable);
+        // SubTypes
+        rawMaterial = new ItemSubType.Builder().name(RAW_MATERIAL).parentType(ItemType.Misc).build();
+        refinedMaterial = new ItemSubType.Builder().name(REFINED_MATERIAL).parentType(ItemType.Misc).build();
+        sword = new ItemSubType.Builder().name(SWORD).parentType(ItemType.Weapon).build();
+        chestArmor = new ItemSubType.Builder().name(CHEST_ARMOR).parentType(ItemType.Armor).build();
+        potion = new ItemSubType.Builder().name(POTION).parentType(ItemType.Consumable).build();
 
-        wood = new Item("Wood", rawMaterial, 1, 1);
-        ironOre = new Item("Iron Ore", rawMaterial, 1, 1);
-        ironIngot = new Item("Iron Ingot", refinedMaterial, 1, 1);
-        ironSword = new Item("Sword", sword, 3, 1);
-        chestPlate = new Item("Chest Plate", chestArmor, 5, 1);
-        healthPotion = new ConsumableItem("Health Potion", potion, 1, 1);
-        healthPotion.consume().add((gs, e) -> Utils.addItem(e, healthPotion, 2));
+        // Items
+        wood = new Item.Builder().name("Wood").type(rawMaterial).weight(1).value(1).build();
+        ironOre = new Item.Builder().name("Iron Ore").type(rawMaterial).weight(1).value(1).build();
+        ironIngot = new Item.Builder().name("Iron Ingot").type(refinedMaterial).weight(1).value(1).build();
+        ironSword = new Item.Builder().name("Iron Sword").type(sword).weight(1).value(3).build();
+        chestPlate = new Item.Builder().name("Chest Plate").type(chestArmor).weight(5).value(1).build();
+        healthPotion = new ConsumableItem.Builder().name("Health Potion")
+            .type(potion)
+            .weight(1)
+            .value(1)
+            .onConsume()
+            // TODO make all items have an interact/use option and equippedables just have equip as its first apply/use
+            .add((gs, e) -> Utils.addItem(e, ironOre, 2))
+            .add((gs, e) -> Utils.addItem(e, ironIngot, 1))
+            .owner()
+            .build();
     }
 
 }

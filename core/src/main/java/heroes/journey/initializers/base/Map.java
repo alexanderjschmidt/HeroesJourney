@@ -27,7 +27,6 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
-import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
@@ -251,19 +250,14 @@ public class Map implements InitializerInterface {
     }
 
     private void generateHouse(int x, int y) {
-        Quest quest = new Quest("Delve a dungeon") {
-            @Override
-            public void onComplete(GameState gameState, Entity completer) {
-                Utils.addItem(completer, Items.ironSword, 1);
-            }
-
-            @Override
-            public boolean isComplete(GameState gameState, Entity owner) {
-                return !gameState.getHistory().isEmpty() &&
-                    gameState.getHistory().getLast() instanceof ActionRecord record &&
-                    record.getAction() == BaseActions.delve && gameState.get(record.getEntity()) == owner;
-            }
-        };
+        Quest quest = new Quest.Builder().name("Delve a dungeon")
+            .onComplete()
+            .add((gs, e) -> Utils.addItem(e, Items.ironSword, 1))
+            .owner()
+            .isComplete()
+            .add((gs, e) -> Utils.justCompletedAction(gs, e, BaseActions.delve))
+            .owner()
+            .build();
 
         Entity house = new Entity();
         house.add(new FactionComponent(SyllableTownNameGenerator.generateName()).addOwnedLocation(
