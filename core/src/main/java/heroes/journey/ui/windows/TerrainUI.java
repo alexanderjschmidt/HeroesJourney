@@ -25,7 +25,7 @@ public class TerrainUI extends UI {
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         ActionTerrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
 
-        String location = LoadOptions.DEBUG ? " (" + cursor.x + ", " + cursor.y + ")" : "";
+        String location = LoadOptions.debugOption.isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
         String name =
             (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + location;
         if (environment == Tiles.house || environment == Tiles.dungeon) {

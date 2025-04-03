@@ -1,17 +1,17 @@
 package heroes.journey.entities.items;
 
-import heroes.journey.entities.effects.Applyable;
+import heroes.journey.entities.effects.Applicable;
 
 public class ConsumableItem extends Item {
 
-    private final Applyable<ConsumableItem> consume;
+    private final Applicable<ConsumableItem> consume;
 
     public ConsumableItem(String name, ItemSubType type, int weight, int value) {
         super(name, type, weight, value);
-        consume = new Applyable<>(this);
+        consume = new Applicable<>(this);
     }
 
-    public Applyable<ConsumableItem> consume() {
+    public Applicable<ConsumableItem> consume() {
         return consume;
     }
 }

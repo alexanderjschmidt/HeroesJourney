@@ -34,12 +34,14 @@ public class Tiles implements InitializerInterface {
         NULL = new BaseTile(NULL_TERRAIN, 100, tiles[3][0]);
         baseTile(NULL, NULL_TERRAIN);
 
+        // Base Terrains
         Terrain water = new Terrain("Water", 50);
         Terrain plains = new Terrain("Plains", 2);
         Terrain hills = new Terrain("Hills", 2);
         Terrain sand = new Terrain("Sand", 3);
         PATH = new Terrain("Path", 1);
 
+        // TODO should I baseTile() these with nullTerrain?
         house = new ActionTerrain("House", 0);
         HOUSE = new BaseTile(house, 0, false, tiles[7][12]);
 
@@ -49,6 +51,7 @@ public class Tiles implements InitializerInterface {
         trees = new ActionTerrain("Trees", 1);
         trees.getActions().add(BaseActions.chopTrees);
 
+        // Transition Terrains
         Terrain plainsToHill = new Terrain("Cliff", 10);
         Terrain sandToHill = new Terrain("Cliff", 10);
         Terrain plainsToSand = new Terrain("Sand", 3);

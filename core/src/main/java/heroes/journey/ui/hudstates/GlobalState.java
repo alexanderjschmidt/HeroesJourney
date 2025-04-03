@@ -17,7 +17,7 @@ class GlobalState extends HUDState {
     public void update(HUD hud) {
         HUD.get().getCursor().update();
         if (Gdx.input.isKeyJustPressed(KeyManager.DEV_MODE)) {
-            LoadOptions.DEBUG = !LoadOptions.DEBUG;
+            LoadOptions.debugOption.onSelect();
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
             Random.get().setSeed((int)(Math.random() * 10000000));

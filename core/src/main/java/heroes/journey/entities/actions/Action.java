@@ -6,7 +6,7 @@ import heroes.journey.GameState;
 
 public abstract class Action {
 
-    String name;
+    protected String name;
 
     public Action(String name, boolean teamSkill) {
         this.name = name;
