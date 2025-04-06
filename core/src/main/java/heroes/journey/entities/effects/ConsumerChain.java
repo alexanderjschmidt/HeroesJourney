@@ -8,11 +8,11 @@ import com.badlogic.gdx.utils.Array;
 
 import heroes.journey.GameState;
 
-public class Applicable {
+public class ConsumerChain {
 
     private final ImmutableArray<BiConsumer<GameState,Entity>> completionActions;
 
-    private Applicable(Array<BiConsumer<GameState,Entity>> completionActionsArray) {
+    private ConsumerChain(Array<BiConsumer<GameState,Entity>> completionActionsArray) {
         completionActions = new ImmutableArray<>(completionActionsArray);
     }
 
@@ -42,8 +42,8 @@ public class Applicable {
             return this;
         }
 
-        public Applicable build() {
-            return new Applicable(completionActions);
+        public ConsumerChain build() {
+            return new ConsumerChain(completionActions);
         }
     }
 }

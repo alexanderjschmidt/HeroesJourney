@@ -3,9 +3,6 @@ package heroes.journey.utils.input;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
-
-import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
@@ -15,22 +12,13 @@ public class Options {
     public static List<Action> optionsList = new ArrayList<>(2);
 
     static {
-        new Action("Options", true) {
-            @Override
-            public boolean isTerminal() {
-                return false;
-            }
-
-            @Override
-            public String onSelect(GameState gameState, Entity selected) {
+        new Action.Builder().name("Options")
+            .teamAction(true)
+            .terminalAction(false)
+            .onSelect()
+            .add((gs, e) -> {
                 HUD.get().setState(new ActionSelectState(optionsList));
                 return null;
-            }
-
-            @Override
-            public boolean requirementsMet(GameState gameState, Entity selected) {
-                return true;
-            }
-        };
+            });
     }
 }

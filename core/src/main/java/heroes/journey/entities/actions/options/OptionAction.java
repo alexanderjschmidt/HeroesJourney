@@ -1,38 +1,25 @@
 package heroes.journey.entities.actions.options;
 
-import com.badlogic.ashley.core.Entity;
-
-import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.utils.input.Options;
 
 public abstract class OptionAction extends Action {
 
-    private final String title;
+    private String display;
 
-    public OptionAction(String name) {
-        super(name, false);
-        this.title = name;
+    public OptionAction(ActionBuilder builder) {
+        super(builder);
+        setDisplay("");
         Options.optionsList.add(this);
     }
 
     @Override
-    public boolean requirementsMet(GameState gameState, Entity selected) {
-        return true;
+    public String toString() {
+        return display;
     }
 
-    public void onHover(GameState gameState, Entity selected) {
-
-    }
-
-    public abstract String onSelect(GameState gameState, Entity selected);
-
-    public boolean isTerminal() {
-        return false;
-    }
-
-    public void setName(String value) {
-        this.name = title + ": " + value;
+    public void setDisplay(String value) {
+        this.display = name + ": " + value;
     }
 
 }

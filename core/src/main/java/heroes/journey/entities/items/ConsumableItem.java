@@ -3,11 +3,11 @@ package heroes.journey.entities.items;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.effects.Applicable;
+import heroes.journey.entities.effects.ConsumerChain;
 
 public class ConsumableItem extends Item {
 
-    private final Applicable consume;
+    private final ConsumerChain consume;
 
     public ConsumableItem(Builder builder) {
         super(builder);
@@ -20,9 +20,9 @@ public class ConsumableItem extends Item {
 
     public static class Builder extends Item.ItemBuilder<Builder,ConsumableItem> {
 
-        private final Applicable.Builder<Builder> consume = new Applicable.Builder<>(this);
+        private final ConsumerChain.Builder<Builder> consume = new ConsumerChain.Builder<>(this);
 
-        public Applicable.Builder<Builder> onConsume() {
+        public ConsumerChain.Builder<Builder> onConsume() {
             return consume;
         }
 

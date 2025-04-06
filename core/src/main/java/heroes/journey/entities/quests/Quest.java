@@ -3,13 +3,13 @@ package heroes.journey.entities.quests;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.effects.Applicable;
+import heroes.journey.entities.effects.ConsumerChain;
 import heroes.journey.entities.effects.PredicateChain;
 
 public class Quest {
 
     private final String name;
-    private final Applicable onComplete;
+    private final ConsumerChain onComplete;
     private final PredicateChain isComplete;
 
     public Quest(Builder builder) {
@@ -33,7 +33,7 @@ public class Quest {
 
     public static class Builder {
         private String name;
-        private final Applicable.Builder<Builder> onComplete = new Applicable.Builder<>(this);
+        private final ConsumerChain.Builder<Builder> onComplete = new ConsumerChain.Builder<>(this);
         private final PredicateChain.Builder<Builder> isComplete = new PredicateChain.Builder<>(this);
 
         public Builder name(String name) {
@@ -41,7 +41,7 @@ public class Quest {
             return this;
         }
 
-        public Applicable.Builder<Builder> onComplete() {
+        public ConsumerChain.Builder<Builder> onComplete() {
             return onComplete;
         }
 
