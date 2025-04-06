@@ -29,57 +29,46 @@ public class BaseActions implements InitializerInterface {
     static {
         openActionMenu = new Action.Builder().name("THIS SHOULD NEVER BE DISPLAYED")
             .terminalAction(false)
-            .requirementsMet()
-            .add((gs, e) -> false)
-            .owner()
-            .onSelect()
-            .add((gs, e) -> {
+            .requirementsMet((gs, e) -> false)
+            .onSelect((gs, e) -> {
                 HUD.get().getActionMenu().open();
                 return null;
             })
-            .owner()
             .build();
-        exit_game = new Action.Builder().name("Exit Game").teamAction(true).onSelect().add((gs, e) -> {
+        exit_game = new Action.Builder().name("Exit Game").teamAction(true).onSelect((gs, e) -> {
             Application.get().setScreen(new MainMenuScreen(Application.get()));
             GameState.global().getEngine().removeAllEntities();
             return null;
-        }).owner().build();
+        }).build();
         end_turn = new Action.Builder().name("End Turn").teamAction(true)
             // This SEEMs contradictory, but its because this is a teamSkill and doesnt have a selected entity to apply to
             // that will get handled by the assigned wait action
-            .terminalAction(false).onSelect().add((gs, e) -> {
+            .terminalAction(false).onSelect((gs, e) -> {
                 Entity entity = gs.getCurrentEntity();
                 entity.add(new ActionComponent(wait));
                 return null;
-            }).owner().build();
+            }).build();
         wait = new Action.Builder().name("Wait").build();
         workout = new CooldownAction.Builder().name("Work out")
             .turnCooldown(1)
-            .onSelect()
-            .add((gs, e) -> Utils.adjustBody(e, 1))
-            .owner()
+            .onSelect((gs, e) -> Utils.adjustBody(e, 1))
             .build();
         study = new CooldownAction.Builder().name("Study")
             .turnCooldown(2)
-            .onSelect()
-            .add((gs, e) -> Utils.adjustMind(e, 1))
-            .owner()
+            .onSelect(((gs, e) -> Utils.adjustMind(e, 1)))
             .build();
         delve = new CooldownAction.Builder().name("Delve")
             .turnCooldown(5)
             .factionCooldown(true)
-            .onSelect()
-            .add((gs, e) -> {
+            .onSelect((gs, e) -> {
                 Utils.addItem(e, Items.ironOre, 5);
                 return "Successful Delve! You found 5 iron ore";
             })
-            .owner()
             .build();
-        chopTrees = new Action.Builder().name("Chop Trees").onSelect().add((gs, e) -> {
-            Utils.addItem(e, Items.wood, 1);
-            return "Gained 1 wood";
-        }).owner().build();
-        inn = new Action.Builder().name("Inn").terminalAction(false).onSelect().add((gs, e) -> {
+        chopTrees = new Action.Builder().name("Chop Trees").onSelect((gs, e) ->
+            Utils.addItem(e, Items.wood, 1)
+        ).build();
+        inn = new Action.Builder().name("Inn").terminalAction(false).onSelect((gs, e) -> {
             Entity town = Utils.getLocationsFaction(gs, e);
             QuestsComponent questsComponent = QuestsComponent.get(town);
             List<Action> questActions = new ArrayList<>();
@@ -88,11 +77,11 @@ public class BaseActions implements InitializerInterface {
             }
             HUD.get().setState(new ActionSelectState(questActions));
             return null;
-        }).owner().requirementsMet().add((gs, e) -> {
+        }).requirementsMet((gs, e) -> {
             Entity town = Utils.getLocationsFaction(gs, e);
             QuestsComponent questsComponent = QuestsComponent.get(town);
             return !questsComponent.isEmpty();
-        }).owner().build();
+        }).build();
     }
 
 }

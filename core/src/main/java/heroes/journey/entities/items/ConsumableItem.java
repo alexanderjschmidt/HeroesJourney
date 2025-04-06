@@ -1,29 +1,30 @@
 package heroes.journey.entities.items;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.entities.effects.ConsumerChain;
+
+import java.util.function.BiConsumer;
 
 public class ConsumableItem extends Item {
 
-    private final ConsumerChain consume;
+    protected BiConsumer<GameState, Entity> consume;
 
     public ConsumableItem(Builder builder) {
         super(builder);
-        consume = builder.consume.build();
+        consume = builder.consume;
     }
 
     public void consume(GameState gameState, Entity consumer) {
-        consume.apply(gameState, consumer);
+        consume.accept(gameState, consumer);
     }
 
-    public static class Builder extends Item.ItemBuilder<Builder,ConsumableItem> {
+    public static class Builder extends Item.ItemBuilder<Builder, ConsumableItem> {
 
-        private final ConsumerChain.Builder<Builder> consume = new ConsumerChain.Builder<>(this);
+        private BiConsumer<GameState, Entity> consume;
 
-        public ConsumerChain.Builder<Builder> onConsume() {
-            return consume;
+        public Builder onConsume(BiConsumer<GameState, Entity> consume) {
+            this.consume = consume;
+            return this;
         }
 
         public ConsumableItem build() {

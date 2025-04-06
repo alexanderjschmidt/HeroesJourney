@@ -1,29 +1,8 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.CooldownComponent;
-import heroes.journey.components.EquipmentComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LoyaltyComponent;
-import heroes.journey.components.PlayerComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
@@ -34,13 +13,17 @@ import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationPhase;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.*;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -75,8 +58,8 @@ public class Map implements InitializerInterface {
                 int numHouses = 10;
                 for (int i = 0; i < numHouses; i++) {
                     while (true) {
-                        int x = (int)(Math.random() * tileMap.length);
-                        int y = (int)(Math.random() * tileMap[0].length);
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
                             generateHouse(x, y);
                             housePos.add(new Position(x, y));
@@ -111,8 +94,8 @@ public class Map implements InitializerInterface {
                 int numDungeons = 8;
                 for (int i = 0; i < numDungeons; i++) {
                     while (true) {
-                        int x = (int)(Math.random() * tileMap.length);
-                        int y = (int)(Math.random() * tileMap[0].length);
+                        int x = (int) (Math.random() * tileMap.length);
+                        int y = (int) (Math.random() * tileMap[0].length);
                         if (tileMap[x][y] == Tiles.PLAINS) {
                             environment[x][y] = Tiles.DUNGEON;
                             generateDungeon(x, y);
@@ -251,12 +234,8 @@ public class Map implements InitializerInterface {
 
     private void generateHouse(int x, int y) {
         Quest quest = new Quest.Builder().name("Delve a dungeon")
-            .onComplete()
-            .add((gs, e) -> Utils.addItem(e, Items.ironSword, 1))
-            .owner()
-            .isComplete()
-            .add((gs, e) -> Utils.justCompletedAction(gs, e, BaseActions.delve))
-            .owner()
+            .onComplete((gs, e) -> Utils.addItem(e, Items.ironSword, 1))
+            .isComplete((gs, e) -> Utils.justCompletedAction(gs, e, BaseActions.delve))
             .build();
 
         Entity house = new Entity();

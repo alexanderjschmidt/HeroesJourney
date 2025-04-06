@@ -1,24 +1,18 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.utils.Utils;
-import heroes.journey.entities.effects.ConsumerChain;
-import heroes.journey.entities.effects.FunctionChain;
-import heroes.journey.entities.effects.PredicateChain;
 
 public class CooldownAction extends Action {
 
+    // TODO This could get folded into Action with a default of 1 and false
     private final int turnCooldown;
     private final boolean factionCooldown;
 
     private CooldownAction(Builder builder) {
         super(builder);
-        this.onHover = builder.onHover.build();
-        this.onSelect = builder.onSelect.build();
-        this.requirementsMet = builder.requirementsMet.build();
         this.turnCooldown = builder.turnCooldown;
         this.factionCooldown = builder.factionCooldown;
     }
@@ -32,7 +26,7 @@ public class CooldownAction extends Action {
         } else {
             cooldownComponent = CooldownComponent.get(entity);
         }
-        return !cooldownComponent.containsKey(this) && requirementsMet.isTrue(gameState, entity);
+        return !cooldownComponent.containsKey(this) && requirementsMet.test(gameState, entity);
     }
 
     @Override
@@ -52,13 +46,10 @@ public class CooldownAction extends Action {
         return turnCooldown;
     }
 
-    public static class Builder extends Action.ActionBuilder<Builder,CooldownAction> {
+    public static class Builder extends Action.ActionBuilder<Builder, CooldownAction> {
 
         private int turnCooldown;
         private boolean factionCooldown = false;
-        private final ConsumerChain.Builder<Builder> onHover = new ConsumerChain.Builder<>(this);
-        private final FunctionChain.Builder<Builder,String> onSelect = new FunctionChain.Builder<>(this);
-        private final PredicateChain.Builder<Builder> requirementsMet = new PredicateChain.Builder<>(this);
 
         public Builder turnCooldown(int turnCooldown) {
             this.turnCooldown = turnCooldown;
@@ -68,18 +59,6 @@ public class CooldownAction extends Action {
         public Builder factionCooldown(boolean factionCooldown) {
             this.factionCooldown = factionCooldown;
             return this;
-        }
-
-        public ConsumerChain.Builder<Builder> onHover() {
-            return onHover;
-        }
-
-        public FunctionChain.Builder<Builder,String> onSelect() {
-            return onSelect;
-        }
-
-        public PredicateChain.Builder<Builder> requirementsMet() {
-            return requirementsMet;
         }
 
         public CooldownAction build() {

@@ -13,6 +13,7 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
+ * Fix Opponenents not acting when off screen
  * Menus
  *  Action Detail UI flesh out
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)

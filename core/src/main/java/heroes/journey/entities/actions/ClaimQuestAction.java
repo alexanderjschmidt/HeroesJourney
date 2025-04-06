@@ -1,13 +1,9 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
-import heroes.journey.entities.effects.ConsumerChain;
-import heroes.journey.entities.effects.FunctionChain;
-import heroes.journey.entities.effects.PredicateChain;
 import heroes.journey.entities.quests.Quest;
 
 public class ClaimQuestAction extends Action {
@@ -16,9 +12,6 @@ public class ClaimQuestAction extends Action {
 
     public ClaimQuestAction(Builder builder) {
         super(builder);
-        this.onHover = builder.onHover.build();
-        this.onSelect = builder.onSelect.build();
-        this.requirementsMet = builder.requirementsMet.build();
         this.quest = builder.quest;
     }
 
@@ -35,13 +28,9 @@ public class ClaimQuestAction extends Action {
         return null;
     }
 
-    public static class Builder extends Action.ActionBuilder<Builder,ClaimQuestAction> {
+    public static class Builder extends Action.ActionBuilder<Builder, ClaimQuestAction> {
 
         private Quest quest;
-
-        private final ConsumerChain.Builder<Builder> onHover = new ConsumerChain.Builder<>(this);
-        private final FunctionChain.Builder<Builder,String> onSelect = new FunctionChain.Builder<>(this);
-        private final PredicateChain.Builder<Builder> requirementsMet = new PredicateChain.Builder<>(this);
 
         public Builder() {
             super.terminalAction(true);

@@ -1,42 +1,38 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.entities.effects.ConsumerChain;
-import heroes.journey.entities.effects.FunctionChain;
-import heroes.journey.entities.effects.PredicateChain;
+
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BiPredicate;
 
 public class Action {
 
     protected final String name;
     protected final boolean terminalAction;
-    protected ConsumerChain onHover;
-    protected FunctionChain<String> onSelect;
-    protected PredicateChain requirementsMet;
+    protected BiConsumer<GameState, Entity> onHover;
+    protected BiFunction<GameState, Entity, String> onSelect;
+    protected BiPredicate<GameState, Entity> requirementsMet;
 
     protected Action(ActionBuilder builder) {
         this.name = builder.name;
         this.terminalAction = builder.terminalAction;
+        this.onHover = builder.onHover;
+        this.onSelect = builder.onSelect;
+        this.requirementsMet = builder.requirementsMet;
         ActionManager.get().put(name, this);
         if (builder.teamAction)
             ActionManager.addTeamAction(this);
     }
 
-    protected Action(Builder builder) {
-        this((ActionBuilder)builder);
-        this.onHover = builder.onHover.build();
-        this.onSelect = builder.onSelect.build();
-        this.requirementsMet = builder.requirementsMet.build();
-    }
-
     public boolean requirementsMet(GameState gameState, Entity selected) {
-        return requirementsMet.isTrue(gameState, selected);
+        return requirementsMet.test(gameState, selected);
     }
 
     public void onHover(GameState gameState, Entity selected) {
         gameState.getRangeManager().clearRange();
-        onHover.apply(gameState, selected);
+        onHover.accept(gameState, selected);
     }
 
     /**
@@ -56,23 +52,7 @@ public class Action {
         return terminalAction;
     }
 
-    public static class Builder extends ActionBuilder<Builder,Action> {
-
-        private final ConsumerChain.Builder<Builder> onHover = new ConsumerChain.Builder<>(this);
-        private final FunctionChain.Builder<Builder,String> onSelect = new FunctionChain.Builder<>(this);
-        private final PredicateChain.Builder<Builder> requirementsMet = new PredicateChain.Builder<>(this);
-
-        public ConsumerChain.Builder<Builder> onHover() {
-            return onHover;
-        }
-
-        public FunctionChain.Builder<Builder,String> onSelect() {
-            return onSelect;
-        }
-
-        public PredicateChain.Builder<Builder> requirementsMet() {
-            return requirementsMet;
-        }
+    public static class Builder extends ActionBuilder<Builder, Action> {
 
         public Action build() {
             return new Action(this);
@@ -80,10 +60,17 @@ public class Action {
 
     }
 
-    public static abstract class ActionBuilder<B extends ActionBuilder<B,I>, I> {
+    public static abstract class ActionBuilder<B extends ActionBuilder<B, I>, I> {
 
         String name;
         boolean teamAction = false, terminalAction = true;
+
+        private BiConsumer<GameState, Entity> onHover = (gs, e) -> {
+        };
+        private BiFunction<GameState, Entity, String> onSelect = (gs, e) -> {
+            return null;
+        };
+        private BiPredicate<GameState, Entity> requirementsMet = (gs, e) -> true;
 
         public B name(String name) {
             this.name = name;
@@ -100,8 +87,23 @@ public class Action {
             return self();
         }
 
+        public B onHover(BiConsumer<GameState, Entity> onHover) {
+            this.onHover = onHover;
+            return self();
+        }
+
+        public B onSelect(BiFunction<GameState, Entity, String> onSelect) {
+            this.onSelect = onSelect;
+            return self();
+        }
+
+        public B requirementsMet(BiPredicate<GameState, Entity> requirementsMet) {
+            this.requirementsMet = requirementsMet;
+            return self();
+        }
+
         protected B self() {
-            return (B)this;
+            return (B) this;
         }
 
         public abstract I build();

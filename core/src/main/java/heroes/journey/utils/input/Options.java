@@ -1,11 +1,11 @@
 package heroes.journey.utils.input;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Options {
 
@@ -15,8 +15,7 @@ public class Options {
         new Action.Builder().name("Options")
             .teamAction(true)
             .terminalAction(false)
-            .onSelect()
-            .add((gs, e) -> {
+            .onSelect((gs, e) -> {
                 HUD.get().setState(new ActionSelectState(optionsList));
                 return null;
             });

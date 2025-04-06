@@ -1,12 +1,8 @@
 package heroes.journey.entities.actions.options;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.effects.ConsumerChain;
-import heroes.journey.entities.effects.FunctionChain;
-import heroes.journey.entities.effects.PredicateChain;
 import heroes.journey.utils.input.Options;
 
 public class BooleanOptionAction extends OptionAction {
@@ -15,9 +11,6 @@ public class BooleanOptionAction extends OptionAction {
 
     public BooleanOptionAction(Builder builder) {
         super(builder);
-        this.onHover = builder.onHover.build();
-        this.onSelect = builder.onSelect.build();
-        this.requirementsMet = builder.requirementsMet.build();
         this.toggle = builder.defaultToggle;
         setDisplay("");
         Options.optionsList.add(this);
@@ -37,13 +30,9 @@ public class BooleanOptionAction extends OptionAction {
         return toggle;
     }
 
-    public static class Builder extends Action.ActionBuilder<Builder,BooleanOptionAction> {
+    public static class Builder extends Action.ActionBuilder<Builder, BooleanOptionAction> {
 
         private boolean defaultToggle;
-
-        private final ConsumerChain.Builder<Builder> onHover = new ConsumerChain.Builder<>(this);
-        private final FunctionChain.Builder<Builder,String> onSelect = new FunctionChain.Builder<>(this);
-        private final PredicateChain.Builder<Builder> requirementsMet = new PredicateChain.Builder<>(this);
 
         public Builder() {
             super.terminalAction(false);
@@ -56,10 +45,6 @@ public class BooleanOptionAction extends OptionAction {
 
         public Builder terminalAction(boolean terminalAction) {
             return this;
-        }
-
-        public FunctionChain.Builder<Builder,String> onSelect() {
-            return onSelect;
         }
 
         public BooleanOptionAction build() {

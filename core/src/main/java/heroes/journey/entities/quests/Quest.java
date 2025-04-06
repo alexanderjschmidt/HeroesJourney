@@ -1,29 +1,29 @@
 package heroes.journey.entities.quests;
 
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.entities.effects.ConsumerChain;
-import heroes.journey.entities.effects.PredicateChain;
+
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
 
 public class Quest {
 
     private final String name;
-    private final ConsumerChain onComplete;
-    private final PredicateChain isComplete;
+    private final BiConsumer<GameState, Entity> onComplete;
+    private final BiPredicate<GameState, Entity> isComplete;
 
     public Quest(Builder builder) {
         this.name = builder.name;
-        this.onComplete = builder.onComplete.build();
-        this.isComplete = builder.isComplete.build();
+        this.onComplete = builder.onComplete;
+        this.isComplete = builder.isComplete;
     }
 
     public void onComplete(GameState gameState, Entity completer) {
-        onComplete.apply(gameState, completer);
+        onComplete.accept(gameState, completer);
     }
 
     public boolean isComplete(GameState gameState, Entity owner) {
-        return isComplete.isTrue(gameState, owner);
+        return isComplete.test(gameState, owner);
     }
 
     @Override
@@ -33,20 +33,22 @@ public class Quest {
 
     public static class Builder {
         private String name;
-        private final ConsumerChain.Builder<Builder> onComplete = new ConsumerChain.Builder<>(this);
-        private final PredicateChain.Builder<Builder> isComplete = new PredicateChain.Builder<>(this);
+        protected BiConsumer<GameState, Entity> onComplete;
+        protected BiPredicate<GameState, Entity> isComplete;
 
         public Builder name(String name) {
             this.name = name;
             return this;
         }
 
-        public ConsumerChain.Builder<Builder> onComplete() {
-            return onComplete;
+        public Builder onComplete(BiConsumer<GameState, Entity> onComplete) {
+            this.onComplete = onComplete;
+            return this;
         }
 
-        public PredicateChain.Builder<Builder> isComplete() {
-            return isComplete;
+        public Builder isComplete(BiPredicate<GameState, Entity> isComplete) {
+            this.isComplete = isComplete;
+            return this;
         }
 
         public Quest build() {

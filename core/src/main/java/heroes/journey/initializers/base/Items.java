@@ -33,11 +33,7 @@ public class Items implements InitializerInterface {
             .type(potion)
             .weight(1)
             .value(1)
-            .onConsume()
-            // TODO make all items have an interact/use option and equippedables just have equip as its first apply/use
-            .add((gs, e) -> Utils.addItem(e, ironOre, 2))
-            .add((gs, e) -> Utils.addItem(e, ironIngot, 1))
-            .owner()
+            .onConsume((gs, e) -> Utils.addItem(e, ironIngot, 1))
             .build();
     }
 
