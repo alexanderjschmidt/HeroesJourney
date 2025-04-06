@@ -3,7 +3,6 @@ package heroes.journey.ui.windows.stats;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
@@ -11,6 +10,7 @@ import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.ui.ScrollPane;
+import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.input.KeyManager;
 
@@ -26,7 +26,19 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
 
     @Override
     public void select() {
-
+        ItemInterface selectedItem = getSelected();
+        switch (selectedItem.getType()) {
+            case Weapon:
+            case Armor:
+                EquipmentComponent equipment = EquipmentComponent.get(entity);
+                equipment.equip((Item) selectedItem);
+                break;
+            case Consumable:
+                removeItem((Item) selectedItem);
+                ConsumableItem c = (ConsumableItem) selectedItem;
+                c.consume(GameState.global(), entity);
+                break;
+        }
     }
 
     @Override
@@ -37,7 +49,7 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
     public void setEntity(Entity entity) {
         this.entity = entity;
         inventoryComponent = InventoryComponent.get(entity);
-        open(inventoryComponent.keySet().stream().toList());
+        open(inventoryComponent.keySet().stream().map(key -> new ScrollPaneEntry<>(key, true)).toList());
     }
 
     @Override
@@ -55,20 +67,7 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
     public void handleInput() {
         super.handleInput();
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            ItemInterface selectedItem = getSelected();
-            switch (selectedItem.getType()) {
-                case Weapon:
-                case Armor:
-                    EquipmentComponent equipment = EquipmentComponent.get(entity);
-                    equipment.equip((Item)selectedItem);
-                    break;
-                case Consumable:
-                    removeItem((Item)selectedItem);
-                    ConsumableItem c = (ConsumableItem)selectedItem;
-                    c.consume(GameState.global(), entity);
-                    break;
-            }
-
+            selectWrapper();
         }
     }
 
@@ -78,7 +77,8 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
             if (selected > 0) {
                 selected--;
             }
-            updateList(inventoryComponent.keySet().stream().toList());
+            updateList(inventoryComponent.keySet().stream()
+                .map(key -> new ScrollPaneEntry<>(key, true)).toList());
         }
     }
 }

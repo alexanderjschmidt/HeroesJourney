@@ -1,24 +1,22 @@
 package heroes.journey.ui.windows;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.ui.BasicBackground;
-import heroes.journey.ui.HUD;
-import heroes.journey.ui.ScrollPane;
-import heroes.journey.ui.UI;
+import heroes.journey.ui.*;
 import heroes.journey.ui.hudstates.ActionSelectState;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends Stack {
 
@@ -40,49 +38,56 @@ public class ActionMenu extends Stack {
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(selectedEntity);
         // Get selected Entities Actions
-        List<Action> requirementsMetOptions = selectedActions.stream()
-            .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
-            .toList();
+        List<ScrollPaneEntry<Action>> requirementsMetOptions = filter(selectedActions, selectedEntity);
         if (selectedPosition != null) {
             // Get Tiles Factions Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getFactionActions(selectedEntity).stream()).distinct().collect(Collectors.toList());
+                getFactionActions(selectedEntity).stream()).collect(Collectors.toList());
             // Get Tiles Environment Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
                     getTileActions(selectedEntity, selectedPosition).stream())
-                .distinct()
                 .collect(Collectors.toList());
         }
-        HUD.get().setState(new ActionSelectState(requirementsMetOptions));
+        System.out.println("OPEN");
+        HUD.get().setState(new ActionSelectState(requirementsMetOptions.stream().distinct().toList()));
     }
 
-    private List<Action> getFactionActions(Entity selectedEntity) {
+    private List<ScrollPaneEntry<Action>> getFactionActions(Entity selectedEntity) {
         Entity faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
         if (faction != null) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(faction);
             if (factionActions != null) {
-                return factionActions.stream()
-                    .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
-                    .toList();
+                return filter(factionActions, selectedEntity);
             }
         }
         return new ArrayList<>();
     }
 
-    private List<Action> getTileActions(Entity selectedEntity, PositionComponent selectedPosition) {
+    private List<ScrollPaneEntry<Action>> getTileActions(Entity selectedEntity, PositionComponent selectedPosition) {
         ActionTerrain environment = GameState.global()
             .getMap()
             .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
         if (environment != null) {
-            return environment.getActions()
-                .stream()
-                .filter(action -> action.requirementsMet(GameState.global(), selectedEntity))
-                .toList();
+            return filter(environment.getActions(), selectedEntity);
         }
         return new ArrayList<>();
     }
 
-    public void open(List<Action> options) {
+    private List<ScrollPaneEntry<Action>> filter(List<Action> input, Entity entity) {
+        return input.stream()
+            .map(action -> {
+                ShowAction result = action.requirementsMet(GameState.global(), entity);
+                return new AbstractMap.SimpleEntry<>(action, result);
+            })
+            .filter(entry -> entry.getValue() != ShowAction.NO)
+            .map(entry -> new ScrollPaneEntry<>(
+                entry.getKey(),
+                entry.getValue() != ShowAction.GRAYED
+            ))
+            .toList();
+    }
+
+    public void open(List<ScrollPaneEntry<Action>> options) {
         actions.open(options);
     }
 
@@ -91,7 +96,7 @@ public class ActionMenu extends Stack {
     }
 
     public void select() {
-        actions.select();
+        actions.selectWrapper();
     }
 
     public void handleInputs() {
@@ -101,7 +106,7 @@ public class ActionMenu extends Stack {
     private class ActionScrollPane extends ScrollPane<Action> {
 
         @Override
-        public void open(List<Action> options) {
+        public void open(List<ScrollPaneEntry<Action>> options) {
             GameState.global().getRangeManager().clearRange();
             if (options.isEmpty()) {
                 System.out.println("Options Empty");

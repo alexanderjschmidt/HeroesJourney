@@ -1,12 +1,13 @@
 package heroes.journey.entities.actions;
 
+import heroes.journey.GameState;
+import heroes.journey.ui.ScrollPaneEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import heroes.journey.GameState;
-
-public class ActionManager extends HashMap<String,Action> {
+public class ActionManager extends HashMap<String, Action> {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,11 +25,11 @@ public class ActionManager extends HashMap<String,Action> {
         teamActions = new ArrayList<Action>();
     }
 
-    public static List<Action> getTeamActions(GameState gameState) {
-        ArrayList<Action> options = new ArrayList<Action>(get().teamActions.size());
+    public static List<ScrollPaneEntry<Action>> getTeamActions(GameState gameState) {
+        ArrayList<ScrollPaneEntry<Action>> options = new ArrayList<>(get().teamActions.size());
         for (Action action : get().teamActions) {
-            if (action.requirementsMet(gameState, null))
-                options.add(action);
+            if (action.requirementsMet(gameState, null) == ShowAction.YES)
+                options.add(new ScrollPaneEntry<>(action, true));
         }
         return options;
     }

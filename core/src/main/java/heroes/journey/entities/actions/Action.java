@@ -5,7 +5,6 @@ import heroes.journey.GameState;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.BiPredicate;
 
 public class Action {
 
@@ -13,7 +12,7 @@ public class Action {
     protected final boolean terminalAction;
     protected BiConsumer<GameState, Entity> onHover;
     protected BiFunction<GameState, Entity, String> onSelect;
-    protected BiPredicate<GameState, Entity> requirementsMet;
+    protected BiFunction<GameState, Entity, ShowAction> requirementsMet;
 
     protected Action(ActionBuilder builder) {
         this.name = builder.name;
@@ -26,8 +25,8 @@ public class Action {
             ActionManager.addTeamAction(this);
     }
 
-    public boolean requirementsMet(GameState gameState, Entity selected) {
-        return requirementsMet.test(gameState, selected);
+    public ShowAction requirementsMet(GameState gameState, Entity selected) {
+        return requirementsMet.apply(gameState, selected);
     }
 
     public void onHover(GameState gameState, Entity selected) {
@@ -70,7 +69,7 @@ public class Action {
         private BiFunction<GameState, Entity, String> onSelect = (gs, e) -> {
             return null;
         };
-        private BiPredicate<GameState, Entity> requirementsMet = (gs, e) -> true;
+        private BiFunction<GameState, Entity, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
         public B name(String name) {
             this.name = name;
@@ -97,7 +96,7 @@ public class Action {
             return self();
         }
 
-        public B requirementsMet(BiPredicate<GameState, Entity> requirementsMet) {
+        public B requirementsMet(BiFunction<GameState, Entity, ShowAction> requirementsMet) {
             this.requirementsMet = requirementsMet;
             return self();
         }

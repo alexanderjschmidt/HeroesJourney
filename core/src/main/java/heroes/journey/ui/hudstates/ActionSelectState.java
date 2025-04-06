@@ -1,25 +1,25 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.components.ActionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.List;
 
 public class ActionSelectState extends HUDState {
 
-    private final List<Action> options;
+    private final List<ScrollPaneEntry<Action>> options;
 
-    public ActionSelectState(List<Action> options) {
+    public ActionSelectState(List<ScrollPaneEntry<Action>> options) {
         super();
         this.options = options;
     }
 
-    public List<Action> getOptions() {
+    public List<ScrollPaneEntry<Action>> getOptions() {
         return options;
     }
 

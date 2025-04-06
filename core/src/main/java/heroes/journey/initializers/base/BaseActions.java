@@ -9,10 +9,12 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.CooldownAction;
+import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class BaseActions implements InitializerInterface {
     static {
         openActionMenu = new Action.Builder().name("THIS SHOULD NEVER BE DISPLAYED")
             .terminalAction(false)
-            .requirementsMet((gs, e) -> false)
+            .requirementsMet((gs, e) -> ShowAction.NO)
             .onSelect((gs, e) -> {
                 HUD.get().getActionMenu().open();
                 return null;
@@ -75,12 +77,13 @@ public class BaseActions implements InitializerInterface {
             for (Quest quest : questsComponent) {
                 questActions.add(new ClaimQuestAction.Builder().name(quest.toString()).quest(quest).build());
             }
-            HUD.get().setState(new ActionSelectState(questActions));
+            List<ScrollPaneEntry<Action>> options = questActions.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
+            HUD.get().setState(new ActionSelectState(options));
             return null;
         }).requirementsMet((gs, e) -> {
             Entity town = Utils.getLocationsFaction(gs, e);
             QuestsComponent questsComponent = QuestsComponent.get(town);
-            return !questsComponent.isEmpty();
+            return questsComponent.isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
         }).build();
     }
 

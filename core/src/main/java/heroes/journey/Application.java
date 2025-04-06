@@ -13,7 +13,7 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
- * Fix Opponenents not acting when off screen
+ * Fix Opponents not acting when off screen
  * Menus
  *  Action Detail UI flesh out
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
@@ -30,8 +30,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Make Delving use stats
  *  Make Dungeons show recover timer
  * Multiplayer
- * Action on Town
- *  Add grayed out actions, ie missing a requirement but letting you know its an option
  * Fog of War
  *  light fog (ie 50% transparent over tiles) on unseen tiles
  *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles

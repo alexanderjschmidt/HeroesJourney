@@ -2,6 +2,7 @@ package heroes.journey.utils.input;
 
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class Options {
             .teamAction(true)
             .terminalAction(false)
             .onSelect((gs, e) -> {
-                HUD.get().setState(new ActionSelectState(optionsList));
+                List<ScrollPaneEntry<Action>> options = optionsList.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
+                HUD.get().setState(new ActionSelectState(options));
                 return null;
             });
     }

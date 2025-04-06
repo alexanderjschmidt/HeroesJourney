@@ -18,7 +18,7 @@ public class CooldownAction extends Action {
     }
 
     @Override
-    public boolean requirementsMet(GameState gameState, Entity entity) {
+    public ShowAction requirementsMet(GameState gameState, Entity entity) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
             Entity faction = Utils.getLocationsFaction(gameState, entity);
@@ -26,7 +26,9 @@ public class CooldownAction extends Action {
         } else {
             cooldownComponent = CooldownComponent.get(entity);
         }
-        return !cooldownComponent.containsKey(this) && requirementsMet.test(gameState, entity);
+        if (cooldownComponent.containsKey(this))
+            return ShowAction.NO;
+        return requirementsMet.apply(gameState, entity);
     }
 
     @Override
