@@ -1,13 +1,20 @@
 package heroes.journey.components.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
+import heroes.journey.entities.quests.Quest;
 
 public class Utils {
 
@@ -18,6 +25,15 @@ public class Utils {
         if (positionComponent == null)
             return null;
         return gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+    }
+
+    public static List<Action> getQuestClaimActions(Entity entity) {
+        QuestsComponent questsComponent = QuestsComponent.get(entity);
+        List<Action> questActions = new ArrayList<>();
+        for (Quest quest : questsComponent) {
+            questActions.add(new ClaimQuestAction.Builder().name(quest.toString()).quest(quest).build());
+        }
+        return questActions;
     }
 
     public static String addItem(Entity entity, Item item, int count) {
@@ -32,7 +48,7 @@ public class Utils {
         StatsComponent statsComponent = StatsComponent.get(entity);
         if (statsComponent == null)
             return null;
-        statsComponent.setBody(statsComponent.getBody() + 1);
+        statsComponent.setBody(statsComponent.getBody() + count);
         return "Successful Workout! Gain 1 Body";
     }
 
@@ -40,7 +56,7 @@ public class Utils {
         StatsComponent statsComponent = StatsComponent.get(entity);
         if (statsComponent == null)
             return null;
-        statsComponent.setMind(statsComponent.getMind() + 1);
+        statsComponent.setMind(statsComponent.getMind() + count);
         return "Successful Study! Gain 1 Mind";
     }
 

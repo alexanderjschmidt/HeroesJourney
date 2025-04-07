@@ -8,25 +8,43 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
- * Fix Opponents not acting when off screen
  * Menus
  *  Action Detail UI flesh out
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
  * 	Stats Screen
  * 		increment on level up
  * 	Inventory
+ *      Icons
  * 		Use Item (health potion)
  * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage)
  * 		Scrolling
  * 		Tabs
  * Show Controls on UIs?
+ * Knowledge System
+ *  Towns: Inn: Rumors
+ *  Fog of War
+ *  Knowledge Menu
+ *      Locations
+ *      Terrains
+ *      Players
+ *      Enemy Types
+ *      Skills?
+ *          Sword arts? Helps you train skills faster
+ *          Heavy Armor
+ *  Knowledge Vs Experience
+ *      You can gain knowledge easier and it will speed up your experience gain
+ *      for that experience/skill
  * Make HUD Locked when players character is moving
  * Make AI Calculation run in the background (Maybe a system that keeps checking if its ready)
+ * Towns
+ *  Inn: Rumors
+ *  Carriages: Fast Travel
  * Make Delving use stats
  *  Make Dungeons show recover timer
  * Multiplayer
@@ -48,6 +66,7 @@ import heroes.journey.utils.art.ResourceManager;
  * 	Background music
  * 	Action Sounds
  * Fold Faction AI into character AI loop for prediction purposes
+ *  or get rid of it?
  * make cursor arrow pathfinding favor already followed path.
  * Camera
  *  force zoom if camera would go off screen

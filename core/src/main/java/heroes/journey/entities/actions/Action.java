@@ -1,18 +1,19 @@
 package heroes.journey.entities.actions;
 
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.GameState;
-
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+
+import com.badlogic.ashley.core.Entity;
+
+import heroes.journey.GameState;
 
 public class Action {
 
     protected final String name;
     protected final boolean terminalAction;
-    protected BiConsumer<GameState, Entity> onHover;
-    protected BiFunction<GameState, Entity, String> onSelect;
-    protected BiFunction<GameState, Entity, ShowAction> requirementsMet;
+    protected BiConsumer<GameState,Entity> onHover;
+    protected BiFunction<GameState,Entity,String> onSelect;
+    protected BiFunction<GameState,Entity,ShowAction> requirementsMet;
 
     protected Action(ActionBuilder builder) {
         this.name = builder.name;
@@ -51,7 +52,7 @@ public class Action {
         return terminalAction;
     }
 
-    public static class Builder extends ActionBuilder<Builder, Action> {
+    public static class Builder extends ActionBuilder<Builder,Action> {
 
         public Action build() {
             return new Action(this);
@@ -59,17 +60,17 @@ public class Action {
 
     }
 
-    public static abstract class ActionBuilder<B extends ActionBuilder<B, I>, I> {
+    public static abstract class ActionBuilder<B extends ActionBuilder<B,I>, I> {
 
         String name;
         boolean teamAction = false, terminalAction = true;
 
-        private BiConsumer<GameState, Entity> onHover = (gs, e) -> {
+        private BiConsumer<GameState,Entity> onHover = (gs, e) -> {
         };
-        private BiFunction<GameState, Entity, String> onSelect = (gs, e) -> {
+        private BiFunction<GameState,Entity,String> onSelect = (gs, e) -> {
             return null;
         };
-        private BiFunction<GameState, Entity, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+        private BiFunction<GameState,Entity,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
         public B name(String name) {
             this.name = name;
@@ -78,6 +79,9 @@ public class Action {
 
         public B teamAction(boolean teamAction) {
             this.teamAction = teamAction;
+            // If its a team action, it doesnt have a selected entity to apply to
+            // for end turn it should be handled by the assigned wait actions
+            this.terminalAction = false;
             return self();
         }
 
@@ -86,23 +90,23 @@ public class Action {
             return self();
         }
 
-        public B onHover(BiConsumer<GameState, Entity> onHover) {
+        public B onHover(BiConsumer<GameState,Entity> onHover) {
             this.onHover = onHover;
             return self();
         }
 
-        public B onSelect(BiFunction<GameState, Entity, String> onSelect) {
+        public B onSelect(BiFunction<GameState,Entity,String> onSelect) {
             this.onSelect = onSelect;
             return self();
         }
 
-        public B requirementsMet(BiFunction<GameState, Entity, ShowAction> requirementsMet) {
+        public B requirementsMet(BiFunction<GameState,Entity,ShowAction> requirementsMet) {
             this.requirementsMet = requirementsMet;
             return self();
         }
 
         protected B self() {
-            return (B) this;
+            return (B)this;
         }
 
         public abstract I build();

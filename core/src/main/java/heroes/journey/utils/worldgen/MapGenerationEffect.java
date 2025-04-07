@@ -7,20 +7,24 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Consumer;
 
 import heroes.journey.GameState;
 
-public abstract class MapGenerationEffect {
+public class MapGenerationEffect {
 
     private final MapGenerationPhase phase;
     private final int timeout, retryCount;
 
-    public MapGenerationEffect(MapGenerationPhase phase) {
-        this(phase, 0);
+    private final Consumer<GameState> applyEffect;
+
+    public MapGenerationEffect(MapGenerationPhase phase, Consumer<GameState> applyEffect) {
+        this(phase, 0, applyEffect);
     }
 
-    public MapGenerationEffect(MapGenerationPhase phase, int timeout) {
+    public MapGenerationEffect(MapGenerationPhase phase, int timeout, Consumer<GameState> applyEffect) {
         this.phase = phase;
+        this.applyEffect = applyEffect;
         this.timeout = timeout;
         this.retryCount = 5;
         NewMapManager.get().addMapGenerationEffect(this);
@@ -29,16 +33,14 @@ public abstract class MapGenerationEffect {
     public void apply(GameState gameState) {
         if (timeout > 0) {
             Callable<Void> task = () -> {
-                applyEffect(gameState);
+                applyEffect.accept(gameState);
                 return null;
             };
             timeout(task);
         } else {
-            applyEffect(gameState);
+            applyEffect.accept(gameState);
         }
     }
-
-    public abstract void applyEffect(GameState gameState);
 
     private void timeout(Callable<Void> task) {
         int i = 0;

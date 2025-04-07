@@ -30,6 +30,10 @@ public class MovementSystem extends IteratingSystem {
         ActorComponent actor = ActorComponent.get(entity);
         ActionComponent action = ActionComponent.get(entity);
 
+        if (actor != null) {
+            actor.act(delta);
+        }
+
         if (movement != null) {
             if (movement.hasPath() && !actor.hasActions()) {
                 System.out.println("Moving");
