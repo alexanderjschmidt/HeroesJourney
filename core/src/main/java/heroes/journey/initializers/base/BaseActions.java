@@ -1,9 +1,6 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.ActionComponent;
@@ -18,6 +15,8 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
+import java.util.List;
+
 public class BaseActions implements InitializerInterface {
 
     public static Action openActionMenu, wait, end_turn, exit_game, attack;
@@ -25,6 +24,7 @@ public class BaseActions implements InitializerInterface {
     public static CooldownAction delve;
     public static Action chopTrees;
     public static Action questBoard;
+    public static Action carriage;
 
     static {
         openActionMenu = new Action.Builder().name("THIS SHOULD NEVER BE DISPLAYED")
@@ -69,15 +69,20 @@ public class BaseActions implements InitializerInterface {
         questBoard = new Action.Builder().name("Quest Board").terminalAction(false).onSelect((gs, e) -> {
             Entity town = Utils.getLocationsFaction(gs, e);
             List<Action> questActions = Utils.getQuestClaimActions(town);
-            List<ScrollPaneEntry<Action>> options = questActions.stream()
-                .map(key -> new ScrollPaneEntry<>(key, true))
-                .toList();
+            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(questActions);
             HUD.get().setState(new ActionSelectState(options));
             return null;
         }).requirementsMet((gs, e) -> {
             Entity town = Utils.getLocationsFaction(gs, e);
             QuestsComponent questsComponent = QuestsComponent.get(town);
             return questsComponent.isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
+        }).build();
+        carriage = new Action.Builder().name("Carriage").terminalAction(false).onSelect((gs, e) -> {
+            Entity town = Utils.getLocationsFaction(gs, e);
+            List<Action> carriageActions = Utils.getCarriageActions(gs, town, e);
+            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
+            HUD.get().setState(new ActionSelectState(options));
+            return null;
         }).build();
     }
 

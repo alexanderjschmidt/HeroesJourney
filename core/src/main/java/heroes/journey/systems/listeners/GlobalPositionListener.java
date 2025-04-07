@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import heroes.journey.GameState;
+import heroes.journey.components.FactionComponent;
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.PositionComponent;
 
@@ -21,6 +22,10 @@ public class GlobalPositionListener implements EntityListener {
 
     @Override
     public void entityAdded(Entity entity) {
+        FactionComponent factionComponent = FactionComponent.get(entity);
+        if (factionComponent != null) {
+            return;
+        }
         GameStateComponent gameStateComponent = GameStateComponent.get(entity);
         if (gameStateComponent.isGlobal()) {
             gameState.getEntities().registerEntity(gameStateComponent.getId(), entity);
@@ -30,6 +35,10 @@ public class GlobalPositionListener implements EntityListener {
 
     @Override
     public void entityRemoved(Entity entity) {
+        FactionComponent factionComponent = FactionComponent.get(entity);
+        if (factionComponent != null) {
+            return;
+        }
         GameStateComponent gameStateComponent = GameStateComponent.get(entity);
         gameState.getEntities().removeEntity(entity);
         if (gameStateComponent.isGlobal())

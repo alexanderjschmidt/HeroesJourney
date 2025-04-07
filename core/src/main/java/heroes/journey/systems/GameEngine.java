@@ -7,6 +7,7 @@ import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
 import heroes.journey.systems.endofturnsystems.FactionSystem;
+import heroes.journey.systems.listeners.FactionCarriageListener;
 import heroes.journey.systems.listeners.GlobalPositionListener;
 import heroes.journey.systems.listeners.StatsActionsListener;
 
@@ -23,6 +24,7 @@ public class GameEngine extends com.badlogic.ashley.core.Engine {
         endOfTurnSystems = new ArrayList<>();
 
         addEntityListener(StatsActionsListener.getFamily(), new StatsActionsListener());
+        addEntityListener(FactionCarriageListener.getFamily(), new FactionCarriageListener());
     }
 
     public void initSystems(GameState gameState) {

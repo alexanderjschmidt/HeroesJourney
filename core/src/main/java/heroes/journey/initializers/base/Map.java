@@ -1,29 +1,8 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
-import heroes.journey.components.AIComponent;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.CooldownComponent;
-import heroes.journey.components.EquipmentComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LoyaltyComponent;
-import heroes.journey.components.PlayerComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.RenderComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
@@ -34,13 +13,17 @@ import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationPhase;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.*;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -67,14 +50,14 @@ public class Map implements InitializerInterface {
 
             // Gen Houses
             int numHouses = 10;
-            housePos = generateRandomFeatures(gameState, Tiles.HOUSE, numHouses);
+            housePos = generateRandomFeatures(gameState, Tiles.HOUSE, numHouses, false);
 
             // Gen Paths between houses
             connectFeatures(gameState, housePos, Tiles.pathTiles.getFirst());
 
             // Gen Dungeons
             int numDungeons = 8;
-            generateRandomFeatures(gameState, Tiles.DUNGEON, numDungeons);
+            generateRandomFeatures(gameState, Tiles.DUNGEON, numDungeons, true);
         });
         // Wave Function collapse keeping houses and path placements
         new MapGenerationEffect(MapGenerationPhase.INIT, gameState -> {
@@ -202,6 +185,8 @@ public class Map implements InitializerInterface {
                 new FactionComponent(SyllableTownNameGenerator.generateName()).addOwnedLocation(gameState, house,
                     new Position(x, y)))
             .add(new GameStateComponent())
+            .add(new PositionComponent(x, y))
+            .add(new CarriageComponent())
             .add(new QuestsComponent().addQuest(quest))
             .add(new PossibleActionsComponent().addAction(BaseActions.questBoard));
         gameState.getEngine().addEntity(house);
@@ -218,16 +203,19 @@ public class Map implements InitializerInterface {
         gameState.getEngine().addEntity(dungeon);
     }
 
-    private static List<Position> generateRandomFeatures(GameState gameState, Tile feature, int count) {
+    private static List<Position> generateRandomFeatures(GameState gameState, Tile feature, int count, boolean dungeon) {
         List<Position> featurePos = new ArrayList<>(count);
         Tile[][] tileMap = gameState.getMap().getTileMap();
         Tile[][] environment = gameState.getMap().getEnvironment();
         for (int i = 0; i < count; i++) {
             while (true) {
-                int x = (int)(Math.random() * environment.length);
-                int y = (int)(Math.random() * environment[0].length);
+                int x = (int) (Math.random() * environment.length);
+                int y = (int) (Math.random() * environment[0].length);
                 if (tileMap[x][y] == Tiles.PLAINS) {
-                    generateHouse(gameState, x, y);
+                    if (dungeon)
+                        generateDungeon(gameState, x, y);
+                    else
+                        generateHouse(gameState, x, y);
                     featurePos.add(new Position(x, y));
                     environment[x][y] = feature;
                     break;
