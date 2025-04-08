@@ -1,7 +1,6 @@
 package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
@@ -18,7 +17,7 @@ public class StatsUIState extends HUDState {
     @Override
     public void enter(HUD hud) {
         justOpened = true;
-        hud.setCenterPanel(true);
+        hud.updateCenterPanel();
         hud.getStatsUI().setVisible(true);
         Cursor cursor = HUD.get().getCursor();
         hud.getStatsUI().setEntity(GameState.global().getEntities().get(cursor.x, cursor.y));

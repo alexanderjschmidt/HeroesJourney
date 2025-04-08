@@ -14,6 +14,7 @@ import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
+import heroes.journey.ui.hudstates.States;
 
 import java.util.List;
 
@@ -60,7 +61,8 @@ public class BaseActions implements InitializerInterface {
             .factionCooldown(true)
             .onSelect((gs, e) -> {
                 Utils.addItem(e, Items.ironOre, 5);
-                return "Successful Delve! You found 5 iron ore";
+                HUD.get().setState(States.DELVE);
+                return null;
             })
             .build();
         chopTrees = new Action.Builder().name("Chop Trees")

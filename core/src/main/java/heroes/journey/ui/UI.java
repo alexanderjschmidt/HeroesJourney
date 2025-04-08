@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.utils.Align;
 
 import heroes.journey.utils.art.ResourceManager;
 
@@ -36,13 +37,18 @@ public abstract class UI extends Widget {
     public abstract void drawAndUpdate(Batch batch, float parentAlpha);
 
     public void drawText(Batch batch, String text, int x, int y) {
-        ResourceManager.get().font24.draw(batch, text, getX() + ((x + 1) * HUD.FONT_SIZE),
-            getY() + getHeight() - ((y + 0.5f) * HUD.FONT_SIZE));
+        drawText(this, batch, text, x, y);
     }
 
     public static void drawText(Actor actor, Batch batch, String text, int x, int y) {
         ResourceManager.get().font24.draw(batch, text, actor.getX() + ((x + 1) * HUD.FONT_SIZE),
             actor.getY() + actor.getHeight() - ((y + 0.5f) * HUD.FONT_SIZE));
+    }
+
+    public static void drawTextWrap(Actor actor, Batch batch, String text, int x, int y) {
+        ResourceManager.get().font12.draw(batch, text, actor.getX() + ((x + 1) * HUD.FONT_SIZE),
+            actor.getY() + actor.getHeight() - ((y + 0.5f) * HUD.FONT_SIZE), actor.getWidth(), Align.center,
+            true);
     }
 
 }
