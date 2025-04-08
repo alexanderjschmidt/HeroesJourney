@@ -128,7 +128,7 @@ public class ResourceManager extends AssetManager {
     }
 
     private void initFonts() {
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("skin/Gabrielle.ttf"));
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("skin/bulletinV1.ttf"));
         FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
         parameter.color = Color.WHITE;

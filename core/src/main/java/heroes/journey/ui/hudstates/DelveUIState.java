@@ -4,11 +4,11 @@ import com.badlogic.gdx.Gdx;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 
-public class PopupUIState extends HUDState {
+public class DelveUIState extends HUDState {
 
     private boolean justOpened = false;
 
-    public PopupUIState() {
+    public DelveUIState() {
         super();
     }
 

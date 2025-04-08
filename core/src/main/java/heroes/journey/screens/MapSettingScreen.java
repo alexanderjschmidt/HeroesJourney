@@ -5,9 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.utils.art.ResourceManager;
@@ -25,7 +31,8 @@ public class MapSettingScreen implements Screen {
 
     public MapSettingScreen(final Application app) {
         this.app = app;
-        this.stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), GameCamera.get()));
+        this.stage = new Stage(
+            new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), GameCamera.get()));
     }
 
     @Override
@@ -36,8 +43,9 @@ public class MapSettingScreen implements Screen {
         Image background = new Image(ResourceManager.get().getTexture("Textures/UI/Background.png"));
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(background);
-        Label label = new Label("RPGame", ResourceManager.get().skin, "title");
-        label.setPosition(Gdx.graphics.getWidth() / 2 - (label.getWidth() / 2), Gdx.graphics.getHeight() / 2 - (label.getHeight() / 2) + 120);
+        Label label = new Label("Heroes Journey", ResourceManager.get().skin, "title");
+        label.setPosition(Gdx.graphics.getWidth() / 2 - (label.getWidth() / 2),
+            Gdx.graphics.getHeight() / 2 - (label.getHeight() / 2) + 120);
         stage.addActor(label);
         initButtons();
     }
@@ -60,7 +68,7 @@ public class MapSettingScreen implements Screen {
         sizeText.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                mapSize = (int) Math.pow(2, sizeText.getValue());
+                mapSize = (int)Math.pow(2, sizeText.getValue());
                 sizeOutput.setText(mapSize + "");
             }
         });
@@ -72,7 +80,7 @@ public class MapSettingScreen implements Screen {
         battleScaleText.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                armySize = (int) battleScaleText.getValue();
+                armySize = (int)battleScaleText.getValue();
                 battleScaleOutput.setText(armySize + "");
             }
         });
@@ -83,7 +91,7 @@ public class MapSettingScreen implements Screen {
         teams.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                teamCount = (int) teams.getValue();
+                teamCount = (int)teams.getValue();
                 teamsOutput.setText(teamCount + "");
             }
         });

@@ -9,16 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.ActionDetailUI;
-import heroes.journey.ui.windows.ActionMenu;
-import heroes.journey.ui.windows.EntityUI;
-import heroes.journey.ui.windows.PopupUI;
-import heroes.journey.ui.windows.StatsUI;
-import heroes.journey.ui.windows.TerrainUI;
-import heroes.journey.ui.windows.TurnUI;
+import heroes.journey.ui.windows.*;
 
 public class HUD extends Stage {
 
@@ -36,9 +29,10 @@ public class HUD extends Stage {
     private final Cell<?> centerWindow;
     private final StatsUI statsUI;
     private final PopupUI popupUI;
+    private final DelveUI delveUI;
 
     private static HUD hud;
-    private final StateMachine<HUD,HUDState> stateMachine;
+    private final StateMachine<HUD, HUDState> stateMachine;
     private HUDState baseState;
     private float delta;
 
@@ -50,7 +44,7 @@ public class HUD extends Stage {
 
     public HUD() {
         super(new ScreenViewport());
-        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.LOCKED);
+        stateMachine = new StackStateMachine<HUD, HUDState>(this, States.LOCKED);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -62,6 +56,7 @@ public class HUD extends Stage {
         turnUI = new TurnUI();
         statsUI = new StatsUI();
         popupUI = new PopupUI();
+        delveUI = new DelveUI();
 
         layout = new Table();
         layout.setFillParent(true);
@@ -162,11 +157,11 @@ public class HUD extends Stage {
         return cursor;
     }
 
-    public void setCenterPanel(boolean isStats) {
+    public void updateCenterPanel() {
         centerWindow.clearActor();
-        if (isStats) {
+        if (stateMachine.getCurrentState() == States.STATS) {
             centerWindow.setActor(statsUI).colspan(3).expand().fill();
-        } else {
+        } else if (stateMachine.getCurrentState() == States.POP_UP) {
             Table popupTable = new Table();
             popupTable.add().expandY();
             popupTable.row();
@@ -182,6 +177,8 @@ public class HUD extends Stage {
             popupTable.add().expandY();
 
             centerWindow.setActor(popupTable).colspan(3).center();
+        } else if (stateMachine.getCurrentState() == States.DELVE) {
+            centerWindow.setActor(delveUI).colspan(3).expand().fill();
         }
         layout.invalidate();
     }
