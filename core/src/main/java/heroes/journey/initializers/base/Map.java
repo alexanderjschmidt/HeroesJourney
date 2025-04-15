@@ -1,8 +1,30 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
+import heroes.journey.components.AIComponent;
+import heroes.journey.components.ActorComponent;
+import heroes.journey.components.CarriageComponent;
+import heroes.journey.components.CooldownComponent;
+import heroes.journey.components.EquipmentComponent;
+import heroes.journey.components.FactionComponent;
+import heroes.journey.components.GameStateComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LoyaltyComponent;
+import heroes.journey.components.PlayerComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.RenderComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
@@ -13,17 +35,13 @@ import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.*;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.MapGenerationPhase;
+import heroes.journey.utils.worldgen.RandomWorldGenerator;
+import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+import heroes.journey.utils.worldgen.WeightedRandomPicker;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -175,7 +193,8 @@ public class Map implements InitializerInterface {
     }
 
     private static void generateHouse(GameState gameState, int x, int y) {
-        Quest quest = new Quest.Builder().name("Delve a dungeon")
+        Quest quest = Quest.builder()
+            .name("Delve a dungeon")
             .onComplete((gs, e) -> Utils.addItem(e, Items.ironSword, 1))
             .isComplete((gs, e) -> Utils.justCompletedAction(gs, e, BaseActions.delve))
             .build();
@@ -203,14 +222,18 @@ public class Map implements InitializerInterface {
         gameState.getEngine().addEntity(dungeon);
     }
 
-    private static List<Position> generateRandomFeatures(GameState gameState, Tile feature, int count, boolean dungeon) {
+    private static List<Position> generateRandomFeatures(
+        GameState gameState,
+        Tile feature,
+        int count,
+        boolean dungeon) {
         List<Position> featurePos = new ArrayList<>(count);
         Tile[][] tileMap = gameState.getMap().getTileMap();
         Tile[][] environment = gameState.getMap().getEnvironment();
         for (int i = 0; i < count; i++) {
             while (true) {
-                int x = (int) (Math.random() * environment.length);
-                int y = (int) (Math.random() * environment[0].length);
+                int x = (int)(Math.random() * environment.length);
+                int y = (int)(Math.random() * environment[0].length);
                 if (tileMap[x][y] == Tiles.PLAINS) {
                     if (dungeon)
                         generateDungeon(gameState, x, y);

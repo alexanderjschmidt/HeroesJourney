@@ -1,21 +1,21 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.utils.Utils;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
+@SuperBuilder
 public class CooldownAction extends Action {
 
     // TODO This could get folded into Action with a default of 1 and false
-    private final int turnCooldown;
-    private final boolean factionCooldown;
-
-    private CooldownAction(Builder builder) {
-        super(builder);
-        this.turnCooldown = builder.turnCooldown;
-        this.factionCooldown = builder.factionCooldown;
-    }
+    @NonNull @Getter private final Integer turnCooldown;
+    @Builder.Default private final boolean factionCooldown = false;
 
     @Override
     public ShowAction requirementsMet(GameState gameState, Entity entity) {
@@ -42,29 +42,5 @@ public class CooldownAction extends Action {
         }
         cooldownComponent.put(this, turnCooldown);
         return onSelect.apply(gameState, entity);
-    }
-
-    public int getTurnCooldown() {
-        return turnCooldown;
-    }
-
-    public static class Builder extends Action.ActionBuilder<Builder, CooldownAction> {
-
-        private int turnCooldown;
-        private boolean factionCooldown = false;
-
-        public Builder turnCooldown(int turnCooldown) {
-            this.turnCooldown = turnCooldown;
-            return this;
-        }
-
-        public Builder factionCooldown(boolean factionCooldown) {
-            this.factionCooldown = factionCooldown;
-            return this;
-        }
-
-        public CooldownAction build() {
-            return new CooldownAction(this);
-        }
     }
 }

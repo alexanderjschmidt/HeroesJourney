@@ -1,15 +1,13 @@
 package heroes.journey.entities.actions;
 
-import heroes.journey.GameState;
-import heroes.journey.ui.ScrollPaneEntry;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ActionManager extends HashMap<String, Action> {
+import heroes.journey.GameState;
+import heroes.journey.ui.ScrollPaneEntry;
 
-    private static final long serialVersionUID = 1L;
+public class ActionManager extends HashMap<String,Action> {
 
     private final List<Action> teamActions;
 
@@ -32,13 +30,6 @@ public class ActionManager extends HashMap<String, Action> {
                 options.add(new ScrollPaneEntry<>(action, true));
         }
         return options;
-    }
-
-    public static Action getAction(String actionName) {
-        Action action = get().get(actionName);
-        if (action == null)
-            System.out.println("SKILL NOT FOUND");
-        return action;
     }
 
     public static void addTeamAction(Action action) {

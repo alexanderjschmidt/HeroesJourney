@@ -1,10 +1,18 @@
 package heroes.journey.components.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
+import heroes.journey.components.CarriageComponent;
+import heroes.journey.components.FactionComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
@@ -12,9 +20,6 @@ import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.ScrollPaneEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Utils {
 
@@ -31,29 +36,31 @@ public class Utils {
         QuestsComponent questsComponent = QuestsComponent.get(entity);
         List<Action> questActions = new ArrayList<>();
         for (Quest quest : questsComponent) {
-            questActions.add(new ClaimQuestAction.Builder().name(quest.toString()).quest(quest).build());
+            questActions.add(ClaimQuestAction.builder().name(quest.toString()).quest(quest).build());
         }
         return questActions;
     }
 
     public static List<Action> getCarriageActions(GameState gameState, Entity town, Entity selected) {
         List<Action> questActions = new ArrayList<>();
-        ImmutableArray<Entity> carriagableLocations = gameState.getEngine().getEntitiesFor(Family.all(FactionComponent.class, CarriageComponent.class, PositionComponent.class).get());
+        ImmutableArray<Entity> carriagableLocations = gameState.getEngine()
+            .getEntitiesFor(
+                Family.all(FactionComponent.class, CarriageComponent.class, PositionComponent.class).get());
         for (Entity carriagableLocation : carriagableLocations) {
             PositionComponent positionComponent = PositionComponent.get(carriagableLocation);
             FactionComponent factionComponent = FactionComponent.get(carriagableLocation);
-            questActions.add(new Action.Builder().name("Travel to " + factionComponent.toString()).onSelect((gs, e) -> {
-                gameState.getEntities().moveEntity(selected, positionComponent.getX(), positionComponent.getY());
-                return "You have arrived at " + factionComponent.toString();
-            }).build());
+            questActions.add(
+                Action.builder().name("Travel to " + factionComponent.toString()).onSelect((gs, e) -> {
+                    gameState.getEntities()
+                        .moveEntity(selected, positionComponent.getX(), positionComponent.getY());
+                    return "You have arrived at " + factionComponent.toString();
+                }).build());
         }
         return questActions;
     }
 
     public static List<ScrollPaneEntry<Action>> convertToScrollEntries(List<Action> actions) {
-        return actions.stream()
-            .map(key -> new ScrollPaneEntry<>(key, true))
-            .toList();
+        return actions.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
     }
 
     public static String addItem(Entity entity, Item item, int count) {
