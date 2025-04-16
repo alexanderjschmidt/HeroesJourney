@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionManager;
+import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.actions.options.OptionAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
@@ -27,6 +27,6 @@ public class Options {
             HUD.get().setState(new ActionSelectState(options));
             return null;
         }).build();
-        ActionManager.addTeamAction(optionsAction);
+        TeamActions.addTeamAction(optionsAction);
     }
 }

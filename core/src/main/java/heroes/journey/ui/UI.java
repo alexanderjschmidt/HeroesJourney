@@ -42,12 +42,12 @@ public abstract class UI extends Widget {
 
     public static void drawText(Actor actor, Batch batch, String text, int x, int y) {
         ResourceManager.get().font24.draw(batch, text, actor.getX() + ((x + 1) * HUD.FONT_SIZE),
-            actor.getY() + actor.getHeight() - ((y + 0.5f) * HUD.FONT_SIZE));
+            actor.getY() + actor.getHeight() - ((y + 0.8f) * HUD.FONT_SIZE));
     }
 
     public static void drawTextWrap(Actor actor, Batch batch, String text, int x, int y) {
         ResourceManager.get().font12.draw(batch, text, actor.getX() + ((x + 1) * HUD.FONT_SIZE),
-            actor.getY() + actor.getHeight() - ((y + 0.5f) * HUD.FONT_SIZE), actor.getWidth(), Align.center,
+            actor.getY() + actor.getHeight() - ((y + 0.8f) * HUD.FONT_SIZE), actor.getWidth(), Align.center,
             true);
     }
 

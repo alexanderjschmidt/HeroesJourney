@@ -1,8 +1,21 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateHouse;
+import static heroes.journey.initializers.base.factories.EntityFactory.overworldEntity;
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.overworld.character.NamedComponent;
 import heroes.journey.components.overworld.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
@@ -11,16 +24,11 @@ import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.initializers.base.factories.EntityFactory.*;
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.MapGenerationPhase;
+import heroes.journey.utils.worldgen.RandomWorldGenerator;
+import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+import heroes.journey.utils.worldgen.WeightedRandomPicker;
 
 public class Map implements InitializerInterface {
 
@@ -138,15 +146,17 @@ public class Map implements InitializerInterface {
         });
         // Add Entities
         new MapGenerationEffect(MapGenerationPhase.FINAL, gameState -> {
-            Entity player = overworldEntity(housePos.getFirst().getX(), housePos.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
-            player.add(new PlayerComponent(gameState.getId()));
+            Entity player = overworldEntity(housePos.getFirst().getX(), housePos.getFirst().getY(),
+                ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+            player.add(new PlayerComponent(gameState.getId())).add(new NamedComponent("Player"));
             InventoryComponent.get(player)
                 .add(Items.healthPotion, 3)
                 .add(Items.ironIngot, 5)
                 .add(Items.chestPlate);
             gameState.getEngine().addEntity(player);
 
-            Entity opponent = overworldEntity(housePos.getLast().getX(), housePos.getLast().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+            Entity opponent = overworldEntity(housePos.getLast().getX(), housePos.getLast().getY(),
+                ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
 
             gameState.getEngine().addEntity(opponent);
         });
@@ -162,8 +172,8 @@ public class Map implements InitializerInterface {
         Tile[][] environment = gameState.getMap().getEnvironment();
         for (int i = 0; i < count; i++) {
             while (true) {
-                int x = (int) (Math.random() * environment.length);
-                int y = (int) (Math.random() * environment[0].length);
+                int x = (int)(Math.random() * environment.length);
+                int y = (int)(Math.random() * environment[0].length);
                 if (tileMap[x][y] == Tiles.PLAINS) {
                     if (dungeon)
                         gameState.getEngine().addEntity(generateDungeon(gameState, x, y));

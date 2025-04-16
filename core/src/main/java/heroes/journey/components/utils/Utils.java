@@ -1,8 +1,12 @@
 package heroes.journey.components.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
@@ -13,12 +17,9 @@ import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.items.Item;
+import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.ScrollPaneEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Utils {
 
@@ -62,7 +63,7 @@ public class Utils {
         return actions.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
     }
 
-    public static String addItem(Entity entity, Item item, int count) {
+    public static String addItem(Entity entity, ItemInterface item, int count) {
         InventoryComponent inventoryComponent = InventoryComponent.get(entity);
         if (inventoryComponent != null) {
             inventoryComponent.add(item, count);
@@ -91,4 +92,5 @@ public class Utils {
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
             gameState.get(record.getEntity()) == owner;
     }
+
 }

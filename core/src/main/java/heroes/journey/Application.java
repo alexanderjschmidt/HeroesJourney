@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -16,8 +17,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Menus
  *  Action Detail UI flesh out
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
- * 	Stats Screen
- * 		increment on level up
  * 	Inventory
  *      Icons
  * 		Use Item (health potion)
@@ -25,6 +24,7 @@ import heroes.journey.utils.art.ResourceManager;
  * 		Scrolling
  * 		Tabs
  * Show Controls on UIs?
+ * Stamina: movement and actions are combined so you can do multiple actions in a turn or move more.
  * Knowledge System
  *  Towns: Inn: Rumors
  *  Fog of War

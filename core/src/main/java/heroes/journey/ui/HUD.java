@@ -9,32 +9,41 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.*;
+import heroes.journey.ui.windows.ActionDetailUI;
+import heroes.journey.ui.windows.ActionMenu;
+import heroes.journey.ui.windows.DelveUI;
+import heroes.journey.ui.windows.EntityUI;
+import heroes.journey.ui.windows.PopupUI;
+import heroes.journey.ui.windows.StatsUI;
+import heroes.journey.ui.windows.TerrainUI;
+import heroes.journey.ui.windows.TurnUI;
+import lombok.Getter;
 
 public class HUD extends Stage {
 
     public static final int FONT_SIZE = 24;
 
-    private final Cursor cursor;
+    @Getter private final Cursor cursor;
     private final Table layout, leftCol;
 
-    private final ActionMenu actionMenu;
+    @Getter private final ActionMenu actionMenu;
     private final ActionDetailUI actionDetailUI;
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
     private final TurnUI turnUI;
 
     private final Cell<?> centerWindow;
-    private final StatsUI statsUI;
-    private final PopupUI popupUI;
-    private final DelveUI delveUI;
+    @Getter private final StatsUI statsUI;
+    @Getter private final PopupUI popupUI;
+    private DelveUI delveUI;
 
     private static HUD hud;
-    private final StateMachine<HUD, HUDState> stateMachine;
+    private final StateMachine<HUD,HUDState> stateMachine;
     private HUDState baseState;
-    private float delta;
+    @Getter private float delta;
 
     public static HUD get() {
         if (hud == null)
@@ -44,7 +53,7 @@ public class HUD extends Stage {
 
     public HUD() {
         super(new ScreenViewport());
-        stateMachine = new StackStateMachine<HUD, HUDState>(this, States.LOCKED);
+        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.LOCKED);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -56,7 +65,7 @@ public class HUD extends Stage {
         turnUI = new TurnUI();
         statsUI = new StatsUI();
         popupUI = new PopupUI();
-        delveUI = new DelveUI();
+        //delveUI = new DelveUI();
 
         layout = new Table();
         layout.setFillParent(true);
@@ -145,16 +154,8 @@ public class HUD extends Stage {
         getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
-    public ActionMenu getActionMenu() {
-        return actionMenu;
-    }
-
     public ActionDetailUI getActionDetailedUI() {
         return actionDetailUI;
-    }
-
-    public Cursor getCursor() {
-        return cursor;
     }
 
     public void updateCenterPanel() {
@@ -163,32 +164,19 @@ public class HUD extends Stage {
             centerWindow.setActor(statsUI).colspan(3).expand().fill();
         } else if (stateMachine.getCurrentState() == States.POP_UP) {
             Table popupTable = new Table();
-            popupTable.add().expandY();
-            popupTable.row();
-            popupTable.add().expandX();
+            String text = popupUI.getText();
+            long newlineCount = text.chars().filter(c -> c == '\n').count() + 2;
             popupTable.add(popupUI)
-                .colspan(3)
-                .minHeight(FONT_SIZE * 5)
-                .maxHeight(FONT_SIZE * 5)
-                .expand()
-                .fill();
-            popupTable.add().expandX();
-            popupTable.row();
-            popupTable.add().expandY();
-
-            centerWindow.setActor(popupTable).colspan(3).center();
+                .minWidth(FONT_SIZE * 25)
+                .maxWidth(FONT_SIZE * 25)
+                .minHeight(FONT_SIZE * newlineCount)
+                .maxHeight(FONT_SIZE * newlineCount)
+                .pad(10);
+            centerWindow.setActor(popupTable).colspan(3).fill().expand();
         } else if (stateMachine.getCurrentState() == States.DELVE) {
             centerWindow.setActor(delveUI).colspan(3).expand().fill();
         }
         layout.invalidate();
-    }
-
-    public StatsUI getStatsUI() {
-        return statsUI;
-    }
-
-    public PopupUI getPopupUI() {
-        return popupUI;
     }
 
     public HUDState getState() {
@@ -228,7 +216,4 @@ public class HUD extends Stage {
             stateMachine.getPreviousState() + " base state " + baseState);
     }
 
-    public float getDelta() {
-        return delta;
-    }
 }

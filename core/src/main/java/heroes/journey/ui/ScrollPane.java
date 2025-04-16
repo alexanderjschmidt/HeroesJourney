@@ -1,16 +1,17 @@
 package heroes.journey.ui;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.input.KeyManager;
+import static heroes.journey.ui.UI.drawText;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static heroes.journey.ui.UI.drawText;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+
+import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.input.KeyManager;
 
 public abstract class ScrollPane<T> extends Widget {
 
@@ -54,7 +55,7 @@ public abstract class ScrollPane<T> extends Widget {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(ResourceManager.get().select, getX() + ((0.5f + offsetX) * HUD.FONT_SIZE),
-            getY() + getHeight() - ((selected + 1.4f + offsetY) * HUD.FONT_SIZE));
+            getY() + getHeight() - ((selected + 1.7f + offsetY) * HUD.FONT_SIZE));
         for (int i = 0; i < options.size(); i++) {
             if (options.get(i).isSelectable()) {
                 ResourceManager.get().font24.setColor(Color.WHITE);

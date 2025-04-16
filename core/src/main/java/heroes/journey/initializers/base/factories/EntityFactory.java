@@ -1,11 +1,24 @@
 package heroes.journey.initializers.base.factories;
 
+import static heroes.journey.initializers.base.factories.MonsterFactory.goblin;
+import static heroes.journey.initializers.base.factories.MonsterFactory.hobGoblin;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
-import heroes.journey.components.overworld.character.*;
+import heroes.journey.components.EquipmentComponent;
+import heroes.journey.components.GameStateComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LoyaltyComponent;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.AIComponent;
+import heroes.journey.components.overworld.character.ActorComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.overworld.character.PossibleActionsComponent;
+import heroes.journey.components.overworld.character.RenderComponent;
 import heroes.journey.components.overworld.place.CarriageComponent;
+import heroes.journey.components.overworld.place.DungeonComponent;
 import heroes.journey.components.overworld.place.FactionComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
@@ -27,7 +40,7 @@ public class EntityFactory {
             .add(new ActorComponent())
             .add(new PossibleActionsComponent())
             .add(new AIComponent(ai))
-            .add(new StatsComponent())
+            .add(StatsComponent.builder().build().init())
             .add(new InventoryComponent())
             .add(new EquipmentComponent())
             .add(new QuestsComponent())
@@ -60,7 +73,11 @@ public class EntityFactory {
                 new FactionComponent(SyllableDungeonNameGenerator.generateName()).addOwnedLocation(gameState,
                     dungeon, new Position(x, y)))
             .add(new GameStateComponent())
-            .add(new PossibleActionsComponent().addAction(BaseActions.delve, dungeon));
+            .add(new PossibleActionsComponent().addAction(BaseActions.delve, dungeon))
+            .add(new InventoryComponent().add(Items.ironOre, 5))
+            .add(DungeonComponent.builder()
+                .layout(new Entity[] {null, goblin(), goblin(), hobGoblin()}) //TODO add a trap
+                .build());
         return dungeon;
     }
 }

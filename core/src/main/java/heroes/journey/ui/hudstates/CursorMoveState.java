@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.entities.actions.ActionManager;
+import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 
@@ -18,7 +18,7 @@ class CursorMoveState extends HUDState {
             if (hud.getCursor().getSelected() != null) {
                 hud.getCursor().clearSelected();
             } else {
-                HUD.get().setState(new ActionSelectState(ActionManager.getTeamActions(GameState.global())));
+                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions(GameState.global())));
             }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
             // TODO only show/allow movement if it has a movement component
@@ -37,7 +37,7 @@ class CursorMoveState extends HUDState {
                     GameState.global().getRangeManager().setMoveAndAttackRange(hud.getCursor().getSelected());
                 }
             } else if (hud.getCursor().getHover() == null) {
-                HUD.get().setState(new ActionSelectState(ActionManager.getTeamActions(GameState.global())));
+                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions(GameState.global())));
             }
         }
         updateFreeMove(hud.getDelta());

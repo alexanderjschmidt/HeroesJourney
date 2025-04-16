@@ -2,10 +2,13 @@ package heroes.journey.components;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.base.Items;
+import lombok.Getter;
 
+@Getter
 public class EquipmentComponent implements ClonableComponent<EquipmentComponent> {
 
     private Item head, chest, legs, boots, handOne, handTwo, accessoryOne, accessoryTwo;
@@ -19,38 +22,6 @@ public class EquipmentComponent implements ClonableComponent<EquipmentComponent>
                 chest = chest == item ? null : item;
                 break;
         }
-    }
-
-    public Item getHead() {
-        return head;
-    }
-
-    public Item getChest() {
-        return chest;
-    }
-
-    public Item getLegs() {
-        return legs;
-    }
-
-    public Item getBoots() {
-        return boots;
-    }
-
-    public Item getHandOne() {
-        return handOne;
-    }
-
-    public Item getHandTwo() {
-        return handTwo;
-    }
-
-    public Item getAccessoryOne() {
-        return accessoryOne;
-    }
-
-    public Item getAccessoryTwo() {
-        return accessoryTwo;
     }
 
     @Override

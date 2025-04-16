@@ -7,7 +7,11 @@ import lombok.Getter;
 @Getter
 public class ItemSubType {
 
-    private final ItemType parentType;
     private final String name;
+    private final ItemType parentType;
+
+    public String toString() {
+        return name;
+    }
 
 }

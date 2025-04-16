@@ -46,10 +46,11 @@ public class EntityUI extends UI {
 
             batch.draw(ResourceManager.get(LoadTextures.UI)[3][0], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((2) * HUD.FONT_SIZE),
-                HEALTH_WIDTH * (statsComponent.getHealth() / StatsComponent.MAX_HEALTH), HEALTH_HEIGHT);
+                HEALTH_WIDTH * ((float)statsComponent.getHealth() / StatsComponent.MAX_HEALTH),
+                HEALTH_HEIGHT);
             batch.draw(ResourceManager.get(LoadTextures.UI)[2][1], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((1) * HUD.FONT_SIZE),
-                HEALTH_WIDTH * (statsComponent.getMana() / StatsComponent.MAX_MANA), HEALTH_HEIGHT);
+                HEALTH_WIDTH * ((float)statsComponent.getMana() / StatsComponent.MAX_MANA), HEALTH_HEIGHT);
 
             drawText(batch, "Health: " + health, 0, 1);
             drawText(batch, "Mana: " + mana, 0, 2);

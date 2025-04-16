@@ -1,23 +1,29 @@
 package heroes.journey.initializers.base;
 
+import java.util.List;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.Application;
 import heroes.journey.GameState;
+import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.overworld.character.ActionComponent;
+import heroes.journey.components.overworld.character.NamedComponent;
+import heroes.journey.components.overworld.place.DungeonComponent;
 import heroes.journey.components.quests.QuestsComponent;
+import heroes.journey.components.utils.DefaultContainer;
+import heroes.journey.components.utils.FightUtils;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.entities.actions.ShowAction;
+import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
-import heroes.journey.ui.hudstates.States;
-
-import java.util.List;
 
 public class BaseActions implements InitializerInterface {
 
@@ -43,14 +49,15 @@ public class BaseActions implements InitializerInterface {
             GameState.global().getEngine().removeAllEntities();
             return null;
         }).build();
-        ActionManager.addTeamAction(exit_game);
+        TeamActions.addTeamAction(exit_game);
         end_turn = Action.builder().name("End Turn").terminal(false).onSelect((gs, e) -> {
             Entity entity = gs.getCurrentEntity();
             entity.add(new ActionComponent(wait));
             HUD.get().revertToInitialState();
             return null;
         }).build();
-        ActionManager.addTeamAction(end_turn);
+        TeamActions.addTeamAction(end_turn);
+
         wait = Action.builder().name("Wait").build();
         workout = CooldownAction.builder()
             .name("Work out")
@@ -67,9 +74,51 @@ public class BaseActions implements InitializerInterface {
             .turnCooldown(5)
             .factionCooldown(true)
             .onSelect((gs, e) -> {
-                Utils.addItem(e, Items.ironOre, 5);
-                HUD.get().setState(States.DELVE);
-                return null;
+                Entity dungeon = Utils.getLocationsFaction(gs, e);
+                DungeonComponent dungeonComponent = DungeonComponent.get(dungeon);
+                DefaultContainer<String> explorationLog = new DefaultContainer<>();
+                boolean conscious = true;
+                for (Entity room : dungeonComponent.getLayout()) {
+                    if (room == null) {
+                        explorationLog.add("Empty");
+                        continue;
+                    }
+                    if (FightUtils.fight(e, room)) {
+                        explorationLog.add(NamedComponent.get(room, "Enemy"));
+                    } else {
+                        conscious = false;
+                        FightUtils.faint(e);
+                        break;
+                    }
+                }
+
+                StringBuilder log = new StringBuilder();
+
+                for (String enemy : explorationLog.keySet()) {
+                    log.append("You have defeated: ")
+                        .append(explorationLog.get(enemy))
+                        .append("x ")
+                        .append(enemy)
+                        .append("\n");
+                }
+
+                if (!conscious) {
+                    log.append("You have lost too much health and fainted");
+                } else {
+                    InventoryComponent inventoryComponent = InventoryComponent.get(dungeon);
+                    log.append("You have completed the Dungeon!\nYour rewards are:\n");
+                    if (inventoryComponent != null) {
+                        for (ItemInterface item : inventoryComponent.keySet()) {
+                            Utils.addItem(e, item, inventoryComponent.get(item));
+                            log.append(inventoryComponent.get(item))
+                                .append("x ")
+                                .append(item.toString())
+                                .append("\n");
+                            ;
+                        }
+                    }
+                }
+                return log.toString();
             })
             .build();
         chopTrees = Action.builder()

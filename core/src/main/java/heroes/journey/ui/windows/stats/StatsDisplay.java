@@ -3,6 +3,7 @@ package heroes.journey.ui.windows.stats;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+
 import heroes.journey.GameCamera;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.RenderComponent;
@@ -30,6 +31,5 @@ public class StatsDisplay extends Widget {
         UI.drawText(this, batch, "Move: " + statsComponent.getMoveDistance(), 0, 3);
         UI.drawText(this, batch, "Body: " + statsComponent.getBody(), 0, 4);
         UI.drawText(this, batch, "Mind: " + statsComponent.getMind(), 0, 5);
-        UI.drawText(this, batch, "Fame: " + statsComponent.getFame(), 0, 6);
     }
 }

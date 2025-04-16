@@ -1,6 +1,9 @@
 package heroes.journey.entities.ai;
 
+import java.util.UUID;
+
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.InventoryComponent;
@@ -17,8 +20,6 @@ import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.initializers.base.Loyalties;
 import heroes.journey.systems.GameEngine;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.UUID;
 
 public class MonsterFactionAI implements AI {
 
@@ -45,7 +46,7 @@ public class MonsterFactionAI implements AI {
             .add(new RenderComponent(ResourceManager.get(LoadTextures.Sprites)[2][8]))
             .add(new ActorComponent())
             .add(new AIComponent(new MCTSAI()))
-            .add(new StatsComponent())
+            .add(StatsComponent.builder().handicapMult(1).build().init())
             .add(new InventoryComponent())
             .add(new LoyaltyComponent().putLoyalty(faction, Loyalties.ALLY));
         System.out.println(goblin);
