@@ -3,10 +3,10 @@ package heroes.journey.systems.listeners;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-import heroes.journey.components.CarriageComponent;
-import heroes.journey.components.FactionComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.overworld.character.PossibleActionsComponent;
+import heroes.journey.components.overworld.place.CarriageComponent;
+import heroes.journey.components.overworld.place.FactionComponent;
 import heroes.journey.initializers.base.BaseActions;
 
 public class FactionCarriageListener implements EntityListener {

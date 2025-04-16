@@ -2,8 +2,7 @@ package heroes.journey.ui.windows;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
-import heroes.journey.components.CooldownComponent;
+import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.ui.HUD;

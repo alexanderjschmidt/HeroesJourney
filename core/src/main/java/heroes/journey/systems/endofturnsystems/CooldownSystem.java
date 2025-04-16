@@ -2,7 +2,7 @@ package heroes.journey.systems.endofturnsystems;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import heroes.journey.components.CooldownComponent;
+import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.systems.EndOfTurnSystem;
 import heroes.journey.systems.GameEngine;
 

@@ -1,4 +1,4 @@
-package heroes.journey.components;
+package heroes.journey.components.overworld.place;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -17,5 +17,5 @@ public class CarriageComponent implements ClonableComponent<CarriageComponent> {
     public static CarriageComponent get(Entity entity) {
         return mapper.get(entity);
     }
-    
+
 }

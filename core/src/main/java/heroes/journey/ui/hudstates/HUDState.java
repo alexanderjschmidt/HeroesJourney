@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import heroes.journey.GameState;
-import heroes.journey.components.PositionComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.ai.pathfinding.Cell;

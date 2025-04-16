@@ -1,4 +1,4 @@
-package heroes.journey.components;
+package heroes.journey.components.overworld.character;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
 import heroes.journey.utils.Direction;
 
 public class ActorComponent extends Actor implements Component {

@@ -1,12 +1,9 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.Application;
 import heroes.journey.GameState;
-import heroes.journey.components.ActionComponent;
+import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
@@ -19,6 +16,8 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.hudstates.States;
+
+import java.util.List;
 
 public class BaseActions implements InitializerInterface {
 

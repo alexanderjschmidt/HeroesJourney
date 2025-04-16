@@ -2,7 +2,7 @@ package heroes.journey.ui.hudstates;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import heroes.journey.components.ActionComponent;
+import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;

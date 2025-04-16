@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.ActionComponent;
+import heroes.journey.components.overworld.character.MovementComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.hudstates.States;

@@ -1,18 +1,14 @@
 package heroes.journey.components.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-
 import heroes.journey.GameState;
-import heroes.journey.components.CarriageComponent;
-import heroes.journey.components.FactionComponent;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.overworld.place.CarriageComponent;
+import heroes.journey.components.overworld.place.FactionComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ClaimQuestAction;
@@ -20,6 +16,9 @@ import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.ScrollPaneEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 

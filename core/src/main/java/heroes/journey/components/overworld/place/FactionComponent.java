@@ -1,4 +1,4 @@
-package heroes.journey.components;
+package heroes.journey.components.overworld.place;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;

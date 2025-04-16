@@ -2,9 +2,8 @@ package heroes.journey.ui.windows;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
-import heroes.journey.components.FactionComponent;
+import heroes.journey.components.overworld.place.FactionComponent;
 import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;

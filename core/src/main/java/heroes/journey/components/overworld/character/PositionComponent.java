@@ -1,8 +1,7 @@
-package heroes.journey.components;
+package heroes.journey.components.overworld.character;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.Position;
 

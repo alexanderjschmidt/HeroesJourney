@@ -2,7 +2,7 @@ package heroes.journey.entities.ai;
 
 import com.badlogic.ashley.core.Entity;
 import heroes.journey.GameState;
-import heroes.journey.components.PositionComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.utils.ai.MCTS;

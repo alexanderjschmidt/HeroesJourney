@@ -1,17 +1,16 @@
 package heroes.journey.utils;
 
-import java.util.ArrayList;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.ArrayList;
 
 public class RangeManager {
 
@@ -94,7 +93,7 @@ public class RangeManager {
             return;
         }
         range[x][y] = RangeColor.BLUE;
-        setDistanceRangeAt(x, y, new int[] {1, 2}, RangeColor.RED);
+        setDistanceRangeAt(x, y, new int[]{1, 2}, RangeColor.RED);
 
         // System.out.println(terrainCost);
         floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selected), x + 1, y, selected);

@@ -5,13 +5,12 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.components.ActorComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.RenderComponent;
+import heroes.journey.components.overworld.character.ActorComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.overworld.character.RenderComponent;
 import heroes.journey.ui.HUD;
 
 public class RenderSystem extends IteratingSystem {

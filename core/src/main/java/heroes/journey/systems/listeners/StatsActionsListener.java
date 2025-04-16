@@ -3,8 +3,8 @@ package heroes.journey.systems.listeners;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
-import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.PossibleActionsComponent;
 import heroes.journey.initializers.base.BaseActions;
 
 public class StatsActionsListener implements EntityListener {

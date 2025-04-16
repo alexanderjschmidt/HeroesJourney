@@ -3,10 +3,9 @@ package heroes.journey.ui.windows.stats;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-
 import heroes.journey.GameCamera;
-import heroes.journey.components.RenderComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.RenderComponent;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 

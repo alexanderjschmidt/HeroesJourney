@@ -2,8 +2,8 @@ package heroes.journey.entities;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.interfaces.ClonableComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 
 import java.util.HashMap;
 import java.util.UUID;

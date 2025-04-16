@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import heroes.journey.GameState;
-import heroes.journey.components.ActionComponent;
-import heroes.journey.components.ActorComponent;
 import heroes.journey.components.GameStateComponent;
-import heroes.journey.components.MovementComponent;
-import heroes.journey.components.PositionComponent;
+import heroes.journey.components.overworld.character.ActionComponent;
+import heroes.journey.components.overworld.character.ActorComponent;
+import heroes.journey.components.overworld.character.MovementComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;

@@ -1,9 +1,8 @@
 package heroes.journey.ui.windows;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
-import heroes.journey.components.PlayerComponent;
+import heroes.journey.components.overworld.character.PlayerComponent;
 import heroes.journey.ui.UI;
 
 public class TurnUI extends UI {
