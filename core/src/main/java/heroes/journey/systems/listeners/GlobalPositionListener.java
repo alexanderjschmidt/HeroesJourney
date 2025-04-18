@@ -3,6 +3,7 @@ package heroes.journey.systems.listeners;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
+
 import heroes.journey.GameState;
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.overworld.character.PositionComponent;
@@ -10,7 +11,7 @@ import heroes.journey.components.overworld.place.FactionComponent;
 
 public class GlobalPositionListener implements EntityListener {
 
-    private GameState gameState;
+    private final GameState gameState;
 
     public GlobalPositionListener(GameState gameState) {
         this.gameState = gameState;

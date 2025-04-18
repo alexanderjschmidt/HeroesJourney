@@ -65,7 +65,7 @@ public class GameState implements Cloneable {
 
     private GameState() {
         entitiesInActionOrder = new ArrayList<>();
-        engine = new GameEngine();
+        engine = new GameEngine(this);
     }
 
     private GameState(int width, int height) {

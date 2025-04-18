@@ -20,12 +20,13 @@ public class GameEngine extends com.badlogic.ashley.core.Engine {
 
     List<EndOfTurnSystem> endOfTurnSystems;
 
-    public GameEngine() {
+    public GameEngine(GameState gameState) {
         super();
         endOfTurnSystems = new ArrayList<>();
 
         addEntityListener(StatsActionsListener.getFamily(), new StatsActionsListener());
         addEntityListener(FactionCarriageListener.getFamily(), new FactionCarriageListener());
+        addEntityListener(GlobalPositionListener.getFamily(), new GlobalPositionListener(gameState));
     }
 
     public void initSystems(GameState gameState) {
@@ -33,8 +34,6 @@ public class GameEngine extends com.badlogic.ashley.core.Engine {
         addSystem(new MovementSystem());
         addSystem(new AISystem());
         addSystem(new CooldownSystem(this));
-
-        addEntityListener(GlobalPositionListener.getFamily(), new GlobalPositionListener(gameState));
     }
 
     public void enableEndOfTurnSystems() {

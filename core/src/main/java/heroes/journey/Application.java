@@ -28,7 +28,7 @@ import heroes.journey.utils.art.ResourceManager;
  * Fog of War
  *  light fog (ie 50% transparent over tiles) on unseen tiles
  *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
- * Add time
+ * Add time/lighting
  *  Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
  *  darker then redder
  * Saving
