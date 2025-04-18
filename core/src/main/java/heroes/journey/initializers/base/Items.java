@@ -5,6 +5,7 @@ import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemSubType;
 import heroes.journey.entities.items.ItemType;
+import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.InitializerInterface;
 
 public class Items implements InitializerInterface {
@@ -27,8 +28,20 @@ public class Items implements InitializerInterface {
         wood = Item.builder().name("Wood").subType(rawMaterial).weight(1).value(1).build();
         ironOre = Item.builder().name("Iron Ore").subType(rawMaterial).weight(1).value(1).build();
         ironIngot = Item.builder().name("Iron Ingot").subType(refinedMaterial).weight(1).value(1).build();
-        ironSword = Item.builder().name("Iron Sword").subType(sword).weight(1).value(3).build();
-        chestPlate = Item.builder().name("Chest Plate").subType(chestArmor).weight(5).value(1).build();
+        ironSword = Item.builder()
+            .name("Iron Sword")
+            .subType(sword)
+            .attributes(new Attributes().add(DamageTypes.PHYSICAL, 3))
+            .weight(1)
+            .value(3)
+            .build();
+        chestPlate = Item.builder()
+            .name("Chest Plate")
+            .subType(chestArmor)
+            .attributes(new Attributes().add(DefenseTypes.PHYSICAL_DEF, 3))
+            .weight(5)
+            .value(1)
+            .build();
         healthPotion = ConsumableItem.builder()
             .name("Health Potion")
             .subType(potion)

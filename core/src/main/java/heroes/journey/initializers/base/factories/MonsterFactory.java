@@ -10,7 +10,7 @@ public class MonsterFactory {
     public static Entity goblin() {
         Entity goblin = new Entity();
 
-        goblin.add(new NamedComponent("Goblin")).add(StatsComponent.builder().handicapMult(3).build().init());
+        goblin.add(new NamedComponent("Goblin")).add(StatsComponent.builder().handicapMult(3).build());
 
         return goblin;
     }
@@ -18,8 +18,7 @@ public class MonsterFactory {
     public static Entity hobGoblin() {
         Entity hobGoblin = new Entity();
 
-        hobGoblin.add(new NamedComponent("Hob Goblin"))
-            .add(StatsComponent.builder().handicapMult(5).build().init());
+        hobGoblin.add(new NamedComponent("Hob Goblin")).add(StatsComponent.builder().handicapMult(5).build());
 
         return hobGoblin;
     }

@@ -46,7 +46,7 @@ public class MonsterFactionAI implements AI {
             .add(new RenderComponent(ResourceManager.get(LoadTextures.Sprites)[2][8]))
             .add(new ActorComponent())
             .add(new AIComponent(new MCTSAI()))
-            .add(StatsComponent.builder().handicapMult(1).build().init())
+            .add(StatsComponent.builder().handicapMult(1).build())
             .add(new InventoryComponent())
             .add(new LoyaltyComponent().putLoyalty(faction, Loyalties.ALLY));
         System.out.println(goblin);

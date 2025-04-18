@@ -1,14 +1,10 @@
 package heroes.journey.components;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 
 import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.entities.stats.DamageType;
-import heroes.journey.entities.stats.DamageTypeManager;
+import heroes.journey.entities.tagging.Attributes;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,16 +24,7 @@ public class StatsComponent implements ClonableComponent<StatsComponent> {
 
     @Builder.Default @Setter(AccessLevel.NONE) private int mana = MAX_MANA;
 
-    private final Map<DamageType,Integer> resistancesFlat = new HashMap<>();
-    private final Map<DamageType,Float> resistancesPercentage = new HashMap<>();
-
-    public StatsComponent init() {
-        for (DamageType type : DamageTypeManager.get().values()) {
-            resistancesFlat.put(type, 0);
-            resistancesPercentage.put(type, 0f);
-        }
-        return this;
-    }
+    @Builder.Default private final Attributes attributes = new Attributes();
 
     // Returns if they are Alive
     public boolean adjustHealth(int health) {
@@ -71,6 +58,6 @@ public class StatsComponent implements ClonableComponent<StatsComponent> {
 
     @Override
     public StatsComponent clone() {
-        return this.toBuilder().build().init();
+        return this.toBuilder().build();
     }
 }

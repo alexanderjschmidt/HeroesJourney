@@ -40,7 +40,7 @@ public class EntityFactory {
             .add(new ActorComponent())
             .add(new PossibleActionsComponent())
             .add(new AIComponent(ai))
-            .add(StatsComponent.builder().build().init())
+            .add(StatsComponent.builder().build())
             .add(new InventoryComponent())
             .add(new EquipmentComponent())
             .add(new QuestsComponent())
