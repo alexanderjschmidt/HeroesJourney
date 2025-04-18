@@ -1,6 +1,7 @@
 package heroes.journey.entities.actions;
 
 import com.badlogic.ashley.core.Entity;
+
 import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.components.utils.Utils;
@@ -13,11 +14,8 @@ import lombok.experimental.SuperBuilder;
 public class CooldownAction extends Action {
 
     // TODO This could get folded into Action with a default of 1 and false
-    @NonNull
-    @Getter
-    private final Integer turnCooldown;
-    @Builder.Default
-    private final boolean factionCooldown = false;
+    @NonNull @Getter private final Integer turnCooldown;
+    @Builder.Default private final boolean factionCooldown = false;
 
     @Override
     public ShowAction requirementsMet(GameState gameState, Entity entity) {
@@ -29,7 +27,7 @@ public class CooldownAction extends Action {
             cooldownComponent = CooldownComponent.get(entity);
         }
         if (cooldownComponent.containsKey(this))
-            return ShowAction.NO;
+            return ShowAction.GRAYED;
         return requirementsMet.apply(gameState, entity);
     }
 

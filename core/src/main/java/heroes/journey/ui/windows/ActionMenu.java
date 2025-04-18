@@ -1,22 +1,28 @@
 package heroes.journey.ui.windows;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+
 import heroes.journey.GameState;
+import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.components.overworld.character.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.ui.*;
+import heroes.journey.ui.BasicBackground;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.ScrollPane;
+import heroes.journey.ui.ScrollPaneEntry;
+import heroes.journey.ui.UI;
 import heroes.journey.ui.hudstates.ActionSelectState;
-
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActionMenu extends Stack {
 
@@ -45,8 +51,7 @@ public class ActionMenu extends Stack {
                 getFactionActions(selectedEntity).stream()).collect(Collectors.toList());
             // Get Tiles Environment Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                    getTileActions(selectedEntity, selectedPosition).stream())
-                .collect(Collectors.toList());
+                getTileActions(selectedEntity, selectedPosition).stream()).collect(Collectors.toList());
         }
         System.out.println("OPEN");
         HUD.get().setState(new ActionSelectState(requirementsMetOptions.stream().distinct().toList()));
@@ -63,7 +68,9 @@ public class ActionMenu extends Stack {
         return new ArrayList<>();
     }
 
-    private List<ScrollPaneEntry<Action>> getTileActions(Entity selectedEntity, PositionComponent selectedPosition) {
+    private List<ScrollPaneEntry<Action>> getTileActions(
+        Entity selectedEntity,
+        PositionComponent selectedPosition) {
         ActionTerrain environment = GameState.global()
             .getMap()
             .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
@@ -80,10 +87,7 @@ public class ActionMenu extends Stack {
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)
-            .map(entry -> new ScrollPaneEntry<>(
-                entry.getKey(),
-                entry.getValue() != ShowAction.GRAYED
-            ))
+            .map(entry -> new ScrollPaneEntry<>(entry.getKey(), entry.getValue() != ShowAction.GRAYED))
             .toList();
     }
 
@@ -91,12 +95,8 @@ public class ActionMenu extends Stack {
         actions.open(options);
     }
 
-    public Action getSelected() {
-        return actions.getSelected();
-    }
-
     public void select() {
-        actions.selectWrapper();
+        actions.select();
     }
 
     public void handleInputs() {
@@ -119,18 +119,25 @@ public class ActionMenu extends Stack {
 
         @Override
         public void select() {
-            Action selectedAction = getSelected();
-            System.out.println("Selected " + selectedAction + " " + selectedAction.isTerminal());
-            String result = selectedAction.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
-            if (result != null) {
-
+            ScrollPaneEntry<Action> selectedAction = actions.getSelected();
+            if (selectedAction.isSelectable()) {
+                // TODO add back TargetAction logic
+                Action action = selectedAction.entry();
+                System.out.println("Selected " + action + " " + action.isTerminal());
+                if (action.isTerminal()) {
+                    Entity selectedEntity = HUD.get().getCursor().getSelected();
+                    selectedEntity.add(new ActionComponent(action));
+                    HUD.get().revertToInitialState();
+                } else {
+                    action.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
+                }
             }
         }
 
         @Override
         public void onHover() {
-            getSelected().onHover(GameState.global(), HUD.get().getCursor().getSelected());
-            actionDetailUI.setAction(getSelected());
+            actions.getSelected().entry().onHover(GameState.global(), HUD.get().getCursor().getSelected());
+            actionDetailUI.setAction(actions.getSelected().entry());
         }
     }
 

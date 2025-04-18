@@ -1,14 +1,13 @@
 package heroes.journey.ui.hudstates;
 
-import com.badlogic.ashley.core.Entity;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
-import heroes.journey.components.overworld.character.ActionComponent;
+
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.List;
 
 public class ActionSelectState extends HUDState {
 
@@ -34,15 +33,7 @@ public class ActionSelectState extends HUDState {
     public void update(HUD hud) {
         HUD.get().getActionMenu().handleInputs();
         if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            Action selectedAction = HUD.get().getActionMenu().getSelected();
-            // TODO add back TargetAction logic
-            if (selectedAction.isTerminal()) {
-                Entity selectedEntity = HUD.get().getCursor().getSelected();
-                selectedEntity.add(new ActionComponent(selectedAction));
-                HUD.get().revertToInitialState();
-            } else {
-                HUD.get().getActionMenu().select();
-            }
+            HUD.get().getActionMenu().select();
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
             Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();

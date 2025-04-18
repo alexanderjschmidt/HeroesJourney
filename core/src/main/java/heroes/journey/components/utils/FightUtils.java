@@ -53,7 +53,7 @@ public class FightUtils {
         // TODO remove most valuable item
     }
 
-    private static Attributes getDamages(Entity attacker) {
+    public static Attributes getDamages(Entity attacker) {
         StatsComponent attackerStats = StatsComponent.get(attacker);
         EquipmentComponent attackerEquipment = EquipmentComponent.get(attacker);
 
@@ -65,7 +65,7 @@ public class FightUtils {
         return damages;
     }
 
-    private static Attributes getDefenses(Entity defender) {
+    public static Attributes getDefenses(Entity defender) {
         StatsComponent defenderStats = StatsComponent.get(defender);
         EquipmentComponent defenderEquipment = EquipmentComponent.get(defender);
 

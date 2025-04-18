@@ -19,8 +19,7 @@ import heroes.journey.utils.art.ResourceManager;
  *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
  * 	Inventory
  *      Icons
- * 		Use Item (health potion)
- * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage)
+ * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encombered you are
  * 		Scrolling
  * 		Tabs
  * Show Controls on UIs?

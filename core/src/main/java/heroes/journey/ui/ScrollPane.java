@@ -71,8 +71,8 @@ public abstract class ScrollPane<T> extends Widget {
         return option.toString();
     }
 
-    public T getSelected() {
-        return options.get(selected).entry();
+    public ScrollPaneEntry<T> getSelected() {
+        return options.get(selected);
     }
 
     private void increment() {

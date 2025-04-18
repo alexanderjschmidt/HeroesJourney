@@ -27,7 +27,7 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
 
     @Override
     public void select() {
-        ItemInterface selectedItem = getSelected();
+        ItemInterface selectedItem = getSelected().entry();
         switch (selectedItem.getType()) {
             case Weapon:
             case Armor:
