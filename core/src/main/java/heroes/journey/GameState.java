@@ -1,12 +1,23 @@
 package heroes.journey;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.components.GameStateComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.*;
+import heroes.journey.components.overworld.character.AIComponent;
+import heroes.journey.components.overworld.character.PlayerComponent;
+import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
@@ -22,10 +33,9 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import lombok.Getter;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
+@Getter
 public class GameState implements Cloneable {
 
     private int width, height;
@@ -33,7 +43,7 @@ public class GameState implements Cloneable {
     private History history;
     private TileMap map;
 
-    private GameEngine engine;
+    private final GameEngine engine;
 
     private RangeManager rangeManager;
 
@@ -194,43 +204,10 @@ public class GameState implements Cloneable {
             HUD.get().setInitialState(States.LOCKED);
             System.out.println("ai turn");
             AIComponent ai = AIComponent.get(currentEntity);
-            QueuedAction action = ai.getAI().getMove(this, currentEntity);
-            System.out.println(action);
-
-            currentEntity.add(new MovementComponent(action.getPath()));
-            currentEntity.add(
-                new ActionComponent(action.getAction(), action.getTargetX(), action.getTargetY()));
+            ai.startProcessingNextMove(this, currentEntity);
         }
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
-    }
-
-    public int getTurn() {
-        return turn;
-    }
-
-    public EntityManager getEntities() {
-        return entities;
-    }
-
-    public GameEngine getEngine() {
-        return engine;
-    }
-
-    public TileMap getMap() {
-        return map;
-    }
-
-    public RangeManager getRangeManager() {
-        return rangeManager;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
     }
 
     public void dispose() {
@@ -239,9 +216,5 @@ public class GameState implements Cloneable {
 
     public String getId() {
         return "id";
-    }
-
-    public History getHistory() {
-        return history;
     }
 }

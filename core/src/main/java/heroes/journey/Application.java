@@ -21,25 +21,8 @@ import heroes.journey.utils.art.ResourceManager;
  *      Icons
  * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
  * 		Scrolling
- * 		Tabs
  * Show Controls on UIs?
- * Stamina: movement and actions are combined so you can do multiple actions in a turn or move more.
- * Knowledge System
- *  Towns: Inn: Rumors
- *  Fog of War
- *  Knowledge Menu
- *      Locations
- *      Terrains
- *      Players
- *      Enemy Types
- *      Skills?
- *          Sword arts? Helps you train skills faster
- *          Heavy Armor
- *  Knowledge Vs Experience
- *      You can gain knowledge easier and it will speed up your experience gain
- *      for that experience/skill
  * Make HUD Locked when players character is moving
- * Make AI Calculation run in the background (Maybe a system that keeps checking if its ready)
  * Multiplayer
  * Fog of War
  *  light fog (ie 50% transparent over tiles) on unseen tiles
@@ -58,15 +41,30 @@ import heroes.journey.utils.art.ResourceManager;
  * Sounds
  * 	Background music
  * 	Action Sounds
- * Fold Faction AI into character AI loop for prediction purposes
- *  or get rid of it?
  * make cursor arrow pathfinding favor already followed path.
+ * Stamina: movement and actions are combined so you can do multiple actions in a turn or move more.
  * Camera
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Efficiency
  *  Use a GameEngine Pool for Ashely so AI doesnt keep making new Entities to be deleted
  *  Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
+ */
+/*
+ * Knowledge System
+ *  Towns: Inn: Rumors
+ *  Fog of War
+ *  Knowledge Menu
+ *      Locations
+ *      Terrains
+ *      Players
+ *      Enemy Types
+ *      Skills?
+ *          Sword arts? Helps you train skills faster
+ *          Heavy Armor
+ *  Knowledge Vs Experience
+ *      You can gain knowledge easier and it will speed up your experience gain
+ *      for that experience/skill
  */
 public class Application extends Game {
 
