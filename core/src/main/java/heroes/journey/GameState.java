@@ -30,7 +30,6 @@ import heroes.journey.systems.GameEngine;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
@@ -51,6 +50,8 @@ public class GameState implements Cloneable {
 
     private UUID currentEntity;
     private List<Entity> entitiesInActionOrder;
+
+    private final List<Entity> playableEntities = new ArrayList<>();
 
     private static GameState gameState;
 
@@ -194,14 +195,11 @@ public class GameState implements Cloneable {
         if (player != null) {
             if (player.getPlayerId().equals(getId())) {
                 HUD.get().getCursor().setPosition(currentEntity);
-                HUD.get().setInitialState(States.CURSOR_MOVE);
                 System.out.println("your turn");
             } else {
-                HUD.get().setInitialState(States.LOCKED);
                 System.out.println("opponent turn");
             }
         } else {
-            HUD.get().setInitialState(States.LOCKED);
             System.out.println("ai turn");
             AIComponent ai = AIComponent.get(currentEntity);
             ai.startProcessingNextMove(this, currentEntity);

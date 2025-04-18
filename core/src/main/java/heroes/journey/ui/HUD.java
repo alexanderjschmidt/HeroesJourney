@@ -42,7 +42,6 @@ public class HUD extends Stage {
 
     private static HUD hud;
     private final StateMachine<HUD,HUDState> stateMachine;
-    private HUDState baseState;
     @Getter private float delta;
 
     public static HUD get() {
@@ -53,7 +52,7 @@ public class HUD extends Stage {
 
     public HUD() {
         super(new ScreenViewport());
-        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.LOCKED);
+        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -186,34 +185,19 @@ public class HUD extends Stage {
     public void setState(HUDState newState) {
         stateMachine.changeState(newState);
         System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
-            stateMachine.getPreviousState() + " base state " + baseState);
-    }
-
-    public void setInitialState(HUDState state) {
-        baseState = state;
-        if (stateMachine.getPreviousState() == null) {
-            stateMachine.setInitialState(baseState);
-        }
-        System.out.println("current state " + stateMachine.getCurrentState() + " previous state " +
-            stateMachine.getPreviousState() + " base state " + baseState);
+            stateMachine.getPreviousState());
     }
 
     public void revertToInitialState() {
         while (stateMachine.revertToPreviousState()) {
         }
-        if (stateMachine.getPreviousState() == null) {
-            stateMachine.setInitialState(baseState);
-        }
-        System.out.println("reset to " + stateMachine.getCurrentState() + " base state " + baseState);
+        System.out.println("reset to " + stateMachine.getCurrentState());
     }
 
     public void revertToPreviousState() {
         stateMachine.revertToPreviousState();
-        if (stateMachine.getPreviousState() == null) {
-            stateMachine.setInitialState(baseState);
-        }
         System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
-            stateMachine.getPreviousState() + " base state " + baseState);
+            stateMachine.getPreviousState());
     }
 
 }

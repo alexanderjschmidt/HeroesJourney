@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 
@@ -26,13 +28,14 @@ class CursorMoveState extends HUDState {
                 savePath();
                 hud.getCursor().moveSelected();
             } else if (hud.getCursor().getHover() != null &&
+                GameState.global().getPlayableEntities().contains(GameState.global().getCurrentEntity()) &&
                 hud.getCursor().getHover() == GameState.global().getCurrentEntity()) {
                 hud.getCursor().setSelectedtoHover();
                 HUD.get().select();
                 StatsComponent stats = StatsComponent.get(hud.getCursor().getSelected());
                 if (stats.getMoveDistance() == 0) {
                     savePath();
-                    //hud.getCursor().getSelected().openActionMenu();
+                    hud.getCursor().getSelected().add(new ActionComponent(BaseActions.openActionMenu));
                 } else {
                     GameState.global().getRangeManager().setMoveAndAttackRange(hud.getCursor().getSelected());
                 }

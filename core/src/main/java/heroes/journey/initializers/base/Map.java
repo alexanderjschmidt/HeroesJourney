@@ -154,6 +154,7 @@ public class Map implements InitializerInterface {
                 .add(Items.ironIngot, 5)
                 .add(Items.chestPlate);
             gameState.getEngine().addEntity(player);
+            GameState.global().getPlayableEntities().add(player);
 
             Entity opponent = overworldEntity(housePos.getLast().getX(), housePos.getLast().getY(),
                 ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
