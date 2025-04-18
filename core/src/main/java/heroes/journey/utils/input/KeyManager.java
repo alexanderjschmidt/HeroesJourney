@@ -18,7 +18,7 @@ public class KeyManager {
     public static final int SELECT = Input.Keys.ENTER;
     public static final int NEXT_CHARACTER = Input.Keys.TAB;
 
-    public static final int SHOW_JOB_INFO = Input.Keys.I;
+    public static final int SHOW_INVENTORY = Input.Keys.I;
     public static final int SHOW_QUESTS = Input.Keys.O;
     public static final int SHOW_STATS = Input.Keys.P;
 

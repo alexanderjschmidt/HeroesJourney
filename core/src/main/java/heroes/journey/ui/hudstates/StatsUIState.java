@@ -1,9 +1,11 @@
 package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameState;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.windows.Display;
 import heroes.journey.utils.input.KeyManager;
 
 public class StatsUIState extends HUDState {
@@ -26,9 +28,26 @@ public class StatsUIState extends HUDState {
     @Override
     public void update(HUD hud) {
         HUD.get().getStatsUI().handleInputs();
-        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK) ||
-            (Gdx.input.isKeyJustPressed(KeyManager.SHOW_JOB_INFO) && !justOpened)) {
+        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();
+        } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_INVENTORY) && !justOpened) {
+            if (HUD.get().getStatsUI().display() == Display.INVENTORY) {
+                HUD.get().revertToPreviousState();
+            } else {
+                HUD.get().getStatsUI().updatePanel(Display.INVENTORY);
+            }
+        } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_STATS) && !justOpened) {
+            if (HUD.get().getStatsUI().display() == Display.STATS) {
+                HUD.get().revertToPreviousState();
+            } else {
+                HUD.get().getStatsUI().updatePanel(Display.STATS);
+            }
+        } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_QUESTS) && !justOpened) {
+            if (HUD.get().getStatsUI().display() == Display.QUESTS) {
+                HUD.get().revertToPreviousState();
+            } else {
+                HUD.get().getStatsUI().updatePanel(Display.QUESTS);
+            }
         }
         justOpened = false;
     }

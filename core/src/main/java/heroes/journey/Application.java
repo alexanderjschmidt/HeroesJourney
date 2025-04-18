@@ -16,10 +16,10 @@ import heroes.journey.utils.art.ResourceManager;
  * TODO List
  * Menus
  *  Action Detail UI flesh out
- *  Split Stats Screen into 3 screens: items (I), Quests (O), Stats (P)
+ *      Make cooldown skills show recover timer
  * 	Inventory
  *      Icons
- * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encombered you are
+ * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
  * 		Scrolling
  * 		Tabs
  * Show Controls on UIs?
@@ -40,10 +40,6 @@ import heroes.journey.utils.art.ResourceManager;
  *      for that experience/skill
  * Make HUD Locked when players character is moving
  * Make AI Calculation run in the background (Maybe a system that keeps checking if its ready)
- * Towns
- *  Inn: Rumors
- * Make Delving use stats
- *  Make Dungeons show recover timer
  * Multiplayer
  * Fog of War
  *  light fog (ie 50% transparent over tiles) on unseen tiles
