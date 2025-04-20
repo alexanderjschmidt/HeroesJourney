@@ -68,7 +68,6 @@ public class RandomWorldGenerator {
     /**
      * Instantiates a new random world generator.
      *
-     * @param size      the size
      * @param amplitude the amplitude
      * @param octaves   the octaves
      * @param roughness the roughness
@@ -86,7 +85,6 @@ public class RandomWorldGenerator {
      * Instantiates a new random world generator.
      *
      * @param seed      the seed
-     * @param size      the size
      * @param amplitude the amplitude
      * @param octaves   the octaves
      * @param roughness the roughness

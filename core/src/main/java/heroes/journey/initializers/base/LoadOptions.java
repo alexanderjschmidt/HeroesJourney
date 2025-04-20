@@ -9,9 +9,13 @@ public class LoadOptions implements InitializerInterface {
     public static final BooleanOptionAction debugOption, autoEndTurnOption;
 
     static {
-        debugOption = BooleanOptionAction.builder().toggle(false).name("Debug").build();
+        debugOption = BooleanOptionAction.builder().toggle(false).name("Debug").build().register();
         Options.addOption(debugOption);
-        autoEndTurnOption = BooleanOptionAction.builder().toggle(false).name("Auto End Turn").build();
+        autoEndTurnOption = BooleanOptionAction.builder()
+            .toggle(false)
+            .name("Auto End Turn")
+            .build()
+            .register();
         Options.addOption(autoEndTurnOption);
     }
 }

@@ -1,8 +1,8 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
+import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
@@ -26,18 +26,18 @@ public class EntityUI extends UI {
 
     @Override
     public void drawAndUpdate(Batch batch, float parentAlpha) {
-        Entity entity;
+        Integer entityId;
         if (hover && HUD.get().getCursor().getHover() != HUD.get().getCursor().getSelected()) {
-            entity = HUD.get().getCursor().getHover();
+            entityId = HUD.get().getCursor().getHover();
         } else if (!hover) {
-            entity = HUD.get().getCursor().getSelected();
+            entityId = HUD.get().getCursor().getSelected();
         } else {
-            entity = null;
+            entityId = null;
         }
 
-        if (entity == null)
+        if (entityId == null)
             return;
-        StatsComponent statsComponent = StatsComponent.get(entity);
+        StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
 
         if (statsComponent != null) {
             String health = statsComponent.getHealth() + "/" + ((int)(StatsComponent.MAX_HEALTH));

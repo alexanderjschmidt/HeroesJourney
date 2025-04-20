@@ -2,18 +2,21 @@ package heroes.journey.entities.items;
 
 import java.util.function.BiConsumer;
 
-import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 public class ConsumableItem extends Item {
 
-    protected BiConsumer<GameState,Entity> onConsume;
+    protected BiConsumer<GameState,Integer> onConsume;
 
-    public void consume(GameState gameState, Entity consumer) {
+    public void consume(GameState gameState, Integer consumer) {
         onConsume.accept(gameState, consumer);
+    }
+
+    public ConsumableItem register() {
+        ItemManager.register(this);
+        return this;
     }
 
 }

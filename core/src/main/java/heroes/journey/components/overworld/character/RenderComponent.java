@@ -1,27 +1,32 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
+import com.artemis.annotations.Transient;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-public class RenderComponent implements Component {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+@Setter
+@Getter
+@Accessors(fluent = true, chain = true)
+@Transient
+public class RenderComponent extends PooledComponent {
 
     private TextureRegion sprite;
 
-    public RenderComponent(TextureRegion sprite) {
-        this.sprite = sprite;
+    public RenderComponent() {
     }
 
-    public TextureRegion getSprite() {
-        return sprite;
+    public static RenderComponent get(World world, int entityId) {
+        return world.getMapper(RenderComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<RenderComponent> mapper = ComponentMapper.getFor(
-        RenderComponent.class);
-
-    public static RenderComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        sprite = null;
     }
 
 }

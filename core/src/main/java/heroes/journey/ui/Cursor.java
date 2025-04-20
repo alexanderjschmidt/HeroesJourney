@@ -1,10 +1,12 @@
 package heroes.journey.ui;
 
-import com.badlogic.ashley.core.Entity;
+import com.artemis.EntityEdit;
+import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
@@ -18,6 +20,8 @@ import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.art.ResourceManager;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Cursor {
     // coords
@@ -26,10 +30,10 @@ public class Cursor {
 
     private HUD hud;
 
-    private Entity selected, hover;
+    @Getter private Integer selected, hover;
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
-    private Cell path;
+    @Setter @Getter private Cell path;
 
     private Animation<TextureRegion> ani;
 
@@ -185,8 +189,8 @@ public class Cursor {
         update();
     }
 
-    public void setPosition(Entity e) {
-        PositionComponent position = PositionComponent.get(e);
+    public void setPosition(Integer entityId) {
+        PositionComponent position = PositionComponent.get(GameState.global().getWorld(), entityId);
         this.setPosition(position.getX(), position.getY());
     }
 
@@ -195,24 +199,21 @@ public class Cursor {
             GameState.global().getRangeManager().clearRange();
             return;
         }
-        GameState.global().getEntities().moveEntity(selected, sx, sy);
-        StatsComponent statsComponent = StatsComponent.get(selected);
+        World world = GameState.global().getWorld();
+        PositionComponent positionComponent = PositionComponent.get(world, selected);
+        positionComponent.setPos(sx, sy);
+        GameState.global()
+            .getEntities()
+            .moveEntity(positionComponent.getX(), positionComponent.getY(), sx, sy);
+        StatsComponent statsComponent = StatsComponent.get(world, selected);
         setPosition(sx, sy);
         clearSelected();
         if (statsComponent.getMoveDistance() != 0) {
             update();
             setSelectedtoHover();
-            GameState.global().getRangeManager().setMoveAndAttackRange(selected);
+            GameState.global().getRangeManager().setMoveAndAttackRange(selected, sx, sy);
             hud.select();
         }
-    }
-
-    public Entity getHover() {
-        return hover;
-    }
-
-    public Entity getSelected() {
-        return selected;
     }
 
     public void setSelectedtoHover() {
@@ -221,27 +222,15 @@ public class Cursor {
         sy = y;
     }
 
-    public void revertAction() {
-        this.setPosition(sx, sy);
-        //selected.openActionMenu();
-    }
-
     public void moveSelected() {
         if (GameState.global().getEntities().get(path.x, path.y) == null ||
-            GameState.global().getEntities().get(path.x, path.y) == selected) {
-            selected.add(new MovementComponent(path.reverse()));
-            selected.add(new ActionComponent(BaseActions.openActionMenu));
+            GameState.global().getEntities().get(path.x, path.y).equals(selected)) {
+            EntityEdit entity = GameState.global().getWorld().edit(selected);
+            entity.create(MovementComponent.class).path(path.reverse());
+            entity.create(ActionComponent.class).action(BaseActions.openActionMenu);
             GameState.global().getRangeManager().clearRange();
             path = null;
         }
-    }
-
-    public Cell getPath() {
-        return path;
-    }
-
-    public void setPath(Cell temp) {
-        this.path = temp;
     }
 
 }

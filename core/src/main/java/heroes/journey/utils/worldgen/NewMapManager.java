@@ -1,16 +1,16 @@
 package heroes.journey.utils.worldgen;
 
-import heroes.journey.GameState;
-import heroes.journey.tilemap.wavefunction.Tile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import heroes.journey.GameState;
+import heroes.journey.tilemap.wavefunction.Tile;
+
 public class NewMapManager {
 
-    Map<MapGenerationPhase, List<MapGenerationEffect>> mapGenerationEffects;
+    Map<MapGenerationPhase,List<MapGenerationEffect>> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
 
@@ -32,12 +32,15 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState) {
-        GameState.global().getEngine().removeAllEntities();
         gameState.getMap().setEnvironment(new Tile[gameState.getWidth()][gameState.getHeight()]);
         for (MapGenerationPhase phase : MapGenerationPhase.values()) {
+            long startTimePhase = System.nanoTime();
             for (MapGenerationEffect mapGenerationEffect : mapGenerationEffects.get(phase)) {
+                long startTimeEffect = System.nanoTime();
                 mapGenerationEffect.apply(gameState);
+                System.out.println(mapGenerationEffect + ": " + (System.nanoTime() - startTimeEffect));
             }
+            System.out.println(phase + ": " + (System.nanoTime() - startTimePhase));
         }
     }
 

@@ -1,7 +1,8 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
+import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
@@ -35,8 +36,8 @@ public class ActionDetailUI extends UI {
 
     public void setAction(Action action) {
         this.action = action;
-        Entity selected = HUD.get().getCursor().getSelected();
+        Integer selected = HUD.get().getCursor().getSelected();
         if (selected != null)
-            cooldownComponent = CooldownComponent.get(selected);
+            cooldownComponent = CooldownComponent.get(GameState.global().getWorld(), selected);
     }
 }

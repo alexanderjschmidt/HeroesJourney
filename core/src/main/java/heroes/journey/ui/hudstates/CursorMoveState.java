@@ -32,10 +32,15 @@ class CursorMoveState extends HUDState {
                 hud.getCursor().getHover() == GameState.global().getCurrentEntity()) {
                 hud.getCursor().setSelectedtoHover();
                 HUD.get().select();
-                StatsComponent stats = StatsComponent.get(hud.getCursor().getSelected());
+                StatsComponent stats = StatsComponent.get(GameState.global().getWorld(),
+                    hud.getCursor().getSelected());
                 if (stats.getMoveDistance() == 0) {
                     savePath();
-                    hud.getCursor().getSelected().add(new ActionComponent(BaseActions.openActionMenu));
+                    GameState.global()
+                        .getWorld()
+                        .edit(hud.getCursor().getSelected())
+                        .create(ActionComponent.class)
+                        .action(BaseActions.openActionMenu);
                 } else {
                     GameState.global().getRangeManager().setMoveAndAttackRange(hud.getCursor().getSelected());
                 }

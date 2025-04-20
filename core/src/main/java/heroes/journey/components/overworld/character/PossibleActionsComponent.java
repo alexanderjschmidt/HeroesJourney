@@ -1,44 +1,55 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import com.artemis.PooledComponent;
+import com.artemis.World;
+
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.initializers.base.BaseActions;
 
-import java.util.ArrayList;
+public class PossibleActionsComponent extends PooledComponent {
 
-public class PossibleActionsComponent extends ArrayList<Action> implements ClonableComponent<PossibleActionsComponent> {
+    private final Set<String> possibleActions;
 
     public PossibleActionsComponent() {
-        add(BaseActions.wait);
+        possibleActions = new HashSet<>();
+        possibleActions.add(BaseActions.wait.toString());
     }
 
-    public PossibleActionsComponent addAction(CooldownAction action, Entity entity) {
-        CooldownComponent cooldownComponent = CooldownComponent.get(entity);
+    public List<Action> getPossibleActions() {
+        return ActionManager.get(possibleActions.stream().toList());
+    }
+
+    public PossibleActionsComponent addAction(CooldownAction action, World world, int entityId) {
+        CooldownComponent cooldownComponent = CooldownComponent.get(world, entityId);
         if (cooldownComponent == null) {
-            entity.add(new CooldownComponent());
+            world.edit(entityId).create(CooldownComponent.class);
         }
-        add(action);
+        possibleActions.add(action.toString());
         return this;
     }
 
     public PossibleActionsComponent addAction(Action action) {
-        add(action);
+        possibleActions.add(action.toString());
         return this;
     }
 
-    public PossibleActionsComponent clone() {
-        PossibleActionsComponent clone = new PossibleActionsComponent();
-        clone.addAll(this);
-        return clone;
+    public static PossibleActionsComponent get(World world, int entityId) {
+        return world.getMapper(PossibleActionsComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<PossibleActionsComponent> mapper = ComponentMapper.getFor(
-        PossibleActionsComponent.class);
+    public PossibleActionsComponent removeAction(Action action) {
+        possibleActions.remove(action);
+        return this;
+    }
 
-    public static PossibleActionsComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        possibleActions.clear();
     }
 }

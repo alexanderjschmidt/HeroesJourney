@@ -3,9 +3,7 @@ package heroes.journey.components.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
+import com.artemis.utils.IntBag;
 
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
@@ -15,46 +13,50 @@ import heroes.journey.components.overworld.place.CarriageComponent;
 import heroes.journey.components.overworld.place.FactionComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ClaimQuestAction;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.items.ItemInterface;
+import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.ScrollPaneEntry;
 
 public class Utils {
 
-    public static Entity getLocationsFaction(GameState gameState, Entity entity) {
-        if (entity == null)
+    public static Integer getLocationsFaction(GameState gameState, Integer entityId) {
+        if (entityId == null)
             return null;
-        PositionComponent positionComponent = PositionComponent.get(entity);
+        PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
         if (positionComponent == null)
             return null;
         return gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
     }
 
-    public static List<Action> getQuestClaimActions(Entity entity) {
-        QuestsComponent questsComponent = QuestsComponent.get(entity);
+    public static List<Action> getQuestClaimActions(GameState gameState, Integer entityId) {
+        QuestsComponent questsComponent = QuestsComponent.get(gameState.getWorld(), entityId);
         List<Action> questActions = new ArrayList<>();
-        for (Quest quest : questsComponent) {
-            questActions.add(ClaimQuestAction.builder().name(quest.toString()).quest(quest).build());
+        for (Quest quest : questsComponent.getQuests()) {
+            questActions.add(quest.getClaimAction());
         }
         return questActions;
     }
 
-    public static List<Action> getCarriageActions(GameState gameState, Entity town, Entity selected) {
+    public static List<Action> getCarriageActions(GameState gameState, Integer town, Integer selected) {
         List<Action> questActions = new ArrayList<>();
-        ImmutableArray<Entity> carriagableLocations = gameState.getEngine()
-            .getEntitiesFor(
-                Family.all(FactionComponent.class, CarriageComponent.class, PositionComponent.class).get());
-        for (Entity carriagableLocation : carriagableLocations) {
-            PositionComponent positionComponent = PositionComponent.get(carriagableLocation);
-            FactionComponent factionComponent = FactionComponent.get(carriagableLocation);
-            questActions.add(
-                Action.builder().name("Travel to " + factionComponent.toString()).onSelect((gs, e) -> {
-                    gameState.getEntities()
-                        .moveEntity(selected, positionComponent.getX(), positionComponent.getY());
-                    return "You have arrived at " + factionComponent.toString();
-                }).build());
+        IntBag carriagableLocations = gameState.getWorld()
+            .getEntitiesWith(FactionComponent.class, CarriageComponent.class, PositionComponent.class);
+        for (Integer carriagableLocation : carriagableLocations.getData()) {
+            if (carriagableLocation == town) {
+                continue;
+            }
+            PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), selected);
+            PositionComponent positionComponentFaction = PositionComponent.get(gameState.getWorld(),
+                carriagableLocation);
+            FactionComponent factionComponent = FactionComponent.get(gameState.getWorld(),
+                carriagableLocation);
+            questActions.add(Action.builder().name(factionComponent.toString()).onSelect((gs, e) -> {
+                gameState.getEntities()
+                    .moveEntity(positionComponent.getX(), positionComponent.getY(),
+                        positionComponentFaction.getX(), positionComponentFaction.getY());
+                return "You have arrived at " + factionComponent.toString();
+            }).build());
         }
         return questActions;
     }
@@ -63,34 +65,34 @@ public class Utils {
         return actions.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
     }
 
-    public static String addItem(Entity entity, ItemInterface item, int count) {
-        InventoryComponent inventoryComponent = InventoryComponent.get(entity);
+    public static String addItem(GameState gameState, Integer entityId, Item item, int count) {
+        InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), entityId);
         if (inventoryComponent != null) {
             inventoryComponent.add(item, count);
         }
         return "Gained " + count + " " + item;
     }
 
-    public static String adjustBody(Entity entity, int count) {
-        StatsComponent statsComponent = StatsComponent.get(entity);
+    public static String adjustBody(GameState gameState, Integer entityId, int count) {
+        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
         statsComponent.setBody(statsComponent.getBody() + count);
         return "Successful Workout! Gain 1 Body";
     }
 
-    public static String adjustMind(Entity entity, int count) {
-        StatsComponent statsComponent = StatsComponent.get(entity);
+    public static String adjustMind(GameState gameState, Integer entityId, int count) {
+        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
         statsComponent.setMind(statsComponent.getMind() + count);
         return "Successful Study! Gain 1 Mind";
     }
 
-    public static boolean justCompletedAction(GameState gameState, Entity owner, Action action) {
+    public static boolean justCompletedAction(GameState gameState, Integer owner, Action action) {
         return !gameState.getHistory().isEmpty() &&
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
-            gameState.get(record.getEntity()) == owner;
+            record.getEntity() == owner;
     }
 
 }

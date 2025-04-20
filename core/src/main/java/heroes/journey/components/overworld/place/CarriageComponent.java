@@ -1,21 +1,16 @@
 package heroes.journey.components.overworld.place;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
-public class CarriageComponent implements ClonableComponent<CarriageComponent> {
+public class CarriageComponent extends PooledComponent {
 
-    @Override
-    public CarriageComponent clone() {
-        return new CarriageComponent();
+    public static CarriageComponent get(World world, int entityId) {
+        return world.getMapper(CarriageComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<CarriageComponent> mapper = ComponentMapper.getFor(
-        CarriageComponent.class);
-
-    public static CarriageComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
     }
 
 }

@@ -26,7 +26,7 @@ public class Options {
                 .toList();
             HUD.get().setState(new ActionSelectState(options));
             return null;
-        }).build();
+        }).build().register();
         TeamActions.addTeamAction(optionsAction);
     }
 }

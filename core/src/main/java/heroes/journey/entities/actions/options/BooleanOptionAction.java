@@ -1,8 +1,7 @@
 package heroes.journey.entities.actions.options;
 
-import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
+import heroes.journey.entities.actions.ActionManager;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,7 +17,7 @@ public class BooleanOptionAction extends OptionAction {
         return onSelect(null, null);
     }
 
-    public String onSelect(GameState gameState, Entity selected) {
+    public String onSelect(GameState gameState, Integer selected) {
         toggle = !toggle;
         this.setDisplay(toggle + "");
         return null;
@@ -26,6 +25,10 @@ public class BooleanOptionAction extends OptionAction {
 
     public boolean isTrue() {
         return toggle;
+    }
+
+    public BooleanOptionAction register() {
+        return (BooleanOptionAction)ActionManager.register(this);
     }
 
 }

@@ -1,31 +1,29 @@
 package heroes.journey.components;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.Map;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
 import heroes.journey.entities.Loyalty;
-import heroes.journey.systems.GameEngine;
+import lombok.Getter;
 
-public class LoyaltyComponent extends HashMap<UUID,Loyalty> implements Component {
+@Getter
+public class LoyaltyComponent extends PooledComponent {
 
-    public LoyaltyComponent putLoyalty(UUID entityId, Loyalty loyalty) {
-        super.put(entityId, loyalty);
+    private Map<Integer,Loyalty> loyaltyMap;
+
+    public LoyaltyComponent putLoyalty(Integer entityId, Loyalty loyalty) {
+        loyaltyMap.put(entityId, loyalty);
         return this;
     }
 
-    public LoyaltyComponent putLoyalty(Entity entity, Loyalty loyalty) {
-        super.put(GameEngine.getID(entity), loyalty);
-        return this;
+    public static LoyaltyComponent get(World world, int entityId) {
+        return world.getMapper(LoyaltyComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<LoyaltyComponent> mapper = ComponentMapper.getFor(
-        LoyaltyComponent.class);
-
-    public static LoyaltyComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        loyaltyMap.clear();
     }
 }

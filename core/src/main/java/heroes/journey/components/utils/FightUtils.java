@@ -1,6 +1,6 @@
 package heroes.journey.components.utils;
 
-import com.badlogic.ashley.core.Entity;
+import com.artemis.World;
 
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.StatsComponent;
@@ -14,30 +14,30 @@ import heroes.journey.initializers.base.DefenseTypes;
 import heroes.journey.initializers.base.Groups;
 
 public class FightUtils {
-    public static boolean fight(Entity fighter, Entity enemy) {
-        StatsComponent fighterStats = StatsComponent.get(fighter);
-        StatsComponent enemyStats = StatsComponent.get(enemy);
+    public static boolean fight(World world, Integer fighter, Integer enemy) {
+        StatsComponent fighterStats = StatsComponent.get(world, fighter);
+        StatsComponent enemyStats = StatsComponent.get(world, enemy);
 
-        Entity attacker = fighterStats.getSpeed() >= enemyStats.getSpeed() ? fighter : enemy;
-        Entity defender = attacker == fighter ? enemy : fighter;
+        Integer attacker = fighterStats.getSpeed() >= enemyStats.getSpeed() ? fighter : enemy;
+        Integer defender = attacker == fighter ? enemy : fighter;
 
         // TODO if fast enough attack multiple times
         while (fighterStats.getHealth() > 0 && enemyStats.getHealth() > 0) {
-            attack(attacker, defender);
-            Entity previousDefender = defender;
+            attack(world, attacker, defender);
+            Integer previousDefender = defender;
             defender = attacker;
             attacker = previousDefender;
         }
         return fighterStats.getHealth() > 0;
     }
 
-    private static void attack(Entity attacker, Entity defender) {
-        StatsComponent attackerStats = StatsComponent.get(attacker);
-        StatsComponent defenderStats = StatsComponent.get(defender);
+    private static void attack(World world, Integer attacker, Integer defender) {
+        StatsComponent attackerStats = StatsComponent.get(world, attacker);
+        StatsComponent defenderStats = StatsComponent.get(world, defender);
 
-        Attributes damages = getDamages(attacker).applyOperation(attackerStats.getHandicapMult(),
+        Attributes damages = getDamages(world, attacker).applyOperation(attackerStats.getHandicapMult(),
             Operation.MULTIPLY);
-        Attributes defenses = getDefenses(defender).applyOperation(defenderStats.getHandicapMult(),
+        Attributes defenses = getDefenses(world, defender).applyOperation(defenderStats.getHandicapMult(),
             Operation.MULTIPLY).convert(ConversionSets.DEFENSE_TO_DAMAGE);
 
         damages.merge(defenses, Operation.SUBTRACT);
@@ -47,35 +47,35 @@ public class FightUtils {
         defenderStats.adjustHealth(-damage);
     }
 
-    public static void faint(Entity e) {
-        StatsComponent statsComponent = StatsComponent.get(e);
+    public static void faint(World world, Integer e) {
+        StatsComponent statsComponent = StatsComponent.get(world, e);
         statsComponent.setHealth(1);
         // TODO remove most valuable item
     }
 
-    public static Attributes getDamages(Entity attacker) {
-        StatsComponent attackerStats = StatsComponent.get(attacker);
-        EquipmentComponent attackerEquipment = EquipmentComponent.get(attacker);
+    public static Attributes getDamages(World world, Integer attacker) {
+        StatsComponent attackerStats = StatsComponent.get(world, attacker);
+        EquipmentComponent attackerEquipment = EquipmentComponent.get(world, attacker);
 
         Attributes damages = new Attributes().add(DamageTypes.PHYSICAL, attackerStats.getBody());
         if (attackerEquipment != null) {
-            damages = safeMerge(damages, attackerEquipment.getHandOne(), Groups.Damage);
-            damages = safeMerge(damages, attackerEquipment.getHandTwo(), Groups.Damage);
+            damages = safeMerge(damages, attackerEquipment.handOne(), Groups.Damage);
+            damages = safeMerge(damages, attackerEquipment.handTwo(), Groups.Damage);
         }
         return damages;
     }
 
-    public static Attributes getDefenses(Entity defender) {
-        StatsComponent defenderStats = StatsComponent.get(defender);
-        EquipmentComponent defenderEquipment = EquipmentComponent.get(defender);
+    public static Attributes getDefenses(World world, Integer defender) {
+        StatsComponent defenderStats = StatsComponent.get(world, defender);
+        EquipmentComponent defenderEquipment = EquipmentComponent.get(world, defender);
 
         Attributes defenses = new Attributes().add(DefenseTypes.PHYSICAL_DEF, defenderStats.getBody())
             .merge(defenderStats.getAttributes().getTagsWithGroup(Groups.Defense));
         if (defenderEquipment != null) {
-            defenses = safeMerge(defenses, defenderEquipment.getHead(), Groups.Defense);
-            defenses = safeMerge(defenses, defenderEquipment.getChest(), Groups.Defense);
-            defenses = safeMerge(defenses, defenderEquipment.getLegs(), Groups.Defense);
-            defenses = safeMerge(defenses, defenderEquipment.getBoots(), Groups.Defense);
+            defenses = safeMerge(defenses, defenderEquipment.head(), Groups.Defense);
+            defenses = safeMerge(defenses, defenderEquipment.chest(), Groups.Defense);
+            defenses = safeMerge(defenses, defenderEquipment.legs(), Groups.Defense);
+            defenses = safeMerge(defenses, defenderEquipment.boots(), Groups.Defense);
         }
         return defenses;
     }

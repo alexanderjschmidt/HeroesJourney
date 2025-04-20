@@ -1,26 +1,30 @@
 package heroes.journey.systems.listeners;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.core.Family;
+import com.artemis.annotations.All;
+import com.artemis.systems.IteratingSystem;
+
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.PossibleActionsComponent;
 import heroes.journey.initializers.base.BaseActions;
 
-public class StatsActionsListener implements EntityListener {
+@All({StatsComponent.class, PossibleActionsComponent.class})
+public class StatsActionsListener extends IteratingSystem {
 
-    public static Family getFamily() {
-        return Family.all(StatsComponent.class, PossibleActionsComponent.class).get();
+    @Override
+    public void inserted(int entityId) {
+        PossibleActionsComponent actionComponent = PossibleActionsComponent.get(getWorld(), entityId);
+        actionComponent.addAction(BaseActions.workout, getWorld(), entityId);
+        actionComponent.addAction(BaseActions.study, getWorld(), entityId);
     }
 
     @Override
-    public void entityAdded(Entity entity) {
-        PossibleActionsComponent actionComponent = PossibleActionsComponent.get(entity);
-        actionComponent.addAction(BaseActions.workout, entity);
-        actionComponent.addAction(BaseActions.study, entity);
+    public void removed(int entityId) {
+        PossibleActionsComponent actionComponent = PossibleActionsComponent.get(getWorld(), entityId);
+        actionComponent.removeAction(BaseActions.workout);
+        actionComponent.removeAction(BaseActions.study);
     }
 
     @Override
-    public void entityRemoved(Entity entity) {
+    protected void process(int i) {
     }
 }

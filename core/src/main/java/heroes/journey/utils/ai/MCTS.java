@@ -1,14 +1,13 @@
 package heroes.journey.utils.ai;
 
-import com.badlogic.ashley.core.Entity;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 
 public class MCTS {
     private static final int SIMULATIONS = 1000;
-    private static final double EXPLORATION_FACTOR = Math.sqrt(2);
 
-    public QueuedAction runMCTS(GameState gameState, Entity playingEntity, Scorer scorer) {
+    public QueuedAction runMCTS(GameState gameState, Integer playingEntity, Scorer scorer) {
+        long start = System.nanoTime();
         Node root = new Node(gameState, null, scorer);
         for (int i = 0; i < SIMULATIONS; i++) {
             Node selectedNode = select(root);
@@ -16,6 +15,7 @@ public class MCTS {
             double result = simulate(selectedNode, playingEntity);
             backpropagate(selectedNode, result);
         }
+        System.out.println("runMCTS took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return root.bestChildByVisits().getQueuedAction();
     }
 
@@ -34,8 +34,11 @@ public class MCTS {
         return node;
     }
 
-    private double simulate(Node node, Entity playingEntity) {
-        return node.rollout(playingEntity); // Random game simulation
+    private double simulate(Node node, Integer playingEntity) {
+        long start = System.nanoTime();
+        double result = node.rollout(playingEntity); // Random game simulation
+        System.out.println("simulate took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        return result;
     }
 
     private void backpropagate(Node node, double result) {

@@ -1,26 +1,26 @@
 package heroes.journey.initializers.base.factories;
 
-import com.badlogic.ashley.core.Entity;
+import com.artemis.EntityEdit;
 
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.NamedComponent;
+import heroes.journey.systems.GameWorld;
 
 public class MonsterFactory {
 
-    public static Entity goblin() {
-        Entity goblin = new Entity();
-
-        goblin.add(new NamedComponent("Goblin")).add(StatsComponent.builder().handicapMult(3).build());
-
-        return goblin;
+    public static Integer goblin(GameWorld world) {
+        //TODO replace with Archetypes
+        EntityEdit goblin = world.createEntity().edit();
+        goblin.create(NamedComponent.class).name("Goblin");
+        goblin.create(StatsComponent.class);
+        return goblin.getEntityId();
     }
 
-    public static Entity hobGoblin() {
-        Entity hobGoblin = new Entity();
-
-        hobGoblin.add(new NamedComponent("Hob Goblin")).add(StatsComponent.builder().handicapMult(5).build());
-
-        return hobGoblin;
+    public static Integer hobGoblin(GameWorld world) {
+        EntityEdit goblin = world.createEntity().edit();
+        goblin.create(NamedComponent.class).name("Hob Goblin");
+        goblin.create(StatsComponent.class);
+        return goblin.getEntityId();
     }
 
 }

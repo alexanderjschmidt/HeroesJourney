@@ -1,121 +1,54 @@
 package heroes.journey.entities;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.components.overworld.character.PositionComponent;
-
-import java.util.HashMap;
-import java.util.UUID;
-
 public class EntityManager implements Cloneable {
 
     private final int width, height;
     // TODO should this just be the uuid?
-    private final Entity[][] entitiesLocations;
-    private final Entity[][] factionsLocations;
-
-    private final HashMap<UUID, Entity> entities;
+    private final Integer[][] entitiesLocations;
+    private final Integer[][] factionsLocations;
 
     public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
-        entitiesLocations = new Entity[width][height];
-        factionsLocations = new Entity[width][height];
-        entities = new HashMap<>();
+        entitiesLocations = new Integer[width][height];
+        factionsLocations = new Integer[width][height];
     }
 
     public EntityManager clone() {
-        EntityManager clone = new EntityManager(width, height);
-
-        for (UUID id : entities.keySet()) {
-            clone.entities.put(id, cloneEntity(clone, entities.get(id)));
-        }
-
-        return clone;
+        return new EntityManager(width, height);
     }
 
-    private Entity cloneEntity(EntityManager manager, Entity e) {
-        Entity clone = new Entity();
-        for (Component component : e.getComponents()) {
-            if (component instanceof ClonableComponent<?> clonableComponent) {
-                clone.add(clonableComponent.clone());
-                if (component instanceof PositionComponent) {
-                    manager.addEntity(clone);
-                }
-            }
-        }
-        return clone;
-    }
-
-    public Entity get(int x, int y) {
+    public Integer get(int x, int y) {
         if (x < 0 || y < 0 || y >= height || x >= width)
             return null;
         return entitiesLocations[x][y];
     }
 
-    public void addEntity(Entity e) {
-        PositionComponent position = PositionComponent.get(e);
-        if (entitiesLocations[position.getX()][position.getY()] == null) {
-            entitiesLocations[position.getX()][position.getY()] = e;
+    public void addEntity(int entityId, int x, int y) {
+        if (entitiesLocations[x][y] == null) {
+            entitiesLocations[x][y] = entityId;
         }
     }
 
-    public Entity moveEntity(Entity e, int x, int y) {
-        PositionComponent position = PositionComponent.get(e);
-        removeEntity(e);
-        position.setPos(x, y);
-        addEntity(e);
-        return e;
-    }
-
-    public Entity removeEntity(Entity e) {
-        PositionComponent position = PositionComponent.get(e);
-        Entity removed = entitiesLocations[position.getX()][position.getY()];
-        entitiesLocations[position.getX()][position.getY()] = null;
+    public Integer removeEntity(int x, int y) {
+        Integer removed = entitiesLocations[x][y];
+        entitiesLocations[x][y] = null;
         return removed;
     }
 
     // Faction Functions
-    public void addFaction(Entity faction, int x, int y) {
-        factionsLocations[x][y] = faction;
-    }
-
-    public Entity getFaction(int x, int y) {
+    public Integer getFaction(int x, int y) {
         if (x < 0 || y < 0 || y >= height || x >= width)
             return null;
         return factionsLocations[x][y];
     }
 
-    // ID Based Functions
-    public Entity getEntity(UUID id) {
-        return entities.get(id);
+    public void addFaction(int faction, int x, int y) {
+        factionsLocations[x][y] = faction;
     }
 
-    public void registerEntity(UUID id, Entity e) {
-        entities.put(id, e);
-    }
-
-    public void unregisterEntity(UUID id) {
-        entities.remove(id);
-    }
-
-    public void print() {
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                Entity e = this.get(x, y);
-                if (e != null) {
-                    System.out.print("[" + x + ": " + y + "]  \t");
-                } else {
-                    System.out.print("(" + x + ", " + y + ")  \t");
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-    public HashMap<UUID, Entity> getEntites() {
-        return entities;
+    public void moveEntity(int currentX, int currentY, int newX, int newY) {
+        entitiesLocations[newX][newY] = entitiesLocations[currentX][currentY];
+        entitiesLocations[currentX][currentY] = null;
     }
 }

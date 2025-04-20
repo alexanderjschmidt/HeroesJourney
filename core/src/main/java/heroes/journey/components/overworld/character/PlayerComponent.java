@@ -1,29 +1,27 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class PlayerComponent implements Component {
+@Setter
+@Getter
+@Accessors(fluent = true, chain = true)
+public class PlayerComponent extends PooledComponent {
 
-    private final String playerId;
-    @Getter @Setter private int fame = 0;
+    private String playerId;
+    private int fame = 0;
 
-    public PlayerComponent(String playerId) {
-        this.playerId = playerId;
+    public static PlayerComponent get(World world, int entityId) {
+        return world.getMapper(PlayerComponent.class).get(entityId);
     }
 
-    public String getPlayerId() {
-        return playerId;
-    }
-
-    private static final ComponentMapper<PlayerComponent> mapper = ComponentMapper.getFor(
-        PlayerComponent.class);
-
-    public static PlayerComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        playerId = null;
+        fame = 0;
     }
 }

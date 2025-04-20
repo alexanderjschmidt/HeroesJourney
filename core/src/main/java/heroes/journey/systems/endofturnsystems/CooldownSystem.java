@@ -1,20 +1,20 @@
 package heroes.journey.systems.endofturnsystems;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
+import com.artemis.World;
+import com.artemis.annotations.All;
+
 import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.systems.EndOfTurnSystem;
-import heroes.journey.systems.GameEngine;
 
+@All({CooldownComponent.class})
 public class CooldownSystem extends EndOfTurnSystem {
 
-    public CooldownSystem(GameEngine engine) {
-        super(Family.all(CooldownComponent.class).get(), engine);
-    }
-
     @Override
-    protected void processEntity(Entity entity, float delta) {
-        CooldownComponent cooldownComponent = CooldownComponent.get(entity);
-        cooldownComponent.entrySet().removeIf(entry -> (entry.setValue(entry.getValue() - 1)) <= 0);
+    protected void process(int entityId) {
+        World world = getWorld();
+        CooldownComponent cooldownComponent = CooldownComponent.get(world, entityId);
+        cooldownComponent.getCooldowns()
+            .entrySet()
+            .removeIf(entry -> (entry.setValue(entry.getValue() - 1)) <= 0);
     }
 }

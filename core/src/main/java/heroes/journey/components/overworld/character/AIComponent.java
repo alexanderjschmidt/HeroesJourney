@@ -2,27 +2,28 @@ package heroes.journey.components.overworld.character;
 
 import java.util.concurrent.Future;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
 import heroes.journey.GameState;
-import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.ai.AI;
+import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.systems.constantsystems.AISystem;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class AIComponent implements ClonableComponent<AIComponent> {
+public class AIComponent extends PooledComponent {
 
-    @Getter private Future<QueuedAction> futureResult = null;
+    @Getter private transient Future<QueuedAction> futureResult = null;
+    @Accessors(fluent = true, chain = true) @Setter private transient AI ai;
 
-    private final AI ai;
-
-    public AIComponent(AI ai) {
-        this.ai = ai;
+    public AIComponent() {
+        this.ai = new MCTSAI();
     }
 
-    public void startProcessingNextMove(GameState gameState, Entity playingEntity) {
+    public void startProcessingNextMove(GameState gameState, Integer playingEntity) {
         if (futureResult == null) {
             futureResult = AISystem.executor.submit(() -> ai.getMove(gameState, playingEntity));
         }
@@ -32,13 +33,14 @@ public class AIComponent implements ClonableComponent<AIComponent> {
         futureResult = null;
     }
 
-    public AIComponent clone() {
-        return new AIComponent(ai);
+    public static AIComponent get(World world, int entityId) {
+        return world.getMapper(AIComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<AIComponent> mapper = ComponentMapper.getFor(AIComponent.class);
-
-    public static AIComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        ai = null;
+        futureResult.cancel(true);
+        futureResult = null;
     }
 }

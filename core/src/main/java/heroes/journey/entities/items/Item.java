@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @Getter
-public class Item implements ItemInterface {
+public class Item {
 
     @NonNull private final String name;
     private final ItemSubType subType;
@@ -20,6 +20,10 @@ public class Item implements ItemInterface {
 
     public String toString() {
         return name;
+    }
+
+    public Item register() {
+        return ItemManager.register(this);
     }
 
 }

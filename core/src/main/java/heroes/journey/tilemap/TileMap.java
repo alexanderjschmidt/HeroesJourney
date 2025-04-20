@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
@@ -19,10 +18,11 @@ import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
+import lombok.Getter;
 
 public class TileMap implements IndexedGraph<TileNode> {
 
-    private int width, height;
+    @Getter private final int width, height;
     private Tile[][] tileMap;
     private Tile[][] environment;
     private float elapsed = 0;
@@ -68,14 +68,6 @@ public class TileMap implements IndexedGraph<TileNode> {
         }
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
     public void setEnvironment(int x, int y, Tile tile) {
         environment[x][y] = tile;
     }
@@ -114,7 +106,7 @@ public class TileMap implements IndexedGraph<TileNode> {
         return map;
     }
 
-    public int getTerrainCost(int x, int y, Entity selected) {
+    public int getTerrainCost(int x, int y, Integer selected) {
         return (tileMap[x][y] == null ? 1 : tileMap[x][y].getTerrain().getTerrainCost()) +
             (environment[x][y] == null ? 0 : environment[x][y].getTerrain().getTerrainCost());
     }

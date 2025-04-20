@@ -11,7 +11,7 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
+import com.artemis.EntityEdit;
 
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
@@ -146,20 +146,19 @@ public class Map implements InitializerInterface {
         });
         // Add Entities
         new MapGenerationEffect(MapGenerationPhase.FINAL, gameState -> {
-            Entity player = overworldEntity(housePos.getFirst().getX(), housePos.getFirst().getY(),
-                ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
-            player.add(new PlayerComponent(gameState.getId())).add(new NamedComponent("Player"));
-            InventoryComponent.get(player)
+            Integer playerId = overworldEntity(gameState, housePos.getFirst().getX(),
+                housePos.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+            EntityEdit player = gameState.getWorld().edit(playerId);
+            player.create(PlayerComponent.class).playerId(gameState.getId());
+            player.create(NamedComponent.class).name("Player");
+            InventoryComponent.get(gameState.getWorld(), playerId)
                 .add(Items.healthPotion, 3)
                 .add(Items.ironIngot, 5)
                 .add(Items.chestPlate);
-            gameState.getEngine().addEntity(player);
-            GameState.global().getPlayableEntities().add(player);
+            GameState.global().getPlayableEntities().add(playerId);
 
-            Entity opponent = overworldEntity(housePos.getLast().getX(), housePos.getLast().getY(),
+            overworldEntity(gameState, housePos.getLast().getX(), housePos.getLast().getY(),
                 ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
-
-            gameState.getEngine().addEntity(opponent);
         });
     }
 
@@ -177,9 +176,9 @@ public class Map implements InitializerInterface {
                 int y = (int)(Math.random() * environment[0].length);
                 if (tileMap[x][y] == Tiles.PLAINS) {
                     if (dungeon)
-                        gameState.getEngine().addEntity(generateDungeon(gameState, x, y));
+                        generateDungeon(gameState, x, y);
                     else
-                        gameState.getEngine().addEntity(generateHouse(gameState, x, y));
+                        generateHouse(gameState, x, y);
                     featurePos.add(new Position(x, y));
                     environment[x][y] = feature;
                     break;

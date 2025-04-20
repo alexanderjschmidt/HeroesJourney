@@ -1,7 +1,9 @@
 package heroes.journey.utils;
 
-import com.badlogic.ashley.core.Entity;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
@@ -9,8 +11,7 @@ import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.ArrayList;
+import lombok.Getter;
 
 public class RangeManager {
 
@@ -20,8 +21,8 @@ public class RangeManager {
 
     private GameState gameState;
     private int width, height;
-    private RangeColor[][] range;
-    private ArrayList<Entity> targets;
+    @Getter private RangeColor[][] range;
+    private ArrayList<Integer> targets;
     private int target;
 
     public RangeManager(GameState gameState, int width, int height) {
@@ -36,21 +37,21 @@ public class RangeManager {
         return new RangeManager(newGameState, width, height);
     }
 
-    public ArrayList<Entity> updateTargets(
-        Entity selected,
+    public ArrayList<Integer> updateTargets(
+        Integer selectedId,
         boolean enemies,
         int[] ranges,
         RangeColor rangeType) {
         clearRange();
-        PositionComponent position = PositionComponent.get(selected);
+        PositionComponent position = PositionComponent.get(GameState.global().getWorld(), selectedId);
         setDistanceRangeAt(position.getX(), position.getY(), ranges, rangeType);
-        targets = new ArrayList<Entity>();
+        targets = new ArrayList<Integer>();
         target = 0;
         for (int x = 0; x < range.length; x++) {
             for (int y = 0; y < range[0].length; y++) {
                 // System.out.print(range[x][y]);
                 if (range[x][y] == rangeType) {
-                    Entity e = gameState.getEntities().get(x, y);
+                    Integer e = gameState.getEntities().get(x, y);
                     if (e != null) {
                         targets.add(e);
                     }
@@ -63,19 +64,24 @@ public class RangeManager {
 
     public void pointAtTarget(int increment) {
         target = (target + increment + targets.size()) % targets.size();
-        PositionComponent position = PositionComponent.get(targets.get(target));
+        PositionComponent position = PositionComponent.get(GameState.global().getWorld(),
+            targets.get(target));
         HUD.get().getCursor().setPosition(position.getX(), position.getY());
     }
 
-    public void setMoveAndAttackRange(Entity selected) {
-        if (selected == null) {
+    public void setMoveAndAttackRange(Integer selectedId, int x, int y) {
+        if (selectedId == null) {
             return;
         }
         clearRange();
-        StatsComponent stats = StatsComponent.get(selected);
+        StatsComponent stats = StatsComponent.get(GameState.global().getWorld(), selectedId);
         int move = stats.getMoveDistance();
-        PositionComponent position = PositionComponent.get(selected);
-        floodfill(move, position.getX(), position.getY(), selected);
+        floodfill(move, x, y, selectedId);
+    }
+
+    public void setMoveAndAttackRange(Integer selectedId) {
+        PositionComponent position = PositionComponent.get(GameState.global().getWorld(), selectedId);
+        setMoveAndAttackRange(selectedId, position.getX(), position.getY());
     }
 
     public void clearRange() {
@@ -83,23 +89,23 @@ public class RangeManager {
         target = 0;
     }
 
-    private void floodfill(int dist, int x, int y, Entity selected) {
+    private void floodfill(int dist, int x, int y, Integer selectedId) {
         if (x < 0 || y < 0 || x >= range.length || y >= range[0].length) {
             // System.out.println("out of bounds");
             return;
         }
         if ((dist < 0 || gameState.getEntities().get(x, y) != null) &&
-            gameState.getEntities().get(x, y) != selected) {
+            gameState.getEntities().get(x, y) != selectedId) {
             return;
         }
         range[x][y] = RangeColor.BLUE;
-        setDistanceRangeAt(x, y, new int[]{1, 2}, RangeColor.RED);
+        setDistanceRangeAt(x, y, new int[] {1, 2}, RangeColor.RED);
 
         // System.out.println(terrainCost);
-        floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selected), x + 1, y, selected);
-        floodfill(dist - gameState.getMap().getTerrainCost(x - 1, y, selected), x - 1, y, selected);
-        floodfill(dist - gameState.getMap().getTerrainCost(x, y + 1, selected), x, y + 1, selected);
-        floodfill(dist - gameState.getMap().getTerrainCost(x, y - 1, selected), x, y - 1, selected);
+        floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selectedId), x + 1, y, selectedId);
+        floodfill(dist - gameState.getMap().getTerrainCost(x - 1, y, selectedId), x - 1, y, selectedId);
+        floodfill(dist - gameState.getMap().getTerrainCost(x, y + 1, selectedId), x, y + 1, selectedId);
+        floodfill(dist - gameState.getMap().getTerrainCost(x, y - 1, selectedId), x, y - 1, selectedId);
 
     }
 
@@ -152,10 +158,6 @@ public class RangeManager {
                         GameCamera.get().getSize());
             }
         }
-    }
-
-    public RangeColor[][] getRange() {
-        return range;
     }
 
     public boolean isEmpty(int x, int y) {

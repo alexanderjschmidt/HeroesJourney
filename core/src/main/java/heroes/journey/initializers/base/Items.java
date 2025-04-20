@@ -25,30 +25,39 @@ public class Items implements InitializerInterface {
         potion = ItemSubType.builder().name(POTION).parentType(ItemType.Consumable).build();
 
         // Items
-        wood = Item.builder().name("Wood").subType(rawMaterial).weight(1).value(1).build();
-        ironOre = Item.builder().name("Iron Ore").subType(rawMaterial).weight(1).value(1).build();
-        ironIngot = Item.builder().name("Iron Ingot").subType(refinedMaterial).weight(1).value(1).build();
+        wood = Item.builder().name("Wood").subType(rawMaterial).weight(1).value(1).build().register();
+        ironOre = Item.builder().name("Iron Ore").subType(rawMaterial).weight(1).value(1).build().register();
+        ironIngot = Item.builder()
+            .name("Iron Ingot")
+            .subType(refinedMaterial)
+            .weight(1)
+            .value(1)
+            .build()
+            .register();
         ironSword = Item.builder()
             .name("Iron Sword")
             .subType(sword)
             .attributes(new Attributes().add(DamageTypes.PHYSICAL, 3))
             .weight(1)
             .value(3)
-            .build();
+            .build()
+            .register();
         chestPlate = Item.builder()
             .name("Chest Plate")
             .subType(chestArmor)
             .attributes(new Attributes().add(DefenseTypes.PHYSICAL_DEF, 3))
             .weight(5)
             .value(1)
-            .build();
+            .build()
+            .register();
         healthPotion = ConsumableItem.builder()
             .name("Health Potion")
             .subType(potion)
             .weight(1)
             .value(1)
-            .onConsume((gs, e) -> Utils.addItem(e, ironIngot, 1))
-            .build();
+            .onConsume((gs, e) -> Utils.addItem(gs, e, ironIngot, 1))
+            .build()
+            .register();
     }
 
 }

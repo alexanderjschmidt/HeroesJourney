@@ -1,6 +1,5 @@
 package heroes.journey.ui.windows.stats;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
@@ -9,15 +8,14 @@ import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
-import heroes.journey.entities.items.ItemInterface;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.input.KeyManager;
 
-public class InventoryDisplay extends ScrollPane<ItemInterface> {
+public class InventoryDisplay extends ScrollPane<Item> {
 
-    private Entity entity;
+    private Integer entityId;
     private InventoryComponent inventoryComponent;
 
     public InventoryDisplay() {
@@ -27,17 +25,18 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
 
     @Override
     public void select() {
-        ItemInterface selectedItem = getSelected().entry();
+        Item selectedItem = getSelected().entry();
         switch (selectedItem.getType()) {
             case Weapon:
             case Armor:
-                EquipmentComponent equipment = EquipmentComponent.get(entity);
+                EquipmentComponent equipment = EquipmentComponent.get(GameState.global().getWorld(),
+                    entityId);
                 equipment.equip((Item)selectedItem);
                 break;
             case Consumable:
                 removeItem((Item)selectedItem);
                 ConsumableItem c = (ConsumableItem)selectedItem;
-                c.consume(GameState.global(), entity);
+                c.consume(GameState.global(), entityId);
                 break;
         }
     }
@@ -47,10 +46,14 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
 
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
-        inventoryComponent = InventoryComponent.get(entity);
-        open(inventoryComponent.keySet().stream().map(key -> new ScrollPaneEntry<>(key, true)).toList());
+    public void setEntity(Integer entityId) {
+        this.entityId = entityId;
+        inventoryComponent = InventoryComponent.get(GameState.global().getWorld(), entityId);
+        open(inventoryComponent.getInventory()
+            .keySet()
+            .stream()
+            .map(key -> new ScrollPaneEntry<>(key, true))
+            .toList());
     }
 
     @Override
@@ -60,7 +63,7 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
     }
 
     @Override
-    public String getText(ItemInterface item) {
+    public String getText(Item item) {
         return inventoryComponent.toString(item);
     }
 
@@ -74,12 +77,15 @@ public class InventoryDisplay extends ScrollPane<ItemInterface> {
 
     private void removeItem(Item item) {
         inventoryComponent.remove(item, 1);
-        if (!inventoryComponent.containsKey(item)) {
+        if (!inventoryComponent.getInventory().containsKey(item)) {
             if (selected > 0) {
                 selected--;
             }
-            updateList(
-                inventoryComponent.keySet().stream().map(key -> new ScrollPaneEntry<>(key, true)).toList());
+            updateList(inventoryComponent.getInventory()
+                .keySet()
+                .stream()
+                .map(key -> new ScrollPaneEntry<>(key, true))
+                .toList());
         }
     }
 }

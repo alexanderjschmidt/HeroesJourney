@@ -1,7 +1,5 @@
 package heroes.journey.entities.actions;
 
-import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.CooldownComponent;
 import heroes.journey.components.utils.Utils;
@@ -18,29 +16,33 @@ public class CooldownAction extends Action {
     @Builder.Default private final boolean factionCooldown = false;
 
     @Override
-    public ShowAction requirementsMet(GameState gameState, Entity entity) {
+    public ShowAction requirementsMet(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
-            Entity faction = Utils.getLocationsFaction(gameState, entity);
-            cooldownComponent = CooldownComponent.get(faction);
+            Integer faction = Utils.getLocationsFaction(gameState, entityId);
+            cooldownComponent = CooldownComponent.get(gameState.getWorld(), faction);
         } else {
-            cooldownComponent = CooldownComponent.get(entity);
+            cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);
         }
-        if (cooldownComponent.containsKey(this))
+        if (cooldownComponent.getCooldowns().containsKey(name))
             return ShowAction.GRAYED;
-        return requirementsMet.apply(gameState, entity);
+        return requirementsMet.apply(gameState, entityId);
     }
 
     @Override
-    public String onSelect(GameState gameState, Entity entity) {
+    public String onSelect(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
-            Entity faction = Utils.getLocationsFaction(gameState, entity);
-            cooldownComponent = CooldownComponent.get(faction);
+            Integer faction = Utils.getLocationsFaction(gameState, entityId);
+            cooldownComponent = CooldownComponent.get(gameState.getWorld(), faction);
         } else {
-            cooldownComponent = CooldownComponent.get(entity);
+            cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);
         }
-        cooldownComponent.put(this, turnCooldown);
-        return onSelect.apply(gameState, entity);
+        cooldownComponent.getCooldowns().put(name, turnCooldown);
+        return onSelect.apply(gameState, entityId);
+    }
+
+    public CooldownAction register() {
+        return (CooldownAction)ActionManager.register(this);
     }
 }

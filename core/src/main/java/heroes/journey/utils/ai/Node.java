@@ -1,15 +1,15 @@
 package heroes.journey.utils.ai;
 
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.GameState;
-import heroes.journey.entities.actions.QueuedAction;
-import heroes.journey.utils.Random;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import heroes.journey.GameState;
+import heroes.journey.entities.actions.QueuedAction;
+import heroes.journey.utils.Random;
+
 public class Node {
+    private static final double EXPLORATION_FACTOR = Math.sqrt(2);
 
     GameState gameState;
     Node parent;
@@ -41,7 +41,6 @@ public class Node {
             childNode.setQueuedAction(QueuedAction);
             children.add(childNode);
         }
-        gameState.dispose();
         gameState = null;
     }
 
@@ -57,7 +56,7 @@ public class Node {
         if (node.visitCount == 0)
             return Double.MAX_VALUE; // Favor unexplored nodes
         double exploitation = node.winScore / node.visitCount;
-        double exploration = Math.sqrt(2) * Math.sqrt(Math.log(this.visitCount) / node.visitCount);
+        double exploration = EXPLORATION_FACTOR * Math.sqrt(Math.log(this.visitCount) / node.visitCount);
         return exploitation + exploration;
     }
 
@@ -73,7 +72,7 @@ public class Node {
     }
 
     // Simulate a random game from this node and return a result
-    public int rollout(Entity playingEntity) {
+    public int rollout(Integer playingEntity) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
         while (scorer.getScore(tempState, playingEntity) > 0 && depth < 5) {

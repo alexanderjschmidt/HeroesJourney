@@ -1,19 +1,22 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
+import com.artemis.annotations.Transient;
 
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class MovementComponent implements Component {
+@Transient
+@Accessors(fluent = true, chain = true)
+public class MovementComponent extends PooledComponent {
 
-    @Getter private Cell path;
+    @Getter @Setter private Cell path;
     private boolean startedMoving;
 
-    public MovementComponent(Cell path) {
-        this.path = path;
+    public MovementComponent() {
         this.startedMoving = false;
     }
 
@@ -30,11 +33,14 @@ public class MovementComponent implements Component {
         return path != null;
     }
 
-    private static final ComponentMapper<MovementComponent> mapper = ComponentMapper.getFor(
-        MovementComponent.class);
+    public static MovementComponent get(World world, int entityId) {
+        return world.getMapper(MovementComponent.class).get(entityId);
+    }
 
-    public static MovementComponent get(Entity entity) {
-        return mapper.get(entity);
+    @Override
+    protected void reset() {
+        path = null;
+        this.startedMoving = false;
     }
 
 }

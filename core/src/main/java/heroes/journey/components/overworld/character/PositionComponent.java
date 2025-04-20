@@ -1,25 +1,38 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.entities.Position;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
-public class PositionComponent extends Position implements ClonableComponent<PositionComponent> {
+import lombok.Getter;
 
-    public PositionComponent(int x, int y) {
-        super(x, y);
+@Getter
+public class PositionComponent extends PooledComponent {
+
+    private int x, y, targetX, targetY;
+
+    public PositionComponent() {
+    }
+
+    public void sync() {
+        x = targetX;
+        y = targetY;
+    }
+
+    public PositionComponent setPos(int x, int y) {
+        targetX = x;
+        targetY = y;
+        return this;
+    }
+
+    public static PositionComponent get(World world, int entityId) {
+        return world.getMapper(PositionComponent.class).get(entityId);
     }
 
     @Override
-    public PositionComponent clone() {
-        return new PositionComponent(getX(), getY());
-    }
-
-    private static final ComponentMapper<PositionComponent> mapper = ComponentMapper.getFor(
-        PositionComponent.class);
-
-    public static PositionComponent get(Entity entity) {
-        return mapper.get(entity);
+    protected void reset() {
+        x = -1;
+        y = -1;
+        targetX = -1;
+        targetY = -1;
     }
 }

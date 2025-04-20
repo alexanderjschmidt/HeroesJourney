@@ -1,34 +1,64 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.components.utils.Container;
-import heroes.journey.entities.items.ItemInterface;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
-public class InventoryComponent extends Container<ItemInterface,InventoryComponent>
-    implements ClonableComponent<InventoryComponent> {
+import heroes.journey.components.utils.DefaultContainer;
+import heroes.journey.entities.items.Item;
+import heroes.journey.entities.items.ItemManager;
+
+public class InventoryComponent extends PooledComponent {
+
+    private final DefaultContainer<String> inventory;
 
     private int gold;
 
+    public InventoryComponent() {
+        this.inventory = new DefaultContainer<>();
+    }
+
     public int getWeight() {
         int weight = 0;
-        for (ItemInterface item : this.keySet()) {
-            weight += item.getWeight() * this.get(item);
+        List<Item> items = ItemManager.get(inventory.keySet().stream().toList());
+        for (Item item : items) {
+            weight += item.getWeight() * inventory.get(item.getName());
         }
         return weight;
     }
 
-    public InventoryComponent clone() {
-        return (InventoryComponent)super.clone();
+    public static InventoryComponent get(World world, int entityId) {
+        return world.getMapper(InventoryComponent.class).get(entityId);
     }
 
-    private static final ComponentMapper<InventoryComponent> mapper = ComponentMapper.getFor(
-        InventoryComponent.class);
-
-    public static InventoryComponent get(Entity entity) {
-        return mapper.get(entity);
+    public InventoryComponent add(Item item) {
+        return add(item, 1);
     }
 
+    public InventoryComponent add(Item item, int count) {
+        inventory.add(item.toString(), count);
+        return this;
+    }
+
+    public void remove(Item item, int i) {
+        inventory.remove(item.toString(), i);
+    }
+
+    @Override
+    protected void reset() {
+        inventory.clear();
+    }
+
+    public Map<Item,Integer> getInventory() {
+        return inventory.entrySet()
+            .stream()
+            .collect(Collectors.toMap(entry -> ItemManager.get().get(entry.getKey()), Map.Entry::getValue));
+    }
+
+    public String toString(Item item) {
+        return inventory.toString(item.toString());
+    }
 }

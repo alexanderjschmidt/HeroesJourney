@@ -5,7 +5,6 @@ import static heroes.journey.ui.windows.Display.STATS;
 
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -72,11 +71,11 @@ public class StatsUI extends Stack {
         }
     }
 
-    public void setEntity(Entity entity) {
-        inventoryDisplay.setEntity(entity);
-        equipmentDisplay.setEntity(entity);
-        questDisplay.setEntity(entity);
-        statsDisplay.setEntity(entity);
+    public void setEntity(Integer entityId) {
+        inventoryDisplay.setEntity(entityId);
+        equipmentDisplay.setEntity(entityId);
+        questDisplay.setEntity(entityId);
+        statsDisplay.setEntity(entityId);
     }
 
     public void handleInputs() {

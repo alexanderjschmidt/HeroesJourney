@@ -1,10 +1,10 @@
 package heroes.journey.ui.windows.stats;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 import heroes.journey.GameCamera;
+import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.RenderComponent;
 import heroes.journey.ui.HUD;
@@ -12,18 +12,18 @@ import heroes.journey.ui.UI;
 
 public class StatsDisplay extends Widget {
 
-    private Entity entity;
+    private Integer entityId;
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setEntity(Integer entityId) {
+        this.entityId = entityId;
     }
 
     public void draw(Batch batch, float parentAlpha) {
-        RenderComponent renderComponent = RenderComponent.get(entity);
-        batch.draw(renderComponent.getSprite(), getX() + HUD.FONT_SIZE, getY() + HUD.FONT_SIZE,
+        RenderComponent renderComponent = RenderComponent.get(GameState.global().getWorld(), entityId);
+        batch.draw(renderComponent.sprite(), getX() + HUD.FONT_SIZE, getY() + HUD.FONT_SIZE,
             GameCamera.get().getSize() * 2, GameCamera.get().getSize() * 2);
 
-        StatsComponent statsComponent = StatsComponent.get(entity);
+        StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
         UI.drawText(this, batch, "===== Stats =====", 0, 0);
         UI.drawText(this, batch, "Health: " + statsComponent.getHealth() + "/" + StatsComponent.MAX_HEALTH, 0,
             1);

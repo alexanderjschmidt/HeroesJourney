@@ -1,32 +1,28 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
-import heroes.journey.components.interfaces.ClonableComponent;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
-public class NamedComponent implements ClonableComponent<NamedComponent> {
+@Setter
+@Accessors(fluent = true, chain = true)
+public class NamedComponent extends PooledComponent {
 
-    private final String name;
-
-    public NamedComponent(String name) {
-        this.name = name;
-    }
+    private String name;
 
     public String toString() {
         return name;
     }
 
-    private static final ComponentMapper<NamedComponent> mapper = ComponentMapper.getFor(
-        NamedComponent.class);
-
-    public static String get(Entity entity, String defaultString) {
-        NamedComponent component = mapper.get(entity);
-        return component == null ? defaultString : mapper.get(entity).toString();
+    public static String get(World world, int entityId, String defaultString) {
+        NamedComponent name = world.getMapper(NamedComponent.class).get(entityId);
+        return name != null ? name.toString() : defaultString;
     }
 
     @Override
-    public NamedComponent clone() {
-        return new NamedComponent(name);
+    protected void reset() {
+        name = null;
     }
 }

@@ -1,30 +1,28 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.entities.actions.CooldownAction;
-
 import java.util.HashMap;
+import java.util.Map;
 
-public class CooldownComponent extends HashMap<CooldownAction, Integer> implements ClonableComponent<CooldownComponent> {
+import com.artemis.PooledComponent;
+import com.artemis.World;
+
+import lombok.Getter;
+
+@Getter
+public class CooldownComponent extends PooledComponent {
+
+    public final Map<String,Integer> cooldowns;
 
     public CooldownComponent() {
+        cooldowns = new HashMap<>();
     }
 
-    public CooldownComponent(CooldownComponent cooldownComponent) {
-        super(cooldownComponent);
+    public static CooldownComponent get(World world, int entityId) {
+        return world.getMapper(CooldownComponent.class).get(entityId);
     }
 
     @Override
-    public CooldownComponent clone() {
-        return new CooldownComponent(this);
-    }
-
-    private static final ComponentMapper<CooldownComponent> mapper = ComponentMapper.getFor(
-        CooldownComponent.class);
-
-    public static CooldownComponent get(Entity entity) {
-        return mapper.get(entity);
+    protected void reset() {
+        cooldowns.clear();
     }
 }

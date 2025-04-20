@@ -1,30 +1,27 @@
 package heroes.journey.components;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
+import com.artemis.PooledComponent;
+import com.artemis.World;
 
-import heroes.journey.components.interfaces.ClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Builder(toBuilder = true)
-public class StatsComponent implements ClonableComponent<StatsComponent> {
+public class StatsComponent extends PooledComponent {
 
     public static final int MAX_HEALTH = 10, MAX_MANA = 10;
 
-    @Builder.Default @Setter private int body = 1, mind = 1;
+    @Setter private int body = 1, mind = 1;
 
-    @Builder.Default private final int handicapMult = 10;
+    private final int handicapMult = 10;
 
-    @Setter @Builder.Default private int health = MAX_HEALTH;
+    @Setter private int health = MAX_HEALTH;
 
-    @Builder.Default @Setter(AccessLevel.NONE) private int mana = MAX_MANA;
+    @Setter(AccessLevel.NONE) private int mana = MAX_MANA;
 
-    @Builder.Default private final Attributes attributes = new Attributes();
+    private final Attributes attributes = new Attributes();
 
     // Returns if they are Alive
     public boolean adjustHealth(int health) {
@@ -49,15 +46,12 @@ public class StatsComponent implements ClonableComponent<StatsComponent> {
         return body;
     }
 
-    private static final ComponentMapper<StatsComponent> mapper = ComponentMapper.getFor(
-        StatsComponent.class);
-
-    public static StatsComponent get(Entity entity) {
-        return mapper.get(entity);
+    public static StatsComponent get(World world, int entityId) {
+        return world.getMapper(StatsComponent.class).get(entityId);
     }
 
     @Override
-    public StatsComponent clone() {
-        return this.toBuilder().build();
+    protected void reset() {
+        attributes.clear();
     }
 }

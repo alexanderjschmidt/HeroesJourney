@@ -2,10 +2,7 @@ package heroes.journey.initializers.base;
 
 import java.util.List;
 
-import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.Application;
-import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.components.overworld.character.NamedComponent;
@@ -18,7 +15,7 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.actions.TeamActions;
-import heroes.journey.entities.items.ItemInterface;
+import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
@@ -43,51 +40,53 @@ public class BaseActions implements InitializerInterface {
                 HUD.get().getActionMenu().open();
                 return null;
             })
-            .build();
+            .build()
+            .register();
         exit_game = Action.builder().name("Exit Game").terminal(false).onSelect((gs, e) -> {
             Application.get().setScreen(new MainMenuScreen(Application.get()));
-            GameState.global().getEngine().removeAllEntities();
             return null;
-        }).build();
+        }).build().register();
         TeamActions.addTeamAction(exit_game);
         end_turn = Action.builder().name("End Turn").terminal(false).onSelect((gs, e) -> {
-            Entity entity = gs.getCurrentEntity();
-            entity.add(new ActionComponent(wait));
+            Integer entityId = gs.getCurrentEntity();
+            gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.wait);
             HUD.get().revertToInitialState();
             return null;
-        }).build();
+        }).build().register();
         TeamActions.addTeamAction(end_turn);
 
-        wait = Action.builder().name("Wait").build();
+        wait = Action.builder().name("Wait").build().register();
         workout = CooldownAction.builder()
             .name("Work out")
             .turnCooldown(1)
-            .onSelect((gs, e) -> Utils.adjustBody(e, 1))
-            .build();
+            .onSelect((gs, e) -> Utils.adjustBody(gs, e, 1))
+            .build()
+            .register();
         study = CooldownAction.builder()
             .name("Study")
             .turnCooldown(2)
-            .onSelect(((gs, e) -> Utils.adjustMind(e, 1)))
-            .build();
+            .onSelect(((gs, e) -> Utils.adjustMind(gs, e, 1)))
+            .build()
+            .register();
         delve = CooldownAction.builder()
             .name("Delve")
             .turnCooldown(5)
             .factionCooldown(true)
             .onSelect((gs, e) -> {
-                Entity dungeon = Utils.getLocationsFaction(gs, e);
-                DungeonComponent dungeonComponent = DungeonComponent.get(dungeon);
+                Integer dungeon = Utils.getLocationsFaction(gs, e);
+                DungeonComponent dungeonComponent = DungeonComponent.get(gs.getWorld(), dungeon);
                 DefaultContainer<String> explorationLog = new DefaultContainer<>();
                 boolean conscious = true;
-                for (Entity room : dungeonComponent.getLayout()) {
+                for (Integer room : dungeonComponent.layout()) {
                     if (room == null) {
                         explorationLog.add("Empty");
                         continue;
                     }
-                    if (FightUtils.fight(e, room)) {
-                        explorationLog.add(NamedComponent.get(room, "Enemy"));
+                    if (FightUtils.fight(gs.getWorld(), e, room)) {
+                        explorationLog.add(NamedComponent.get(gs.getWorld(), room, "Enemy"));
                     } else {
                         conscious = false;
-                        FightUtils.faint(e);
+                        FightUtils.faint(gs.getWorld(), e);
                         break;
                     }
                 }
@@ -105,12 +104,12 @@ public class BaseActions implements InitializerInterface {
                 if (!conscious) {
                     log.append("You have lost too much health and fainted");
                 } else {
-                    InventoryComponent inventoryComponent = InventoryComponent.get(dungeon);
+                    InventoryComponent inventoryComponent = InventoryComponent.get(gs.getWorld(), dungeon);
                     log.append("You have completed the Dungeon!\nYour rewards are:\n");
                     if (inventoryComponent != null) {
-                        for (ItemInterface item : inventoryComponent.keySet()) {
-                            Utils.addItem(e, item, inventoryComponent.get(item));
-                            log.append(inventoryComponent.get(item))
+                        for (Item item : inventoryComponent.getInventory().keySet()) {
+                            Utils.addItem(gs, e, item, inventoryComponent.getInventory().get(item));
+                            log.append(inventoryComponent.getInventory().get(item))
                                 .append("x ")
                                 .append(item.toString())
                                 .append("\n");
@@ -120,29 +119,31 @@ public class BaseActions implements InitializerInterface {
                 }
                 return log.toString();
             })
-            .build();
+            .build()
+            .register();
         chopTrees = Action.builder()
             .name("Chop Trees")
-            .onSelect((gs, e) -> Utils.addItem(e, Items.wood, 1))
-            .build();
+            .onSelect((gs, e) -> Utils.addItem(gs, e, Items.wood, 1))
+            .build()
+            .register();
         questBoard = Action.builder().name("Quest Board").terminal(false).onSelect((gs, e) -> {
-            Entity town = Utils.getLocationsFaction(gs, e);
-            List<Action> questActions = Utils.getQuestClaimActions(town);
+            Integer town = Utils.getLocationsFaction(gs, e);
+            List<Action> questActions = Utils.getQuestClaimActions(gs, town);
             List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(questActions);
             HUD.get().setState(new ActionSelectState(options));
             return null;
         }).requirementsMet((gs, e) -> {
-            Entity town = Utils.getLocationsFaction(gs, e);
-            QuestsComponent questsComponent = QuestsComponent.get(town);
-            return questsComponent.isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
-        }).build();
+            Integer town = Utils.getLocationsFaction(gs, e);
+            QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
+            return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
+        }).build().register();
         carriage = Action.builder().name("Carriage").terminal(false).onSelect((gs, e) -> {
-            Entity town = Utils.getLocationsFaction(gs, e);
+            Integer town = Utils.getLocationsFaction(gs, e);
             List<Action> carriageActions = Utils.getCarriageActions(gs, town, e);
             List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
             HUD.get().setState(new ActionSelectState(options));
             return null;
-        }).build();
+        }).build().register();
     }
 
 }

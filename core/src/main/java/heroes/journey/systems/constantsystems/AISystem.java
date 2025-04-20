@@ -3,34 +3,34 @@ package heroes.journey.systems.constantsystems;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
+import com.artemis.EntityEdit;
+import com.artemis.annotations.All;
+import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.components.overworld.character.AIComponent;
 import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.components.overworld.character.MovementComponent;
 import heroes.journey.entities.actions.QueuedAction;
 
+@All({AIComponent.class})
 public class AISystem extends IteratingSystem {
 
     public static final ExecutorService executor = Executors.newFixedThreadPool(2);
 
-    public AISystem() {
-        super(Family.all(AIComponent.class).get());
-    }
-
     @Override
-    protected void processEntity(Entity entity, float deltaTime) {
-        AIComponent ai = AIComponent.get(entity);
+    protected void process(int entityId) {
+        AIComponent ai = AIComponent.get(getWorld(), entityId);
         if (ai.getFutureResult() != null && ai.getFutureResult().isDone()) {
             try {
                 QueuedAction nextMove = ai.getFutureResult().get();
                 System.out.println(nextMove);
 
-                entity.add(new MovementComponent(nextMove.getPath()));
-                entity.add(
-                    new ActionComponent(nextMove.getAction(), nextMove.getTargetX(), nextMove.getTargetY()));
+                EntityEdit entity = world.edit(entityId);
+                entity.create(MovementComponent.class).path(nextMove.getPath());
+                entity.create(ActionComponent.class)
+                    .action(nextMove.getAction())
+                    .targetX(nextMove.getTargetX())
+                    .targetY(nextMove.getTargetY());
 
                 ai.idle();
             } catch (Exception e) {

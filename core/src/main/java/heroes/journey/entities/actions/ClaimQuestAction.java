@@ -1,7 +1,5 @@
 package heroes.journey.entities.actions;
 
-import com.badlogic.ashley.core.Entity;
-
 import heroes.journey.GameState;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.Utils;
@@ -14,14 +12,13 @@ public class ClaimQuestAction extends Action {
     private final Quest quest;
 
     @Override
-    public String onSelect(GameState gameState, Entity entity) {
-        Entity town = Utils.getLocationsFaction(gameState, entity);
-        QuestsComponent factionsQuestsComponent = QuestsComponent.get(town);
-        QuestsComponent questsComponent = QuestsComponent.get(town);
+    public String onSelect(GameState gameState, Integer entityId) {
+        Integer town = Utils.getLocationsFaction(gameState, entityId);
+        QuestsComponent factionsQuestsComponent = QuestsComponent.get(gameState.getWorld(), town);
 
-        if (factionsQuestsComponent != null && questsComponent != null) {
-            factionsQuestsComponent.remove(quest);
-            QuestsComponent.get(entity).addQuest(quest);
+        if (factionsQuestsComponent != null) {
+            factionsQuestsComponent.getQuests().remove(quest);
+            QuestsComponent.get(gameState.getWorld(), entityId).addQuest(quest);
         }
         return null;
     }

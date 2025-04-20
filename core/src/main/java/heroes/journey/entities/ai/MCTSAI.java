@@ -1,6 +1,8 @@
 package heroes.journey.entities.ai;
 
-import com.badlogic.ashley.core.Entity;
+import java.util.ArrayList;
+import java.util.List;
+
 import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.entities.actions.QueuedAction;
@@ -8,9 +10,6 @@ import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MCTSAI implements AI, Scorer {
 
@@ -21,15 +20,15 @@ public class MCTSAI implements AI, Scorer {
     }
 
     @Override
-    public QueuedAction getMove(GameState gameState, Entity playingEntity) {
+    public QueuedAction getMove(GameState gameState, Integer playingEntity) {
         return mcts.runMCTS(gameState.clone(), playingEntity, this);
     }
 
     @Override
     public List<QueuedAction> getPossibleQueuedActions(GameState gameState) {
         List<QueuedAction> possibleActions = new ArrayList<>();
-        Entity playingEntity = gameState.getCurrentEntity();
-        PositionComponent position = PositionComponent.get(playingEntity);
+        Integer playingEntity = gameState.getCurrentEntity();
+        PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
         Cell target = new Cell(position.getX(), position.getY() - 1);
         Cell path = new Cell(position.getX(), position.getY());
         path.parent = target;
@@ -41,8 +40,8 @@ public class MCTSAI implements AI, Scorer {
     }
 
     @Override
-    public int getScore(GameState gameState, Entity playingEntity) {
-        PositionComponent position = PositionComponent.get(playingEntity);
+    public int getScore(GameState gameState, Integer playingEntity) {
+        PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
         return GameState.global().getHeight() - position.getY();
     }
 }

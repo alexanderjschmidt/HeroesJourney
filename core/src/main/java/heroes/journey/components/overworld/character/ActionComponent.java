@@ -1,50 +1,46 @@
 package heroes.journey.components.overworld.character;
 
-import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Entity;
-import heroes.journey.components.interfaces.ClonableComponent;
-import heroes.journey.entities.actions.Action;
+import com.artemis.PooledComponent;
+import com.artemis.World;
+import com.artemis.annotations.Transient;
 
-public class ActionComponent implements ClonableComponent<ActionComponent> {
+import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ActionManager;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Accessors;
+
+@ToString
+@Transient
+@Accessors(fluent = true, chain = true)
+@Setter
+@Getter
+public class ActionComponent extends PooledComponent {
 
     // Split this into Possible Actions component and actively doing action component
-    private final Action action;
-    private final int targetX, targetY;
-
-    public ActionComponent(Action action, int targetX, int targetY) {
-        this.action = action;
-        this.targetX = targetX;
-        this.targetY = targetY;
-    }
-
-    public ActionComponent(Action action) {
-        this(action, -1, -1);
-    }
+    private String action;
+    private int targetX, targetY;
 
     public Action getAction() {
-        return action;
+        System.out.println(action);
+        return ActionManager.get().get(action);
     }
 
-    public int getTargetX() {
-        return targetX;
+    public ActionComponent action(Action action) {
+        this.action = action.toString();
+        return this;
     }
 
-    public int getTargetY() {
-        return targetY;
+    public static ActionComponent get(World world, int entityId) {
+        return world.getMapper(ActionComponent.class).get(entityId);
     }
 
-    public ActionComponent clone() {
-        return new ActionComponent(action, targetX, targetY);
+    @Override
+    protected void reset() {
+        action = null;
+        targetX = -1;
+        targetY = -1;
     }
 
-    public String toString() {
-        return action + " (" + targetX + ", " + targetY + ")";
-    }
-
-    private static final ComponentMapper<ActionComponent> mapper = ComponentMapper.getFor(
-        ActionComponent.class);
-
-    public static ActionComponent get(Entity entity) {
-        return mapper.get(entity);
-    }
 }

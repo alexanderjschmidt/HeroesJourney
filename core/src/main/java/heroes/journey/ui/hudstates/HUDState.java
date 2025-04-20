@@ -3,6 +3,7 @@ package heroes.journey.ui.hudstates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+
 import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.ui.Cursor;
@@ -71,7 +72,8 @@ public abstract class HUDState implements State<HUD> {
         Cell holder = Cell.clone(cursor().getPath());
         if (holder == null) {
             if (cursor().getSelected() != null) {
-                PositionComponent position = PositionComponent.get(cursor().getSelected());
+                PositionComponent position = PositionComponent.get(GameState.global().getWorld(),
+                    cursor().getSelected());
                 holder = new Cell(position.getX(), position.getY());
             } else
                 holder = new Cell(cursor().x, cursor().y);

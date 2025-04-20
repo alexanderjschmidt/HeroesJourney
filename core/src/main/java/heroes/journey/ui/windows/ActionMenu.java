@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.badlogic.ashley.core.Entity;
+import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 
 import heroes.journey.GameState;
@@ -40,11 +40,13 @@ public class ActionMenu extends Stack {
     }
 
     public void open() {
-        Entity selectedEntity = GameState.global().getCurrentEntity();
-        PossibleActionsComponent selectedActions = PossibleActionsComponent.get(selectedEntity);
-        PositionComponent selectedPosition = PositionComponent.get(selectedEntity);
+        Integer selectedEntity = GameState.global().getCurrentEntity();
+        World world = GameState.global().getWorld();
+        PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
+        PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
-        List<ScrollPaneEntry<Action>> requirementsMetOptions = filter(selectedActions, selectedEntity);
+        List<ScrollPaneEntry<Action>> requirementsMetOptions = filter(selectedActions.getPossibleActions(),
+            selectedEntity);
         if (selectedPosition != null) {
             // Get Tiles Factions Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
@@ -57,19 +59,20 @@ public class ActionMenu extends Stack {
         HUD.get().setState(new ActionSelectState(requirementsMetOptions.stream().distinct().toList()));
     }
 
-    private List<ScrollPaneEntry<Action>> getFactionActions(Entity selectedEntity) {
-        Entity faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
+    private List<ScrollPaneEntry<Action>> getFactionActions(Integer selectedEntity) {
+        Integer faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
         if (faction != null) {
-            PossibleActionsComponent factionActions = PossibleActionsComponent.get(faction);
+            PossibleActionsComponent factionActions = PossibleActionsComponent.get(
+                GameState.global().getWorld(), faction);
             if (factionActions != null) {
-                return filter(factionActions, selectedEntity);
+                return filter(factionActions.getPossibleActions(), selectedEntity);
             }
         }
         return new ArrayList<>();
     }
 
     private List<ScrollPaneEntry<Action>> getTileActions(
-        Entity selectedEntity,
+        Integer selectedEntity,
         PositionComponent selectedPosition) {
         ActionTerrain environment = GameState.global()
             .getMap()
@@ -80,10 +83,10 @@ public class ActionMenu extends Stack {
         return new ArrayList<>();
     }
 
-    private List<ScrollPaneEntry<Action>> filter(List<Action> input, Entity entity) {
+    private List<ScrollPaneEntry<Action>> filter(List<Action> input, Integer entityId) {
         return input.stream()
             .map(action -> {
-                ShowAction result = action.requirementsMet(GameState.global(), entity);
+                ShowAction result = action.requirementsMet(GameState.global(), entityId);
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)
@@ -125,8 +128,12 @@ public class ActionMenu extends Stack {
                 Action action = selectedAction.entry();
                 System.out.println("Selected " + action + " " + action.isTerminal());
                 if (action.isTerminal()) {
-                    Entity selectedEntity = HUD.get().getCursor().getSelected();
-                    selectedEntity.add(new ActionComponent(action));
+                    Integer selectedEntity = HUD.get().getCursor().getSelected();
+                    GameState.global()
+                        .getWorld()
+                        .edit(selectedEntity)
+                        .create(ActionComponent.class)
+                        .action(action);
                     HUD.get().revertToInitialState();
                 } else {
                     action.onSelect(GameState.global(), HUD.get().getCursor().getSelected());

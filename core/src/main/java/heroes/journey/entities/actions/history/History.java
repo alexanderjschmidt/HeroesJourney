@@ -1,19 +1,19 @@
 package heroes.journey.entities.actions.history;
 
+import java.util.Stack;
+
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.Stack;
-import java.util.UUID;
+import lombok.Getter;
 
 public class History extends Stack<Record> implements Cloneable {
 
-    public void add(Cell path, UUID currentEntity) {
+    public void add(Cell path, Integer currentEntity) {
         this.add(new MovementRecord(currentEntity, path.toPos(), path.getEnd().toPos()));
     }
 
-    public void add(Action action, Position pos, UUID currentEntity) {
+    public void add(Action action, Position pos, Integer currentEntity) {
         this.add(new ActionRecord(currentEntity, action, pos));
     }
 
@@ -24,21 +24,17 @@ public class History extends Stack<Record> implements Cloneable {
 
     @Override
     public History clone() {
-        return (History) super.clone();
+        return (History)super.clone();
     }
 }
 
+@Getter
 class Record {
 
-    private final UUID entity;
+    private final Integer entity;
 
-    public Record(UUID entity) {
+    public Record(Integer entity) {
         this.entity = entity;
-    }
-
-
-    public UUID getEntity() {
-        return entity;
     }
 
 }
