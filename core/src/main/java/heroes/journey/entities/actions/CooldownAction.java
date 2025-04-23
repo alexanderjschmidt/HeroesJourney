@@ -19,7 +19,7 @@ public class CooldownAction extends Action {
     public ShowAction requirementsMet(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
-            Integer faction = Utils.getLocationsFaction(gameState, entityId);
+            Integer faction = Utils.getLocation(gameState, entityId);
             cooldownComponent = CooldownComponent.get(gameState.getWorld(), faction);
         } else {
             cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);
@@ -33,7 +33,7 @@ public class CooldownAction extends Action {
     public String onSelect(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
-            Integer faction = Utils.getLocationsFaction(gameState, entityId);
+            Integer faction = Utils.getLocation(gameState, entityId);
             cooldownComponent = CooldownComponent.get(gameState.getWorld(), faction);
         } else {
             cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);

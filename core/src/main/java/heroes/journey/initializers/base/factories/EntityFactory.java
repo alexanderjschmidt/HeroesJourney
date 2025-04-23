@@ -12,14 +12,14 @@ import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.AIComponent;
 import heroes.journey.components.overworld.character.ActorComponent;
+import heroes.journey.components.overworld.character.NamedComponent;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.components.overworld.character.PossibleActionsComponent;
 import heroes.journey.components.overworld.character.RenderComponent;
 import heroes.journey.components.overworld.place.CarriageComponent;
 import heroes.journey.components.overworld.place.DungeonComponent;
-import heroes.journey.components.overworld.place.FactionComponent;
+import heroes.journey.components.overworld.place.LocationComponent;
 import heroes.journey.components.quests.QuestsComponent;
-import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.initializers.base.Items;
@@ -46,9 +46,8 @@ public class EntityFactory {
 
     public static Integer generateHouse(GameState gameState, int x, int y) {
         EntityEdit house = gameState.getWorld().createEntity().edit();
-        house.create(FactionComponent.class)
-            .name(SyllableTownNameGenerator.generateName())
-            .addOwnedLocation(gameState, house.getEntityId(), new Position(x, y));
+        house.create(LocationComponent.class);
+        house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y).sync();
         house.create(CarriageComponent.class);
         house.create(QuestsComponent.class).addQuest(Quests.delve);
@@ -59,9 +58,8 @@ public class EntityFactory {
     public static Integer generateDungeon(GameState gameState, int x, int y) {
         GameWorld world = gameState.getWorld();
         EntityEdit dungeon = gameState.getWorld().createEntity().edit();
-        dungeon.create(FactionComponent.class)
-            .name(SyllableDungeonNameGenerator.generateName())
-            .addOwnedLocation(gameState, dungeon.getEntityId(), new Position(x, y));
+        dungeon.create(LocationComponent.class);
+        dungeon.create(NamedComponent.class).name(SyllableDungeonNameGenerator.generateName());
         dungeon.create(PositionComponent.class).setPos(x, y).sync();
         dungeon.create(PossibleActionsComponent.class)
             .addAction(BaseActions.delve, gameState.getWorld(), dungeon.getEntityId());

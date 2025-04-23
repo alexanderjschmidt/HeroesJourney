@@ -6,12 +6,12 @@ import com.artemis.systems.IteratingSystem;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.components.overworld.character.PossibleActionsComponent;
 import heroes.journey.components.overworld.place.CarriageComponent;
-import heroes.journey.components.overworld.place.FactionComponent;
+import heroes.journey.components.overworld.place.LocationComponent;
 import heroes.journey.initializers.base.BaseActions;
 
-@All({FactionComponent.class, PositionComponent.class, CarriageComponent.class,
+@All({LocationComponent.class, PositionComponent.class, CarriageComponent.class,
     PossibleActionsComponent.class})
-public class FactionCarriageListener extends IteratingSystem {
+public class LocationCarriageListener extends IteratingSystem {
 
     @Override
     public void inserted(int entityId) {

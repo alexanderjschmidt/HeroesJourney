@@ -48,9 +48,9 @@ public class ActionMenu extends Stack {
         List<ScrollPaneEntry<Action>> requirementsMetOptions = filter(selectedActions.getPossibleActions(),
             selectedEntity);
         if (selectedPosition != null) {
-            // Get Tiles Factions Actions
+            // Get Tiles Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getFactionActions(selectedEntity).stream()).collect(Collectors.toList());
+                getLocationActions(selectedEntity).stream()).collect(Collectors.toList());
             // Get Tiles Environment Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
                 getTileActions(selectedEntity, selectedPosition).stream()).collect(Collectors.toList());
@@ -59,8 +59,8 @@ public class ActionMenu extends Stack {
         HUD.get().setState(new ActionSelectState(requirementsMetOptions.stream().distinct().toList()));
     }
 
-    private List<ScrollPaneEntry<Action>> getFactionActions(Integer selectedEntity) {
-        Integer faction = Utils.getLocationsFaction(GameState.global(), selectedEntity);
+    private List<ScrollPaneEntry<Action>> getLocationActions(Integer selectedEntity) {
+        Integer faction = Utils.getLocation(GameState.global(), selectedEntity);
         if (faction != null) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(
                 GameState.global().getWorld(), faction);

@@ -10,7 +10,7 @@ import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.components.overworld.place.CarriageComponent;
-import heroes.journey.components.overworld.place.FactionComponent;
+import heroes.journey.components.overworld.place.LocationComponent;
 import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
@@ -20,13 +20,13 @@ import heroes.journey.ui.ScrollPaneEntry;
 
 public class Utils {
 
-    public static Integer getLocationsFaction(GameState gameState, Integer entityId) {
+    public static Integer getLocation(GameState gameState, Integer entityId) {
         if (entityId == null)
             return null;
         PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
         if (positionComponent == null)
             return null;
-        return gameState.getEntities().getFaction(positionComponent.getX(), positionComponent.getY());
+        return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
     }
 
     public static List<Action> getQuestClaimActions(GameState gameState, Integer entityId) {
@@ -41,20 +41,20 @@ public class Utils {
     public static List<Action> getCarriageActions(GameState gameState, Integer town, Integer selected) {
         List<Action> questActions = new ArrayList<>();
         IntBag carriagableLocations = gameState.getWorld()
-            .getEntitiesWith(FactionComponent.class, CarriageComponent.class, PositionComponent.class);
+            .getEntitiesWith(LocationComponent.class, CarriageComponent.class, PositionComponent.class);
         for (Integer carriagableLocation : carriagableLocations.getData()) {
             if (carriagableLocation == town) {
                 continue;
             }
             PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), selected);
-            PositionComponent positionComponentFaction = PositionComponent.get(gameState.getWorld(),
+            PositionComponent positionComponentLocation = PositionComponent.get(gameState.getWorld(),
                 carriagableLocation);
-            FactionComponent factionComponent = FactionComponent.get(gameState.getWorld(),
+            LocationComponent factionComponent = LocationComponent.get(gameState.getWorld(),
                 carriagableLocation);
             questActions.add(Action.builder().name(factionComponent.toString()).onSelect((gs, e) -> {
                 gameState.getEntities()
                     .moveEntity(positionComponent.getX(), positionComponent.getY(),
-                        positionComponentFaction.getX(), positionComponentFaction.getY());
+                        positionComponentLocation.getX(), positionComponentLocation.getY());
                 return "You have arrived at " + factionComponent.toString();
             }).build());
         }

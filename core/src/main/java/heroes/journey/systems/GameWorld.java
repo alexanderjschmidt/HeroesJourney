@@ -27,7 +27,8 @@ import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
-import heroes.journey.systems.listeners.FactionCarriageListener;
+import heroes.journey.systems.listeners.LocationCarriageListener;
+import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
 import heroes.journey.systems.listeners.StatsActionsListener;
 
@@ -64,10 +65,11 @@ public class GameWorld extends World {
     private static WorldConfiguration buildConfig(GameState gameState, boolean limited) {
         WorldConfigurationBuilder builder = new WorldConfigurationBuilder().with(
                 new WorldSerializationManager())
-            .with(new CooldownSystem())                 // Removed 'this' (was illegal in static context!)
+            .with(new CooldownSystem())
             .with(new PositionSyncSystem(gameState))
+            .with(new LocationPositionSyncSystem(gameState))
             .with(new StatsActionsListener())
-            .with(new FactionCarriageListener());
+            .with(new LocationCarriageListener());
         if (!limited) {
             builder.with(new RenderSystem()).with(new MovementSystem()).with(new AISystem());
         }

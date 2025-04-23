@@ -13,7 +13,7 @@ public class ClaimQuestAction extends Action {
 
     @Override
     public String onSelect(GameState gameState, Integer entityId) {
-        Integer town = Utils.getLocationsFaction(gameState, entityId);
+        Integer town = Utils.getLocation(gameState, entityId);
         QuestsComponent factionsQuestsComponent = QuestsComponent.get(gameState.getWorld(), town);
 
         if (factionsQuestsComponent != null) {

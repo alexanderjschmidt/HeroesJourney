@@ -36,19 +36,24 @@ public class EntityManager implements Cloneable {
         return removed;
     }
 
-    // Faction Functions
-    public Integer getFaction(int x, int y) {
+    public void moveEntity(int currentX, int currentY, int newX, int newY) {
+        entitiesLocations[newX][newY] = entitiesLocations[currentX][currentY];
+        entitiesLocations[currentX][currentY] = null;
+    }
+
+    // Location Functions
+    public Integer getLocation(int x, int y) {
         if (x < 0 || y < 0 || y >= height || x >= width)
             return null;
         return factionsLocations[x][y];
     }
 
-    public void addFaction(int faction, int x, int y) {
+    public void addLocation(int faction, int x, int y) {
         factionsLocations[x][y] = faction;
     }
 
-    public void moveEntity(int currentX, int currentY, int newX, int newY) {
-        entitiesLocations[newX][newY] = entitiesLocations[currentX][currentY];
-        entitiesLocations[currentX][currentY] = null;
+    public void removeLocation(int x, int y) {
+        Integer removed = factionsLocations[x][y];
+        factionsLocations[x][y] = null;
     }
 }

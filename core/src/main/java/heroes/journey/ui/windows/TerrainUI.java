@@ -3,7 +3,7 @@ package heroes.journey.ui.windows;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.place.FactionComponent;
+import heroes.journey.components.overworld.character.NamedComponent;
 import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
@@ -28,9 +28,8 @@ public class TerrainUI extends UI {
         String name =
             (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + location;
         if (environment == Tiles.house || environment == Tiles.dungeon) {
-            Integer faction = GameState.global().getEntities().getFaction(cursor.x, cursor.y);
-            FactionComponent factionComponent = FactionComponent.get(GameState.global().getWorld(), faction);
-            name = factionComponent.toString();
+            Integer faction = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
+            name = NamedComponent.get(GameState.global().getWorld(), faction, "Unnamed Location");
         }
         drawText(batch, name, 0, 0);
     }

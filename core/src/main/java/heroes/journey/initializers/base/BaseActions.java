@@ -73,7 +73,7 @@ public class BaseActions implements InitializerInterface {
             .turnCooldown(5)
             .factionCooldown(true)
             .onSelect((gs, e) -> {
-                Integer dungeon = Utils.getLocationsFaction(gs, e);
+                Integer dungeon = Utils.getLocation(gs, e);
                 DungeonComponent dungeonComponent = DungeonComponent.get(gs.getWorld(), dungeon);
                 DefaultContainer<String> explorationLog = new DefaultContainer<>();
                 boolean conscious = true;
@@ -127,18 +127,18 @@ public class BaseActions implements InitializerInterface {
             .build()
             .register();
         questBoard = Action.builder().name("Quest Board").terminal(false).onSelect((gs, e) -> {
-            Integer town = Utils.getLocationsFaction(gs, e);
+            Integer town = Utils.getLocation(gs, e);
             List<Action> questActions = Utils.getQuestClaimActions(gs, town);
             List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(questActions);
             HUD.get().setState(new ActionSelectState(options));
             return null;
         }).requirementsMet((gs, e) -> {
-            Integer town = Utils.getLocationsFaction(gs, e);
+            Integer town = Utils.getLocation(gs, e);
             QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
             return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
         }).build().register();
         carriage = Action.builder().name("Carriage").terminal(false).onSelect((gs, e) -> {
-            Integer town = Utils.getLocationsFaction(gs, e);
+            Integer town = Utils.getLocation(gs, e);
             List<Action> carriageActions = Utils.getCarriageActions(gs, town, e);
             List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
             HUD.get().setState(new ActionSelectState(options));
