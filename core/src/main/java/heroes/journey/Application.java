@@ -22,7 +22,7 @@ import heroes.journey.utils.art.ResourceManager;
  * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
  *          Trash Item to reduce weight if movement is 0
  * 		Scrolling
- * Show Controls on UIs?
+ *  Show Controls on UIs?
  * Make HUD Locked when players character is moving
  * Multiplayer
  * Fog of War

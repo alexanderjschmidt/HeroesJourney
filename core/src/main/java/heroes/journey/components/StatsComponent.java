@@ -11,13 +11,14 @@ import lombok.Setter;
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
-    public static final int MAX_HEALTH = 10, MAX_MANA = 10;
+    public static final int MAX_HEALTH = 10, MAX_STAMINA = 10, MAX_MANA = 10;
 
     @Setter private int body = 1, mind = 1;
 
     @Setter private int handicapMult = 10;
 
     @Setter private int health = MAX_HEALTH;
+    @Setter private int stamina = MAX_STAMINA;
 
     @Setter(AccessLevel.NONE) private int mana = MAX_MANA;
 
@@ -27,6 +28,14 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
     public boolean adjustHealth(int health) {
         this.health = (int)Math.min(MAX_HEALTH, Math.max(0, this.health + health));
         return (this.health + health > 0);
+    }
+
+    public boolean adjustStamina(int stamina) {
+        if (this.stamina + stamina < 0) {
+            return false;
+        }
+        this.stamina = (int)Math.min(MAX_STAMINA, Math.max(0, this.stamina + stamina));
+        return true;
     }
 
     // Returns if they can use the spell

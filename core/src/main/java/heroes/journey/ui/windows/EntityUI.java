@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.overworld.character.NamedComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
@@ -11,8 +12,8 @@ import heroes.journey.utils.art.ResourceManager;
 
 public class EntityUI extends UI {
 
-    public static final int HEALTH_WIDTH = HUD.FONT_SIZE * 8;
-    public static final int HEALTH_HEIGHT = HUD.FONT_SIZE;
+    public static final int BAR_WIDTH = HUD.FONT_SIZE * 8;
+    public static final int BAR_HEIGHT = HUD.FONT_SIZE;
 
     public boolean hover = true;
 
@@ -27,7 +28,7 @@ public class EntityUI extends UI {
     @Override
     public void drawAndUpdate(Batch batch, float parentAlpha) {
         Integer entityId;
-        if (hover && HUD.get().getCursor().getHover() != HUD.get().getCursor().getSelected()) {
+        if (hover && !HUD.get().getCursor().getHover().equals(HUD.get().getCursor().getSelected())) {
             entityId = HUD.get().getCursor().getHover();
         } else if (!hover) {
             entityId = HUD.get().getCursor().getSelected();
@@ -38,22 +39,28 @@ public class EntityUI extends UI {
         if (entityId == null)
             return;
         StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
+        String name = NamedComponent.get(GameState.global().getWorld(), entityId, "---");
 
         if (statsComponent != null) {
             String health = statsComponent.getHealth() + "/" + ((int)(StatsComponent.MAX_HEALTH));
             String mana = statsComponent.getMana() + "/" + ((int)StatsComponent.MAX_MANA);
+            String stamina = statsComponent.getStamina() + "/" + ((int)StatsComponent.MAX_STAMINA);
             // replace with labels
 
             batch.draw(ResourceManager.get(LoadTextures.UI)[3][0], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((2) * HUD.FONT_SIZE),
-                HEALTH_WIDTH * ((float)statsComponent.getHealth() / StatsComponent.MAX_HEALTH),
-                HEALTH_HEIGHT);
+                BAR_WIDTH * ((float)statsComponent.getHealth() / StatsComponent.MAX_HEALTH), BAR_HEIGHT);
             batch.draw(ResourceManager.get(LoadTextures.UI)[2][1], getX() + HUD.FONT_SIZE,
                 12 + getY() + ((1) * HUD.FONT_SIZE),
-                HEALTH_WIDTH * ((float)statsComponent.getMana() / StatsComponent.MAX_MANA), HEALTH_HEIGHT);
+                BAR_WIDTH * ((float)statsComponent.getMana() / StatsComponent.MAX_MANA), BAR_HEIGHT);
+            batch.draw(ResourceManager.get(LoadTextures.UI)[3][1], getX() + HUD.FONT_SIZE,
+                12 + getY() + ((0) * HUD.FONT_SIZE),
+                BAR_WIDTH * ((float)statsComponent.getMana() / StatsComponent.MAX_STAMINA), BAR_HEIGHT);
 
-            drawText(batch, "Health: " + health, 0, 1);
-            drawText(batch, "Mana: " + mana, 0, 2);
+            drawText(batch, name, 0, 0);
+            drawText(batch, "H: " + health, 0, 1);
+            drawText(batch, "M: " + mana, 0, 2);
+            drawText(batch, "S: " + stamina, 0, 3);
         }
     }
 
