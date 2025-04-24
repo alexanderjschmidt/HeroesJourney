@@ -1,0 +1,15 @@
+plugins {
+  id("java")
+}
+
+java.sourceCompatibility = 21
+java.targetCompatibility = 21
+if (JavaVersion.current().isJava9Compatible()) {
+  compileJava.options.release.set(21)
+}
+
+eclipse.project.name = appName + '-shared'
+
+dependencies {
+  api 'com.esotericsoftware:kryonet:2.22.0-RC1'
+}

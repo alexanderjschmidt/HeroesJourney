@@ -1,11 +1,14 @@
 package heroes.journey.ui.screens;
 
+import java.io.IOException;
+
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.client.GameClient;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
@@ -14,6 +17,7 @@ import heroes.journey.utils.worldgen.NewMapManager;
 public class BattleScreen implements Screen {
 
     private Application app;
+    private GameClient client;
     private SpriteBatch batch;
 
     private MapData mapData;
@@ -23,6 +27,12 @@ public class BattleScreen implements Screen {
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
         this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 2, false);
+        this.client = new GameClient();
+        try {
+            client.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         startGame();
     }
 
