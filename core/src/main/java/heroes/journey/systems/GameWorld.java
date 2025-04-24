@@ -26,6 +26,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.overworld.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.constantsystems.AISystem;
+import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
@@ -75,7 +76,10 @@ public class GameWorld extends World {
             .with(new StatsActionsListener())
             .with(new LocationCarriageListener());
         if (!limited) {
-            builder.with(new RenderSystem()).with(new MovementSystem()).with(new AISystem());
+            builder.with(new RenderSystem())
+                .with(new MovementSystem())
+                .with(new ActionSystem())
+                .with(new AISystem());
         }
 
         return builder.build();

@@ -28,7 +28,7 @@ public class EntityUI extends UI {
     @Override
     public void drawAndUpdate(Batch batch, float parentAlpha) {
         Integer entityId;
-        if (hover && !HUD.get().getCursor().getHover().equals(HUD.get().getCursor().getSelected())) {
+        if (hover && HUD.get().getCursor().getHover() != HUD.get().getCursor().getSelected()) {
             entityId = HUD.get().getCursor().getHover();
         } else if (!hover) {
             entityId = HUD.get().getCursor().getSelected();
