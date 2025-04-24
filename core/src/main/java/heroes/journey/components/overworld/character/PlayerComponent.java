@@ -1,8 +1,8 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(fluent = true, chain = true)
-public class PlayerComponent extends PooledComponent {
+public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
 
     private String playerId;
     private int fame = 0;
@@ -23,5 +23,11 @@ public class PlayerComponent extends PooledComponent {
     protected void reset() {
         playerId = null;
         fame = 0;
+    }
+
+    @Override
+    public void copy(PlayerComponent from) {
+        playerId = from.playerId;
+        fame = from.fame;
     }
 }

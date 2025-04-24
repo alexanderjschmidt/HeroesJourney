@@ -1,10 +1,10 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 import com.artemis.annotations.Transient;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Accessors(fluent = true, chain = true)
 @Transient
-public class RenderComponent extends PooledComponent {
+public class RenderComponent extends PooledClonableComponent<RenderComponent> {
 
     private TextureRegion sprite;
 
@@ -27,6 +27,11 @@ public class RenderComponent extends PooledComponent {
     @Override
     protected void reset() {
         sprite = null;
+    }
+
+    @Override
+    public void copy(RenderComponent from) {
+        sprite = from.sprite;
     }
 
 }

@@ -1,12 +1,12 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 
 @Getter
-public class PositionComponent extends PooledComponent {
+public class PositionComponent extends PooledClonableComponent<PositionComponent> {
 
     private int x, y, targetX, targetY;
 
@@ -34,5 +34,13 @@ public class PositionComponent extends PooledComponent {
         y = -1;
         targetX = -1;
         targetY = -1;
+    }
+
+    @Override
+    public void copy(PositionComponent from) {
+        x = from.x;
+        y = from.y;
+        targetX = from.targetX;
+        targetY = from.targetY;
     }
 }

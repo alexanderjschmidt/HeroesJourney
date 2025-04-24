@@ -41,8 +41,8 @@ public class LocationPositionSyncSystem extends IteratingSystem {
     protected void process(int entityId) {
         PositionComponent pos = PositionComponent.get(world, entityId);
         if (pos.getTargetX() != pos.getX() || pos.getTargetY() != pos.getY()) {
-            System.out.println(pos.getX() + ", " + pos.getY());
-            System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
+            // System.out.println(pos.getX() + ", " + pos.getY());
+            // System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
             gameState.getEntities().removeLocation(pos.getX(), pos.getY());
             pos.sync();
             gameState.getEntities().addLocation(entityId, pos.getX(), pos.getY());

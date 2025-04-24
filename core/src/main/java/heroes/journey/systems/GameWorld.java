@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.artemis.Aspect;
 import com.artemis.AspectSubscriptionManager;
@@ -27,6 +29,7 @@ import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
+import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationCarriageListener;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
@@ -66,6 +69,7 @@ public class GameWorld extends World {
         WorldConfigurationBuilder builder = new WorldConfigurationBuilder().with(
                 new WorldSerializationManager())
             .with(new CooldownSystem())
+            .with(new IdSyncSystem(gameState))
             .with(new PositionSyncSystem(gameState))
             .with(new LocationPositionSyncSystem(gameState))
             .with(new StatsActionsListener())
@@ -103,7 +107,7 @@ public class GameWorld extends World {
         jsonSerializer = new JsonArtemisSerializer(this);
         jsonSerializer.register(Position.class, Position.getJSONSerializer());
         manager.setSerializer(jsonSerializer);
-        cloneWorld(gameState);
+        cloneWorldSerializer(gameState);
         manager.setSerializer(kryoSerializer);
     }
 
@@ -114,6 +118,32 @@ public class GameWorld extends World {
      * @return
      */
     public GameWorld cloneWorld(GameState gameState) {
+        long start = System.nanoTime();
+        GameWorld cloned = new GameWorld(buildConfig(gameState, true));
+
+        IntBag entities = this.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
+        int[] ids = entities.getData();
+
+        Map<Integer,Integer> oldToNew = new HashMap<>();
+
+        // Pre-create entity IDs in newWorld (single-threaded and safe)
+        for (int id : ids) {
+            oldToNew.put(id, cloned.create());
+            ComponentCopier.copyEntity(this, cloned, oldToNew.get(id));
+        }
+
+        cloned.process();
+        System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        return cloned;
+    }
+
+    /**
+     * For AI Usage only
+     *
+     * @param gameState
+     * @return
+     */
+    public GameWorld cloneWorldSerializer(GameState gameState) {
         long start = System.nanoTime();
         // Export current world state
         final EntitySubscription allEntities = this.getAspectSubscriptionManager().get(Aspect.all());

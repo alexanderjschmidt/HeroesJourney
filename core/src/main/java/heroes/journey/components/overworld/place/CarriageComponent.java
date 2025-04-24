@@ -1,9 +1,10 @@
 package heroes.journey.components.overworld.place;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
-public class CarriageComponent extends PooledComponent {
+import heroes.journey.components.utils.PooledClonableComponent;
+
+public class CarriageComponent extends PooledClonableComponent<CarriageComponent> {
 
     public static CarriageComponent get(World world, int entityId) {
         return world.getMapper(CarriageComponent.class).get(entityId);
@@ -11,6 +12,10 @@ public class CarriageComponent extends PooledComponent {
 
     @Override
     protected void reset() {
+    }
+
+    @Override
+    public void copy(CarriageComponent from) {
     }
 
 }

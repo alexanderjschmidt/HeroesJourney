@@ -1,14 +1,14 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Setter
 @Accessors(fluent = true, chain = true)
-public class NamedComponent extends PooledComponent {
+public class NamedComponent extends PooledClonableComponent<NamedComponent> {
 
     private String name;
 
@@ -24,5 +24,10 @@ public class NamedComponent extends PooledComponent {
     @Override
     protected void reset() {
         name = null;
+    }
+
+    @Override
+    public void copy(NamedComponent from) {
+        name = from.name;
     }
 }

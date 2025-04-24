@@ -4,10 +4,10 @@ import java.util.List;
 
 import heroes.journey.Application;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.overworld.character.ActionComponent;
 import heroes.journey.components.overworld.character.NamedComponent;
 import heroes.journey.components.overworld.place.DungeonComponent;
-import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.FightUtils;
 import heroes.journey.components.utils.Utils;

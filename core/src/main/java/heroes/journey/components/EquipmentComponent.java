@@ -1,8 +1,8 @@
 package heroes.journey.components;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemManager;
 import heroes.journey.initializers.base.Items;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 @Setter
 @Accessors(fluent = true, chain = true)
-public class EquipmentComponent extends PooledComponent {
+public class EquipmentComponent extends PooledClonableComponent<EquipmentComponent> {
 
     private String head, chest, legs, boots, handOne, handTwo, accessoryOne, accessoryTwo;
 
@@ -65,5 +65,17 @@ public class EquipmentComponent extends PooledComponent {
     @Override
     protected void reset() {
 
+    }
+
+    @Override
+    public void copy(EquipmentComponent from) {
+        head = from.head;
+        chest = from.chest;
+        legs = from.legs;
+        boots = from.boots;
+        handOne = from.handOne;
+        handTwo = from.handTwo;
+        accessoryOne = from.accessoryOne;
+        accessoryTwo = from.accessoryTwo;
     }
 }

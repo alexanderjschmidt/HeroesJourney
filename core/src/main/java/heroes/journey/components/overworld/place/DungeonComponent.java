@@ -1,8 +1,8 @@
 package heroes.journey.components.overworld.place;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Setter
 @Getter
 @Accessors(fluent = true, chain = true)
-public class DungeonComponent extends PooledComponent {
+public class DungeonComponent extends PooledClonableComponent<DungeonComponent> {
 
     private Integer[] layout;
 
@@ -26,6 +26,11 @@ public class DungeonComponent extends PooledComponent {
     @Override
     protected void reset() {
         layout = null;
+    }
+
+    @Override
+    public void copy(DungeonComponent from) {
+        layout = from.layout;
     }
 
 }

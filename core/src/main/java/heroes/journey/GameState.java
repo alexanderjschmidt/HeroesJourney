@@ -9,10 +9,10 @@ import java.util.stream.IntStream;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.overworld.character.AIComponent;
 import heroes.journey.components.overworld.character.PlayerComponent;
-import heroes.journey.components.quests.QuestsComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;

@@ -1,6 +1,5 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 import com.artemis.annotations.Transient;
 import com.badlogic.gdx.math.Interpolation;
@@ -8,12 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.utils.Direction;
 import lombok.Getter;
 
 @Getter
 @Transient
-public class ActorComponent extends PooledComponent {
+public class ActorComponent extends PooledClonableComponent<ActorComponent> {
 
     private final Actor actor;
 
@@ -66,6 +66,10 @@ public class ActorComponent extends PooledComponent {
 
     public void reset() {
         actor.setPosition(0, 0);
+    }
+
+    @Override
+    public void copy(ActorComponent from) {
     }
 
     public float getX() {

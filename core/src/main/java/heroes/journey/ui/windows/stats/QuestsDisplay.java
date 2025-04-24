@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 
 import heroes.journey.GameState;
-import heroes.journey.components.quests.QuestsComponent;
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.UI;
 

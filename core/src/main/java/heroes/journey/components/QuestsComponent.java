@@ -1,15 +1,15 @@
-package heroes.journey.components.quests;
+package heroes.journey.components;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.entities.quests.QuestManager;
 
-public class QuestsComponent extends PooledComponent {
+public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
 
     private final List<String> quests;
 
@@ -33,5 +33,10 @@ public class QuestsComponent extends PooledComponent {
     @Override
     protected void reset() {
         quests.clear();
+    }
+
+    @Override
+    public void copy(QuestsComponent from) {
+        quests.addAll(from.quests);
     }
 }

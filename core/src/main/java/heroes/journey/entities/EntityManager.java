@@ -1,5 +1,8 @@
 package heroes.journey.entities;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EntityManager implements Cloneable {
 
     private final int width, height;
@@ -7,11 +10,15 @@ public class EntityManager implements Cloneable {
     private final Integer[][] entitiesLocations;
     private final Integer[][] factionsLocations;
 
+    private int entityCount = 0;
+    private final Map<Integer,Integer> entityMap;
+
     public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
         entitiesLocations = new Integer[width][height];
         factionsLocations = new Integer[width][height];
+        entityMap = new HashMap<>();
     }
 
     public EntityManager clone() {
@@ -55,5 +62,20 @@ public class EntityManager implements Cloneable {
     public void removeLocation(int x, int y) {
         Integer removed = factionsLocations[x][y];
         factionsLocations[x][y] = null;
+    }
+
+    // Registration
+    public int register(int entityId) {
+        entityMap.put(entityCount, entityId);
+        return entityCount++;
+    }
+
+    public int register(int entityId, int id) {
+        entityMap.put(id, entityId);
+        return id;
+    }
+
+    public void unregister(int id) {
+        entityMap.remove(id);
     }
 }

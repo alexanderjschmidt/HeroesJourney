@@ -2,10 +2,10 @@ package heroes.journey.components.overworld.character;
 
 import java.util.concurrent.Future;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
 import heroes.journey.GameState;
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.ai.AI;
 import heroes.journey.entities.ai.MCTSAI;
@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-public class AIComponent extends PooledComponent {
+public class AIComponent extends PooledClonableComponent<AIComponent> {
 
     @Getter private transient Future<QueuedAction> futureResult = null;
     @Accessors(fluent = true, chain = true) @Setter private transient AI ai;
@@ -42,5 +42,10 @@ public class AIComponent extends PooledComponent {
         ai = null;
         futureResult.cancel(true);
         futureResult = null;
+    }
+
+    @Override
+    public void copy(AIComponent from) {
+        ai = from.ai;
     }
 }

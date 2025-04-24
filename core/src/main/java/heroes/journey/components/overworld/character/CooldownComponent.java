@@ -3,13 +3,13 @@ package heroes.journey.components.overworld.character;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 
 @Getter
-public class CooldownComponent extends PooledComponent {
+public class CooldownComponent extends PooledClonableComponent<CooldownComponent> {
 
     public final Map<String,Integer> cooldowns;
 
@@ -24,5 +24,10 @@ public class CooldownComponent extends PooledComponent {
     @Override
     protected void reset() {
         cooldowns.clear();
+    }
+
+    @Override
+    public void copy(CooldownComponent from) {
+        cooldowns.putAll(from.cooldowns);
     }
 }

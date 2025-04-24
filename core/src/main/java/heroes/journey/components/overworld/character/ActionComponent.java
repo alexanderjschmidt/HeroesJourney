@@ -1,9 +1,9 @@
 package heroes.journey.components.overworld.character;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 import com.artemis.annotations.Transient;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 @Setter
 @Getter
-public class ActionComponent extends PooledComponent {
+public class ActionComponent extends PooledClonableComponent<ActionComponent> {
 
     // Split this into Possible Actions component and actively doing action component
     private String action;
@@ -41,6 +41,13 @@ public class ActionComponent extends PooledComponent {
         action = null;
         targetX = -1;
         targetY = -1;
+    }
+
+    @Override
+    public void copy(ActionComponent from) {
+        action = from.action;
+        targetX = from.targetX;
+        targetY = from.targetY;
     }
 
 }

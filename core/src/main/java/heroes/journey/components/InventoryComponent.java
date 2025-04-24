@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
 import heroes.journey.components.utils.DefaultContainer;
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemManager;
 
-public class InventoryComponent extends PooledComponent {
+public class InventoryComponent extends PooledClonableComponent<InventoryComponent> {
 
     private final DefaultContainer<String> inventory;
 
@@ -50,6 +50,12 @@ public class InventoryComponent extends PooledComponent {
     @Override
     protected void reset() {
         inventory.clear();
+    }
+
+    @Override
+    public void copy(InventoryComponent from) {
+        inventory.putAll(from.inventory);
+        gold = from.gold;
     }
 
     public Map<Item,Integer> getInventory() {

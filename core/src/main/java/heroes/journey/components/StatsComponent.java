@@ -1,21 +1,21 @@
 package heroes.journey.components;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class StatsComponent extends PooledComponent {
+public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     public static final int MAX_HEALTH = 10, MAX_MANA = 10;
 
     @Setter private int body = 1, mind = 1;
 
-    private final int handicapMult = 10;
+    @Setter private int handicapMult = 10;
 
     @Setter private int health = MAX_HEALTH;
 
@@ -53,5 +53,15 @@ public class StatsComponent extends PooledComponent {
     @Override
     protected void reset() {
         attributes.clear();
+    }
+
+    @Override
+    public void copy(StatsComponent from) {
+        body = from.body;
+        mind = from.mind;
+        handicapMult = from.getHandicapMult();
+        health = from.health;
+        mana = from.mana;
+        attributes.putAll(from.attributes);
     }
 }

@@ -1,7 +1,7 @@
 package heroes.journey.entities.actions;
 
 import heroes.journey.GameState;
-import heroes.journey.components.quests.QuestsComponent;
+import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.quests.Quest;
 import lombok.experimental.SuperBuilder;

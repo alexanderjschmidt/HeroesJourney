@@ -4,15 +4,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.artemis.PooledComponent;
 import com.artemis.World;
 
+import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.initializers.base.BaseActions;
 
-public class PossibleActionsComponent extends PooledComponent {
+public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
 
@@ -51,5 +51,10 @@ public class PossibleActionsComponent extends PooledComponent {
     @Override
     protected void reset() {
         possibleActions.clear();
+    }
+
+    @Override
+    public void copy(PossibleActionsComponent from) {
+        possibleActions.addAll(from.possibleActions);
     }
 }

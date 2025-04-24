@@ -48,7 +48,6 @@ import heroes.journey.utils.art.ResourceManager;
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
  * Efficiency
- *  Use a GameWorld Pool for Ashely so AI doesnt keep making new Entities to be deleted
  *  Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  */
 /*
