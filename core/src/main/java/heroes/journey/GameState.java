@@ -11,8 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.AIComponent;
-import heroes.journey.components.overworld.character.PlayerComponent;
+import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;

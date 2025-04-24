@@ -5,7 +5,7 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.IdComponent;
+import heroes.journey.components.character.IdComponent;
 
 @All({IdComponent.class})
 public class IdSyncSystem extends BaseEntitySystem {

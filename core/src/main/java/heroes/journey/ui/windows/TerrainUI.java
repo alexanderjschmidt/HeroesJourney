@@ -3,7 +3,7 @@ package heroes.journey.ui.windows;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.NamedComponent;
+import heroes.journey.components.character.NamedComponent;
 import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;

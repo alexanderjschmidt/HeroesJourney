@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.RenderComponent;
+import heroes.journey.components.character.RenderComponent;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 

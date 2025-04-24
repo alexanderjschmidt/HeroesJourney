@@ -5,9 +5,9 @@ import java.util.List;
 import heroes.journey.Application;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.overworld.character.ActionComponent;
-import heroes.journey.components.overworld.character.NamedComponent;
-import heroes.journey.components.overworld.place.DungeonComponent;
+import heroes.journey.components.character.ActionComponent;
+import heroes.journey.components.character.NamedComponent;
+import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.FightUtils;
 import heroes.journey.components.utils.Utils;
@@ -17,10 +17,10 @@ import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.screens.MainMenuScreen;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
+import heroes.journey.ui.screens.MainMenuScreen;
 
 public class BaseActions implements InitializerInterface {
 

@@ -6,9 +6,9 @@ import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.ActionComponent;
-import heroes.journey.components.overworld.character.MovementComponent;
-import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.character.ActionComponent;
+import heroes.journey.components.character.MovementComponent;
+import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;

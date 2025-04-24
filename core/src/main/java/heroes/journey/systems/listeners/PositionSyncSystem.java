@@ -6,8 +6,8 @@ import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.PositionComponent;
-import heroes.journey.components.overworld.place.LocationComponent;
+import heroes.journey.components.character.PositionComponent;
+import heroes.journey.components.place.LocationComponent;
 
 @All({PositionComponent.class})
 @Exclude({LocationComponent.class})

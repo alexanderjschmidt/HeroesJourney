@@ -1,4 +1,4 @@
-package heroes.journey.components.overworld.place;
+package heroes.journey.components.place;
 
 import com.artemis.World;
 

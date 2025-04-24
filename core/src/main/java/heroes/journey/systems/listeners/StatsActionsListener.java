@@ -4,7 +4,7 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.PossibleActionsComponent;
+import heroes.journey.components.character.PossibleActionsComponent;
 import heroes.journey.initializers.base.BaseActions;
 
 @All({StatsComponent.class, PossibleActionsComponent.class})

@@ -15,8 +15,8 @@ import com.artemis.EntityEdit;
 
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.overworld.character.NamedComponent;
-import heroes.journey.components.overworld.character.PlayerComponent;
+import heroes.journey.components.character.NamedComponent;
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;

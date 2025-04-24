@@ -11,9 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.ActorComponent;
-import heroes.journey.components.overworld.character.PositionComponent;
-import heroes.journey.components.overworld.character.RenderComponent;
+import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.PositionComponent;
+import heroes.journey.components.character.RenderComponent;
 import heroes.journey.ui.HUD;
 
 @All({PositionComponent.class, RenderComponent.class})

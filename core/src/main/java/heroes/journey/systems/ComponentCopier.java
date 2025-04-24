@@ -7,17 +7,17 @@ import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.AIComponent;
-import heroes.journey.components.overworld.character.ActorComponent;
-import heroes.journey.components.overworld.character.CooldownComponent;
-import heroes.journey.components.overworld.character.IdComponent;
-import heroes.journey.components.overworld.character.NamedComponent;
-import heroes.journey.components.overworld.character.PlayerComponent;
-import heroes.journey.components.overworld.character.PositionComponent;
-import heroes.journey.components.overworld.character.PossibleActionsComponent;
-import heroes.journey.components.overworld.place.CarriageComponent;
-import heroes.journey.components.overworld.place.DungeonComponent;
-import heroes.journey.components.overworld.place.LocationComponent;
+import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.CooldownComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.character.NamedComponent;
+import heroes.journey.components.character.PlayerComponent;
+import heroes.journey.components.character.PositionComponent;
+import heroes.journey.components.character.PossibleActionsComponent;
+import heroes.journey.components.place.CarriageComponent;
+import heroes.journey.components.place.DungeonComponent;
+import heroes.journey.components.place.LocationComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
 
 public class ComponentCopier {

@@ -23,7 +23,7 @@ import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.ActionSystem;

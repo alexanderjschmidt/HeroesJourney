@@ -1,4 +1,4 @@
-package heroes.journey.screens;
+package heroes.journey.ui.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

@@ -5,8 +5,8 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.PositionComponent;
-import heroes.journey.components.overworld.place.LocationComponent;
+import heroes.journey.components.character.PositionComponent;
+import heroes.journey.components.place.LocationComponent;
 
 @All({PositionComponent.class, LocationComponent.class})
 public class LocationPositionSyncSystem extends IteratingSystem {

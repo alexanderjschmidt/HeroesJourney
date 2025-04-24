@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.PositionComponent;
+import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.utils.ai.MCTS;

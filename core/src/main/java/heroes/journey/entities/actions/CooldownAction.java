@@ -1,7 +1,7 @@
 package heroes.journey.entities.actions;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.CooldownComponent;
+import heroes.journey.components.character.CooldownComponent;
 import heroes.journey.components.utils.Utils;
 import lombok.Builder;
 import lombok.Getter;

@@ -7,9 +7,9 @@ import com.artemis.EntityEdit;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 
-import heroes.journey.components.overworld.character.AIComponent;
-import heroes.journey.components.overworld.character.ActionComponent;
-import heroes.journey.components.overworld.character.MovementComponent;
+import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.ActionComponent;
+import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.actions.QueuedAction;
 
 @All({AIComponent.class})

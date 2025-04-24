@@ -3,7 +3,7 @@ package heroes.journey.initializers.base.factories;
 import com.artemis.EntityEdit;
 
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.NamedComponent;
+import heroes.journey.components.character.NamedComponent;
 import heroes.journey.systems.GameWorld;
 
 public class MonsterFactory {

@@ -1,7 +1,8 @@
-package heroes.journey.screens;
+package heroes.journey.ui.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
@@ -21,7 +22,7 @@ public class BattleScreen implements Screen {
     // quickStart constructor
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
-        this.mapData = new MapData((int) (Math.random() * 10000000), Map.MAP_SIZE, 2, false);
+        this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 2, false);
         startGame();
     }
 

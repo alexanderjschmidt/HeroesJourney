@@ -1,4 +1,4 @@
-package heroes.journey.screens;
+package heroes.journey.ui.screens;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;

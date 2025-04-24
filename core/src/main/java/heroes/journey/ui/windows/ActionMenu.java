@@ -10,9 +10,9 @@ import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 
 import heroes.journey.GameState;
-import heroes.journey.components.overworld.character.ActionComponent;
-import heroes.journey.components.overworld.character.PositionComponent;
-import heroes.journey.components.overworld.character.PossibleActionsComponent;
+import heroes.journey.components.character.ActionComponent;
+import heroes.journey.components.character.PositionComponent;
+import heroes.journey.components.character.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;

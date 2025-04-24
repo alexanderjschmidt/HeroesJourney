@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.overworld.character.ActionComponent;
+import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.HUD;
