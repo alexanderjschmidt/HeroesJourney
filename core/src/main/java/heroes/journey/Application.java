@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -28,9 +27,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Fog of War
  *  light fog (ie 50% transparent over tiles) on unseen tiles
  *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
- * Add time/lighting
- *  Add Day/Night Cycle (could be used to show the world itself is getting darker not day/night)
- *  darker then redder
  * Saving
  * Map Generation
  *  make Map Generation Phases not enums
