@@ -1,20 +1,21 @@
 package heroes.journey.components;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.artemis.World;
-
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemManager;
+import lombok.Getter;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class InventoryComponent extends PooledClonableComponent<InventoryComponent> {
 
     private final DefaultContainer<String> inventory;
 
+    @Getter
     private int gold;
 
     public InventoryComponent() {
@@ -58,7 +59,7 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
         gold = from.gold;
     }
 
-    public Map<Item,Integer> getInventory() {
+    public Map<Item, Integer> getInventory() {
         return inventory.entrySet()
             .stream()
             .collect(Collectors.toMap(entry -> ItemManager.get().get(entry.getKey()), Map.Entry::getValue));
@@ -66,5 +67,9 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
 
     public String toString(Item item) {
         return inventory.toString(item.toString());
+    }
+
+    public void adjustGold(int gold) {
+        this.gold += gold;
     }
 }

@@ -1,42 +1,50 @@
 package heroes.journey.entities.actions;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
 import heroes.journey.GameState;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
 @SuperBuilder
 public class Action {
 
     protected final String name;
-    @Getter @Builder.Default protected final boolean terminal = true;
-    @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
+    @Getter
+    @Builder.Default
+    protected final boolean terminal = true;
+    @Builder.Default
+    protected BiConsumer<GameState, Integer> onHover = (gs, e) -> {
     };
-    @Builder.Default protected BiFunction<GameState,Integer,String> onSelect = (gs, e) -> {
+    @Builder.Default
+    protected BiFunction<GameState, Integer, String> onSelect = (gs, e) -> {
         return null;
     };
     @Builder.Default
-    protected BiFunction<GameState,Integer,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    protected BiFunction<GameState, Integer, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
-    public ShowAction requirementsMet(GameState gameState, Integer selected) {
-        return requirementsMet.apply(gameState, selected);
+    @Builder.Default
+    protected Cost cost = Cost.builder().build();
+
+    public ShowAction requirementsMet(GameState gameState, Integer userId) {
+        return requirementsMet.apply(gameState, userId).and(cost.requirementsMet(gameState, userId));
     }
 
-    public void onHover(GameState gameState, Integer selected) {
+    public void onHover(GameState gameState, Integer userId) {
         gameState.getRangeManager().clearRange();
-        onHover.accept(gameState, selected);
+        onHover.accept(gameState, userId);
     }
 
     /**
      * @param gameState
-     * @param selected
+     * @param userId
      * @return the results of the action for a popup window
      */
-    public String onSelect(GameState gameState, Integer selected) {
-        return onSelect.apply(gameState, selected);
+    public String onSelect(GameState gameState, Integer userId) {
+        cost.onUse(gameState, userId);
+        return onSelect.apply(gameState, userId);
     }
 
     @Override
