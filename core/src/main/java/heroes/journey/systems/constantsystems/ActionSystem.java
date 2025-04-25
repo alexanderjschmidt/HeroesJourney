@@ -22,6 +22,7 @@ public class ActionSystem extends IteratingSystem {
         World world = getWorld();
         ActionComponent action = ActionComponent.get(world, entityId);
 
+        // TODO this is null on carriage?
         String result = action.getAction().onSelect(GameState.global(), entityId);
         if (result != null) {
             //TODO make it only show up for players its supposed to

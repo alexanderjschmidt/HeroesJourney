@@ -1,7 +1,5 @@
 package heroes.journey.ui.screens;
 
-import java.io.IOException;
-
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -28,11 +26,7 @@ public class BattleScreen implements Screen {
         this.app = app;
         this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 2, false);
         this.client = new GameClient();
-        try {
-            client.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
         startGame();
     }
 

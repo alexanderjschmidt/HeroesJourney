@@ -2,7 +2,9 @@ package heroes.journey.entities.actions.history;
 
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
+import lombok.Getter;
 
+@Getter
 public class ActionRecord extends Record {
 
     private final Action action;
@@ -12,14 +14,6 @@ public class ActionRecord extends Record {
         super(entity);
         this.action = action;
         this.position = position;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public Position getPosition() {
-        return position;
     }
 
 }

@@ -1,7 +1,9 @@
 package heroes.journey.entities.actions.history;
 
 import heroes.journey.entities.Position;
+import lombok.Getter;
 
+@Getter
 public class MovementRecord extends Record {
 
     private final Position startPos, endPos;
@@ -10,14 +12,6 @@ public class MovementRecord extends Record {
         super(entity);
         this.startPos = startPos;
         this.endPos = endPos;
-    }
-
-    public Position getStartPos() {
-        return startPos;
-    }
-
-    public Position getEndPos() {
-        return endPos;
     }
 
 }

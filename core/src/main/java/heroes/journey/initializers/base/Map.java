@@ -1,5 +1,6 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.BaseActions.createCarriageAction;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateHouse;
 import static heroes.journey.initializers.base.factories.EntityFactory.overworldEntity;
@@ -177,8 +178,10 @@ public class Map implements InitializerInterface {
                 if (tileMap[x][y] == Tiles.PLAINS) {
                     if (dungeon)
                         generateDungeon(gameState, x, y);
-                    else
-                        generateHouse(gameState, x, y);
+                    else {
+                        int house = generateHouse(gameState, x, y);
+                        createCarriageAction(gameState, house);
+                    }
                     featurePos.add(new Position(x, y));
                     environment[x][y] = feature;
                     break;

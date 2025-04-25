@@ -3,19 +3,17 @@ package heroes.journey.components.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.artemis.utils.IntBag;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.character.PositionComponent;
-import heroes.journey.components.place.CarriageComponent;
-import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
+import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.ScrollPaneEntry;
 
 public class Utils {
@@ -38,25 +36,14 @@ public class Utils {
         return questActions;
     }
 
-    public static List<Action> getCarriageActions(GameState gameState, Integer town, Integer selected) {
+    public static List<Action> getCarriageActions(GameState gameState, Integer town) {
         List<Action> questActions = new ArrayList<>();
-        IntBag carriagableLocations = gameState.getWorld()
-            .getEntitiesWith(LocationComponent.class, CarriageComponent.class, PositionComponent.class);
-        for (Integer carriagableLocation : carriagableLocations.getData()) {
-            if (carriagableLocation == town) {
+        String townName = NamedComponent.get(gameState.getWorld(), town, "---");
+        for (Action carriageAction : BaseActions.carriageActions) {
+            if (townName.equals("---") || carriageAction.toString().contains(townName)) {
                 continue;
             }
-            PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), selected);
-            PositionComponent positionComponentLocation = PositionComponent.get(gameState.getWorld(),
-                carriagableLocation);
-            LocationComponent factionComponent = LocationComponent.get(gameState.getWorld(),
-                carriagableLocation);
-            questActions.add(Action.builder().name(factionComponent.toString()).onSelect((gs, e) -> {
-                gameState.getEntities()
-                    .moveEntity(positionComponent.getX(), positionComponent.getY(),
-                        positionComponentLocation.getX(), positionComponentLocation.getY());
-                return "You have arrived at " + factionComponent.toString();
-            }).build());
+            questActions.add(carriageAction);
         }
         return questActions;
     }

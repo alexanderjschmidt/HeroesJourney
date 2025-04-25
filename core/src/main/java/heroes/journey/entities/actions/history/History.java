@@ -5,7 +5,6 @@ import java.util.Stack;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import lombok.Getter;
 
 public class History extends Stack<Record> implements Cloneable {
 
@@ -26,16 +25,5 @@ public class History extends Stack<Record> implements Cloneable {
     public History clone() {
         return (History)super.clone();
     }
-}
-
-@Getter
-class Record {
-
-    private final Integer entity;
-
-    public Record(Integer entity) {
-        this.entity = entity;
-    }
-
 }
 
