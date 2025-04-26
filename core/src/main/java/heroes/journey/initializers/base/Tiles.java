@@ -2,6 +2,7 @@ package heroes.journey.initializers.base;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;

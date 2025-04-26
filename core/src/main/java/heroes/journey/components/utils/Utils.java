@@ -4,13 +4,11 @@ import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
-import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.ScrollPaneEntry;
 
 import java.util.ArrayList;
@@ -32,18 +30,6 @@ public class Utils {
         List<Action> questActions = new ArrayList<>();
         for (Quest quest : questsComponent.getQuests()) {
             questActions.add(quest.getClaimAction());
-        }
-        return questActions;
-    }
-
-    public static List<Action> getCarriageActions(GameState gameState, Integer townId) {
-        List<Action> questActions = new ArrayList<>();
-        String townName = NamedComponent.get(gameState.getWorld(), townId, "---");
-        for (Action carriageAction : BaseActions.carriageActions) {
-            if (townName.equals("---") || carriageAction.toString().contains(townName)) {
-                continue;
-            }
-            questActions.add(carriageAction);
         }
         return questActions;
     }

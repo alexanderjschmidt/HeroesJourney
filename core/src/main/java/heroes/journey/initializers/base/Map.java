@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static heroes.journey.initializers.base.BaseActions.createCarriageAction;
 import static heroes.journey.initializers.base.factories.EntityFactory.*;
 import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
 import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
@@ -35,7 +34,7 @@ public class Map implements InitializerInterface {
     public static MapGenerationEffect trees;
 
     private static List<Kingdom> kingdoms = new ArrayList<>();
-    static List<Position> features = new ArrayList<>();
+    public static List<Position> features = new ArrayList<>();
 
     static {
         // Generate Smooth Noise
@@ -74,8 +73,7 @@ public class Map implements InitializerInterface {
                 kingdoms.add(kingdom);
 
                 gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
-                int house = generateTown(gameState, capital.getX(), capital.getY());
-                createCarriageAction(gameState, house);
+                generateTown(gameState, capital.getX(), capital.getY(), true);
                 features.add(capital);
                 //System.out.println("Capital: " + capital.getX() + ", " + capital.getY());
             }
@@ -109,7 +107,7 @@ public class Map implements InitializerInterface {
                             kingdom.towns.add(candidate);
                             features.add(candidate);
                             gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
-                            generateTown(gameState, candidate.getX(), candidate.getY());
+                            generateTown(gameState, candidate.getX(), candidate.getY(), false);
                             placed.add(candidate);
                             placedTown = true;
                             break;

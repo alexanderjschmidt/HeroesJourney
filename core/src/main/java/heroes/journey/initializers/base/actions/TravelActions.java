@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers.base.actions;
 
 import heroes.journey.GameState;
 import heroes.journey.components.character.NamedComponent;
@@ -7,6 +7,7 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
@@ -30,8 +31,8 @@ public class TravelActions implements InitializerInterface {
         }).build().register();
 
         // Add Travel Actions
-        MapGenerationEffect travel = MapGenerationEffect.builder().name("travel").dependsOn(new String[]{Map.trees.getName()}).applyEffect(gameState -> {
-            for (Position feature : Map.features) {
+        MapGenerationEffect travel = MapGenerationEffect.builder().name("travel").dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()}).applyEffect(gameState -> {
+            for (Position feature : heroes.journey.initializers.base.Map.features) {
                 Integer locationId = gameState.getEntities().getLocation(feature.getX(), feature.getY());
                 if (locationId == null) {
                     System.out.println(feature);

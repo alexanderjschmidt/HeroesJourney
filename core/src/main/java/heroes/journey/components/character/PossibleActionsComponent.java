@@ -1,16 +1,15 @@
 package heroes.journey.components.character;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.CooldownAction;
-import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.initializers.base.actions.BaseActions;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 

@@ -8,18 +8,19 @@ import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.*;
-import heroes.journey.components.place.CarriageComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.ai.AI;
-import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.initializers.base.Items;
 import heroes.journey.initializers.base.Quests;
-import heroes.journey.initializers.base.TravelActions;
+import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.initializers.base.actions.CarriageActions;
+import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 
+import static heroes.journey.initializers.base.actions.CarriageActions.createCarriageAction;
 import static heroes.journey.initializers.base.factories.MonsterFactory.goblin;
 import static heroes.journey.initializers.base.factories.MonsterFactory.hobGoblin;
 
@@ -39,14 +40,15 @@ public class EntityFactory {
         return entity.getEntityId();
     }
 
-    public static Integer generateTown(GameState gameState, int x, int y) {
+    public static Integer generateTown(GameState gameState, int x, int y, boolean capital) {
         EntityEdit house = gameState.getWorld().createEntity().edit();
         house.create(LocationComponent.class);
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y).sync();
-        house.create(CarriageComponent.class);
         house.create(QuestsComponent.class).addQuest(Quests.delve);
-        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard).addAction(TravelActions.travel);
+        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard).addAction(TravelActions.travel).addAction(CarriageActions.carriage);
+        if (capital)
+            createCarriageAction(gameState, house.getEntityId());
         return house.getEntityId();
     }
 

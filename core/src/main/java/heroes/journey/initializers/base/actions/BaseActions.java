@@ -1,12 +1,10 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers.base.actions;
 
 import heroes.journey.Application;
-import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.NamedComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.FightUtils;
@@ -17,12 +15,12 @@ import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.Items;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.screens.MainMenuScreen;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BaseActions implements InitializerInterface {
@@ -32,8 +30,6 @@ public class BaseActions implements InitializerInterface {
     public static CooldownAction delve;
     public static Action chopTrees;
     public static Action questBoard;
-    public static Action carriage;
-    public static List<Action> carriageActions;
 
     static {
         openActionMenu = Action.builder()
@@ -141,29 +137,6 @@ public class BaseActions implements InitializerInterface {
             QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
             return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
         }).build().register();
-        carriage = Action.builder().name("Carriage").terminal(false).onSelect((gs, e) -> {
-            Integer town = Utils.getLocation(gs, e);
-            List<Action> carriageActions = Utils.getCarriageActions(gs, town);
-            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
-            HUD.get().setState(new ActionSelectState(options));
-            return null;
-        }).build().register();
-        carriageActions = new ArrayList<>();
-    }
-
-    public static void createCarriageAction(GameState gameState, Integer town) {
-        PositionComponent positionComponentLocation = PositionComponent.get(gameState.getWorld(), town);
-        String locationName = NamedComponent.get(gameState.getWorld(), town, "Unknown Location");
-        Action carriageAction = Action.builder()
-            .name("Carriage to " + locationName.toString())
-            .onSelect((gs, e) -> {
-                PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-                positionComponent.setPos(positionComponentLocation.getX(), positionComponentLocation.getY());
-                return "You have arrived at " + locationName + " on a carriage";
-            })
-            .build()
-            .register();
-        carriageActions.add(carriageAction);
     }
 
 }

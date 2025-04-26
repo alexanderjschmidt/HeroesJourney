@@ -1,28 +1,28 @@
 package heroes.journey.tilemap;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-
 import heroes.journey.GameCamera;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.initializers.base.BaseActions;
+import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TileMap implements IndexedGraph<TileNode> {
 
-    @Getter private final int width, height;
+    @Getter
+    private final int width, height;
     private Tile[][] tileMap;
     private Tile[][] environment;
     private float elapsed = 0;
@@ -41,13 +41,13 @@ public class TileMap implements IndexedGraph<TileNode> {
     public void render(SpriteBatch batch, float delta) {
         elapsed += delta;
 
-        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
+        int xo = (int) (GameCamera.get().position.x / GameCamera.get().getSize());
+        int yo = (int) (GameCamera.get().position.y / GameCamera.get().getSize());
 
-        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().getxLow()), 0);
-        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().getyLow()), 0);
-        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().getxHigh()), width);
-        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().getyHigh()), height);
+        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().getxLow()), 0);
+        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().getyLow()), 0);
+        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().getxHigh()), width);
+        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().getyHigh()), height);
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {
@@ -75,9 +75,9 @@ public class TileMap implements IndexedGraph<TileNode> {
     public ActionTerrain getEnvironment(int x, int y) {
         if (x < 0 || y < 0 || x >= width || y >= height) {
             Tile env = environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
-            return env == null ? null : (ActionTerrain)env.getTerrain();
+            return env == null ? null : (ActionTerrain) env.getTerrain();
         } else {
-            return environment[x][y] == null ? null : (ActionTerrain)environment[x][y].getTerrain();
+            return environment[x][y] == null ? null : (ActionTerrain) environment[x][y].getTerrain();
         }
     }
 
@@ -92,7 +92,7 @@ public class TileMap implements IndexedGraph<TileNode> {
             options.add(BaseActions.wait);
             return options;
         }
-        return ((ActionTerrain)tile.getTerrain()).getActions();
+        return ((ActionTerrain) tile.getTerrain()).getActions();
     }
 
     public TileMap clone(EntityManager entityManager) {

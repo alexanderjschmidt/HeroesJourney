@@ -14,7 +14,10 @@ import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
-import heroes.journey.systems.listeners.*;
+import heroes.journey.systems.listeners.IdSyncSystem;
+import heroes.journey.systems.listeners.LocationPositionSyncSystem;
+import heroes.journey.systems.listeners.PositionSyncSystem;
+import heroes.journey.systems.listeners.StatsActionsListener;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -62,8 +65,7 @@ public class GameWorld extends World {
             .with(new IdSyncSystem(gameState))
             .with(new PositionSyncSystem(gameState))
             .with(new LocationPositionSyncSystem(gameState))
-            .with(new StatsActionsListener())
-            .with(new LocationCarriageListener());
+            .with(new StatsActionsListener());
         if (!limited) {
             builder.with(new RenderSystem())
                 .with(new MovementSystem())
