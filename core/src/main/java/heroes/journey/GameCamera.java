@@ -2,7 +2,7 @@ package heroes.journey;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
+import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 
@@ -40,17 +40,17 @@ public class GameCamera extends OrthographicCamera {
             lastTargetY = cursor.y;
             if (cursor.x * size - position.x < -(3f * Gdx.graphics.getWidth() / 10f)) {
                 position.x = Math.min(Math.max(position.x - size, size * (xLow + xHigh - 2) / 2),
-                    (size * 128) - (size * (xLow + xHigh - 2) / 2));
+                    (size * Map.MAP_SIZE) - (size * (xLow + xHigh - 2) / 2));
             } else if (cursor.x * size - position.x > (3f * Gdx.graphics.getWidth() / 10f)) {
                 position.x = Math.min(Math.max(position.x + size, size * (xLow + xHigh - 2) / 2),
-                    (size * 128) - (size * (xLow + xHigh - 2) / 2));
+                    (size * Map.MAP_SIZE) - (size * (xLow + xHigh - 2) / 2));
             }
             if (cursor.y * size - position.y < -(3f * Gdx.graphics.getHeight() / 10f)) {
                 position.y = Math.min(Math.max(position.y - size, size * (yLow + yHigh - 2) / 2),
-                    (size * 128) - (size * (yLow + yHigh - 2) / 2));
+                    (size * Map.MAP_SIZE) - (size * (yLow + yHigh - 2) / 2));
             } else if (cursor.y * size - position.y > (3f * Gdx.graphics.getHeight() / 10f)) {
                 position.y = Math.min(Math.max(position.y + size, size * (yLow + yHigh - 2) / 2),
-                    (size * 128) - (size * (yLow + yHigh - 2) / 2));
+                    (size * Map.MAP_SIZE) - (size * (yLow + yHigh - 2) / 2));
             }
         }
     }
@@ -58,22 +58,22 @@ public class GameCamera extends OrthographicCamera {
     public void setZoom() {
         switch (size) {
             case 16:
-                xLow = (int)(41);
-                yLow = (int)(23);
-                xHigh = (int)(41);
-                yHigh = (int)(23);
+                xLow = (int) (41);
+                yLow = (int) (23);
+                xHigh = (int) (41);
+                yHigh = (int) (23);
                 break;
             case 32:
-                xLow = (int)(21);
-                yLow = (int)(12);
-                xHigh = (int)(21);
-                yHigh = (int)(12);
+                xLow = (int) (21);
+                yLow = (int) (12);
+                xHigh = (int) (21);
+                yHigh = (int) (12);
                 break;
             default:
-                xLow = (int)(11);
-                yLow = (int)(7);
-                xHigh = (int)(11);
-                yHigh = (int)(7);
+                xLow = (int) (11);
+                yLow = (int) (7);
+                xHigh = (int) (11);
+                yHigh = (int) (7);
         }
         position.x = Math.min(Math.max(lastTargetX * size, size * (xLow + xHigh - 2) / 2),
             (size * 128) - (size * (xLow + xHigh - 2) / 2));
@@ -116,13 +116,13 @@ public class GameCamera extends OrthographicCamera {
     }
 
     public boolean onCamera(int x, int y) {
-        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
+        int xo = (int) (GameCamera.get().position.x / GameCamera.get().getSize());
+        int yo = (int) (GameCamera.get().position.y / GameCamera.get().getSize());
 
-        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().xLow), 0);
-        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().yLow), 0);
-        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().xHigh), GameState.global().getWidth());
-        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().yHigh), GameState.global().getHeight());
+        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().xLow), 0);
+        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().yLow), 0);
+        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().xHigh), GameState.global().getWidth());
+        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().yHigh), GameState.global().getHeight());
 
         return x >= x0 && x <= x1 && y >= y0 && y <= y1;
     }

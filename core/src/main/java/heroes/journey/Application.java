@@ -39,9 +39,6 @@ import heroes.journey.utils.art.ResourceManager;
  * 	Action Sounds
  * make cursor arrow pathfinding favor already followed path.
  * Stamina: movement and actions are combined so you can do multiple actions in a turn or move more.
- * Camera
- *  force zoom if camera would go off screen
- *  make camera not go beyond map
  */
 /*
  * Knowledge System
