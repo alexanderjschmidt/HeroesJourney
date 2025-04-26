@@ -1,5 +1,6 @@
 package heroes.journey.ui.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
@@ -10,6 +11,8 @@ import heroes.journey.initializers.base.Map;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.LightManager;
+import heroes.journey.utils.Random;
+import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.worldgen.NewMapManager;
 
 public class BattleScreen implements Screen {
@@ -45,6 +48,11 @@ public class BattleScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
+            Random.get().setSeed((int) (Math.random() * 10000000));
+            NewMapManager.get().initMapGeneration(GameState.global());
+        }
+
         GameCamera.get().updateGameCamera();
         app.getViewport().setCamera(GameCamera.get());
         batch.setProjectionMatrix(GameCamera.get().combined);

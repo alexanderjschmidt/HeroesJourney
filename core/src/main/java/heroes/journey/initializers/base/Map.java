@@ -29,11 +29,11 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
-    public static int MAP_SIZE = 32;
+    public static int MAP_SIZE = 64;
 
     private static List<Position> housePos;
 
-    public void init() {
+    static {
         // Generate Smooth Noise
         MapGenerationEffect noise = MapGenerationEffect.builder().name("noise").applyEffect(gameState -> {
             int width = gameState.getWidth();
@@ -46,10 +46,7 @@ public class Map implements InitializerInterface {
             gameState.getMap().setTileMap(tileMap);
         }).build().register();
         // Add Dungeons Houses And Paths
-        MapGenerationEffect dungeonsAndTowns = MapGenerationEffect.builder().name("dungeonsAndTowns").dependsOn(new String[]{noise.getName()}).timeout(500).applyEffect(gameState -> {
-            Tile[][] tileMap = gameState.getMap().getTileMap();
-            Tile[][] environment = gameState.getMap().getEnvironment();
-
+        MapGenerationEffect dungeonsAndTowns = MapGenerationEffect.builder().name("dungeonsAndTowns").timeout(500).dependsOn(new String[]{noise.getName()}).applyEffect(gameState -> {
             // Gen Houses
             int numHouses = 10;
             housePos = generateRandomFeatures(gameState, Tiles.HOUSE, numHouses, false);
@@ -187,7 +184,7 @@ public class Map implements InitializerInterface {
         return featurePos;
     }
 
-    private void connectFeatures(GameState gameState, List<Position> featurePos, Tile connector) {
+    private static void connectFeatures(GameState gameState, List<Position> featurePos, Tile connector) {
         int featureStart = 0;
         int featureEnd = 1;
         while (featureStart < featurePos.size()) {

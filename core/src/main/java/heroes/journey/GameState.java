@@ -1,14 +1,7 @@
 package heroes.journey;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
@@ -20,7 +13,6 @@ import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.Initializer;
-import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.tilemap.TileMap;
@@ -28,6 +20,12 @@ import heroes.journey.ui.HUD;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Getter
 public class GameState implements Cloneable {
@@ -43,7 +41,8 @@ public class GameState implements Cloneable {
 
     private int turn;
 
-    @Getter private Integer currentEntity;
+    @Getter
+    private Integer currentEntity;
     private List<Integer> entitiesInActionOrder;
 
     private final List<Integer> playableEntities = new ArrayList<>();
@@ -62,12 +61,6 @@ public class GameState implements Cloneable {
         world = GameWorld.initGameWorld(this);
     }
 
-    private GameState(int width, int height) {
-        entitiesInActionOrder = new ArrayList<>();
-        this.width = width;
-        this.height = height;
-    }
-
     public void init(MapData mapData) {
         Initializer.init();
 
@@ -78,13 +71,13 @@ public class GameState implements Cloneable {
         history = new History();
         rangeManager = new RangeManager(this, width, height);
 
-        new Map().init();
-
         turn = 0;
     }
 
     public GameState clone() {
-        GameState clone = new GameState(width, height);
+        GameState clone = new GameState();
+        clone.width = width;
+        clone.height = height;
         clone.entities = entities.clone();
         clone.world = world.cloneWorld(clone);
         clone.history = history.clone();

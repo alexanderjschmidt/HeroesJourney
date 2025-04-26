@@ -3,6 +3,7 @@ package heroes.journey.utils.worldgen;
 import heroes.journey.GameState;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 public class NewMapManager {
 
@@ -25,10 +26,39 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState) {
-        List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
-        for (MapGenerationEffect phase : sorted) {
-            System.out.println("Running phase: " + phase.getName());
-            phase.apply(gameState);
+        Callable<Void> task = () -> {
+            List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
+            for (MapGenerationEffect phase : sorted) {
+                System.out.println("Running phase: " + phase.getName());
+                phase.apply(gameState);
+            }
+            return null;
+        };
+        timeout(task, 5, 2000);
+    }
+
+    public static void timeout(Callable<Void> task, int retryCount, int timeout) {
+        int i = 0;
+        ExecutorService executorService = Executors.newSingleThreadExecutor(); // create once outside the loop
+        try {
+            while (i < retryCount) {
+                i++;
+                Future<Void> future = executorService.submit(task);
+                try {
+                    // Wait for the task to complete or timeout
+                    future.get(timeout, TimeUnit.MILLISECONDS);
+                    break;  // Break if the task completes successfully
+                } catch (TimeoutException e) {
+                    // Handle timeout case (task did not finish in time)
+                    future.cancel(true);
+                } catch (ExecutionException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    future.cancel(true); // ensure cancellation if needed
+                }
+            }
+        } finally {
+            executorService.shutdown();  // Shutdown executor once all retries are done
         }
     }
 

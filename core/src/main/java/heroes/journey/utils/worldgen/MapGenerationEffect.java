@@ -5,8 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+
+import static heroes.journey.utils.worldgen.NewMapManager.timeout;
 
 @Getter
 @Builder
@@ -33,34 +35,9 @@ public class MapGenerationEffect {
                 applyEffect.accept(gameState);
                 return null;
             };
-            timeout(task);
+            timeout(task, retryCount, timeout);
         } else {
             applyEffect.accept(gameState);
-        }
-    }
-
-    private void timeout(Callable<Void> task) {
-        int i = 0;
-        ExecutorService executorService = Executors.newSingleThreadExecutor(); // create once outside the loop
-        try {
-            while (i < retryCount) {
-                i++;
-                Future<Void> future = executorService.submit(task);
-                try {
-                    // Wait for the task to complete or timeout
-                    future.get(timeout, TimeUnit.MILLISECONDS);
-                    break;  // Break if the task completes successfully
-                } catch (TimeoutException e) {
-                    // Handle timeout case (task did not finish in time)
-                    future.cancel(true);
-                } catch (ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    future.cancel(true); // ensure cancellation if needed
-                }
-            }
-        } finally {
-            executorService.shutdown();  // Shutdown executor once all retries are done
         }
     }
 
