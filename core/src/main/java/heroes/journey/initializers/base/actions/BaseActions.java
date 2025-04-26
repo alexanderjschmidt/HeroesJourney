@@ -15,7 +15,6 @@ import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.Items;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
@@ -28,7 +27,6 @@ public class BaseActions implements InitializerInterface {
     public static Action openActionMenu, wait, end_turn, exit_game, attack;
     public static CooldownAction workout, study;
     public static CooldownAction delve;
-    public static Action chopTrees;
     public static Action questBoard;
 
     static {
@@ -119,11 +117,6 @@ public class BaseActions implements InitializerInterface {
                 }
                 return log.toString();
             })
-            .build()
-            .register();
-        chopTrees = Action.builder()
-            .name("Chop Trees")
-            .onSelect((gs, e) -> Utils.addItem(gs, e, Items.wood, 1))
             .build()
             .register();
         questBoard = Action.builder().name("Quest Board").terminal(false).onSelect((gs, e) -> {

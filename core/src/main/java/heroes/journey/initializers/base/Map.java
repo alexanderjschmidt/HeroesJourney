@@ -45,6 +45,7 @@ public class Map implements InitializerInterface {
             int[][] noiseMap = noiseGen.generateMap(width);
             Tile[][] tileMap = convertToTileMap(noiseMap);
             smooth(tileMap, baseTiles);
+            smooth(tileMap, baseTiles);
 
             gameState.getMap().setTileMap(tileMap);
         }).build().register();

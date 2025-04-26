@@ -17,6 +17,8 @@ import heroes.journey.utils.art.ResourceManager;
  * Menus
  *  Action Detail UI flesh out
  *      Make cooldown skills show recover timer
+ *      Show Cost of actions
+ *      Make Travel and Carriage actions cost dynamic based on distance
  * 	Inventory
  *      Icons
  * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
@@ -31,17 +33,14 @@ import heroes.journey.utils.art.ResourceManager;
  * Saving
  * Map Generation
  *  Improve timeout
- *  Make paths allowed to go through hills to make the \_/?
- *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
+ *      Make paths allowed to go through hills to make the \_/?
+ *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  * 	Improve road generation some towns roads loop too much
- * 	Improve map generation
  * Sounds
  * 	Background music
  * 	Action Sounds
- * make cursor arrow pathfinding favor already followed path.
- * Stamina: movement and actions are combined so you can do multiple actions in a turn or move more.
  */
 /*
  * Knowledge System

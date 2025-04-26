@@ -2,7 +2,6 @@ package heroes.journey.initializers.base;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
@@ -48,7 +47,6 @@ public class Tiles implements InitializerInterface {
         DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
 
         trees = new ActionTerrain("Trees", 1);
-        trees.getActions().add(BaseActions.chopTrees);
 
         // Transition Terrains
         Terrain plainsToHill = new Terrain("Cliff", 10);
