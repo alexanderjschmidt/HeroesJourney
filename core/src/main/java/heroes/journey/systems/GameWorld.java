@@ -143,18 +143,7 @@ public class GameWorld extends World {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final SaveFileFormat save = new SaveFileFormat(allEntities);
 
-        this.setDelta(0);
-        if (this.getSystem(RenderSystem.class) != null) {
-            this.getSystem(AISystem.class).setEnabled(false);
-            this.getSystem(RenderSystem.class).setEnabled(false);
-            this.getSystem(MovementSystem.class).setEnabled(false);
-        }
-        this.process();
-        if (this.getSystem(RenderSystem.class) != null) {
-            this.getSystem(AISystem.class).setEnabled(true);
-            this.getSystem(RenderSystem.class).setEnabled(true);
-            this.getSystem(MovementSystem.class).setEnabled(true);
-        }
+        basicProcess();
         this.getSystem(WorldSerializationManager.class).save(baos, save);
 
         // Create a new GameWorld with a fresh config
@@ -181,4 +170,18 @@ public class GameWorld extends World {
         return cloned;
     }
 
+    public void basicProcess() {
+        this.setDelta(0);
+        if (this.getSystem(RenderSystem.class) != null) {
+            this.getSystem(AISystem.class).setEnabled(false);
+            this.getSystem(RenderSystem.class).setEnabled(false);
+            this.getSystem(MovementSystem.class).setEnabled(false);
+        }
+        this.process();
+        if (this.getSystem(RenderSystem.class) != null) {
+            this.getSystem(AISystem.class).setEnabled(true);
+            this.getSystem(RenderSystem.class).setEnabled(true);
+            this.getSystem(MovementSystem.class).setEnabled(true);
+        }
+    }
 }

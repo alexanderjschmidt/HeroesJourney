@@ -1,22 +1,13 @@
 package heroes.journey.initializers.base.factories;
 
-import static heroes.journey.initializers.base.factories.MonsterFactory.goblin;
-import static heroes.journey.initializers.base.factories.MonsterFactory.hobGoblin;
-
 import com.artemis.EntityEdit;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.AIComponent;
-import heroes.journey.components.character.ActorComponent;
-import heroes.journey.components.character.NamedComponent;
-import heroes.journey.components.character.PositionComponent;
-import heroes.journey.components.character.PossibleActionsComponent;
-import heroes.journey.components.character.RenderComponent;
+import heroes.journey.components.character.*;
 import heroes.journey.components.place.CarriageComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
@@ -24,9 +15,13 @@ import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.initializers.base.Items;
 import heroes.journey.initializers.base.Quests;
+import heroes.journey.initializers.base.TravelActions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
+
+import static heroes.journey.initializers.base.factories.MonsterFactory.goblin;
+import static heroes.journey.initializers.base.factories.MonsterFactory.hobGoblin;
 
 public class EntityFactory {
 
@@ -44,14 +39,14 @@ public class EntityFactory {
         return entity.getEntityId();
     }
 
-    public static Integer generateHouse(GameState gameState, int x, int y) {
+    public static Integer generateTown(GameState gameState, int x, int y) {
         EntityEdit house = gameState.getWorld().createEntity().edit();
         house.create(LocationComponent.class);
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y).sync();
         house.create(CarriageComponent.class);
         house.create(QuestsComponent.class).addQuest(Quests.delve);
-        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
+        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard).addAction(TravelActions.travel);
         return house.getEntityId();
     }
 
@@ -62,10 +57,10 @@ public class EntityFactory {
         dungeon.create(NamedComponent.class).name(SyllableDungeonNameGenerator.generateName());
         dungeon.create(PositionComponent.class).setPos(x, y).sync();
         dungeon.create(PossibleActionsComponent.class)
-            .addAction(BaseActions.delve, gameState.getWorld(), dungeon.getEntityId());
+            .addAction(BaseActions.delve, gameState.getWorld(), dungeon.getEntityId()).addAction(TravelActions.travel);
         dungeon.create(InventoryComponent.class).add(Items.ironOre, 5);
         dungeon.create(DungeonComponent.class)
-            .layout(new Integer[] {null, goblin(world), goblin(world), hobGoblin(world)});
+            .layout(new Integer[]{null, goblin(world), goblin(world), hobGoblin(world)});
         return dungeon.getEntityId();
     }
 }

@@ -34,7 +34,6 @@ public class BaseActions implements InitializerInterface {
     public static Action questBoard;
     public static Action carriage;
     public static List<Action> carriageActions;
-    public static Action travel;
 
     static {
         openActionMenu = Action.builder()
@@ -150,13 +149,6 @@ public class BaseActions implements InitializerInterface {
             return null;
         }).build().register();
         carriageActions = new ArrayList<>();
-        travel = Action.builder().name("Travel").terminal(false).onSelect((gs, e) -> {
-            Integer town = Utils.getLocation(gs, e);
-            List<Action> carriageActions = Utils.getCarriageActions(gs, town);
-            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
-            HUD.get().setState(new ActionSelectState(options));
-            return null;
-        }).build().register();
     }
 
     public static void createCarriageAction(GameState gameState, Integer town) {

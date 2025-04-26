@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
@@ -30,10 +29,13 @@ public class Cursor {
 
     private HUD hud;
 
-    @Getter private Integer selected, hover;
+    @Getter
+    private Integer selected, hover;
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
-    @Setter @Getter private Cell path;
+    @Setter
+    @Getter
+    private Cell path;
 
     private Animation<TextureRegion> ani;
 
@@ -56,6 +58,7 @@ public class Cursor {
     }
 
     public void clearSelected() {
+        System.out.println("clear selected");
         selected = null;
         sx = -1;
         sy = -1;
@@ -202,9 +205,6 @@ public class Cursor {
         World world = GameState.global().getWorld();
         PositionComponent positionComponent = PositionComponent.get(world, selected);
         positionComponent.setPos(sx, sy);
-        GameState.global()
-            .getEntities()
-            .moveEntity(positionComponent.getX(), positionComponent.getY(), sx, sy);
         StatsComponent statsComponent = StatsComponent.get(world, selected);
         setPosition(sx, sy);
         clearSelected();

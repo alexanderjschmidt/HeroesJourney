@@ -30,10 +30,12 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 @SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
 
-    public static int MAP_SIZE = 64;
+    public static int MAP_SIZE = 128;
     public static int NUM_KINGDOMS = 3;
+    public static MapGenerationEffect trees;
 
     private static List<Kingdom> kingdoms = new ArrayList<>();
+    static List<Position> features = new ArrayList<>();
 
     static {
         // Generate Smooth Noise
@@ -72,14 +74,14 @@ public class Map implements InitializerInterface {
                 kingdoms.add(kingdom);
 
                 gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
-                int house = generateHouse(gameState, capital.getX(), capital.getY());
+                int house = generateTown(gameState, capital.getX(), capital.getY());
                 createCarriageAction(gameState, house);
+                features.add(capital);
                 //System.out.println("Capital: " + capital.getX() + ", " + capital.getY());
             }
         }).build().register();
         // Add Towns
         MapGenerationEffect townsGen = MapGenerationEffect.builder().name("towns").dependsOn(new String[]{kingdomsGen.getName()}).applyEffect(gameState -> {
-
             int minDistanceBetweenTowns = 6;
             int maxAttempts = 100;
 
@@ -105,9 +107,9 @@ public class Map implements InitializerInterface {
 
                         if (!tooClose) {
                             kingdom.towns.add(candidate);
+                            features.add(candidate);
                             gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
-                            int house = generateHouse(gameState, candidate.getX(), candidate.getY());
-                            createCarriageAction(gameState, house);
+                            generateTown(gameState, candidate.getX(), candidate.getY());
                             placed.add(candidate);
                             placedTown = true;
                             break;
@@ -162,6 +164,7 @@ public class Map implements InitializerInterface {
                         if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature)) {
                             gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
                             generateDungeon(gameState, candidate.getX(), candidate.getY());
+                            features.add(candidate);
                             placed = true;
                             break;
                         }
@@ -188,6 +191,7 @@ public class Map implements InitializerInterface {
 
                     if (inBounds(x, y) && isLandTile(gameState.getMap().getTileMap()[x][y]) && isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures)) {
                         gameState.getMap().setEnvironment(x, y, Tiles.DUNGEON);
+                        features.add(candidate);
                         placed = true;
                         System.out.println("Placed a wilderness dungeon!");
                         break;
@@ -248,7 +252,7 @@ public class Map implements InitializerInterface {
             gameState.getMap().setTileMap(tileMap);
         }).build().register();
         // Create Trees
-        MapGenerationEffect trees = MapGenerationEffect.builder().name("trees").dependsOn(new String[]{wfcPaths.getName()}).applyEffect(gameState -> {
+        trees = MapGenerationEffect.builder().name("trees").dependsOn(new String[]{wfcPaths.getName()}).applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];

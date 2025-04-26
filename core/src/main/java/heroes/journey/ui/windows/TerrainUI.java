@@ -24,14 +24,14 @@ public class TerrainUI extends UI {
 
         String locationCoords = LoadOptions.debugOption.isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
         String name =
-            (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + locationCoords;
+            (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));
         if (environment != null) {
             Integer locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
             if (locationId != null) {
                 name = NamedComponent.get(GameState.global().getWorld(), locationId, "Unnamed Location");
             }
         }
-        drawText(batch, name, 0, 0);
+        drawText(batch, name + locationCoords, 0, 0);
     }
 
 }

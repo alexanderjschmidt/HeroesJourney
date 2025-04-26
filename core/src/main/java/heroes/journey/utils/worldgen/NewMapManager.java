@@ -28,12 +28,23 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState, MapData mapData) {
+        gameState.init(mapData);
+        List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
+        for (MapGenerationEffect phase : sorted) {
+            System.out.println("Running phase: " + phase.getName());
+            phase.apply(gameState);
+            gameState.getWorld().basicProcess();
+        }
+    }
+
+    public void initMapGenerationTimeout(GameState gameState, MapData mapData) {
         timeout(() -> (Callable<Void>) () -> {
             gameState.init(mapData);
             List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
             for (MapGenerationEffect phase : sorted) {
                 System.out.println("Running phase: " + phase.getName());
                 phase.apply(gameState);
+                gameState.getWorld().basicProcess();
             }
             return null;
         }, 10, 1000);

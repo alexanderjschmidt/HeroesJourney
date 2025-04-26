@@ -13,6 +13,7 @@ import heroes.journey.utils.art.ResourceManager;
 
 /*
  * TODO List
+ * Bugish: Guarantee there is a return trip for every Travel connection
  * Menus
  *  Action Detail UI flesh out
  *      Make cooldown skills show recover timer

@@ -1,8 +1,5 @@
 package heroes.journey.components.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
@@ -15,6 +12,9 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.ScrollPaneEntry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -36,9 +36,9 @@ public class Utils {
         return questActions;
     }
 
-    public static List<Action> getCarriageActions(GameState gameState, Integer town) {
+    public static List<Action> getCarriageActions(GameState gameState, Integer townId) {
         List<Action> questActions = new ArrayList<>();
-        String townName = NamedComponent.get(gameState.getWorld(), town, "---");
+        String townName = NamedComponent.get(gameState.getWorld(), townId, "---");
         for (Action carriageAction : BaseActions.carriageActions) {
             if (townName.equals("---") || carriageAction.toString().contains(townName)) {
                 continue;

@@ -35,7 +35,6 @@ public class ActionMenu extends Stack {
     }
 
     public void open() {
-        System.out.println("OPEN");
         Integer selectedEntity = GameState.global().getCurrentEntity();
         World world = GameState.global().getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
