@@ -1,8 +1,5 @@
 package heroes.journey.initializers.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.Application;
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
@@ -24,6 +21,9 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.screens.MainMenuScreen;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseActions implements InitializerInterface {
 
@@ -151,7 +151,10 @@ public class BaseActions implements InitializerInterface {
         }).build().register();
         carriageActions = new ArrayList<>();
         travel = Action.builder().name("Travel").terminal(false).onSelect((gs, e) -> {
-
+            Integer town = Utils.getLocation(gs, e);
+            List<Action> carriageActions = Utils.getCarriageActions(gs, town);
+            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
+            HUD.get().setState(new ActionSelectState(options));
             return null;
         }).build().register();
     }

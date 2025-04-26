@@ -1,19 +1,6 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.BaseActions.createCarriageAction;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateHouse;
-import static heroes.journey.initializers.base.factories.EntityFactory.overworldEntity;
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.artemis.EntityEdit;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.character.NamedComponent;
@@ -26,10 +13,19 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationPhase;
 import heroes.journey.utils.worldgen.RandomWorldGenerator;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 import heroes.journey.utils.worldgen.WeightedRandomPicker;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.initializers.base.BaseActions.createCarriageAction;
+import static heroes.journey.initializers.base.factories.EntityFactory.*;
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -39,7 +35,7 @@ public class Map implements InitializerInterface {
 
     public void init() {
         // Generate Smooth Noise
-        new MapGenerationEffect(MapGenerationPhase.INIT, gameState -> {
+        MapGenerationEffect noise = MapGenerationEffect.builder().name("noise").applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             RandomWorldGenerator noiseGen = new RandomWorldGenerator(50, 5, .7f, true);
@@ -48,9 +44,9 @@ public class Map implements InitializerInterface {
             smooth(tileMap, baseTiles);
 
             gameState.getMap().setTileMap(tileMap);
-        });
+        }).build().register();
         // Add Dungeons Houses And Paths
-        new MapGenerationEffect(MapGenerationPhase.INIT, 500, gameState -> {
+        MapGenerationEffect dungeonsAndTowns = MapGenerationEffect.builder().name("dungeonsAndTowns").dependsOn(new String[]{noise.getName()}).timeout(500).applyEffect(gameState -> {
             Tile[][] tileMap = gameState.getMap().getTileMap();
             Tile[][] environment = gameState.getMap().getEnvironment();
 
@@ -64,9 +60,9 @@ public class Map implements InitializerInterface {
             // Gen Dungeons
             int numDungeons = 8;
             generateRandomFeatures(gameState, Tiles.DUNGEON, numDungeons, true);
-        });
+        }).build().register();
         // Wave Function collapse keeping houses and path placements
-        new MapGenerationEffect(MapGenerationPhase.INIT, gameState -> {
+        MapGenerationEffect wfc = MapGenerationEffect.builder().name("waveFunctionCollapse").dependsOn(new String[]{dungeonsAndTowns.getName()}).applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
@@ -88,9 +84,9 @@ public class Map implements InitializerInterface {
 
             Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
             gameState.getMap().setTileMap(tileMap);
-        });
+        }).build().register();
         // Wave Function collapse paths to smooth tiles
-        new MapGenerationEffect(MapGenerationPhase.SECOND, gameState -> {
+        MapGenerationEffect wfcPaths = MapGenerationEffect.builder().name("waveFunctionCollapsePaths").dependsOn(new String[]{wfc.getName()}).applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
@@ -112,9 +108,9 @@ public class Map implements InitializerInterface {
 
             Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
             gameState.getMap().setTileMap(tileMap);
-        });
+        }).build().register();
         // Create Trees
-        new MapGenerationEffect(MapGenerationPhase.SECOND, gameState -> {
+        MapGenerationEffect trees = MapGenerationEffect.builder().name("trees").dependsOn(new String[]{wfcPaths.getName()}).applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
@@ -144,9 +140,9 @@ public class Map implements InitializerInterface {
             }
 
             gameState.getMap().setEnvironment(environment);
-        });
+        }).build().register();
         // Add Entities
-        new MapGenerationEffect(MapGenerationPhase.FINAL, gameState -> {
+        MapGenerationEffect entities = MapGenerationEffect.builder().name("entities").dependsOn(new String[]{trees.getName()}).applyEffect(gameState -> {
             Integer playerId = overworldEntity(gameState, housePos.getFirst().getX(),
                 housePos.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
             EntityEdit player = gameState.getWorld().edit(playerId);
@@ -160,7 +156,7 @@ public class Map implements InitializerInterface {
 
             overworldEntity(gameState, housePos.getLast().getX(), housePos.getLast().getY(),
                 ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
-        });
+        }).build().register();
     }
 
     private static List<Position> generateRandomFeatures(
@@ -173,8 +169,8 @@ public class Map implements InitializerInterface {
         Tile[][] environment = gameState.getMap().getEnvironment();
         for (int i = 0; i < count; i++) {
             while (true) {
-                int x = (int)(Math.random() * environment.length);
-                int y = (int)(Math.random() * environment[0].length);
+                int x = (int) (Math.random() * environment.length);
+                int y = (int) (Math.random() * environment[0].length);
                 if (tileMap[x][y] == Tiles.PLAINS) {
                     if (dungeon)
                         generateDungeon(gameState, x, y);

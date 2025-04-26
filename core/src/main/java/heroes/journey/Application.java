@@ -29,7 +29,6 @@ import heroes.journey.utils.art.ResourceManager;
  *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
  * Saving
  * Map Generation
- *  make Map Generation Phases not enums
  *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
@@ -43,8 +42,6 @@ import heroes.journey.utils.art.ResourceManager;
  * Camera
  *  force zoom if camera would go off screen
  *  make camera not go beyond map
- * Efficiency
- *  Chunk EntityManager for more efficiency? Only clone nearby chunks for AI? limited on how far they could travel in x turns
  */
 /*
  * Knowledge System

@@ -1,33 +1,30 @@
 package heroes.journey.utils.worldgen;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import heroes.journey.GameState;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-import heroes.journey.GameState;
-
+@Getter
+@Builder
 public class MapGenerationEffect {
 
-    private final MapGenerationPhase phase;
-    private final int timeout, retryCount;
+    @NonNull
+    private final String name;
+    @Builder.Default
+    private final int timeout = 0, retryCount = 3;
+    @Builder.Default
+    public final String[] dependsOn = new String[0];
 
+    @NonNull
     private final Consumer<GameState> applyEffect;
 
-    public MapGenerationEffect(MapGenerationPhase phase, Consumer<GameState> applyEffect) {
-        this(phase, 0, applyEffect);
-    }
-
-    public MapGenerationEffect(MapGenerationPhase phase, int timeout, Consumer<GameState> applyEffect) {
-        this.phase = phase;
-        this.applyEffect = applyEffect;
-        this.timeout = timeout;
-        this.retryCount = 5;
-        NewMapManager.get().addMapGenerationEffect(this);
+    public MapGenerationEffect register() {
+        NewMapManager.get().addMapGenerationEffect(name, this);
+        return this;
     }
 
     public void apply(GameState gameState) {
@@ -67,7 +64,4 @@ public class MapGenerationEffect {
         }
     }
 
-    public MapGenerationPhase getPhase() {
-        return phase;
-    }
 }
