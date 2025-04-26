@@ -139,6 +139,9 @@ public class GameState implements Cloneable {
         IntBag entities = world.getEntitiesWith(QuestsComponent.class);
         for (Integer entityId : entities.getData()) {
             QuestsComponent quests = QuestsComponent.get(world, entityId);
+            if (quests == null) {
+                continue;
+            }
             List<Quest> completedQuests = new ArrayList<>();
             for (Quest quest : quests.getQuests()) {
                 if (quest.isComplete(this, entityId)) {

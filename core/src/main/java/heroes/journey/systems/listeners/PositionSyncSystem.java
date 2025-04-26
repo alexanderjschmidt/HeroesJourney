@@ -4,7 +4,6 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.place.LocationComponent;
@@ -41,7 +40,7 @@ public class PositionSyncSystem extends IteratingSystem {
     @Override
     protected void process(int entityId) {
         PositionComponent pos = PositionComponent.get(world, entityId);
-        if (pos.getTargetX() != pos.getX() || pos.getTargetY() != pos.getY()) {
+        if (pos.isNotSynced()) {
             // System.out.println(pos.getX() + ", " + pos.getY());
             // System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
             gameState.getEntities().removeEntity(pos.getX(), pos.getY());

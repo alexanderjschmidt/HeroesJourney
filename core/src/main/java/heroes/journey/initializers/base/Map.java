@@ -9,16 +9,16 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static heroes.journey.initializers.base.BaseActions.createCarriageAction;
 import static heroes.journey.initializers.base.factories.EntityFactory.*;
@@ -27,11 +27,13 @@ import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
 import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
 import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
+@SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
 
     public static int MAP_SIZE = 64;
+    public static int NUM_KINGDOMS = 3;
 
-    private static List<Position> housePos;
+    private static List<Kingdom> kingdoms = new ArrayList<>();
 
     static {
         // Generate Smooth Noise
@@ -45,21 +47,160 @@ public class Map implements InitializerInterface {
 
             gameState.getMap().setTileMap(tileMap);
         }).build().register();
-        // Add Dungeons Houses And Paths
-        MapGenerationEffect dungeonsAndTowns = MapGenerationEffect.builder().name("dungeonsAndTowns").timeout(500).dependsOn(new String[]{noise.getName()}).applyEffect(gameState -> {
-            // Gen Houses
-            int numHouses = 10;
-            housePos = generateRandomFeatures(gameState, Tiles.HOUSE, numHouses, false);
+        // Capitals
+        MapGenerationEffect kingdomsGen = MapGenerationEffect.builder().name("kingdoms").dependsOn(new String[]{noise.getName()}).applyEffect(gameState -> {
+            kingdoms = new ArrayList<>();
+            int centerX = MAP_SIZE / 2;
+            int centerY = MAP_SIZE / 2;
+            int radius = MAP_SIZE / 3; // How far from center the capital should be
 
-            // Gen Paths between houses
-            connectFeatures(gameState, housePos, Tiles.pathTiles.getFirst());
+            // Random offset in degrees (0 to 360)
+            double randomOffsetDeg = Random.get().nextDouble() * 360.0;
 
-            // Gen Dungeons
-            int numDungeons = 8;
-            generateRandomFeatures(gameState, Tiles.DUNGEON, numDungeons, true);
+            for (int i = 0; i < NUM_KINGDOMS; i++) {
+                // Divide full circle (360°) into thirds
+                double angleDeg = i * (360.0 / NUM_KINGDOMS) + randomOffsetDeg;
+                double angleRad = Math.toRadians(angleDeg);
+
+                // Polar to Cartesian
+                int x = centerX + (int) (Math.cos(angleRad) * radius);
+                int y = centerY + (int) (Math.sin(angleRad) * radius);
+
+                // Snap to nearest valid land tile
+                Position capital = findValidLandTile(x, y, gameState.getMap().getTileMap());
+                Kingdom kingdom = new Kingdom("Kingdom " + (i + 1), capital);
+                kingdoms.add(kingdom);
+
+                gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
+                int house = generateHouse(gameState, capital.getX(), capital.getY());
+                createCarriageAction(gameState, house);
+                //System.out.println("Capital: " + capital.getX() + ", " + capital.getY());
+            }
+        }).build().register();
+        // Add Towns
+        MapGenerationEffect townsGen = MapGenerationEffect.builder().name("towns").dependsOn(new String[]{kingdomsGen.getName()}).applyEffect(gameState -> {
+
+            int minDistanceBetweenTowns = 6;
+            int maxAttempts = 100;
+
+            for (Kingdom kingdom : kingdoms) {
+                int numTowns = Random.get().nextInt(3, 6);
+                Set<Position> placed = new HashSet<>();
+                placed.add(kingdom.capital); // avoid placing towns right next to the capital
+
+                for (int i = 0; i < numTowns; i++) {
+                    boolean placedTown = false;
+
+                    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), kingdom.capital, 4, 8);
+
+                        // Check spacing with existing towns in this kingdom
+                        boolean tooClose = false;
+                        for (Position existing : placed) {
+                            if (candidate.distanceTo(existing) < minDistanceBetweenTowns) {
+                                tooClose = true;
+                                break;
+                            }
+                        }
+
+                        if (!tooClose) {
+                            kingdom.towns.add(candidate);
+                            gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
+                            int house = generateHouse(gameState, candidate.getX(), candidate.getY());
+                            createCarriageAction(gameState, house);
+                            placed.add(candidate);
+                            placedTown = true;
+                            break;
+                        }
+                    }
+
+                    if (!placedTown) {
+                        System.out.println("Warning: Could not place all towns for " + kingdom.name);
+                    }
+                }
+            }
+        }).build().register();
+        // Add Paths
+        MapGenerationEffect paths = MapGenerationEffect.builder().name("paths").dependsOn(new String[]{townsGen.getName()}).applyEffect(gameState -> {
+            // Capitals to towns
+            for (Kingdom kingdom : kingdoms) {
+                for (Position town : kingdom.towns) {
+                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdom.capital, town);
+                }
+            }
+            // Capitals to Capitals
+            for (int i = 0; i < kingdoms.size(); i++) {
+                for (int j = i + 1; j < kingdoms.size(); j++) {
+                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdoms.get(i).capital, kingdoms.get(j).capital);
+                }
+            }
+        }).build().register();
+        // Add Dungeons
+        MapGenerationEffect dungeonsGen = MapGenerationEffect.builder().name("dungeons").dependsOn(new String[]{paths.getName()}).applyEffect(gameState -> {
+            int minDistanceFromAnyFeature = 5;
+            int minDistanceFromSettlement = 3;
+            int maxDistanceFromSettlement = 10;
+            int dungeonsPerSettlementMin = 2;
+            int dungeonsPerSettlementMax = 4;
+            int maxAttempts = 50;
+
+            List<Position> settlements = new ArrayList<>();
+            for (Kingdom kingdom : kingdoms) {
+                settlements.add(kingdom.capital);
+                settlements.addAll(kingdom.towns);
+            }
+
+            for (Position settlement : settlements) {
+                int numDungeons = Random.get().nextInt(dungeonsPerSettlementMin, dungeonsPerSettlementMax);
+
+                for (int i = 0; i < numDungeons; i++) {
+                    boolean placed = false;
+
+                    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), settlement, minDistanceFromSettlement, maxDistanceFromSettlement);
+
+                        if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature)) {
+                            gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
+                            generateDungeon(gameState, candidate.getX(), candidate.getY());
+                            placed = true;
+                            break;
+                        }
+                    }
+
+                    if (!placed) {
+                        System.out.println("Warning: Could not place a dungeon near " + settlement);
+                    }
+                }
+            }
+        }).build().register();
+        MapGenerationEffect wildDungeons = MapGenerationEffect.builder().name("wildDungeons").dependsOn(new String[]{dungeonsGen.getName()}).applyEffect(gameState -> {
+            int numWildernessDungeons = Random.get().nextInt(4, 8); // Adjust how many you want
+            int minDistanceFromAllFeatures = 5;
+            int maxAttempts = 250;
+
+            for (int i = 0; i < numWildernessDungeons; i++) {
+                boolean placed = false;
+
+                for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                    int x = Random.get().nextInt(0, MAP_SIZE - 1);
+                    int y = Random.get().nextInt(0, MAP_SIZE - 1);
+                    Position candidate = new Position(x, y);
+
+                    if (inBounds(x, y) && isLandTile(gameState.getMap().getTileMap()[x][y]) && isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures)) {
+                        gameState.getMap().setEnvironment(x, y, Tiles.DUNGEON);
+                        placed = true;
+                        System.out.println("Placed a wilderness dungeon!");
+                        break;
+                    }
+                }
+
+                if (!placed) {
+                    System.out.println("Warning: Could not place a wilderness dungeon!");
+                }
+            }
         }).build().register();
         // Wave Function collapse keeping houses and path placements
-        MapGenerationEffect wfc = MapGenerationEffect.builder().name("waveFunctionCollapse").dependsOn(new String[]{dungeonsAndTowns.getName()}).applyEffect(gameState -> {
+        MapGenerationEffect wfc = MapGenerationEffect.builder().name("waveFunctionCollapse").dependsOn(new String[]{wildDungeons.getName()}).applyEffect(gameState -> {
             int width = gameState.getWidth();
 
             WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
@@ -140,8 +281,8 @@ public class Map implements InitializerInterface {
         }).build().register();
         // Add Entities
         MapGenerationEffect entities = MapGenerationEffect.builder().name("entities").dependsOn(new String[]{trees.getName()}).applyEffect(gameState -> {
-            Integer playerId = overworldEntity(gameState, housePos.getFirst().getX(),
-                housePos.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+            Integer playerId = overworldEntity(gameState, kingdoms.getFirst().towns.getFirst().getX(),
+                kingdoms.getFirst().towns.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
             EntityEdit player = gameState.getWorld().edit(playerId);
             player.create(PlayerComponent.class).playerId(gameState.getId());
             player.create(NamedComponent.class).name("Player");
@@ -151,59 +292,79 @@ public class Map implements InitializerInterface {
                 .add(Items.chestPlate);
             GameState.global().getPlayableEntities().add(playerId);
 
-            overworldEntity(gameState, housePos.getLast().getX(), housePos.getLast().getY(),
+            overworldEntity(gameState, kingdoms.getLast().towns.getLast().getX(), kingdoms.getLast().towns.getLast().getY(),
                 ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
         }).build().register();
     }
 
-    private static List<Position> generateRandomFeatures(
-        GameState gameState,
-        Tile feature,
-        int count,
-        boolean dungeon) {
-        List<Position> featurePos = new ArrayList<>(count);
-        Tile[][] tileMap = gameState.getMap().getTileMap();
-        Tile[][] environment = gameState.getMap().getEnvironment();
-        for (int i = 0; i < count; i++) {
-            while (true) {
-                int x = (int) (Math.random() * environment.length);
-                int y = (int) (Math.random() * environment[0].length);
-                if (tileMap[x][y] == Tiles.PLAINS) {
-                    if (dungeon)
-                        generateDungeon(gameState, x, y);
-                    else {
-                        int house = generateHouse(gameState, x, y);
-                        createCarriageAction(gameState, house);
+    private static void buildRoad(GameState gameState, Tile connector, Position location1, Position location2) {
+        Cell path = new RoadPathing().getPath(gameState.getMap(), location1.getX(),
+            location1.getY(), location2.getX(),
+            location2.getY());
+        while (path != null) {
+            gameState.getMap().setTile(path.x, path.y, connector);
+            path = path.parent;
+        }
+    }
+
+    private static Position findValidLandTile(int startX, int startY, Tile[][] map) {
+        int maxRadius = 10;
+
+        for (int r = 0; r <= maxRadius; r++) {
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dy = -r; dy <= r; dy++) {
+                    if (Math.abs(dx) != r && Math.abs(dy) != r) continue; // only outer edge
+                    int x = startX + dx;
+                    int y = startY + dy;
+                    if (inBounds(x, y) && isLandTile(map[x][y])) {
+                        return new Position(x, y);
                     }
-                    featurePos.add(new Position(x, y));
-                    environment[x][y] = feature;
-                    break;
                 }
             }
         }
-        return featurePos;
+
+        return new Position(startX, startY); // fallback, might not be land
     }
 
-    private static void connectFeatures(GameState gameState, List<Position> featurePos, Tile connector) {
-        int featureStart = 0;
-        int featureEnd = 1;
-        while (featureStart < featurePos.size()) {
-            Cell path = new RoadPathing().getPath(gameState.getMap(), featurePos.get(featureStart).getX(),
-                featurePos.get(featureStart).getY(), featurePos.get(featureEnd).getX(),
-                featurePos.get(featureEnd).getY());
-            while (path != null) {
-                gameState.getMap().setTile(path.x, path.y, connector);
-                path = path.parent;
-            }
-            featureEnd++;
-            if (featureStart == featureEnd) {
-                featureEnd++;
-            }
-            if (featureEnd >= featurePos.size()) {
-                featureEnd = 0;
-                featureStart++;
+    private static boolean isLandTile(Tile tile) {
+        return tile == Tiles.PLAINS || tile == Tiles.HILLS;
+    }
+
+    private static boolean inBounds(int x, int y) {
+        return x >= 0 && y >= 0 && x < MAP_SIZE && y < MAP_SIZE;
+    }
+
+    private static Position getNearbyValidTile(Tile[][] map, Position center, int minDist, int maxDist) {
+        for (int i = 0; i < 100; i++) {
+            int dx = Random.get().nextInt(-maxDist, maxDist);
+            int dy = Random.get().nextInt(-maxDist, maxDist);
+            if (Math.abs(dx) + Math.abs(dy) < minDist) continue;
+
+            int x = center.getX() + dx;
+            int y = center.getY() + dy;
+            if (inBounds(x, y) && isLandTile(map[x][y])) {
+                return new Position(x, y);
             }
         }
+        return center; // fallback
+    }
+
+    private static boolean isPositionFarFromFeatures(GameState gameState, Position pos, int minDistance) {
+        for (int dx = -minDistance; dx <= minDistance; dx++) {
+            for (int dy = -minDistance; dy <= minDistance; dy++) {
+                int x = pos.getX() + dx;
+                int y = pos.getY() + dy;
+
+                if (!inBounds(x, y)) continue;
+
+                if (gameState.getMap().getEnvironment(x, y) != null) {
+                    if (pos.distanceTo(new Position(x, y)) < minDistance) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }

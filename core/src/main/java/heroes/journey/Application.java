@@ -29,6 +29,8 @@ import heroes.journey.utils.art.ResourceManager;
  *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
  * Saving
  * Map Generation
+ *  Improve timeout
+ *  Make paths allowed to go through hills to make the \_/?
  *  Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons

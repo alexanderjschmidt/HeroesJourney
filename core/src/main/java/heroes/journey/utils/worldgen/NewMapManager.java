@@ -1,9 +1,11 @@
 package heroes.journey.utils.worldgen;
 
 import heroes.journey.GameState;
+import heroes.journey.tilemap.MapData;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class NewMapManager {
 
@@ -25,40 +27,37 @@ public class NewMapManager {
         mapGenerationEffects.put(name, effect);
     }
 
-    public void initMapGeneration(GameState gameState) {
-        Callable<Void> task = () -> {
+    public void initMapGeneration(GameState gameState, MapData mapData) {
+        timeout(() -> (Callable<Void>) () -> {
+            gameState.init(mapData);
             List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
             for (MapGenerationEffect phase : sorted) {
                 System.out.println("Running phase: " + phase.getName());
                 phase.apply(gameState);
             }
             return null;
-        };
-        timeout(task, 5, 2000);
+        }, 10, 1000);
     }
 
-    public static void timeout(Callable<Void> task, int retryCount, int timeout) {
-        int i = 0;
-        ExecutorService executorService = Executors.newSingleThreadExecutor(); // create once outside the loop
-        try {
-            while (i < retryCount) {
-                i++;
-                Future<Void> future = executorService.submit(task);
-                try {
-                    // Wait for the task to complete or timeout
-                    future.get(timeout, TimeUnit.MILLISECONDS);
-                    break;  // Break if the task completes successfully
-                } catch (TimeoutException e) {
-                    // Handle timeout case (task did not finish in time)
-                    future.cancel(true);
-                } catch (ExecutionException | InterruptedException e) {
-                    throw new RuntimeException(e);
-                } finally {
-                    future.cancel(true); // ensure cancellation if needed
-                }
+    public static void timeout(Supplier<Callable<Void>> taskSupplier, int retryCount, int timeout) {
+        int i = 0; // create once outside the loop
+        while (i < retryCount) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            i++;
+            Future<Void> future = executorService.submit(taskSupplier.get());
+            try {
+                // Wait for the task to complete or timeout
+                future.get(timeout, TimeUnit.MILLISECONDS);
+                break;  // Break if the task completes successfully
+            } catch (TimeoutException e) {
+                // Handle timeout case (task did not finish in time)
+                System.out.println("Timed out");
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                future.cancel(true); // ensure cancellation if needed
+                executorService.shutdownNow();
             }
-        } finally {
-            executorService.shutdown();  // Shutdown executor once all retries are done
         }
     }
 

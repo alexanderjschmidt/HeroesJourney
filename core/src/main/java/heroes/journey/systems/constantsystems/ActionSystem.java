@@ -4,7 +4,6 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.MovementComponent;
@@ -21,6 +20,11 @@ public class ActionSystem extends IteratingSystem {
     protected void process(int entityId) {
         World world = getWorld();
         ActionComponent action = ActionComponent.get(world, entityId);
+        PositionComponent positionComponent = PositionComponent.get(world, entityId);
+
+        if (positionComponent.isNotSynced()) {
+            return;
+        }
 
         // TODO this is null on carriage?
         String result = action.getAction().onSelect(GameState.global(), entityId);

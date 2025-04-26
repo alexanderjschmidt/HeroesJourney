@@ -6,7 +6,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Serializer;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-
 import lombok.Getter;
 
 @Getter
@@ -73,5 +72,12 @@ public class Position {
                 return new Position(x, y);
             }
         };
+    }
+
+    public int distanceTo(Position other) {
+        int dx = this.x - other.x;
+        int dy = this.y - other.y;
+        // return (int) Math.sqrt(dx * dx + dy * dy); // Euclidean
+        return Math.abs(this.x - other.x) + Math.abs(this.y - other.y); // Manhattan
     }
 }

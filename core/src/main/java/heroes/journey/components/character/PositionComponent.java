@@ -1,7 +1,6 @@
 package heroes.journey.components.character;
 
 import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 
@@ -42,5 +41,9 @@ public class PositionComponent extends PooledClonableComponent<PositionComponent
         y = from.y;
         targetX = from.targetX;
         targetY = from.targetY;
+    }
+
+    public boolean isNotSynced() {
+        return targetX != x || targetY != y;
     }
 }

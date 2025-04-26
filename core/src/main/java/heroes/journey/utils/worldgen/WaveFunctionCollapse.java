@@ -1,13 +1,13 @@
 package heroes.journey.utils.worldgen;
 
+import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.utils.Direction;
+import heroes.journey.utils.Random;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
-import heroes.journey.tilemap.wavefunction.Tile;
-import heroes.journey.utils.Direction;
-import heroes.journey.utils.Random;
 
 public class WaveFunctionCollapse {
 
@@ -64,7 +64,7 @@ public class WaveFunctionCollapse {
             collapseInnerRandom(map, possibleTilesMap, maxEntropyX, maxEntropyY);
             propagateConstraints(map, possibleTilesMap, maxEntropyX, maxEntropyY);
         }
-        System.out.println("Tiles: " + (map.length * map.length));
+        // System.out.println("Tiles: " + (map.length * map.length));
         return map;
     }
 
@@ -143,7 +143,7 @@ public class WaveFunctionCollapse {
         int sy) {
         Queue<int[]> propagationQueue = new LinkedList<>();
 
-        propagationQueue.add(new int[] {sx, sy});
+        propagationQueue.add(new int[]{sx, sy});
         // Propagate the constraints to neighboring cells
         int processed = 0;
         while (!propagationQueue.isEmpty()) {
@@ -183,7 +183,7 @@ public class WaveFunctionCollapse {
             possibleTilesMap[x][y].removeIf(tile -> !collapsedTile.aligns(dir, tile));
             if (possibleTilesMap[x][y].size() == 1) {
                 collapseInnerRandom(map, possibleTilesMap, x, y);
-                propagationQueue.add(new int[] {x, y});
+                propagationQueue.add(new int[]{x, y});
             }
         }
     }

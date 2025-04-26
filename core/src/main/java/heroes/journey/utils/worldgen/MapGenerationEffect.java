@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import static heroes.journey.utils.worldgen.NewMapManager.timeout;
@@ -31,11 +30,10 @@ public class MapGenerationEffect {
 
     public void apply(GameState gameState) {
         if (timeout > 0) {
-            Callable<Void> task = () -> {
+            timeout(() -> {
                 applyEffect.accept(gameState);
                 return null;
-            };
-            timeout(task, retryCount, timeout);
+            }, retryCount, timeout);
         } else {
             applyEffect.accept(gameState);
         }

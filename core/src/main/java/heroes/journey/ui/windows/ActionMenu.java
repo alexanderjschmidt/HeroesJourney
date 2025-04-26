@@ -1,14 +1,7 @@
 package heroes.journey.ui.windows;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.PositionComponent;
@@ -17,12 +10,14 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.ui.BasicBackground;
-import heroes.journey.ui.HUD;
-import heroes.journey.ui.ScrollPane;
-import heroes.journey.ui.ScrollPaneEntry;
-import heroes.journey.ui.UI;
+import heroes.journey.ui.*;
 import heroes.journey.ui.hudstates.ActionSelectState;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends Stack {
 
@@ -40,6 +35,7 @@ public class ActionMenu extends Stack {
     }
 
     public void open() {
+        System.out.println("OPEN");
         Integer selectedEntity = GameState.global().getCurrentEntity();
         World world = GameState.global().getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);

@@ -1,7 +1,6 @@
 package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActionComponent;
@@ -9,6 +8,8 @@ import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.initializers.base.BaseActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override
@@ -29,7 +30,7 @@ class CursorMoveState extends HUDState {
                 hud.getCursor().moveSelected();
             } else if (hud.getCursor().getHover() != null &&
                 GameState.global().getPlayableEntities().contains(GameState.global().getCurrentEntity()) &&
-                hud.getCursor().getHover() == GameState.global().getCurrentEntity()) {
+                Objects.equals(hud.getCursor().getHover(), GameState.global().getCurrentEntity())) {
                 hud.getCursor().setSelectedtoHover();
                 HUD.get().select();
                 StatsComponent stats = StatsComponent.get(GameState.global().getWorld(),

@@ -20,6 +20,9 @@ public class Cost {
     protected BiFunction<GameState, Integer, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
     public void onUse(GameState gameState, Integer userId) {
+        if (userId == null) {
+            return;
+        }
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
         statsComponent.adjustStamina(-stamina);
@@ -33,6 +36,9 @@ public class Cost {
     }
 
     public ShowAction requirementsMet(GameState gameState, Integer userId) {
+        if (userId == null) {
+            return ShowAction.YES;
+        }
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
         ShowAction enoughStamina = statsComponent.getStamina() > this.health ? ShowAction.YES : ShowAction.GRAYED;

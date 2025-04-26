@@ -1,27 +1,11 @@
 package heroes.journey.systems;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.artemis.Aspect;
-import com.artemis.AspectSubscriptionManager;
-import com.artemis.BaseSystem;
-import com.artemis.Component;
-import com.artemis.EntitySubscription;
-import com.artemis.World;
-import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
+import com.artemis.*;
 import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.Position;
@@ -30,11 +14,15 @@ import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
-import heroes.journey.systems.listeners.IdSyncSystem;
-import heroes.journey.systems.listeners.LocationCarriageListener;
-import heroes.journey.systems.listeners.LocationPositionSyncSystem;
-import heroes.journey.systems.listeners.PositionSyncSystem;
-import heroes.journey.systems.listeners.StatsActionsListener;
+import heroes.journey.systems.listeners.*;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameWorld extends World {
 
@@ -68,7 +56,8 @@ public class GameWorld extends World {
 
     private static WorldConfiguration buildConfig(GameState gameState, boolean limited) {
         WorldConfigurationBuilder builder = new WorldConfigurationBuilder().with(
-                new WorldSerializationManager())
+            new WorldSerializationManager());
+        builder
             .with(new CooldownSystem())
             .with(new IdSyncSystem(gameState))
             .with(new PositionSyncSystem(gameState))
@@ -88,7 +77,7 @@ public class GameWorld extends World {
     private void collectEndOfTurnSystems() {
         for (BaseSystem system : getSystems()) {
             if (system instanceof EndOfTurnSystem) {
-                endOfTurnSystems.add((EndOfTurnSystem)system);
+                endOfTurnSystems.add((EndOfTurnSystem) system);
             }
         }
     }
@@ -128,16 +117,14 @@ public class GameWorld extends World {
         IntBag entities = this.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
         int[] ids = entities.getData();
 
-        Map<Integer,Integer> oldToNew = new HashMap<>();
-
-        // Pre-create entity IDs in newWorld (single-threaded and safe)
+        Map<Integer, Integer> oldToNew = new HashMap<>();
         for (int id : ids) {
             oldToNew.put(id, cloned.create());
             ComponentCopier.copyEntity(this, cloned, oldToNew.get(id));
         }
 
         cloned.process();
-        System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        //System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return cloned;
     }
 

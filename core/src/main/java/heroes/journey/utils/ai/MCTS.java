@@ -37,7 +37,7 @@ public class MCTS {
     private double simulate(Node node, Integer playingEntity) {
         long start = System.nanoTime();
         double result = node.rollout(playingEntity); // Random game simulation
-        System.out.println("simulate took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        //System.out.println("simulate took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return result;
     }
 

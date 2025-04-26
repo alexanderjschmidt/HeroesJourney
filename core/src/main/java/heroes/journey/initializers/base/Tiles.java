@@ -1,21 +1,16 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.tilemap.wavefunction.AnimatedTile;
-import heroes.journey.tilemap.wavefunction.BaseTile;
-import heroes.journey.tilemap.wavefunction.Terrain;
-import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.tilemap.wavefunction.*;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+
+import java.util.List;
 
 public class Tiles implements InitializerInterface {
 
@@ -25,8 +20,8 @@ public class Tiles implements InitializerInterface {
     public static Terrain PATH;
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles, treeTiles;
-    public static Tile HOUSE, DUNGEON;
-    public static ActionTerrain house, trees, dungeon;
+    public static Tile CAPITAL, TOWN, DUNGEON;
+    public static ActionTerrain capital, town, trees, dungeon;
 
     static {
         TextureRegion[][] tiles = ResourceManager.get(LoadTextures.OverworldTileset);
@@ -42,8 +37,11 @@ public class Tiles implements InitializerInterface {
         PATH = new Terrain("Path", 1);
 
         // TODO should I baseTile() these with nullTerrain?
-        house = new ActionTerrain("House", 0);
-        HOUSE = new BaseTile(house, 0, false, tiles[7][12]);
+        capital = new ActionTerrain("Capital", 0);
+        CAPITAL = new BaseTile(capital, 0, false, tiles[9][14]);
+
+        town = new ActionTerrain("Town", 0);
+        TOWN = new BaseTile(town, 0, false, tiles[7][12]);
 
         dungeon = new ActionTerrain("Dungeon", 1);
         DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);

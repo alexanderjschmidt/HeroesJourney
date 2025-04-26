@@ -1,11 +1,9 @@
 package heroes.journey.ui.windows;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.NamedComponent;
 import heroes.journey.initializers.base.LoadOptions;
-import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.ui.Cursor;
@@ -24,12 +22,14 @@ public class TerrainUI extends UI {
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         ActionTerrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
 
-        String location = LoadOptions.debugOption.isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
+        String locationCoords = LoadOptions.debugOption.isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
         String name =
-            (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + location;
-        if (environment == Tiles.house || environment == Tiles.dungeon) {
-            Integer faction = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
-            name = NamedComponent.get(GameState.global().getWorld(), faction, "Unnamed Location");
+            (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment))) + locationCoords;
+        if (environment != null) {
+            Integer locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
+            if (locationId != null) {
+                name = NamedComponent.get(GameState.global().getWorld(), locationId, "Unnamed Location");
+            }
         }
         drawText(batch, name, 0, 0);
     }

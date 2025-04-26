@@ -38,8 +38,7 @@ public class BattleScreen implements Screen {
     public void startGame() {
         batch = app.getBatch();
 
-        GameState.global().init(mapData);
-        NewMapManager.get().initMapGeneration(GameState.global());
+        NewMapManager.get().initMapGeneration(GameState.global(), mapData);
         GameState.global().nextTurn();
 
         ready = true;
@@ -50,7 +49,8 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
             Random.get().setSeed((int) (Math.random() * 10000000));
-            NewMapManager.get().initMapGeneration(GameState.global());
+            NewMapManager.get().initMapGeneration(GameState.global(), mapData);
+            GameState.global().nextTurn();
         }
 
         GameCamera.get().updateGameCamera();
