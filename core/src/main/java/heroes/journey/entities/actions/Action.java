@@ -1,6 +1,7 @@
 package heroes.journey.entities.actions;
 
 import heroes.journey.GameState;
+import heroes.journey.ui.HUD;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -33,6 +34,7 @@ public class Action {
     }
 
     public void onHover(GameState gameState, Integer userId) {
+        HUD.get().getCursor().setMapPointerLoc(null);
         gameState.getRangeManager().clearRange();
         onHover.accept(gameState, userId);
     }

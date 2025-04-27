@@ -8,14 +8,17 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Feature;
-import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static heroes.journey.initializers.base.Map.features;
 
 public class TravelActions implements InitializerInterface {
 
@@ -33,17 +36,22 @@ public class TravelActions implements InitializerInterface {
 
         // Add Travel Actions
         MapGenerationEffect travel = MapGenerationEffect.builder().name("travel").dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()}).applyEffect(gameState -> {
-            for (Feature feature : heroes.journey.initializers.base.Map.features) {
+            for (Feature feature : features) {
+                if (feature.connections.size() < 3) {
+                    feature.makeConnections(features, 3);
+                }
+            }
+            for (Feature feature : features) {
                 Integer locationId = gameState.getEntities().getLocation(feature.location.getX(), feature.location.getY());
                 if (locationId == null) {
                     System.out.println(feature);
                     continue;
                 }
                 String name = NamedComponent.get(gameState.getWorld(), locationId, "Unknown Location");
-                EnumMap<Direction, Feature> travelableFeatures = findClosestFeaturesGroupedByDirection(feature, Map.features, 8, 3, 15);
-                List<Action> connections = new ArrayList<>(travelableFeatures.size());
-                for (Direction dir : travelableFeatures.keySet()) {
-                    connections.add(getTravelAction(gameState, dir, travelableFeatures.get(dir)));
+                List<Action> connections = new ArrayList<>(feature.connections.size());
+                for (Feature connection : feature.connections) {
+                    Direction dir = Direction.approximateDirection(feature.location, connection.location);
+                    connections.add(getTravelAction(gameState, dir, connection));
                 }
                 travelConnections.put(name, connections);
             }
@@ -58,6 +66,9 @@ public class TravelActions implements InitializerInterface {
         }
         String locationName = NamedComponent.get(gameState.getWorld(), locationId, "Unknown Location");
         return Action.builder().name(dir + " to " + locationName)
+            .onHover((gs, e) -> {
+                HUD.get().getCursor().setMapPointerLoc(new Position(feature.location.getX(), feature.location.getY()));
+            })
             .onSelect((gs, e) -> {
                 PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
                 positionComponent.setPos(feature.location.getX(), feature.location.getY());
@@ -68,66 +79,5 @@ public class TravelActions implements InitializerInterface {
     private static List<Action> getTravelActions(GameState gameState, Integer featureId) {
         String featureName = NamedComponent.get(gameState.getWorld(), featureId, "---");
         return travelConnections.get(featureName);
-    }
-
-    private static EnumMap<Direction, Feature> findClosestFeaturesGroupedByDirection(Feature start, List<Feature> features, int maxFeatures, int minFeatures, int maxDistAfterMinFeatures) {
-        // Step 1: Sort all features by distance from the start
-        List<Feature> sorted = features.stream()
-            .filter(p -> !p.location.equals(start.location)) // skip yourself
-            .sorted(Comparator.comparingDouble(p -> p.location.distanceTo(start.location)))
-            .toList();
-
-        // Step 2: Assign closest features to directions
-        EnumMap<Direction, Feature> result = new EnumMap<>(Direction.class);
-        int featuresAdded = 0;
-
-        for (Feature connected : start.connections) {
-            Direction dir = approximateDirection(start.location, connected.location);
-
-            if (!result.containsKey(dir)) {
-                result.put(dir, connected);
-                featuresAdded++;
-            }
-        }
-
-        for (Feature feature : sorted) {
-            if (featuresAdded >= maxFeatures) break;
-
-            int dist = start.location.distanceTo(feature.location);
-            // After we have a minimum number of connections it shouldnt find anything further than maxDistAfterMinFeatures
-            // this is if a feature is really far out it will still find minFeatures connections but no more.
-            if (featuresAdded >= minFeatures && dist > maxDistAfterMinFeatures) {
-                break;
-            }
-            Direction dir = approximateDirection(start.location, feature.location);
-
-            if (!result.containsKey(dir)) {
-                start.add(feature);
-                result.put(dir, feature);
-                featuresAdded++;
-            }
-        }
-
-        return result;
-    }
-
-    private static Direction approximateDirection(Position from, Position to) {
-        int dx = to.getX() - from.getX();
-        int dy = to.getY() - from.getY();
-
-        double angle = Math.atan2(dy, dx); // Note: Y axis is flipped (top-down map)
-        double degrees = Math.toDegrees(angle);
-        degrees = (degrees + 360) % 360; // Normalize to [0, 360)
-
-        if (degrees >= 337.5 || degrees < 22.5) return Direction.EAST;
-        if (degrees >= 22.5 && degrees < 67.5) return Direction.NORTHEAST;
-        if (degrees >= 67.5 && degrees < 112.5) return Direction.NORTH;
-        if (degrees >= 112.5 && degrees < 157.5) return Direction.NORTHWEST;
-        if (degrees >= 157.5 && degrees < 202.5) return Direction.WEST;
-        if (degrees >= 202.5 && degrees < 247.5) return Direction.SOUTHWEST;
-        if (degrees >= 247.5 && degrees < 292.5) return Direction.SOUTH;
-        if (degrees >= 292.5 && degrees < 337.5) return Direction.SOUTHEAST;
-
-        return Direction.NORTH; // fallback
     }
 }

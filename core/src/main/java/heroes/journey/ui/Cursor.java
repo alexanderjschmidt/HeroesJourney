@@ -12,6 +12,7 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PositionComponent;
+import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.ui.hudstates.States;
@@ -27,7 +28,7 @@ public class Cursor {
     public int x, y;
     // render points
 
-    private HUD hud;
+    private final HUD hud;
 
     @Getter
     private Integer selected, hover;
@@ -37,7 +38,9 @@ public class Cursor {
     @Getter
     private Cell path;
 
-    private Animation<TextureRegion> ani;
+    private final Animation<TextureRegion> ani, mapPointer;
+    @Setter
+    private Position mapPointerLoc;
 
     private float elapsed = 0;
 
@@ -46,7 +49,9 @@ public class Cursor {
         TextureRegion[] frames = {ResourceManager.get(LoadTextures.UI)[0][0],
             ResourceManager.get(LoadTextures.UI)[0][0], ResourceManager.get(LoadTextures.UI)[1][0]};
         ani = new Animation<TextureRegion>(.5f, frames);
-        setPosition(10, 15);
+        TextureRegion[] framesPointer = {ResourceManager.get(LoadTextures.UI)[3][3],
+            ResourceManager.get(LoadTextures.UI)[3][3], ResourceManager.get(LoadTextures.UI)[4][3]};
+        mapPointer = new Animation<TextureRegion>(.5f, framesPointer);
     }
 
     public void update() {
@@ -79,6 +84,10 @@ public class Cursor {
         }
         batch.draw(ani.getKeyFrame(elapsed, true), x * GameCamera.get().getSize(),
             y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
+        if (mapPointerLoc != null) {
+            batch.draw(mapPointer.getKeyFrame(elapsed, true), mapPointerLoc.getX() * GameCamera.get().getSize(),
+                mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
+        }
         batch.setColor(Color.WHITE);
     }
 

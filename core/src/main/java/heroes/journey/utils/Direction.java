@@ -1,6 +1,7 @@
 package heroes.journey.utils;
 
 import com.badlogic.gdx.math.Vector2;
+import heroes.journey.entities.Position;
 import lombok.Getter;
 
 public enum Direction {
@@ -83,4 +84,43 @@ public enum Direction {
         return v;
     }
 
+    public Direction inverse() {
+        if (this == Direction.NORTH)
+            return Direction.SOUTH;
+        else if (this == Direction.SOUTH)
+            return Direction.NORTH;
+        else if (this == Direction.EAST)
+            return Direction.WEST;
+        else if (this == Direction.WEST)
+            return Direction.EAST;
+        else if (this == Direction.NORTHEAST)
+            return Direction.SOUTHWEST;
+        else if (this == Direction.NORTHWEST)
+            return Direction.SOUTHEAST;
+        else if (this == Direction.SOUTHEAST)
+            return Direction.NORTHWEST;
+        else if (this == Direction.SOUTHWEST)
+            return Direction.NORTHEAST;
+        return Direction.NODIRECTION;
+    }
+
+    public static Direction approximateDirection(Position from, Position to) {
+        int dx = to.getX() - from.getX();
+        int dy = to.getY() - from.getY();
+
+        double angle = Math.atan2(dy, dx); // Note: Y axis is flipped (top-down map)
+        double degrees = Math.toDegrees(angle);
+        degrees = (degrees + 360) % 360; // Normalize to [0, 360)
+
+        if (degrees >= 337.5 || degrees < 22.5) return Direction.EAST;
+        if (degrees >= 22.5 && degrees < 67.5) return Direction.NORTHEAST;
+        if (degrees >= 67.5 && degrees < 112.5) return Direction.NORTH;
+        if (degrees >= 112.5 && degrees < 157.5) return Direction.NORTHWEST;
+        if (degrees >= 157.5 && degrees < 202.5) return Direction.WEST;
+        if (degrees >= 202.5 && degrees < 247.5) return Direction.SOUTHWEST;
+        if (degrees >= 247.5 && degrees < 292.5) return Direction.SOUTH;
+        if (degrees >= 292.5 && degrees < 337.5) return Direction.SOUTHEAST;
+
+        return Direction.NORTH; // fallback
+    }
 }
