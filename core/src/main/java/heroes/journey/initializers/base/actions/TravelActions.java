@@ -1,6 +1,8 @@
 package heroes.journey.initializers.base.actions;
 
+import com.artemis.EntityEdit;
 import heroes.journey.GameState;
+import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.utils.Utils;
@@ -12,6 +14,8 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.Direction;
+import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 
 import java.util.ArrayList;
@@ -71,8 +75,10 @@ public class TravelActions implements InitializerInterface {
             })
             .onSelect((gs, e) -> {
                 PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-                positionComponent.setPos(feature.location.getX(), feature.location.getY());
-                return "You have arrived at " + locationName + " on foot";
+                Cell path = new EntityCursorPathing().getPath(GameState.global().getMap(), positionComponent.getX(), positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
+                EntityEdit entity = GameState.global().getWorld().edit(e);
+                entity.create(MovementComponent.class).path(path.reverse());
+                return null;
             }).build().register();
     }
 

@@ -27,9 +27,6 @@ import lombok.Getter;
  *  Show Controls on UIs?
  * Make HUD Locked when players character is moving
  * Multiplayer
- * Fog of War
- *  light fog (ie 50% transparent over tiles) on unseen tiles
- *  black (or Heavy Fog ie pure white no transparency) on undiscovered tiles
  * Saving
  * Map Generation
  *  Improve timeout

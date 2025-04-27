@@ -77,4 +77,8 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         mana = from.mana;
         attributes.putAll(from.attributes);
     }
+
+    public int getVision() {
+        return body + 3;
+    }
 }
