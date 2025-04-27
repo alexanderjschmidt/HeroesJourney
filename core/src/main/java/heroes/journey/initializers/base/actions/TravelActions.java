@@ -7,6 +7,7 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.Feature;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
@@ -32,14 +33,14 @@ public class TravelActions implements InitializerInterface {
 
         // Add Travel Actions
         MapGenerationEffect travel = MapGenerationEffect.builder().name("travel").dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()}).applyEffect(gameState -> {
-            for (Position feature : heroes.journey.initializers.base.Map.features) {
-                Integer locationId = gameState.getEntities().getLocation(feature.getX(), feature.getY());
+            for (Feature feature : heroes.journey.initializers.base.Map.features) {
+                Integer locationId = gameState.getEntities().getLocation(feature.location.getX(), feature.location.getY());
                 if (locationId == null) {
                     System.out.println(feature);
                     continue;
                 }
                 String name = NamedComponent.get(gameState.getWorld(), locationId, "Unknown Location");
-                EnumMap<Direction, Position> travelableFeatures = findClosestFeaturesGroupedByDirection(feature, Map.features, 8, 2, 10);
+                EnumMap<Direction, Feature> travelableFeatures = findClosestFeaturesGroupedByDirection(feature, Map.features, 8, 3, 15);
                 List<Action> connections = new ArrayList<>(travelableFeatures.size());
                 for (Direction dir : travelableFeatures.keySet()) {
                     connections.add(getTravelAction(gameState, dir, travelableFeatures.get(dir)));
@@ -49,17 +50,17 @@ public class TravelActions implements InitializerInterface {
         }).build().register();
     }
 
-    private static Action getTravelAction(GameState gameState, Direction dir, Position position) {
-        Integer locationId = gameState.getEntities().getLocation(position.getX(), position.getY());
+    private static Action getTravelAction(GameState gameState, Direction dir, Feature feature) {
+        Integer locationId = gameState.getEntities().getLocation(feature.location.getX(), feature.location.getY());
         if (locationId == null) {
-            System.out.println(position);
+            System.out.println(feature);
             return null;
         }
         String locationName = NamedComponent.get(gameState.getWorld(), locationId, "Unknown Location");
         return Action.builder().name(dir + " to " + locationName)
             .onSelect((gs, e) -> {
                 PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-                positionComponent.setPos(position.getX(), position.getY());
+                positionComponent.setPos(feature.location.getX(), feature.location.getY());
                 return "You have arrived at " + locationName + " on foot";
             }).build().register();
     }
@@ -69,30 +70,40 @@ public class TravelActions implements InitializerInterface {
         return travelConnections.get(featureName);
     }
 
-    private static EnumMap<Direction, Position> findClosestFeaturesGroupedByDirection(Position start, List<Position> features, int maxFeatures, int minFeatures, int maxDistAfterMinFeatures) {
+    private static EnumMap<Direction, Feature> findClosestFeaturesGroupedByDirection(Feature start, List<Feature> features, int maxFeatures, int minFeatures, int maxDistAfterMinFeatures) {
         // Step 1: Sort all features by distance from the start
-        List<Position> sorted = features.stream()
-            .filter(p -> !p.equals(start)) // skip yourself
-            .sorted(Comparator.comparingDouble(p -> start.distanceTo(p)))
+        List<Feature> sorted = features.stream()
+            .filter(p -> !p.location.equals(start.location)) // skip yourself
+            .sorted(Comparator.comparingDouble(p -> p.location.distanceTo(start.location)))
             .toList();
 
         // Step 2: Assign closest features to directions
-        EnumMap<Direction, Position> result = new EnumMap<Direction, Position>(Direction.class);
+        EnumMap<Direction, Feature> result = new EnumMap<>(Direction.class);
         int featuresAdded = 0;
 
-        for (Position position : sorted) {
+        for (Feature connected : start.connections) {
+            Direction dir = approximateDirection(start.location, connected.location);
+
+            if (!result.containsKey(dir)) {
+                result.put(dir, connected);
+                featuresAdded++;
+            }
+        }
+
+        for (Feature feature : sorted) {
             if (featuresAdded >= maxFeatures) break;
 
-            int dist = start.distanceTo(position);
+            int dist = start.location.distanceTo(feature.location);
             // After we have a minimum number of connections it shouldnt find anything further than maxDistAfterMinFeatures
             // this is if a feature is really far out it will still find minFeatures connections but no more.
             if (featuresAdded >= minFeatures && dist > maxDistAfterMinFeatures) {
                 break;
             }
-            Direction dir = approximateDirection(start, position);
+            Direction dir = approximateDirection(start.location, feature.location);
 
             if (!result.containsKey(dir)) {
-                result.put(dir, position);
+                start.add(feature);
+                result.put(dir, feature);
                 featuresAdded++;
             }
         }

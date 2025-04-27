@@ -1,21 +1,28 @@
 package heroes.journey.utils.worldgen;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class WeightedRandomPicker<T> extends ArrayList<T> {
     public final List<Long> cumulativeWeights; // Stores cumulative weights
-    private final Map<T,Integer> indexMap;       // Maps items to their index in `items`
+    private final Map<T, Integer> indexMap;       // Maps items to their index in `items`
     private long totalWeight;                   // Sum of all weights
 
     public WeightedRandomPicker() {
         this.cumulativeWeights = new ArrayList<>();
         this.indexMap = new HashMap<>();
         this.totalWeight = 0;
+    }
+
+    public WeightedRandomPicker(WeightedRandomPicker<T> possibleTiles, int weight) {
+        this();
+        if (possibleTiles.isEmpty()) {
+            return;
+        }
+        addItem(possibleTiles.getFirst(), possibleTiles.cumulativeWeights.getFirst());
+        for (int i = 1; i < possibleTiles.size(); i++) {
+            addItem(possibleTiles.get(i), weight);
+        }
     }
 
     public WeightedRandomPicker(WeightedRandomPicker<T> possibleTiles) {
@@ -93,8 +100,8 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
 
         // Remove item and its cumulative weight
         //System.out.println(size() + " " + cumulativeWeights.size());
-        super.remove((int)index);
-        cumulativeWeights.remove((int)index);
+        super.remove((int) index);
+        cumulativeWeights.remove((int) index);
 
         // Update indexMap for shifted elements
         for (int i = index; i < size(); i++) {
@@ -113,7 +120,7 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
         if (isEmpty())
             throw new IllegalStateException("No items available");
 
-        long r = (long)(Math.random() * totalWeight);
+        long r = (long) (Math.random() * totalWeight);
         int index = Collections.binarySearch(cumulativeWeights, r);
         if (index < 0)
             index = -index - 1; // Convert negative insertion point
@@ -122,7 +129,7 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
     }
 
     public void testDistribution() {
-        HashMap<String,Integer> distribution = new HashMap<String,Integer>();
+        HashMap<String, Integer> distribution = new HashMap<String, Integer>();
         for (T t : this) {
             distribution.put(t.toString(), 0);
         }

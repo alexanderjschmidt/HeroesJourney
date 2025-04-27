@@ -9,40 +9,38 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
+import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.ActionDetailUI;
-import heroes.journey.ui.windows.ActionMenu;
-import heroes.journey.ui.windows.DelveUI;
-import heroes.journey.ui.windows.EntityUI;
-import heroes.journey.ui.windows.PopupUI;
-import heroes.journey.ui.windows.StatsUI;
-import heroes.journey.ui.windows.TerrainUI;
-import heroes.journey.ui.windows.TurnUI;
+import heroes.journey.ui.windows.*;
 import lombok.Getter;
 
 public class HUD extends Stage {
 
     public static final int FONT_SIZE = 24;
 
-    @Getter private final Cursor cursor;
+    @Getter
+    private final Cursor cursor;
     private final Table layout, leftCol;
 
-    @Getter private final ActionMenu actionMenu;
+    @Getter
+    private final ActionMenu actionMenu;
     private final ActionDetailUI actionDetailUI;
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
     private final TurnUI turnUI;
 
     private final Cell<?> centerWindow;
-    @Getter private final StatsUI statsUI;
-    @Getter private final PopupUI popupUI;
+    @Getter
+    private final StatsUI statsUI;
+    @Getter
+    private final PopupUI popupUI;
     private DelveUI delveUI;
 
     private static HUD hud;
-    private final StateMachine<HUD,HUDState> stateMachine;
-    @Getter private float delta;
+    private final StateMachine<HUD, HUDState> stateMachine;
+    @Getter
+    private float delta;
 
     public static HUD get() {
         if (hud == null)
@@ -52,7 +50,7 @@ public class HUD extends Stage {
 
     public HUD() {
         super(new ScreenViewport());
-        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
+        stateMachine = new StackStateMachine<HUD, HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -87,9 +85,6 @@ public class HUD extends Stage {
         centerWindow = layout.add(statsUI).colspan(3);
         layout.add(rightCol);
 
-        leftCol.debug();
-        rightCol.debug();
-        layout.debug();
         this.addActor(layout);
 
         resize();
@@ -129,6 +124,9 @@ public class HUD extends Stage {
         if (selectedEntityUI != null) {
             selectedEntityUI.watchSelected();
         }
+        leftCol.setDebug(LoadOptions.debugOption.isTrue());
+        layout.setDebug(LoadOptions.debugOption.isTrue());
+
         draw();
     }
 

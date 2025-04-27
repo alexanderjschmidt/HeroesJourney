@@ -10,10 +10,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
+import lombok.Getter;
 
 /*
  * TODO List
- * Bugish: Guarantee there is a return trip for every Travel connection
  * Menus
  *  Action Detail UI flesh out
  *      Make cooldown skills show recover timer
@@ -58,6 +58,7 @@ import heroes.journey.utils.art.ResourceManager;
  *      You can gain knowledge easier and it will speed up your experience gain
  *      for that experience/skill
  */
+@Getter
 public class Application extends Game {
 
     private Viewport viewport;
@@ -119,14 +120,6 @@ public class Application extends Game {
 
     @Override
     public void resume() {
-    }
-
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-
-    public Viewport getViewport() {
-        return viewport;
     }
 
 }

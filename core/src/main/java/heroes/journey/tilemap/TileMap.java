@@ -44,10 +44,10 @@ public class TileMap implements IndexedGraph<TileNode> {
         int xo = (int) (GameCamera.get().position.x / GameCamera.get().getSize());
         int yo = (int) (GameCamera.get().position.y / GameCamera.get().getSize());
 
-        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().getxLow()), 0);
-        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().getyLow()), 0);
-        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().getxHigh()), width);
-        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().getyHigh()), height);
+        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().getXLow()), 0);
+        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().getYLow()), 0);
+        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().getXHigh()), width);
+        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().getYHigh()), height);
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {

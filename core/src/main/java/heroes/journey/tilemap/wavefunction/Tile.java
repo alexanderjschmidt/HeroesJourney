@@ -1,16 +1,15 @@
 package heroes.journey.tilemap.wavefunction;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Tile {
 
-    private final Map<Direction,Terrain> neighbors;
+    private final Map<Direction, Terrain> neighbors;
     private final boolean addToDefaultTiles;
 
     private final Terrain terrain;
@@ -37,6 +36,8 @@ public abstract class Tile {
     }
 
     public boolean aligns(Direction direction, Tile tile) {
+        if (tile == null)
+            return true;
         switch (direction) {
             case NORTHWEST -> {
                 return tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHWEST);

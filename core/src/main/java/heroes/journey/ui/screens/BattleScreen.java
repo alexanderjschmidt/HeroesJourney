@@ -7,8 +7,10 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
+import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.tilemap.MapData;
+import heroes.journey.ui.DebugRenderer;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.LightManager;
 import heroes.journey.utils.Random;
@@ -21,6 +23,7 @@ public class BattleScreen implements Screen {
     private GameClient client;
     private SpriteBatch batch;
     private LightManager lightManager;
+    private DebugRenderer debugRenderer;
 
     private MapData mapData;
     private boolean ready = false;
@@ -31,6 +34,7 @@ public class BattleScreen implements Screen {
         this.mapData = new MapData((int) (Math.random() * 10000000), Map.MAP_SIZE, 2, false);
         this.client = new GameClient();
         this.lightManager = new LightManager();
+        this.debugRenderer = new DebugRenderer();
 
         startGame();
     }
@@ -59,6 +63,8 @@ public class BattleScreen implements Screen {
 
         GameState.global().update(delta);
         lightManager.update();
+        if (LoadOptions.debugOption.isTrue())
+            debugRenderer.render();
         HUD.get().update(delta);
     }
 

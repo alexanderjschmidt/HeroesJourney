@@ -13,7 +13,10 @@ import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.worldgen.*;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.RandomWorldGenerator;
+import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+import heroes.journey.utils.worldgen.WeightedRandomPicker;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,8 +36,8 @@ public class Map implements InitializerInterface {
     public static int NUM_KINGDOMS = 3;
     public static MapGenerationEffect trees;
 
-    private static List<Kingdom> kingdoms = new ArrayList<>();
-    public static List<Position> features = new ArrayList<>();
+    private static List<Feature> kingdoms = new ArrayList<>();
+    public static List<Feature> features = new ArrayList<>();
 
     static {
         // Generate Smooth Noise
@@ -70,12 +73,12 @@ public class Map implements InitializerInterface {
 
                 // Snap to nearest valid land tile
                 Position capital = findValidLandTile(x, y, gameState.getMap().getTileMap());
-                Kingdom kingdom = new Kingdom("Kingdom " + (i + 1), capital);
+                Feature kingdom = new Feature("kingdom", capital);
                 kingdoms.add(kingdom);
 
                 gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
                 generateTown(gameState, capital.getX(), capital.getY(), true);
-                features.add(capital);
+                features.add(kingdom);
                 //System.out.println("Capital: " + capital.getX() + ", " + capital.getY());
             }
         }).build().register();
@@ -84,16 +87,16 @@ public class Map implements InitializerInterface {
             int minDistanceBetweenTowns = 6;
             int maxAttempts = 100;
 
-            for (Kingdom kingdom : kingdoms) {
+            for (Feature kingdom : kingdoms) {
                 int numTowns = Random.get().nextInt(3, 6);
                 Set<Position> placed = new HashSet<>();
-                placed.add(kingdom.capital); // avoid placing towns right next to the capital
+                placed.add(kingdom.location); // avoid placing towns right next to the capital
 
                 for (int i = 0; i < numTowns; i++) {
                     boolean placedTown = false;
 
                     for (int attempt = 0; attempt < maxAttempts; attempt++) {
-                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), kingdom.capital, 4, 8);
+                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), kingdom.location, 4, 8);
 
                         // Check spacing with existing towns in this kingdom
                         boolean tooClose = false;
@@ -105,8 +108,9 @@ public class Map implements InitializerInterface {
                         }
 
                         if (!tooClose) {
-                            kingdom.towns.add(candidate);
-                            features.add(candidate);
+                            Feature town = new Feature("town", candidate);
+                            kingdom.add(town);
+                            features.add(town);
                             gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
                             generateTown(gameState, candidate.getX(), candidate.getY(), false);
                             placed.add(candidate);
@@ -116,7 +120,7 @@ public class Map implements InitializerInterface {
                     }
 
                     if (!placedTown) {
-                        System.out.println("Warning: Could not place all towns for " + kingdom.name);
+                        System.out.println("Warning: Could not place all towns for kingdom");
                     }
                 }
             }
@@ -124,15 +128,15 @@ public class Map implements InitializerInterface {
         // Add Paths
         MapGenerationEffect paths = MapGenerationEffect.builder().name("paths").dependsOn(new String[]{townsGen.getName()}).applyEffect(gameState -> {
             // Capitals to towns
-            for (Kingdom kingdom : kingdoms) {
-                for (Position town : kingdom.towns) {
-                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdom.capital, town);
+            for (Feature kingdom : kingdoms) {
+                for (Feature town : kingdom.connections) {
+                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdom.location, town.location);
                 }
             }
             // Capitals to Capitals
             for (int i = 0; i < kingdoms.size(); i++) {
                 for (int j = i + 1; j < kingdoms.size(); j++) {
-                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdoms.get(i).capital, kingdoms.get(j).capital);
+                    buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdoms.get(i).location, kingdoms.get(j).location);
                 }
             }
         }).build().register();
@@ -145,25 +149,26 @@ public class Map implements InitializerInterface {
             int dungeonsPerSettlementMax = 4;
             int maxAttempts = 50;
 
-            List<Position> settlements = new ArrayList<>();
-            for (Kingdom kingdom : kingdoms) {
-                settlements.add(kingdom.capital);
-                settlements.addAll(kingdom.towns);
+            List<Feature> settlements = new ArrayList<>();
+            for (Feature kingdom : kingdoms) {
+                settlements.add(kingdom);
+                settlements.addAll(kingdom.connections);
             }
 
-            for (Position settlement : settlements) {
+            for (Feature settlement : settlements) {
                 int numDungeons = Random.get().nextInt(dungeonsPerSettlementMin, dungeonsPerSettlementMax);
 
                 for (int i = 0; i < numDungeons; i++) {
                     boolean placed = false;
 
                     for (int attempt = 0; attempt < maxAttempts; attempt++) {
-                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), settlement, minDistanceFromSettlement, maxDistanceFromSettlement);
+                        Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(), settlement.location, minDistanceFromSettlement, maxDistanceFromSettlement);
 
                         if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature)) {
                             gameState.getMap().setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
                             generateDungeon(gameState, candidate.getX(), candidate.getY());
-                            features.add(candidate);
+                            Feature dungeon = new Feature("dungeon", candidate);
+                            features.add(dungeon);
                             placed = true;
                             break;
                         }
@@ -176,7 +181,7 @@ public class Map implements InitializerInterface {
             }
         }).build().register();
         MapGenerationEffect wildDungeons = MapGenerationEffect.builder().name("wildDungeons").dependsOn(new String[]{dungeonsGen.getName()}).applyEffect(gameState -> {
-            int numWildernessDungeons = Random.get().nextInt(4, 8); // Adjust how many you want
+            int numWildernessDungeons = Random.get().nextInt(8, 16); // Adjust how many you want
             int minDistanceFromAllFeatures = 5;
             int maxAttempts = 250;
 
@@ -190,7 +195,9 @@ public class Map implements InitializerInterface {
 
                     if (inBounds(x, y) && isLandTile(gameState.getMap().getTileMap()[x][y]) && isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures)) {
                         gameState.getMap().setEnvironment(x, y, Tiles.DUNGEON);
-                        features.add(candidate);
+                        generateDungeon(gameState, x, y);
+                        Feature dungeon = new Feature("wilddungeon", candidate);
+                        features.add(dungeon);
                         placed = true;
                         System.out.println("Placed a wilderness dungeon!");
                         break;
@@ -284,8 +291,9 @@ public class Map implements InitializerInterface {
         }).build().register();
         // Add Entities
         MapGenerationEffect entities = MapGenerationEffect.builder().name("entities").dependsOn(new String[]{trees.getName()}).applyEffect(gameState -> {
-            Integer playerId = overworldEntity(gameState, kingdoms.getFirst().towns.getFirst().getX(),
-                kingdoms.getFirst().towns.getFirst().getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+            Feature playerTown = kingdoms.getFirst().connections.stream().toList().getFirst();
+            Integer playerId = overworldEntity(gameState, playerTown.location.getX(),
+                playerTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
             EntityEdit player = gameState.getWorld().edit(playerId);
             player.create(PlayerComponent.class).playerId(gameState.getId());
             player.create(NamedComponent.class).name("Player");
@@ -295,7 +303,8 @@ public class Map implements InitializerInterface {
                 .add(Items.chestPlate);
             GameState.global().getPlayableEntities().add(playerId);
 
-            overworldEntity(gameState, kingdoms.getLast().towns.getLast().getX(), kingdoms.getLast().towns.getLast().getY(),
+            Feature opponentTown = kingdoms.getLast().connections.stream().toList().getLast();
+            overworldEntity(gameState, opponentTown.location.getX(), opponentTown.location.getY(),
                 ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
         }).build().register();
     }

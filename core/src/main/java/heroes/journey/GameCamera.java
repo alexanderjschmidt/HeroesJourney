@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
+import lombok.Getter;
 
 public class GameCamera extends OrthographicCamera {
 
     private static int size = 32;
+    @Getter
     private int xLow, xHigh, yLow, yHigh;
 
     private int lastTargetX = 0;
@@ -97,22 +99,6 @@ public class GameCamera extends OrthographicCamera {
 
     public int getSize() {
         return size;
-    }
-
-    public int getxLow() {
-        return xLow;
-    }
-
-    public int getxHigh() {
-        return xHigh;
-    }
-
-    public int getyLow() {
-        return yLow;
-    }
-
-    public int getyHigh() {
-        return yHigh;
     }
 
     public boolean onCamera(int x, int y) {

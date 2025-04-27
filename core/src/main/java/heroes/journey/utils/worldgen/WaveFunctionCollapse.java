@@ -23,7 +23,6 @@ public class WaveFunctionCollapse {
             for (int y = 0; y < map.length; y++) {
                 if (possibleTilesMapPrime[x][y] == null) {
                     possibleTilesMapPrime[x][y] = new WeightedRandomPicker<>(possibleTiles);
-                    //possibleTilesMapPrime[x][y] = getPossibleTiles()
                 }
                 possibleTilesMap[x][y] = new WeightedRandomPicker(possibleTilesMapPrime[x][y]);
             }
@@ -40,7 +39,7 @@ public class WaveFunctionCollapse {
                     int ax = (startX + x) % map.length;
                     int ay = (startY + y) % map.length;
                     if (map[ax][ay] == null && possibleTilesMap[ax][ay].isEmpty()) {
-                        clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 2);
+                        clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 3);
                         continue outer;
                     }
                     // TODO update this to use the highest value in the weighted random picker not the total weight
