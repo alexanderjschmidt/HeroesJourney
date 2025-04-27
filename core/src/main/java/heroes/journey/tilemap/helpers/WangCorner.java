@@ -1,14 +1,13 @@
 package heroes.journey.tilemap.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.tilemap.wavefunction.BaseTile;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WangCorner {
 
@@ -34,10 +33,10 @@ public class WangCorner {
         // Center (Not included because it should be one of the adjacent tiles
         // tile.add(new BaseTileRender(tiles[y + 1][x + 1], 0), adjacentTileInner, adjacentTileInner,
         //     adjacentTileInner, adjacentTileInner);
-        int cornerWeight = (int)(transitionWeight * (70 / 100d));
-        int edgeWeight = (int)(transitionWeight * (10 / 100d));
-        int inverseCornerWeight = (int)(transitionWeight * (70 / 100d));
-        int diagonalWeight = (int)(transitionWeight * (1 / 100d));
+        int cornerWeight = (int) (transitionWeight * (70 / 100d));
+        int edgeWeight = (int) (transitionWeight * (10 / 100d));
+        int inverseCornerWeight = (int) (transitionWeight * (70 / 100d));
+        int diagonalWeight = (int) (transitionWeight * (1 / 100d));
         // Setup Tiles
         // Corners
         Tile northWest = new BaseTile(base, cornerWeight, addToDefault, tiles[x][y]);
@@ -59,6 +58,8 @@ public class WangCorner {
         Tile diagonalSouthWest = new BaseTile(base, diagonalWeight, addToDefault, tiles[x + 3][y + 2]);
         // Diagonal with the cliff on the top left and bottom right
         Tile diagonalNorthWest = new BaseTile(base, diagonalWeight, addToDefault, tiles[x + 4][y + 2]);
+        // Center
+        Tile center = new BaseTile(base, transitionWeight, addToDefault, tiles[x + 1][y + 1]);
 
         tileSet.add(northWest);
         tileSet.add(northEast);
@@ -74,6 +75,7 @@ public class WangCorner {
         tileSet.add(southEastInverse);
         tileSet.add(diagonalSouthWest);
         tileSet.add(diagonalNorthWest);
+        tileSet.add(center);
 
         // Add connections
         // Corners
@@ -192,6 +194,16 @@ public class WangCorner {
             .add(Direction.SOUTH, base)
             .add(Direction.SOUTHWEST, adjacentTileOuter)
             .add(Direction.WEST, base);
+        // Center
+        center.add(Direction.NORTHWEST, adjacentTileInner)
+            .add(Direction.NORTH, adjacentTileInner)
+            .add(Direction.NORTHEAST, adjacentTileInner)
+            .add(Direction.EAST, adjacentTileInner)
+            .add(Direction.SOUTHEAST, adjacentTileInner)
+            .add(Direction.SOUTH, adjacentTileInner)
+            .add(Direction.SOUTHWEST, adjacentTileInner)
+            .add(Direction.WEST, adjacentTileInner);
+
         return tileSet;
     }
 

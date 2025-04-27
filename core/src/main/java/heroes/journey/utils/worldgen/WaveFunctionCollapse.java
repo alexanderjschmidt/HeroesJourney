@@ -1,13 +1,12 @@
 package heroes.journey.utils.worldgen;
 
+import heroes.journey.initializers.base.Tiles;
+import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class WaveFunctionCollapse {
 
@@ -15,7 +14,7 @@ public class WaveFunctionCollapse {
     public static final List<Tile> baseTiles = new ArrayList<>();
 
     public static Tile[][] applyWaveFunctionCollapse(
-        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime) {
+        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime, boolean clearHole) {
         int width = possibleTilesMapPrime.length;
         Tile[][] map = new Tile[width][width];
         WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[map.length][map.length];
@@ -39,8 +38,11 @@ public class WaveFunctionCollapse {
                     int ax = (startX + x) % map.length;
                     int ay = (startY + y) % map.length;
                     if (map[ax][ay] == null && possibleTilesMap[ax][ay].isEmpty()) {
-                        clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 3);
-                        continue outer;
+                        if (clearHole)
+                            clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 2);
+                        else
+                            possibleTilesMap[ax][ay].addItem(Tiles.HOLE, 10);
+                        continue;
                     }
                     // TODO update this to use the highest value in the weighted random picker not the total weight
                     // ie it contains a plains tile that is weighted at 1000000000
@@ -63,8 +65,44 @@ public class WaveFunctionCollapse {
             collapseInnerRandom(map, possibleTilesMap, maxEntropyX, maxEntropyY);
             propagateConstraints(map, possibleTilesMap, maxEntropyX, maxEntropyY);
         }
+        for (int x = 0; x < map.length; x++) {
+            for (int y = 0; y < map.length; y++) {
+                if (map[x][y] == Tiles.HOLE) {
+                    //map[x][y] = bestFit(map, x, y);
+                }
+            }
+        }
         // System.out.println("Tiles: " + (map.length * map.length));
         return map;
+    }
+
+    private static Tile bestFit(Tile[][] map, int x, int y) {
+        return TileManager.get().stream()
+            .max(Comparator.comparingInt(t -> getAlignmentScore(t, map, x, y)))
+            .orElse(Tiles.HOLE);
+    }
+
+    private static int getAlignmentScore(Tile tile, Tile[][] map, int x, int y) {
+        int alignment = 0;
+        System.out.println("Trying to find " + x + ", " + y);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTHWEST);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTH);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTHEAST);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.EAST);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTHEAST);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTH);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTHWEST);
+        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.WEST);
+        return alignment;
+    }
+
+    private static int getAlignmentScoreIndividual(Tile tile, Tile[][] map, int x, int y, Direction dir) {
+        int nx = (int) (x + dir.getDirVector().x);
+        int ny = (int) (y + dir.getDirVector().y);
+        if (nx >= 0 && nx < map.length && ny >= 0 && ny < map.length && map[nx][ny] != null) {
+            return tile.alignment(dir, map[nx][ny]);
+        }
+        return 0;
     }
 
     private static void clearHole(

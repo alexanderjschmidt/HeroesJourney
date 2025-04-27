@@ -1,8 +1,11 @@
 package heroes.journey.tilemap.wavefunction;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import heroes.journey.initializers.base.Tiles;
+import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +15,10 @@ public abstract class Tile {
     private final Map<Direction, Terrain> neighbors;
     private final boolean addToDefaultTiles;
 
+    @Getter
     private final Terrain terrain;
 
+    @Getter
     private final long weight;
 
     public Tile(Terrain terrain, int baseWeight, boolean addToDefaultTiles) {
@@ -21,6 +26,7 @@ public abstract class Tile {
         neighbors = new HashMap<>();
         this.weight = baseWeight == 0 ? 1 : baseWeight;
         this.addToDefaultTiles = addToDefaultTiles;
+        TileManager.get().add(this);
     }
 
     public Tile(Terrain terrain, int baseWeight) {
@@ -36,7 +42,7 @@ public abstract class Tile {
     }
 
     public boolean aligns(Direction direction, Tile tile) {
-        if (tile == null)
+        if (tile == null || tile == Tiles.HOLE)
             return true;
         switch (direction) {
             case NORTHWEST -> {
@@ -75,15 +81,53 @@ public abstract class Tile {
         throw new RuntimeException("Invalid Direction");
     }
 
+    public int alignment(Direction direction, Tile tile) {
+        switch (direction) {
+            case NORTHWEST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.SOUTHEAST) + direction);
+                return tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHWEST) ? 1 : 0;
+            }
+            case NORTH -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.SOUTH) + direction + ", ");
+                return (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHWEST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.SOUTH) == neighbors.get(Direction.NORTH) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHEAST) ? 1 : 0);
+            }
+            case NORTHEAST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.SOUTHWEST) + direction);
+                return (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHEAST) ? 1 : 0);
+            }
+            case EAST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.WEST) + direction + ", ");
+                return (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.NORTHEAST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.WEST) == neighbors.get(Direction.EAST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.SOUTHEAST) ? 1 : 0);
+            }
+            case SOUTHEAST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.NORTHWEST) + direction);
+                return (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHEAST) ? 1 : 0);
+            }
+            case SOUTH -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.NORTH) + direction + ", ");
+                return (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHWEST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.NORTH) == neighbors.get(Direction.SOUTH) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.SOUTHEAST) ? 1 : 0);
+            }
+            case SOUTHWEST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.NORTHEAST) + direction);
+                return (tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.SOUTHWEST) ? 1 : 0);
+            }
+            case WEST -> {
+                System.out.println("wants " + tile.neighbors.get(Direction.EAST) + direction + ", ");
+                return (tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.NORTHWEST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.EAST) == neighbors.get(Direction.WEST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.SOUTHWEST) ? 1 : 0);
+            }
+        }
+        throw new RuntimeException("Invalid Direction");
+    }
+
     public abstract void render(SpriteBatch batch, float elapsed, int x, int y);
-
-    public Terrain getTerrain() {
-        return terrain;
-    }
-
-    public long getWeight() {
-        return weight;
-    }
 
     public String toString() {
         return "" + neighbors.get(Direction.NORTHWEST).toString().charAt(0) +

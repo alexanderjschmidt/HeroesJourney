@@ -15,7 +15,8 @@ import java.util.List;
 public class Tiles implements InitializerInterface {
 
     public static final Terrain NULL_TERRAIN = new Terrain("NULL", 0);
-    public static final Tile NULL;
+    public static final Terrain HOLE_TERRAIN = new Terrain("HOLE", 0);
+    public static final Tile NULL, HOLE;
 
     public static Terrain PATH;
     public static Tile WATER, SAND, PLAINS, HILLS;
@@ -29,6 +30,12 @@ public class Tiles implements InitializerInterface {
         NULL = new BaseTile(NULL_TERRAIN, 100, tiles[3][0]);
         baseTile(NULL, NULL_TERRAIN);
 
+        HOLE = new BaseTile(HOLE_TERRAIN, 100, tiles[3][0]) {
+            public boolean aligns(Direction direction, Tile tile) {
+                return true;
+            }
+        };
+
         // Base Terrains
         Terrain water = new Terrain("Water", 50);
         Terrain plains = new Terrain("Plains", 2);
@@ -36,15 +43,17 @@ public class Tiles implements InitializerInterface {
         Terrain sand = new Terrain("Sand", 3);
         PATH = new Terrain("Path", 1);
 
-        // TODO should I baseTile() these with nullTerrain?
         capital = new ActionTerrain("Capital", 0);
         CAPITAL = new BaseTile(capital, 0, false, tiles[9][14]);
+        baseTile(CAPITAL, NULL_TERRAIN, false);
 
         town = new ActionTerrain("Town", 0);
         TOWN = new BaseTile(town, 0, false, tiles[7][12]);
+        baseTile(TOWN, NULL_TERRAIN, false);
 
         dungeon = new ActionTerrain("Dungeon", 1);
         DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
+        baseTile(DUNGEON, NULL_TERRAIN, false);
 
         trees = new ActionTerrain("Trees", 1);
 

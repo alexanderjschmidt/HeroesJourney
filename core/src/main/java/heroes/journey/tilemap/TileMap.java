@@ -77,7 +77,7 @@ public class TileMap implements IndexedGraph<TileNode> {
             Tile env = environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
             return env == null ? null : (ActionTerrain) env.getTerrain();
         } else {
-            return environment[x][y] == null ? null : (ActionTerrain) environment[x][y].getTerrain();
+            return environment[x][y] != null && environment[x][y].getTerrain() instanceof ActionTerrain actionTerrain ? actionTerrain : null;
         }
     }
 

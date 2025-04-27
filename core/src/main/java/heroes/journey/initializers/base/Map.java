@@ -32,7 +32,7 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 @SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
 
-    public static int MAP_SIZE = 128;
+    public static int MAP_SIZE = 64;
     public static int NUM_KINGDOMS = 3;
     public static MapGenerationEffect trees;
 
@@ -230,7 +230,7 @@ public class Map implements InitializerInterface {
                 }
             }
 
-            Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
+            Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, false);
             gameState.getMap().setTileMap(tileMap);
         }).build().register();
         // Wave Function collapse paths to smooth tiles
@@ -254,7 +254,7 @@ public class Map implements InitializerInterface {
                 }
             }
 
-            Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
+            Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, true);
             gameState.getMap().setTileMap(tileMap);
         }).build().register();
         // Create Trees
@@ -276,7 +276,7 @@ public class Map implements InitializerInterface {
                     possibleTilesMap[x][y].addItem(Tiles.NULL, totalWeight > 0 ? totalWeight : 100);
                 }
             }
-            Tile[][] environment = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
+            Tile[][] environment = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, true);
 
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < width; y++) {
