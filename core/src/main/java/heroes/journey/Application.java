@@ -27,6 +27,10 @@ import lombok.Getter;
  * 		Scrolling
  *  Show Controls on UIs?
  * Make HUD Locked when players character is moving, and have the camera follow player movement
+ * Dont make new basic Monsters for dungeons, they're just groupings of stats
+ * make Journey requirements met based on stamina cost (seems like if its too high its just free)
+ * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
+ * Make Camera not go off map when zooming out
  * Multiplayer
  * Saving
  * Map Generation
