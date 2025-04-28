@@ -15,10 +15,6 @@ import lombok.Getter;
 
 /*
  * TODO List
- * Split traveling into 3 options
- *  Explore: travel to a direction. If you hit a place before your stamina runs out you move there.
- *  Wayfare: travel by road (semi known)
- *  Journey: travel to a known location
  * Menus
  *  Action Detail UI flesh out
  *      Make cooldown skills show recover timer
@@ -30,16 +26,16 @@ import lombok.Getter;
  *          Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
- * Make HUD Locked when players character is moving
+ * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Multiplayer
  * Saving
  * Map Generation
- *  Improve timeout
+ *  Improve timeout/WFC going forever
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
- * 	Improve road generation some towns roads loop too much
+ * 	Improve road generation roads are too straight
  * Sounds
  * 	Background music
  * 	Action Sounds

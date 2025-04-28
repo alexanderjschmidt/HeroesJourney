@@ -122,7 +122,7 @@ public class Map implements InitializerInterface {
                                 Integer townId = generateTown(gameState, candidate.getX(), candidate.getY(),
                                     false);
                                 Feature town = new Feature(townId, FeatureType.TOWN, candidate);
-                                kingdom.getConnections().add(town);
+                                kingdom.add(town);
                                 placed.add(candidate);
                                 placedTown = true;
                                 break;

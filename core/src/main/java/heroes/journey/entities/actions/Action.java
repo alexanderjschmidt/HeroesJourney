@@ -1,33 +1,28 @@
 package heroes.journey.entities.actions;
 
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
 import heroes.journey.GameState;
 import heroes.journey.ui.HUD;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Action {
 
     protected final String name;
-    @Getter
-    @Builder.Default
-    protected final boolean terminal = true;
-    @Builder.Default
-    protected BiConsumer<GameState, Integer> onHover = (gs, e) -> {
+    @Getter @Builder.Default protected final boolean terminal = true;
+    @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
     };
-    @Builder.Default
-    protected BiFunction<GameState, Integer, String> onSelect = (gs, e) -> {
+    @Builder.Default protected BiFunction<GameState,Integer,String> onSelect = (gs, e) -> {
         return null;
     };
     @Builder.Default
-    protected BiFunction<GameState, Integer, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    protected BiFunction<GameState,Integer,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
-    @Builder.Default
-    protected Cost cost = Cost.builder().build();
+    @Builder.Default protected Cost cost = Cost.builder().build();
 
     public ShowAction requirementsMet(GameState gameState, Integer userId) {
         return requirementsMet.apply(gameState, userId).and(cost.requirementsMet(gameState, userId));

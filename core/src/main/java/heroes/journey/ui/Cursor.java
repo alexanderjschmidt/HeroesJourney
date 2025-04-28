@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
@@ -30,17 +31,13 @@ public class Cursor {
 
     private final HUD hud;
 
-    @Getter
-    private Integer selected, hover;
+    @Getter private Integer selected, hover;
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
-    @Setter
-    @Getter
-    private Cell path;
+    @Setter @Getter private Cell path;
 
     private final Animation<TextureRegion> ani, mapPointer;
-    @Setter
-    private Position mapPointerLoc;
+    @Setter private Position mapPointerLoc;
 
     private float elapsed = 0;
 
@@ -85,8 +82,10 @@ public class Cursor {
         batch.draw(ani.getKeyFrame(elapsed, true), x * GameCamera.get().getSize(),
             y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         if (mapPointerLoc != null) {
-            batch.draw(mapPointer.getKeyFrame(elapsed, true), mapPointerLoc.getX() * GameCamera.get().getSize(),
-                mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
+            batch.draw(mapPointer.getKeyFrame(elapsed, true),
+                mapPointerLoc.getX() * GameCamera.get().getSize(),
+                mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(),
+                GameCamera.get().getSize());
         }
         batch.setColor(Color.WHITE);
     }
@@ -216,7 +215,7 @@ public class Cursor {
         positionComponent.setPos(sx, sy);
         StatsComponent statsComponent = StatsComponent.get(world, selected);
         setPosition(sx, sy);
-        clearSelected();
+        //clearSelected();
         if (statsComponent.getMoveDistance() != 0) {
             update();
             setSelectedtoHover();
