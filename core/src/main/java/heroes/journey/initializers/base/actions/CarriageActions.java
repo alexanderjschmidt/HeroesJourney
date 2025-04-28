@@ -1,19 +1,18 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heroes.journey.GameState;
 import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CarriageActions {
-    
+
     public static Action carriage;
     public static List<Action> carriageActions;
 
@@ -21,8 +20,7 @@ public class CarriageActions {
         carriage = Action.builder().name("Carriage").terminal(false).onSelect((gs, e) -> {
             Integer town = Utils.getLocation(gs, e);
             List<Action> carriageActions = getCarriageActions(gs, town);
-            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(carriageActions);
-            HUD.get().setState(new ActionSelectState(options));
+            HUD.get().setState(new ActionSelectState(carriageActions));
             return null;
         }).build().register();
         carriageActions = new ArrayList<>();

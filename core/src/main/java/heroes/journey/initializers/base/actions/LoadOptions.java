@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers.base.actions;
 
 import heroes.journey.entities.actions.options.BooleanOptionAction;
 import heroes.journey.initializers.InitializerInterface;

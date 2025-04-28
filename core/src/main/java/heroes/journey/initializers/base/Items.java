@@ -7,6 +7,8 @@ import heroes.journey.entities.items.ItemSubType;
 import heroes.journey.entities.items.ItemType;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.tags.DamageTypes;
+import heroes.journey.initializers.base.tags.DefenseTypes;
 
 public class Items implements InitializerInterface {
 

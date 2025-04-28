@@ -1,21 +1,31 @@
-package heroes.journey.initializers.base;
-
-import heroes.journey.entities.Position;
-import heroes.journey.utils.Direction;
-
-import java.util.*;
+package heroes.journey.tilemap.features;
 
 import static heroes.journey.utils.Direction.approximateDirection;
 
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
+import heroes.journey.entities.Position;
+import heroes.journey.utils.Direction;
+import lombok.Getter;
+
+@Getter
 public class Feature {
-    public String type;
+    public Integer entityId;
+    public FeatureType type;
     public Position location;
     public Set<Feature> connections;
 
-    public Feature(String type, Position location) {
+    public Feature(Integer entityId, FeatureType type, Position location) {
+        this.entityId = entityId;
         this.type = type;
         this.location = location;
         connections = new HashSet<>();
+        FeatureManager.get().put(entityId, this);
     }
 
     public void add(Feature feature) {
@@ -25,10 +35,12 @@ public class Feature {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
 
-        Feature feature = (Feature) o;
+        Feature feature = (Feature)o;
 
         return Objects.equals(location, feature.location);
     }
@@ -38,19 +50,22 @@ public class Feature {
         return location != null ? location.hashCode() : 0;
     }
 
-    public void makeConnections(List<Feature> features, int maxFeatures) {
+    public void makeConnections(int maxFeatures) {
         // Step 1: Sort all features by distance from the start
-        List<Feature> sorted = features.stream()
+        List<Feature> sorted = FeatureManager.get()
+            .values()
+            .stream()
             .filter(f -> !f.location.equals(location)) // skip yourself
             .sorted(Comparator.comparingDouble(f -> f.location.distanceTo(location)))
             .toList();
 
         // Step 2: Assign closest features to directions
-        EnumMap<Direction, Feature> result = new EnumMap<>(Direction.class);
+        EnumMap<Direction,Feature> result = new EnumMap<>(Direction.class);
         int featuresAdded = 0;
 
         for (Feature info : sorted) {
-            if (featuresAdded >= maxFeatures) break;
+            if (featuresAdded >= maxFeatures)
+                break;
 
             Direction dir = approximateDirection(location, info.location);
 

@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers.base.tags;
 
 import heroes.journey.entities.tagging.ConversionSet;
 

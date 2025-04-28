@@ -8,10 +8,10 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Operation;
-import heroes.journey.initializers.base.ConversionSets;
-import heroes.journey.initializers.base.DamageTypes;
-import heroes.journey.initializers.base.DefenseTypes;
-import heroes.journey.initializers.base.Groups;
+import heroes.journey.initializers.base.tags.ConversionSets;
+import heroes.journey.initializers.base.tags.DamageTypes;
+import heroes.journey.initializers.base.tags.DefenseTypes;
+import heroes.journey.initializers.base.tags.Groups;
 
 public class FightUtils {
     public static boolean fight(World world, Integer fighter, Integer enemy) {

@@ -8,6 +8,7 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
@@ -16,7 +17,7 @@ import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.character.RenderComponent;
-import heroes.journey.initializers.base.LoadOptions;
+import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.ui.HUD;
 
@@ -44,15 +45,28 @@ public class RenderSystem extends BaseEntitySystem {
             this.process(world, ids[i]);
         }
 
+        Fog[][] fog = getFog();
+
+        if (!LoadOptions.debugOption.isTrue())
+            renderFog(batch, fog);
+
+        HUD.get().getCursor().render(batch, world.getDelta());
+        batch.end();
+    }
+
+    private Fog[][] getFog() {
         Fog[][] fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
+        // Get Playing entities Map
         for (Integer playable : GameState.global().getPlayableEntities()) {
             MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
             if (mapComponent != null)
                 mergeFog(fog, mapComponent.getFog());
         }
+        // Get Playing entities vision
         for (Integer playable : GameState.global().getPlayableEntities()) {
             MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
-            PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(), playable);
+            PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
+                playable);
             StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);
             if (mapComponent != null && statsComponent != null && positionComponent != null) {
                 int vision = statsComponent.getVision();
@@ -66,19 +80,13 @@ public class RenderSystem extends BaseEntitySystem {
                             if (newX >= 0 && newX < fog.length && newY >= 0 && newY < fog.length) {
                                 // Set fog to None (null) if within the vision range
                                 fog[newX][newY] = null; // Assuming `null` indicates visible (no fog).
-                                mapComponent.getFog()[newX][newY] = Fog.LIGHT;
                             }
                         }
                     }
                 }
             }
         }
-
-        if (!LoadOptions.debugOption.isTrue())
-            renderFog(batch, fog);
-
-        HUD.get().getCursor().render(batch, world.getDelta());
-        batch.end();
+        return fog;
     }
 
     private void mergeFog(Fog[][] fog, Fog[][] fog1) {
@@ -104,13 +112,13 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     public void renderFog(Batch batch, Fog[][] fog) {
-        int xo = (int) (GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int) (GameCamera.get().position.y / GameCamera.get().getSize());
+        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
+        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
 
-        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().getXLow()), 0);
-        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().getYLow()), 0);
-        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().getXHigh()), fog.length);
-        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().getYHigh()), fog.length);
+        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().getXLow()), 0);
+        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().getYLow()), 0);
+        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().getXHigh()), fog.length);
+        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().getYHigh()), fog.length);
 
         for (int x = x0; x < x1; x++) {
             for (int y = y0; y < y1; y++) {

@@ -4,9 +4,13 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
+
 import heroes.journey.GameState;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.place.LocationComponent;
+import heroes.journey.tilemap.Fog;
 
 @All({PositionComponent.class})
 @Exclude({LocationComponent.class})
@@ -46,6 +50,32 @@ public class PositionSyncSystem extends IteratingSystem {
             gameState.getEntities().removeEntity(pos.getX(), pos.getY());
             pos.sync();
             gameState.getEntities().addEntity(entityId, pos.getX(), pos.getY());
+
+            // Update Map
+            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), entityId);
+            StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
+            if (mapComponent != null && statsComponent != null) {
+                int vision = statsComponent.getVision();
+                for (int x = -vision; x <= vision; x++) {
+                    for (int y = -vision; y <= vision; y++) {
+                        if (Math.abs(x) + Math.abs(y) <= vision) {
+                            int newX = pos.getX() + x;
+                            int newY = pos.getY() + y;
+
+                            // Ensure we are within bounds of the fog array
+                            if (newX >= 0 && newX < mapComponent.getFog().length && newY >= 0 &&
+                                newY < mapComponent.getFog()[newX].length) {
+                                // Set fog to None (null) if within the vision range
+                                mapComponent.getFog()[newX][newY] = Fog.LIGHT;
+                                Integer location = gameState.getEntities().getLocation(newX, newY);
+                                if (location != null) {
+                                    mapComponent.getKnownLocations().add(location);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

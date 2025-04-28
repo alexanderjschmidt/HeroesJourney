@@ -1,6 +1,9 @@
 package heroes.journey.ui.hudstates;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActionComponent;
@@ -8,8 +11,6 @@ import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override
@@ -21,7 +22,7 @@ class CursorMoveState extends HUDState {
             if (hud.getCursor().getSelected() != null) {
                 hud.getCursor().clearSelected();
             } else {
-                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions(GameState.global())));
+                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
             // TODO only show/allow movement if it has a movement component
@@ -46,7 +47,7 @@ class CursorMoveState extends HUDState {
                     GameState.global().getRangeManager().setMoveAndAttackRange(hud.getCursor().getSelected());
                 }
             } else if (hud.getCursor().getHover() == null) {
-                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions(GameState.global())));
+                HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }
         }
         updateFreeMove(hud.getDelta());

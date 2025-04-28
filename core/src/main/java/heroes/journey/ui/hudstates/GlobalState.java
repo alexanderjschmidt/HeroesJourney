@@ -1,13 +1,14 @@
 package heroes.journey.ui.hudstates;
 
+import static heroes.journey.ui.hudstates.States.STATS;
+
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameCamera;
-import heroes.journey.initializers.base.LoadOptions;
+import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.Display;
 import heroes.journey.utils.input.KeyManager;
-
-import static heroes.journey.ui.hudstates.States.STATS;
 
 class GlobalState extends HUDState {
     @Override

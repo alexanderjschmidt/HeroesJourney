@@ -1,5 +1,8 @@
 package heroes.journey.components.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
@@ -9,10 +12,6 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
-import heroes.journey.ui.ScrollPaneEntry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Utils {
 
@@ -32,10 +31,6 @@ public class Utils {
             questActions.add(quest.getClaimAction());
         }
         return questActions;
-    }
-
-    public static List<ScrollPaneEntry<Action>> convertToScrollEntries(List<Action> actions) {
-        return actions.stream().map(key -> new ScrollPaneEntry<>(key, true)).toList();
     }
 
     public static String addItem(GameState gameState, Integer entityId, Item item, int count) {

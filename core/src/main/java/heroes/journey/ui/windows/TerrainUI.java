@@ -1,9 +1,10 @@
 package heroes.journey.ui.windows;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameState;
 import heroes.journey.components.character.NamedComponent;
-import heroes.journey.initializers.base.LoadOptions;
+import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.tilemap.wavefunction.ActionTerrain;
 import heroes.journey.tilemap.wavefunction.Terrain;
 import heroes.journey.ui.Cursor;
@@ -22,9 +23,10 @@ public class TerrainUI extends UI {
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         ActionTerrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
 
-        String locationCoords = LoadOptions.debugOption.isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
-        String name =
-            (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));
+        String locationCoords = LoadOptions.debugOption.isTrue() ?
+            " (" + cursor.x + ", " + cursor.y + ")" :
+            "";
+        String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));
         if (environment != null) {
             Integer locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
             if (locationId != null) {

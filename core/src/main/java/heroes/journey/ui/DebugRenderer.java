@@ -4,10 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import heroes.journey.GameCamera;
-import heroes.journey.initializers.base.Feature;
 
-import static heroes.journey.initializers.base.Map.features;
+import heroes.journey.GameCamera;
+import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.features.FeatureManager;
 
 public class DebugRenderer {
 
@@ -24,16 +24,18 @@ public class DebugRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(connectionColor);
 
-        for (Feature feature : features) {
+        for (Feature feature : FeatureManager.get().values()) {
             for (Feature connected : feature.connections) {
                 // Avoid double-drawing
                 if (feature.location.hashCode() < connected.location.hashCode()) {
-                    shapeRenderer.line(
-                        (feature.location.getX() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f),
-                        (feature.location.getY() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f),
-                        (connected.location.getX() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f),
-                        (connected.location.getY() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f)
-                    );
+                    shapeRenderer.line((feature.location.getX() * GameCamera.get().getSize()) +
+                            (GameCamera.get().getSize() / 2f),
+                        (feature.location.getY() * GameCamera.get().getSize()) +
+                            (GameCamera.get().getSize() / 2f),
+                        (connected.location.getX() * GameCamera.get().getSize()) +
+                            (GameCamera.get().getSize() / 2f),
+                        (connected.location.getY() * GameCamera.get().getSize()) +
+                            (GameCamera.get().getSize() / 2f));
                 }
             }
         }
@@ -42,12 +44,11 @@ public class DebugRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(featureDotColor);
 
-        for (Feature feature : features) {
+        for (Feature feature : FeatureManager.get().values()) {
             shapeRenderer.circle(
                 (feature.location.getX() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f),
                 (feature.location.getY() * GameCamera.get().getSize()) + (GameCamera.get().getSize() / 2f),
-                GameCamera.get().getSize() / 4f
-            );
+                GameCamera.get().getSize() / 4f);
         }
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);

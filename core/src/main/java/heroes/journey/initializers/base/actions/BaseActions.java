@@ -1,5 +1,7 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.List;
+
 import heroes.journey.Application;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.QuestsComponent;
@@ -16,11 +18,8 @@ import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.screens.MainMenuScreen;
-
-import java.util.List;
 
 public class BaseActions implements InitializerInterface {
 
@@ -122,8 +121,7 @@ public class BaseActions implements InitializerInterface {
         questBoard = Action.builder().name("Quest Board").terminal(false).onSelect((gs, e) -> {
             Integer town = Utils.getLocation(gs, e);
             List<Action> questActions = Utils.getQuestClaimActions(gs, town);
-            List<ScrollPaneEntry<Action>> options = Utils.convertToScrollEntries(questActions);
-            HUD.get().setState(new ActionSelectState(options));
+            HUD.get().setState(new ActionSelectState(questActions));
             return null;
         }).requirementsMet((gs, e) -> {
             Integer town = Utils.getLocation(gs, e);

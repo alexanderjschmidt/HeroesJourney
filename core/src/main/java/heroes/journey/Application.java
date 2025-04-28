@@ -8,12 +8,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 
 /*
  * TODO List
+ * Split traveling into 3 options
+ *  Explore: travel to a direction. If you hit a place before your stamina runs out you move there.
+ *  Wayfare: travel by road (semi known)
+ *  Journey: travel to a known location
  * Menus
  *  Action Detail UI flesh out
  *      Make cooldown skills show recover timer

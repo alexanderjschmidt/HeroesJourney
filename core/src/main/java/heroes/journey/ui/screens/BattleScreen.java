@@ -3,12 +3,13 @@ package heroes.journey.ui.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
-import heroes.journey.initializers.base.LoadOptions;
 import heroes.journey.initializers.base.Map;
+import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.ui.DebugRenderer;
 import heroes.journey.ui.HUD;
@@ -31,7 +32,7 @@ public class BattleScreen implements Screen {
     // quickStart constructor
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
-        this.mapData = new MapData((int) (Math.random() * 10000000), Map.MAP_SIZE, 2, false);
+        this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 2, false);
         this.client = new GameClient();
         this.lightManager = new LightManager();
         this.debugRenderer = new DebugRenderer();
@@ -52,7 +53,7 @@ public class BattleScreen implements Screen {
     @Override
     public void render(float delta) {
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
-            Random.get().setSeed((int) (Math.random() * 10000000));
+            Random.get().setSeed((int)(Math.random() * 10000000));
             NewMapManager.get().initMapGeneration(GameState.global(), mapData);
             GameState.global().nextTurn();
         }
