@@ -45,7 +45,7 @@ public class Cost {
         double mult = multiplier.apply(gameState, userId);
 
         ShowAction enoughStamina =
-            statsComponent.getStamina() > this.health * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.getStamina() > this.stamina * mult ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughMana =
             statsComponent.getMana() >= this.mana * mult ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughHealth =

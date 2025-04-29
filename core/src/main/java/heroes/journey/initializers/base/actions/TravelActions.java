@@ -55,7 +55,7 @@ public class TravelActions implements InitializerInterface {
                         baseWidth, dir);
 
                     return "You have explored the " + dir;
-                }).build().register();
+                }).cost(Cost.builder().stamina(5).build()).build().register();
                 exploreActions.put(dir, exploreAction);
             }
         }
