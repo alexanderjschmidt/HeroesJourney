@@ -1,5 +1,7 @@
 package heroes.journey.entities;
 
+import static heroes.journey.initializers.base.Map.inBounds;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class EntityManager implements Cloneable {
     }
 
     public Integer get(int x, int y) {
-        if (x < 0 || y < 0 || y >= height || x >= width)
+        if (!inBounds(x, y, width, height))
             return null;
         return entitiesLocations[x][y];
     }
@@ -50,7 +52,7 @@ public class EntityManager implements Cloneable {
 
     // Location Functions
     public Integer getLocation(int x, int y) {
-        if (x < 0 || y < 0 || y >= height || x >= width)
+        if (!inBounds(x, y, width, height))
             return null;
         return factionsLocations[x][y];
     }

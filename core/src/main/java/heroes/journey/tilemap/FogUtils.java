@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import heroes.journey.GameState;
 import heroes.journey.components.character.MapComponent;
+import heroes.journey.initializers.base.Map;
 import heroes.journey.utils.Direction;
 
 public class FogUtils {
@@ -23,7 +24,7 @@ public class FogUtils {
                     int newY = yBase + y;
 
                     // Ensure we are within bounds of the fog array
-                    if (newX >= 0 && newX < fog.length && newY >= 0 && newY < fog.length) {
+                    if (Map.inBounds(newX, newY, fog)) {
                         // Set fog to None (null) if within the vision range
                         fog[newX][newY] = null; // Assuming `null` indicates visible (no fog).
                     }
@@ -45,8 +46,7 @@ public class FogUtils {
                     int newY = yBase + y;
 
                     // Ensure we are within bounds of the fog array
-                    if (newX >= 0 && newX < mapComponent.getFog().length && newY >= 0 &&
-                        newY < mapComponent.getFog()[newX].length) {
+                    if (Map.inBounds(newX, newY, mapComponent.getFog())) {
                         mapComponent.getFog()[newX][newY] = Fog.LIGHT;
                         Integer location = gameState.getEntities().getLocation(newX, newY);
                         if (location != null) {
@@ -80,8 +80,7 @@ public class FogUtils {
                         int newX = centerX + offsetX;
                         int newY = centerY + offsetY;
 
-                        if (newX >= 0 && newX < mapComponent.getFog().length && newY >= 0 &&
-                            newY < mapComponent.getFog()[newX].length) {
+                        if (Map.inBounds(newX, newY, mapComponent.getFog())) {
                             mapComponent.getFog()[newX][newY] = Fog.LIGHT; // Clear fog
                             Integer location = gameState.getEntities().getLocation(newX, newY);
                             if (location != null) {

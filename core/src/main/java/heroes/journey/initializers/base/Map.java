@@ -400,8 +400,16 @@ public class Map implements InitializerInterface {
         return tile == Tiles.PLAINS || tile == Tiles.HILLS;
     }
 
-    private static boolean inBounds(int x, int y) {
-        return x >= 0 && y >= 0 && x < MAP_SIZE && y < MAP_SIZE;
+    public static boolean inBounds(int x, int y) {
+        return inBounds(x, y, MAP_SIZE, MAP_SIZE);
+    }
+
+    public static boolean inBounds(int x, int y, int width, int height) {
+        return x >= 0 && y >= 0 && x < width && y < height;
+    }
+
+    public static boolean inBounds(int x, int y, Object[][] array) {
+        return x >= 0 && y >= 0 && x < array.length && y < array[x].length;
     }
 
     private static Position getNearbyValidTile(Tile[][] map, Position center, int minDist, int maxDist) {

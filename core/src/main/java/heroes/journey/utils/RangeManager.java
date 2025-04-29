@@ -1,5 +1,7 @@
 package heroes.journey.utils;
 
+import static heroes.journey.initializers.base.Map.inBounds;
+
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -90,7 +92,7 @@ public class RangeManager {
     }
 
     private void floodfill(int dist, int x, int y, Integer selectedId) {
-        if (x < 0 || y < 0 || x >= range.length || y >= range[0].length) {
+        if (!inBounds(x, y, range)) {
             // System.out.println("out of bounds");
             return;
         }

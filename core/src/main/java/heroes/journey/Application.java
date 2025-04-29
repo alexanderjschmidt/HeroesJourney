@@ -28,7 +28,6 @@ import lombok.Getter;
  *  Show Controls on UIs?
  * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
- * make in bounds of 2d array a util function `>=0`
  * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
  * Make Camera not go off map when zooming out
  * Multiplayer

@@ -1,5 +1,7 @@
 package heroes.journey.utils.worldgen.dungeon;
 
+import static heroes.journey.initializers.base.Map.inBounds;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class DungeonGenerator {
     private void placeRoom(int x, int y, int w, int h) {
         for (int i = y; i < y + h; i++) {
             for (int j = x; j < x + w; j++) {
-                if (i >= 0 && i < height && j >= 0 && j < width) {
+                if (inBounds(x, y, width, height)) {
                     dungeon[i][j] = 1;
                 }
             }

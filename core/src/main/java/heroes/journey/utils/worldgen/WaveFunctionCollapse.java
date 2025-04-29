@@ -1,12 +1,18 @@
 package heroes.journey.utils.worldgen;
 
+import static heroes.journey.initializers.base.Map.inBounds;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.wavefunction.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
-
-import java.util.*;
 
 public class WaveFunctionCollapse {
 
@@ -14,7 +20,8 @@ public class WaveFunctionCollapse {
     public static final List<Tile> baseTiles = new ArrayList<>();
 
     public static Tile[][] applyWaveFunctionCollapse(
-        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime, boolean clearHole) {
+        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime,
+        boolean clearHole) {
         int width = possibleTilesMapPrime.length;
         Tile[][] map = new Tile[width][width];
         WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[map.length][map.length];
@@ -77,7 +84,8 @@ public class WaveFunctionCollapse {
     }
 
     private static Tile bestFit(Tile[][] map, int x, int y) {
-        return TileManager.get().stream()
+        return TileManager.get()
+            .stream()
             .max(Comparator.comparingInt(t -> getAlignmentScore(t, map, x, y)))
             .orElse(Tiles.HOLE);
     }
@@ -97,9 +105,9 @@ public class WaveFunctionCollapse {
     }
 
     private static int getAlignmentScoreIndividual(Tile tile, Tile[][] map, int x, int y, Direction dir) {
-        int nx = (int) (x + dir.getDirVector().x);
-        int ny = (int) (y + dir.getDirVector().y);
-        if (nx >= 0 && nx < map.length && ny >= 0 && ny < map.length && map[nx][ny] != null) {
+        int nx = (int)(x + dir.getDirVector().x);
+        int ny = (int)(y + dir.getDirVector().y);
+        if (inBounds(nx, ny, map) && map[nx][ny] != null) {
             return tile.alignment(dir, map[nx][ny]);
         }
         return 0;
@@ -115,7 +123,7 @@ public class WaveFunctionCollapse {
         //System.out.println("Clear Hole: " + x + " " + y);
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
-                if (x + dx >= 0 && x + dx < map.length && y + dy >= 0 && y + dy < map.length) {
+                if (inBounds(x + dx, y + dy, map)) {
                     map[x + dx][y + dy] = null;
                 }
             }
@@ -132,8 +140,7 @@ public class WaveFunctionCollapse {
         int radius) {
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
-                if (x + dx >= 0 && x + dx < possibleTilesMap.length && y + dy >= 0 &&
-                    y + dy < possibleTilesMap.length) {
+                if (inBounds(x + dx, y + dy, possibleTilesMap)) {
                     possibleTilesMap[x + dx][y + dy] = getPossibleTiles(map, possibleTilesMap,
                         possibleTilesMapPrime, x + dx, y + dy);
                     //System.out.println("(" + (radius + dx) + ", " + (radius + dy) + ")");
@@ -168,7 +175,7 @@ public class WaveFunctionCollapse {
         int nx,
         int ny,
         Direction dir) {
-        if (nx >= 0 && nx < map.length && ny >= 0 && ny < map.length && map[nx][ny] != null) {
+        if (inBounds(nx, ny, map) && map[nx][ny] != null) {
             tiles.removeIf(tile -> !tile.aligns(dir, map[nx][ny]));
         }
     }
@@ -180,7 +187,7 @@ public class WaveFunctionCollapse {
         int sy) {
         Queue<int[]> propagationQueue = new LinkedList<>();
 
-        propagationQueue.add(new int[]{sx, sy});
+        propagationQueue.add(new int[] {sx, sy});
         // Propagate the constraints to neighboring cells
         int processed = 0;
         while (!propagationQueue.isEmpty()) {
@@ -216,11 +223,11 @@ public class WaveFunctionCollapse {
         Direction dir,
         Tile collapsedTile,
         Queue<int[]> propagationQueue) {
-        if (x >= 0 && x < map.length && y >= 0 && y < map.length && map[x][y] == null) {
+        if (inBounds(x, y, map) && map[x][y] == null) {
             possibleTilesMap[x][y].removeIf(tile -> !collapsedTile.aligns(dir, tile));
             if (possibleTilesMap[x][y].size() == 1) {
                 collapseInnerRandom(map, possibleTilesMap, x, y);
-                propagationQueue.add(new int[]{x, y});
+                propagationQueue.add(new int[] {x, y});
             }
         }
     }
