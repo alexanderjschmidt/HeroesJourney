@@ -19,6 +19,7 @@ import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.tilemap.Fog;
+import heroes.journey.tilemap.FogUtils;
 import heroes.journey.ui.HUD;
 
 @All({PositionComponent.class, RenderComponent.class})
@@ -60,55 +61,19 @@ public class RenderSystem extends BaseEntitySystem {
         for (Integer playable : GameState.global().getPlayableEntities()) {
             MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
             if (mapComponent != null)
-                mergeFog(fog, mapComponent.getFog());
+                FogUtils.mergeFog(fog, mapComponent.getFog());
         }
         // Get Playing entities vision
         for (Integer playable : GameState.global().getPlayableEntities()) {
-            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
             PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
                 playable);
             StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);
-            if (mapComponent != null && statsComponent != null && positionComponent != null) {
-                int vision = statsComponent.getVision();
-                for (int x = -vision; x <= vision; x++) {
-                    for (int y = -vision; y <= vision; y++) {
-                        if (Math.abs(x) + Math.abs(y) <= vision) {
-                            int newX = positionComponent.getX() + x;
-                            int newY = positionComponent.getY() + y;
-
-                            // Ensure we are within bounds of the fog array
-                            if (newX >= 0 && newX < fog.length && newY >= 0 && newY < fog.length) {
-                                // Set fog to None (null) if within the vision range
-                                fog[newX][newY] = null; // Assuming `null` indicates visible (no fog).
-                            }
-                        }
-                    }
-                }
+            if (statsComponent != null && positionComponent != null) {
+                FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
+                    statsComponent.getVision());
             }
         }
         return fog;
-    }
-
-    private void mergeFog(Fog[][] fog, Fog[][] fog1) {
-        // Assuming fog and fog1 have the same dimensions
-        int width = fog.length;
-        int height = fog[0].length;
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                // Merge each corresponding element from fog and fog1
-                fog[i][j] = mergeFog(fog[i][j], fog1[i][j]);
-            }
-        }
-    }
-
-    public Fog mergeFog(Fog existingFog, Fog newFog) {
-        if (newFog == Fog.NONE || existingFog == Fog.NONE) {
-            return Fog.NONE;
-        } else if (newFog == Fog.LIGHT || existingFog == Fog.LIGHT) {
-            return Fog.LIGHT;
-        }
-        return Fog.DENSE;
     }
 
     public void renderFog(Batch batch, Fog[][] fog) {

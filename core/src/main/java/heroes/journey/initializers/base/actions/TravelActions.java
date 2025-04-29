@@ -18,7 +18,7 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.Cost;
 import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.tilemap.Fog;
+import heroes.journey.tilemap.FogUtils;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
@@ -45,79 +45,14 @@ public class TravelActions implements InitializerInterface {
                 Action exploreAction = Action.builder().name("Explore " + dir).onSelect((gs, e) -> {
                     PositionComponent position = PositionComponent.get(gs.getWorld(), e);
                     MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
-                    Fog[][] fog = mapComponent.getFog();
-
-                    int x = position.getX();
-                    int y = position.getY();
-                    int width = fog.length;
-                    int height = fog[0].length;
 
                     // TODO Based on Stamina/Body
                     int revealDistance = 8; // How far the cone extends
                     // TODO Based on Vision
                     int baseWidth = 0;       // Start width (0 = just 1 tile at origin)
 
-                    int dx = 0;
-                    int dy = 0;
-
-                    // Determine movement per step for the direction
-                    switch (dir) {
-                        case NORTH:
-                            dy = 1;
-                            break;
-                        case SOUTH:
-                            dy = -1;
-                            break;
-                        case EAST:
-                            dx = 1;
-                            break;
-                        case WEST:
-                            dx = -1;
-                            break;
-                        case NORTHEAST:
-                            dx = 1;
-                            dy = 1;
-                            break;
-                        case NORTHWEST:
-                            dx = -1;
-                            dy = 1;
-                            break;
-                        case SOUTHEAST:
-                            dx = 1;
-                            dy = -1;
-                            break;
-                        case SOUTHWEST:
-                            dx = -1;
-                            dy = -1;
-                            break;
-                        default:
-                            break;
-                    }
-
-                    for (int dist = 1; dist <= revealDistance; dist++) {
-                        int centerX = x + dist * dx;
-                        int centerY = y + dist * dy;
-
-                        int currentWidth = baseWidth + (dist / 2); // Cone gets wider the farther it goes
-
-                        for (int offsetX = -currentWidth; offsetX <= currentWidth; offsetX++) {
-                            for (int offsetY = -currentWidth; offsetY <= currentWidth; offsetY++) {
-                                // Only reveal roughly in cone shape
-                                if (Math.abs(offsetX) + Math.abs(offsetY) <= currentWidth) {
-                                    int newX = centerX + offsetX;
-                                    int newY = centerY + offsetY;
-
-                                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                                        fog[newX][newY] = Fog.LIGHT; // Clear fog
-                                        Integer location = gs.getEntities().getLocation(newX, newY);
-                                        if (location != null) {
-                                            mapComponent.getKnownLocations().add(location);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    FogUtils.revealCone(gs, mapComponent, position.getX(), position.getY(), revealDistance,
+                        baseWidth, dir);
 
                     return "You have explored the " + dir;
                 }).build().register();
