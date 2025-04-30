@@ -25,16 +25,16 @@ import heroes.journey.ui.hudstates.ActionSelectState;
 public class ActionMenu extends Stack {
 
     private final ScrollPane<Action> actions;
-    private final ActionDetailUI actionDetailUI;
+    private final InfoUI infoUI;
 
-    public ActionMenu(ActionDetailUI actionDetailUI) {
+    public ActionMenu(InfoUI infoUI) {
         super();
         this.setVisible(false);
         actions = new ActionScrollPane();
         UI background = new BasicBackground();
         this.add(background);
         this.add(actions);
-        this.actionDetailUI = actionDetailUI;
+        this.infoUI = infoUI;
     }
 
     public void open() {
@@ -130,7 +130,7 @@ public class ActionMenu extends Stack {
         @Override
         public void onHover() {
             actions.getSelected().entry().onHover(GameState.global(), HUD.get().getCursor().getSelected());
-            actionDetailUI.setAction(actions.getSelected().entry());
+            infoUI.showInfo(actions.getSelected().entry());
         }
     }
 

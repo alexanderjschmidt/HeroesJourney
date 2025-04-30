@@ -8,15 +8,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Value;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.ActionDetailUI;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.ui.windows.DelveUI;
 import heroes.journey.ui.windows.EntityUI;
+import heroes.journey.ui.windows.InfoUI;
 import heroes.journey.ui.windows.PopupUI;
 import heroes.journey.ui.windows.StatsUI;
 import heroes.journey.ui.windows.TerrainUI;
@@ -29,9 +30,10 @@ public class HUD extends Stage {
 
     @Getter private final Cursor cursor;
     private final Table layout, leftCol;
+    private final int layoutPadding = 5;
 
     @Getter private final ActionMenu actionMenu;
-    private final ActionDetailUI actionDetailUI;
+    private final InfoUI infoUI;
     private final TerrainUI terrainUI;
     private EntityUI entityUI, selectedEntityUI;
     private final TurnUI turnUI;
@@ -52,14 +54,14 @@ public class HUD extends Stage {
     }
 
     public HUD() {
-        super(new ScreenViewport());
+        super(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
 
-        actionDetailUI = new ActionDetailUI();
-        actionMenu = new ActionMenu(actionDetailUI);
+        infoUI = new InfoUI();
+        actionMenu = new ActionMenu(infoUI);
         terrainUI = new TerrainUI();
         entityUI = new EntityUI();
         turnUI = new TurnUI();
@@ -69,24 +71,25 @@ public class HUD extends Stage {
 
         layout = new Table();
         layout.setFillParent(true);
-        layout.defaults().pad(5).expand().fill();
-        layout.top().left();
+        layout.defaults().pad(layoutPadding).fill().top().left();
 
         // TODO lock its width, so that the middle column can expand?
         leftCol = new Table();
         buildLeftCol();
 
         Table rightCol = new Table();
-        rightCol.defaults().expand().fill();
-        rightCol.top().left();
+        rightCol.defaults().top().right().expand().fill().height(Value.percentHeight(0.49f, rightCol));
         //TODO fix action menu make it only take up as much space as it needs with a filler row
         rightCol.add(actionMenu).padBottom(2.5f);
         rightCol.row();
-        rightCol.add(actionDetailUI).padTop(2.5f);
+        rightCol.add(infoUI).padTop(2.5f);
 
-        layout.add(leftCol);
-        centerWindow = layout.add(statsUI).colspan(3);
-        layout.add(rightCol);
+        float screenWidth = getViewport().getWorldWidth();
+        float sideWidth = screenWidth / 5;
+
+        layout.add(leftCol).left().fill().width(sideWidth);
+        centerWindow = layout.add(statsUI).expand().fill();
+        layout.add(rightCol).right().fill().width(sideWidth);
 
         this.addActor(layout);
 
@@ -95,29 +98,23 @@ public class HUD extends Stage {
 
     private void buildLeftCol() {
         leftCol.clearChildren();
-        leftCol.defaults().expandX().fillX();
-        leftCol.add(turnUI).minHeight(FONT_SIZE * 2).maxHeight(FONT_SIZE * 2).padBottom(2.5f).top();
+        leftCol.defaults().expandX().fill();
+        leftCol.add(turnUI).height(Value.percentHeight(.075f, leftCol)).padBottom(2.5f).top();
         leftCol.row();
         leftCol.add().expandY();
         leftCol.row();
         if (selectedEntityUI != null) {
             selectedEntityUI.setPosition(0, 0);
             leftCol.add(selectedEntityUI)
-                .minHeight(FONT_SIZE * 5)
-                .maxHeight(FONT_SIZE * 5)
+                .height(Value.percentHeight(.2f, leftCol))
                 .padBottom(2.5f)
                 .padTop(2.5f)
                 .bottom();
             leftCol.row();
         }
-        leftCol.add(entityUI)
-            .minHeight(FONT_SIZE * 5)
-            .maxHeight(FONT_SIZE * 5)
-            .padBottom(2.5f)
-            .padTop(2.5f)
-            .bottom();
+        leftCol.add(entityUI).height(Value.percentHeight(.2f, leftCol)).padBottom(2.5f).padTop(2.5f).bottom();
         leftCol.row();
-        leftCol.add(terrainUI).minHeight(FONT_SIZE * 2).maxHeight(FONT_SIZE * 2).padTop(2.5f).bottom();
+        leftCol.add(terrainUI).height(Value.percentHeight(.075f, leftCol)).padTop(2.5f).bottom();
     }
 
     public void update(float delta) {
@@ -127,8 +124,7 @@ public class HUD extends Stage {
         if (selectedEntityUI != null) {
             selectedEntityUI.watchSelected();
         }
-        leftCol.setDebug(LoadOptions.debugOption.isTrue());
-        layout.setDebug(LoadOptions.debugOption.isTrue());
+        this.setDebugAll(LoadOptions.debugOption.isTrue());
 
         draw();
     }
@@ -152,29 +148,35 @@ public class HUD extends Stage {
 
     public void resize() {
         getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+
+        float screenWidth = getViewport().getWorldWidth();
+        float sideWidth = screenWidth / 5f;
+
+        // Force reapply widths on resize
+        layout.getCells().get(0).width(sideWidth); // leftCol
+        layout.getCells().get(1).width(screenWidth - (sideWidth * 2) - (layoutPadding * 6));  // centerWindow
+        layout.getCells().get(2).width(sideWidth); // rightCol
     }
 
-    public ActionDetailUI getActionDetailedUI() {
-        return actionDetailUI;
+    public InfoUI getActionDetailedUI() {
+        return infoUI;
     }
 
     public void updateCenterPanel() {
         centerWindow.clearActor();
         if (stateMachine.getCurrentState() == States.STATS) {
-            centerWindow.setActor(statsUI).colspan(3).expand().fill();
+            centerWindow.setActor(statsUI).expand().fill();
         } else if (stateMachine.getCurrentState() == States.POP_UP) {
             Table popupTable = new Table();
             String text = popupUI.getText();
             long newlineCount = text.chars().filter(c -> c == '\n').count() + 2;
             popupTable.add(popupUI)
-                .minWidth(FONT_SIZE * 25)
-                .maxWidth(FONT_SIZE * 25)
-                .minHeight(FONT_SIZE * newlineCount)
-                .maxHeight(FONT_SIZE * newlineCount)
+                .width(Value.percentWidth(.75f, popupTable))
+                .height(FONT_SIZE * (newlineCount + 1))
                 .pad(10);
-            centerWindow.setActor(popupTable).colspan(3).fill().expand();
+            centerWindow.setActor(popupTable).expand().fill();
         } else if (stateMachine.getCurrentState() == States.DELVE) {
-            centerWindow.setActor(delveUI).colspan(3).expand().fill();
+            centerWindow.setActor(delveUI).expand().fill();
         }
         layout.invalidate();
     }

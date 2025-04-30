@@ -1,11 +1,18 @@
 package heroes.journey.entities.actions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.utils.art.ResourceManager;
 import lombok.Builder;
 
 @Builder
@@ -67,4 +74,60 @@ public class Cost {
             .and(enoughGold);
     }
 
+    private Table table;
+    private Label staminaCost;
+    private Label manaCost;
+    private Label healthCost;
+    private Label goldCost;
+
+    public void initDisplay() {
+        staminaCost = new Label("", ResourceManager.get().skin);
+        staminaCost.setColor(Color.GREEN);
+        manaCost = new Label("", ResourceManager.get().skin);
+        manaCost.setColor(Color.BLUE);
+        healthCost = new Label("", ResourceManager.get().skin);
+        healthCost.setColor(Color.RED);
+        goldCost = new Label("", ResourceManager.get().skin);
+        goldCost.setColor(Color.GOLD);
+        table = new Table();
+        table.defaults().left();
+    }
+
+    public Table getDisplay() {
+        if (staminaCost == null) {
+            initDisplay();
+        }
+        table.clear();
+        List<Label> costLabels = new ArrayList<>();
+
+        double mult = multiplier.apply(GameState.global(), GameState.global().getCurrentEntity());
+
+        if (stamina * mult != 0) {
+            staminaCost.setText("S: " + (stamina * mult));
+            costLabels.add(staminaCost);
+        }
+        if (mana * mult != 0) {
+            manaCost.setText("M: " + (mana * mult));
+            costLabels.add(manaCost);
+        }
+        if (health * mult != 0) {
+            healthCost.setText("H: " + (health * mult));
+            costLabels.add(healthCost);
+        }
+        if (gold * mult != 0) {
+            goldCost.setText("G: " + (gold * mult));
+            costLabels.add(goldCost);
+        }
+        for (int i = 0; i < costLabels.size(); i++) {
+            table.add(costLabels.get(i)).padLeft(5).padRight(5).expand().fill().left();
+            if (i % 2 == 1)
+                table.row(); // Move to next row every 2 labels
+        }
+        if (costLabels.size() % 2 == 1) {
+            table.row(); // Add row in case there's 1 leftover and no even pair
+        }
+        // TODO add item cost
+
+        return table;
+    }
 }

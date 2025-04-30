@@ -49,11 +49,14 @@ public class WaveFunctionCollapse {
                             clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 2);
                         else
                             possibleTilesMap[ax][ay].addItem(Tiles.HOLE, 10);
-                        continue;
+                    } else if (map[ax][ay] == null && possibleTilesMap[ax][ay].size() <= 3) {
+                        maxEntropy = Long.MAX_VALUE - possibleTilesMap[ax][ay].size();
+                        maxEntropyX = ax;
+                        maxEntropyY = ay;
                     }
                     // TODO update this to use the highest value in the weighted random picker not the total weight
                     // ie it contains a plains tile that is weighted at 1000000000
-                    if (map[ax][ay] == null && possibleTilesMap[ax][ay].getTotalWeight() > maxEntropy &&
+                    else if (map[ax][ay] == null && possibleTilesMap[ax][ay].getTotalWeight() > maxEntropy &&
                         !possibleTilesMap[ax][ay].isEmpty()) {
                         maxEntropy = possibleTilesMap[ax][ay].getTotalWeight();
                         maxEntropyX = ax;

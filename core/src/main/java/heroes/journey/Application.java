@@ -6,7 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import heroes.journey.ui.screens.LoadingScreen;
@@ -33,7 +33,7 @@ import lombok.Getter;
  * Multiplayer
  * Saving
  * Map Generation
- *  Improve timeout/WFC going forever
+ *  Improve timeout/WFC going forever/Holes
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
@@ -82,7 +82,7 @@ public class Application extends Game {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
 
-        viewport = new StretchViewport(w, h, new OrthographicCamera());
+        viewport = new FitViewport(w, h, new OrthographicCamera());
         GameCamera.get().setToOrtho(false, w, h);
         viewport.apply();
         batch = new SpriteBatch();

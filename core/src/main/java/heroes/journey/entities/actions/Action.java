@@ -3,16 +3,22 @@ package heroes.journey.entities.actions;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.InfoProvider;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true)
-public class Action {
+public class Action implements InfoProvider {
 
-    protected final String name;
+    @NonNull protected final String name;
+    @Builder.Default protected final String description = "";
     @Getter @Builder.Default protected final boolean terminal = true;
     @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
     };
@@ -35,8 +41,6 @@ public class Action {
     }
 
     /**
-     * @param gameState
-     * @param userId
      * @return the results of the action for a popup window
      */
     public String onSelect(GameState gameState, Integer userId) {
@@ -53,4 +57,18 @@ public class Action {
         return ActionManager.register(this);
     }
 
+    @Override
+    public String getTitle() {
+        return name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public void fillCustomContent(Table table, Skin skin) {
+        table.add(cost.getDisplay()).center().fill().expand();
+    }
 }
