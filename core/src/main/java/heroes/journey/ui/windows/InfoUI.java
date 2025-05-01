@@ -31,7 +31,7 @@ public class InfoUI extends Stack {
 
         mainTable.add(titleLabel).left().pad(2.5f).fill().row();
         mainTable.add(contentTable).left().pad(2.5f).fill().row();
-        mainTable.add(bodyLabel).left().pad(2.5f).expand().fill().row();
+        mainTable.add(bodyLabel).left().top().pad(2.5f).expand().fill().row();
 
         Container<Table> paddedContainer = new Container<>(mainTable);
         paddedContainer.pad(HUD.FONT_SIZE).center();

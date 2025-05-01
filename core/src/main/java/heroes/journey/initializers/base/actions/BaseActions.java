@@ -52,15 +52,17 @@ public class BaseActions implements InitializerInterface {
         }).build().register();
         TeamActions.addTeamAction(end_turn);
 
-        wait = Action.builder().name("Wait").build().register();
+        wait = Action.builder().name("Wait").description("Do Nothing").build().register();
         workout = CooldownAction.builder()
             .name("Work out")
+            .description("Lift weights, gain body")
             .turnCooldown(1)
             .onSelect((gs, e) -> Utils.adjustBody(gs, e, 1))
             .build()
             .register();
         study = CooldownAction.builder()
             .name("Study")
+            .description("Expand your mind, increasing your potential")
             .turnCooldown(2)
             .onSelect(((gs, e) -> Utils.adjustMind(gs, e, 1)))
             .build()
@@ -118,16 +120,23 @@ public class BaseActions implements InitializerInterface {
             })
             .build()
             .register();
-        questBoard = Action.builder().name("Quest Board").terminal(false).onSelect((gs, e) -> {
-            Integer town = Utils.getLocation(gs, e);
-            List<Action> questActions = Utils.getQuestClaimActions(gs, town);
-            HUD.get().setState(new ActionSelectState(questActions));
-            return null;
-        }).requirementsMet((gs, e) -> {
-            Integer town = Utils.getLocation(gs, e);
-            QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
-            return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
-        }).build().register();
+        questBoard = Action.builder()
+            .name("Quest Board")
+            .description("See what the people need help with")
+            .terminal(false)
+            .onSelect((gs, e) -> {
+                Integer town = Utils.getLocation(gs, e);
+                List<Action> questActions = Utils.getQuestClaimActions(gs, town);
+                HUD.get().setState(new ActionSelectState(questActions));
+                return null;
+            })
+            .requirementsMet((gs, e) -> {
+                Integer town = Utils.getLocation(gs, e);
+                QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
+                return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
+            })
+            .build()
+            .register();
     }
 
 }

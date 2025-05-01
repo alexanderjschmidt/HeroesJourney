@@ -1,5 +1,9 @@
 package heroes.journey.entities.actions;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.components.character.CooldownComponent;
 import heroes.journey.components.utils.Utils;
@@ -17,13 +21,7 @@ public class CooldownAction extends Action {
 
     @Override
     public ShowAction requirementsMet(GameState gameState, Integer entityId) {
-        CooldownComponent cooldownComponent;
-        if (factionCooldown) {
-            Integer faction = Utils.getLocation(gameState, entityId);
-            cooldownComponent = CooldownComponent.get(gameState.getWorld(), faction);
-        } else {
-            cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);
-        }
+        CooldownComponent cooldownComponent = getCooldownComponent(gameState, entityId);
         if (cooldownComponent.getCooldowns().containsKey(name))
             return ShowAction.GRAYED;
         return requirementsMet.apply(gameState, entityId);
@@ -31,6 +29,12 @@ public class CooldownAction extends Action {
 
     @Override
     public String onSelect(GameState gameState, Integer entityId) {
+        CooldownComponent cooldownComponent = getCooldownComponent(gameState, entityId);
+        cooldownComponent.getCooldowns().put(name, turnCooldown);
+        return onSelect.apply(gameState, entityId);
+    }
+
+    private CooldownComponent getCooldownComponent(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent;
         if (factionCooldown) {
             Integer faction = Utils.getLocation(gameState, entityId);
@@ -38,8 +42,23 @@ public class CooldownAction extends Action {
         } else {
             cooldownComponent = CooldownComponent.get(gameState.getWorld(), entityId);
         }
-        cooldownComponent.getCooldowns().put(name, turnCooldown);
-        return onSelect.apply(gameState, entityId);
+        return cooldownComponent;
+    }
+
+    private Label cooldown;
+
+    @Override
+    public void fillCustomContent(Table table, Skin skin) {
+        if (cooldown == null) {
+            cooldown = new Label("", skin);
+        }
+        CooldownComponent cooldownComponent = getCooldownComponent(GameState.global(),
+            GameState.global().getCurrentEntity());
+        Integer cooldownVal = cooldownComponent.getCooldowns().get(this.name);
+        cooldownVal = cooldownVal == null ? turnCooldown : (turnCooldown - cooldownVal - 1);
+        cooldown.setText(cooldownVal + "/" + turnCooldown);
+        table.add(cooldown).fill().row();
+        super.fillCustomContent(table, skin);
     }
 
     public CooldownAction register() {
