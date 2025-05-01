@@ -107,7 +107,7 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
         // Remove item and its cumulative weight
         //System.out.println(size() + " " + cumulativeWeights.size());
         super.remove((int)index);
-        cumulativeWeights.remove((int)index);
+        long removedWeight = cumulativeWeights.remove((int)index);
 
         // Update indexMap for shifted elements
         for (int i = index; i < size(); i++) {
@@ -116,6 +116,27 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
 
         // Update totalWeight
         totalWeight = cumulativeWeights.isEmpty() ? 0 : cumulativeWeights.getLast();
+        return true;
+    }
+
+    /**
+     * Halves the weight of the given item.
+     *
+     * @param item the item whose weight should be halved
+     * @return true if the item's weight was halved, false if the item was not found
+     */
+    public boolean halveWeight(T item) {
+        Integer index = indexMap.get(item);
+        if (index == null) {
+            return false; // Item not found
+        }
+
+        long originalWeight =
+            cumulativeWeights.get(index) - (index > 0 ? cumulativeWeights.get(index - 1) : 0);
+        long newWeight = Math.max(1, originalWeight / 2); // Ensure weight stays positive
+
+        remove(item);       // Remove the current item and adjust state
+        addItem(item, newWeight); // Re-add it with the new halved weight
         return true;
     }
 
