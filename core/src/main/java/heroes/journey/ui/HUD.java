@@ -29,12 +29,16 @@ public class HUD extends Stage {
     private final Table layout, leftCol;
     private final int layoutPadding = 5;
 
+    // TODO move this into its own right column class
     @Getter private final ActionMenu actionMenu;
     private final InfoUI infoUI;
+
+    // TODO move this into its own left column class
     private final TerrainUI terrainUI;
     private final EntityUI entityUI;
     private final TurnUI turnUI;
 
+    // TODO move this into its own center screen class
     private final Cell<?> centerWindow;
     @Getter private final StatsUI statsUI;
     @Getter private final PopupUI popupUI;
@@ -49,8 +53,9 @@ public class HUD extends Stage {
         return hud;
     }
 
-    public HUD() {
+    private HUD() {
         super(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+
         stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 

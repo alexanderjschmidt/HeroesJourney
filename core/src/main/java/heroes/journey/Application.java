@@ -27,10 +27,13 @@ import lombok.Getter;
  *          Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
+ * Multiplayer
+ *  setup player, host, and lobby for server
+ *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
  * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
- * Multiplayer
+ * move effects to player info panel
  * Saving
  * Map Generation
  *  Improve timeout/WFC going forever/Holes

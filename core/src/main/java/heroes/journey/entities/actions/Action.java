@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.InfoProvider;
+import heroes.journey.ui.windows.InfoProvider;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

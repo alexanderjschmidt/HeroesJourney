@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Align;
 
 import heroes.journey.ui.BasicBackground;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.InfoProvider;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
 
