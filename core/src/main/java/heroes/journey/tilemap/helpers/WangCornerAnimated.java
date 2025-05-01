@@ -2,9 +2,9 @@ package heroes.journey.tilemap.helpers;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import heroes.journey.tilemap.wavefunction.AnimatedTile;
-import heroes.journey.tilemap.wavefunction.Terrain;
-import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 
 public class WangCornerAnimated {

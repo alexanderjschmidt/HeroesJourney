@@ -10,7 +10,7 @@ import java.util.Queue;
 
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
-import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 
@@ -49,7 +49,7 @@ public class WaveFunctionCollapse {
                             clearHole(map, possibleTilesMap, possibleTilesMapPrime, ax, ay, 2);
                         else
                             possibleTilesMap[ax][ay].addItem(Tiles.HOLE, 10);
-                    } else if (map[ax][ay] == null && possibleTilesMap[ax][ay].size() <= 3) {
+                    } else if (map[ax][ay] == null && possibleTilesMap[ax][ay].size() >= 3 && clearHole) {
                         maxEntropy = Long.MAX_VALUE - possibleTilesMap[ax][ay].size();
                         maxEntropyX = ax;
                         maxEntropyY = ay;

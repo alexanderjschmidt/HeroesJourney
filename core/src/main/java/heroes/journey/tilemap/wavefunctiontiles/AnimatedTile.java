@@ -1,4 +1,4 @@
-package heroes.journey.tilemap.wavefunction;
+package heroes.journey.tilemap.wavefunctiontiles;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

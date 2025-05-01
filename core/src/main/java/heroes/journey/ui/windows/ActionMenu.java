@@ -14,7 +14,7 @@ import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.character.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.tilemap.wavefunction.ActionTerrain;
+import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.ui.BasicBackground;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;

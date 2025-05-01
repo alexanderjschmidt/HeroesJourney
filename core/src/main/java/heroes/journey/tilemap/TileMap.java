@@ -16,9 +16,9 @@ import heroes.journey.GameCamera;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.actions.BaseActions;
-import heroes.journey.tilemap.wavefunction.ActionTerrain;
-import heroes.journey.tilemap.wavefunction.Terrain;
-import heroes.journey.tilemap.wavefunction.Tile;
+import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
 

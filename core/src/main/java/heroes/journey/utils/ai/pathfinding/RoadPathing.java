@@ -7,7 +7,7 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileMap;
-import heroes.journey.tilemap.wavefunction.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 
 public class RoadPathing {
 

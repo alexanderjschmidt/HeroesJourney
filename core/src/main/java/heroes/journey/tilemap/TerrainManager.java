@@ -2,7 +2,7 @@ package heroes.journey.tilemap;
 
 import java.util.HashMap;
 
-import heroes.journey.tilemap.wavefunction.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 
 public class TerrainManager extends HashMap<String,Terrain> {
 

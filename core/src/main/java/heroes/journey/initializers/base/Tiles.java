@@ -1,16 +1,21 @@
 package heroes.journey.initializers.base;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunction.*;
+import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
+import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
+import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-
-import java.util.List;
 
 public class Tiles implements InitializerInterface {
 

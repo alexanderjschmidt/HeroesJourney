@@ -1,10 +1,10 @@
-package heroes.journey.tilemap.wavefunction;
-
-import heroes.journey.entities.actions.Action;
+package heroes.journey.tilemap.wavefunctiontiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import heroes.journey.entities.actions.Action;
 
 public class ActionTerrain extends Terrain {
 

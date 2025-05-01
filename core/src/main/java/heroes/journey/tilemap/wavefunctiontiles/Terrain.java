@@ -1,4 +1,4 @@
-package heroes.journey.tilemap.wavefunction;
+package heroes.journey.tilemap.wavefunctiontiles;
 
 import heroes.journey.tilemap.TerrainManager;
 

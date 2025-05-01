@@ -1,13 +1,14 @@
 package heroes.journey.tilemap.helpers;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import heroes.journey.tilemap.wavefunction.BaseTile;
-import heroes.journey.tilemap.wavefunction.Terrain;
-import heroes.journey.tilemap.wavefunction.Tile;
-import heroes.journey.utils.Direction;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.Direction;
 
 public class WangCorner {
 
@@ -33,10 +34,10 @@ public class WangCorner {
         // Center (Not included because it should be one of the adjacent tiles
         // tile.add(new BaseTileRender(tiles[y + 1][x + 1], 0), adjacentTileInner, adjacentTileInner,
         //     adjacentTileInner, adjacentTileInner);
-        int cornerWeight = (int) (transitionWeight * (70 / 100d));
-        int edgeWeight = (int) (transitionWeight * (10 / 100d));
-        int inverseCornerWeight = (int) (transitionWeight * (70 / 100d));
-        int diagonalWeight = (int) (transitionWeight * (1 / 100d));
+        int cornerWeight = (int)(transitionWeight * (70 / 100d));
+        int edgeWeight = (int)(transitionWeight * (10 / 100d));
+        int inverseCornerWeight = (int)(transitionWeight * (70 / 100d));
+        int diagonalWeight = (int)(transitionWeight * (1 / 100d));
         // Setup Tiles
         // Corners
         Tile northWest = new BaseTile(base, cornerWeight, addToDefault, tiles[x][y]);
