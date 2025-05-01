@@ -214,7 +214,7 @@ public class Cursor {
         positionComponent.setPos(sx, sy);
         StatsComponent statsComponent = StatsComponent.get(world, selected);
         setPosition(sx, sy);
-        //clearSelected();
+        clearSelected();
         if (statsComponent.getMoveDistance() != 0) {
             update();
             setSelectedtoHover();

@@ -52,7 +52,8 @@ public class ActionSelectState extends HUDState {
         } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
             Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();
-            hud.getCursor().revertSelectedPosition();
+            if (!(HUD.get().getState() instanceof ActionSelectState))
+                hud.getCursor().revertSelectedPosition();
         }
     }
 
