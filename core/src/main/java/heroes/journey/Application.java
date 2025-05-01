@@ -29,7 +29,9 @@ import lombok.Getter;
  * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
  * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
- * Make Camera not go off map when zooming out
+ * Improve Camera
+ *  Make Camera not go off map when zooming out
+ *  Make Camera center on player when cursor jumps to player
  * Multiplayer
  * Saving
  * Map Generation

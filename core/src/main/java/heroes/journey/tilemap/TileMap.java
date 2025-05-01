@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
 import heroes.journey.GameCamera;
+import heroes.journey.RenderBounds;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.actions.BaseActions;
@@ -44,16 +45,10 @@ public class TileMap implements IndexedGraph<TileNode> {
     public void render(SpriteBatch batch, float delta) {
         elapsed += delta;
 
-        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
+        RenderBounds bounds = RenderBounds.get();
 
-        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().getXLow()), 0);
-        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().getYLow()), 0);
-        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().getXHigh()), width);
-        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().getYHigh()), height);
-
-        for (int x = x0; x < x1; x++) {
-            for (int y = y0; y < y1; y++) {
+        for (int x = bounds.x0; x < bounds.x1; x++) {
+            for (int y = bounds.y0; y < bounds.y1; y++) {
                 if (tileMap[x][y] != null)
                     tileMap[x][y].render(batch, elapsed, x, y);
                 if (environment[x][y] != null)

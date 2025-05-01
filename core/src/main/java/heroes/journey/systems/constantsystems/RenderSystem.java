@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.RenderBounds;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.MapComponent;
@@ -77,16 +78,10 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     public void renderFog(Batch batch, Fog[][] fog) {
-        int xo = (int)(GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int)(GameCamera.get().position.y / GameCamera.get().getSize());
+        RenderBounds bounds = RenderBounds.get();
 
-        int x0 = (int)Math.max(Math.floor(xo - GameCamera.get().getXLow()), 0);
-        int y0 = (int)Math.max(Math.floor(yo - GameCamera.get().getYLow()), 0);
-        int x1 = (int)Math.min(Math.floor(xo + GameCamera.get().getXHigh()), fog.length);
-        int y1 = (int)Math.min(Math.floor(yo + GameCamera.get().getYHigh()), fog.length);
-
-        for (int x = x0; x < x1; x++) {
-            for (int y = y0; y < y1; y++) {
+        for (int x = bounds.x0; x < bounds.x1; x++) {
+            for (int y = bounds.y0; y < bounds.y1; y++) {
                 if (fog[x][y] != Fog.NONE && fog[x][y] != null)
                     fog[x][y].render(batch, x, y);
             }

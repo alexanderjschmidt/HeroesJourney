@@ -2,6 +2,7 @@ package heroes.journey;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
 import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
@@ -10,11 +11,7 @@ import lombok.Getter;
 public class GameCamera extends OrthographicCamera {
 
     private static int size = 32;
-    @Getter
-    private int xLow, xHigh, yLow, yHigh;
-
-    private int lastTargetX = 0;
-    private int lastTargetY = 0;
+    @Getter private int xLow, xHigh, yLow, yHigh;
 
     private static GameCamera camera;
 
@@ -38,8 +35,6 @@ public class GameCamera extends OrthographicCamera {
         super.update();
         Cursor cursor = HUD.get().getCursor();
         if (cursor != null) {
-            lastTargetX = cursor.x;
-            lastTargetY = cursor.y;
             if (cursor.x * size - position.x < -(3f * Gdx.graphics.getWidth() / 10f)) {
                 position.x = Math.min(Math.max(position.x - size, size * (xLow + xHigh - 2) / 2),
                     (size * Map.MAP_SIZE) - (size * (xLow + xHigh - 2) / 2));
@@ -58,28 +53,29 @@ public class GameCamera extends OrthographicCamera {
     }
 
     public void setZoom() {
+        Cursor cursor = HUD.get().getCursor();
         switch (size) {
             case 16:
-                xLow = (int) (41);
-                yLow = (int) (23);
-                xHigh = (int) (41);
-                yHigh = (int) (23);
+                xLow = (int)(41);
+                yLow = (int)(23);
+                xHigh = (int)(41);
+                yHigh = (int)(23);
                 break;
             case 32:
-                xLow = (int) (21);
-                yLow = (int) (12);
-                xHigh = (int) (21);
-                yHigh = (int) (12);
+                xLow = (int)(21);
+                yLow = (int)(12);
+                xHigh = (int)(21);
+                yHigh = (int)(12);
                 break;
             default:
-                xLow = (int) (11);
-                yLow = (int) (7);
-                xHigh = (int) (11);
-                yHigh = (int) (7);
+                xLow = (int)(11);
+                yLow = (int)(7);
+                xHigh = (int)(11);
+                yHigh = (int)(7);
         }
-        position.x = Math.min(Math.max(lastTargetX * size, size * (xLow + xHigh - 2) / 2),
+        position.x = Math.min(Math.max(cursor.x * size, size * (xLow + xHigh - 2) / 2),
             (size * 128) - (size * (xLow + xHigh - 2) / 2));
-        position.y = Math.min(Math.max(lastTargetY * size, size * (yLow + yHigh - 2) / 2),
+        position.y = Math.min(Math.max(cursor.y * size, size * (yLow + yHigh - 2) / 2),
             (size * 128) - (size * (yLow + yHigh - 2) / 2));
     }
 
@@ -102,14 +98,9 @@ public class GameCamera extends OrthographicCamera {
     }
 
     public boolean onCamera(int x, int y) {
-        int xo = (int) (GameCamera.get().position.x / GameCamera.get().getSize());
-        int yo = (int) (GameCamera.get().position.y / GameCamera.get().getSize());
+        RenderBounds bounds = RenderBounds.get();
 
-        int x0 = (int) Math.max(Math.floor(xo - GameCamera.get().xLow), 0);
-        int y0 = (int) Math.max(Math.floor(yo - GameCamera.get().yLow), 0);
-        int x1 = (int) Math.min(Math.floor(xo + GameCamera.get().xHigh), GameState.global().getWidth());
-        int y1 = (int) Math.min(Math.floor(yo + GameCamera.get().yHigh), GameState.global().getHeight());
-
-        return x >= x0 && x <= x1 && y >= y0 && y <= y1;
+        return x >= bounds.x0 && x <= bounds.x1 && y >= bounds.y0 && y <= bounds.y1;
     }
 }
+
