@@ -3,9 +3,7 @@ package heroes.journey.ui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.StackStateMachine;
 import com.badlogic.gdx.ai.fsm.StateMachine;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
@@ -15,7 +13,6 @@ import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.ui.windows.ActionMenu;
-import heroes.journey.ui.windows.DelveUI;
 import heroes.journey.ui.windows.EntityUI;
 import heroes.journey.ui.windows.InfoUI;
 import heroes.journey.ui.windows.PopupUI;
@@ -35,13 +32,12 @@ public class HUD extends Stage {
     @Getter private final ActionMenu actionMenu;
     private final InfoUI infoUI;
     private final TerrainUI terrainUI;
-    private EntityUI entityUI, selectedEntityUI;
+    private final EntityUI entityUI;
     private final TurnUI turnUI;
 
     private final Cell<?> centerWindow;
     @Getter private final StatsUI statsUI;
     @Getter private final PopupUI popupUI;
-    private DelveUI delveUI;
 
     private static HUD hud;
     private final StateMachine<HUD,HUDState> stateMachine;
@@ -67,7 +63,6 @@ public class HUD extends Stage {
         turnUI = new TurnUI();
         statsUI = new StatsUI();
         popupUI = new PopupUI();
-        //delveUI = new DelveUI();
 
         layout = new Table();
         layout.setFillParent(true);
@@ -103,16 +98,11 @@ public class HUD extends Stage {
         leftCol.row();
         leftCol.add().expandY();
         leftCol.row();
-        if (selectedEntityUI != null) {
-            selectedEntityUI.setPosition(0, 0);
-            leftCol.add(selectedEntityUI)
-                .height(Value.percentHeight(.2f, leftCol))
-                .padBottom(2.5f)
-                .padTop(2.5f)
-                .bottom();
-            leftCol.row();
-        }
-        leftCol.add(entityUI).height(Value.percentHeight(.2f, leftCol)).padBottom(2.5f).padTop(2.5f).bottom();
+        leftCol.add(entityUI)
+            .height(Value.percentHeight(.175f, leftCol))
+            .padBottom(2.5f)
+            .padTop(2.5f)
+            .bottom();
         leftCol.row();
         leftCol.add(terrainUI).height(Value.percentHeight(.075f, leftCol)).padTop(2.5f).bottom();
     }
@@ -121,29 +111,9 @@ public class HUD extends Stage {
         this.delta = delta;
         stateMachine.update();
         act();
-        if (selectedEntityUI != null) {
-            selectedEntityUI.watchSelected();
-        }
         this.setDebugAll(LoadOptions.debugOption.isTrue());
 
         draw();
-    }
-
-    public void select() {
-        selectedEntityUI = entityUI;
-        entityUI = new EntityUI();
-        float slideAmount = selectedEntityUI.getHeight() + 5;
-        selectedEntityUI.addAction(Actions.sequence(Actions.moveBy(0, slideAmount, .2f, Interpolation.linear),
-            Actions.run(this::buildLeftCol)));
-    }
-
-    public void clearSelect() {
-        if (selectedEntityUI != null)
-            selectedEntityUI.addAction(
-                Actions.sequence(Actions.fadeOut(.5f, Interpolation.pow5Out), Actions.delay(1f),
-                    Actions.removeActor()));
-        selectedEntityUI = null;
-        buildLeftCol();
     }
 
     public void resize() {
@@ -175,8 +145,6 @@ public class HUD extends Stage {
                 .height(FONT_SIZE * (newlineCount + 1))
                 .pad(10);
             centerWindow.setActor(popupTable).expand().fill();
-        } else if (stateMachine.getCurrentState() == States.DELVE) {
-            centerWindow.setActor(delveUI).expand().fill();
         }
         layout.invalidate();
     }

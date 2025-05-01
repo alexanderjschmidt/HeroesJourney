@@ -15,27 +15,13 @@ public class EntityUI extends UI {
     public static final int BAR_WIDTH = HUD.FONT_SIZE * 8;
     public static final int BAR_HEIGHT = HUD.FONT_SIZE;
 
-    public boolean hover = true;
-
     public EntityUI() {
         super();
     }
 
-    public void watchSelected() {
-        hover = false;
-    }
-
     @Override
     public void drawAndUpdate(Batch batch, float parentAlpha) {
-        Integer entityId;
-        if (hover && HUD.get().getCursor().getHover() != HUD.get().getCursor().getSelected()) {
-            entityId = HUD.get().getCursor().getHover();
-        } else if (!hover) {
-            entityId = HUD.get().getCursor().getSelected();
-        } else {
-            entityId = null;
-        }
-
+        Integer entityId = HUD.get().getCursor().getHover();
         if (entityId == null)
             return;
         StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);

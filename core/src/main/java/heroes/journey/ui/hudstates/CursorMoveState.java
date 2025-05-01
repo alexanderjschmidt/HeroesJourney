@@ -33,7 +33,6 @@ class CursorMoveState extends HUDState {
                 GameState.global().getPlayableEntities().contains(GameState.global().getCurrentEntity()) &&
                 Objects.equals(hud.getCursor().getHover(), GameState.global().getCurrentEntity())) {
                 hud.getCursor().setSelectedtoHover();
-                HUD.get().select();
                 StatsComponent stats = StatsComponent.get(GameState.global().getWorld(),
                     hud.getCursor().getSelected());
                 if (stats.getMoveDistance() == 0) {

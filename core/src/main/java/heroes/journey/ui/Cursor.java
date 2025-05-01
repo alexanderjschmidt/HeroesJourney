@@ -66,7 +66,6 @@ public class Cursor {
         sy = -1;
         path = null;
         GameState.global().getRangeManager().clearRange();
-        hud.clearSelect();
     }
 
     public void render(Batch batch, float delta) {
@@ -220,7 +219,6 @@ public class Cursor {
             update();
             setSelectedtoHover();
             GameState.global().getRangeManager().setMoveAndAttackRange(selected, sx, sy);
-            hud.select();
         }
     }
 
