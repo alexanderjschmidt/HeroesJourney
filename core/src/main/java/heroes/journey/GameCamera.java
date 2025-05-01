@@ -8,10 +8,11 @@ import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import lombok.Getter;
 
+@Getter
 public class GameCamera extends OrthographicCamera {
 
-    private static int size = 32;
-    @Getter private int xLow, xHigh, yLow, yHigh;
+    private int size = 32;
+    private int xLow, xHigh, yLow, yHigh;
 
     private static GameCamera camera;
 
@@ -35,21 +36,53 @@ public class GameCamera extends OrthographicCamera {
         super.update();
         Cursor cursor = HUD.get().getCursor();
         if (cursor != null) {
-            if (cursor.x * size - position.x < -(3f * Gdx.graphics.getWidth() / 10f)) {
-                position.x = Math.min(Math.max(position.x - size, size * (xLow + xHigh - 2) / 2),
-                    (size * Map.MAP_SIZE) - (size * (xLow + xHigh - 2) / 2));
-            } else if (cursor.x * size - position.x > (3f * Gdx.graphics.getWidth() / 10f)) {
-                position.x = Math.min(Math.max(position.x + size, size * (xLow + xHigh - 2) / 2),
-                    (size * Map.MAP_SIZE) - (size * (xLow + xHigh - 2) / 2));
+            //Centered
+            int cameraX = (int)(position.x / size);
+            int cameraY = (int)(position.y / size);
+
+            // Viewport size in tiles
+            int tilesWide = Gdx.graphics.getWidth() / size;
+            int tilesHigh = Gdx.graphics.getHeight() / size;
+
+            // Outer thirds (in tile space, relative to camera center)
+            int leftBound = cameraX - tilesWide / 2 + tilesWide / 5;
+            int rightBound = cameraX + tilesWide / 2 - tilesWide / 5;
+            int bottomBound = cameraY - tilesHigh / 2 + tilesHigh / 5;
+            int topBound = cameraY + tilesHigh / 2 - tilesHigh / 5;
+
+            // Move camera if cursor is outside the middle third (i.e., in outer thirds)
+            if (cursor.x < leftBound) {
+                setX(cameraX - 1);
+            } else if (cursor.x > rightBound) {
+                setX(cameraX + 1);
             }
-            if (cursor.y * size - position.y < -(3f * Gdx.graphics.getHeight() / 10f)) {
-                position.y = Math.min(Math.max(position.y - size, size * (yLow + yHigh - 2) / 2),
-                    (size * Map.MAP_SIZE) - (size * (yLow + yHigh - 2) / 2));
-            } else if (cursor.y * size - position.y > (3f * Gdx.graphics.getHeight() / 10f)) {
-                position.y = Math.min(Math.max(position.y + size, size * (yLow + yHigh - 2) / 2),
-                    (size * Map.MAP_SIZE) - (size * (yLow + yHigh - 2) / 2));
+            if (cursor.y < bottomBound) {
+                setY(cameraY - 1);
+            } else if (cursor.y > topBound) {
+                setY(cameraY + 1);
             }
         }
+    }
+
+    private void setX(int x) {
+        position.x = Math.min(Math.max(x * size, getXBound()), (size * Map.MAP_SIZE) - getXBound());
+    }
+
+    private void setY(int y) {
+        position.y = Math.min(Math.max(y * size, getYBound()), (size * Map.MAP_SIZE) - getYBound());
+    }
+
+    public void center(int x, int y) {
+        setX(x);
+        setY(y);
+    }
+
+    private int getXBound() {
+        return size * ((xLow + xHigh - 2) / 2);
+    }
+
+    private int getYBound() {
+        return size * ((yLow + yHigh - 2) / 2);
     }
 
     public void setZoom() {
@@ -73,10 +106,7 @@ public class GameCamera extends OrthographicCamera {
                 xHigh = (int)(11);
                 yHigh = (int)(7);
         }
-        position.x = Math.min(Math.max(cursor.x * size, size * (xLow + xHigh - 2) / 2),
-            (size * 128) - (size * (xLow + xHigh - 2) / 2));
-        position.y = Math.min(Math.max(cursor.y * size, size * (yLow + yHigh - 2) / 2),
-            (size * 128) - (size * (yLow + yHigh - 2) / 2));
+        center(cursor.x, cursor.y);
     }
 
     public void zoomIn() {
@@ -91,10 +121,6 @@ public class GameCamera extends OrthographicCamera {
             size /= 2;
             setZoom();
         }
-    }
-
-    public int getSize() {
-        return size;
     }
 
     public boolean onCamera(int x, int y) {

@@ -265,7 +265,7 @@ public class Map implements InitializerInterface {
                     }
                 }
 
-                Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, true);
+                Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, false);
                 gameState.getMap().setTileMap(tileMap);
             })
             .build()

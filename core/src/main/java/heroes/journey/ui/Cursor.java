@@ -202,6 +202,7 @@ public class Cursor {
     public void setPosition(Integer entityId) {
         PositionComponent position = PositionComponent.get(GameState.global().getWorld(), entityId);
         this.setPosition(position.getX(), position.getY());
+        GameCamera.get().center(position.getX(), position.getY());
     }
 
     public void revertSelectedPosition() {

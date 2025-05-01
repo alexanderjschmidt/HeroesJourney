@@ -1,7 +1,14 @@
 package heroes.journey;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
@@ -21,12 +28,6 @@ import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 @Getter
 public class GameState implements Cloneable {
 
@@ -41,8 +42,7 @@ public class GameState implements Cloneable {
 
     private int turn;
 
-    @Getter
-    private Integer currentEntity;
+    @Getter private Integer currentEntity;
     private List<Integer> entitiesInActionOrder;
 
     private final List<Integer> playableEntities = new ArrayList<>();

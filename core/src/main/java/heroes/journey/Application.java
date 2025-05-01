@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
@@ -29,9 +30,6 @@ import lombok.Getter;
  * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
  * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
- * Improve Camera
- *  Make Camera not go off map when zooming out
- *  Make Camera center on player when cursor jumps to player
  * Multiplayer
  * Saving
  * Map Generation
@@ -94,8 +92,10 @@ public class Application extends Game {
 
     public void setScreen(Screen screen) {
         super.setScreen(screen);
-        GameCamera.get().position.x = Gdx.graphics.getWidth() / 2f;
-        GameCamera.get().position.y = Gdx.graphics.getHeight() / 2f;
+        if (!(screen instanceof BattleScreen)) {
+            GameCamera.get().position.x = Gdx.graphics.getWidth() / 2f;
+            GameCamera.get().position.y = Gdx.graphics.getHeight() / 2f;
+        }
     }
 
     @Override
