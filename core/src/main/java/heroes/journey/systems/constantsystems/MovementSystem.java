@@ -6,9 +6,9 @@ import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.components.character.PositionComponent;
 
 @All({PositionComponent.class, ActorComponent.class, MovementComponent.class})
 public class MovementSystem extends IteratingSystem {

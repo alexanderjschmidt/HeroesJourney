@@ -1,4 +1,4 @@
-package heroes.journey.components.character;
+package heroes.journey.components;
 
 import java.util.HashMap;
 import java.util.Map;

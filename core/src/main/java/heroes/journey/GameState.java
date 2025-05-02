@@ -23,8 +23,9 @@ import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.TileMap;
-import heroes.journey.ui.EffectManager;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.HUDEffectManager;
+import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
@@ -70,7 +71,8 @@ public class GameState implements Cloneable {
         history = new History();
         rangeManager = new RangeManager(this, width, height);
 
-        EffectManager.get();
+        HUDEffectManager.get();
+        WorldEffectManager.get();
 
         turn = 0;
     }
@@ -167,10 +169,7 @@ public class GameState implements Cloneable {
         return setCurrentEntity(entitiesInActionOrder.removeFirst());
     }
 
-    // UI sets up the players next turn
-    public void nextTurn() {
-        Integer currentEntity = incrementTurn();
-        System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
+    private void updateCurrentEntity() {
 
         PlayerComponent player = PlayerComponent.get(world, currentEntity);
         if (player != null) {
@@ -185,6 +184,15 @@ public class GameState implements Cloneable {
             AIComponent ai = AIComponent.get(world, currentEntity);
             ai.startProcessingNextMove(this, currentEntity);
         }
+    }
+
+    // UI sets up the players next turn
+    public void nextTurn() {
+        Integer currentEntity = incrementTurn();
+        System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
+
+        updateCurrentEntity();
+
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
     }

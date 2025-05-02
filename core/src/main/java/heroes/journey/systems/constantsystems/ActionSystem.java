@@ -4,10 +4,11 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
+
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.States;

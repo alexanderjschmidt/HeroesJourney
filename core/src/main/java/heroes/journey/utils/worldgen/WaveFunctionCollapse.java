@@ -14,6 +14,7 @@ import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 
+@SuppressWarnings("unchecked")
 public class WaveFunctionCollapse {
 
     public static final WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();

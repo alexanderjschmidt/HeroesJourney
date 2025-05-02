@@ -8,10 +8,10 @@ import java.util.Objects;
 import com.artemis.EntityEdit;
 
 import heroes.journey.GameState;
+import heroes.journey.components.NamedComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.components.character.NamedComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;

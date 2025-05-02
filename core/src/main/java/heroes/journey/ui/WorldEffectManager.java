@@ -4,23 +4,24 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.utils.art.ResourceManager;
 
-public class EffectManager extends Stage {
+public class WorldEffectManager extends Stage {
 
-    private static EffectManager effectManager;
+    private static WorldEffectManager worldEffectManager;
 
-    private EffectManager() {
-        super(Application.get().getViewport());
+    private WorldEffectManager(Viewport viewport) {
+        super(viewport);
     }
 
-    public static EffectManager get() {
-        if (effectManager == null)
-            effectManager = new EffectManager();
-        return effectManager;
+    public static WorldEffectManager get() {
+        if (worldEffectManager == null)
+            worldEffectManager = new WorldEffectManager(Application.get().getViewport());
+        return worldEffectManager;
     }
 
     // TODO allow chaining of effects? or some randomness to the positioning

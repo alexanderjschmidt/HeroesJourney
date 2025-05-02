@@ -3,7 +3,7 @@ package heroes.journey.systems.endofturnsystems;
 import com.artemis.World;
 import com.artemis.annotations.All;
 
-import heroes.journey.components.character.CooldownComponent;
+import heroes.journey.components.CooldownComponent;
 import heroes.journey.systems.EndOfTurnSystem;
 
 @All({CooldownComponent.class})

@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;

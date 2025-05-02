@@ -1,6 +1,7 @@
-package heroes.journey.components.character;
+package heroes.journey.components;
 
 import com.artemis.World;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import lombok.Getter;
 

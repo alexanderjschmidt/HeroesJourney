@@ -17,10 +17,6 @@ import lombok.Getter;
 /*
  * TODO List
  * Menus
- *  Action Detail UI flesh out
- *      Make cooldown skills show recover timer
- *      Show Cost of actions
- *      Make Travel and Carriage actions cost dynamic based on distance
  * 	Inventory
  *      Icons
  * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
@@ -31,9 +27,13 @@ import lombok.Getter;
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make HUD Locked when players character is moving, and have the camera follow player movement
+ * Make the different travels fail if someone is already there?
+ *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
- * add effects to screen. Like plus's that fade upwards on regen (only if you can see it in fog)
- * move effects to player info panel
+ *  Maybe have a global templates World since they dont render or loose health?
+ * Effects
+ *  make effects only show if can be seen in fog
+ *  move effects to player info panel
  * Saving
  * Map Generation
  *  Improve timeout/WFC going forever/Holes
@@ -45,6 +45,9 @@ import lombok.Getter;
  * Sounds
  * 	Background music
  * 	Action Sounds
+ * Efficiency
+ *  Make Fog compute first and then dont render anything that would be covered by Dense Fog
+ *  multithread MCTS
  */
 /*
  * Knowledge System

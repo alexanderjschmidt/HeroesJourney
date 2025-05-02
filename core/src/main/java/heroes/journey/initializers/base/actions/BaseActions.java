@@ -4,9 +4,9 @@ import java.util.List;
 
 import heroes.journey.Application;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.NamedComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.FightUtils;

@@ -3,8 +3,8 @@ package heroes.journey.ui.windows;
 import com.badlogic.gdx.graphics.g2d.Batch;
 
 import heroes.journey.GameState;
+import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.NamedComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;

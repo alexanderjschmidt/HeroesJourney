@@ -9,9 +9,9 @@ import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.components.character.PositionComponent;
-import heroes.journey.components.character.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;

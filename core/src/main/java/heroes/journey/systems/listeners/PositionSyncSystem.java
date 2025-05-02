@@ -6,9 +6,9 @@ import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.tilemap.FogUtils;
 

@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
-import heroes.journey.components.character.CooldownComponent;
+import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.utils.Utils;
 import lombok.Builder;
 import lombok.Getter;

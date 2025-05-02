@@ -12,9 +12,10 @@ import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.models.MapData;
 import heroes.journey.ui.DebugRenderer;
-import heroes.journey.ui.EffectManager;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.LightManager;
+import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.worldgen.NewMapManager;
@@ -64,8 +65,9 @@ public class BattleScreen implements Screen {
         lightManager.update();
         if (LoadOptions.debugOption.isTrue())
             debugRenderer.render();
-        EffectManager.get().update(delta);
+        WorldEffectManager.get().update(delta);
         HUD.get().update(delta);
+        HUDEffectManager.get().update(delta);
     }
 
     @Override

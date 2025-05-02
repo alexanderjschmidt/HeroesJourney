@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.components.character.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.initializers.base.actions.BaseActions;
