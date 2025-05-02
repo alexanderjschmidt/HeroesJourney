@@ -1,4 +1,4 @@
-package heroes.journey.systems.endofturnsystems;
+package heroes.journey.systems.triggerable;
 
 import com.artemis.World;
 import com.artemis.annotations.All;
@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.Color;
 
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.systems.EndOfTurnSystem;
+import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.ui.WorldEffectManager;
 
 @All({StatsComponent.class})
-public class RegenSystem extends EndOfTurnSystem {
+public class RegenSystem extends TriggerableSystem {
 
     @Override
     protected void process(int entityId) {
@@ -30,5 +30,10 @@ public class RegenSystem extends EndOfTurnSystem {
             WorldEffectManager.addTextEffect("+" + (statsComponent.getBody() * 2), Color.GREEN,
                 positionComponent.getX(), positionComponent.getY(), 15, 0);
         }
+    }
+
+    @Override
+    public EventTrigger getTrigger() {
+        return EventTrigger.TURN;
     }
 }

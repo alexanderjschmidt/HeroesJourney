@@ -20,6 +20,7 @@ import heroes.journey.entities.actions.history.History;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
+import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
@@ -91,6 +92,7 @@ public class GameState implements Cloneable {
 
     // For AI to apply a flat action to movement just to update state
     public GameState applyAction(QueuedAction queuedAction) {
+        long start = System.nanoTime();
         Cell path = queuedAction.getPath();
 
         Integer e = entities.get(path.x, path.y);
@@ -108,6 +110,8 @@ public class GameState implements Cloneable {
         history.add(queuedAction.getAction(),
             new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
         incrementTurn();
+        world.basicProcess();
+        System.out.println("apply took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return this;
     }
 
@@ -140,9 +144,7 @@ public class GameState implements Cloneable {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
             entitiesInActionOrder = getEntitiesInActionOrder();
             turn++;
-            if (GameState.global() == this) {
-                world.enableEndOfTurnSystems();
-            }
+            world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
         }
         return setCurrentEntity(entitiesInActionOrder.removeFirst());
     }
@@ -164,10 +166,11 @@ public class GameState implements Cloneable {
     }
 
     // UI sets up the players next turn
-    public void nextTurn() {
+    public void nextMove() {
         Integer currentEntity = incrementTurn();
         System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
 
+        world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
         updateCurrentEntity();
 
         getRangeManager().clearRange();

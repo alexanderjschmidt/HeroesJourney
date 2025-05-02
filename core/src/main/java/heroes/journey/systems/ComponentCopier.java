@@ -13,6 +13,7 @@ import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
@@ -36,6 +37,7 @@ public class ComponentCopier {
         copyComponent(world, newEntity, entityId, InventoryComponent.class);
         copyComponent(world, newEntity, entityId, QuestsComponent.class);
         copyComponent(world, newEntity, entityId, StatsComponent.class);
+        copyComponent(world, newEntity, entityId, MapComponent.class);
     }
 
     private static <T extends PooledClonableComponent<T>> void copyComponent(

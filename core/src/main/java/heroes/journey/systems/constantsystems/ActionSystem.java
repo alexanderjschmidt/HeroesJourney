@@ -38,7 +38,7 @@ public class ActionSystem extends IteratingSystem {
             GameState.global()
                 .getHistory()
                 .add(action.getAction(), new Position(action.targetX(), action.targetY()), entityId);
-            GameState.global().nextTurn();
+            GameState.global().nextMove();
         }
         world.edit(entityId).remove(ActionComponent.class);
     }

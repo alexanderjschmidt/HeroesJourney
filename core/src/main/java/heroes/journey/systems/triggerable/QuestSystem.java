@@ -1,4 +1,4 @@
-package heroes.journey.systems.endofturnsystems;
+package heroes.journey.systems.triggerable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,10 @@ import com.artemis.annotations.All;
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.entities.quests.Quest;
-import heroes.journey.systems.EndOfTurnSystem;
+import heroes.journey.systems.TriggerableSystem;
 
 @All({QuestsComponent.class})
-public class QuestSystem extends EndOfTurnSystem {
+public class QuestSystem extends TriggerableSystem {
 
     private final GameState gameState;
 
@@ -32,5 +32,10 @@ public class QuestSystem extends EndOfTurnSystem {
             }
         }
         quests.getQuests().removeAll(completedQuests);
+    }
+
+    @Override
+    public EventTrigger getTrigger() {
+        return EventTrigger.MOVE;
     }
 }

@@ -29,17 +29,18 @@ import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
-import heroes.journey.systems.endofturnsystems.CooldownSystem;
-import heroes.journey.systems.endofturnsystems.QuestSystem;
-import heroes.journey.systems.endofturnsystems.RegenSystem;
 import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
 import heroes.journey.systems.listeners.StatsActionsListener;
+import heroes.journey.systems.triggerable.CooldownSystem;
+import heroes.journey.systems.triggerable.QuestSystem;
+import heroes.journey.systems.triggerable.RegenSystem;
 
 public class GameWorld extends World {
 
-    private final List<EndOfTurnSystem> endOfTurnSystems = new ArrayList<>();
+    private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
+    private final List<BaseSystem> nonBasicSystems = new ArrayList<>();
     private final WorldSerializationManager manager;
     private final KryoArtemisSerializer kryoSerializer;
 
@@ -62,7 +63,7 @@ public class GameWorld extends World {
 
     public static GameWorld initGameWorld(GameState gameState) {
         GameWorld world = new GameWorld(buildConfig(gameState, false));
-        world.collectEndOfTurnSystems();  // Auto-detect end-of-turn systems, if needed
+        world.collectTriggerableSystems();  // Auto-detect end-of-turn systems, if needed
 
         return world;
     }
@@ -87,17 +88,18 @@ public class GameWorld extends World {
         return builder.build();
     }
 
-    private void collectEndOfTurnSystems() {
+    private void collectTriggerableSystems() {
         for (BaseSystem system : getSystems()) {
-            if (system instanceof EndOfTurnSystem) {
-                endOfTurnSystems.add((EndOfTurnSystem)system);
+            if (system instanceof TriggerableSystem triggerableSystem) {
+                triggerableSystems.add(triggerableSystem);
             }
         }
     }
 
-    public void enableEndOfTurnSystems() {
-        for (EndOfTurnSystem system : endOfTurnSystems) {
-            system.setEnabled(true);
+    public void enableTriggerableSystems(TriggerableSystem.EventTrigger trigger) {
+        for (TriggerableSystem system : triggerableSystems) {
+            if (system.getTrigger() == trigger)
+                system.setEnabled(true);
         }
     }
 
@@ -156,7 +158,6 @@ public class GameWorld extends World {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final SaveFileFormat save = new SaveFileFormat(allEntities);
 
-        basicProcess();
         this.getSystem(WorldSerializationManager.class).save(baos, save);
 
         // Create a new GameWorld with a fresh config

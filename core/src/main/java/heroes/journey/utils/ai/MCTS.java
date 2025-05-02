@@ -4,7 +4,7 @@ import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 
 public class MCTS {
-    private static final int SIMULATIONS = 1000;
+    private static final int SIMULATIONS = 500;
 
     public QueuedAction runMCTS(GameState gameState, Integer playingEntity, Scorer scorer) {
         long start = System.nanoTime();
