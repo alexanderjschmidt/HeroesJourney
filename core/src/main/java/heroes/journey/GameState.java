@@ -9,7 +9,6 @@ import java.util.stream.IntStream;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -18,7 +17,6 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.History;
-import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
@@ -138,25 +136,6 @@ public class GameState implements Cloneable {
                 .thenComparing(Object::toString)).collect(Collectors.toList());
     }
 
-    //TODO make component System combo
-    private void processQuests() {
-        IntBag entities = world.getEntitiesWith(QuestsComponent.class);
-        for (Integer entityId : entities.getData()) {
-            QuestsComponent quests = QuestsComponent.get(world, entityId);
-            if (quests == null) {
-                continue;
-            }
-            List<Quest> completedQuests = new ArrayList<>();
-            for (Quest quest : quests.getQuests()) {
-                if (quest.isComplete(this, entityId)) {
-                    quest.onComplete(this, entityId);
-                    completedQuests.add(quest);
-                }
-            }
-            quests.getQuests().removeAll(completedQuests);
-        }
-    }
-
     private Integer incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
             entitiesInActionOrder = getEntitiesInActionOrder();
@@ -165,12 +144,10 @@ public class GameState implements Cloneable {
                 world.enableEndOfTurnSystems();
             }
         }
-        processQuests();
         return setCurrentEntity(entitiesInActionOrder.removeFirst());
     }
 
     private void updateCurrentEntity() {
-
         PlayerComponent player = PlayerComponent.get(world, currentEntity);
         if (player != null) {
             if (player.playerId().equals(getId())) {

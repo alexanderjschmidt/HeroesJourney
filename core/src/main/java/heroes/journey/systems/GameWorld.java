@@ -30,6 +30,7 @@ import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.endofturnsystems.CooldownSystem;
+import heroes.journey.systems.endofturnsystems.QuestSystem;
 import heroes.journey.systems.endofturnsystems.RegenSystem;
 import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
@@ -71,6 +72,7 @@ public class GameWorld extends World {
             new WorldSerializationManager());
         builder.with(new CooldownSystem())
             .with(new RegenSystem())
+            .with(new QuestSystem(gameState))
             .with(new IdSyncSystem(gameState))
             .with(new PositionSyncSystem(gameState))
             .with(new LocationPositionSyncSystem(gameState))
