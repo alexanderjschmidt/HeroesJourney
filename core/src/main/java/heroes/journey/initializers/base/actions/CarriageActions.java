@@ -8,8 +8,8 @@ import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.ui.HUD;
-import heroes.journey.ui.hudstates.ActionSelectState;
+import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.StringResult;
 
 public class CarriageActions {
 
@@ -17,11 +17,10 @@ public class CarriageActions {
     public static List<Action> carriageActions;
 
     static {
-        carriage = Action.builder().name("Carriage").terminal(false).onSelect((gs, e) -> {
+        carriage = Action.builder().name("Carriage").onSelect((gs, e) -> {
             Integer town = Utils.getLocation(gs, e);
             List<Action> carriageActions = getCarriageActions(gs, town);
-            HUD.get().setState(new ActionSelectState(carriageActions));
-            return null;
+            return new ActionListResult(carriageActions);
         }).build().register();
         carriageActions = new ArrayList<>();
     }
@@ -46,7 +45,7 @@ public class CarriageActions {
             .onSelect((gs, e) -> {
                 PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
                 positionComponent.setPos(positionComponentLocation.getX(), positionComponentLocation.getY());
-                return "You have arrived at " + locationName + " on a carriage";
+                return new StringResult("You have arrived at " + locationName + " on a carriage");
             })
             .build()
             .register();

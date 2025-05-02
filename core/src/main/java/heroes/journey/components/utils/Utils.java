@@ -10,6 +10,7 @@ import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
+import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 
@@ -33,28 +34,28 @@ public class Utils {
         return questActions;
     }
 
-    public static String addItem(GameState gameState, Integer entityId, Item item, int count) {
+    public static StringResult addItem(GameState gameState, Integer entityId, Item item, int count) {
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), entityId);
         if (inventoryComponent != null) {
             inventoryComponent.add(item, count);
         }
-        return "Gained " + count + " " + item;
+        return new StringResult("Gained " + count + " " + item);
     }
 
-    public static String adjustBody(GameState gameState, Integer entityId, int count) {
+    public static StringResult adjustBody(GameState gameState, Integer entityId, int count) {
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
         statsComponent.setBody(statsComponent.getBody() + count);
-        return "Successful Workout! Gain 1 Body";
+        return new StringResult("Successful Workout! Gain 1 Body");
     }
 
-    public static String adjustMind(GameState gameState, Integer entityId, int count) {
+    public static StringResult adjustMind(GameState gameState, Integer entityId, int count) {
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
         statsComponent.setMind(statsComponent.getMind() + count);
-        return "Successful Study! Gain 1 Mind";
+        return new StringResult("Successful Study! Gain 1 Mind");
     }
 
     public static boolean justCompletedAction(GameState gameState, Integer owner, Action action) {

@@ -2,6 +2,7 @@ package heroes.journey.entities.actions.options;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionManager;
+import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -13,11 +14,11 @@ public class BooleanOptionAction extends OptionAction {
     @NonNull private Boolean toggle;
     @Getter @Builder.Default protected final boolean terminal = false;
 
-    public String onSelect() {
+    public ActionResult onSelect() {
         return onSelect(null, null);
     }
 
-    public String onSelect(GameState gameState, Integer selected) {
+    public ActionResult onSelect(GameState gameState, Integer selected) {
         toggle = !toggle;
         this.setDisplay(toggle + "");
         return null;

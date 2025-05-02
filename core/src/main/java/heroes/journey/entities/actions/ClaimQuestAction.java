@@ -3,6 +3,7 @@ package heroes.journey.entities.actions;
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.utils.Utils;
+import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.entities.quests.Quest;
 import lombok.experimental.SuperBuilder;
 
@@ -12,7 +13,7 @@ public class ClaimQuestAction extends Action {
     private final Quest quest;
 
     @Override
-    public String onSelect(GameState gameState, Integer entityId) {
+    public ActionResult onSelect(GameState gameState, Integer entityId) {
         Integer town = Utils.getLocation(gameState, entityId);
         QuestsComponent factionsQuestsComponent = QuestsComponent.get(gameState.getWorld(), town);
 

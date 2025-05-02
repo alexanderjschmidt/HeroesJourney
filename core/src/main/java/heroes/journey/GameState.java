@@ -111,7 +111,7 @@ public class GameState implements Cloneable {
             new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
         incrementTurn();
         world.basicProcess();
-        System.out.println("apply took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        // System.out.println("apply took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return this;
     }
 

@@ -17,13 +17,14 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.Cost;
 import heroes.journey.entities.actions.ShowAction;
+import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.FogUtils;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
@@ -54,22 +55,22 @@ public class TravelActions implements InitializerInterface {
                     FogUtils.revealCone(gs, mapComponent, position.getX(), position.getY(), revealDistance,
                         baseWidth, dir);
 
-                    return "You have explored the " + dir;
+                    return new StringResult("You have explored the " + dir);
                 }).cost(Cost.builder().stamina(5).mana(1).build()).build().register();
                 exploreActions.put(dir, exploreAction);
             }
         }
 
-        explore = Action.builder().name("Explore").terminal(false).onSelect((gs, e) -> {
-            HUD.get().setState(new ActionSelectState(exploreActions.values().stream().toList()));
-            return null;
-        }).build().register();
-        wayfare = Action.builder().name("Wayfare").terminal(false).onSelect((gs, e) -> {
+        explore = Action.builder()
+            .name("Explore")
+            .onSelect((gs, e) -> new ActionListResult(exploreActions.values().stream().toList()))
+            .build()
+            .register();
+        wayfare = Action.builder().name("Wayfare").onSelect((gs, e) -> {
             Integer featureId = Utils.getLocation(gs, e);
             Feature feature = FeatureManager.get().get(featureId);
             List<Action> wayfareActions = getWayfareActions(gs, feature);
-            HUD.get().setState(new ActionSelectState(wayfareActions));
-            return null;
+            return new ActionListResult(wayfareActions);
         }).requirementsMet((gs, e) -> {
             Integer featureId = Utils.getLocation(gs, e);
             Feature feature = FeatureManager.get().get(featureId);
@@ -77,7 +78,7 @@ public class TravelActions implements InitializerInterface {
                 ShowAction.YES :
                 ShowAction.GRAYED;
         }).build().register();
-        journey = Action.builder().name("Journey").terminal(false).onSelect((gs, e) -> {
+        journey = Action.builder().name("Journey").onSelect((gs, e) -> {
             Integer feature = Utils.getLocation(gs, e);
             MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
             List<Action> journeyActions = new ArrayList<>();
@@ -85,8 +86,7 @@ public class TravelActions implements InitializerInterface {
                 if (!Objects.equals(feature, knownLocation))
                     journeyActions.add(journeyActionsList.get(knownLocation));
             }
-            HUD.get().setState(new ActionSelectState(journeyActions));
-            return null;
+            return new ActionListResult(journeyActions);
         }).requirementsMet((gs, e) -> {
             MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
             System.out.println(mapComponent.getKnownLocations().size());
@@ -95,10 +95,11 @@ public class TravelActions implements InitializerInterface {
         travelActionOptions.add(explore);
         travelActionOptions.add(wayfare);
         travelActionOptions.add(journey);
-        travel = Action.builder().name("Travel").terminal(false).onSelect((gs, e) -> {
-            HUD.get().setState(new ActionSelectState(travelActionOptions));
-            return null;
-        }).build().register();
+        travel = Action.builder()
+            .name("Travel")
+            .onSelect((gs, e) -> new ActionListResult(travelActionOptions))
+            .build()
+            .register();
         // Add Travel Actions
         MapGenerationEffect travel = MapGenerationEffect.builder()
             .name("travel")
@@ -137,7 +138,7 @@ public class TravelActions implements InitializerInterface {
                 feature.location.getY(), e);
             EntityEdit entity = GameState.global().getWorld().edit(e);
             entity.create(MovementComponent.class).path(path.reverse());
-            return "You have traveled to " + locationName;
+            return new StringResult("You have traveled to " + locationName);
         }).cost(Cost.builder().stamina(1).multiplier((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
             Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());

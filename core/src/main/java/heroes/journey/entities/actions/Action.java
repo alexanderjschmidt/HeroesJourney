@@ -7,10 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
+import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.InfoProvider;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
@@ -19,12 +19,9 @@ public class Action implements InfoProvider {
 
     @NonNull protected final String name;
     @Builder.Default protected final String description = "";
-    @Getter @Builder.Default protected final boolean terminal = true;
     @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
     };
-    @Builder.Default protected BiFunction<GameState,Integer,String> onSelect = (gs, e) -> {
-        return null;
-    };
+    protected BiFunction<GameState,Integer,ActionResult> onSelect;
     @Builder.Default
     protected BiFunction<GameState,Integer,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
@@ -43,7 +40,7 @@ public class Action implements InfoProvider {
     /**
      * @return the results of the action for a popup window
      */
-    public String onSelect(GameState gameState, Integer userId) {
+    public ActionResult onSelect(GameState gameState, Integer userId) {
         cost.onUse(gameState, userId);
         return onSelect.apply(gameState, userId);
     }

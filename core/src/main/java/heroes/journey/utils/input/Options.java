@@ -19,7 +19,7 @@ public class Options {
     }
 
     static {
-        Action optionsAction = Action.builder().name("Options").terminal(false).onSelect((gs, e) -> {
+        Action optionsAction = Action.builder().name("Options").onSelect((gs, e) -> {
             HUD.get().setState(new ActionSelectState(optionsList));
             return null;
         }).build().register();

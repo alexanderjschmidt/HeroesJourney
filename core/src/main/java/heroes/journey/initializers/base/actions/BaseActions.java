@@ -15,10 +15,12 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.entities.actions.ShowAction;
 import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.EndTurnResult;
+import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.ui.HUD;
-import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.screens.MainMenuScreen;
 
 public class BaseActions implements InitializerInterface {
@@ -31,20 +33,16 @@ public class BaseActions implements InitializerInterface {
     static {
         openActionMenu = Action.builder()
             .name("THIS SHOULD NEVER BE DISPLAYED")
-            .terminal(false)
             .requirementsMet((gs, e) -> ShowAction.NO)
-            .onSelect((gs, e) -> {
-                HUD.get().getActionMenu().open();
-                return null;
-            })
+            .onSelect((gs, e) -> new ActionListResult(HUD.get().getActionMenu().getActionsFor(e)))
             .build()
             .register();
-        exit_game = Action.builder().name("Exit Game").terminal(false).onSelect((gs, e) -> {
+        exit_game = Action.builder().name("Exit Game").onSelect((gs, e) -> {
             Application.get().setScreen(new MainMenuScreen(Application.get()));
             return null;
         }).build().register();
         TeamActions.addTeamAction(exit_game);
-        end_turn = Action.builder().name("End Turn").terminal(false).onSelect((gs, e) -> {
+        end_turn = Action.builder().name("End Turn").onSelect((gs, e) -> {
             Integer entityId = gs.getCurrentEntity();
             gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.wait);
             HUD.get().revertToInitialState();
@@ -52,7 +50,12 @@ public class BaseActions implements InitializerInterface {
         }).build().register();
         TeamActions.addTeamAction(end_turn);
 
-        wait = Action.builder().name("Wait").description("Do Nothing").build().register();
+        wait = Action.builder()
+            .name("Wait")
+            .description("Do Nothing")
+            .onSelect((gs, e) -> new EndTurnResult())
+            .build()
+            .register();
         workout = CooldownAction.builder()
             .name("Work out")
             .description("Lift weights, gain body")
@@ -116,19 +119,17 @@ public class BaseActions implements InitializerInterface {
                         }
                     }
                 }
-                return log.toString();
+                return new StringResult(log.toString());
             })
             .build()
             .register();
         questBoard = Action.builder()
             .name("Quest Board")
             .description("See what the people need help with")
-            .terminal(false)
             .onSelect((gs, e) -> {
                 Integer town = Utils.getLocation(gs, e);
                 List<Action> questActions = Utils.getQuestClaimActions(gs, town);
-                HUD.get().setState(new ActionSelectState(questActions));
-                return null;
+                return new ActionListResult(questActions);
             })
             .requirementsMet((gs, e) -> {
                 Integer town = Utils.getLocation(gs, e);

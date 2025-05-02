@@ -20,7 +20,6 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
-import heroes.journey.ui.hudstates.ActionSelectState;
 
 public class ActionMenu extends Stack {
 
@@ -37,8 +36,7 @@ public class ActionMenu extends Stack {
         this.infoUI = infoUI;
     }
 
-    public void open() {
-        Integer selectedEntity = GameState.global().getCurrentEntity();
+    public List<Action> getActionsFor(Integer selectedEntity) {
         World world = GameState.global().getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
@@ -52,8 +50,7 @@ public class ActionMenu extends Stack {
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
                 getTileActions(selectedPosition).stream()).collect(Collectors.toList());
         }
-        System.out.println("OPEN");
-        HUD.get().setState(new ActionSelectState(requirementsMetOptions.stream().distinct().toList()));
+        return requirementsMetOptions.stream().distinct().toList();
     }
 
     private List<Action> getLocationActions(Integer selectedEntity) {
@@ -111,18 +108,16 @@ public class ActionMenu extends Stack {
             if (selectedAction.isSelectable()) {
                 // TODO add back TargetAction logic
                 Action action = selectedAction.entry();
-                System.out.println("Selected " + action + " " + action.isTerminal() + " " +
-                    HUD.get().getCursor().getSelected());
-                if (action.isTerminal()) {
-                    Integer selectedEntity = HUD.get().getCursor().getSelected();
+                Integer selectedEntity = HUD.get().getCursor().getSelected();
+                System.out.println("Selected " + action + " " + selectedEntity);
+                if (selectedEntity != null) {
                     GameState.global()
                         .getWorld()
                         .edit(selectedEntity)
                         .create(ActionComponent.class)
                         .action(action);
-                    HUD.get().revertToInitialState();
                 } else {
-                    action.onSelect(GameState.global(), HUD.get().getCursor().getSelected());
+                    action.onSelect(GameState.global(), null);
                 }
             }
         }

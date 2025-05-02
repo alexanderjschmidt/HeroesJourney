@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import heroes.journey.GameState;
 import heroes.journey.components.CooldownComponent;
 import heroes.journey.components.utils.Utils;
+import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,7 +29,7 @@ public class CooldownAction extends Action {
     }
 
     @Override
-    public String onSelect(GameState gameState, Integer entityId) {
+    public ActionResult onSelect(GameState gameState, Integer entityId) {
         CooldownComponent cooldownComponent = getCooldownComponent(gameState, entityId);
         cooldownComponent.getCooldowns().put(name, turnCooldown);
         return onSelect.apply(gameState, entityId);
