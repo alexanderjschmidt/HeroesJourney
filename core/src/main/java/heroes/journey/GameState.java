@@ -46,8 +46,6 @@ public class GameState implements Cloneable {
     @Getter private Integer currentEntity;
     private List<Integer> entitiesInActionOrder;
 
-    private final List<Integer> playableEntities = new ArrayList<>();
-
     private static GameState gameState;
 
     public static GameState global() {

@@ -16,6 +16,7 @@ import java.util.Set;
 import com.artemis.EntityEdit;
 
 import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.character.NamedComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -353,7 +354,7 @@ public class Map implements InitializerInterface {
                     .add(Items.healthPotion, 3)
                     .add(Items.ironIngot, 5)
                     .add(Items.chestPlate);
-                GameState.global().getPlayableEntities().add(playerId);
+                PlayerInfo.get().getPlayableEntities().add(playerId);
 
                 Feature opponentTown = kingdoms.getLast().connections.stream().toList().getLast();
                 overworldEntity(gameState, opponentTown.location.getX(), opponentTown.location.getY(),

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
 import heroes.journey.RenderBounds;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActorComponent;
@@ -59,13 +60,13 @@ public class RenderSystem extends BaseEntitySystem {
     private Fog[][] getFog() {
         Fog[][] fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
         // Get Playing entities Map
-        for (Integer playable : GameState.global().getPlayableEntities()) {
+        for (Integer playable : PlayerInfo.get().getPlayableEntities()) {
             MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
             if (mapComponent != null)
                 FogUtils.mergeFog(fog, mapComponent.getFog());
         }
         // Get Playing entities vision
-        for (Integer playable : GameState.global().getPlayableEntities()) {
+        for (Integer playable : PlayerInfo.get().getPlayableEntities()) {
             PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
                 playable);
             StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);

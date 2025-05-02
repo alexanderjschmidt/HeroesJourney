@@ -1,12 +1,13 @@
 package heroes.journey.entities.actions.options;
 
 import heroes.journey.entities.actions.Action;
+import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 public abstract class OptionAction extends Action {
-
-    private String display = "";
+    
+    @Builder.Default private String display = "";
 
     @Override
     public String toString() {
