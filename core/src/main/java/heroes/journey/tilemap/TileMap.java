@@ -12,7 +12,6 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.GameCamera;
 import heroes.journey.RenderBounds;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
@@ -39,7 +38,6 @@ public class TileMap implements IndexedGraph<TileNode> {
         tileMap = new Tile[width][height];
         environment = new Tile[width][height];
         updateGraph();
-        GameCamera.get().setZoom();
     }
 
     public void render(SpriteBatch batch, float delta) {

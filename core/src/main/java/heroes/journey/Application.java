@@ -95,7 +95,9 @@ public class Application extends Game {
 
     public void setScreen(Screen screen) {
         super.setScreen(screen);
-        if (!(screen instanceof BattleScreen)) {
+        if (screen instanceof BattleScreen battleScreen) {
+            battleScreen.startGame();
+        } else {
             GameCamera.get().position.x = Gdx.graphics.getWidth() / 2f;
             GameCamera.get().position.y = Gdx.graphics.getHeight() / 2f;
         }

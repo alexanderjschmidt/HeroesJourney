@@ -123,14 +123,6 @@ public class HUD extends Stage {
 
     public void resize() {
         getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-
-        float screenWidth = getViewport().getWorldWidth();
-        float sideWidth = screenWidth / 5f;
-
-        // Force reapply widths on resize
-        layout.getCells().get(0).width(sideWidth); // leftCol
-        layout.getCells().get(1).width(screenWidth - (sideWidth * 2) - (layoutPadding * 6));  // centerWindow
-        layout.getCells().get(2).width(sideWidth); // rightCol
     }
 
     public InfoUI getActionDetailedUI() {

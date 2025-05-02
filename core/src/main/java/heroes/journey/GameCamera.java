@@ -33,10 +33,9 @@ public class GameCamera extends OrthographicCamera {
     }
 
     public void updateGameCamera() {
-        super.update();
         Cursor cursor = HUD.get().getCursor();
         if (cursor != null) {
-            //Centered
+            // Centered
             int cameraX = (int)(position.x / size);
             int cameraY = (int)(position.y / size);
 
@@ -62,14 +61,23 @@ public class GameCamera extends OrthographicCamera {
                 setY(cameraY + 1);
             }
         }
+        super.update();
     }
 
     private void setX(int x) {
         position.x = Math.min(Math.max(x * size, getXBound()), (size * Map.MAP_SIZE) - getXBound());
+        super.update();
     }
 
     private void setY(int y) {
         position.y = Math.min(Math.max(y * size, getYBound()), (size * Map.MAP_SIZE) - getYBound());
+        super.update();
+    }
+
+    public void print() {
+        int cameraX = (int)(position.x / size);
+        int cameraY = (int)(position.y / size);
+        System.out.println(cameraX + " cam " + cameraY);
     }
 
     public void center(int x, int y) {

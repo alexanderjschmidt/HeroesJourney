@@ -23,6 +23,7 @@ import heroes.journey.initializers.Initializer;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.MapData;
 import heroes.journey.tilemap.TileMap;
+import heroes.journey.ui.EffectManager;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -70,6 +71,8 @@ public class GameState implements Cloneable {
         entities = new EntityManager(width, height);
         history = new History();
         rangeManager = new RangeManager(this, width, height);
+
+        EffectManager.get();
 
         turn = 0;
     }
@@ -135,6 +138,7 @@ public class GameState implements Cloneable {
                 .thenComparing(Object::toString)).collect(Collectors.toList());
     }
 
+    //TODO make component System combo
     private void processQuests() {
         IntBag entities = world.getEntitiesWith(QuestsComponent.class);
         for (Integer entityId : entities.getData()) {

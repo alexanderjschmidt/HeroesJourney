@@ -37,8 +37,6 @@ public class BattleScreen implements Screen {
         this.client = new GameClient();
         this.lightManager = new LightManager();
         this.debugRenderer = new DebugRenderer();
-
-        startGame();
     }
 
     public void startGame() {
@@ -49,7 +47,6 @@ public class BattleScreen implements Screen {
         GameState.global().nextTurn();
 
         ready = true;
-        //ActionQueue.get().checkLocked();
     }
 
     @Override
@@ -61,7 +58,6 @@ public class BattleScreen implements Screen {
         }
 
         GameCamera.get().updateGameCamera();
-        app.getViewport().setCamera(GameCamera.get());
         batch.setProjectionMatrix(GameCamera.get().combined);
 
         GameState.global().update(delta);
@@ -74,6 +70,8 @@ public class BattleScreen implements Screen {
 
     @Override
     public void show() {
+        app.getViewport().setCamera(GameCamera.get());
+        GameCamera.get().setZoom();
     }
 
     @Override
@@ -97,10 +95,6 @@ public class BattleScreen implements Screen {
 
     @Override
     public void dispose() {
-    }
-
-    public Application getApp() {
-        return app;
     }
 
 }
