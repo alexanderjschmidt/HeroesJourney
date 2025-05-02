@@ -21,7 +21,7 @@ public class ServerLauncher {
         server.start();
         server.bind(TCP_PORT, UDP_PORT);
 
-        server.addListener(new ServerListener()); // Your listener class for handling messages
+        server.addListener(new LobbyListener()); // Your listener class for handling messages
 
         System.out.println("Server started on TCP " + TCP_PORT + " / UDP " + UDP_PORT);
     }

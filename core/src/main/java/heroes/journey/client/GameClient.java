@@ -8,10 +8,9 @@ import java.io.IOException;
 import com.esotericsoftware.kryonet.Client;
 
 import heroes.journey.KryoRegister;
-import heroes.journey.Message;
 
 public class GameClient {
-    
+
     private static final String SERVER_IP = "localhost"; // Change to your server IP
 
     private Client client;
@@ -23,11 +22,11 @@ public class GameClient {
         client.start();
         client.connect(5000, SERVER_IP, TCP_PORT, UDP_PORT);
 
-        client.addListener(new ClientListener());
+        client.addListener(new LobbyListener());
 
         // Example of sending a message once connected
-        Message message = new Message("Hello from client!");
-        client.sendTCP(message);
+        // Message message = new Message("Hello from client!");
+        // client.sendTCP(message);
 
         System.out.println("Client started and connected to server.");
     }

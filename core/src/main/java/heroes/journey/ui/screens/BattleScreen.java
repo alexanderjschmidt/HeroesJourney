@@ -10,7 +10,7 @@ import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.actions.LoadOptions;
-import heroes.journey.tilemap.MapData;
+import heroes.journey.models.MapData;
 import heroes.journey.ui.DebugRenderer;
 import heroes.journey.ui.EffectManager;
 import heroes.journey.ui.HUD;
