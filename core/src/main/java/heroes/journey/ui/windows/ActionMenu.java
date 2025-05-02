@@ -36,8 +36,8 @@ public class ActionMenu extends Stack {
         this.infoUI = infoUI;
     }
 
-    public List<Action> getActionsFor(Integer selectedEntity) {
-        World world = GameState.global().getWorld();
+    public static List<Action> getActionsFor(GameState gameState, Integer selectedEntity) {
+        World world = gameState.getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
@@ -45,19 +45,19 @@ public class ActionMenu extends Stack {
         if (selectedPosition != null) {
             // Get Tiles Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getLocationActions(selectedEntity).stream()).collect(Collectors.toList());
+                getLocationActions(gameState, selectedEntity).stream()).collect(Collectors.toList());
             // Get Tiles Environment Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getTileActions(selectedPosition).stream()).collect(Collectors.toList());
+                getTileActions(gameState, selectedPosition).stream()).collect(Collectors.toList());
         }
         return requirementsMetOptions.stream().distinct().toList();
     }
 
-    private List<Action> getLocationActions(Integer selectedEntity) {
-        Integer faction = Utils.getLocation(GameState.global(), selectedEntity);
+    private static List<Action> getLocationActions(GameState gameState, Integer selectedEntity) {
+        Integer faction = Utils.getLocation(gameState, selectedEntity);
         if (faction != null) {
-            PossibleActionsComponent factionActions = PossibleActionsComponent.get(
-                GameState.global().getWorld(), faction);
+            PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
+                faction);
             if (factionActions != null) {
                 return factionActions.getPossibleActions();
             }
@@ -65,10 +65,8 @@ public class ActionMenu extends Stack {
         return new ArrayList<>();
     }
 
-    private List<Action> getTileActions(
-        PositionComponent selectedPosition) {
-        ActionTerrain environment = GameState.global()
-            .getMap()
+    private static List<Action> getTileActions(GameState gameState, PositionComponent selectedPosition) {
+        ActionTerrain environment = gameState.getMap()
             .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
         if (environment != null) {
             return environment.getActions();

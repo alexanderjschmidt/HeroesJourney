@@ -11,6 +11,7 @@ import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.InfoProvider;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
@@ -18,7 +19,8 @@ import lombok.experimental.SuperBuilder;
 public class Action implements InfoProvider {
 
     @NonNull protected final String name;
-    @Builder.Default protected final String description = "";
+    @Builder.Default @Getter protected final String description = "";
+    @Builder.Default @Getter protected final boolean returnsActionList = false;
     @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
     };
     protected BiFunction<GameState,Integer,ActionResult> onSelect;
@@ -57,11 +59,6 @@ public class Action implements InfoProvider {
     @Override
     public String getTitle() {
         return name;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
     }
 
     @Override

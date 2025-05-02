@@ -17,7 +17,7 @@ public class CarriageActions {
     public static List<Action> carriageActions;
 
     static {
-        carriage = Action.builder().name("Carriage").onSelect((gs, e) -> {
+        carriage = Action.builder().name("Carriage").returnsActionList(true).onSelect((gs, e) -> {
             Integer town = Utils.getLocation(gs, e);
             List<Action> carriageActions = getCarriageActions(gs, town);
             return new ActionListResult(carriageActions);

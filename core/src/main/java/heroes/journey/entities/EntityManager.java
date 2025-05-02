@@ -13,6 +13,7 @@ public class EntityManager implements Cloneable {
     private final Integer[][] factionsLocations;
 
     private int entityCount = 0;
+    // TODO use this registration for any entity references since I cant trust the entityId will stay the same across GameWorlds
     private final Map<Integer,Integer> entityMap;
 
     public EntityManager(int width, int height) {

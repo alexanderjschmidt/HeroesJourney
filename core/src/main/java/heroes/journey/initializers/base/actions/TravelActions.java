@@ -63,10 +63,11 @@ public class TravelActions implements InitializerInterface {
 
         explore = Action.builder()
             .name("Explore")
+            .returnsActionList(true)
             .onSelect((gs, e) -> new ActionListResult(exploreActions.values().stream().toList()))
             .build()
             .register();
-        wayfare = Action.builder().name("Wayfare").onSelect((gs, e) -> {
+        wayfare = Action.builder().name("Wayfare").returnsActionList(true).onSelect((gs, e) -> {
             Integer featureId = Utils.getLocation(gs, e);
             Feature feature = FeatureManager.get().get(featureId);
             List<Action> wayfareActions = getWayfareActions(gs, feature);
@@ -78,7 +79,7 @@ public class TravelActions implements InitializerInterface {
                 ShowAction.YES :
                 ShowAction.GRAYED;
         }).build().register();
-        journey = Action.builder().name("Journey").onSelect((gs, e) -> {
+        journey = Action.builder().name("Journey").returnsActionList(true).onSelect((gs, e) -> {
             Integer feature = Utils.getLocation(gs, e);
             MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
             List<Action> journeyActions = new ArrayList<>();
@@ -97,6 +98,7 @@ public class TravelActions implements InitializerInterface {
         travelActionOptions.add(journey);
         travel = Action.builder()
             .name("Travel")
+            .returnsActionList(true)
             .onSelect((gs, e) -> new ActionListResult(travelActionOptions))
             .build()
             .register();

@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -77,6 +78,7 @@ public class GameState implements Cloneable {
     }
 
     public GameState clone() {
+        // TODO Make this better to fix ai
         GameState clone = new GameState();
         clone.width = width;
         clone.height = height;
@@ -101,6 +103,9 @@ public class GameState implements Cloneable {
         if (e != null) {
             Cell end = path.getEnd();
             entities.moveEntity(path.x, path.y, end.x, end.y);
+            PositionComponent positionComponent = PositionComponent.get(world, e);
+            positionComponent.setPos(end.x, end.y);
+            positionComponent.sync();
             history.add(queuedAction.getPath(), e);
         }
 

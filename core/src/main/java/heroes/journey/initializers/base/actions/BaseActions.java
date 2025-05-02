@@ -22,6 +22,7 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
+import heroes.journey.ui.windows.ActionMenu;
 
 public class BaseActions implements InitializerInterface {
 
@@ -33,8 +34,9 @@ public class BaseActions implements InitializerInterface {
     static {
         openActionMenu = Action.builder()
             .name("THIS SHOULD NEVER BE DISPLAYED")
+            .returnsActionList(true)
             .requirementsMet((gs, e) -> ShowAction.NO)
-            .onSelect((gs, e) -> new ActionListResult(HUD.get().getActionMenu().getActionsFor(e)))
+            .onSelect((gs, e) -> new ActionListResult(ActionMenu.getActionsFor(gs, e)))
             .build()
             .register();
         exit_game = Action.builder().name("Exit Game").onSelect((gs, e) -> {
@@ -126,6 +128,7 @@ public class BaseActions implements InitializerInterface {
         questBoard = Action.builder()
             .name("Quest Board")
             .description("See what the people need help with")
+            .returnsActionList(true)
             .onSelect((gs, e) -> {
                 Integer town = Utils.getLocation(gs, e);
                 List<Action> questActions = Utils.getQuestClaimActions(gs, town);
