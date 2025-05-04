@@ -1,11 +1,13 @@
 package heroes.journey.components;
 
-import com.artemis.World;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.systems.GameWorld;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {
@@ -59,8 +61,8 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         return body;
     }
 
-    public static StatsComponent get(World world, int entityId) {
-        return world.getMapper(StatsComponent.class).get(entityId);
+    public static StatsComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(StatsComponent.class, entityId);
     }
 
     @Override

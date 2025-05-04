@@ -1,9 +1,10 @@
 package heroes.journey.components;
 
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @Getter
 public class PositionComponent extends PooledClonableComponent<PositionComponent> {
@@ -24,8 +25,8 @@ public class PositionComponent extends PooledClonableComponent<PositionComponent
         return this;
     }
 
-    public static PositionComponent get(World world, int entityId) {
-        return world.getMapper(PositionComponent.class).get(entityId);
+    public static PositionComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(PositionComponent.class, entityId);
     }
 
     @Override

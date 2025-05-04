@@ -1,8 +1,5 @@
 package heroes.journey.components.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
@@ -14,9 +11,13 @@ import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class Utils {
 
-    public static Integer getLocation(GameState gameState, Integer entityId) {
+    public static UUID getLocation(GameState gameState, UUID entityId) {
         if (entityId == null)
             return null;
         PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
@@ -25,7 +26,7 @@ public class Utils {
         return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
     }
 
-    public static List<Action> getQuestClaimActions(GameState gameState, Integer entityId) {
+    public static List<Action> getQuestClaimActions(GameState gameState, UUID entityId) {
         QuestsComponent questsComponent = QuestsComponent.get(gameState.getWorld(), entityId);
         List<Action> questActions = new ArrayList<>();
         for (Quest quest : questsComponent.getQuests()) {
@@ -34,7 +35,7 @@ public class Utils {
         return questActions;
     }
 
-    public static StringResult addItem(GameState gameState, Integer entityId, Item item, int count) {
+    public static StringResult addItem(GameState gameState, UUID entityId, Item item, int count) {
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), entityId);
         if (inventoryComponent != null) {
             inventoryComponent.add(item, count);
@@ -42,7 +43,7 @@ public class Utils {
         return new StringResult("Gained " + count + " " + item);
     }
 
-    public static StringResult adjustBody(GameState gameState, Integer entityId, int count) {
+    public static StringResult adjustBody(GameState gameState, UUID entityId, int count) {
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
@@ -50,7 +51,7 @@ public class Utils {
         return new StringResult("Successful Workout! Gain 1 Body");
     }
 
-    public static StringResult adjustMind(GameState gameState, Integer entityId, int count) {
+    public static StringResult adjustMind(GameState gameState, UUID entityId, int count) {
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent == null)
             return null;
@@ -58,7 +59,7 @@ public class Utils {
         return new StringResult("Successful Study! Gain 1 Mind");
     }
 
-    public static boolean justCompletedAction(GameState gameState, Integer owner, Action action) {
+    public static boolean justCompletedAction(GameState gameState, UUID owner, Action action) {
         return !gameState.getHistory().isEmpty() &&
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
             record.getEntity() == owner;

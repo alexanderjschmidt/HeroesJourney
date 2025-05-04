@@ -1,15 +1,9 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.ui.windows.Display.INVENTORY;
-import static heroes.journey.ui.windows.Display.STATS;
-
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.ui.BasicBackground;
 import heroes.journey.ui.UI;
 import heroes.journey.ui.windows.stats.EquipmentDisplay;
@@ -17,6 +11,12 @@ import heroes.journey.ui.windows.stats.InventoryDisplay;
 import heroes.journey.ui.windows.stats.QuestsDisplay;
 import heroes.journey.ui.windows.stats.StatsDisplay;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.ui.windows.Display.INVENTORY;
+import static heroes.journey.ui.windows.Display.STATS;
 
 public class StatsUI extends Stack {
 
@@ -71,7 +71,7 @@ public class StatsUI extends Stack {
         }
     }
 
-    public void setEntity(Integer entityId) {
+    public void setEntity(UUID entityId) {
         inventoryDisplay.setEntity(entityId);
         equipmentDisplay.setEntity(entityId);
         questDisplay.setEntity(entityId);

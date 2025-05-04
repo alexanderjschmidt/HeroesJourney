@@ -1,13 +1,14 @@
 package heroes.journey.components;
 
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemManager;
 import heroes.journey.initializers.base.Items;
+import heroes.journey.systems.GameWorld;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Setter
 @Accessors(fluent = true, chain = true)
@@ -58,8 +59,8 @@ public class EquipmentComponent extends PooledClonableComponent<EquipmentCompone
         return ItemManager.getItem(accessoryTwo);
     }
 
-    public static EquipmentComponent get(World world, int entityId) {
-        return world.getMapper(EquipmentComponent.class).get(entityId);
+    public static EquipmentComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(EquipmentComponent.class, entityId);
     }
 
     @Override

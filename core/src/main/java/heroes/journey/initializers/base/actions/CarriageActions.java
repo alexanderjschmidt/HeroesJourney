@@ -1,8 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -11,6 +8,10 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.StringResult;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class CarriageActions {
 
     public static Action carriage;
@@ -18,14 +19,14 @@ public class CarriageActions {
 
     static {
         carriage = Action.builder().name("Carriage").returnsActionList(true).onSelect((gs, e) -> {
-            Integer town = Utils.getLocation(gs, e);
+            UUID town = Utils.getLocation(gs, e);
             List<Action> carriageActions = getCarriageActions(gs, town);
             return new ActionListResult(carriageActions);
         }).build().register();
         carriageActions = new ArrayList<>();
     }
 
-    private static List<Action> getCarriageActions(GameState gameState, Integer townId) {
+    private static List<Action> getCarriageActions(GameState gameState, UUID townId) {
         List<Action> questActions = new ArrayList<>();
         String townName = NamedComponent.get(gameState.getWorld(), townId, "---");
         for (Action carriageAction : carriageActions) {
@@ -37,7 +38,7 @@ public class CarriageActions {
         return questActions;
     }
 
-    public static void createCarriageAction(GameState gameState, Integer town) {
+    public static void createCarriageAction(GameState gameState, UUID town) {
         PositionComponent positionComponentLocation = PositionComponent.get(gameState.getWorld(), town);
         String locationName = NamedComponent.get(gameState.getWorld(), town, "Unknown Location");
         Action carriageAction = Action.builder()

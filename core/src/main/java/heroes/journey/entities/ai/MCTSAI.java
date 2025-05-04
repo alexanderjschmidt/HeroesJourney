@@ -1,8 +1,5 @@
 package heroes.journey.entities.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
@@ -14,6 +11,10 @@ import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 import heroes.journey.utils.ai.pathfinding.Cell;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class MCTSAI implements AI, Scorer {
 
     private final MCTS mcts;
@@ -23,14 +24,14 @@ public class MCTSAI implements AI, Scorer {
     }
 
     @Override
-    public QueuedAction getMove(GameState gameState, Integer playingEntity) {
+    public QueuedAction getMove(GameState gameState, UUID playingEntity) {
         return mcts.runMCTS(gameState.clone(), playingEntity, this);
     }
 
     @Override
     public List<QueuedAction> getPossibleQueuedActions(GameState gameState) {
         List<QueuedAction> possibleActions = new ArrayList<>();
-        Integer playingEntity = gameState.getCurrentEntity();
+        UUID playingEntity = gameState.getCurrentEntity();
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
         addActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), gameState,
@@ -42,11 +43,11 @@ public class MCTSAI implements AI, Scorer {
         List<QueuedAction> possibleActions,
         List<Action> actions,
         GameState gameState,
-        Integer entityId,
+        UUID entityId,
         PositionComponent position) {
         for (Action action : actions) {
             if (action.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult)action.onSelect(gameState, entityId);
+                ActionListResult result = (ActionListResult) action.onSelect(gameState, entityId);
                 addActions(possibleActions, result.list(), gameState, entityId, position);
             } else {
                 if (action.requirementsMet(gameState, entityId) == ShowAction.YES) {
@@ -58,7 +59,7 @@ public class MCTSAI implements AI, Scorer {
     }
 
     @Override
-    public int getScore(GameState gameState, Integer playingEntity) {
+    public int getScore(GameState gameState, UUID playingEntity) {
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
         return GameState.global().getHeight() - position.getY();
     }

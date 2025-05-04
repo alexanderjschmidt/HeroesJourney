@@ -2,17 +2,18 @@ package heroes.journey.ui.windows.stats;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.ui.UI;
 
+import java.util.UUID;
+
 public class QuestsDisplay extends Widget {
 
-    private Integer entityId;
+    private UUID entityId;
 
-    public void setEntity(Integer entityId) {
+    public void setEntity(UUID entityId) {
         this.entityId = entityId;
     }
 

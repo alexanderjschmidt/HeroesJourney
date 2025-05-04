@@ -1,26 +1,27 @@
 package heroes.journey.components.place;
 
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Setter
 @Getter
 @Accessors(fluent = true, chain = true)
 public class DungeonComponent extends PooledClonableComponent<DungeonComponent> {
 
-    private Integer[] layout;
+    private UUID[] layout;
 
     // Secrets/Bonus Rooms
     // private float percentOfTraps; // The left over after these two percentages is empty rooms
     // private List<Entity> possibleTraps;
     // private float environmentalHazardLevel; // Theme of dungeon
 
-    public static DungeonComponent get(World world, int entityId) {
-        return world.getMapper(DungeonComponent.class).get(entityId);
+    public static DungeonComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(DungeonComponent.class, entityId);
     }
 
     @Override

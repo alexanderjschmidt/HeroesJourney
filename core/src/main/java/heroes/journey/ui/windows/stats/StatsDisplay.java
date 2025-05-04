@@ -2,7 +2,6 @@ package heroes.journey.ui.windows.stats;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
@@ -10,11 +9,13 @@ import heroes.journey.components.character.RenderComponent;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 
+import java.util.UUID;
+
 public class StatsDisplay extends Widget {
 
-    private Integer entityId;
+    private UUID entityId;
 
-    public void setEntity(Integer entityId) {
+    public void setEntity(UUID entityId) {
         this.entityId = entityId;
     }
 

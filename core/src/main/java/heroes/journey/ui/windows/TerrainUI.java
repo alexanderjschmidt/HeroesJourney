@@ -1,7 +1,6 @@
 package heroes.journey.ui.windows;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.initializers.base.actions.LoadOptions;
@@ -10,6 +9,8 @@ import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
+
+import java.util.UUID;
 
 public class TerrainUI extends UI {
 
@@ -28,7 +29,7 @@ public class TerrainUI extends UI {
             "";
         String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));
         if (environment != null) {
-            Integer locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
+            UUID locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
             if (locationId != null) {
                 name = NamedComponent.get(GameState.global().getWorld(), locationId, "Unnamed Location");
             }

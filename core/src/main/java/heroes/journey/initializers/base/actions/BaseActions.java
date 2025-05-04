@@ -1,7 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.List;
-
 import heroes.journey.Application;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
@@ -24,6 +22,9 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
 
+import java.util.List;
+import java.util.UUID;
+
 public class BaseActions implements InitializerInterface {
 
     public static Action openActionMenu, wait, end_turn, exit_game, attack;
@@ -45,7 +46,7 @@ public class BaseActions implements InitializerInterface {
         }).build().register();
         TeamActions.addTeamAction(exit_game);
         end_turn = Action.builder().name("End Turn").onSelect((gs, e) -> {
-            Integer entityId = gs.getCurrentEntity();
+            UUID entityId = gs.getCurrentEntity();
             gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.wait);
             HUD.get().revertToInitialState();
             return null;
@@ -77,11 +78,11 @@ public class BaseActions implements InitializerInterface {
             .turnCooldown(5)
             .factionCooldown(true)
             .onSelect((gs, e) -> {
-                Integer dungeon = Utils.getLocation(gs, e);
+                UUID dungeon = Utils.getLocation(gs, e);
                 DungeonComponent dungeonComponent = DungeonComponent.get(gs.getWorld(), dungeon);
                 DefaultContainer<String> explorationLog = new DefaultContainer<>();
                 boolean conscious = true;
-                for (Integer room : dungeonComponent.layout()) {
+                for (UUID room : dungeonComponent.layout()) {
                     if (room == null) {
                         explorationLog.add("Empty");
                         continue;
@@ -130,12 +131,12 @@ public class BaseActions implements InitializerInterface {
             .description("See what the people need help with")
             .returnsActionList(true)
             .onSelect((gs, e) -> {
-                Integer town = Utils.getLocation(gs, e);
+                UUID town = Utils.getLocation(gs, e);
                 List<Action> questActions = Utils.getQuestClaimActions(gs, town);
                 return new ActionListResult(questActions);
             })
             .requirementsMet((gs, e) -> {
-                Integer town = Utils.getLocation(gs, e);
+                UUID town = Utils.getLocation(gs, e);
                 QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
                 return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
             })

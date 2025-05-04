@@ -1,12 +1,13 @@
 package heroes.journey.utils.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.utils.Random;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 public class Node {
     private static final double EXPLORATION_FACTOR = Math.sqrt(2);
@@ -72,7 +73,7 @@ public class Node {
     }
 
     // Simulate a random game from this node and return a result
-    public int rollout(Integer playingEntity) {
+    public int rollout(UUID playingEntity) {
         GameState tempState = this.gameState.clone();
         int depth = 0;
         while (scorer.getScore(tempState, playingEntity) > 0 && depth < 5) {

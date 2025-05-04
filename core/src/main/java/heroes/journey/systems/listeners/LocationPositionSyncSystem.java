@@ -1,14 +1,18 @@
 package heroes.journey.systems.listeners;
 
-import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.place.LocationComponent;
+import heroes.journey.systems.GameWorld;
 
-@All({PositionComponent.class, LocationComponent.class})
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.actions.CarriageActions.createCarriageAction;
+
+@All({PositionComponent.class, LocationComponent.class, IdComponent.class})
 public class LocationPositionSyncSystem extends IteratingSystem {
 
     private final GameState gameState;
@@ -19,18 +23,25 @@ public class LocationPositionSyncSystem extends IteratingSystem {
 
     @Override
     public void inserted(int entityId) {
-        World world = getWorld();
-        PositionComponent pos = PositionComponent.get(world, entityId);
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        PositionComponent pos = PositionComponent.get(world, id);
+        LocationComponent loc = LocationComponent.get(world, id);
 
         pos.sync();
-        gameState.getEntities().addLocation(entityId, pos.getX(), pos.getY());
+        gameState.getEntities().addLocation(id, pos.getX(), pos.getY());
+
+        if (loc.capital())
+            // TODO make this happen in carriage system on insert?
+            createCarriageAction(gameState, id);
     }
 
     @Override
     public void removed(int entityId) {
         // TODO make sure its target and current pos is cleared
-        World world = getWorld();
-        PositionComponent pos = PositionComponent.get(world, entityId);
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        PositionComponent pos = PositionComponent.get(world, id);
 
         gameState.getEntities().removeLocation(pos.getX(), pos.getY());
         pos.sync();
@@ -39,13 +50,16 @@ public class LocationPositionSyncSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        PositionComponent pos = PositionComponent.get(world, entityId);
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        PositionComponent pos = PositionComponent.get(world, id);
         if (pos.getTargetX() != pos.getX() || pos.getTargetY() != pos.getY()) {
             // System.out.println(pos.getX() + ", " + pos.getY());
             // System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
             gameState.getEntities().removeLocation(pos.getX(), pos.getY());
             pos.sync();
-            gameState.getEntities().addLocation(entityId, pos.getX(), pos.getY());
+            gameState.getEntities().addLocation(id, pos.getX(), pos.getY());
         }
+
     }
 }

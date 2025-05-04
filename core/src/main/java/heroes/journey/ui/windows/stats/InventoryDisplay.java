@@ -2,7 +2,6 @@ package heroes.journey.ui.windows.stats;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
@@ -13,9 +12,11 @@ import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.input.KeyManager;
 
+import java.util.UUID;
+
 public class InventoryDisplay extends ScrollPane<Item> {
 
-    private Integer entityId;
+    private UUID entityId;
     private InventoryComponent inventoryComponent;
 
     public InventoryDisplay() {
@@ -31,11 +32,11 @@ public class InventoryDisplay extends ScrollPane<Item> {
             case Armor:
                 EquipmentComponent equipment = EquipmentComponent.get(GameState.global().getWorld(),
                     entityId);
-                equipment.equip((Item)selectedItem);
+                equipment.equip((Item) selectedItem);
                 break;
             case Consumable:
-                removeItem((Item)selectedItem);
-                ConsumableItem c = (ConsumableItem)selectedItem;
+                removeItem((Item) selectedItem);
+                ConsumableItem c = (ConsumableItem) selectedItem;
                 c.consume(GameState.global(), entityId);
                 break;
         }
@@ -46,7 +47,7 @@ public class InventoryDisplay extends ScrollPane<Item> {
 
     }
 
-    public void setEntity(Integer entityId) {
+    public void setEntity(UUID entityId) {
         this.entityId = entityId;
         inventoryComponent = InventoryComponent.get(GameState.global().getWorld(), entityId);
         open(inventoryComponent.getInventory()

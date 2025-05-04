@@ -1,22 +1,23 @@
 package heroes.journey.components.character;
 
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Setter
 @Getter
 @Accessors(fluent = true, chain = true)
 public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
 
-    private String playerId;
+    private UUID playerId;
     private int fame = 0;
 
-    public static PlayerComponent get(World world, int entityId) {
-        return world.getMapper(PlayerComponent.class).get(entityId);
+    public static PlayerComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(PlayerComponent.class, entityId);
     }
 
     @Override

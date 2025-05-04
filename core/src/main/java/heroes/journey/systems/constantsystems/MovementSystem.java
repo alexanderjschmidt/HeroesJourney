@@ -4,23 +4,27 @@ import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
+import heroes.journey.systems.GameWorld;
 
-@All({PositionComponent.class, ActorComponent.class, MovementComponent.class})
+import java.util.UUID;
+
+@All({PositionComponent.class, ActorComponent.class, MovementComponent.class, IdComponent.class})
 public class MovementSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        World world = getWorld();
-        PositionComponent position = PositionComponent.get(world, entityId);
-        MovementComponent movement = MovementComponent.get(world, entityId);
-        ActorComponent actor = ActorComponent.get(world, entityId);
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        PositionComponent position = PositionComponent.get(world, id);
+        MovementComponent movement = MovementComponent.get(world, id);
+        ActorComponent actor = ActorComponent.get(world, id);
 
-        updateMovement(entityId, position, actor, movement);
+        updateMovement(id, entityId, position, actor, movement);
 
         if (actor != null) {
             actor.act(world.getDelta());
@@ -28,6 +32,7 @@ public class MovementSystem extends IteratingSystem {
     }
 
     private void updateMovement(
+        UUID id,
         int entityId,
         PositionComponent position,
         ActorComponent actor,
@@ -35,7 +40,7 @@ public class MovementSystem extends IteratingSystem {
         if (movement.hasPath() && actor != null && !actor.hasActions()) {
             System.out.println("Moving " + movement.path());
             if (!movement.hasBegunMoving()) {
-                GameState.global().getHistory().add(movement.path(), entityId);
+                GameState.global().getHistory().add(movement.path(), id);
             }
             //TODO Make duration based on move speed
             actor.addAction(Actions.sequence(

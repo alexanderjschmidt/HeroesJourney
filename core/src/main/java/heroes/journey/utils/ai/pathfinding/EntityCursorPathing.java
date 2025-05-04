@@ -4,12 +4,13 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.Heuristic;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
-
 import heroes.journey.tilemap.TileMap;
+
+import java.util.UUID;
 
 public class EntityCursorPathing {
 
-    public Cell getPath(TileMap map, int startX, int startY, int endX, int endY, Integer entityId) {
+    public Cell getPath(TileMap map, int startX, int startY, int endX, int endY, UUID entityId) {
         TileNode startNode = map.getNodes()[startX][startY];
         TileNode endNode = map.getNodes()[endX][endY];
 
@@ -23,10 +24,10 @@ public class EntityCursorPathing {
     }
 
     private static class TerrainAwareHeuristic implements Heuristic<TileNode> {
-        Integer entityId;
+        UUID entityId;
         TileMap map;
 
-        public TerrainAwareHeuristic(Integer entityId, TileMap map) {
+        public TerrainAwareHeuristic(UUID entityId, TileMap map) {
             this.entityId = entityId;
             this.map = map;
         }

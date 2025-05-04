@@ -2,15 +2,7 @@ package heroes.journey.systems;
 
 import com.artemis.EntityEdit;
 import com.artemis.World;
-
-import heroes.journey.components.CooldownComponent;
-import heroes.journey.components.EquipmentComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.NamedComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MapComponent;
@@ -25,7 +17,6 @@ public class ComponentCopier {
         EntityEdit newEntity = newWorld.getEntity(entityId).edit();
 
         copyComponent(world, newEntity, entityId, AIComponent.class);
-        copyComponent(world, newEntity, entityId, CooldownComponent.class);
         copyComponent(world, newEntity, entityId, IdComponent.class);
         copyComponent(world, newEntity, entityId, NamedComponent.class);
         copyComponent(world, newEntity, entityId, PlayerComponent.class);

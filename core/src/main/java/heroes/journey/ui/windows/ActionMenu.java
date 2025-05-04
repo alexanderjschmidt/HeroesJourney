@@ -1,25 +1,21 @@
 package heroes.journey.ui.windows;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import com.artemis.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
-import heroes.journey.ui.BasicBackground;
-import heroes.journey.ui.HUD;
-import heroes.journey.ui.ScrollPane;
-import heroes.journey.ui.ScrollPaneEntry;
-import heroes.journey.ui.UI;
+import heroes.journey.ui.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends Stack {
 
@@ -36,8 +32,8 @@ public class ActionMenu extends Stack {
         this.infoUI = infoUI;
     }
 
-    public static List<Action> getActionsFor(GameState gameState, Integer selectedEntity) {
-        World world = gameState.getWorld();
+    public static List<Action> getActionsFor(GameState gameState, UUID selectedEntity) {
+        GameWorld world = gameState.getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
@@ -53,8 +49,8 @@ public class ActionMenu extends Stack {
         return requirementsMetOptions.stream().distinct().toList();
     }
 
-    private static List<Action> getLocationActions(GameState gameState, Integer selectedEntity) {
-        Integer faction = Utils.getLocation(gameState, selectedEntity);
+    private static List<Action> getLocationActions(GameState gameState, UUID selectedEntity) {
+        UUID faction = Utils.getLocation(gameState, selectedEntity);
         if (faction != null) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
                 faction);
@@ -106,7 +102,7 @@ public class ActionMenu extends Stack {
             if (selectedAction.isSelectable()) {
                 // TODO add back TargetAction logic
                 Action action = selectedAction.entry();
-                Integer selectedEntity = HUD.get().getCursor().getSelected();
+                UUID selectedEntity = HUD.get().getCursor().getSelected();
                 System.out.println("Selected " + action + " " + selectedEntity);
                 if (selectedEntity != null) {
                     GameState.global()

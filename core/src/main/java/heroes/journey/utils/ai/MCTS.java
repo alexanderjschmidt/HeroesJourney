@@ -3,10 +3,12 @@ package heroes.journey.utils.ai;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 
+import java.util.UUID;
+
 public class MCTS {
     private static final int SIMULATIONS = 500;
 
-    public QueuedAction runMCTS(GameState gameState, Integer playingEntity, Scorer scorer) {
+    public QueuedAction runMCTS(GameState gameState, UUID playingEntity, Scorer scorer) {
         long start = System.nanoTime();
         Node root = new Node(gameState, null, scorer);
         for (int i = 0; i < SIMULATIONS; i++) {
@@ -34,7 +36,7 @@ public class MCTS {
         return node;
     }
 
-    private double simulate(Node node, Integer playingEntity) {
+    private double simulate(Node node, UUID playingEntity) {
         long start = System.nanoTime();
         double result = node.rollout(playingEntity); // Random game simulation
         //System.out.println("simulate took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");

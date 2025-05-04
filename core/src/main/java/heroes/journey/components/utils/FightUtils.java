@@ -1,7 +1,5 @@
 package heroes.journey.components.utils;
 
-import com.artemis.World;
-
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.items.Item;
@@ -12,26 +10,29 @@ import heroes.journey.initializers.base.tags.ConversionSets;
 import heroes.journey.initializers.base.tags.DamageTypes;
 import heroes.journey.initializers.base.tags.DefenseTypes;
 import heroes.journey.initializers.base.tags.Groups;
+import heroes.journey.systems.GameWorld;
+
+import java.util.UUID;
 
 public class FightUtils {
-    public static boolean fight(World world, Integer fighter, Integer enemy) {
+    public static boolean fight(GameWorld world, UUID fighter, UUID enemy) {
         StatsComponent fighterStats = StatsComponent.get(world, fighter);
         StatsComponent enemyStats = StatsComponent.get(world, enemy);
 
-        Integer attacker = fighterStats.getSpeed() >= enemyStats.getSpeed() ? fighter : enemy;
-        Integer defender = attacker == fighter ? enemy : fighter;
+        UUID attacker = fighterStats.getSpeed() >= enemyStats.getSpeed() ? fighter : enemy;
+        UUID defender = attacker == fighter ? enemy : fighter;
 
         // TODO if fast enough attack multiple times
         while (fighterStats.getHealth() > 0 && enemyStats.getHealth() > 0) {
             attack(world, attacker, defender);
-            Integer previousDefender = defender;
+            UUID previousDefender = defender;
             defender = attacker;
             attacker = previousDefender;
         }
         return fighterStats.getHealth() > 0;
     }
 
-    private static void attack(World world, Integer attacker, Integer defender) {
+    private static void attack(GameWorld world, UUID attacker, UUID defender) {
         StatsComponent attackerStats = StatsComponent.get(world, attacker);
         StatsComponent defenderStats = StatsComponent.get(world, defender);
 
@@ -47,13 +48,13 @@ public class FightUtils {
         defenderStats.adjustHealth(-damage);
     }
 
-    public static void faint(World world, Integer e) {
+    public static void faint(GameWorld world, UUID e) {
         StatsComponent statsComponent = StatsComponent.get(world, e);
         statsComponent.setHealth(1);
         // TODO remove most valuable item
     }
 
-    public static Attributes getDamages(World world, Integer attacker) {
+    public static Attributes getDamages(GameWorld world, UUID attacker) {
         StatsComponent attackerStats = StatsComponent.get(world, attacker);
         EquipmentComponent attackerEquipment = EquipmentComponent.get(world, attacker);
 
@@ -65,7 +66,7 @@ public class FightUtils {
         return damages;
     }
 
-    public static Attributes getDefenses(World world, Integer defender) {
+    public static Attributes getDefenses(GameWorld world, UUID defender) {
         StatsComponent defenderStats = StatsComponent.get(world, defender);
         EquipmentComponent defenderEquipment = EquipmentComponent.get(world, defender);
 

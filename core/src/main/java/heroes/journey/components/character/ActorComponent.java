@@ -1,15 +1,16 @@
 package heroes.journey.components.character;
 
-import com.artemis.World;
 import com.artemis.annotations.Transient;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @Getter
 @Transient
@@ -48,8 +49,8 @@ public class ActorComponent extends PooledClonableComponent<ActorComponent> {
                 Interpolation.pow5Out)));
     }
 
-    public static ActorComponent get(World world, int entityId) {
-        return world.getMapper(ActorComponent.class).get(entityId);
+    public static ActorComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(ActorComponent.class, entityId);
     }
 
     public boolean hasActions() {

@@ -2,12 +2,14 @@ package heroes.journey.entities.actions.history;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class Record {
 
-    private final Integer entity;
+    private final UUID entity;
 
-    public Record(Integer entity) {
+    public Record(UUID entity) {
         this.entity = entity;
     }
 

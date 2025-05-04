@@ -1,10 +1,11 @@
 package heroes.journey.components;
 
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Setter
 @Accessors(fluent = true, chain = true)
@@ -16,8 +17,8 @@ public class NamedComponent extends PooledClonableComponent<NamedComponent> {
         return name;
     }
 
-    public static String get(World world, int entityId, String defaultString) {
-        NamedComponent name = world.getMapper(NamedComponent.class).get(entityId);
+    public static String get(GameWorld world, UUID entityId, String defaultString) {
+        NamedComponent name = world.getEntity(NamedComponent.class, entityId);
         return name != null ? name.toString() : defaultString;
     }
 

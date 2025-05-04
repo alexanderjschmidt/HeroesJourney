@@ -1,12 +1,10 @@
 package heroes.journey.ui;
 
 import com.artemis.EntityEdit;
-import com.artemis.World;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -16,6 +14,7 @@ import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -24,6 +23,8 @@ import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 public class Cursor {
     // coords
     public int x, y;
@@ -31,13 +32,17 @@ public class Cursor {
 
     private final HUD hud;
 
-    @Getter private Integer selected, hover;
+    @Getter
+    private UUID selected, hover;
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
-    @Setter @Getter private Cell path;
+    @Setter
+    @Getter
+    private Cell path;
 
     private final Animation<TextureRegion> ani, mapPointer;
-    @Setter private Position mapPointerLoc;
+    @Setter
+    private Position mapPointerLoc;
 
     private float elapsed = 0;
 
@@ -199,7 +204,7 @@ public class Cursor {
         update();
     }
 
-    public void setPosition(Integer entityId) {
+    public void setPosition(UUID entityId) {
         PositionComponent position = PositionComponent.get(GameState.global().getWorld(), entityId);
         this.setPosition(position.getX(), position.getY());
         GameCamera.get().center(position.getX(), position.getY());
@@ -210,7 +215,7 @@ public class Cursor {
             GameState.global().getRangeManager().clearRange();
             return;
         }
-        World world = GameState.global().getWorld();
+        GameWorld world = GameState.global().getWorld();
         PositionComponent positionComponent = PositionComponent.get(world, selected);
         positionComponent.setPos(sx, sy);
         StatsComponent statsComponent = StatsComponent.get(world, selected);

@@ -2,16 +2,17 @@ package heroes.journey.ui.windows.stats;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.ui.UI;
 
+import java.util.UUID;
+
 public class EquipmentDisplay extends Widget {
 
-    private Integer entityId;
+    private UUID entityId;
 
-    public void setEntity(Integer entityId) {
+    public void setEntity(UUID entityId) {
         this.entityId = entityId;
     }
 

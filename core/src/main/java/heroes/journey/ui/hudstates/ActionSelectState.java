@@ -1,10 +1,6 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.AbstractMap;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;
@@ -12,17 +8,21 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
 
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.UUID;
+
 public class ActionSelectState extends HUDState {
 
     private final List<ScrollPaneEntry<Action>> options;
 
     public ActionSelectState(List<Action> options) {
         super();
-        Integer selectedEntity = GameState.global().getCurrentEntity();
+        UUID selectedEntity = GameState.global().getCurrentEntity();
         this.options = filter(options, selectedEntity);
     }
 
-    private List<ScrollPaneEntry<Action>> filter(List<Action> input, Integer entityId) {
+    private List<ScrollPaneEntry<Action>> filter(List<Action> input, UUID entityId) {
         return input.stream()
             .map(action -> {
                 ShowAction result = action.requirementsMet(GameState.global(), entityId);

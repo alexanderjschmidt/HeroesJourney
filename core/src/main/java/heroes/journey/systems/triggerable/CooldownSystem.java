@@ -1,19 +1,22 @@
 package heroes.journey.systems.triggerable;
 
-import com.artemis.World;
 import com.artemis.annotations.All;
-
-import heroes.journey.components.CooldownComponent;
+import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 
-@All({CooldownComponent.class})
+import java.util.UUID;
+
+@All({PossibleActionsComponent.class, IdComponent.class})
 public class CooldownSystem extends TriggerableSystem {
 
     // TODO update to check history and run on Move
     @Override
     protected void process(int entityId) {
-        World world = getWorld();
-        CooldownComponent cooldownComponent = CooldownComponent.get(world, entityId);
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        PossibleActionsComponent cooldownComponent = PossibleActionsComponent.get(world, id);
         cooldownComponent.getCooldowns()
             .entrySet()
             .removeIf(entry -> (entry.setValue(entry.getValue() - 1)) <= 0);

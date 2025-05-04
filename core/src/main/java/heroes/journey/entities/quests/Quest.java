@@ -1,26 +1,30 @@
 package heroes.journey.entities.quests;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.ClaimQuestAction;
 import lombok.Builder;
 import lombok.NonNull;
 
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+
 @Builder
 public class Quest {
 
-    @NonNull private final String name;
-    @NonNull private final BiConsumer<GameState,Integer> onComplete;
-    @NonNull private final BiPredicate<GameState,Integer> isComplete;
+    @NonNull
+    private final String name;
+    @NonNull
+    private final BiConsumer<GameState, UUID> onComplete;
+    @NonNull
+    private final BiPredicate<GameState, UUID> isComplete;
 
-    public void onComplete(GameState gameState, Integer completer) {
+    public void onComplete(GameState gameState, UUID completer) {
         onComplete.accept(gameState, completer);
     }
 
-    public boolean isComplete(GameState gameState, Integer owner) {
+    public boolean isComplete(GameState gameState, UUID owner) {
         return isComplete.test(gameState, owner);
     }
 
@@ -35,6 +39,6 @@ public class Quest {
     }
 
     public ClaimQuestAction getClaimAction() {
-        return (ClaimQuestAction)ActionManager.get().get(name);
+        return (ClaimQuestAction) ActionManager.get().get(name);
     }
 }

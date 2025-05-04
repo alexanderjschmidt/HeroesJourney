@@ -1,11 +1,6 @@
 package heroes.journey.utils;
 
-import static heroes.journey.initializers.base.Map.inBounds;
-
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -15,6 +10,11 @@ import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.Map.inBounds;
+
 public class RangeManager {
 
     public enum RangeColor {
@@ -23,8 +23,9 @@ public class RangeManager {
 
     private GameState gameState;
     private int width, height;
-    @Getter private RangeColor[][] range;
-    private ArrayList<Integer> targets;
+    @Getter
+    private RangeColor[][] range;
+    private ArrayList<UUID> targets;
     private int target;
 
     public RangeManager(GameState gameState, int width, int height) {
@@ -39,21 +40,21 @@ public class RangeManager {
         return new RangeManager(newGameState, width, height);
     }
 
-    public ArrayList<Integer> updateTargets(
-        Integer selectedId,
+    public ArrayList<UUID> updateTargets(
+        UUID selectedId,
         boolean enemies,
         int[] ranges,
         RangeColor rangeType) {
         clearRange();
         PositionComponent position = PositionComponent.get(GameState.global().getWorld(), selectedId);
         setDistanceRangeAt(position.getX(), position.getY(), ranges, rangeType);
-        targets = new ArrayList<Integer>();
+        targets = new ArrayList<UUID>();
         target = 0;
         for (int x = 0; x < range.length; x++) {
             for (int y = 0; y < range[0].length; y++) {
                 // System.out.print(range[x][y]);
                 if (range[x][y] == rangeType) {
-                    Integer e = gameState.getEntities().get(x, y);
+                    UUID e = gameState.getEntities().get(x, y);
                     if (e != null) {
                         targets.add(e);
                     }
@@ -71,7 +72,7 @@ public class RangeManager {
         HUD.get().getCursor().setPosition(position.getX(), position.getY());
     }
 
-    public void setMoveAndAttackRange(Integer selectedId, int x, int y) {
+    public void setMoveAndAttackRange(UUID selectedId, int x, int y) {
         if (selectedId == null) {
             return;
         }
@@ -81,7 +82,7 @@ public class RangeManager {
         floodfill(move, x, y, selectedId);
     }
 
-    public void setMoveAndAttackRange(Integer selectedId) {
+    public void setMoveAndAttackRange(UUID selectedId) {
         PositionComponent position = PositionComponent.get(GameState.global().getWorld(), selectedId);
         setMoveAndAttackRange(selectedId, position.getX(), position.getY());
     }
@@ -91,7 +92,7 @@ public class RangeManager {
         target = 0;
     }
 
-    private void floodfill(int dist, int x, int y, Integer selectedId) {
+    private void floodfill(int dist, int x, int y, UUID selectedId) {
         if (!inBounds(x, y, range)) {
             // System.out.println("out of bounds");
             return;
@@ -101,7 +102,7 @@ public class RangeManager {
             return;
         }
         range[x][y] = RangeColor.BLUE;
-        setDistanceRangeAt(x, y, new int[] {1, 2}, RangeColor.RED);
+        setDistanceRangeAt(x, y, new int[]{1, 2}, RangeColor.RED);
 
         // System.out.println(terrainCost);
         floodfill(dist - gameState.getMap().getTerrainCost(x + 1, y, selectedId), x + 1, y, selectedId);

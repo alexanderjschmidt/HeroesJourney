@@ -1,18 +1,19 @@
 package heroes.journey.tilemap;
 
 import com.badlogic.gdx.math.Vector2;
-
 import heroes.journey.GameState;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.utils.Direction;
+
+import java.util.UUID;
 
 public class FogUtils {
 
     private static int dist(int x, int y) {
         int absX = Math.abs(x);
         int absY = Math.abs(y);
-        return (int)Math.sqrt((absX * absX) + (absY * absY)); // Euclidean
+        return (int) Math.sqrt((absX * absX) + (absY * absY)); // Euclidean
         // return absX + absY; // Manhattan
     }
 
@@ -48,9 +49,9 @@ public class FogUtils {
                     // Ensure we are within bounds of the fog array
                     if (Map.inBounds(newX, newY, mapComponent.getFog())) {
                         mapComponent.getFog()[newX][newY] = Fog.LIGHT;
-                        Integer location = gameState.getEntities().getLocation(newX, newY);
-                        if (location != null) {
-                            mapComponent.getKnownLocations().add(location);
+                        UUID locationUuid = gameState.getEntities().getLocationUUID(newX, newY);
+                        if (locationUuid != null) {
+                            mapComponent.getKnownLocations().add(locationUuid);
                         }
                     }
                 }
@@ -68,8 +69,8 @@ public class FogUtils {
         Direction direction) {
         Vector2 dir = direction.getDirVector();
         for (int dist = 1; dist <= revealDistance; dist++) {
-            int centerX = (int)(x + dist * dir.x);
-            int centerY = (int)(y + dist * dir.y);
+            int centerX = (int) (x + dist * dir.x);
+            int centerY = (int) (y + dist * dir.y);
 
             int currentWidth = baseWidth + (dist / 2); // Cone gets wider the farther it goes
 
@@ -82,9 +83,9 @@ public class FogUtils {
 
                         if (Map.inBounds(newX, newY, mapComponent.getFog())) {
                             mapComponent.getFog()[newX][newY] = Fog.LIGHT; // Clear fog
-                            Integer location = gameState.getEntities().getLocation(newX, newY);
-                            if (location != null) {
-                                mapComponent.getKnownLocations().add(location);
+                            UUID locationUuid = gameState.getEntities().getLocationUUID(newX, newY);
+                            if (locationUuid != null) {
+                                mapComponent.getKnownLocations().add(locationUuid);
                             }
                         }
                     }

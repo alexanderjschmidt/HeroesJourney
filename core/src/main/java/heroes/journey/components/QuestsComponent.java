@@ -1,13 +1,13 @@
 package heroes.journey.components;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.entities.quests.QuestManager;
+import heroes.journey.systems.GameWorld;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
 
@@ -26,8 +26,8 @@ public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
         return this;
     }
 
-    public static QuestsComponent get(World world, int entityId) {
-        return world.getMapper(QuestsComponent.class).get(entityId);
+    public static QuestsComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(QuestsComponent.class, entityId);
     }
 
     @Override

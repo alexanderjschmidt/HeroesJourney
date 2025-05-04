@@ -1,31 +1,34 @@
 package heroes.journey.entities.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Builder;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
 @Builder
 public class Cost {
 
-    @Builder.Default private int stamina = 0, mana = 0, health = 0, gold = 0;
-    @Builder.Default protected BiConsumer<GameState,Integer> onUse = (gs, e) -> {
+    @Builder.Default
+    private int stamina = 0, mana = 0, health = 0, gold = 0;
+    @Builder.Default
+    protected BiConsumer<GameState, UUID> onUse = (gs, e) -> {
     };
     @Builder.Default
-    protected BiFunction<GameState,Integer,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
-    @Builder.Default protected BiFunction<GameState,Integer,Double> multiplier = (gs, e) -> 1.0;
+    protected BiFunction<GameState, UUID, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    @Builder.Default
+    protected BiFunction<GameState, UUID, Double> multiplier = (gs, e) -> 1.0;
 
-    public void onUse(GameState gameState, Integer userId) {
+    public void onUse(GameState gameState, UUID userId) {
         if (userId == null) {
             return;
         }
@@ -33,17 +36,17 @@ public class Cost {
 
         double mult = multiplier.apply(gameState, userId);
 
-        statsComponent.adjustStamina((int)-(stamina * mult));
-        statsComponent.adjustMana((int)-(mana * mult));
-        statsComponent.adjustHealth((int)-(health * mult));
+        statsComponent.adjustStamina((int) -(stamina * mult));
+        statsComponent.adjustMana((int) -(mana * mult));
+        statsComponent.adjustHealth((int) -(health * mult));
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
-        inventoryComponent.adjustGold((int)-(gold * mult));
+        inventoryComponent.adjustGold((int) -(gold * mult));
 
         onUse.accept(gameState, userId);
     }
 
-    public ShowAction requirementsMet(GameState gameState, Integer userId) {
+    public ShowAction requirementsMet(GameState gameState, UUID userId) {
         if (userId == null) {
             return ShowAction.YES;
         }

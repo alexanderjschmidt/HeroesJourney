@@ -1,23 +1,23 @@
 package heroes.journey.components;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.artemis.World;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
-import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.systems.GameWorld;
+import lombok.Getter;
+
+import java.util.*;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
+    @Getter
+    private final Map<String, Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
+        cooldowns = new HashMap<>();
         possibleActions.add(BaseActions.wait.toString());
     }
 
@@ -25,22 +25,13 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
         return ActionManager.get(possibleActions.stream().toList());
     }
 
-    public PossibleActionsComponent addAction(CooldownAction action, World world, int entityId) {
-        CooldownComponent cooldownComponent = CooldownComponent.get(world, entityId);
-        if (cooldownComponent == null) {
-            world.edit(entityId).create(CooldownComponent.class);
-        }
-        possibleActions.add(action.toString());
-        return this;
-    }
-
     public PossibleActionsComponent addAction(Action action) {
         possibleActions.add(action.toString());
         return this;
     }
 
-    public static PossibleActionsComponent get(World world, int entityId) {
-        return world.getMapper(PossibleActionsComponent.class).get(entityId);
+    public static PossibleActionsComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(PossibleActionsComponent.class, entityId);
     }
 
     public PossibleActionsComponent removeAction(Action action) {
@@ -51,10 +42,12 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     @Override
     protected void reset() {
         possibleActions.clear();
+        cooldowns.clear();
     }
 
     @Override
     public void copy(PossibleActionsComponent from) {
         possibleActions.addAll(from.possibleActions);
+        cooldowns.putAll(from.cooldowns);
     }
 }

@@ -1,19 +1,22 @@
 package heroes.journey;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
+import java.util.UUID;
 
 @Getter
 public class PlayerInfo {
 
     private static PlayerInfo playerInfo;
 
-    private final List<Integer> playableEntities;
+    private final List<UUID> playableEntities;
+    private final UUID uuid;
 
     private PlayerInfo() {
         playableEntities = new ArrayList<>();
+        uuid = UUID.randomUUID();
     }
 
     public static PlayerInfo get() {

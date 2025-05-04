@@ -1,11 +1,7 @@
 package heroes.journey.entities.actions;
 
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.ui.HUD;
@@ -15,25 +11,36 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+
 @SuperBuilder(toBuilder = true)
 public class Action implements InfoProvider {
 
-    @NonNull protected final String name;
-    @Builder.Default @Getter protected final String description = "";
-    @Builder.Default @Getter protected final boolean returnsActionList = false;
-    @Builder.Default protected BiConsumer<GameState,Integer> onHover = (gs, e) -> {
-    };
-    protected BiFunction<GameState,Integer,ActionResult> onSelect;
+    @NonNull
+    protected final String name;
     @Builder.Default
-    protected BiFunction<GameState,Integer,ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    @Getter
+    protected final String description = "";
+    @Builder.Default
+    @Getter
+    protected final boolean returnsActionList = false;
+    @Builder.Default
+    protected BiConsumer<GameState, UUID> onHover = (gs, e) -> {
+    };
+    protected BiFunction<GameState, UUID, ActionResult> onSelect;
+    @Builder.Default
+    protected BiFunction<GameState, UUID, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
-    @Builder.Default protected Cost cost = Cost.builder().build();
+    @Builder.Default
+    protected Cost cost = Cost.builder().build();
 
-    public ShowAction requirementsMet(GameState gameState, Integer userId) {
+    public ShowAction requirementsMet(GameState gameState, UUID userId) {
         return requirementsMet.apply(gameState, userId).and(cost.requirementsMet(gameState, userId));
     }
 
-    public void onHover(GameState gameState, Integer userId) {
+    public void onHover(GameState gameState, UUID userId) {
         HUD.get().getCursor().setMapPointerLoc(null);
         gameState.getRangeManager().clearRange();
         onHover.accept(gameState, userId);
@@ -42,7 +49,7 @@ public class Action implements InfoProvider {
     /**
      * @return the results of the action for a popup window
      */
-    public ActionResult onSelect(GameState gameState, Integer userId) {
+    public ActionResult onSelect(GameState gameState, UUID userId) {
         cost.onUse(gameState, userId);
         return onSelect.apply(gameState, userId);
     }

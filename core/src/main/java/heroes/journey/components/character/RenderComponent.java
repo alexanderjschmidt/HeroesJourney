@@ -1,13 +1,14 @@
 package heroes.journey.components.character;
 
-import com.artemis.World;
 import com.artemis.annotations.Transient;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -20,8 +21,8 @@ public class RenderComponent extends PooledClonableComponent<RenderComponent> {
     public RenderComponent() {
     }
 
-    public static RenderComponent get(World world, int entityId) {
-        return world.getMapper(RenderComponent.class).get(entityId);
+    public static RenderComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(RenderComponent.class, entityId);
     }
 
     @Override

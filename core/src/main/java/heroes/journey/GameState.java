@@ -1,17 +1,10 @@
 package heroes.journey;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.Position;
@@ -30,6 +23,10 @@ import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Getter
 public class GameState implements Cloneable {
 
@@ -44,8 +41,10 @@ public class GameState implements Cloneable {
 
     private int turn;
 
-    @Getter private Integer currentEntity;
-    private List<Integer> entitiesInActionOrder;
+    @Getter
+    private UUID currentEntity;
+    //private Integer currentEntity;
+    private List<UUID> entitiesInActionOrder;
 
     private static GameState gameState;
 
@@ -85,8 +84,7 @@ public class GameState implements Cloneable {
         clone.entities = entities.clone();
         clone.world = world.cloneWorld(clone);
         clone.history = history.clone();
-        clone.map = map.clone(clone.entities);
-        clone.rangeManager = rangeManager.clone(clone);
+        clone.map = map.clone();
         clone.turn = turn;
         clone.currentEntity = currentEntity;
         return clone;
@@ -97,23 +95,33 @@ public class GameState implements Cloneable {
         long start = System.nanoTime();
         Cell path = queuedAction.getPath();
 
-        Integer e = entities.get(path.x, path.y);
+        UUID e = entities.get(path.x, path.y);
         //System.out.println(queuedAction + " " + path + " " + e);
-        // Move to the end of the Path
         if (e != null) {
+            // Move to the end of the Path
             Cell end = path.getEnd();
             entities.moveEntity(path.x, path.y, end.x, end.y);
             PositionComponent positionComponent = PositionComponent.get(world, e);
             positionComponent.setPos(end.x, end.y);
             positionComponent.sync();
             history.add(queuedAction.getPath(), e);
+
+            // Apply chosen Action
+            Action action = queuedAction.getAction();
+            action.onSelect(this, e);
+            history.add(queuedAction.getAction(),
+                new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
+            MovementComponent movement = MovementComponent.get(world, e);
+            if (movement != null) {
+                end = movement.path().getEnd();
+                entities.moveEntity(path.x, path.y, end.x, end.y);
+                world.getEntity(e).edit().remove(MovementComponent.class);
+                positionComponent.setPos(end.x, end.y);
+                positionComponent.sync();
+                history.add(movement.path(), e);
+            }
         }
 
-        // Apply chosen Action
-        Action action = queuedAction.getAction();
-        action.onSelect(this, e);
-        history.add(queuedAction.getAction(),
-            new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
         incrementTurn();
         world.basicProcess();
         // System.out.println("apply took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
@@ -130,34 +138,19 @@ public class GameState implements Cloneable {
         rangeManager.render(batch, turn);
     }
 
-    public Integer setCurrentEntity(Integer currentEntity) {
-        this.currentEntity = currentEntity;
-        return currentEntity;
-    }
-
-    private List<Integer> getEntitiesInActionOrder() {
-        IntBag entities = world.getEntitiesWith(StatsComponent.class, AIComponent.class);
-        int[] ids = entities.getData();
-        int size = entities.size();  // important! IntBag may over-allocate.
-
-        return IntStream.range(0, size).mapToObj(i -> ids[i])  // convert int index to Integer entityId
-            .sorted(Comparator.comparing((Integer e) -> StatsComponent.get(world, e).getSpeed())
-                .thenComparing(Object::toString)).collect(Collectors.toList());
-    }
-
-    private Integer incrementTurn() {
+    private UUID incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
-            entitiesInActionOrder = getEntitiesInActionOrder();
+            entitiesInActionOrder = world.getEntitiesWith(StatsComponent.class, AIComponent.class);
             turn++;
             world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
         }
-        return setCurrentEntity(entitiesInActionOrder.removeFirst());
+        return entitiesInActionOrder.removeFirst();
     }
 
     private void updateCurrentEntity() {
         PlayerComponent player = PlayerComponent.get(world, currentEntity);
         if (player != null) {
-            if (player.playerId().equals(getId())) {
+            if (player.playerId().equals(PlayerInfo.get().getUuid())) {
                 HUD.get().getCursor().setPosition(currentEntity);
                 System.out.println("your turn");
             } else {
@@ -172,7 +165,7 @@ public class GameState implements Cloneable {
 
     // UI sets up the players next turn
     public void nextMove() {
-        Integer currentEntity = incrementTurn();
+        UUID currentEntity = incrementTurn();
         System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
 
         world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
@@ -180,9 +173,5 @@ public class GameState implements Cloneable {
 
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
-    }
-
-    public String getId() {
-        return "id";
     }
 }

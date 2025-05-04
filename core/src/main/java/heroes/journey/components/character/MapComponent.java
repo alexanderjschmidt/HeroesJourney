@@ -1,21 +1,21 @@
 package heroes.journey.components.character;
 
+import heroes.journey.GameState;
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
+import heroes.journey.tilemap.Fog;
+import lombok.Getter;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.artemis.World;
-
-import heroes.journey.GameState;
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.tilemap.Fog;
-import lombok.Getter;
+import java.util.UUID;
 
 @Getter
 public class MapComponent extends PooledClonableComponent<MapComponent> {
 
     private Fog[][] fog;
-    private Set<Integer> knownLocations;
+    private Set<UUID> knownLocations;
 
     public MapComponent() {
         fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
@@ -25,8 +25,8 @@ public class MapComponent extends PooledClonableComponent<MapComponent> {
         knownLocations = new HashSet<>();
     }
 
-    public static MapComponent get(World world, int entityId) {
-        return world.getMapper(MapComponent.class).get(entityId);
+    public static MapComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(MapComponent.class, entityId);
     }
 
     @Override

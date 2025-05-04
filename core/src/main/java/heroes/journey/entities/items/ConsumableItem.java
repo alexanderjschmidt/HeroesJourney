@@ -1,16 +1,17 @@
 package heroes.journey.entities.items;
 
-import java.util.function.BiConsumer;
-
 import heroes.journey.GameState;
 import lombok.experimental.SuperBuilder;
+
+import java.util.UUID;
+import java.util.function.BiConsumer;
 
 @SuperBuilder
 public class ConsumableItem extends Item {
 
-    protected BiConsumer<GameState,Integer> onConsume;
+    protected BiConsumer<GameState, UUID> onConsume;
 
-    public void consume(GameState gameState, Integer consumer) {
+    public void consume(GameState gameState, UUID consumer) {
         onConsume.accept(gameState, consumer);
     }
 

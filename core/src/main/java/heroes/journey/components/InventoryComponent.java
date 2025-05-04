@@ -1,14 +1,15 @@
 package heroes.journey.components;
 
-import com.artemis.World;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemManager;
+import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class InventoryComponent extends PooledClonableComponent<InventoryComponent> {
@@ -31,8 +32,8 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
         return weight;
     }
 
-    public static InventoryComponent get(World world, int entityId) {
-        return world.getMapper(InventoryComponent.class).get(entityId);
+    public static InventoryComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(InventoryComponent.class, entityId);
     }
 
     public InventoryComponent add(Item item) {
