@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class TileNode {
     public int x, y;
-    private final Array<Connection<TileNode>> connections = new Array<>();
+    private final Array<Connection<TileNode>> connections = new Array<>(4);
 
     public TileNode(int x, int y) {
         this.x = x;

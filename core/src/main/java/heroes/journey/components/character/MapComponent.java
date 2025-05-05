@@ -1,15 +1,16 @@
 package heroes.journey.components.character;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import lombok.Getter;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 @Getter
 public class MapComponent extends PooledClonableComponent<MapComponent> {
@@ -22,7 +23,7 @@ public class MapComponent extends PooledClonableComponent<MapComponent> {
         for (Fog[] fogs : fog) {
             Arrays.fill(fogs, Fog.DENSE);
         }
-        knownLocations = new HashSet<>();
+        knownLocations = Collections.synchronizedSet(new HashSet<>());
     }
 
     public static MapComponent get(GameWorld world, UUID entityId) {

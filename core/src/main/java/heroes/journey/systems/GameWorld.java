@@ -1,15 +1,37 @@
 package heroes.journey.systems;
 
-import com.artemis.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.artemis.Aspect;
+import com.artemis.AspectSubscriptionManager;
+import com.artemis.BaseSystem;
+import com.artemis.Component;
+import com.artemis.EntityEdit;
+import com.artemis.EntitySubscription;
+import com.artemis.World;
+import com.artemis.WorldConfiguration;
+import com.artemis.WorldConfigurationBuilder;
 import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
@@ -23,22 +45,15 @@ import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.QuestSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 public class GameWorld extends World {
 
     private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
-    private final List<BaseSystem> nonBasicSystems = new ArrayList<>();
+    private static final List<Class<? extends Component>> nonBasicSystems = new ArrayList<>();
     private final WorldSerializationManager manager;
     private final KryoArtemisSerializer kryoSerializer;
 
     // TODO use this registration for any entity references since I cant trust the entityId will stay the same across GameWorlds
-    private final Map<UUID, Integer> entityMap;
+    public final Map<UUID,Integer> entityMap;
 
     private GameWorld(WorldConfiguration config) {
         super(config);
@@ -119,15 +134,13 @@ public class GameWorld extends World {
         AspectSubscriptionManager asm = getSystem(AspectSubscriptionManager.class);
         EntitySubscription subscription = asm.get(Aspect.all(components));
         int[] ids = subscription.getEntities().getData();
-        return IntStream.range(0, ids.length).mapToObj(i -> ids[i])  // convert int index to UUID entityId
-            .sorted(Comparator.comparing((Integer e) -> {
-                    UUID id = IdComponent.get(this, e);
-                    return StatsComponent.get(this, id).getSpeed();
-                })
-                .thenComparing(Object::toString)).map(e -> {
-                UUID id = IdComponent.get(this, e);
-                return id;
-            }).collect(Collectors.toList());
+        return IntStream.range(0, subscription.getEntities().size())
+            .mapToObj(i -> ids[i])
+            .sorted(Comparator.comparing(
+                    (Integer e) -> StatsComponent.get(this, IdComponent.get(this, e)).getSpeed())
+                .thenComparing(Object::toString))
+            .map(e -> IdComponent.get(this, e))
+            .collect(Collectors.toList());
     }
 
     public void saveWorld(GameState gameState) {
@@ -152,14 +165,13 @@ public class GameWorld extends World {
         IntBag entities = this.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
         int[] ids = entities.getData();
 
-        Map<Integer, Integer> oldToNew = new HashMap<>();
+        Map<Integer,Integer> oldToNew = new HashMap<>();
         for (int id : ids) {
             oldToNew.put(id, cloned.create());
-            ComponentCopier.copyEntity(this, cloned, oldToNew.get(id));
+            ComponentCopier.copyEntity(this, cloned, id, oldToNew.get(id));
         }
-
         cloned.basicProcess();
-        //System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        Utils.logTime("cloned " + ids.length + " " + entities.size(), start, 20);
         return cloned;
     }
 
@@ -199,8 +211,8 @@ public class GameWorld extends World {
             }
         }
 
-        cloned.process();
-        System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
+        cloned.basicProcess();
+        //System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
         return cloned;
     }
 
@@ -210,17 +222,26 @@ public class GameWorld extends World {
             this.getSystem(AISystem.class).setEnabled(false);
             this.getSystem(RenderSystem.class).setEnabled(false);
             this.getSystem(MovementSystem.class).setEnabled(false);
+            this.getSystem(ActionSystem.class).setEnabled(false);
         }
         this.process();
         if (this.getSystem(RenderSystem.class) != null) {
             this.getSystem(AISystem.class).setEnabled(true);
             this.getSystem(RenderSystem.class).setEnabled(true);
             this.getSystem(MovementSystem.class).setEnabled(true);
+            this.getSystem(ActionSystem.class).setEnabled(true);
         }
     }
 
     public <T extends Component> T getEntity(java.lang.Class<T> type, UUID entityId) {
-        return super.getMapper(type).get(entityMap.get(entityId));
+        try {
+            return super.getMapper(type).get(entityMap.get(entityId));
+        } catch (Exception e) {
+            System.out.println(this);
+            System.out.println(entityId + " " + type);
+            System.out.println(entityMap);
+            throw e;
+        }
     }
 
     public com.artemis.Entity getEntity(UUID entityId) {

@@ -1,6 +1,13 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -24,16 +31,14 @@ import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 
-import java.util.*;
-
 public class TravelActions implements InitializerInterface {
 
     public static final Action explore, wayfare, journey, travel;
     // TODO Pilgrimage lose a turn but go anywhere?
     // TODO No direction explore that expands in a circle?
-    private static final HashMap<Direction, Action> exploreActions = new HashMap<>();
-    private static final HashMap<UUID, Action> journeyActionsList = new HashMap<>();
-    private static final HashMap<UUID, Action> wayfareActionsList = new HashMap<>();
+    private static final HashMap<Direction,Action> exploreActions = new HashMap<>();
+    private static final HashMap<UUID,Action> journeyActionsList = new HashMap<>();
+    private static final HashMap<UUID,Action> wayfareActionsList = new HashMap<>();
     private static final List<Action> travelActionOptions = new ArrayList<>();
 
     static {
@@ -79,9 +84,11 @@ public class TravelActions implements InitializerInterface {
             UUID feature = Utils.getLocation(gs, e);
             MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
             List<Action> journeyActions = new ArrayList<>();
-            for (UUID knownLocation : mapComponent.getKnownLocations()) {
-                if (!Objects.equals(feature, knownLocation))
-                    journeyActions.add(journeyActionsList.get(knownLocation));
+            synchronized (mapComponent.getKnownLocations()) {
+                for (UUID knownLocation : mapComponent.getKnownLocations()) {
+                    if (!Objects.equals(feature, knownLocation))
+                        journeyActions.add(journeyActionsList.get(knownLocation));
+                }
             }
             return new ActionListResult(journeyActions);
         }).requirementsMet((gs, e) -> {
@@ -101,7 +108,7 @@ public class TravelActions implements InitializerInterface {
         // Add Travel Actions
         MapGenerationEffect travel = MapGenerationEffect.builder()
             .name("travel")
-            .dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()})
+            .dependsOn(new String[] {heroes.journey.initializers.base.Map.trees.getName()})
             .applyEffect(gameState -> {
                 for (Feature feature : FeatureManager.get().values()) {
                     UUID locationId = gameState.getEntities()
@@ -131,16 +138,15 @@ public class TravelActions implements InitializerInterface {
                 .setMapPointerLoc(new Position(feature.location.getX(), feature.location.getY()));
         }).onSelect((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-            Cell path = new EntityCursorPathing().getPath(GameState.global().getMap(),
-                positionComponent.getX(), positionComponent.getY(), feature.location.getX(),
-                feature.location.getY(), e);
-            EntityEdit entity = GameState.global().getWorld().edit(e);
+            Cell path = new EntityCursorPathing().getPath(gs.getMap(), positionComponent.getX(),
+                positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
+            EntityEdit entity = gs.getWorld().edit(e);
             entity.create(MovementComponent.class).path(path.reverse());
             return new StringResult("You have traveled to " + locationName);
         }).cost(Cost.builder().stamina(1).multiplier((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
             Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());
-            return (double) entityPos.distanceTo(feature.location);
+            return (double)entityPos.distanceTo(feature.location);
         }).build()).build().register();
         journeyActionsList.put(locationId, journeyAction);
 

@@ -152,20 +152,26 @@ public class HUD extends Stage {
 
     public void setState(HUDState newState) {
         stateMachine.changeState(newState);
-        System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
-            stateMachine.getPreviousState());
+        if (LoadOptions.debugOption.isTrue()) {
+            System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
+                stateMachine.getPreviousState());
+        }
     }
 
     public void revertToInitialState() {
         while (stateMachine.revertToPreviousState()) {
         }
-        System.out.println("reset to " + stateMachine.getCurrentState());
+        if (LoadOptions.debugOption.isTrue()) {
+            System.out.println("reset to " + stateMachine.getCurrentState());
+        }
     }
 
     public void revertToPreviousState() {
         stateMachine.revertToPreviousState();
-        System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
-            stateMachine.getPreviousState());
+        if (LoadOptions.debugOption.isTrue()) {
+            System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
+                stateMachine.getPreviousState());
+        }
     }
 
 }

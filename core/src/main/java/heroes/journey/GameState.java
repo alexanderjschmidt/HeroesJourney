@@ -1,9 +1,15 @@
 package heroes.journey;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
@@ -23,10 +29,6 @@ import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @Getter
 public class GameState implements Cloneable {
 
@@ -41,8 +43,7 @@ public class GameState implements Cloneable {
 
     private int turn;
 
-    @Getter
-    private UUID currentEntity;
+    @Getter private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
 
@@ -57,11 +58,11 @@ public class GameState implements Cloneable {
 
     private GameState() {
         entitiesInActionOrder = new ArrayList<>();
-        world = GameWorld.initGameWorld(this);
     }
 
     public void init(MapData mapData) {
         Initializer.init();
+        world = GameWorld.initGameWorld(this);
 
         this.width = mapData.getMapSize();
         this.height = mapData.getMapSize();
@@ -78,13 +79,18 @@ public class GameState implements Cloneable {
 
     public GameState clone() {
         // TODO Make this better to fix ai
+        long start = System.nanoTime();
         GameState clone = new GameState();
         clone.width = width;
         clone.height = height;
         clone.entities = entities.clone();
+        //Utils.logTime("clone up to world", start, 200);
         clone.world = world.cloneWorld(clone);
+        //Utils.logTime("clone after world", start, 200);
         clone.history = history.clone();
-        clone.map = map.clone();
+        // Since map layout never changes
+        clone.map = map;
+        //Utils.logTime("clone after map", start, 200);
         clone.turn = turn;
         clone.currentEntity = currentEntity;
         return clone;
@@ -111,14 +117,15 @@ public class GameState implements Cloneable {
             action.onSelect(this, e);
             history.add(queuedAction.getAction(),
                 new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
+            // If action adds movement
             MovementComponent movement = MovementComponent.get(world, e);
             if (movement != null) {
                 end = movement.path().getEnd();
                 entities.moveEntity(path.x, path.y, end.x, end.y);
-                world.getEntity(e).edit().remove(MovementComponent.class);
                 positionComponent.setPos(end.x, end.y);
                 positionComponent.sync();
                 history.add(movement.path(), e);
+                world.getEntity(e).edit().remove(MovementComponent.class);
             }
         }
 
@@ -140,7 +147,8 @@ public class GameState implements Cloneable {
 
     private UUID incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
-            entitiesInActionOrder = world.getEntitiesWith(StatsComponent.class, AIComponent.class);
+            entitiesInActionOrder = world.getEntitiesWith(StatsComponent.class, AIComponent.class,
+                IdComponent.class);
             turn++;
             world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
         }
@@ -165,7 +173,7 @@ public class GameState implements Cloneable {
 
     // UI sets up the players next turn
     public void nextMove() {
-        UUID currentEntity = incrementTurn();
+        currentEntity = incrementTurn();
         System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
 
         world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
@@ -173,5 +181,13 @@ public class GameState implements Cloneable {
 
         getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
+    }
+
+    public UUID getNextPlayer(UUID player) {
+        if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
+            return world.getEntitiesWith(StatsComponent.class, AIComponent.class, IdComponent.class)
+                .getFirst();
+        }
+        return entitiesInActionOrder.getFirst();
     }
 }

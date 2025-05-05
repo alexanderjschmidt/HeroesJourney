@@ -1,11 +1,20 @@
 package heroes.journey.tilemap;
 
+import static heroes.journey.initializers.base.Map.inBounds;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+
 import heroes.journey.RenderBounds;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
@@ -13,27 +22,17 @@ import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.Map.inBounds;
+import lombok.Setter;
 
 public class TileMap implements IndexedGraph<TileNode> {
 
-    @Getter
-    private final int width, height;
-    @Getter
-    private Tile[][] tileMap;
-    @Getter
-    private Tile[][] environment;
+    @Getter private final int width, height;
+    @Setter @Getter private Tile[][] tileMap;
+    @Setter @Getter private Tile[][] environment;
     private float elapsed = 0;
 
     // For Pathfinding
-    @Getter
-    private TileNode[][] nodes;
+    @Getter private TileNode[][] nodes;
 
     public TileMap(int mapSize) {
         width = mapSize;
@@ -74,7 +73,7 @@ public class TileMap implements IndexedGraph<TileNode> {
     public ActionTerrain getEnvironment(int x, int y) {
         if (!inBounds(x, y, width, height)) {
             Tile env = environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
-            return env == null ? null : (ActionTerrain) env.getTerrain();
+            return env == null ? null : (ActionTerrain)env.getTerrain();
         } else {
             return environment[x][y] != null &&
                 environment[x][y].getTerrain() instanceof ActionTerrain actionTerrain ? actionTerrain : null;
@@ -92,17 +91,19 @@ public class TileMap implements IndexedGraph<TileNode> {
             options.add(BaseActions.wait);
             return options;
         }
-        return ((ActionTerrain) tile.getTerrain()).getActions();
+        return ((ActionTerrain)tile.getTerrain()).getActions();
     }
 
     public TileMap clone() {
         TileMap map = new TileMap(width);
         map.tileMap = Arrays.copyOf(tileMap, tileMap.length);
         map.environment = Arrays.copyOf(environment, environment.length);
+        long startTime = System.nanoTime();
         for (int x = 0; x < width; x++) {
             map.tileMap[x] = Arrays.copyOf(tileMap[x], tileMap[x].length);
             map.environment[x] = Arrays.copyOf(environment[x], environment[x].length);
         }
+        Utils.logTime("connect nodes", startTime, 10);
         return map;
     }
 
@@ -111,22 +112,16 @@ public class TileMap implements IndexedGraph<TileNode> {
             (environment[x][y] == null ? 0 : environment[x][y].getTerrain().getTerrainCost());
     }
 
-    public void setTileMap(Tile[][] tileMap) {
-        this.tileMap = tileMap;
-    }
-
-    public void setEnvironment(Tile[][] environment) {
-        this.environment = environment;
-    }
-
     private void updateGraph() {
         nodes = new TileNode[width][height];
+        long startTime = System.nanoTime();
         // Create Nodes
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 nodes[x][y] = new TileNode(x, y);
             }
         }
+        Utils.logTime("Create nodes " + width, startTime, 10);
 
         // Connect Nodes (4-directional movement)
         for (int x = 0; x < width; x++) {
@@ -141,6 +136,7 @@ public class TileMap implements IndexedGraph<TileNode> {
                     nodes[x][y].getConnections().add(new DefaultConnection<>(nodes[x][y], nodes[x][y + 1]));
             }
         }
+        Utils.logTime("connect nodes " + height, startTime, 10);
     }
 
     @Override

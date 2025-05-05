@@ -1,11 +1,11 @@
 package heroes.journey.entities.actions.history;
 
+import java.util.Stack;
+import java.util.UUID;
+
 import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.utils.ai.pathfinding.Cell;
-
-import java.util.Stack;
-import java.util.UUID;
 
 public class History extends Stack<Record> implements Cloneable {
 
@@ -24,7 +24,7 @@ public class History extends Stack<Record> implements Cloneable {
 
     @Override
     public History clone() {
-        return (History) super.clone();
+        return (History)super.clone();
     }
 }
 

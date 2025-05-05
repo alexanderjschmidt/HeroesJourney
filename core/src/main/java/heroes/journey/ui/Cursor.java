@@ -1,10 +1,13 @@
 package heroes.journey.ui;
 
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -23,8 +26,6 @@ import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.UUID;
-
 public class Cursor {
     // coords
     public int x, y;
@@ -32,17 +33,13 @@ public class Cursor {
 
     private final HUD hud;
 
-    @Getter
-    private UUID selected, hover;
+    @Getter private UUID selected, hover;
     // Starting positions of selected to revert to on ESCAPE
     private int sx = -1, sy = -1;
-    @Setter
-    @Getter
-    private Cell path;
+    @Setter @Getter private Cell path;
 
     private final Animation<TextureRegion> ani, mapPointer;
-    @Setter
-    private Position mapPointerLoc;
+    @Setter private Position mapPointerLoc;
 
     private float elapsed = 0;
 
@@ -65,7 +62,7 @@ public class Cursor {
     }
 
     public void clearSelected() {
-        System.out.println("clear selected");
+        //System.out.println("clear selected");
         selected = null;
         sx = -1;
         sy = -1;

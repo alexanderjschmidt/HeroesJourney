@@ -1,6 +1,9 @@
 package heroes.journey.components.character;
 
+import java.util.UUID;
+
 import com.artemis.annotations.Transient;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -8,15 +11,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.util.UUID;
-
 @Transient
 @Accessors(fluent = true, chain = true)
 public class MovementComponent extends PooledClonableComponent<MovementComponent> {
 
-    @Getter
-    @Setter
-    private Cell path;
+    @Getter @Setter private Cell path;
     private boolean startedMoving;
 
     public MovementComponent() {

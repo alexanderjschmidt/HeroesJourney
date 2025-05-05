@@ -1,6 +1,21 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
+import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -22,14 +37,6 @@ import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.RandomWorldGenerator;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 import heroes.journey.utils.worldgen.WeightedRandomPicker;
-
-import java.util.*;
-
-import static heroes.journey.initializers.base.factories.EntityFactory.*;
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
 @SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
@@ -54,7 +61,7 @@ public class Map implements InitializerInterface {
         // Capitals
         MapGenerationEffect kingdomsGen = MapGenerationEffect.builder()
             .name("kingdoms")
-            .dependsOn(new String[]{noise.getName()})
+            .dependsOn(new String[] {noise.getName()})
             .applyEffect(gameState -> {
                 int centerX = MAP_SIZE / 2;
                 int centerY = MAP_SIZE / 2;
@@ -69,8 +76,8 @@ public class Map implements InitializerInterface {
                     double angleRad = Math.toRadians(angleDeg);
 
                     // Polar to Cartesian
-                    int x = centerX + (int) (Math.cos(angleRad) * radius);
-                    int y = centerY + (int) (Math.sin(angleRad) * radius);
+                    int x = centerX + (int)(Math.cos(angleRad) * radius);
+                    int y = centerY + (int)(Math.sin(angleRad) * radius);
 
                     // Snap to nearest valid land tile
                     Position capital = findValidLandTile(x, y, gameState.getMap().getTileMap());
@@ -86,7 +93,7 @@ public class Map implements InitializerInterface {
         // Add Towns
         MapGenerationEffect townsGen = MapGenerationEffect.builder()
             .name("towns")
-            .dependsOn(new String[]{kingdomsGen.getName()})
+            .dependsOn(new String[] {kingdomsGen.getName()})
             .applyEffect(gameState -> {
                 int minDistanceBetweenTowns = 6;
                 int maxAttempts = 100;
@@ -136,7 +143,7 @@ public class Map implements InitializerInterface {
         // Add Paths
         MapGenerationEffect paths = MapGenerationEffect.builder()
             .name("paths")
-            .dependsOn(new String[]{townsGen.getName()})
+            .dependsOn(new String[] {townsGen.getName()})
             .applyEffect(gameState -> {
                 // Capitals to towns
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
@@ -158,15 +165,17 @@ public class Map implements InitializerInterface {
         // Add Monsters
         MapGenerationEffect monsters = MapGenerationEffect.builder()
             .name("monsters")
-            .dependsOn(new String[]{paths.getName()})
+            .dependsOn(new String[] {paths.getName()})
             .applyEffect(gameState -> {
                 MonsterFactory.goblin(gameState.getWorld());
                 MonsterFactory.hobGoblin(gameState.getWorld());
-            }).build().register();
+            })
+            .build()
+            .register();
         // Add Dungeons
         MapGenerationEffect dungeonsGen = MapGenerationEffect.builder()
             .name("dungeons")
-            .dependsOn(new String[]{monsters.getName()})
+            .dependsOn(new String[] {monsters.getName()})
             .applyEffect(gameState -> {
                 int minDistanceFromAnyFeature = 5;
                 int minDistanceFromSettlement = 3;
@@ -213,7 +222,7 @@ public class Map implements InitializerInterface {
             .register();
         MapGenerationEffect wildDungeons = MapGenerationEffect.builder()
             .name("wildDungeons")
-            .dependsOn(new String[]{dungeonsGen.getName()})
+            .dependsOn(new String[] {dungeonsGen.getName()})
             .applyEffect(gameState -> {
                 int numWildernessDungeons = Random.get().nextInt(8, 16); // Adjust how many you want
                 int minDistanceFromAllFeatures = 5;
@@ -248,7 +257,7 @@ public class Map implements InitializerInterface {
         // Wave Function collapse keeping houses and path placements
         MapGenerationEffect wfc = MapGenerationEffect.builder()
             .name("waveFunctionCollapse")
-            .dependsOn(new String[]{wildDungeons.getName()})
+            .dependsOn(new String[] {wildDungeons.getName()})
             .applyEffect(gameState -> {
                 int width = gameState.getWidth();
 
@@ -277,7 +286,7 @@ public class Map implements InitializerInterface {
         // Wave Function collapse paths to smooth tiles
         MapGenerationEffect wfcPaths = MapGenerationEffect.builder()
             .name("waveFunctionCollapsePaths")
-            .dependsOn(new String[]{wfc.getName()})
+            .dependsOn(new String[] {wfc.getName()})
             .applyEffect(gameState -> {
                 int width = gameState.getWidth();
 
@@ -306,7 +315,7 @@ public class Map implements InitializerInterface {
         // Create Trees
         trees = MapGenerationEffect.builder()
             .name("trees")
-            .dependsOn(new String[]{wfcPaths.getName()})
+            .dependsOn(new String[] {wfcPaths.getName()})
             .applyEffect(gameState -> {
                 int width = gameState.getWidth();
 
@@ -343,14 +352,14 @@ public class Map implements InitializerInterface {
         // Add Entities
         MapGenerationEffect entities = MapGenerationEffect.builder()
             .name("entities")
-            .dependsOn(new String[]{trees.getName()})
+            .dependsOn(new String[] {trees.getName()})
             .applyEffect(gameState -> {
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
                 Feature playerTown = kingdoms.getFirst().connections.stream().toList().getFirst();
-                UUID playerId = overworldEntity(gameState, playerTown.location.getX(),
-                    playerTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1],
-                    new MCTSAI());
-                EntityEdit player = gameState.getWorld().edit(playerId);
+                EntityEdit player = gameState.getWorld().createEntity().edit();
+                UUID playerId = addOverworldComponents(gameState.getWorld(), player,
+                    playerTown.location.getX(), playerTown.location.getY(),
+                    ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
                 player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                 player.create(NamedComponent.class).name("Player");
                 InventoryComponent.get(gameState.getWorld(), playerId)
@@ -360,8 +369,10 @@ public class Map implements InitializerInterface {
                 PlayerInfo.get().getPlayableEntities().add(playerId);
 
                 Feature opponentTown = kingdoms.getLast().connections.stream().toList().getLast();
-                overworldEntity(gameState, opponentTown.location.getX(), opponentTown.location.getY(),
-                    ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+                EntityEdit opponent = gameState.getWorld().createEntity().edit();
+                addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
+                    opponentTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1],
+                    new MCTSAI());
             })
             .build()
             .register();

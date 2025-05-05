@@ -26,7 +26,7 @@ class CursorMoveState extends HUDState {
                 HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            System.out.println(hud.getCursor().getSelected());
+            // System.out.println(hud.getCursor().getSelected());
             // TODO only show/allow movement if it has a movement component
             if (hud.getCursor().getSelected() != null) {
                 savePath();

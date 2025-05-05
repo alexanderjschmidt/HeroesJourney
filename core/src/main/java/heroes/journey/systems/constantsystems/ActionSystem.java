@@ -1,9 +1,13 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.UUID;
+
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
+
 import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.IdComponent;
@@ -18,15 +22,13 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.hudstates.States;
 
-import java.util.UUID;
-
 @All({PositionComponent.class, ActionComponent.class, IdComponent.class})
 @Exclude({MovementComponent.class})
 public class ActionSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
         ActionComponent action = ActionComponent.get(world, id);
         PositionComponent positionComponent = PositionComponent.get(world, id);
@@ -39,13 +41,15 @@ public class ActionSystem extends IteratingSystem {
         ActionResult result = action.getAction().onSelect(GameState.global(), id);
         if (result != null) {
             //TODO make it only show up for players its supposed to
-            System.out.println(result.getClass());
+            //System.out.println(result.getClass());
             switch (result) {
                 case StringResult str -> {
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
-                    HUD.get().getPopupUI().setText(str.toString());
-                    HUD.get().setState(States.POP_UP);
+                    if (PlayerInfo.get().getPlayableEntities().contains(id)) {
+                        HUD.get().getPopupUI().setText(str.toString());
+                        HUD.get().setState(States.POP_UP);
+                    }
                 }
                 case ActionListResult actions -> {
                     HUD.get().setState(new ActionSelectState(actions.list()));

@@ -1,13 +1,14 @@
 package heroes.journey.entities.actions;
 
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.results.ActionResult;
+import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.quests.Quest;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @SuperBuilder
 public class ClaimQuestAction extends Action {
@@ -23,6 +24,6 @@ public class ClaimQuestAction extends Action {
             factionsQuestsComponent.getQuests().remove(quest);
             QuestsComponent.get(gameState.getWorld(), entityId).addQuest(quest);
         }
-        return null;
+        return new EndTurnResult();
     }
 }

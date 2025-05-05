@@ -1,64 +1,75 @@
 package heroes.journey.utils.ai;
 
-import heroes.journey.GameState;
-import heroes.journey.entities.actions.QueuedAction;
-import heroes.journey.utils.Random;
+import static heroes.journey.utils.ai.MCTS.DEPTH_TO_SIMULATE;
+import static heroes.journey.utils.ai.MCTS.EXPLORATION_FACTOR;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class Node {
-    private static final double EXPLORATION_FACTOR = Math.sqrt(2);
+import heroes.journey.GameState;
+import heroes.journey.entities.actions.QueuedAction;
+import heroes.journey.utils.Random;
+import lombok.Getter;
+import lombok.Setter;
 
-    GameState gameState;
-    Node parent;
-    List<Node> children;
+public class Node {
+
+    @Getter Node parent;
+    final List<Node> children;
     private int visitCount;
     private double winScore;
-    private QueuedAction queuedAction;
+    @Getter @Setter private QueuedAction queuedAction;
     private final Scorer scorer;
+    private final UUID player;
 
-    public Node(GameState gameState, Node parent, Scorer scorer) {
-        this.gameState = gameState;
+    public Node(Node parent, Scorer scorer, UUID player) {
         this.parent = parent;
-        this.children = new ArrayList<>();
+        this.children = Collections.synchronizedList(new ArrayList<>());
         this.visitCount = 0;
         this.winScore = 0.0;
         this.scorer = scorer;
+        this.player = player;
     }
 
     // Get all possible QueuedActions and create child nodes
-    public void expand() {
+    public void expand(GameState gameState) {
         if (!children.isEmpty())
-            return; // Already expanded
+            return;
 
-        List<QueuedAction> possibleQueuedActions = scorer.getPossibleQueuedActions(gameState);
-        for (QueuedAction QueuedAction : possibleQueuedActions) {
-            GameState newState = gameState.clone()
-                .applyAction(QueuedAction); // Apply QueuedAction to get new state
-            Node childNode = new Node(newState, this, scorer);
-            childNode.setQueuedAction(QueuedAction);
-            children.add(childNode);
+        UUID nextPlayer = gameState.getNextPlayer(player);
+
+        List<QueuedAction> actions = scorer.getPossibleQueuedActions(gameState);
+        for (QueuedAction action : actions) {
+            Node child = new Node(this, scorer, nextPlayer);
+            child.setQueuedAction(action);
+            children.add(child);
         }
-        gameState = null;
     }
 
     // Select the best child using UCT (Upper Confidence Bound for Trees)
-    public Node bestUCTChild() {
-        return children.stream()
-            .max(Comparator.comparingDouble(this::uctValue))
-            .orElseThrow(() -> new IllegalStateException("No children found"));
+    public Node bestUCTChild(UUID rootPlayer) {
+        synchronized (children) {
+            return children.stream()
+                .max(Comparator.comparingDouble(child -> uctValue(child, rootPlayer)))
+                .orElseThrow(() -> new IllegalStateException("No children found"));
+        }
     }
 
     // Compute UCT value for a node
-    private double uctValue(Node node) {
+    private double uctValue(Node node, UUID rootPlayer) {
         if (node.visitCount == 0)
             return Double.MAX_VALUE; // Favor unexplored nodes
-        double exploitation = node.winScore / node.visitCount;
+        double winRate = node.winScore / node.visitCount;
+
+        // Flip the perspective if this node's player is not the root player
+        if (!node.player.equals(rootPlayer)) {
+            winRate = 1.0 - winRate;
+        }
         double exploration = EXPLORATION_FACTOR * Math.sqrt(Math.log(this.visitCount) / node.visitCount);
-        return exploitation + exploration;
+        return winRate + exploration;
     }
 
     // Get a random unexplored child
@@ -73,24 +84,25 @@ public class Node {
     }
 
     // Simulate a random game from this node and return a result
-    public int rollout(UUID playingEntity) {
-        GameState tempState = this.gameState.clone();
+    public int rollout(UUID playingEntity, GameState gameState) {
         int depth = 0;
-        while (scorer.getScore(tempState, playingEntity) > 0 && depth < 5) {
-            List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(tempState);
+        while (scorer.getScore(gameState, playingEntity) > 0 && depth < DEPTH_TO_SIMULATE) {
+            long start = System.nanoTime();
+            List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
             QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
-            tempState = tempState.applyAction(randomQueuedAction);
+            gameState = gameState.applyAction(randomQueuedAction);
             depth++;
         }
-        return scorer.getScore(tempState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
+        return scorer.getScore(gameState, playingEntity); // 1.0 if AI wins, 0.0 if loss, 0.5 for draw
     }
 
-    // Backpropagate the result up the tree
-    public void updateStats(double result) {
+    // Back propagate the result up the tree
+    public void updateStats(double result, UUID resultPlayer) {
         visitCount++;
-        winScore += result;
-        if (parent != null) {
-            parent.updateStats(1 - result); // Switch result for opponent
+        if (this.player.equals(resultPlayer)) {
+            winScore += result;
+        } else {
+            winScore += (1.0 - result);
         }
     }
 
@@ -101,20 +113,27 @@ public class Node {
             .orElseThrow(() -> new IllegalStateException("No children available"));
     }
 
+    public GameState reconstructGameStateFromRoot(GameState rootState) {
+        GameState state = rootState.clone();
+        List<QueuedAction> path = new ArrayList<>();
+        Node current = this;
+
+        // Walk backwards to gather actions
+        while (current != null && current.queuedAction != null) {
+            path.addFirst(current.queuedAction); // Prepend actions
+            current = current.parent;
+        }
+
+        for (QueuedAction action : path) {
+            state = state.applyAction(action); // Apply deltas in order
+        }
+
+        return state;
+    }
+
     // Utility methods
     public boolean hasChildren() {
         return !children.isEmpty();
     }
 
-    public Node getParent() {
-        return parent;
-    }
-
-    public void setQueuedAction(QueuedAction queuedAction) {
-        this.queuedAction = queuedAction;
-    }
-
-    public QueuedAction getQueuedAction() {
-        return queuedAction;
-    }
 }

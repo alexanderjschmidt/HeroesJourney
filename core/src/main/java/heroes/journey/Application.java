@@ -31,6 +31,9 @@ import lombok.Getter;
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * Dont make new basic Monsters for dungeons, they're just groupings of stats
  *  Maybe have a global templates World since they dont render or loose health?
+ * AI
+ *  Improve score function
+ *  Add understanding of fog of war (Probably need more knowledge information)
  * Effects
  *  make effects only show if can be seen in fog
  *  move effects to player info panel
