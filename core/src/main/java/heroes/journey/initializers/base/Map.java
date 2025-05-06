@@ -119,7 +119,9 @@ public class Map implements InitializerInterface {
                                 }
                             }
 
-                            if (!tooClose) {
+                            if (!tooClose &&
+                                surroundedBySame(gameState.getMap().getTileMap(), candidate.getX(),
+                                    candidate.getY())) {
                                 gameState.getMap()
                                     .setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
                                 UUID townId = generateTown(gameState, candidate.getX(), candidate.getY(),
@@ -201,7 +203,9 @@ public class Map implements InitializerInterface {
                             Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(),
                                 settlement.location, minDistanceFromSettlement, maxDistanceFromSettlement);
 
-                            if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature)) {
+                            if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature) &&
+                                surroundedBySame(gameState.getMap().getTileMap(), candidate.getX(),
+                                    candidate.getY())) {
                                 gameState.getMap()
                                     .setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
                                 UUID dungeonId = generateDungeon(gameState, candidate.getX(),
@@ -237,7 +241,8 @@ public class Map implements InitializerInterface {
                         Position candidate = new Position(x, y);
 
                         if (inBounds(x, y) && isLandTile(gameState.getMap().getTileMap()[x][y]) &&
-                            isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures)) {
+                            isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures) &&
+                            surroundedBySame(gameState.getMap().getTileMap(), x, y)) {
                             gameState.getMap().setEnvironment(x, y, Tiles.DUNGEON);
                             UUID dungeonId = generateDungeon(gameState, x, y);
                             Feature dungeon = new Feature(dungeonId, FeatureType.DUNGEON, candidate);
@@ -270,15 +275,17 @@ public class Map implements InitializerInterface {
                             possibleTilesMap[x][y] = new WeightedRandomPicker<>();
                             possibleTilesMap[x][y].addItem(gameState.getMap().getTileMap()[x][y],
                                 Integer.MAX_VALUE);
-                        } else if (baseTiles.contains(gameState.getMap().getTileMap()[x][y])) {
-                            possibleTilesMap[x][y] = new WeightedRandomPicker<>(possibleTiles);
+                        } else if (surroundedBySame(gameState.getMap().getTileMap(), x, y)) {
+                            possibleTilesMap[x][y] = new WeightedRandomPicker<>();
                             possibleTilesMap[x][y].addItem(gameState.getMap().getTileMap()[x][y],
-                                possibleTilesMap[x][y].getTotalWeight() * 10);
+                                Integer.MAX_VALUE);
+                        } else {
+                            possibleTilesMap[x][y] = new WeightedRandomPicker<>(possibleTiles);
                         }
                     }
                 }
 
-                Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, false);
+                Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap, true);
                 gameState.getMap().setTileMap(tileMap);
             })
             .build()
@@ -303,6 +310,7 @@ public class Map implements InitializerInterface {
                             for (Tile t : Tiles.pathTiles) {
                                 possibleTilesMap[x][y].addItem(t, t.getWeight());
                             }
+                            possibleTilesMap[x][y].remove(Tiles.pathTiles.getFirst());
                         }
                     }
                 }
@@ -378,6 +386,18 @@ public class Map implements InitializerInterface {
             .register();
     }
 
+    private static boolean surroundedBySame(Tile[][] tileMap, int x, int y) {
+        Tile t = tileMap[x][y];
+        return (!inBounds(x - 1, y + 1) || t == tileMap[x - 1][y + 1]) &&
+            (!inBounds(x - 1, y) || t == tileMap[x - 1][y]) &&
+            (!inBounds(x - 1, y - 1) || t == tileMap[x - 1][y - 1]) &&
+            (!inBounds(x, y - 1) || t == tileMap[x][y - 1]) &&
+            (!inBounds(x, y + 1) || t == tileMap[x][y + 1]) &&
+            (!inBounds(x + 1, y - 1) || t == tileMap[x + 1][y - 1]) &&
+            (!inBounds(x + 1, y) || t == tileMap[x + 1][y]) &&
+            (!inBounds(x + 1, y + 1) || t == tileMap[x + 1][y + 1]);
+    }
+
     private static void buildRoad(
         GameState gameState,
         Tile connector,
@@ -401,7 +421,7 @@ public class Map implements InitializerInterface {
                         continue; // only outer edge
                     int x = startX + dx;
                     int y = startY + dy;
-                    if (inBounds(x, y) && isLandTile(map[x][y])) {
+                    if (inBounds(x, y) && isLandTile(map[x][y]) && surroundedBySame(map, x, y)) {
                         return new Position(x, y);
                     }
                 }

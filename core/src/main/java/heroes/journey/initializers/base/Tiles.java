@@ -1,21 +1,16 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
-import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
-import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
-import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.tilemap.wavefunctiontiles.*;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
+
+import java.util.List;
 
 public class Tiles implements InitializerInterface {
 
@@ -23,7 +18,7 @@ public class Tiles implements InitializerInterface {
     public static final Terrain HOLE_TERRAIN = new Terrain("HOLE", 0);
     public static final Tile NULL, HOLE;
 
-    public static Terrain PATH;
+    public static Terrain PATH, plains;
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles, treeTiles;
     public static Tile CAPITAL, TOWN, DUNGEON;
@@ -43,7 +38,7 @@ public class Tiles implements InitializerInterface {
 
         // Base Terrains
         Terrain water = new Terrain("Water", 50);
-        Terrain plains = new Terrain("Plains", 2);
+        plains = new Terrain("Plains", 2);
         Terrain hills = new Terrain("Hills", 2);
         Terrain sand = new Terrain("Sand", 3);
         PATH = new Terrain("Path", 1);

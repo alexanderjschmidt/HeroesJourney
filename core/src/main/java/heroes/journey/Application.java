@@ -23,21 +23,25 @@ import lombok.Getter;
  *          Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
+ * Update HUD to use stage ui components
+ * Add Action Queue to order movement actions and cursor centers better
+ *  Make Cursor jump to player at end of movement, not end of opponents turn (and statement?) incase the opponents turn ends faster than player movement
+ * Effects
+ *  make effects only show if can be seen in fog
+ *  move effects to player info panel
  * Multiplayer
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Make the different travels fail if someone is already there?
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
- * Dont make new basic Monsters for dungeons, they're just groupings of stats
- *  Maybe have a global templates World since they dont render or loose health?
  * AI
  *  Improve score function
  *  Add understanding of fog of war (Probably need more knowledge information)
- * Effects
- *  make effects only show if can be seen in fog
- *  move effects to player info panel
  * Saving
+ * Add Events
+ *  Demon kings arrival
+ *  new quests appearances
  * Map Generation
  *  Improve timeout/WFC going forever/Holes
  *  Add variation plain tiles
@@ -50,7 +54,6 @@ import lombok.Getter;
  * 	Action Sounds
  * Efficiency
  *  Make Fog compute first and then dont render anything that would be covered by Dense Fog
- *  multithread MCTS
  */
 /*
  * Knowledge System

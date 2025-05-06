@@ -12,7 +12,6 @@ import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
-import heroes.journey.utils.Random;
 
 @SuppressWarnings("unchecked")
 public class WaveFunctionCollapse {
@@ -26,56 +25,49 @@ public class WaveFunctionCollapse {
         WFCData data = new WFCData(possibleTilesMapPrime);
         outer:
         while (true) {
-            // Step 1: Find the cell with the highest entropy (most definitive possibile value)
-            int maxEntropyX = -1, maxEntropyY = -1;
-            long maxEntropy = Integer.MIN_VALUE;
-            int startX = Random.get().nextInt(data.size());
-            int startY = Random.get().nextInt(data.size());
+            // Step 1: Find the cell with the highest entropy (most definitive possible value)
+            int minEntropyX = -1, minEntropyY = -1;
+            long minEntropy = Long.MAX_VALUE;
             for (int x = 0; x < data.size(); x++) {
                 for (int y = 0; y < data.size(); y++) {
-                    int ax = (startX + x) % data.size();
-                    int ay = (startY + y) % data.size();
-                    if (data.map[ax][ay] == null && data.possibleTilesMap[ax][ay].isEmpty()) {
-                        if (clearHole)
-                            clearHole(data, ax, ay, 1);
-                        else
-                            data.possibleTilesMap[ax][ay].addItem(Tiles.HOLE, 10);
-                    } else if (data.map[ax][ay] == null && data.possibleTilesMap[ax][ay].size() >= 3 &&
-                        clearHole) {
-                        maxEntropy = Long.MAX_VALUE - data.possibleTilesMap[ax][ay].size();
-                        maxEntropyX = ax;
-                        maxEntropyY = ay;
+                    if (data.map[x][y] == null && data.possibleTilesMap[x][y].isEmpty()) {
+                        if (clearHole) {
+                            clearHole(data, x, y, 2);
+                            continue outer;
+                        } else
+                            data.possibleTilesMap[x][y].addItem(Tiles.HOLE, 10);
                     }
                     // TODO update this to use the highest value in the weighted random picker not the total weight
                     // ie it contains a plains tile that is weighted at 1000000000
-                    else if (data.map[ax][ay] == null &&
-                        data.possibleTilesMap[ax][ay].getTotalWeight() > maxEntropy &&
-                        !data.possibleTilesMap[ax][ay].isEmpty()) {
-                        maxEntropy = data.possibleTilesMap[ax][ay].getTotalWeight();
-                        maxEntropyX = ax;
-                        maxEntropyY = ay;
+                    else if (data.map[x][y] == null &&
+                        data.possibleTilesMap[x][y].getTotalWeight() < minEntropy) {
+                        minEntropy = data.possibleTilesMap[x][y].getTotalWeight();
+                        minEntropyX = x;
+                        minEntropyY = y;
                     }
 
                 }
             }
-            // System.out.println("Highest Entrophy: " + maxEntropy + ": " + maxEntropyX + ", " + maxEntropyY);
+            // System.out.println("Highest Entrophy: " + minEntropy + ": " + minEntropyX + ", " + minEntropyY);
             // If all cells are collapsed, exit the loop
-            if (maxEntropy == Integer.MIN_VALUE) {
+            if (minEntropy == Long.MAX_VALUE) {
                 break;
             }
 
             // Step 2: Collapse the chosen cell to one of its possible states
-            collapseInnerRandom(data, maxEntropyX, maxEntropyY);
-            propagateConstraints(data, maxEntropyX, maxEntropyY);
+            collapseInnerRandom(data, minEntropyX, minEntropyY);
+            propagateConstraints(data, minEntropyX, minEntropyY);
         }
+        int holes = 0;
         for (int x = 0; x < data.size(); x++) {
             for (int y = 0; y < data.size(); y++) {
                 if (data.map[x][y] == Tiles.HOLE) {
-                    //map[x][y] = bestFit(map, x, y);
+                    data.map[x][y] = bestFit(data.map, x, y);
+                    holes++;
                 }
             }
         }
-        // System.out.println("Tiles: " + (data.size() * data.size()));
+        System.out.println("Holes: " + holes + " in " + (data.size() * data.size()) + " tiles");
         return data.map;
     }
 
@@ -88,15 +80,11 @@ public class WaveFunctionCollapse {
 
     private static int getAlignmentScore(Tile tile, Tile[][] map, int x, int y) {
         int alignment = 0;
-        System.out.println("Trying to find " + x + ", " + y);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTHWEST);
         alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTH);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTHEAST);
         alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.EAST);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTHEAST);
         alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTH);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTHWEST);
         alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.WEST);
+        //System.out.println("Trying to find " + x + ", " + y + " " + alignment);
         return alignment;
     }
 
@@ -106,7 +94,7 @@ public class WaveFunctionCollapse {
         if (inBounds(nx, ny, map) && map[nx][ny] != null) {
             return tile.alignment(dir, map[nx][ny]);
         }
-        return 0;
+        return 1;
     }
 
     private static void clearHole(WFCData data, int x, int y, int radius) {
@@ -138,11 +126,11 @@ public class WaveFunctionCollapse {
         for (Tile t : data.triedTiles[x][y]) {
             tiles.halveWeight(t);
         }
-        if (tiles.isEmpty()) {
+        if (tiles.isEmpty() || tiles.getTotalWeight() == tiles.size()) {
             tiles.addItem(Tiles.HOLE, 10);
         }
 
-        updateBasedOnNeighbor(data, tiles, x - 1, y + 1, Direction.NORTHWEST);
+        updateBasedOnNeighbor(data, tiles, x - 1, y + 1, heroes.journey.utils.Direction.NORTHWEST);
         updateBasedOnNeighbor(data, tiles, x, y + 1, Direction.NORTH);
         updateBasedOnNeighbor(data, tiles, x + 1, y + 1, Direction.NORTHEAST);
         updateBasedOnNeighbor(data, tiles, x + 1, y, Direction.EAST);
