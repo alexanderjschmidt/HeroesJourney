@@ -21,25 +21,23 @@ public class StatsUI extends UI {
 
     private final InventoryDisplay inventoryDisplay = new InventoryDisplay();
     private final EquipmentDisplay equipmentDisplay = new EquipmentDisplay();
+    private final Table inventory = new Table();
     private final QuestsDisplay questDisplay = new QuestsDisplay();
     private final StatsDisplay statsDisplay = new StatsDisplay();
 
-    private final List<Actor> allDisplays = List.of(statsDisplay, questDisplay, inventoryDisplay,
-        equipmentDisplay);
+    private final List<Actor> allDisplays = List.of(statsDisplay, questDisplay, inventory);
 
     private Display display = STATS;
 
     public StatsUI() {
         super();
-        Table inventory = new Table();
         inventory.defaults().expand().fill();
         // TODO add title to this, maybe make its own display that is a table with the title as the top row
         inventory.add(inventoryDisplay);
         inventory.add(equipmentDisplay);
 
-        mainTable.add(statsDisplay);
-        mainTable.add(questDisplay);
-        mainTable.add(inventory);
+        mainTable.defaults().expand().top().left();
+
         setVisibility();
         this.setVisible(false);
     }
@@ -57,12 +55,19 @@ public class StatsUI extends UI {
 
     private void setVisibility() {
         allDisplays.forEach(actor -> actor.setVisible(false));
+        mainTable.clear();
         switch (display) {
-            case STATS -> statsDisplay.setVisible(true);
-            case QUESTS -> questDisplay.setVisible(true);
+            case STATS -> {
+                mainTable.add(statsDisplay);
+                statsDisplay.setVisible(true);
+            }
+            case QUESTS -> {
+                mainTable.add(questDisplay);
+                questDisplay.setVisible(true);
+            }
             case INVENTORY -> {
-                inventoryDisplay.setVisible(true);
-                equipmentDisplay.setVisible(true);
+                mainTable.add(inventory);
+                inventory.setVisible(true);
             }
         }
     }

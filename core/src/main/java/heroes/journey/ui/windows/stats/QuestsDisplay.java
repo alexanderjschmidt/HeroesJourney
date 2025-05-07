@@ -2,28 +2,34 @@ package heroes.journey.ui.windows.stats;
 
 import java.util.UUID;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.entities.quests.Quest;
+import heroes.journey.utils.art.ResourceManager;
 
-public class QuestsDisplay extends Widget {
+public class QuestsDisplay extends Table {
 
-    private UUID entityId;
+    private final Table quests;
 
-    public void setEntity(UUID entityId) {
-        this.entityId = entityId;
+    public QuestsDisplay() {
+        Label title = new Label("===== Quests =====", ResourceManager.get().skin);
+        quests = new Table();
+        quests.defaults().fill().left().pad(2.5f);
+
+        this.defaults().fill().left().expandX().pad(2.5f);
+        this.add(title).row();
+        this.add(quests).row();
+        this.add().expandY().row();
     }
 
-    public void draw(Batch batch, float parentAlpha) {
+    public void setEntity(UUID entityId) {
+        quests.clear();
         QuestsComponent questsComponent = QuestsComponent.get(GameState.global().getWorld(), entityId);
-
-        //UI.drawText(this, batch, "===== Quests =====", 0, 0);
-        for (int i = 0; i < questsComponent.getQuests().size(); i++) {
-            Quest quest = questsComponent.getQuests().get(i);
-            //UI.drawText(this, batch, quest.toString(), 0, i + 1);
+        for (Quest quest : questsComponent.getQuests()) {
+            quests.add(new Label(quest.toString(), ResourceManager.get().skin));
         }
     }
 }
