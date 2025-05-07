@@ -21,6 +21,7 @@ public class TerrainUI extends UI {
     public TerrainUI() {
         super();
         this.terrain = new Label("", ResourceManager.get().skin);
+        this.terrain.setWrap(true);
         this.mainTable.add(terrain).expand().row();
 
         pack();

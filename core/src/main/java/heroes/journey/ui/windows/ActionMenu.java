@@ -28,7 +28,8 @@ public class ActionMenu extends UI {
         super();
         this.setVisible(false);
         actions = new ActionScrollPane();
-        mainTable.add(actions);
+        mainTable.add(actions).row();
+        mainTable.add().expandY().row();
         this.infoUI = infoUI;
 
         pack();
