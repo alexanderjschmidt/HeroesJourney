@@ -135,12 +135,7 @@ public class HUD extends Stage {
             centerWindow.setActor(statsUI).expand().fill();
         } else if (stateMachine.getCurrentState() == States.POP_UP) {
             Table popupTable = new Table();
-            String text = popupUI.getText();
-            long newlineCount = text.chars().filter(c -> c == '\n').count() + 2;
-            popupTable.add(popupUI)
-                .width(Value.percentWidth(.75f, popupTable))
-                .height(FONT_SIZE * (newlineCount + 1))
-                .pad(10);
+            popupTable.add(popupUI).width(Value.percentWidth(.75f, popupTable)).pad(10);
             centerWindow.setActor(popupTable).expand().fill();
         }
         layout.invalidate();

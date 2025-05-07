@@ -1,7 +1,5 @@
 package heroes.journey.ui;
 
-import static heroes.journey.ui.UI.drawText;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public abstract class ScrollPane<T> extends Widget {
             } else {
                 ResourceManager.get().font24.setColor(Color.GRAY);
             }
-            drawText(this, batch, getText(options.get(i).entry()), 1 + offsetX, i + offsetY);
+            //drawText(this, batch, getText(options.get(i).entry()), 1 + offsetX, i + offsetY);
         }
         ResourceManager.get().font24.setColor(Color.WHITE);
     }

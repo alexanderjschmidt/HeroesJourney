@@ -1,7 +1,10 @@
 package heroes.journey.ui.windows.stats;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
@@ -9,10 +12,7 @@ import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
-import heroes.journey.ui.UI;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.UUID;
 
 public class InventoryDisplay extends ScrollPane<Item> {
 
@@ -32,11 +32,11 @@ public class InventoryDisplay extends ScrollPane<Item> {
             case Armor:
                 EquipmentComponent equipment = EquipmentComponent.get(GameState.global().getWorld(),
                     entityId);
-                equipment.equip((Item) selectedItem);
+                equipment.equip((Item)selectedItem);
                 break;
             case Consumable:
-                removeItem((Item) selectedItem);
-                ConsumableItem c = (ConsumableItem) selectedItem;
+                removeItem((Item)selectedItem);
+                ConsumableItem c = (ConsumableItem)selectedItem;
                 c.consume(GameState.global(), entityId);
                 break;
         }
@@ -59,7 +59,7 @@ public class InventoryDisplay extends ScrollPane<Item> {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        UI.drawText(this, batch, "===== Inventory =====", 0, 0);
+        //UI.drawText(this, batch, "===== Inventory =====", 0, 0);
         super.draw(batch, parentAlpha);
     }
 

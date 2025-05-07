@@ -1,6 +1,11 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -9,15 +14,12 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
-import heroes.journey.ui.*;
+import heroes.journey.ui.HUD;
+import heroes.journey.ui.ScrollPane;
+import heroes.journey.ui.ScrollPaneEntry;
+import heroes.journey.ui.UI;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-public class ActionMenu extends Stack {
+public class ActionMenu extends UI {
 
     private final ScrollPane<Action> actions;
     private final InfoUI infoUI;
@@ -26,10 +28,10 @@ public class ActionMenu extends Stack {
         super();
         this.setVisible(false);
         actions = new ActionScrollPane();
-        UI background = new BasicBackground();
-        this.add(background);
-        this.add(actions);
+        mainTable.add(actions);
         this.infoUI = infoUI;
+
+        pack();
     }
 
     public static List<Action> getActionsFor(GameState gameState, UUID selectedEntity) {

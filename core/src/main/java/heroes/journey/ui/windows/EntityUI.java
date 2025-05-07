@@ -1,53 +1,52 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import java.util.UUID;
+
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.initializers.base.LoadTextures;
 import heroes.journey.ui.HUD;
+import heroes.journey.ui.ResourceBar;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
 
-import java.util.UUID;
-
 public class EntityUI extends UI {
 
-    public static final int BAR_WIDTH = HUD.FONT_SIZE * 8;
-    public static final int BAR_HEIGHT = HUD.FONT_SIZE;
+    Label entity;
+    ResourceBar health, mana, stamina;
 
     public EntityUI() {
         super();
+        this.entity = new Label("", ResourceManager.get().skin);
+        this.entity.setWrap(true);
+        this.health = new ResourceBar(ResourceManager.get(LoadTextures.UI)[3][0], null);
+        this.mana = new ResourceBar(ResourceManager.get(LoadTextures.UI)[2][1], null);
+        this.stamina = new ResourceBar(ResourceManager.get(LoadTextures.UI)[3][1], null);
+        this.mainTable.add(entity).expandX().row();
+        this.mainTable.add(health).expandX().row();
+        this.mainTable.add(mana).expandX().row();
+        this.mainTable.add(stamina).expandX().row();
+
+        pack();
     }
 
     @Override
-    public void drawAndUpdate(Batch batch, float parentAlpha) {
+    public void update() {
         UUID entityId = HUD.get().getCursor().getHover();
         if (entityId == null)
             return;
         StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
         String name = NamedComponent.get(GameState.global().getWorld(), entityId, "---");
 
+        entity.setText(name);
+
         if (statsComponent != null) {
-            String health = statsComponent.getHealth() + "/" + ((int) (StatsComponent.MAX_HEALTH));
-            String mana = statsComponent.getMana() + "/" + ((int) StatsComponent.MAX_MANA);
-            String stamina = statsComponent.getStamina() + "/" + ((int) StatsComponent.MAX_STAMINA);
-            // replace with labels
-
-            batch.draw(ResourceManager.get(LoadTextures.UI)[3][0], getX() + HUD.FONT_SIZE,
-                12 + getY() + ((2) * HUD.FONT_SIZE),
-                BAR_WIDTH * ((float) statsComponent.getHealth() / StatsComponent.MAX_HEALTH), BAR_HEIGHT);
-            batch.draw(ResourceManager.get(LoadTextures.UI)[2][1], getX() + HUD.FONT_SIZE,
-                12 + getY() + ((1) * HUD.FONT_SIZE),
-                BAR_WIDTH * ((float) statsComponent.getMana() / StatsComponent.MAX_MANA), BAR_HEIGHT);
-            batch.draw(ResourceManager.get(LoadTextures.UI)[3][1], getX() + HUD.FONT_SIZE,
-                12 + getY() + ((0) * HUD.FONT_SIZE),
-                BAR_WIDTH * ((float) statsComponent.getStamina() / StatsComponent.MAX_STAMINA), BAR_HEIGHT);
-
-            drawText(batch, name, 0, 0);
-            drawText(batch, "H: " + health, 0, 1);
-            drawText(batch, "M: " + mana, 0, 2);
-            drawText(batch, "S: " + stamina, 0, 3);
+            health.update(statsComponent.getHealth(), (int)(StatsComponent.MAX_HEALTH));
+            mana.update(statsComponent.getMana(), (int)(StatsComponent.MAX_HEALTH));
+            stamina.update(statsComponent.getStamina(), (int)(StatsComponent.MAX_HEALTH));
         }
     }
 

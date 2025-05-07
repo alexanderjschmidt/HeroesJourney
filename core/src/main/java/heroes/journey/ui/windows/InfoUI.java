@@ -1,17 +1,13 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
-import heroes.journey.ui.BasicBackground;
-import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
 
-public class InfoUI extends Stack {
+public class InfoUI extends UI {
 
     private final Label titleLabel;
     private final Label bodyLabel;
@@ -19,8 +15,6 @@ public class InfoUI extends Stack {
 
     public InfoUI() {
         super();
-        UI background = new BasicBackground();
-        this.add(background);
         this.titleLabel = new Label("", ResourceManager.get().skin);
         this.titleLabel.setWrap(true);
         this.bodyLabel = new Label("", ResourceManager.get().skin);
@@ -28,16 +22,9 @@ public class InfoUI extends Stack {
         this.bodyLabel.setAlignment(Align.top | Align.left);
         this.contentTable = new Table();
 
-        Table mainTable = new Table();
-
-        mainTable.add(titleLabel).left().pad(2.5f).fill().row();
-        mainTable.add(contentTable).left().pad(2.5f).fill().row();
-        mainTable.add(bodyLabel).top().left().pad(2.5f).expand().fill().row();
-
-        Container<Table> paddedContainer = new Container<>(mainTable);
-        paddedContainer.pad(HUD.FONT_SIZE).center();
-        paddedContainer.fill();
-        this.add(paddedContainer);
+        mainTable.add(titleLabel).row();
+        mainTable.add(contentTable).row();
+        mainTable.add(bodyLabel).top().expand().row();
 
         setVisible(false);
         pack();

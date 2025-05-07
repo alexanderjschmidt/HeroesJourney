@@ -1,19 +1,21 @@
 package heroes.journey.ui.windows;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import heroes.journey.ui.UI;
+import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
-import lombok.Setter;
 
-@Setter
 @Getter
 public class PopupUI extends UI {
 
-    private String text;
+    private final Label text;
 
-    @Override
-    public void drawAndUpdate(Batch batch, float parentAlpha) {
-        this.drawText(batch, text, 0, 0);
+    public PopupUI() {
+        super();
+        this.text = new Label("", ResourceManager.get().skin);
+        this.text.setWrap(true);
+        this.mainTable.add(text);
     }
+
 }

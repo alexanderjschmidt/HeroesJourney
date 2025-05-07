@@ -47,7 +47,7 @@ public class ActionSystem extends IteratingSystem {
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
                     if (PlayerInfo.get().getPlayableEntities().contains(id)) {
-                        HUD.get().getPopupUI().setText(str.toString());
+                        HUD.get().getPopupUI().getText().setText(str.toString());
                         HUD.get().setState(States.POP_UP);
                     }
                 }
