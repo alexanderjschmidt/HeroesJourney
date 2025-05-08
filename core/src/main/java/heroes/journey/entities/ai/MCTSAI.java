@@ -1,11 +1,8 @@
 package heroes.journey.entities.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.ShowAction;
@@ -14,6 +11,10 @@ import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 import heroes.journey.utils.ai.pathfinding.Cell;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class MCTSAI implements AI, Scorer {
 
@@ -41,8 +42,8 @@ public class MCTSAI implements AI, Scorer {
 
     @Override
     public int getScore(GameState gameState, UUID playingEntity) {
-        PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
-        return gameState.getHeight() - position.getY();
+        PlayerComponent player = PlayerComponent.get(gameState.getWorld(), playingEntity);
+        return player.fame();
     }
 
     private void addUsableActions(
@@ -53,7 +54,7 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position) {
         for (Action action : actions) {
             if (action.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult)action.onSelect(gameState, entityId);
+                ActionListResult result = (ActionListResult) action.onSelect(gameState, entityId);
                 addUsableActions(possibleActions, result.list(), gameState, entityId, position);
             } else {
                 if (action.requirementsMet(gameState, entityId) == ShowAction.YES) {

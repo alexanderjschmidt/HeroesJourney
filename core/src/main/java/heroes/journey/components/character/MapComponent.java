@@ -1,22 +1,18 @@
 package heroes.journey.components.character;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import lombok.Getter;
 
+import java.util.*;
+
 @Getter
 public class MapComponent extends PooledClonableComponent<MapComponent> {
 
     private Fog[][] fog;
-    private Set<UUID> knownLocations;
+    private final Set<UUID> knownLocations;
 
     public MapComponent() {
         fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
@@ -32,7 +28,16 @@ public class MapComponent extends PooledClonableComponent<MapComponent> {
 
     @Override
     public void copy(MapComponent from) {
-        this.fog = from.fog;
-        this.knownLocations = from.knownLocations;
+        this.fog = new Fog[from.fog.length][from.fog.length];
+        for (int x = 0; x < from.fog.length / 2; x++) {
+            System.arraycopy(from.fog[x], 0, fog[x], 0, from.fog[x].length);
+        }
+        this.knownLocations.addAll(from.knownLocations);
+    }
+
+    @Override
+    protected void reset() {
+        this.fog = new Fog[fog.length][fog.length];
+        knownLocations.clear();
     }
 }

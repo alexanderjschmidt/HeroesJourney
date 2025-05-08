@@ -1,17 +1,17 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.Objects;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override
@@ -50,6 +50,9 @@ class CursorMoveState extends HUDState {
             } else if (hud.getCursor().getHover() == null) {
                 HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }
+        } else if (Gdx.input.isKeyJustPressed(KeyManager.AI_PLAY) && PlayerInfo.get().getPlayableEntities().contains(GameState.global().getCurrentEntity())) {
+            AIComponent ai = AIComponent.get(GameState.global().getWorld(), GameState.global().getCurrentEntity());
+            ai.startProcessingNextMove(GameState.global(), GameState.global().getCurrentEntity());
         }
         updateFreeMove(hud.getDelta());
     }

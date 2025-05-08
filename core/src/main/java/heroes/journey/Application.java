@@ -36,7 +36,6 @@ import lombok.Getter;
  * Make the different travels fail if someone is already there?
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * AI
- *  Improve score function
  *  Add understanding of fog of war (Probably need more knowledge information)
  * Saving
  * Add Events

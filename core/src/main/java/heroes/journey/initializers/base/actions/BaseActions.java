@@ -5,6 +5,7 @@ import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.components.utils.FightUtils;
@@ -120,6 +121,11 @@ public class BaseActions implements InitializerInterface {
                                 .append("\n");
                             ;
                         }
+                    }
+                    PlayerComponent playerComponent = PlayerComponent.get(gs.getWorld(), e);
+                    if (playerComponent != null) {
+                        playerComponent.fame(playerComponent.fame() + 5);
+                        log.append("You have gained ").append(5).append(" fame");
                     }
                 }
                 return new StringResult(log.toString());

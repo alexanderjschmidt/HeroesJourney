@@ -11,6 +11,7 @@ public class KeyManager {
     public static final int RIGHT = Input.Keys.D;
 
     public static final int DEV_MODE = Input.Keys.GRAVE;
+    public static final int AI_PLAY = Input.Keys.SEMICOLON;
 
     public static final int ESCAPE = Input.Keys.ESCAPE;
     public static final int BACK = Input.Keys.BACKSPACE;

@@ -1,11 +1,6 @@
 package heroes.journey;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
@@ -29,6 +24,10 @@ import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Getter
 public class GameState implements Cloneable {
 
@@ -43,7 +42,8 @@ public class GameState implements Cloneable {
 
     private int turn;
 
-    @Getter private UUID currentEntity;
+    @Getter
+    private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
 
@@ -174,7 +174,7 @@ public class GameState implements Cloneable {
     // UI sets up the players next turn
     public void nextMove() {
         currentEntity = incrementTurn();
-        System.out.println("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder);
+        System.out.print("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder + " ");
 
         world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
         updateCurrentEntity();

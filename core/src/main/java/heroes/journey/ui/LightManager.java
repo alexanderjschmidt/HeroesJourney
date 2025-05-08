@@ -12,8 +12,8 @@ public class LightManager {
     int maxNightTurn = 10;
     int demonTurnStart = 10;
     int demonTurnEnd = 20;
-    float maxNightAlpha = 0.5f;
-    float maxDemonAlpha = 0.4f; // red intensity at full demon time
+    float maxNightAlpha = 0.4f;
+    float maxDemonAlpha = 0.2f; // red intensity at full demon time
 
     // Night color component (blue)
     Color nightTint = new Color(0f, 0f, 0.1f, 1f); // full strength, we'll scale alpha
