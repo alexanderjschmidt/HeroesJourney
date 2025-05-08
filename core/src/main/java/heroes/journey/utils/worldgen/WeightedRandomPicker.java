@@ -60,6 +60,9 @@ public class WeightedRandomPicker<T> extends ArrayList<T> {
      * Adds an item with a specific weight
      */
     public void addItem(T item, long weight) {
+        if (item == null) {
+            throw new RuntimeException("Item cannot be null");
+        }
         if (indexMap.containsKey(item)) {
             remove(item);
         }

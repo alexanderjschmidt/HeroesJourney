@@ -1,17 +1,10 @@
 package heroes.journey.utils.worldgen;
 
-import static heroes.journey.initializers.base.Map.inBounds;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-
-import heroes.journey.initializers.base.Tiles;
-import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
+import heroes.journey.utils.Random;
+
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class WaveFunctionCollapse {
@@ -20,211 +13,179 @@ public class WaveFunctionCollapse {
     public static final List<Tile> baseTiles = new ArrayList<>();
 
     public static Tile[][] applyWaveFunctionCollapse(
-        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime,
-        boolean clearHole) {
+        final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime) {
         WFCData data = new WFCData(possibleTilesMapPrime);
+        Stack<Decision> stack = new Stack<>();
+
         outer:
         while (true) {
             // Step 1: Find the cell with the highest entropy (most definitive possible value)
             int minEntropyX = -1, minEntropyY = -1;
             long minEntropy = Long.MAX_VALUE;
+            int startX = Random.get().nextInt(data.size());
+            int startY = Random.get().nextInt(data.size());
             for (int x = 0; x < data.size(); x++) {
                 for (int y = 0; y < data.size(); y++) {
-                    if (data.map[x][y] == null && data.possibleTilesMap[x][y].isEmpty()) {
-                        if (clearHole) {
-                            clearHole(data, x, y, 2);
-                            continue outer;
-                        } else
-                            data.possibleTilesMap[x][y].addItem(Tiles.HOLE, 10);
+                    int ax = (startX + x) % data.size();
+                    int ay = (startY + y) % data.size();
+                    if (data.map[ax][ay] == null) {
+                        if (data.possibleTilesMap[ax][ay].isEmpty()) {
+                            // Contradiction detected: trigger backtracking
+                            if (!backtrack(data, stack))
+                                return data.map;
+                            continue outer; // restart entropy search after backtrack
+                        } else {
+                            long weight = data.possibleTilesMap[ax][ay].getTotalWeight();
+                            if (weight < minEntropy) {
+                                minEntropy = weight;
+                                minEntropyX = ax;
+                                minEntropyY = ay;
+                            }
+                        }
                     }
-                    // TODO update this to use the highest value in the weighted random picker not the total weight
-                    // ie it contains a plains tile that is weighted at 1000000000
-                    else if (data.map[x][y] == null &&
-                        data.possibleTilesMap[x][y].getTotalWeight() < minEntropy) {
-                        minEntropy = data.possibleTilesMap[x][y].getTotalWeight();
-                        minEntropyX = x;
-                        minEntropyY = y;
-                    }
-
                 }
             }
-            // System.out.println("Highest Entrophy: " + minEntropy + ": " + minEntropyX + ", " + minEntropyY);
-            // If all cells are collapsed, exit the loop
-            if (minEntropy == Long.MAX_VALUE) {
+
+            if (minEntropy == Long.MAX_VALUE)
                 break;
+
+            Tile choice = data.possibleTilesMap[minEntropyX][minEntropyY].getRandomItem();
+            if (choice == null)
+                System.out.println(data.possibleTilesMap[minEntropyX][minEntropyY]);
+            if (!isCompatibleWithNeighbors(data, minEntropyX, minEntropyY, choice)) {
+                throw new RuntimeException(
+                    "Not Compatible " + choice + " " + minEntropyX + ", " + minEntropyY);
             }
 
-            // Step 2: Collapse the chosen cell to one of its possible states
-            collapseInnerRandom(data, minEntropyX, minEntropyY);
-            propagateConstraints(data, minEntropyX, minEntropyY);
+            Decision decision = new Decision(minEntropyX, minEntropyY, choice,
+                data.possibleTilesMap[minEntropyX][minEntropyY]);
+            collapseCell(data, minEntropyX, minEntropyY, choice);
+            //System.out.println("collapsed main " + minEntropyX + ", " + minEntropyY);
+            propagateConstraints(data, minEntropyX, minEntropyY, decision.deltas);
+            stack.push(decision);
         }
-        int holes = 0;
-        for (int x = 0; x < data.size(); x++) {
-            for (int y = 0; y < data.size(); y++) {
-                if (data.map[x][y] == Tiles.HOLE) {
-                    data.map[x][y] = bestFit(data.map, x, y);
-                    holes++;
-                }
-            }
-        }
-        System.out.println("Holes: " + holes + " in " + (data.size() * data.size()) + " tiles");
+
         return data.map;
     }
 
-    private static Tile bestFit(Tile[][] map, int x, int y) {
-        return TileManager.get()
-            .stream()
-            .max(Comparator.comparingInt(t -> getAlignmentScore(t, map, x, y)))
-            .orElse(Tiles.HOLE);
-    }
+    private static void propagateConstraints(WFCData data, int sx, int sy, List<ActionDelta> deltas) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{sx, sy});
 
-    private static int getAlignmentScore(Tile tile, Tile[][] map, int x, int y) {
-        int alignment = 0;
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.NORTH);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.EAST);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.SOUTH);
-        alignment += getAlignmentScoreIndividual(tile, map, x, y, Direction.WEST);
-        //System.out.println("Trying to find " + x + ", " + y + " " + alignment);
-        return alignment;
-    }
+        while (!queue.isEmpty()) {
+            int[] pos = queue.poll();
+            int x = pos[0];
+            int y = pos[1];
+            Tile collapsed = data.map[x][y];
 
-    private static int getAlignmentScoreIndividual(Tile tile, Tile[][] map, int x, int y, Direction dir) {
-        int nx = (int)(x + dir.getDirVector().x);
-        int ny = (int)(y + dir.getDirVector().y);
-        if (inBounds(nx, ny, map) && map[nx][ny] != null) {
-            return tile.alignment(dir, map[nx][ny]);
-        }
-        return 1;
-    }
+            for (Direction dir : Direction.values()) {
+                if (dir == Direction.NODIRECTION)
+                    continue;
+                int nx = (int) (x + dir.getDirVector().x);
+                int ny = (int) (y + dir.getDirVector().y);
+                if (!inBounds(nx, ny, data.map) || data.map[nx][ny] != null)
+                    continue;
 
-    private static void clearHole(WFCData data, int x, int y, int radius) {
-        //System.out.println("Clear Hole: " + x + " " + y);
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                if (inBounds(x + dx, y + dy, data.map)) {
-                    data.triedTiles[x + dx][y + dy].add(data.map[x + dx][y + dy]);
-                    data.map[x + dx][y + dy] = null;
+                List<Tile> toRemove = new ArrayList<>();
+                for (Tile t : data.possibleTilesMap[nx][ny]) {
+                    if (!collapsed.aligns(dir, t)) {
+                        toRemove.add(t);
+                    }
                 }
-            }
-        }
-        updateSurrounding(data, x, y, radius);
-    }
 
-    private static void updateSurrounding(WFCData data, int x, int y, int radius) {
-        for (int dx = -radius; dx <= radius; dx++) {
-            for (int dy = -radius; dy <= radius; dy++) {
-                if (inBounds(x + dx, y + dy, data.possibleTilesMap)) {
-                    data.possibleTilesMap[x + dx][y + dy] = getPossibleTiles(data, x + dx, y + dy);
-                    //System.out.println("(" + (radius + dx) + ", " + (radius + dy) + ")");
+                if (!toRemove.isEmpty()) {
+                    for (Tile t : toRemove)
+                        data.possibleTilesMap[nx][ny].remove(t);
+                    ActionDelta delta = new ActionDelta(nx, ny, toRemove);
+                    if (data.possibleTilesMap[nx][ny].size() == 1) {
+                        Tile t = data.possibleTilesMap[nx][ny].getRandomItem();
+                        collapseCell(data, nx, ny, t);
+                        delta.autoCollapsedTo = t; // <== record the collapse
+                        //("collapsed prop " + nx + ", " + ny);
+                        queue.add(new int[]{nx, ny});
+                    }
+                    deltas.add(delta);
                 }
             }
         }
     }
 
-    private static WeightedRandomPicker<Tile> getPossibleTiles(WFCData data, int x, int y) {
-        WeightedRandomPicker<Tile> tiles = new WeightedRandomPicker<>(data.possibleTilesMapPrime[x][y]);
-        for (Tile t : data.triedTiles[x][y]) {
-            tiles.halveWeight(t);
-        }
-        if (tiles.isEmpty() || tiles.getTotalWeight() == tiles.size()) {
-            tiles.addItem(Tiles.HOLE, 10);
-        }
-
-        updateBasedOnNeighbor(data, tiles, x - 1, y + 1, heroes.journey.utils.Direction.NORTHWEST);
-        updateBasedOnNeighbor(data, tiles, x, y + 1, Direction.NORTH);
-        updateBasedOnNeighbor(data, tiles, x + 1, y + 1, Direction.NORTHEAST);
-        updateBasedOnNeighbor(data, tiles, x + 1, y, Direction.EAST);
-        updateBasedOnNeighbor(data, tiles, x + 1, y - 1, Direction.SOUTHEAST);
-        updateBasedOnNeighbor(data, tiles, x, y - 1, Direction.SOUTH);
-        updateBasedOnNeighbor(data, tiles, x - 1, y - 1, Direction.SOUTHWEST);
-        updateBasedOnNeighbor(data, tiles, x - 1, y, Direction.WEST);
-
-        return tiles;
-    }
-
-    private static void updateBasedOnNeighbor(
-        WFCData data,
-        WeightedRandomPicker<Tile> tiles,
-        int nx,
-        int ny,
-        Direction dir) {
-        if (inBounds(nx, ny, data.map) && data.map[nx][ny] != null) {
-            tiles.removeIf(tile -> !tile.aligns(dir, data.map[nx][ny]));
-        }
-    }
-
-    private static void propagateConstraints(WFCData data, int sx, int sy) {
-        Queue<int[]> propagationQueue = new LinkedList<>();
-
-        propagationQueue.add(new int[] {sx, sy});
-        // Propagate the constraints to neighboring cells
-        int processed = 0;
-        while (!propagationQueue.isEmpty()) {
-            //System.out.println("Queue size: " + propagationQueue.size() + " Processed: " + processed++);
-            int[] position = propagationQueue.poll();
-            int x = position[0];
-            int y = position[1];
-
-            Tile collapsedTile = data.map[x][y];
-            //System.out.println(map[x][y] + " " + x + ", " + y);
-
-            // Check neighbors and remove tiles that don’t match edges
-            checkNeighbor(data, x - 1, y + 1, Direction.NORTHWEST, collapsedTile, propagationQueue);
-            checkNeighbor(data, x, y + 1, Direction.NORTH, collapsedTile, propagationQueue);
-            checkNeighbor(data, x + 1, y + 1, Direction.NORTHEAST, collapsedTile, propagationQueue);
-            checkNeighbor(data, x + 1, y, Direction.EAST, collapsedTile, propagationQueue);
-            checkNeighbor(data, x + 1, y - 1, Direction.SOUTHEAST, collapsedTile, propagationQueue);
-            checkNeighbor(data, x, y - 1, Direction.SOUTH, collapsedTile, propagationQueue);
-            checkNeighbor(data, x - 1, y - 1, Direction.SOUTHWEST, collapsedTile, propagationQueue);
-            checkNeighbor(data, x - 1, y, Direction.WEST, collapsedTile, propagationQueue);
-        }
-    }
-
-    private static void checkNeighbor(
-        WFCData data,
-        int x,
-        int y,
-        Direction dir,
-        Tile collapsedTile,
-        Queue<int[]> propagationQueue) {
-        if (inBounds(x, y, data.map) && data.map[x][y] == null) {
-            data.possibleTilesMap[x][y].removeIf(tile -> !collapsedTile.aligns(dir, tile));
-            if (data.possibleTilesMap[x][y].size() == 1) {
-                collapseInnerRandom(data, x, y);
-                propagationQueue.add(new int[] {x, y});
-            }
-        }
-    }
-
-    private static void collapseInnerRandom(WFCData data, int x, int y) {
-        Tile t = data.possibleTilesMap[x][y].getRandomItem();
+    private static void collapseCell(WFCData data, int x, int y, Tile t) {
         data.possibleTilesMap[x][y].clear();
         data.possibleTilesMap[x][y].addItem(t, t.getWeight());
         data.map[x][y] = t;
-        if (data.map[x][y] == null) {
-            throw new RuntimeException("Collapsed To Null");
+    }
+
+    private static boolean backtrack(WFCData data, Stack<Decision> stack) {
+        //System.out.println("backtrack");
+        while (!stack.isEmpty()) {
+            Decision d = stack.pop();
+            //System.out.println("pop " + d.x + ", " + d.y + " " + data.map[d.x][d.y]);
+            undoDeltas(data, d.deltas);
+            data.map[d.x][d.y] = null;
+            data.possibleTilesMap[d.x][d.y].clear();
+            for (Tile t : d.remainingOptions) {
+                data.possibleTilesMap[d.x][d.y].addItem(t, t.getWeight());
+            }
+            if (!d.remainingOptions.isEmpty()) {
+                return true;
+            }
         }
+        return false;
+    }
+
+    private static void undoDeltas(WFCData data, List<ActionDelta> deltas) {
+        for (int i = deltas.size() - 1; i >= 0; i--) {
+            ActionDelta delta = deltas.get(i);
+            //System.out.println("undo " + delta.x + ", " + delta.y + " " + delta.removedTiles);
+            for (Tile t : delta.removedTiles) {
+                data.possibleTilesMap[delta.x][delta.y].addItem(t, t.getWeight());
+            }
+            if (delta.autoCollapsedTo != null) {
+                data.map[delta.x][delta.y] = null;
+            }
+        }
+    }
+
+    private static boolean isCompatibleWithNeighbors(WFCData data, int x, int y, Tile candidate) {
+        for (Direction dir : Direction.values()) {
+            if (dir == Direction.NODIRECTION)
+                continue;
+
+            int nx = (int) (x + dir.getDirVector().x);
+            int ny = (int) (y + dir.getDirVector().y);
+
+            if (!inBounds(nx, ny, data.map))
+                continue;
+
+            Tile neighbor = data.map[nx][ny];
+            if (neighbor != null) {
+                // Check if candidate aligns with neighbor and vice versa
+                if (!candidate.aligns(dir, neighbor) || !neighbor.aligns(dir.inverse(), candidate)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean inBounds(int x, int y, Tile[][] map) {
+        return x >= 0 && y >= 0 && x < map.length && y < map[0].length;
     }
 
     private static class WFCData {
         public WeightedRandomPicker<Tile>[][] possibleTilesMap;
-        public final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime;
-        public ArrayList<Tile>[][] triedTiles;
         public Tile[][] map;
 
         public WFCData(WeightedRandomPicker<Tile>[][] possibleTilesMapPrime) {
-            this.possibleTilesMapPrime = possibleTilesMapPrime;
             int width = possibleTilesMapPrime.length;
+            this.possibleTilesMap = possibleTilesMapPrime;
             map = new Tile[width][width];
-            possibleTilesMap = new WeightedRandomPicker[width][width];
-            triedTiles = new ArrayList[width][width];
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < width; y++) {
-                    if (possibleTilesMapPrime[x][y] == null) {
-                        possibleTilesMapPrime[x][y] = new WeightedRandomPicker<>(possibleTiles);
+                    if (possibleTilesMap[x][y] == null) {
+                        possibleTilesMap[x][y] = new WeightedRandomPicker<>(possibleTiles);
                     }
-                    possibleTilesMap[x][y] = new WeightedRandomPicker(possibleTilesMapPrime[x][y]);
-                    triedTiles[x][y] = new ArrayList();
                 }
             }
         }
@@ -233,5 +194,33 @@ public class WaveFunctionCollapse {
             return map.length;
         }
 
+    }
+
+    private static class ActionDelta {
+        int x, y;
+        List<Tile> removedTiles = new ArrayList<>();
+        Tile autoCollapsedTo = null;
+
+        ActionDelta(int x, int y, List<Tile> removed) {
+            this.x = x;
+            this.y = y;
+            this.removedTiles.addAll(removed);
+        }
+    }
+
+    private static class Decision {
+        int x, y;
+        Tile chosen;
+        List<ActionDelta> deltas;
+        List<Tile> remainingOptions;
+
+        Decision(int x, int y, Tile chosen, List<Tile> remainingOptions) {
+            this.x = x;
+            this.y = y;
+            this.chosen = chosen;
+            this.remainingOptions = new ArrayList<>(remainingOptions);
+            this.remainingOptions.remove(chosen);
+            this.deltas = new ArrayList<>();
+        }
     }
 }

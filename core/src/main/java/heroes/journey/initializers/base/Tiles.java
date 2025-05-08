@@ -1,16 +1,21 @@
 package heroes.journey.initializers.base;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunctiontiles.*;
+import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
+import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
+import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
+import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-
-import java.util.List;
 
 public class Tiles implements InitializerInterface {
 
@@ -65,10 +70,10 @@ public class Tiles implements InitializerInterface {
         Terrain hillToWater = new Terrain("Cliff", 50);
         Terrain sandToWater = new Terrain("Water", 50);
 
-        WATER = new AnimatedTile(water, 100, WangCornerAnimated.getFrames(tiles, 21, 11, 4, 5), .2f);
-        PLAINS = new BaseTile(plains, 10000, tiles[1][5]);
-        HILLS = new BaseTile(hills, 2000, tiles[1][11]);
-        SAND = new BaseTile(sand, 500, tiles[1][17]);
+        WATER = new AnimatedTile(water, 300, WangCornerAnimated.getFrames(tiles, 21, 11, 4, 5), .2f);
+        PLAINS = new BaseTile(plains, 1000, tiles[1][5]);
+        HILLS = new BaseTile(hills, 500, tiles[1][11]);
+        SAND = new BaseTile(sand, 200, tiles[1][17]);
 
         baseTile(WATER, water);
         baseTile(PLAINS, plains);

@@ -1,24 +1,25 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 import lombok.Getter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public abstract class Tile {
 
-    private final Map<Direction,Terrain> neighbors;
+    private final Map<Direction, Terrain> neighbors;
     private final boolean addToDefaultTiles;
 
-    @Getter private final Terrain terrain;
+    @Getter
+    private final Terrain terrain;
 
-    @Getter private final long weight;
+    @Getter
+    private final long weight;
 
     public Tile(Terrain terrain, int baseWeight, boolean addToDefaultTiles) {
         this.terrain = terrain;
@@ -89,10 +90,10 @@ public abstract class Tile {
             case NORTH -> {
                 //System.out.println("wants " + tile.neighbors.get(Direction.SOUTH) + direction + ", ");
                 return
-                    (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHWEST) ? 1 : 0) +
-                        (tile.neighbors.get(Direction.SOUTH) == neighbors.get(Direction.NORTH) ? 1 : 0) + (
+                    (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.NORTHWEST) ? 2 : 0) +
+                        (tile.neighbors.get(Direction.SOUTH) == neighbors.get(Direction.NORTH) ? 3 : 0) + (
                         tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.NORTHEAST) ?
-                            1 :
+                            2 :
                             0);
             }
             case NORTHEAST -> {
@@ -104,10 +105,10 @@ public abstract class Tile {
             case EAST -> {
                 //System.out.println("wants " + tile.neighbors.get(Direction.WEST) + direction + ", ");
                 return
-                    (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.NORTHEAST) ? 1 : 0) +
-                        (tile.neighbors.get(Direction.WEST) == neighbors.get(Direction.EAST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.NORTHEAST) ? 2 : 0) +
+                        (tile.neighbors.get(Direction.WEST) == neighbors.get(Direction.EAST) ? 3 : 0) +
                         (tile.neighbors.get(Direction.SOUTHWEST) == neighbors.get(Direction.SOUTHEAST) ?
-                            1 :
+                            2 :
                             0);
             }
             case SOUTHEAST -> {
@@ -119,10 +120,10 @@ public abstract class Tile {
             case SOUTH -> {
                 //System.out.println("wants " + tile.neighbors.get(Direction.NORTH) + direction + ", ");
                 return
-                    (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHWEST) ? 1 : 0) +
-                        (tile.neighbors.get(Direction.NORTH) == neighbors.get(Direction.SOUTH) ? 1 : 0) + (
+                    (tile.neighbors.get(Direction.NORTHWEST) == neighbors.get(Direction.SOUTHWEST) ? 2 : 0) +
+                        (tile.neighbors.get(Direction.NORTH) == neighbors.get(Direction.SOUTH) ? 3 : 0) + (
                         tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.SOUTHEAST) ?
-                            1 :
+                            2 :
                             0);
             }
             case SOUTHWEST -> {
@@ -134,26 +135,35 @@ public abstract class Tile {
             case WEST -> {
                 //System.out.println("wants " + tile.neighbors.get(Direction.EAST) + direction + ", ");
                 return
-                    (tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.NORTHWEST) ? 1 : 0) +
-                        (tile.neighbors.get(Direction.EAST) == neighbors.get(Direction.WEST) ? 1 : 0) +
+                    (tile.neighbors.get(Direction.NORTHEAST) == neighbors.get(Direction.NORTHWEST) ? 2 : 0) +
+                        (tile.neighbors.get(Direction.EAST) == neighbors.get(Direction.WEST) ? 3 : 0) +
                         (tile.neighbors.get(Direction.SOUTHEAST) == neighbors.get(Direction.SOUTHWEST) ?
-                            1 :
+                            2 :
                             0);
             }
         }
         throw new RuntimeException("Invalid Direction");
     }
 
+    public float similarityTo(Tile other) {
+        float similarity = 1;
+        for (Direction dir : neighbors.keySet()) {
+            if (other.neighbors.get(dir).equals(this.neighbors.get(dir)))
+                similarity += dir.isCardinal() ? 3 : 1;
+        }
+        return similarity / (4 * (3 + 1));
+    }
+
     public abstract void render(SpriteBatch batch, float elapsed, int x, int y);
 
     public String toString() {
-        return "" + neighbors.get(Direction.NORTHWEST).toString().charAt(1) +
-            neighbors.get(Direction.NORTH).toString().charAt(1) +
-            neighbors.get(Direction.NORTHEAST).toString().charAt(1) + '\n' +
-            neighbors.get(Direction.WEST).toString().charAt(1) + " " +
-            neighbors.get(Direction.EAST).toString().charAt(1) + '\n' +
-            neighbors.get(Direction.SOUTHWEST).toString().charAt(1) +
-            neighbors.get(Direction.SOUTH).toString().charAt(1) +
-            neighbors.get(Direction.SOUTHEAST).toString().charAt(1);
+        return "\n" + neighbors.get(Direction.NORTHWEST).toString().substring(0, 2) +
+            neighbors.get(Direction.NORTH).toString().substring(0, 2) +
+            neighbors.get(Direction.NORTHEAST).toString().substring(0, 2) + '\n' +
+            neighbors.get(Direction.WEST).toString().substring(0, 2) + "  " +
+            neighbors.get(Direction.EAST).toString().substring(0, 2) + '\n' +
+            neighbors.get(Direction.SOUTHWEST).toString().substring(0, 2) +
+            neighbors.get(Direction.SOUTH).toString().substring(0, 2) +
+            neighbors.get(Direction.SOUTHEAST).toString().substring(0, 2);
     }
 }
