@@ -22,8 +22,6 @@ import lombok.Getter;
  *          Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
- *  Fix spacing on selector in ScrollPane
- *  Add slide animation to selector
  * Add Action Queue to order movement actions and cursor centers better
  *  Make Cursor jump to player at end of movement, not end of opponents turn (and statement?) incase the opponents turn ends faster than player movement
  * Effects
