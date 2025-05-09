@@ -1,26 +1,26 @@
 package heroes.journey.systems.constantsystems;
 
-import java.util.UUID;
-
-import com.artemis.World;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.systems.GameWorld;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @All({PositionComponent.class, ActorComponent.class, MovementComponent.class, IdComponent.class})
 public class MovementSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
         UUID id = IdComponent.get(world, entityId);
         PositionComponent position = PositionComponent.get(world, id);
         MovementComponent movement = MovementComponent.get(world, id);
@@ -30,6 +30,19 @@ public class MovementSystem extends IteratingSystem {
 
         if (actor != null) {
             actor.act(world.getDelta());
+        }
+    }
+
+    @Override
+    public void removed(int entityId) {
+        GameWorld world = (GameWorld) getWorld();
+        UUID id = IdComponent.get(world, entityId);
+        EventQueueComponent events = EventQueueComponent.get(world, id);
+        if (events != null) {
+            Objects.requireNonNull(events.events().poll()).run();
+            if (events.events().isEmpty()) {
+                world.edit(entityId).remove(EventQueueComponent.class);
+            }
         }
     }
 
@@ -49,12 +62,11 @@ public class MovementSystem extends IteratingSystem {
             //TODO Make duration based on move speed
             actor.addAction(Actions.sequence(
                 Actions.moveTo(movement.path().x - position.getX(), movement.path().y - position.getY(), .2f),
-                Actions.run(() -> updatePosition(world, entityId, position, actor, movement))));
+                Actions.run(() -> updatePosition(entityId, position, actor, movement))));
         }
     }
 
     private void updatePosition(
-        World world,
         int entityId,
         PositionComponent position,
         ActorComponent actor,

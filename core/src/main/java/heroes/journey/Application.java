@@ -23,13 +23,12 @@ import lombok.Getter;
  *      Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
- * Add Action Queue to order movement actions and cursor centers better
- *  Make Cursor jump to player at end of movement, not end of opponents turn (and statement?) incase the opponents turn ends faster than player movement
+ * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Multiplayer
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
- * Make HUD Locked when players character is moving, and have the camera follow player movement
  * Make the different travels fail if someone is already there?
+ *  Or allow entities to stack and battle?
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * AI
  *  Add understanding of fog of war (Probably need more knowledge information)

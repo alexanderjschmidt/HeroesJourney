@@ -55,7 +55,7 @@ public class Utils {
         if (statsComponent == null)
             return null;
         statsComponent.setBody(statsComponent.getBody() + count);
-        FogUtils.updateMap(gameState, entityId);
+        FogUtils.updateMap(gameState.getWorld(), gameState, entityId);
         return new StringResult("Successful Workout! Gain 1 Body");
     }
 
@@ -74,7 +74,7 @@ public class Utils {
 
         statsComponent.adjustHealth(count);
 
-        if (!PlayerInfo.isPlayer(entityId))
+        if (!PlayerInfo.isPlayer(entityId) || !gameState.isGlobal())
             return;
         ResourceBar health = HUD.get().getEntityUI().getHealth();
         Vector2 screenPos = health.localToStageCoordinates(new Vector2(0, 0));
@@ -93,7 +93,7 @@ public class Utils {
 
         statsComponent.adjustMana(count);
 
-        if (!PlayerInfo.isPlayer(entityId))
+        if (!PlayerInfo.isPlayer(entityId) || !gameState.isGlobal())
             return;
         ResourceBar mana = HUD.get().getEntityUI().getMana();
         Vector2 screenPos = mana.localToStageCoordinates(new Vector2(0, 0));
@@ -112,7 +112,7 @@ public class Utils {
 
         statsComponent.adjustStamina(count);
 
-        if (!PlayerInfo.isPlayer(entityId))
+        if (!PlayerInfo.isPlayer(entityId) || !gameState.isGlobal())
             return;
         ResourceBar stamina = HUD.get().getEntityUI().getStamina();
         Vector2 screenPos = stamina.localToStageCoordinates(new Vector2(0, 0));
@@ -128,6 +128,10 @@ public class Utils {
         return !gameState.getHistory().isEmpty() &&
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
             record.getEntity() == owner;
+    }
+
+    public static void popUp(String message) {
+
     }
 
     public static void logTime(String log, long start, long printIfLongerThan) {

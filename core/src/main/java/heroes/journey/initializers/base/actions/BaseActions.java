@@ -28,7 +28,8 @@ import java.util.UUID;
 
 public class BaseActions implements InitializerInterface {
 
-    public static Action openActionMenu, wait, end_turn, exit_game, attack;
+    public static String popupMessage = "";
+    public static Action openActionMenu, wait, end_turn, exit_game, attack, popup;
     public static CooldownAction workout, study;
     public static CooldownAction delve;
     public static Action questBoard;
@@ -53,6 +54,10 @@ public class BaseActions implements InitializerInterface {
             return null;
         }).build().register();
         TeamActions.addTeamAction(end_turn);
+        popup = Action.builder()
+            .name("Popup")
+            .onSelect((gs, e) -> new StringResult(popupMessage))
+            .build().register();
 
         wait = Action.builder()
             .name("Wait")

@@ -30,7 +30,7 @@ public class PositionSyncSystem extends IteratingSystem {
         pos.sync();
         gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
 
-        FogUtils.updateMap(gameState, id);
+        FogUtils.updateMap(world, gameState, id);
     }
 
     @Override
@@ -51,13 +51,13 @@ public class PositionSyncSystem extends IteratingSystem {
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
         if (pos.isNotSynced()) {
-            System.out.println(pos.getX() + ", " + pos.getY());
-            System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
+            //System.out.println(pos.getX() + ", " + pos.getY());
+            //System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
             gameState.getEntities().removeEntity(pos.getX(), pos.getY());
             pos.sync();
             gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
 
-            FogUtils.updateMap(gameState, id);
+            FogUtils.updateMap(world, gameState, id);
         }
     }
 }

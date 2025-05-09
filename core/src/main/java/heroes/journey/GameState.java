@@ -190,4 +190,8 @@ public class GameState implements Cloneable {
         }
         return entitiesInActionOrder.getFirst();
     }
+
+    public boolean isGlobal() {
+        return this == GameState.global();
+    }
 }

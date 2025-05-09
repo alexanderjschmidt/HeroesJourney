@@ -7,6 +7,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.initializers.base.Map;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 
 import java.util.UUID;
@@ -57,17 +58,18 @@ public class FogUtils {
         }
     }
 
-    public static void updateMap(GameState gameState, UUID id) {
-        PositionComponent pos = PositionComponent.get(gameState.getWorld(), id);
-        MapComponent mapComponent = MapComponent.get(gameState.getWorld(), id);
-        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), id);
+    public static void updateMap(GameWorld world, GameState gameState, UUID id) {
+        PositionComponent pos = PositionComponent.get(world, id);
+        MapComponent mapComponent = MapComponent.get(world, id);
+        StatsComponent statsComponent = StatsComponent.get(world, id);
         if (pos != null && mapComponent != null && statsComponent != null) {
-            FogUtils.updateMap(gameState, mapComponent, pos.getX(), pos.getY(),
+            FogUtils.updateMap(world, gameState, mapComponent, pos.getX(), pos.getY(),
                 statsComponent.getVision());
         }
     }
 
     private static void updateMap(
+        GameWorld world,
         GameState gameState,
         MapComponent mapComponent,
         int xBase,

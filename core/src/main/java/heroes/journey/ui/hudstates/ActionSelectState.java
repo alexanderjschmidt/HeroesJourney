@@ -47,9 +47,7 @@ public class ActionSelectState extends HUDState {
     @Override
     public void update(HUD hud) {
         HUD.get().getActionMenu().handleInputs();
-        if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
-            HUD.get().getActionMenu().select();
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
+        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
             Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();
             if (!(HUD.get().getState() instanceof ActionSelectState))

@@ -1,11 +1,5 @@
 package heroes.journey.ui.windows;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -18,6 +12,12 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -78,7 +78,7 @@ public class ActionMenu extends UI {
     }
 
     public void select() {
-        actions.select();
+        actions.selectWrapper();
     }
 
     public void handleInputs() {
@@ -101,21 +101,18 @@ public class ActionMenu extends UI {
 
         @Override
         public void select() {
-            ScrollPaneEntry<Action> selectedAction = actions.getSelected();
-            if (selectedAction.isSelectable()) {
-                // TODO add back TargetAction logic
-                Action action = selectedAction.entry();
-                UUID selectedEntity = HUD.get().getCursor().getSelected();
-                System.out.println("Selected " + action + " " + selectedEntity);
-                if (selectedEntity != null) {
-                    GameState.global()
-                        .getWorld()
-                        .edit(selectedEntity)
-                        .create(ActionComponent.class)
-                        .action(action);
-                } else {
-                    action.onSelect(GameState.global(), null);
-                }
+            // TODO add back TargetAction logic
+            Action action = getSelected().entry();
+            UUID selectedEntity = HUD.get().getCursor().getSelected();
+            System.out.println("Selected " + action + " " + selectedEntity);
+            if (selectedEntity != null) {
+                GameState.global()
+                    .getWorld()
+                    .edit(selectedEntity)
+                    .create(ActionComponent.class)
+                    .action(action);
+            } else {
+                action.onSelect(GameState.global(), null);
             }
         }
 

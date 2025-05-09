@@ -1,9 +1,6 @@
 package heroes.journey.components.character;
 
-import java.util.UUID;
-
 import com.artemis.annotations.Transient;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
@@ -12,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
 
 @ToString
 @Transient
