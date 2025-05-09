@@ -1,6 +1,9 @@
 package heroes.journey.ui.hudstates;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.StatsComponent;
@@ -10,8 +13,6 @@ import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override
@@ -31,8 +32,7 @@ class CursorMoveState extends HUDState {
             if (hud.getCursor().getSelected() != null) {
                 savePath();
                 hud.getCursor().moveSelected();
-            } else if (hud.getCursor().getHover() != null &&
-                PlayerInfo.get().getPlayableEntities().contains(GameState.global().getCurrentEntity()) &&
+            } else if (hud.getCursor().getHover() != null && PlayerInfo.isCurrentlyPlaying() &&
                 Objects.equals(hud.getCursor().getHover(), GameState.global().getCurrentEntity())) {
                 hud.getCursor().setSelectedtoHover();
                 StatsComponent stats = StatsComponent.get(GameState.global().getWorld(),
@@ -50,8 +50,9 @@ class CursorMoveState extends HUDState {
             } else if (hud.getCursor().getHover() == null) {
                 HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.AI_PLAY) && PlayerInfo.get().getPlayableEntities().contains(GameState.global().getCurrentEntity())) {
-            AIComponent ai = AIComponent.get(GameState.global().getWorld(), GameState.global().getCurrentEntity());
+        } else if (Gdx.input.isKeyJustPressed(KeyManager.AI_PLAY) && PlayerInfo.isCurrentlyPlaying()) {
+            AIComponent ai = AIComponent.get(GameState.global().getWorld(),
+                GameState.global().getCurrentEntity());
             ai.startProcessingNextMove(GameState.global(), GameState.global().getCurrentEntity());
         }
         updateFreeMove(hud.getDelta());

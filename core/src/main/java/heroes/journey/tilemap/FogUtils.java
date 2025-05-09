@@ -1,6 +1,9 @@
 package heroes.journey.tilemap;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.math.Vector2;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
@@ -9,34 +12,27 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.utils.Direction;
 
-import java.util.UUID;
-
 public class FogUtils {
 
     private static int dist(int x, int y) {
         int absX = Math.abs(x);
         int absY = Math.abs(y);
-        return (int) Math.sqrt((absX * absX) + (absY * absY)); // Euclidean
+        return (int)Math.sqrt((absX * absX) + (absY * absY)); // Euclidean
         // return absX + absY; // Manhattan
     }
 
-    public static Fog[][] getFog() {
-        Fog[][] fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
+    public static Fog[][] getFog(GameState gameState, UUID entityId) {
+        Fog[][] fog = new Fog[gameState.getWidth()][gameState.getHeight()];
         // Get Playing entities Map
-        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
-            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
-            if (mapComponent != null)
-                FogUtils.mergeFog(fog, mapComponent.getFog());
-        }
+        MapComponent mapComponent = MapComponent.get(gameState.getWorld(), entityId);
+        if (mapComponent != null)
+            FogUtils.mergeFog(fog, mapComponent.getFog());
         // Get Playing entities vision
-        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
-            PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
-                playable);
-            StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);
-            if (statsComponent != null && positionComponent != null) {
-                FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
-                    statsComponent.getVision());
-            }
+        PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
+        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
+        if (statsComponent != null && positionComponent != null) {
+            FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
+                statsComponent.getVision());
         }
         return fog;
     }
@@ -97,8 +93,8 @@ public class FogUtils {
         Direction direction) {
         Vector2 dir = direction.getDirVector();
         for (int dist = 1; dist <= revealDistance; dist++) {
-            int centerX = (int) (x + dist * dir.x);
-            int centerY = (int) (y + dist * dir.y);
+            int centerX = (int)(x + dist * dir.x);
+            int centerY = (int)(y + dist * dir.y);
 
             int currentWidth = baseWidth + (dist / 2); // Cone gets wider the farther it goes
 

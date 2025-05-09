@@ -1,5 +1,7 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.UUID;
+
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.annotations.All;
@@ -7,7 +9,12 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.*;
+
+import heroes.journey.Application;
+import heroes.journey.GameCamera;
+import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
+import heroes.journey.RenderBounds;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
@@ -16,10 +23,6 @@ import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.ui.HUD;
-
-import java.util.UUID;
-
-import static heroes.journey.tilemap.FogUtils.getFog;
 
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {
@@ -31,7 +34,7 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     protected final void processSystem() {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
 
         SpriteBatch batch = Application.get().getBatch();
         batch.begin();
@@ -45,7 +48,7 @@ public class RenderSystem extends BaseEntitySystem {
             this.process(world, IdComponent.get(world, ids[i]));
         }
 
-        PlayerInfo.setFog(getFog());
+        PlayerInfo.updateFog();
 
         if (!LoadOptions.debugOption.isTrue())
             renderFog(batch, PlayerInfo.get().getFog());

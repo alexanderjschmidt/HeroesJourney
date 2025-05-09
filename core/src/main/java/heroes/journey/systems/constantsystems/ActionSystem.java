@@ -46,7 +46,7 @@ public class ActionSystem extends IteratingSystem {
                 case StringResult str -> {
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
-                    if (PlayerInfo.get().getPlayableEntities().contains(id)) {
+                    if (PlayerInfo.isPlayer(id)) {
                         HUD.get().getPopupUI().getText().setText(str.toString());
                         HUD.get().setState(States.POP_UP);
                     }

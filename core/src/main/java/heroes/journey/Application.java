@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.art.ResourceManager;
@@ -29,6 +30,7 @@ import lombok.Getter;
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make HUD Locked when players character is moving, and have the camera follow player movement
+ * Store anything you can see in known locations (on init or gaining more vision)
  * Make the different travels fail if someone is already there?
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * AI
