@@ -30,6 +30,8 @@ public class Action implements InfoProvider {
     protected BiConsumer<GameState, UUID> onHover = (gs, e) -> {
     };
     protected BiFunction<GameState, UUID, ActionResult> onSelect;
+    // This is used for complex actions that need to be simplified for the AI
+    protected BiFunction<GameState, UUID, ActionResult> onSelectAI;
     @Builder.Default
     protected BiFunction<GameState, UUID, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
 
@@ -49,9 +51,15 @@ public class Action implements InfoProvider {
     /**
      * @return the results of the action for a popup window
      */
-    public ActionResult onSelect(GameState gameState, UUID userId) {
+    public ActionResult onSelect(GameState gameState, UUID userId, boolean ai) {
         cost.onUse(gameState, userId);
+        if (ai && onSelectAI != null)
+            return onSelectAI.apply(gameState, userId);
         return onSelect.apply(gameState, userId);
+    }
+
+    public ActionResult onSelect(GameState gameState, UUID userId) {
+        return onSelect(gameState, userId, false);
     }
 
     @Override

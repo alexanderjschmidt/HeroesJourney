@@ -147,6 +147,17 @@ public class TravelActions implements InitializerInterface {
             });
 
             return new MultiStepResult(events);
+        }).onSelectAI((gs, e) -> {
+            PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
+            Cell path = new EntityCursorPathing().getPath(gs.getMap(), positionComponent.getX(),
+                positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
+
+            Cell end = path.getEnd();
+            gs.getEntities().moveEntity(path.x, path.y, end.x, end.y);
+            positionComponent.setPos(end.x, end.y);
+            positionComponent.sync();
+            gs.getHistory().add(path, e);
+            return new StringResult("You have traveled to " + locationName);
         }).cost(Cost.builder().stamina(1).multiplier((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
             Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());

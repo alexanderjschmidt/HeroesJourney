@@ -28,7 +28,7 @@ import lombok.Getter;
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make the different travels fail if someone is already there?
- *  Or allow entities to stack and battle?
+ *  Or allow entities to stack and battle?yui
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * AI
  *  Add understanding of fog of war (Probably need more knowledge information)
@@ -46,8 +46,6 @@ import lombok.Getter;
  * Sounds
  * 	Background music
  * 	Action Sounds
- * Efficiency
- *  Make Fog compute first and then dont render anything that would be covered by Dense Fog
  */
 /*
  * Knowledge System

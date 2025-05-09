@@ -114,9 +114,9 @@ public class GameState implements Cloneable {
 
             // Apply chosen Action
             Action action = queuedAction.getAction();
-            action.onSelect(this, e);
             history.add(queuedAction.getAction(),
                 new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
+            action.onSelect(this, e, true);
             // If action adds movement
             MovementComponent movement = MovementComponent.get(world, e);
             if (movement != null) {
