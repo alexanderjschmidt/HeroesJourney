@@ -1,18 +1,23 @@
 package heroes.journey.systems.triggerable;
 
 import com.artemis.annotations.All;
-import com.badlogic.gdx.graphics.Color;
-import heroes.journey.components.PositionComponent;
+import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
-import heroes.journey.ui.WorldEffectManager;
 
 import java.util.UUID;
 
 @All({StatsComponent.class, IdComponent.class})
 public class RegenSystem extends TriggerableSystem {
+
+    private final GameState gameState;
+
+    public RegenSystem(GameState gameState) {
+        this.gameState = gameState;
+    }
 
     @Override
     protected void process(int entityId) {
@@ -20,19 +25,9 @@ public class RegenSystem extends TriggerableSystem {
         UUID id = IdComponent.get(world, entityId);
         StatsComponent statsComponent = StatsComponent.get(world, id);
         // TODO fix stats ratios
-        statsComponent.adjustHealth(statsComponent.getBody());
-        statsComponent.adjustMana(statsComponent.getMind());
-        statsComponent.adjustStamina(statsComponent.getBody() * 2);
-
-        PositionComponent positionComponent = PositionComponent.get(world, id);
-        if (positionComponent != null) {
-            WorldEffectManager.addTextEffect("+" + (statsComponent.getBody()), Color.GREEN,
-                positionComponent.getX(), positionComponent.getY(), -15, 0);
-            WorldEffectManager.addTextEffect("+" + (statsComponent.getMana() * 2), Color.GREEN,
-                positionComponent.getX(), positionComponent.getY(), 0, 0);
-            WorldEffectManager.addTextEffect("+" + (statsComponent.getBody() * 2), Color.GREEN,
-                positionComponent.getX(), positionComponent.getY(), 15, 0);
-        }
+        Utils.adjustHealth(gameState, id, statsComponent.getBody());
+        Utils.adjustMana(gameState, id, statsComponent.getMind());
+        Utils.adjustStamina(gameState, id, statsComponent.getBody() * 2);
     }
 
     @Override

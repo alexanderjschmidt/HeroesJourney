@@ -1,9 +1,6 @@
 package heroes.journey.ui.windows;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
@@ -12,11 +9,15 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ResourceBar;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
+import lombok.Getter;
+
+import java.util.UUID;
 
 public class EntityUI extends UI {
 
-    Label entity;
-    ResourceBar health, mana, stamina;
+    private final Label entity;
+    @Getter
+    private final ResourceBar health, mana, stamina;
 
     public EntityUI() {
         super();
@@ -44,10 +45,9 @@ public class EntityUI extends UI {
         entity.setText(name);
 
         if (statsComponent != null) {
-            health.update(statsComponent.getHealth(), (int)(StatsComponent.MAX_HEALTH));
-            mana.update(statsComponent.getMana(), (int)(StatsComponent.MAX_HEALTH));
-            stamina.update(statsComponent.getStamina(), (int)(StatsComponent.MAX_HEALTH));
+            health.update(statsComponent.getHealth(), (int) (StatsComponent.MAX_HEALTH));
+            mana.update(statsComponent.getMana(), (int) (StatsComponent.MAX_HEALTH));
+            stamina.update(statsComponent.getStamina(), (int) (StatsComponent.MAX_HEALTH));
         }
     }
-
 }

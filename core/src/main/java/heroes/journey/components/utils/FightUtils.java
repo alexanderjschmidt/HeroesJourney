@@ -1,5 +1,6 @@
 package heroes.journey.components.utils;
 
+import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.items.Item;
@@ -15,7 +16,8 @@ import heroes.journey.systems.GameWorld;
 import java.util.UUID;
 
 public class FightUtils {
-    public static boolean fight(GameWorld world, UUID fighter, UUID enemy) {
+    public static boolean fight(GameState gameState, UUID fighter, UUID enemy) {
+        GameWorld world = gameState.getWorld();
         StatsComponent fighterStats = StatsComponent.get(world, fighter);
         StatsComponent enemyStats = StatsComponent.get(world, enemy);
 
@@ -24,7 +26,7 @@ public class FightUtils {
 
         // TODO if fast enough attack multiple times
         while (fighterStats.getHealth() > 0 && enemyStats.getHealth() > 0) {
-            attack(world, attacker, defender);
+            attack(gameState, attacker, defender);
             UUID previousDefender = defender;
             defender = attacker;
             attacker = previousDefender;
@@ -32,7 +34,8 @@ public class FightUtils {
         return fighterStats.getHealth() > 0;
     }
 
-    private static void attack(GameWorld world, UUID attacker, UUID defender) {
+    private static void attack(GameState gameState, UUID attacker, UUID defender) {
+        GameWorld world = gameState.getWorld();
         StatsComponent attackerStats = StatsComponent.get(world, attacker);
         StatsComponent defenderStats = StatsComponent.get(world, defender);
 
@@ -45,7 +48,7 @@ public class FightUtils {
 
         int damage = Math.max(1, damages.getTotal()); // always at least 1
 
-        defenderStats.adjustHealth(-damage);
+        Utils.adjustHealth(gameState, defender, -damage);
     }
 
     public static void faint(GameWorld world, UUID e) {

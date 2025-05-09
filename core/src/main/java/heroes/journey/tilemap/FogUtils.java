@@ -62,7 +62,7 @@ public class FogUtils {
         }
     }
 
-    private static void updateMap(
+    public static void updateMap(
         GameState gameState,
         MapComponent mapComponent,
         int xBase,

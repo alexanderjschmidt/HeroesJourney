@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.components.utils.Utils;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Builder;
 
@@ -36,9 +37,9 @@ public class Cost {
 
         double mult = multiplier.apply(gameState, userId);
 
-        statsComponent.adjustStamina((int) -(stamina * mult));
-        statsComponent.adjustMana((int) -(mana * mult));
-        statsComponent.adjustHealth((int) -(health * mult));
+        Utils.adjustStamina(gameState, userId, (int) -(stamina * mult));
+        Utils.adjustMana(gameState, userId, (int) -(mana * mult));
+        Utils.adjustHealth(gameState, userId, (int) -(health * mult));
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         inventoryComponent.adjustGold((int) -(gold * mult));

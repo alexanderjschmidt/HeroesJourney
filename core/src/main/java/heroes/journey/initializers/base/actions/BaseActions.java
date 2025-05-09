@@ -88,7 +88,7 @@ public class BaseActions implements InitializerInterface {
                         explorationLog.add("Empty");
                         continue;
                     }
-                    if (FightUtils.fight(gs.getWorld(), e, room)) {
+                    if (FightUtils.fight(gs, e, room)) {
                         explorationLog.add(NamedComponent.get(gs.getWorld(), room, "Enemy"));
                     } else {
                         conscious = false;

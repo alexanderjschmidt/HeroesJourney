@@ -1,32 +1,11 @@
 package heroes.journey.systems;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import com.artemis.Aspect;
-import com.artemis.AspectSubscriptionManager;
-import com.artemis.BaseSystem;
-import com.artemis.Component;
-import com.artemis.EntityEdit;
-import com.artemis.EntitySubscription;
-import com.artemis.World;
-import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
+import com.artemis.*;
 import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
@@ -45,6 +24,13 @@ import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.QuestSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class GameWorld extends World {
 
     private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
@@ -53,7 +39,7 @@ public class GameWorld extends World {
     private final KryoArtemisSerializer kryoSerializer;
 
     // TODO use this registration for any entity references since I cant trust the entityId will stay the same across GameWorlds
-    public final Map<UUID,Integer> entityMap;
+    public final Map<UUID, Integer> entityMap;
 
     private GameWorld(WorldConfiguration config) {
         super(config);
@@ -99,7 +85,7 @@ public class GameWorld extends World {
             new WorldSerializationManager());
         builder.with(new IdSyncSystem())
             .with(new CooldownSystem())
-            .with(new RegenSystem())
+            .with(new RegenSystem(gameState))
             .with(new QuestSystem(gameState))
             .with(new PositionSyncSystem(gameState))
             .with(new LocationPositionSyncSystem(gameState))
@@ -165,7 +151,7 @@ public class GameWorld extends World {
         IntBag entities = this.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
         int[] ids = entities.getData();
 
-        Map<Integer,Integer> oldToNew = new HashMap<>();
+        Map<Integer, Integer> oldToNew = new HashMap<>();
         for (int id : ids) {
             oldToNew.put(id, cloned.create());
             ComponentCopier.copyEntity(this, cloned, id, oldToNew.get(id));

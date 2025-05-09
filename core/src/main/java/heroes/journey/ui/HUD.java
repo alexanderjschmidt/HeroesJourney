@@ -8,44 +8,43 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.ActionMenu;
-import heroes.journey.ui.windows.EntityUI;
-import heroes.journey.ui.windows.InfoUI;
-import heroes.journey.ui.windows.PopupUI;
-import heroes.journey.ui.windows.StatsUI;
-import heroes.journey.ui.windows.TerrainUI;
-import heroes.journey.ui.windows.TurnUI;
+import heroes.journey.ui.windows.*;
 import lombok.Getter;
 
 public class HUD extends Stage {
 
     public static final int FONT_SIZE = 24;
 
-    @Getter private final Cursor cursor;
+    @Getter
+    private final Cursor cursor;
     private final Table layout, leftCol;
     private final int layoutPadding = 5;
 
     // TODO move this into its own right column class
-    @Getter private final ActionMenu actionMenu;
+    @Getter
+    private final ActionMenu actionMenu;
     private final InfoUI infoUI;
 
     // TODO move this into its own left column class
     private final TerrainUI terrainUI;
+    @Getter
     private final EntityUI entityUI;
     private final TurnUI turnUI;
 
     // TODO move this into its own center screen class
     private final Cell<?> centerWindow;
-    @Getter private final StatsUI statsUI;
-    @Getter private final PopupUI popupUI;
+    @Getter
+    private final StatsUI statsUI;
+    @Getter
+    private final PopupUI popupUI;
 
     private static HUD hud;
-    private final StateMachine<HUD,HUDState> stateMachine;
-    @Getter private float delta;
+    private final StateMachine<HUD, HUDState> stateMachine;
+    @Getter
+    private float delta;
 
     public static HUD get() {
         if (hud == null)
@@ -56,7 +55,7 @@ public class HUD extends Stage {
     private HUD() {
         super(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
+        stateMachine = new StackStateMachine<HUD, HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -168,5 +167,4 @@ public class HUD extends Stage {
                 stateMachine.getPreviousState());
         }
     }
-
 }

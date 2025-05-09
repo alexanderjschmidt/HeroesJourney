@@ -25,8 +25,6 @@ import lombok.Getter;
  *  Show Controls on UIs?
  * Add Action Queue to order movement actions and cursor centers better
  *  Make Cursor jump to player at end of movement, not end of opponents turn (and statement?) incase the opponents turn ends faster than player movement
- * Effects
- *  move heal effects to player info panel
  * Multiplayer
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
@@ -40,6 +38,7 @@ import lombok.Getter;
  *  Demon kings arrival
  *  new quests appearances
  * Map Generation
+ *  Fix Black/Empty Tile Map
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
