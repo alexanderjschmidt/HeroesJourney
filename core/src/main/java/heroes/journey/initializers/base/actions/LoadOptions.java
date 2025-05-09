@@ -6,7 +6,7 @@ import heroes.journey.utils.input.Options;
 
 public class LoadOptions implements InitializerInterface {
 
-    public static final BooleanOptionAction debugOption, autoEndTurnOption;
+    public static final BooleanOptionAction debugOption, autoEndTurnOption, backgroundMusic;
 
     static {
         debugOption = BooleanOptionAction.builder().toggle(false).name("Debug").build().register();
@@ -17,5 +17,11 @@ public class LoadOptions implements InitializerInterface {
             .build()
             .register();
         Options.addOption(autoEndTurnOption);
+        backgroundMusic = BooleanOptionAction.builder()
+            .toggle(false)
+            .name("Music")
+            .build()
+            .register();
+        Options.addOption(backgroundMusic);
     }
 }

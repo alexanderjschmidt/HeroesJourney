@@ -108,6 +108,8 @@ public class TravelActions implements InitializerInterface {
             .name("travel")
             .dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()})
             .applyEffect(gameState -> {
+                wayfareActionsList.clear();
+                journeyActionsList.clear();
                 for (Feature feature : FeatureManager.get().values()) {
                     UUID locationId = gameState.getEntities()
                         .getLocation(feature.location.getX(), feature.location.getY());

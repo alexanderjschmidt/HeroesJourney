@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
+import heroes.journey.utils.MusicManager;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 
@@ -28,7 +29,7 @@ import lombok.Getter;
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui
  * Make the different travels fail if someone is already there?
- *  Or allow entities to stack and battle?yui
+ *  Or allow entities to stack and battle?
  *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
  * AI
  *  Add understanding of fog of war (Probably need more knowledge information)
@@ -43,7 +44,6 @@ import lombok.Getter;
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  * 	Improve road generation roads are too straight
  * Sounds
- * 	Background music
  * 	Action Sounds
  */
 /*
@@ -106,6 +106,7 @@ public class Application extends Game {
     @Override
     public void dispose() {
         super.dispose();
+        MusicManager.get().dispose();
         ResourceManager.get().dispose();
     }
 

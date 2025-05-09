@@ -11,6 +11,7 @@ import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.models.MapData;
 import heroes.journey.ui.*;
+import heroes.journey.utils.MusicManager;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.worldgen.NewMapManager;
@@ -39,6 +40,9 @@ public class BattleScreen implements Screen {
         batch = app.getBatch();
 
         NewMapManager.get().initMapGeneration(GameState.global(), mapData);
+
+        if (LoadOptions.backgroundMusic.isTrue())
+            MusicManager.play("Sounds/Music/Dragon_Of_The_Mist.mp3");
 
         ready = true;
     }
