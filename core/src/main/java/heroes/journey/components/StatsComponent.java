@@ -83,4 +83,8 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
     public int getVision() {
         return body + 3;
     }
+
+    public int getCarryCapacity() {
+        return body * 10;
+    }
 }

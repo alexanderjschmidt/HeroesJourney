@@ -18,15 +18,12 @@ public abstract class ScrollPane<T> extends Table {
     private List<ScrollPaneEntry<T>> options;
     public int selected = 0;
     private int MAX_HEIGHT = 14;
-    private final Table listTable = new Table();
 
     public ScrollPane() {
         super();
         defaults().left().pad(2.5f).fill();
 
         options = new ArrayList<>();
-
-        add(listTable).expand().fill();  // Add the stack to this table
     }
 
     public void selectWrapper() {
@@ -45,20 +42,20 @@ public abstract class ScrollPane<T> extends Table {
 
     public void updateList(List<ScrollPaneEntry<T>> options) {
         this.options = options;
-        listTable.clearChildren(); // clear only the inner list, not whole layout
+        clearChildren(); // clear only the inner list, not whole layout
         optionLabels.clear();
 
         for (int i = 0; i < options.size(); i++) {
-            listTable.row();
+            row();
 
             Label text = new Label(getText(options.get(i).entry()), ResourceManager.get().skin);
             text.setColor(options.get(i).isSelectable() ? Color.WHITE : Color.DARK_GRAY);
-            listTable.add(text).expandX().left().pad(2.5f);
+            add(text).expandX().left().pad(2.5f);
 
             optionLabels.add(text);
         }
 
-        listTable.pack();
+        pack();
         moveSelectorToRow();
         onHover();
     }

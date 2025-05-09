@@ -9,9 +9,9 @@ import heroes.journey.GameState;
 
 public class LightManager {
 
-    int maxNightTurn = 10;
-    int demonTurnStart = 10;
-    int demonTurnEnd = 20;
+    int maxNightTurn = 50;
+    int demonTurnStart = 50;
+    int demonTurnEnd = 75;
     float maxNightAlpha = 0.4f;
     float maxDemonAlpha = 0.2f; // red intensity at full demon time
 
@@ -21,7 +21,7 @@ public class LightManager {
     Color demonTint = new Color(0.3f, 0f, 0f, 1f);
 
     boolean isLightningActive = false;
-    int lightningStart = 15;
+    int lightningStart = 60;
     float lightningTimer = 0f;
     float lightningDuration = 0.1f;
 

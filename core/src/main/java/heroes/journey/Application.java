@@ -17,9 +17,10 @@ import lombok.Getter;
  * TODO List
  * Menus
  * 	Inventory
- *      Icons
- * 		Show Gold and Weight (do I even want weight? could be a good soft stat usage) make you move less the more encumbered you are
- *          Trash Item to reduce weight if movement is 0
+ *      Icons its own column
+ *      make count its own column
+ * 		make you move less the more encumbered you are
+ *      Trash Item to reduce weight if movement is 0
  * 		Scrolling
  *  Show Controls on UIs?
  * Add Action Queue to order movement actions and cursor centers better
