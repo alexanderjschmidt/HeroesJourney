@@ -1,5 +1,6 @@
 package heroes.journey;
 
+import heroes.journey.tilemap.Fog;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class PlayerInfo {
     private static PlayerInfo playerInfo;
 
     private final List<UUID> playableEntities;
+    private Fog[][] fog;
     private final UUID uuid;
 
     private PlayerInfo() {
@@ -23,5 +25,9 @@ public class PlayerInfo {
         if (playerInfo == null)
             playerInfo = new PlayerInfo();
         return playerInfo;
+    }
+
+    public static void setFog(Fog[][] fog) {
+        get().fog = fog;
     }
 }

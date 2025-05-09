@@ -26,8 +26,7 @@ import lombok.Getter;
  * Add Action Queue to order movement actions and cursor centers better
  *  Make Cursor jump to player at end of movement, not end of opponents turn (and statement?) incase the opponents turn ends faster than player movement
  * Effects
- *  make effects only show if can be seen in fog
- *  move effects to player info panel
+ *  move heal effects to player info panel
  * Multiplayer
  *  setup player, host, and lobby for server
  *  make only one entity per team, will make my life easier on deciding what to display in ui

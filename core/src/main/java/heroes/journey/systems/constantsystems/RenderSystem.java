@@ -9,18 +9,17 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.*;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
-import heroes.journey.tilemap.FogUtils;
 import heroes.journey.ui.HUD;
 
 import java.util.UUID;
+
+import static heroes.journey.tilemap.FogUtils.getFog;
 
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {
@@ -46,34 +45,13 @@ public class RenderSystem extends BaseEntitySystem {
             this.process(world, IdComponent.get(world, ids[i]));
         }
 
-        Fog[][] fog = getFog();
+        PlayerInfo.setFog(getFog());
 
         if (!LoadOptions.debugOption.isTrue())
-            renderFog(batch, fog);
+            renderFog(batch, PlayerInfo.get().getFog());
 
         HUD.get().getCursor().render(batch, world.getDelta());
         batch.end();
-    }
-
-    private Fog[][] getFog() {
-        Fog[][] fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
-        // Get Playing entities Map
-        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
-            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
-            if (mapComponent != null)
-                FogUtils.mergeFog(fog, mapComponent.getFog());
-        }
-        // Get Playing entities vision
-        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
-            PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
-                playable);
-            StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);
-            if (statsComponent != null && positionComponent != null) {
-                FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
-                    statsComponent.getVision());
-            }
-        }
-        return fog;
     }
 
     public void renderFog(Batch batch, Fog[][] fog) {

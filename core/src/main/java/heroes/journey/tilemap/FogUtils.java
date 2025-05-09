@@ -2,6 +2,9 @@ package heroes.journey.tilemap;
 
 import com.badlogic.gdx.math.Vector2;
 import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.utils.Direction;
@@ -17,7 +20,32 @@ public class FogUtils {
         // return absX + absY; // Manhattan
     }
 
-    public static void applyVision(Fog[][] fog, int xBase, int yBase, int vision) {
+    public static Fog[][] getFog() {
+        Fog[][] fog = new Fog[GameState.global().getWidth()][GameState.global().getHeight()];
+        // Get Playing entities Map
+        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
+            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), playable);
+            if (mapComponent != null)
+                FogUtils.mergeFog(fog, mapComponent.getFog());
+        }
+        // Get Playing entities vision
+        for (UUID playable : PlayerInfo.get().getPlayableEntities()) {
+            PositionComponent positionComponent = PositionComponent.get(GameState.global().getWorld(),
+                playable);
+            StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), playable);
+            if (statsComponent != null && positionComponent != null) {
+                FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
+                    statsComponent.getVision());
+            }
+        }
+        return fog;
+    }
+
+    public static boolean isVisible(int x, int y) {
+        return PlayerInfo.get().getFog()[x][y] == Fog.NONE || PlayerInfo.get().getFog()[x][y] == null;
+    }
+
+    private static void applyVision(Fog[][] fog, int xBase, int yBase, int vision) {
         for (int x = -vision; x <= vision; x++) {
             for (int y = -vision; y <= vision; y++) {
                 if (dist(x, y) <= vision) {
@@ -34,7 +62,7 @@ public class FogUtils {
         }
     }
 
-    public static void updateMap(
+    private static void updateMap(
         GameState gameState,
         MapComponent mapComponent,
         int xBase,

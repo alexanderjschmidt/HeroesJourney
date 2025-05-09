@@ -5,10 +5,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.utils.art.ResourceManager;
+
+import static heroes.journey.tilemap.FogUtils.isVisible;
 
 public class WorldEffectManager extends Stage {
 
@@ -26,6 +27,8 @@ public class WorldEffectManager extends Stage {
 
     // TODO allow chaining of effects? or some randomness to the positioning
     public static void addTextEffect(String text, Color color, int x, int y, int xoffset, int yoffset) {
+        if (!isVisible(x, y))
+            return;
         Label stamina = new Label(text, ResourceManager.get().skin);
         stamina.setPosition(x * GameCamera.get().getSize() + xoffset,
             y * GameCamera.get().getSize() + yoffset);
