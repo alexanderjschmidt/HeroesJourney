@@ -37,7 +37,6 @@ import lombok.Getter;
  *  Demon kings arrival
  *  new quests appearances
  * Map Generation
- *  Fix Black/Empty Tile Map
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?

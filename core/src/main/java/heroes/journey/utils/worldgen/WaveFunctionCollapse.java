@@ -31,8 +31,10 @@ public class WaveFunctionCollapse {
                     if (data.map[ax][ay] == null) {
                         if (data.possibleTilesMap[ax][ay].isEmpty()) {
                             // Contradiction detected: trigger backtracking
-                            if (!backtrack(data, stack))
-                                return data.map;
+                            if (!backtrack(data, stack)) {
+                                System.out.println("Failed to find suitable map layout");
+                                throw new MapGenerationException("Failed to find suitable map layout");
+                            }
                             continue outer; // restart entropy search after backtrack
                         } else {
                             long weight = data.possibleTilesMap[ax][ay].getTotalWeight();

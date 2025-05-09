@@ -29,13 +29,20 @@ public class NewMapManager {
     }
 
     public void initMapGeneration(GameState gameState, MapData mapData) {
-        gameState.init(mapData);
-        FeatureManager.get().clear();
         List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
-        for (MapGenerationEffect phase : sorted) {
-            System.out.println("Running phase: " + phase.getName());
-            phase.apply(gameState);
-            gameState.getWorld().basicProcess();
+        while (true) {
+            try {
+                gameState.init(mapData);
+                FeatureManager.get().clear();
+                for (MapGenerationEffect phase : sorted) {
+                    System.out.println("Running phase: " + phase.getName());
+                    phase.apply(gameState);
+                    gameState.getWorld().basicProcess();
+                }
+            } catch (MapGenerationException e) {
+                continue;
+            }
+            break;
         }
         gameState.nextMove();
     }
