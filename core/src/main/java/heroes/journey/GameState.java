@@ -62,6 +62,9 @@ public class GameState implements Cloneable {
 
     public void init(MapData mapData) {
         Initializer.init();
+        entitiesInActionOrder.clear();
+        if (world != null)
+            world.getEntityManager().reset();
         world = GameWorld.initGameWorld(this);
 
         this.width = mapData.getMapSize();

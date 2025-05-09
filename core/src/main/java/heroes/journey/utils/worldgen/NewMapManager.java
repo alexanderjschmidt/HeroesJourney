@@ -1,26 +1,16 @@
 package heroes.journey.utils.worldgen;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.function.Supplier;
-
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
+import heroes.journey.tilemap.features.FeatureManager;
+
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.Supplier;
 
 public class NewMapManager {
 
-    Map<String,MapGenerationEffect> mapGenerationEffects;
+    Map<String, MapGenerationEffect> mapGenerationEffects;
 
     private static NewMapManager newMapManager;
 
@@ -40,17 +30,20 @@ public class NewMapManager {
 
     public void initMapGeneration(GameState gameState, MapData mapData) {
         gameState.init(mapData);
+        FeatureManager.get().clear();
         List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
         for (MapGenerationEffect phase : sorted) {
             System.out.println("Running phase: " + phase.getName());
             phase.apply(gameState);
             gameState.getWorld().basicProcess();
         }
+        gameState.nextMove();
     }
 
     public void initMapGenerationTimeout(GameState gameState, MapData mapData) {
-        timeout(() -> (Callable<Void>)() -> {
+        timeout(() -> (Callable<Void>) () -> {
             gameState.init(mapData);
+            FeatureManager.get().clear();
             List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
             for (MapGenerationEffect phase : sorted) {
                 System.out.println("Running phase: " + phase.getName());
@@ -83,9 +76,9 @@ public class NewMapManager {
         }
     }
 
-    private List<MapGenerationEffect> topologicalSort(Map<String,MapGenerationEffect> phases) {
-        Map<String,Integer> inDegree = new HashMap<>();
-        Map<String,List<String>> graph = new HashMap<>();
+    private List<MapGenerationEffect> topologicalSort(Map<String, MapGenerationEffect> phases) {
+        Map<String, Integer> inDegree = new HashMap<>();
+        Map<String, List<String>> graph = new HashMap<>();
 
         for (String name : phases.keySet()) {
             inDegree.put(name, 0);
