@@ -5,9 +5,7 @@ import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.FogUtils;
@@ -31,6 +29,8 @@ public class PositionSyncSystem extends IteratingSystem {
         PositionComponent pos = PositionComponent.get(world, id);
         pos.sync();
         gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
+
+        FogUtils.updateMap(gameState, id);
     }
 
     @Override
@@ -51,19 +51,13 @@ public class PositionSyncSystem extends IteratingSystem {
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
         if (pos.isNotSynced()) {
-            // System.out.println(pos.getX() + ", " + pos.getY());
-            // System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
+            System.out.println(pos.getX() + ", " + pos.getY());
+            System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
             gameState.getEntities().removeEntity(pos.getX(), pos.getY());
             pos.sync();
             gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
 
-            // Update Map
-            MapComponent mapComponent = MapComponent.get(GameState.global().getWorld(), id);
-            StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), id);
-            if (mapComponent != null && statsComponent != null) {
-                FogUtils.updateMap(gameState, mapComponent, pos.getX(), pos.getY(),
-                    statsComponent.getVision());
-            }
+            FogUtils.updateMap(gameState, id);
         }
     }
 }

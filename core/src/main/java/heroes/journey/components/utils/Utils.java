@@ -1,12 +1,7 @@
 package heroes.journey.components.utils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -18,9 +13,14 @@ import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
+import heroes.journey.tilemap.FogUtils;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.ResourceBar;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Utils {
 
@@ -55,6 +55,7 @@ public class Utils {
         if (statsComponent == null)
             return null;
         statsComponent.setBody(statsComponent.getBody() + count);
+        FogUtils.updateMap(gameState, entityId);
         return new StringResult("Successful Workout! Gain 1 Body");
     }
 
@@ -78,11 +79,11 @@ public class Utils {
         ResourceBar health = HUD.get().getEntityUI().getHealth();
         Vector2 screenPos = health.localToStageCoordinates(new Vector2(0, 0));
         if (count > 0)
-            HUDEffectManager.addTextEffect("+" + count, Color.PINK, (int)(screenPos.x + health.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("+" + count, Color.PINK, (int) (screenPos.x + health.getWidth()),
+                (int) screenPos.y);
         else if (count < 0)
-            HUDEffectManager.addTextEffect("" + count, Color.RED, (int)(screenPos.x + health.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("" + count, Color.RED, (int) (screenPos.x + health.getWidth()),
+                (int) screenPos.y);
     }
 
     public static void adjustMana(GameState gameState, UUID entityId, int count) {
@@ -97,11 +98,11 @@ public class Utils {
         ResourceBar mana = HUD.get().getEntityUI().getMana();
         Vector2 screenPos = mana.localToStageCoordinates(new Vector2(0, 0));
         if (count > 0)
-            HUDEffectManager.addTextEffect("+" + count, Color.BLUE, (int)(screenPos.x + mana.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("+" + count, Color.BLUE, (int) (screenPos.x + mana.getWidth()),
+                (int) screenPos.y);
         else if (count < 0)
-            HUDEffectManager.addTextEffect("" + count, Color.NAVY, (int)(screenPos.x + mana.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("" + count, Color.NAVY, (int) (screenPos.x + mana.getWidth()),
+                (int) screenPos.y);
     }
 
     public static void adjustStamina(GameState gameState, UUID entityId, int count) {
@@ -116,11 +117,11 @@ public class Utils {
         ResourceBar stamina = HUD.get().getEntityUI().getStamina();
         Vector2 screenPos = stamina.localToStageCoordinates(new Vector2(0, 0));
         if (count > 0)
-            HUDEffectManager.addTextEffect("+" + count, Color.GREEN, (int)(screenPos.x + stamina.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("+" + count, Color.GREEN, (int) (screenPos.x + stamina.getWidth()),
+                (int) screenPos.y);
         else if (count < 0)
-            HUDEffectManager.addTextEffect("" + count, Color.OLIVE, (int)(screenPos.x + stamina.getWidth()),
-                (int)screenPos.y);
+            HUDEffectManager.addTextEffect("" + count, Color.OLIVE, (int) (screenPos.x + stamina.getWidth()),
+                (int) screenPos.y);
     }
 
     public static boolean justCompletedAction(GameState gameState, UUID owner, Action action) {
