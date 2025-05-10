@@ -11,6 +11,7 @@ import heroes.journey.initializers.base.Items;
 import heroes.journey.initializers.base.Quests;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.CarriageActions;
+import heroes.journey.initializers.base.actions.DelveAction;
 import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
@@ -67,7 +68,7 @@ public class EntityFactory {
         dungeon.create(NamedComponent.class).name(SyllableDungeonNameGenerator.generateName());
         dungeon.create(PositionComponent.class).setPos(x, y).sync();
         dungeon.create(PossibleActionsComponent.class)
-            .addAction(BaseActions.delve)
+            .addAction(DelveAction.delve)
             .addAction(TravelActions.travel);
         dungeon.create(InventoryComponent.class).add(Items.ironOre, 5);
         dungeon.create(DungeonComponent.class).layout(new UUID[]{null, goblinId, goblinId, hobgoblinId});

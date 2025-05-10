@@ -4,7 +4,7 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.initializers.base.actions.DelveAction;
 
 public class Quests implements InitializerInterface {
 
@@ -20,7 +20,7 @@ public class Quests implements InitializerInterface {
                     playerComponent.fame(playerComponent.fame() + 10);
                 }
             })
-            .isComplete((gs, e) -> Utils.justCompletedAction(gs, e, BaseActions.delve))
+            .isComplete((gs, e) -> Utils.justCompletedAction(gs, e, DelveAction.delve))
             .build()
             .register();
     }

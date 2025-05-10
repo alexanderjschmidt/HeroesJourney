@@ -17,21 +17,26 @@ import lombok.Getter;
 /*
  * TODO Features
  *
- * Knowledge System
- * Multiplayer
- *  setup player, host, and lobby for server
+ * Buffs
+ *  Start with Rest Action that adds a buff that doubles regen
+ * Target Actions, make Actions take inputs (Target Entity ID),
+ *  so travel actions just need a target location instead of an action for every movement.
+ *  Attack action on other entity
  * Add Events
  *  Demon kings arrival
  *  Global Quests
  *  new quests appearances
  * Sounds
  * 	Action Sounds
- * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
+ * Multiplayer
+ *  setup player, host, and lobby for server
+ * Knowledge System
  */
 /* TODO Improvements
  *
  * Map Generation
  *  Add variation plain tiles
+ *  Move Generation variables out of MapGenEffects
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap

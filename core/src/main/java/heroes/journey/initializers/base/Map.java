@@ -9,14 +9,11 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.actions.CarriageActions;
-import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
-import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
@@ -387,9 +384,6 @@ public class Map implements InitializerInterface {
             })
             .build()
             .register();
-
-        TravelActions.wayfare.toString();
-        CarriageActions.carriage.toString();
     }
 
     private static boolean surroundedBySame(Tile[][] tileMap, int x, int y) {
@@ -486,40 +480,6 @@ public class Map implements InitializerInterface {
             }
         }
         return true;
-    }
-
-    public static long computeTileWeight(Tile candidate, Tile[][] noiseMap, int x, int y) {
-        // Step 1: Similarity to noise-defined terrain
-        double matchScore = candidate.similarityTo(noiseMap[x][y]) *
-            100; // You define this: 1.0 = identical, 0.0 = very different
-
-        // Step 2: Neighbor alignment bias
-        int aligned = 1;
-        for (Direction dir : Direction.values()) {
-            if (dir == Direction.NODIRECTION)
-                continue;
-            int nx = (int) (x + dir.getDirVector().x);
-            int ny = (int) (y + dir.getDirVector().y);
-            if (inBounds(nx, ny, noiseMap) && noiseMap[nx][ny] != null) {
-                aligned += candidate.alignment(dir, noiseMap[nx][ny]);
-            }
-        }
-        double alignmentScore = aligned / 33f * 100;
-
-        double finalScore = Math.pow(matchScore, 4) * Math.pow(alignmentScore, 2);
-
-        long result = (long) (candidate.getWeight() * finalScore);
-
-        if (result == 0 || alignmentScore == 0 || matchScore == 0 || finalScore == 0 ||
-            candidate.getWeight() == 0) {
-            throw new RuntimeException(
-                candidate + " (" + candidate.getWeight() + "): " + "Scores: " + alignmentScore + " " +
-                    matchScore + " " + finalScore + "=" + Math.pow(matchScore, 3) + "*" +
-                    Math.pow(alignmentScore, 3) + " " + result);
-        }
-
-        // Final weight combines base tile weight with noise and alignment preferences
-        return result;
     }
 
 }

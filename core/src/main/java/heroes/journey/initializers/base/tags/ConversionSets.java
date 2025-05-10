@@ -1,8 +1,9 @@
 package heroes.journey.initializers.base.tags;
 
 import heroes.journey.entities.tagging.ConversionSet;
+import heroes.journey.initializers.InitializerInterface;
 
-public class ConversionSets {
+public class ConversionSets implements InitializerInterface {
 
     public static final ConversionSet DEFENSE_TO_DAMAGE = new ConversionSet();
 

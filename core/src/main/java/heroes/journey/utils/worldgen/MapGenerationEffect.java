@@ -42,4 +42,9 @@ public class MapGenerationEffect {
         }
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }

@@ -7,6 +7,7 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
+import heroes.journey.initializers.Initializer;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.models.MapData;
@@ -37,6 +38,7 @@ public class BattleScreen implements Screen {
     }
 
     public void startGame() {
+        Initializer.init();
         batch = app.getBatch();
 
         NewMapManager.get().initMapGeneration(GameState.global(), mapData, ready);

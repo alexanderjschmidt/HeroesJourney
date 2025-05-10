@@ -7,6 +7,7 @@ import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.StringResult;
+import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class CarriageActions {
+public class CarriageActions implements InitializerInterface {
 
     public static Action carriage;
     public static List<Action> carriageActions;

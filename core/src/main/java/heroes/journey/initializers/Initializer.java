@@ -1,9 +1,9 @@
 package heroes.journey.initializers;
 
+import org.reflections.Reflections;
+
 import java.lang.invoke.MethodHandles;
 import java.util.Set;
-
-import org.reflections.Reflections;
 
 public class Initializer {
 
@@ -11,8 +11,9 @@ public class Initializer {
         Reflections reflections = new Reflections("heroes.journey.initializers");
         Set<Class<? extends InitializerInterface>> classes = reflections.getSubTypesOf(InitializerInterface.class);
 
-        for (Class<?> clazz : classes) {
+        for (Class<? extends InitializerInterface> clazz : classes) {
             try {
+                System.out.println("Loaded " + clazz);
                 MethodHandles.lookup().ensureInitialized(clazz);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package heroes.journey.utils.worldgen;
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
 import heroes.journey.tilemap.features.FeatureManager;
+import lombok.Getter;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -11,6 +12,7 @@ import java.util.function.Supplier;
 public class NewMapManager {
 
     private static NewMapManager newMapManager;
+    @Getter
     Map<String, MapGenerationEffect> mapGenerationEffects;
 
     private NewMapManager() {
@@ -58,8 +60,8 @@ public class NewMapManager {
                     FeatureManager.get().clear();
                 }
                 for (MapGenerationEffect phase : sorted) {
+                    System.out.println("Running phase: " + phase.getName() + " " + phase.isRunOnLoad());
                     if (!loading || phase.isRunOnLoad()) {
-                        System.out.println("Running phase: " + phase.getName() + " " + phase.isRunOnLoad());
                         phase.apply(gameState);
                     }
                     gameState.getWorld().basicProcess();
