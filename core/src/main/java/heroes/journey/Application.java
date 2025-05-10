@@ -34,6 +34,7 @@ import lombok.Getter;
  * AI
  *  Add understanding of fog of war (Probably need more knowledge information)
  * Saving
+ * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
  * Add Events
  *  Demon kings arrival
  *  new quests appearances

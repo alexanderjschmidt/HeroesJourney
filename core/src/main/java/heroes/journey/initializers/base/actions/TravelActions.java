@@ -154,8 +154,7 @@ public class TravelActions implements InitializerInterface {
             Cell path = new EntityCursorPathing().getPath(gs.getMap(), positionComponent.getX(),
                 positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
 
-            Cell end = path.getEnd();
-            gs.getEntities().moveEntity(path.x, path.y, end.x, end.y);
+            Cell end = gs.getEntities().moveEntity(e, path);
             positionComponent.setPos(end.x, end.y);
             positionComponent.sync();
             return new StringResult("You have traveled to " + locationName);

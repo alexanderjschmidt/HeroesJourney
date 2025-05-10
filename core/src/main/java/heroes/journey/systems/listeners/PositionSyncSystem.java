@@ -40,9 +40,9 @@ public class PositionSyncSystem extends IteratingSystem {
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
 
-        gameState.getEntities().removeEntity(pos.getX(), pos.getY());
+        gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
         pos.sync();
-        gameState.getEntities().removeEntity(pos.getX(), pos.getY());
+        gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PositionSyncSystem extends IteratingSystem {
         if (pos.isNotSynced()) {
             //System.out.println(pos.getX() + ", " + pos.getY());
             //System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
-            gameState.getEntities().removeEntity(pos.getX(), pos.getY());
+            gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
             pos.sync();
             gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
 

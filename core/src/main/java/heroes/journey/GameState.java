@@ -98,21 +98,21 @@ public class GameState implements Cloneable {
     public GameState applyAction(QueuedAction queuedAction) {
         long start = System.nanoTime();
 
+        UUID e = queuedAction.getEntityId();
         //System.out.println(queuedAction + " " + path + " " + e);
         // Apply chosen Action
         Action action = queuedAction.getAction();
-        history.add(queuedAction.getAction(), queuedAction.getEntityId());
-        action.onSelect(this, queuedAction.getEntityId(), true);
+        history.add(queuedAction.getAction(), e);
+        action.onSelect(this, e, true);
         // If action adds movement
         // TODO remove this, onSelectAI should handle this
-        MovementComponent movement = MovementComponent.get(world, queuedAction.getEntityId());
+        MovementComponent movement = MovementComponent.get(world, e);
         if (movement != null) {
-            PositionComponent positionComponent = PositionComponent.get(world, queuedAction.getEntityId());
-            Cell end = movement.path().getEnd();
-            entities.moveEntity(movement.path().x, movement.path().y, end.x, end.y);
+            PositionComponent positionComponent = PositionComponent.get(world, e);
+            Cell end = entities.moveEntity(e, movement.path());
             positionComponent.setPos(end.x, end.y);
             positionComponent.sync();
-            world.getEntity(queuedAction.getEntityId()).edit().remove(MovementComponent.class);
+            world.getEntity(e).edit().remove(MovementComponent.class);
         }
 
         incrementTurn();

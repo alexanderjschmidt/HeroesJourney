@@ -44,7 +44,7 @@ public class Cursor {
     }
 
     public void update() {
-        hover = GameState.global().getEntities().get(x, y);
+        hover = GameState.global().getEntities().get(x, y).isEmpty() ? null : GameState.global().getEntities().get(x, y).getFirst();
     }
 
     public void clearSelected() {

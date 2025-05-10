@@ -1,5 +1,9 @@
 package heroes.journey.entities;
 
+import heroes.journey.utils.ai.pathfinding.Cell;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import static heroes.journey.initializers.base.Map.inBounds;
@@ -7,14 +11,18 @@ import static heroes.journey.initializers.base.Map.inBounds;
 public class EntityManager implements Cloneable {
 
     private final int width, height;
-    // TODO should this just be the uuid?
-    private final UUID[][] entitiesLocations;
+    private final List<UUID>[][] entitiesLocations;
     private final UUID[][] factionsLocations;
 
     public EntityManager(int width, int height) {
         this.width = width;
         this.height = height;
-        entitiesLocations = new UUID[width][height];
+        entitiesLocations = new ArrayList[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                entitiesLocations[x][y] = new ArrayList<>();
+            }
+        }
         factionsLocations = new UUID[width][height];
     }
 
@@ -22,25 +30,25 @@ public class EntityManager implements Cloneable {
         return new EntityManager(width, height);
     }
 
-    public UUID get(int x, int y) {
+    public List<UUID> get(int x, int y) {
         if (!inBounds(x, y, width, height))
             return null;
         return entitiesLocations[x][y];
     }
 
     public void addEntity(UUID entityId, int x, int y) {
-        if (entitiesLocations[x][y] == null) {
-            entitiesLocations[x][y] = entityId;
-        }
+        entitiesLocations[x][y].add(entityId);
     }
 
-    public void removeEntity(int x, int y) {
-        entitiesLocations[x][y] = null;
+    public void removeEntity(UUID entityId, int x, int y) {
+        entitiesLocations[x][y].remove(entityId);
     }
 
-    public void moveEntity(int currentX, int currentY, int newX, int newY) {
-        entitiesLocations[newX][newY] = entitiesLocations[currentX][currentY];
-        entitiesLocations[currentX][currentY] = null;
+    public Cell moveEntity(UUID entityId, Cell path) {
+        Cell end = path.getEnd();
+        removeEntity(entityId, path.x, path.y);
+        addEntity(entityId, end.x, end.y);
+        return end;
     }
 
     // Location Functions
