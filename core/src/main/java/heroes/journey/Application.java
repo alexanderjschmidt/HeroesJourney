@@ -21,12 +21,12 @@ import lombok.Getter;
  * Multiplayer
  *  setup player, host, and lobby for server
  * Saving
- * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
  * Add Events
  *  Demon kings arrival
  *  new quests appearances
  * Sounds
  * 	Action Sounds
+ * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
  */
 /* TODO Improvements
  *

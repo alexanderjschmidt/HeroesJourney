@@ -360,24 +360,28 @@ public class Map implements InitializerInterface {
             .dependsOn(new String[]{trees.getName()})
             .applyEffect(gameState -> {
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
-                Feature playerTown = kingdoms.getFirst().connections.stream().toList().getFirst();
-                EntityEdit player = gameState.getWorld().createEntity().edit();
-                UUID playerId = addOverworldComponents(gameState.getWorld(), player,
-                    playerTown.location.getX(), playerTown.location.getY(),
-                    ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
-                player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
-                player.create(NamedComponent.class).name("Player");
-                InventoryComponent.get(gameState.getWorld(), playerId)
-                    .add(Items.healthPotion, 3)
-                    .add(Items.ironIngot, 5)
-                    .add(Items.chestPlate);
-                PlayerInfo.get().setPlayerId(playerId);
-
-                Feature opponentTown = kingdoms.getLast().connections.stream().toList().getLast();
-                EntityEdit opponent = gameState.getWorld().createEntity().edit();
-                addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
-                    opponentTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1],
-                    new MCTSAI());
+                for (Feature kingdom : kingdoms) {
+                    if (kingdom == kingdoms.getFirst()) {
+                        Feature playerTown = kingdom.connections.stream().toList().getFirst();
+                        EntityEdit player = gameState.getWorld().createEntity().edit();
+                        UUID playerId = addOverworldComponents(gameState.getWorld(), player,
+                            playerTown.location.getX(), playerTown.location.getY(),
+                            ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+                        player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
+                        player.create(NamedComponent.class).name("Player");
+                        InventoryComponent.get(gameState.getWorld(), playerId)
+                            .add(Items.healthPotion, 3)
+                            .add(Items.ironIngot, 5)
+                            .add(Items.chestPlate);
+                        PlayerInfo.get().setPlayerId(playerId);
+                    } else {
+                        Feature opponentTown = kingdom.connections.stream().toList().getLast();
+                        EntityEdit opponent = gameState.getWorld().createEntity().edit();
+                        addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
+                            opponentTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1],
+                            new MCTSAI());
+                    }
+                }
             })
             .build()
             .register();
