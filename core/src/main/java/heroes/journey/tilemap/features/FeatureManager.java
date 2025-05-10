@@ -15,6 +15,10 @@ public class FeatureManager extends HashMap<UUID, Feature> {
         return featureManager;
     }
 
+    public static Feature getFeature(UUID id) {
+        return get().get(id);
+    }
+
     public static List<Feature> get(FeatureType type) {
         return get().values().stream().filter(f -> f.getType() == type).collect(Collectors.toList());
     }

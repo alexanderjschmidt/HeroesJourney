@@ -10,6 +10,7 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
+import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
@@ -20,6 +21,8 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.tilemap.TileMapSaveData;
+import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
@@ -187,7 +190,7 @@ public class GameState implements Cloneable {
         world.saveWorld(save, useJson);
         TileMapSaveData mapSaveData = map.getSaveData();
 
-        GameStateSaveData gameStateSaveData = new GameStateSaveData(width, height, mapSaveData, history, turn, currentEntity, entitiesInActionOrder, PlayerInfo.get());
+        GameStateSaveData gameStateSaveData = new GameStateSaveData(width, height, mapSaveData, history, turn, currentEntity, entitiesInActionOrder, PlayerInfo.get(), FeatureManager.get().values().stream().toList());
 
         Json json = new Json();
         json.prettyPrint(true);
@@ -196,8 +199,10 @@ public class GameState implements Cloneable {
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
         json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
         json.setSerializer(UUID.class, new UUIDSerializer());
-        json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
+        json.setSerializer(Feature.class, new FeatureSerializer());
+        json.setSerializer(Position.class, new PositionSerializer());
 
+        json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
         String prettyJson = json.toJson(gameStateSaveData);
         try (FileWriter writer = new FileWriter("saves/" + save + "/gamestate.json")) {
             writer.write(prettyJson);
@@ -216,6 +221,8 @@ public class GameState implements Cloneable {
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
         json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
         json.setSerializer(UUID.class, new UUIDSerializer());
+        json.setSerializer(Feature.class, new FeatureSerializer());
+        json.setSerializer(Position.class, new PositionSerializer());
 
         try (FileReader reader = new FileReader("saves/" + save + "/gamestate.json")) {
             GameStateSaveData gameStateSaveData = json.fromJson(GameStateSaveData.class, reader);
@@ -236,7 +243,7 @@ public class GameState implements Cloneable {
         }
         gameState.world = GameWorld.initGameWorld(gameState);
         gameState.world.loadWorld(save, true);
-        
+
         HUD.get().getCursor().setPosition(gameState.currentEntity);
 
         HUDEffectManager.get();

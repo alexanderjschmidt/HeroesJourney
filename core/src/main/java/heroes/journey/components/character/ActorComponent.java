@@ -1,6 +1,5 @@
 package heroes.journey.components.character;
 
-import com.artemis.annotations.Transient;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -13,10 +12,9 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-@Transient
 public class ActorComponent extends PooledClonableComponent<ActorComponent> {
 
-    private final Actor actor;
+    private final transient Actor actor;
 
     public ActorComponent() {
         actor = new Actor();

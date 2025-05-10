@@ -13,7 +13,7 @@ public class Feature {
     public UUID entityId;
     public FeatureType type;
     public Position location;
-    public Set<Feature> connections;
+    public Set<UUID> connections;
 
     public Feature(UUID entityId, FeatureType type, Position location) {
         this.entityId = entityId;
@@ -24,8 +24,8 @@ public class Feature {
     }
 
     public void add(Feature feature) {
-        connections.add(feature);
-        feature.connections.add(this);
+        connections.add(feature.entityId);
+        feature.connections.add(entityId);
     }
 
     @Override

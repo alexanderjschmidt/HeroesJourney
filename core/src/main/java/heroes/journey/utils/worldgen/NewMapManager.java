@@ -49,15 +49,19 @@ public class NewMapManager {
         mapGenerationEffects.put(name, effect);
     }
 
-    public void initMapGeneration(GameState gameState, MapData mapData) {
+    public void initMapGeneration(GameState gameState, MapData mapData, boolean loading) {
         List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
         while (true) {
             try {
-                gameState.init(mapData);
-                FeatureManager.get().clear();
+                if (!loading) {
+                    gameState.init(mapData);
+                    FeatureManager.get().clear();
+                }
                 for (MapGenerationEffect phase : sorted) {
-                    System.out.println("Running phase: " + phase.getName());
-                    phase.apply(gameState);
+                    if (!loading || phase.isRunOnLoad()) {
+                        System.out.println("Running phase: " + phase.getName() + " " + phase.isRunOnLoad());
+                        phase.apply(gameState);
+                    }
                     gameState.getWorld().basicProcess();
                 }
             } catch (MapGenerationException e) {
@@ -65,7 +69,8 @@ public class NewMapManager {
             }
             break;
         }
-        gameState.nextMove();
+        if (!loading)
+            gameState.nextMove();
     }
 
     public void initMapGenerationTimeout(GameState gameState, MapData mapData) {

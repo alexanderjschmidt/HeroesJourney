@@ -106,6 +106,7 @@ public class TravelActions implements InitializerInterface {
         // Add Travel Actions
         MapGenerationEffect travel = MapGenerationEffect.builder()
             .name("travel")
+            .runOnLoad(true)
             .dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()})
             .applyEffect(gameState -> {
                 wayfareActionsList.clear();
@@ -142,12 +143,13 @@ public class TravelActions implements InitializerInterface {
                 positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
 
             Queue<Runnable> events = new LinkedList<>();
-            events.add(() -> gs.getWorld().edit(e).create(MovementComponent.class).path(path.reverse()));
+            events.add(() -> {
+                gs.getWorld().edit(e).create(MovementComponent.class).path(path.reverse());
+            });
             events.add(() -> {
                 BaseActions.popupMessage = "You have traveled to " + locationName;
                 gs.getWorld().edit(e).create(ActionComponent.class).action(popup);
             });
-
             return new MultiStepResult(events);
         }).onSelectAI((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
@@ -177,7 +179,8 @@ public class TravelActions implements InitializerInterface {
 
     private static List<Action> getWayfareActions(GameState gameState, Feature feature) {
         List<Action> actions = new ArrayList<>();
-        for (Feature connection : feature.getConnections()) {
+        for (UUID connectionId : feature.getConnections()) {
+            Feature connection = FeatureManager.getFeature(connectionId);
             actions.add(wayfareActionsList.get(connection.entityId));
         }
         return actions;

@@ -9,6 +9,7 @@ import heroes.journey.GameStateSaveData;
 import heroes.journey.PlayerInfo;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.tilemap.TileMapSaveData;
+import heroes.journey.tilemap.features.Feature;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveD
         }
         json.writeArrayEnd();
         json.writeValue("playerInfo", saveData.getPlayerInfo());
+        json.writeValue("features", saveData.getFeatures());
         json.writeObjectEnd();
     }
 
@@ -49,8 +51,13 @@ public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveD
         }
 
         PlayerInfo playerInfo = json.readValue("playerInfo", PlayerInfo.class, jsonValue);
+        JsonValue featuresArray = jsonValue.get("features");
+        List<Feature> features = new ArrayList<>();
+        for (JsonValue val = featuresArray.child; val != null; val = val.next) {
+            features.add(json.readValue(Feature.class, val));
+        }
 
-        return new GameStateSaveData(width, height, map, history, turn, currentEntity, entitiesInActionOrder, playerInfo);
+        return new GameStateSaveData(width, height, map, history, turn, currentEntity, entitiesInActionOrder, playerInfo, features);
     }
 
     @Override
@@ -80,6 +87,6 @@ public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveD
             entitiesInActionOrder.add(UUID.fromString(input.readString()));
         }
 
-        return new GameStateSaveData(10, 10, map, history, turn, currentEntity, entitiesInActionOrder, null);
+        return new GameStateSaveData(10, 10, map, history, turn, currentEntity, entitiesInActionOrder, null, null);
     }
 }

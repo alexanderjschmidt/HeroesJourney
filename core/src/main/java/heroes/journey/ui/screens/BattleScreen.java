@@ -39,9 +39,7 @@ public class BattleScreen implements Screen {
     public void startGame() {
         batch = app.getBatch();
 
-        if (!ready) {
-            NewMapManager.get().initMapGeneration(GameState.global(), mapData);
-        }
+        NewMapManager.get().initMapGeneration(GameState.global(), mapData, ready);
 
         if (LoadOptions.backgroundMusic.isTrue())
             MusicManager.play("Sounds/Music/Dragon_Of_The_Mist.mp3");
@@ -52,7 +50,7 @@ public class BattleScreen implements Screen {
     public void render(float delta) {
         if (Gdx.input.isKeyJustPressed(KeyManager.RE_GEN_MAP)) {
             Random.get().setSeed((int) (Math.random() * 10000000));
-            NewMapManager.get().initMapGeneration(GameState.global(), mapData);
+            NewMapManager.get().initMapGeneration(GameState.global(), mapData, false);
         }
 
         GameCamera.get().updateGameCamera();

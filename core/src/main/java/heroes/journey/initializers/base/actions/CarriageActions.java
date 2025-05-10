@@ -1,9 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -15,6 +11,10 @@ import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class CarriageActions {
 
@@ -30,7 +30,8 @@ public class CarriageActions {
         // Add Carriage Actions
         MapGenerationEffect carriage = MapGenerationEffect.builder()
             .name("carriage")
-            .dependsOn(new String[] {heroes.journey.initializers.base.Map.trees.getName()})
+            .runOnLoad(true)
+            .dependsOn(new String[]{heroes.journey.initializers.base.Map.trees.getName()})
             .applyEffect(gameState -> {
                 for (Feature feature : FeatureManager.get().values()) {
                     if (feature.getType() != FeatureType.KINGDOM) {

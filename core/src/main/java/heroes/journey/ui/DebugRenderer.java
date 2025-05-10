@@ -8,6 +8,8 @@ import heroes.journey.GameCamera;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 
+import java.util.UUID;
+
 public class DebugRenderer {
 
     private Color connectionColor = Color.WHITE;
@@ -24,8 +26,9 @@ public class DebugRenderer {
         shapeRenderer.setColor(connectionColor);
 
         for (Feature feature : FeatureManager.get().values()) {
-            for (Feature connected : feature.connections) {
+            for (UUID connectedId : feature.connections) {
                 // Avoid double-drawing
+                Feature connected = FeatureManager.get().get(connectedId);
                 if (feature.location.hashCode() < connected.location.hashCode()) {
                     shapeRenderer.line((feature.location.getX() * GameCamera.get().getSize()) +
                             (GameCamera.get().getSize() / 2f),

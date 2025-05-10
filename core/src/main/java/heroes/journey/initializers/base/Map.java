@@ -145,7 +145,8 @@ public class Map implements InitializerInterface {
                 // Capitals to towns
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
                 for (Feature kingdom : kingdoms) {
-                    for (Feature town : kingdom.connections) {
+                    for (UUID townId : kingdom.connections) {
+                        Feature town = FeatureManager.get().get(townId);
                         buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdom.location, town.location);
                     }
                 }
@@ -184,7 +185,9 @@ public class Map implements InitializerInterface {
                 List<Feature> settlements = new ArrayList<>();
                 for (Feature kingdom : FeatureManager.get(FeatureType.KINGDOM)) {
                     settlements.add(kingdom);
-                    settlements.addAll(kingdom.connections);
+                    for (UUID connectionId : kingdom.connections) {
+                        settlements.add(FeatureManager.get().get(connectionId));
+                    }
                 }
 
                 for (Feature settlement : settlements) {
@@ -361,7 +364,7 @@ public class Map implements InitializerInterface {
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
                 for (Feature kingdom : kingdoms) {
                     if (kingdom == kingdoms.getFirst()) {
-                        Feature playerTown = kingdom.connections.stream().toList().getFirst();
+                        Feature playerTown = FeatureManager.get().get(kingdom.connections.stream().toList().getFirst());
                         EntityEdit player = gameState.getWorld().createEntity().edit();
                         UUID playerId = addOverworldComponents(gameState.getWorld(), player,
                             playerTown.location.getX(), playerTown.location.getY(),
@@ -374,7 +377,7 @@ public class Map implements InitializerInterface {
                             .add(Items.chestPlate);
                         PlayerInfo.get().setPlayerId(playerId);
                     } else {
-                        Feature opponentTown = kingdom.connections.stream().toList().getLast();
+                        Feature opponentTown = FeatureManager.get().get(kingdom.connections.stream().toList().getLast());
                         EntityEdit opponent = gameState.getWorld().createEntity().edit();
                         addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
                             opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE,
