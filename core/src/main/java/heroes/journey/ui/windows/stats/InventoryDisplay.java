@@ -18,12 +18,14 @@ import java.util.UUID;
 public class InventoryDisplay extends Table {
 
     private UUID entityId;
+    private EquipmentDisplay equipmentDisplay;
     private InventoryComponent inventoryComponent;
     private final InventoryScroll inventoryScroll;
     private final Label gold, weight;
 
-    public InventoryDisplay() {
+    public InventoryDisplay(EquipmentDisplay equipmentDisplay) {
         super();
+        this.equipmentDisplay = equipmentDisplay;
         Label title = new Label("===== Inventory =====", ResourceManager.get().skin);
         inventoryScroll = new InventoryScroll();
 
@@ -48,6 +50,10 @@ public class InventoryDisplay extends Table {
 
     public void setEntity(UUID entityId) {
         this.entityId = entityId;
+        refreshEntity();
+    }
+
+    private void refreshEntity() {
         inventoryComponent = InventoryComponent.get(GameState.global().getWorld(), entityId);
         inventoryScroll.open(inventoryComponent.getInventory()
             .keySet()
@@ -68,6 +74,7 @@ public class InventoryDisplay extends Table {
         @Override
         public void select() {
             Item selectedItem = getSelected().entry();
+            System.out.println(selectedItem);
             switch (selectedItem.getType()) {
                 case Weapon:
                 case Armor:
@@ -81,6 +88,8 @@ public class InventoryDisplay extends Table {
                     c.consume(GameState.global(), entityId);
                     break;
             }
+            equipmentDisplay.refreshEntity();
+            refreshEntity();
         }
 
         private void removeItem(Item item) {

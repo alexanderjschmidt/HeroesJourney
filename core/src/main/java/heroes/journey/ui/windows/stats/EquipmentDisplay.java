@@ -1,16 +1,16 @@
 package heroes.journey.ui.windows.stats;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.utils.art.ResourceManager;
 
+import java.util.UUID;
+
 public class EquipmentDisplay extends Table {
 
+    private UUID entityId;
     private final Label head, chest, legs, boots;
     private final Label handOne, handTwo, accessoryOne, accessoryTwo;
 
@@ -45,6 +45,11 @@ public class EquipmentDisplay extends Table {
     }
 
     public void setEntity(UUID entityId) {
+        this.entityId = entityId;
+        refreshEntity();
+    }
+
+    public void refreshEntity() {
         EquipmentComponent equipmentComponent = EquipmentComponent.get(GameState.global().getWorld(),
             entityId);
 
@@ -58,6 +63,7 @@ public class EquipmentDisplay extends Table {
         accessoryOne.setText("Acc One: " + str(equipmentComponent.accessoryOne()));
         accessoryTwo.setText("Acc Two: " + str(equipmentComponent.accessoryTwo()));
     }
+
 
     private String str(Object o) {
         return o == null ? "---" : o.toString();

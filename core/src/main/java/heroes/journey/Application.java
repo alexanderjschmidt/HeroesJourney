@@ -15,7 +15,30 @@ import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 
 /*
- * TODO List
+ * TODO Features
+ *
+ * Knowledge System
+ * Multiplayer
+ *  setup player, host, and lobby for server
+ * Saving
+ * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
+ * Add Events
+ *  Demon kings arrival
+ *  new quests appearances
+ * Sounds
+ * 	Action Sounds
+ */
+/* TODO Improvements
+ *
+ * Map Generation
+ *  Add variation plain tiles
+ * 	Guarantee path to all dungeons
+ *      Make paths allowed to go through hills to make the \_/?
+ *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
+ * 	Improve road generation roads are too straight
+ * AI
+ *  Add understanding of fog of war (Probably need more knowledge information)
+ *  Make AI use/equipped gear
  * Menus
  * 	Inventory
  *      Icons its own column
@@ -25,27 +48,6 @@ import lombok.Getter;
  * 		Scrolling
  *  Show Controls on UIs?
  * Make HUD Locked when players character is moving, and have the camera follow player movement
- * Multiplayer
- *  setup player, host, and lobby for server
- *  make only one entity per team, will make my life easier on deciding what to display in ui
- * Make the different travels fail if someone is already there?
- *  Or allow entities to stack and battle?
- *  Grayed if you can see someone their, and fail (loose the turn) if you cant see
- * AI
- *  Add understanding of fog of war (Probably need more knowledge information)
- * Saving
- * make Actions take inputs, so travel actions just need a target location instead of an action for every movement.
- * Add Events
- *  Demon kings arrival
- *  new quests appearances
- * Map Generation
- *  Add variation plain tiles
- * 	Guarantee path to all dungeons
- *      Make paths allowed to go through hills to make the \_/?
- *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
- * 	Improve road generation roads are too straight
- * Sounds
- * 	Action Sounds
  */
 /*
  * Knowledge System
