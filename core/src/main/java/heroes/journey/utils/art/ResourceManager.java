@@ -37,6 +37,8 @@ public class ResourceManager extends AssetManager {
 
     public HashMap<TextureMap, TextureRegion[][]> textureRegions;
 
+    public HashMap<String, TextureRegion> sprites;
+
     private static ResourceManager manager;
 
     public static synchronized ResourceManager get() {
@@ -46,6 +48,16 @@ public class ResourceManager extends AssetManager {
         return manager;
     }
 
+    public static TextureRegion getSprite(String sprite) {
+        return get().sprites.get(sprite);
+    }
+
+    public static void register(String spriteName, TextureRegion sprite) {
+        if (get().sprites.containsKey(spriteName))
+            throw new RuntimeException("Registering sprite with the same name as existing sprite " + spriteName);
+        get().sprites.put(spriteName, sprite);
+    }
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
@@ -53,6 +65,7 @@ public class ResourceManager extends AssetManager {
 
     private ResourceManager() {
         textureRegions = new HashMap<TextureMap, TextureRegion[][]>();
+        sprites = new HashMap<>();
 
         initFonts();
         loadSkin("uiskin");

@@ -20,7 +20,6 @@ import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
-import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.RandomWorldGenerator;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
@@ -366,7 +365,7 @@ public class Map implements InitializerInterface {
                         EntityEdit player = gameState.getWorld().createEntity().edit();
                         UUID playerId = addOverworldComponents(gameState.getWorld(), player,
                             playerTown.location.getX(), playerTown.location.getY(),
-                            ResourceManager.get(LoadTextures.Sprites)[1][1], new MCTSAI());
+                            LoadTextures.PLAYER_SPRITE, new MCTSAI());
                         player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                         player.create(NamedComponent.class).name("Player");
                         InventoryComponent.get(gameState.getWorld(), playerId)
@@ -378,7 +377,7 @@ public class Map implements InitializerInterface {
                         Feature opponentTown = kingdom.connections.stream().toList().getLast();
                         EntityEdit opponent = gameState.getWorld().createEntity().edit();
                         addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
-                            opponentTown.location.getY(), ResourceManager.get(LoadTextures.Sprites)[1][1],
+                            opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE,
                             new MCTSAI());
                     }
                 }
