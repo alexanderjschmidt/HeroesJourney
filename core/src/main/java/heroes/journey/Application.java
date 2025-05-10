@@ -21,10 +21,6 @@ import lombok.Getter;
  * Multiplayer
  *  setup player, host, and lobby for server
  * Saving
- *  save world (halfway there with serializer)
- *  save tile map
- *      Make Tiles serializable? Maybe make a TileManager that relates a string/int to a tile?'
- *      May want to add tile variance before trying to save it
  *  load from main menu
  * Add Events
  *  Demon kings arrival

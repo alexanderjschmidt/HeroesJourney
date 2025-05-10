@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class Tile {
 
@@ -165,5 +166,42 @@ public abstract class Tile {
             neighbors.get(Direction.SOUTHWEST).toString().substring(0, 2) +
             neighbors.get(Direction.SOUTH).toString().substring(0, 2) +
             neighbors.get(Direction.SOUTHEAST).toString().substring(0, 2);
+    }
+
+    public String getLayout(Map<String, Integer> terrainMap) {
+        return terrainMap.get(neighbors.get(Direction.NORTHWEST).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.NORTH).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.NORTHEAST).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.WEST).toString()) +
+            "," +
+            terrainMap.get(terrain.toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.EAST).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.SOUTHWEST).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.SOUTH).toString()) +
+            "," +
+            terrainMap.get(neighbors.get(Direction.SOUTHEAST).toString());
+    }
+
+    public boolean matchesLayout(String[] layout) {
+        return Objects.equals(layout[0], getNeighborString(Direction.NORTHWEST)) &&
+            Objects.equals(layout[1], getNeighborString(Direction.NORTH)) &&
+            Objects.equals(layout[2], getNeighborString(Direction.NORTHEAST)) &&
+            Objects.equals(layout[3], getNeighborString(Direction.WEST)) &&
+            Objects.equals(layout[4], terrain.toString()) &&
+            Objects.equals(layout[5], getNeighborString(Direction.EAST)) &&
+            Objects.equals(layout[6], getNeighborString(Direction.SOUTHWEST)) &&
+            Objects.equals(layout[7], getNeighborString(Direction.SOUTH)) &&
+            Objects.equals(layout[8], getNeighborString(Direction.SOUTHEAST));
+    }
+
+    private String getNeighborString(Direction direction) {
+        Object neighbor = neighbors.get(direction);
+        return neighbor != null ? neighbor.toString() : "null";
     }
 }

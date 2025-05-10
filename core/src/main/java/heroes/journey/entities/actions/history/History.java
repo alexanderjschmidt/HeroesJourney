@@ -8,7 +8,7 @@ import java.util.UUID;
 public class History extends Stack<Record> implements Cloneable {
 
     public void add(Action action, UUID currentEntity) {
-        this.add(new ActionRecord(currentEntity, action));
+        this.add(new ActionRecord(currentEntity, action.toString()));
     }
 
     @Override

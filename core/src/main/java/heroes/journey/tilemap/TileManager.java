@@ -13,4 +13,13 @@ public class TileManager extends ArrayList<Tile> {
             tileManager = new TileManager();
         return tileManager;
     }
+
+    // TODO improve performance with map?
+    public Tile getTileMatch(String[] layout) {
+        for (Tile t : this) {
+            if (t.matchesLayout(layout))
+                return t;
+        }
+        return null;
+    }
 }

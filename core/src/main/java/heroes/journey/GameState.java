@@ -177,5 +177,6 @@ public class GameState implements Cloneable {
 
     public void save(String save, boolean json) {
         world.saveWorld(save, json);
+        map.save(save, json);
     }
 }

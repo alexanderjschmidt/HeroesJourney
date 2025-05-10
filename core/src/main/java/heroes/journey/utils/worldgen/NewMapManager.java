@@ -10,9 +10,12 @@ import java.util.function.Supplier;
 
 public class NewMapManager {
 
+    private static NewMapManager newMapManager;
     Map<String, MapGenerationEffect> mapGenerationEffects;
 
-    private static NewMapManager newMapManager;
+    private NewMapManager() {
+        mapGenerationEffects = new HashMap<>();
+    }
 
     public static NewMapManager get() {
         if (newMapManager == null)
@@ -20,8 +23,26 @@ public class NewMapManager {
         return newMapManager;
     }
 
-    private NewMapManager() {
-        mapGenerationEffects = new HashMap<>();
+    public static void timeout(Supplier<Callable<Void>> taskSupplier, int retryCount, int timeout) {
+        int i = 0; // create once outside the loop
+        while (i < retryCount) {
+            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            i++;
+            Future<Void> future = executorService.submit(taskSupplier.get());
+            try {
+                // Wait for the task to complete or timeout
+                future.get(timeout, TimeUnit.MILLISECONDS);
+                break;  // Break if the task completes successfully
+            } catch (TimeoutException e) {
+                // Handle timeout case (task did not finish in time)
+                System.out.println("Timed out");
+            } catch (ExecutionException | InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                future.cancel(true); // ensure cancellation if needed
+                executorService.shutdownNow();
+            }
+        }
     }
 
     public void addMapGenerationEffect(String name, MapGenerationEffect effect) {
@@ -59,28 +80,6 @@ public class NewMapManager {
             }
             return null;
         }, 10, 1000);
-    }
-
-    public static void timeout(Supplier<Callable<Void>> taskSupplier, int retryCount, int timeout) {
-        int i = 0; // create once outside the loop
-        while (i < retryCount) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            i++;
-            Future<Void> future = executorService.submit(taskSupplier.get());
-            try {
-                // Wait for the task to complete or timeout
-                future.get(timeout, TimeUnit.MILLISECONDS);
-                break;  // Break if the task completes successfully
-            } catch (TimeoutException e) {
-                // Handle timeout case (task did not finish in time)
-                System.out.println("Timed out");
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
-            } finally {
-                future.cancel(true); // ensure cancellation if needed
-                executorService.shutdownNow();
-            }
-        }
     }
 
     private List<MapGenerationEffect> topologicalSort(Map<String, MapGenerationEffect> phases) {

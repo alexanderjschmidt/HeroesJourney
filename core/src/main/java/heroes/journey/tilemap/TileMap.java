@@ -5,6 +5,8 @@ import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import heroes.journey.RenderBounds;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
@@ -13,13 +15,14 @@ import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
+import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 
 import static heroes.journey.initializers.base.Map.inBounds;
 
@@ -157,6 +160,93 @@ public class TileMap implements IndexedGraph<TileNode> {
     @Override
     public Array<Connection<TileNode>> getConnections(TileNode fromNode) {
         return fromNode.getConnections();
+    }
+
+    public void save(String save, boolean useJson) {
+        // Save Terrain -> Int Terrain Map
+        Map<String, Integer> terrainMap = new HashMap<>(TerrainManager.get().size());
+        int count = 0;
+        terrainMap.put("null", count++);
+        for (String terrain : TerrainManager.get().keySet()) {
+            terrainMap.put(terrain, count++);
+        }
+        Map<String, Integer> tileToIntMap = new HashMap<>();
+        int tileCount = 0;
+        int[][] map = new int[width][height];
+        int[][] env = new int[width][height];
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                String layout = tileMap[x][y].getLayout(terrainMap);
+                if (!tileToIntMap.containsKey(layout)) {
+                    tileToIntMap.put(layout, tileCount++);
+                }
+                map[x][y] = tileToIntMap.get(layout);
+
+                String layoutEnv;
+                if (environment[x][y] == null) {
+                    layoutEnv = "0,0,0,0,0,0,0,0,0";
+                } else {
+                    layoutEnv = environment[x][y].getLayout(terrainMap);
+                }
+                if (!tileToIntMap.containsKey(layoutEnv)) {
+                    tileToIntMap.put(layoutEnv, tileCount++);
+                }
+                env[x][y] = tileToIntMap.get(layoutEnv);
+            }
+        }
+        TileMapSaveData saveData = new TileMapSaveData(terrainMap, tileToIntMap, map, env);
+
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
+
+        try (FileWriter writer = new FileWriter("saves/" + save + "/map.json")) {
+            json.toJson(saveData, writer);
+        } catch (IOException e) {
+            e.printStackTrace(); // or your logging system
+        }
+    }
+
+    public void load(String save) {
+        Json json = new Json();
+        json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
+
+        TileMapSaveData saveData;
+        try (FileReader reader = new FileReader("saves/" + save + "/map.json")) {
+            saveData = json.fromJson(TileMapSaveData.class, reader);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        Map<Integer, String> intToTileMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : saveData.getTileToIntMap().entrySet()) {
+            intToTileMap.put(entry.getValue(), entry.getKey());
+        }
+        Map<Integer, String> intToTerrainMap = new HashMap<>();
+        for (Map.Entry<String, Integer> entry : saveData.getTerrainMap().entrySet()) {
+            intToTerrainMap.put(entry.getValue(), entry.getKey());
+        }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                String[] layoutStr = intToTileMap.get(saveData.getMap()[x][y]).split(",");
+                // Convert layoutStr to ints
+                String[] layout = new String[layoutStr.length];
+                for (int i = 0; i < layoutStr.length; i++) {
+                    layout[i] = intToTerrainMap.get(Integer.parseInt(layoutStr[i]));
+                }
+                assert (tileMap[x][y] == TileManager.get().getTileMatch(layout));
+                tileMap[x][y] = TileManager.get().getTileMatch(layout);
+
+                String[] layoutStrEnv = intToTileMap.get(saveData.getEnvironment()[x][y]).split(",");
+                // Convert layoutStr to ints
+                String[] layoutEnv = new String[layoutStrEnv.length];
+                for (int i = 0; i < layoutStrEnv.length; i++) {
+                    layoutEnv[i] = intToTerrainMap.get(Integer.parseInt(layoutStrEnv[i]));
+                }
+                assert (environment[x][y] == TileManager.get().getTileMatch(layoutEnv));
+                environment[x][y] = TileManager.get().getTileMatch(layoutEnv);
+            }
+        }
     }
 }
 
