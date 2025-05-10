@@ -39,6 +39,9 @@ public class ActionSystem extends IteratingSystem {
         if (result != null) {
             switch (result) {
                 case StringResult str -> {
+                    GameState.global()
+                        .getHistory()
+                        .add(action.getAction(), id);
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
                     if (PlayerInfo.isPlayer(id)) {

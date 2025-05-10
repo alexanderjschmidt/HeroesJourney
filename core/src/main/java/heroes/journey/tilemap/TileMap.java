@@ -5,8 +5,6 @@ import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import heroes.journey.RenderBounds;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
@@ -15,13 +13,9 @@ import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.ai.pathfinding.TileNode;
-import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 
 import static heroes.journey.initializers.base.Map.inBounds;
@@ -162,7 +156,7 @@ public class TileMap implements IndexedGraph<TileNode> {
         return fromNode.getConnections();
     }
 
-    public void save(String save, boolean useJson) {
+    public TileMapSaveData getSaveData() {
         // Save Terrain -> Int Terrain Map
         Map<String, Integer> terrainMap = new HashMap<>(TerrainManager.get().size());
         int count = 0;
@@ -194,30 +188,10 @@ public class TileMap implements IndexedGraph<TileNode> {
                 env[x][y] = tileToIntMap.get(layoutEnv);
             }
         }
-        TileMapSaveData saveData = new TileMapSaveData(terrainMap, tileToIntMap, map, env);
-
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
-
-        try (FileWriter writer = new FileWriter("saves/" + save + "/map.json")) {
-            json.toJson(saveData, writer);
-        } catch (IOException e) {
-            e.printStackTrace(); // or your logging system
-        }
+        return new TileMapSaveData(terrainMap, tileToIntMap, map, env);
     }
 
-    public void load(String save) {
-        Json json = new Json();
-        json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
-
-        TileMapSaveData saveData;
-        try (FileReader reader = new FileReader("saves/" + save + "/map.json")) {
-            saveData = json.fromJson(TileMapSaveData.class, reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
+    public void load(TileMapSaveData saveData) {
         Map<Integer, String> intToTileMap = new HashMap<>();
         for (Map.Entry<String, Integer> entry : saveData.getTileToIntMap().entrySet()) {
             intToTileMap.put(entry.getValue(), entry.getKey());

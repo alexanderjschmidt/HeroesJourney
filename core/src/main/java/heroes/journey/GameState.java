@@ -1,6 +1,8 @@
 package heroes.journey;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
@@ -16,12 +18,19 @@ import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.tilemap.TileMap;
+import heroes.journey.tilemap.TileMapSaveData;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
+import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
+import heroes.journey.utils.serializers.UUIDSerializer;
 import lombok.Getter;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,9 +41,9 @@ public class GameState implements Cloneable {
     private static GameState gameState;
     private int width, height;
     private EntityManager entities;
-    private History history;
-    private TileMap map;
     private GameWorld world;
+    private TileMap map;
+    private History history;
     private int turn;
     @Getter
     private UUID currentEntity;
@@ -175,8 +184,41 @@ public class GameState implements Cloneable {
         return this == GameState.global();
     }
 
-    public void save(String save, boolean json) {
-        world.saveWorld(save, json);
-        map.save(save, json);
+    public void save(String save, boolean useJson) {
+        world.saveWorld(save, useJson);
+        TileMapSaveData mapSaveData = map.getSaveData();
+
+        GameStateSaveData gameStateSaveData = new GameStateSaveData(mapSaveData, history, turn, currentEntity, entitiesInActionOrder);
+
+        Json json = new Json();
+        json.prettyPrint(true);
+        json.setSerializer(GameStateSaveData.class, new GameStateSaveDataSerializer());
+        json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
+        json.setSerializer(UUID.class, new UUIDSerializer());
+        json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
+
+        String prettyJson = json.toJson(gameStateSaveData);
+        try (FileWriter writer = new FileWriter("saves/" + save + "/gamestate.json")) {
+            writer.write(prettyJson);
+        } catch (IOException e) {
+            e.printStackTrace(); // or your logging system
+        }
+    }
+
+    public void loadFromFile(String save) {
+        Json json = new Json();
+        json.setSerializer(GameStateSaveData.class, new GameStateSaveDataSerializer());
+        json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
+
+        try (FileReader reader = new FileReader("saves/" + save + "/gamestate.json")) {
+            GameStateSaveData gameStateSaveData = json.fromJson(GameStateSaveData.class, reader);
+            this.map.load(gameStateSaveData.getMap());
+            this.history = gameStateSaveData.getHistory();
+            this.turn = gameStateSaveData.getTurn();
+            this.currentEntity = gameStateSaveData.getCurrentEntity();
+            this.entitiesInActionOrder = gameStateSaveData.getEntitiesInActionOrder();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
