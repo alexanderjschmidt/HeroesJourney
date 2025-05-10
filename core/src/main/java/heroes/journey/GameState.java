@@ -12,6 +12,7 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
+import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
@@ -23,9 +24,7 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
-import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
-import heroes.journey.utils.serializers.UUIDSerializer;
+import heroes.journey.utils.serializers.*;
 import lombok.Getter;
 
 import java.io.FileReader;
@@ -188,12 +187,14 @@ public class GameState implements Cloneable {
         world.saveWorld(save, useJson);
         TileMapSaveData mapSaveData = map.getSaveData();
 
-        GameStateSaveData gameStateSaveData = new GameStateSaveData(mapSaveData, history, turn, currentEntity, entitiesInActionOrder);
+        GameStateSaveData gameStateSaveData = new GameStateSaveData(width, height, mapSaveData, history, turn, currentEntity, entitiesInActionOrder, PlayerInfo.get());
 
         Json json = new Json();
         json.prettyPrint(true);
         json.setSerializer(GameStateSaveData.class, new GameStateSaveDataSerializer());
+        json.setSerializer(PlayerInfo.class, new PlayerInfoSerializer());
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
+        json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
         json.setSerializer(UUID.class, new UUIDSerializer());
         json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact
 
@@ -205,20 +206,36 @@ public class GameState implements Cloneable {
         }
     }
 
-    public void loadFromFile(String save) {
+    public static void loadFromFile(String save) {
+        Initializer.init();
+        gameState = new GameState();
+        gameState.world = GameWorld.initGameWorld(gameState);
+        gameState.world.loadWorld(save, true);
+
         Json json = new Json();
         json.setSerializer(GameStateSaveData.class, new GameStateSaveDataSerializer());
+        json.setSerializer(PlayerInfo.class, new PlayerInfoSerializer());
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
+        json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
+        json.setSerializer(UUID.class, new UUIDSerializer());
 
         try (FileReader reader = new FileReader("saves/" + save + "/gamestate.json")) {
             GameStateSaveData gameStateSaveData = json.fromJson(GameStateSaveData.class, reader);
-            this.map.load(gameStateSaveData.getMap());
-            this.history = gameStateSaveData.getHistory();
-            this.turn = gameStateSaveData.getTurn();
-            this.currentEntity = gameStateSaveData.getCurrentEntity();
-            this.entitiesInActionOrder = gameStateSaveData.getEntitiesInActionOrder();
+            // TODO Serialize width and height
+            gameState.width = gameStateSaveData.getWidth();
+            gameState.height = gameStateSaveData.getHeight();
+            gameState.map = new TileMap(gameState.width);
+            gameState.entities = new EntityManager(gameState.width, gameState.height);
+            gameState.map.load(gameStateSaveData.getMap());
+            gameState.history = gameStateSaveData.getHistory();
+            gameState.turn = gameStateSaveData.getTurn();
+            gameState.currentEntity = gameStateSaveData.getCurrentEntity();
+            gameState.entitiesInActionOrder = gameStateSaveData.getEntitiesInActionOrder();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        HUDEffectManager.get();
+        WorldEffectManager.get();
     }
 }

@@ -17,6 +17,7 @@ public class Serializers {
         JsonArtemisSerializer jsonSerializer = new JsonArtemisSerializer(world);
         // Utils
         jsonSerializer.register(Position.class, new PositionSerializer());
+        jsonSerializer.register(UUID.class, new UUIDSerializer());
 
         // Components
         jsonSerializer.register(FogMap.class, new FogMapSerializer());

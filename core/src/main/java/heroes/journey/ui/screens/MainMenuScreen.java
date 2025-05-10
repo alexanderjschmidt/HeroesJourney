@@ -1,11 +1,5 @@
 package heroes.journey.ui.screens;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.alpha;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveBy;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.parallel;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,10 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
+import heroes.journey.GameState;
 import heroes.journey.utils.art.ResourceManager;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class MainMenuScreen implements Screen {
 
@@ -112,7 +108,10 @@ public class MainMenuScreen implements Screen {
         buttonLoad.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // app.load();
+                GameState.loadFromFile("save");
+                BattleScreen battleScreen = new BattleScreen(app, true);
+                battleScreen.readyUp();
+                app.setScreen(battleScreen);
             }
         });
 

@@ -6,17 +6,25 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class UUIDSerializer extends CustomSerializer<UUID> {
     @Override
     public void write(Json json, UUID uuid, Class aClass) {
-        json.writeValue(uuid.toString());
+        if (uuid == null) {
+            json.writeValue("null");
+        } else {
+            json.writeValue(uuid.toString());
+        }
     }
 
     @Override
     public UUID read(Json json, JsonValue jsonValue, Class aClass) {
         String id = jsonValue.asString();
+        if (Objects.equals(id, "null") || id == null) {
+            return null;
+        }
         return UUID.fromString(id);
     }
 

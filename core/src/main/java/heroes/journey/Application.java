@@ -20,8 +20,6 @@ import lombok.Getter;
  * Knowledge System
  * Multiplayer
  *  setup player, host, and lobby for server
- * Saving
- *  load from main menu
  * Add Events
  *  Demon kings arrival
  *  new quests appearances

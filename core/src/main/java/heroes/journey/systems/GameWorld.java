@@ -24,6 +24,7 @@ import heroes.journey.systems.triggerable.QuestSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
 import heroes.journey.utils.serializers.Serializers;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -145,6 +146,14 @@ public class GameWorld extends World {
         manager.setSerializer(kryo);
     }
 
+    public void loadWorld(String saveName, boolean json) {
+        KryoArtemisSerializer kryo = manager.getSerializer();
+        if (json)
+            manager.setSerializer(Serializers.json(this));
+        loadWorld(saveName);
+        manager.setSerializer(kryo);
+    }
+
     private void saveWorld(String saveName) {
         long start = System.nanoTime();
         // Export current world state
@@ -160,6 +169,24 @@ public class GameWorld extends World {
         file.writeBytes(baos.toByteArray(), false); // false = overwrite, true = append
 
         Utils.logTime("saved", start, 20);
+    }
+
+    private void loadWorld(String saveName) {
+        long start = System.nanoTime();
+
+        // Read saved data from file
+        FileHandle file = Gdx.files.local("saves/" + saveName + "/world.json");
+        if (!file.exists()) {
+            throw new RuntimeException("Save file not found: " + file.path());
+        }
+
+        byte[] data = file.readBytes();
+        ByteArrayInputStream bais = new ByteArrayInputStream(data);
+
+        // Deserialize and apply to world
+        manager.load(bais, SaveFileFormat.class);
+
+        Utils.logTime("loaded", start, 20);
     }
 
     public void basicProcess() {

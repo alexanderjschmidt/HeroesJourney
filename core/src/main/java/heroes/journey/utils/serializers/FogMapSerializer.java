@@ -15,6 +15,10 @@ public class FogMapSerializer extends CustomSerializer<FogMap> {
         json.writeObjectStart();
         Fog[][] fog = fogMap.getFog();
 
+        int height = fog.length;
+        int width = fog[0].length;
+        json.writeValue("height", height);
+        json.writeValue("width", width);
         // Write fog dimensions and data as 2D char array
         json.writeArrayStart("fog");
         for (Fog[] row : fog) {
@@ -36,8 +40,8 @@ public class FogMapSerializer extends CustomSerializer<FogMap> {
     public FogMap read(Json json, JsonValue jsonValue, Class aClass) {
         // Parse fog array
         JsonValue fogJson = jsonValue.get("fog");
-        int height = fogJson.size;
-        int width = fogJson.get(0).size;
+        int height = jsonValue.getInt("height");
+        int width = jsonValue.getInt("width");
 
         Fog[][] fog = new Fog[height][width];
 

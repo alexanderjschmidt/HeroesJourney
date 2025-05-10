@@ -39,11 +39,12 @@ public class BattleScreen implements Screen {
     public void startGame() {
         batch = app.getBatch();
 
-        NewMapManager.get().initMapGeneration(GameState.global(), mapData);
+        if (!ready) {
+            NewMapManager.get().initMapGeneration(GameState.global(), mapData);
+        }
 
         if (LoadOptions.backgroundMusic.isTrue())
             MusicManager.play("Sounds/Music/Dragon_Of_The_Mist.mp3");
-
         ready = true;
     }
 
@@ -95,4 +96,7 @@ public class BattleScreen implements Screen {
     public void dispose() {
     }
 
+    public void readyUp() {
+        this.ready = true;
+    }
 }

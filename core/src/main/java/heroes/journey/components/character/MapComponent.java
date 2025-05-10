@@ -7,7 +7,6 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import lombok.Getter;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -20,7 +19,7 @@ public class MapComponent extends PooledClonableComponent<MapComponent> {
 
     public MapComponent() {
         fogMap = new FogMap(new Fog[GameState.global().getWidth()][GameState.global().getHeight()]);
-        knownLocations = Collections.synchronizedSet(new HashSet<>());
+        knownLocations = new HashSet<>();
     }
 
     public static MapComponent get(GameWorld world, UUID entityId) {
