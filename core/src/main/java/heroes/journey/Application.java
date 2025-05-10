@@ -22,6 +22,7 @@ import lombok.Getter;
  *  setup player, host, and lobby for server
  * Add Events
  *  Demon kings arrival
+ *  Global Quests
  *  new quests appearances
  * Sounds
  * 	Action Sounds
@@ -51,9 +52,7 @@ import lombok.Getter;
 /*
  * Knowledge System
  *  Towns: Inn: Rumors
- *  Fog of War
  *  Knowledge Menu
- *      Locations
  *      Terrains
  *      Players
  *      Enemy Types
