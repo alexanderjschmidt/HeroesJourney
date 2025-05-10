@@ -1,8 +1,8 @@
 package heroes.journey.tilemap;
 
-import java.util.ArrayList;
-
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
+
+import java.util.ArrayList;
 
 public class TileManager extends ArrayList<Tile> {
 

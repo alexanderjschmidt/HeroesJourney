@@ -1,17 +1,16 @@
 package heroes.journey.systems;
 
 import com.artemis.*;
-import com.artemis.io.JsonArtemisSerializer;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import heroes.journey.GameState;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.utils.Utils;
-import heroes.journey.entities.Position;
 import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
@@ -23,54 +22,26 @@ import heroes.journey.systems.listeners.StatsActionsListener;
 import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.QuestSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
+import heroes.journey.utils.serializers.Serializers;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class GameWorld extends World {
 
-    private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
     private static final List<Class<? extends Component>> nonBasicSystems = new ArrayList<>();
-    private final WorldSerializationManager manager;
-    private final KryoArtemisSerializer kryoSerializer;
-
     // TODO use this registration for any entity references since I cant trust the entityId will stay the same across GameWorlds
     public final Map<UUID, Integer> entityMap;
+    private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
+    private final WorldSerializationManager manager;
 
     private GameWorld(WorldConfiguration config) {
         super(config);
         manager = this.getSystem(WorldSerializationManager.class);
-        kryoSerializer = new KryoArtemisSerializer(this);
-        initKryoSerializer();
-        manager.setSerializer(kryoSerializer);
+        manager.setSerializer(Serializers.kryo(this));
         entityMap = new HashMap<>();
-    }
-
-    private void initKryoSerializer() {
-        kryoSerializer.register(Position.class, Position.getKryoSerializer());
-        kryoSerializer.register(PositionComponent.class);
-
-        kryoSerializer.getKryo().setReferences(false);
-        // To debug what doesnt have a custom serializer
-        // kryoSerializer.getKryo().setRegistrationRequired(true);
-    }
-
-    // Registration
-    public UUID register(int entityId, UUID uuid) {
-        entityMap.put(uuid, entityId);
-        return uuid;
-    }
-
-    public void unregister(UUID uuid) {
-        entityMap.remove(uuid);
-    }
-
-    public Integer get(UUID uuid) {
-        return entityMap.get(uuid);
     }
 
     public static GameWorld initGameWorld(GameState gameState) {
@@ -98,6 +69,20 @@ public class GameWorld extends World {
         }
 
         return builder.build();
+    }
+
+    // Registration
+    public UUID register(int entityId, UUID uuid) {
+        entityMap.put(uuid, entityId);
+        return uuid;
+    }
+
+    public void unregister(UUID uuid) {
+        entityMap.remove(uuid);
+    }
+
+    public Integer get(UUID uuid) {
+        return entityMap.get(uuid);
     }
 
     private void collectTriggerableSystems() {
@@ -129,15 +114,6 @@ public class GameWorld extends World {
             .collect(Collectors.toList());
     }
 
-    public void saveWorld(GameState gameState) {
-        JsonArtemisSerializer jsonSerializer;
-        jsonSerializer = new JsonArtemisSerializer(this);
-        jsonSerializer.register(Position.class, Position.getJSONSerializer());
-        manager.setSerializer(jsonSerializer);
-        cloneWorldSerializer(gameState);
-        manager.setSerializer(kryoSerializer);
-    }
-
     /**
      * For AI Usage only
      *
@@ -161,13 +137,15 @@ public class GameWorld extends World {
         return cloned;
     }
 
-    /**
-     * For AI Usage only
-     *
-     * @param gameState
-     * @return
-     */
-    public GameWorld cloneWorldSerializer(GameState gameState) {
+    public void saveWorld(String saveName, boolean json) {
+        KryoArtemisSerializer kryo = manager.getSerializer();
+        if (json)
+            manager.setSerializer(Serializers.json(this));
+        saveWorld(saveName);
+        manager.setSerializer(kryo);
+    }
+
+    private void saveWorld(String saveName) {
         long start = System.nanoTime();
         // Export current world state
         final EntitySubscription allEntities = this.getAspectSubscriptionManager().get(Aspect.all());
@@ -178,28 +156,10 @@ public class GameWorld extends World {
 
         this.getSystem(WorldSerializationManager.class).save(baos, save);
 
-        // Create a new GameWorld with a fresh config
-        GameWorld cloned = new GameWorld(buildConfig(gameState, true));
+        FileHandle file = Gdx.files.local("saves/" + saveName + "/world.json");
+        file.writeBytes(baos.toByteArray(), false); // false = overwrite, true = append
 
-        // New serializer for the cloned world
-        try {
-            final ByteArrayInputStream is = new ByteArrayInputStream(baos.toByteArray());
-            cloned.getSystem(WorldSerializationManager.class).load(is, SaveFileFormat.class);
-        } catch (Exception e) {
-            System.out.println("Failed to clone world: " + e);
-            e.printStackTrace();
-            System.out.println("Known components: " + this.getComponentManager().getComponentTypes());
-            System.out.println("Known archetypes: " + save.archetypes);
-            try {
-                System.out.println(baos.toString("UTF-8"));
-            } catch (UnsupportedEncodingException uncoded) {
-                throw new RuntimeException(uncoded);
-            }
-        }
-
-        cloned.basicProcess();
-        //System.out.println("clone took " + (System.nanoTime() - start) / 1_000_000.0 + " ms");
-        return cloned;
+        Utils.logTime("saved", start, 20);
     }
 
     public void basicProcess() {

@@ -1,18 +1,10 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.initializers.base.Map.inBounds;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-
 import heroes.journey.RenderBounds;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
@@ -24,15 +16,28 @@ import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.Map.inBounds;
+
 public class TileMap implements IndexedGraph<TileNode> {
 
-    @Getter private final int width, height;
-    @Setter @Getter private Tile[][] tileMap;
-    @Setter @Getter private Tile[][] environment;
+    @Getter
+    private final int width, height;
+    @Setter
+    @Getter
+    private Tile[][] tileMap;
+    @Setter
+    @Getter
+    private Tile[][] environment;
     private float elapsed = 0;
 
     // For Pathfinding
-    @Getter private TileNode[][] nodes;
+    @Getter
+    private TileNode[][] nodes;
 
     public TileMap(int mapSize) {
         width = mapSize;
@@ -73,7 +78,7 @@ public class TileMap implements IndexedGraph<TileNode> {
     public ActionTerrain getEnvironment(int x, int y) {
         if (!inBounds(x, y, width, height)) {
             Tile env = environment[Math.max(0, Math.min(width - 1, x))][Math.max(0, Math.min(height - 1, y))];
-            return env == null ? null : (ActionTerrain)env.getTerrain();
+            return env == null ? null : (ActionTerrain) env.getTerrain();
         } else {
             return environment[x][y] != null &&
                 environment[x][y].getTerrain() instanceof ActionTerrain actionTerrain ? actionTerrain : null;
@@ -91,7 +96,7 @@ public class TileMap implements IndexedGraph<TileNode> {
             options.add(BaseActions.wait);
             return options;
         }
-        return ((ActionTerrain)tile.getTerrain()).getActions();
+        return ((ActionTerrain) tile.getTerrain()).getActions();
     }
 
     public TileMap clone() {

@@ -21,6 +21,11 @@ import lombok.Getter;
  * Multiplayer
  *  setup player, host, and lobby for server
  * Saving
+ *  save world (halfway there with serializer)
+ *  save tile map
+ *      Make Tiles serializable? Maybe make a TileManager that relates a string/int to a tile?'
+ *      May want to add tile variance before trying to save it
+ *  load from main menu
  * Add Events
  *  Demon kings arrival
  *  new quests appearances
@@ -68,19 +73,18 @@ import lombok.Getter;
 @Getter
 public class Application extends Game {
 
+    private static Application app;
     private Viewport viewport;
     private SpriteBatch batch;
 
-    private static Application app;
+    private Application() {
+        super();
+    }
 
     public static Application get() {
         if (app == null)
             app = new Application();
         return app;
-    }
-
-    private Application() {
-        super();
     }
 
     @Override

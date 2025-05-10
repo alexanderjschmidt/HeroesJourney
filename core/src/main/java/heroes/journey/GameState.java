@@ -29,31 +29,27 @@ import java.util.UUID;
 @Getter
 public class GameState implements Cloneable {
 
+    private static GameState gameState;
     private int width, height;
     private EntityManager entities;
     private History history;
     private TileMap map;
-
     private GameWorld world;
-
     private int turn;
-
     @Getter
     private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
 
-    private static GameState gameState;
+    private GameState() {
+        entitiesInActionOrder = new ArrayList<>();
+    }
 
     public static GameState global() {
         if (gameState == null) {
             gameState = new GameState();
         }
         return gameState;
-    }
-
-    private GameState() {
-        entitiesInActionOrder = new ArrayList<>();
     }
 
     public void init(MapData mapData) {
@@ -177,5 +173,9 @@ public class GameState implements Cloneable {
 
     public boolean isGlobal() {
         return this == GameState.global();
+    }
+
+    public void save(String save, boolean json) {
+        world.saveWorld(save, json);
     }
 }

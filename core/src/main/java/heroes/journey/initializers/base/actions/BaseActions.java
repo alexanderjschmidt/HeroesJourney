@@ -29,7 +29,7 @@ import java.util.UUID;
 public class BaseActions implements InitializerInterface {
 
     public static String popupMessage = "";
-    public static Action openActionMenu, wait, end_turn, exit_game, attack, popup;
+    public static Action openActionMenu, wait, end_turn, exit_game, attack, popup, save;
     public static CooldownAction workout, study;
     public static CooldownAction delve;
     public static Action questBoard;
@@ -54,6 +54,14 @@ public class BaseActions implements InitializerInterface {
             return null;
         }).build().register();
         TeamActions.addTeamAction(end_turn);
+        save = Action.builder()
+            .name("Save")
+            .description("Save Game")
+            .onSelect((gs, e) -> {
+                gs.save("save", true);
+                return new StringResult("Your Game has been Saved!");
+            }).build().register();
+        TeamActions.addTeamAction(save);
         popup = Action.builder()
             .name("Popup")
             .onSelect((gs, e) -> new StringResult(popupMessage))
