@@ -1,18 +1,23 @@
 package heroes.journey.entities.buffs;
 
-public class BuffManager {
+import java.util.HashMap;
 
-	public BuffType parry, rallied, blessed, poisoned;
+public class BuffManager extends HashMap<String, Buff> {
 
-	private static BuffManager buffManager;
+    private static BuffManager buffManager;
 
-	public static BuffManager get() {
-		if (buffManager == null)
-			buffManager = new BuffManager();
-		return buffManager;
-	}
+    public static BuffManager get() {
+        if (buffManager == null)
+            buffManager = new BuffManager();
+        return buffManager;
+    }
 
-	private BuffManager() {
-	}
+    private BuffManager() {
+    }
+
+    public static Buff register(Buff buff) {
+        get().put(buff.getName(), buff);
+        return buff;
+    }
 
 }

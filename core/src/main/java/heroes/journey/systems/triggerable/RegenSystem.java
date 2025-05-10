@@ -5,10 +5,13 @@ import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.utils.Utils;
+import heroes.journey.initializers.base.Buffs;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 
 import java.util.UUID;
+
+import static heroes.journey.components.utils.Utils.useBuff;
 
 @All({StatsComponent.class, IdComponent.class})
 public class RegenSystem extends TriggerableSystem {
@@ -24,10 +27,17 @@ public class RegenSystem extends TriggerableSystem {
         GameWorld world = (GameWorld) getWorld();
         UUID id = IdComponent.get(world, entityId);
         StatsComponent statsComponent = StatsComponent.get(world, id);
-        // TODO fix stats ratios
-        Utils.adjustHealth(gameState, id, statsComponent.getBody());
-        Utils.adjustMana(gameState, id, statsComponent.getMind());
-        Utils.adjustStamina(gameState, id, statsComponent.getBody() * 2);
+
+        if (useBuff(gameState, id, Buffs.rested)) {
+            Utils.adjustHealth(gameState, id, statsComponent.getBody() * 2);
+            Utils.adjustMana(gameState, id, statsComponent.getMind() * 2);
+            Utils.adjustStamina(gameState, id, statsComponent.getBody() * 4);
+        } else {
+            // TODO fix stats ratios
+            Utils.adjustHealth(gameState, id, statsComponent.getBody());
+            Utils.adjustMana(gameState, id, statsComponent.getMind());
+            Utils.adjustStamina(gameState, id, statsComponent.getBody() * 2);
+        }
     }
 
     @Override

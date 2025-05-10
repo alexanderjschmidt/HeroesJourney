@@ -17,8 +17,6 @@ import lombok.Getter;
 /*
  * TODO Features
  *
- * Buffs
- *  Start with Rest Action that adds a buff that doubles regen
  * Target Actions, make Actions take inputs (Target Entity ID),
  *  so travel actions just need a target location instead of an action for every movement.
  *  Attack action on other entity

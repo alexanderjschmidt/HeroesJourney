@@ -37,6 +37,7 @@ public class EntityFactory {
         entity.create(RenderComponent.class).sprite(render);
         entity.create(ActorComponent.class);
         entity.create(PossibleActionsComponent.class);
+        entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AIComponent.class).ai(ai);
         entity.create(StatsComponent.class);

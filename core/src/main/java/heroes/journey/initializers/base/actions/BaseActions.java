@@ -1,6 +1,7 @@
 package heroes.journey.initializers.base.actions;
 
 import heroes.journey.Application;
+import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.utils.Utils;
@@ -12,6 +13,7 @@ import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.Buffs;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
@@ -22,7 +24,7 @@ import java.util.UUID;
 public class BaseActions implements InitializerInterface {
 
     public static String popupMessage = "";
-    public static Action openActionMenu, wait, end_turn, exit_game, popup, save;
+    public static Action openActionMenu, rest, end_turn, exit_game, popup, save;
     public static CooldownAction workout, study;
     public static Action questBoard;
 
@@ -41,7 +43,7 @@ public class BaseActions implements InitializerInterface {
         TeamActions.addTeamAction(exit_game);
         end_turn = Action.builder().name("End Turn").onSelect((gs, e) -> {
             UUID entityId = gs.getCurrentEntity();
-            gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.wait);
+            gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.rest);
             HUD.get().revertToInitialState();
             return null;
         }).build().register();
@@ -58,13 +60,17 @@ public class BaseActions implements InitializerInterface {
             .name("Popup")
             .onSelect((gs, e) -> new StringResult(popupMessage))
             .build().register();
-        wait = Action.builder()
-            .name("Wait")
-            .description("Do Nothing")
-            .onSelect((gs, e) -> new EndTurnResult())
+        rest = Action.builder()
+            .name("Rest")
+            .description("Do nothing, resting your body and mind.")
+            .onSelect((gs, e) -> {
+                BuffsComponent buffsComponent = BuffsComponent.get(gs.getWorld(), e);
+                buffsComponent.add(Buffs.rested);
+                return new EndTurnResult();
+            })
             .build()
             .register();
-        
+
         workout = CooldownAction.builder()
             .name("Work out")
             .description("Lift weights, gain body")

@@ -18,7 +18,7 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
         cooldowns = new HashMap<>();
-        possibleActions.add(BaseActions.wait.toString());
+        possibleActions.add(BaseActions.rest.toString());
     }
 
     public List<Action> getPossibleActions() {

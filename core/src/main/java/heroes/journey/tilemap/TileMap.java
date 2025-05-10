@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Array;
 import heroes.journey.RenderBounds;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
@@ -89,9 +88,7 @@ public class TileMap implements IndexedGraph<TileNode> {
     public List<Action> getTileActions(int x, int y) {
         Tile tile = environment[x][y];
         if (tile == null) {
-            ArrayList<Action> options = new ArrayList<Action>(1);
-            options.add(BaseActions.wait);
-            return options;
+            return new ArrayList<>();
         }
         return ((ActionTerrain) tile.getTerrain()).getActions();
     }

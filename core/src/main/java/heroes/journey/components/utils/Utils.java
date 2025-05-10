@@ -4,13 +4,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.StatsComponent;
+import heroes.journey.components.*;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.results.StringResult;
+import heroes.journey.entities.buffs.Buff;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.tilemap.FogUtils;
@@ -122,6 +120,16 @@ public class Utils {
         else if (count < 0)
             HUDEffectManager.addTextEffect("" + count, Color.OLIVE, (int) (screenPos.x + stamina.getWidth()),
                 (int) screenPos.y);
+    }
+
+    /**
+     * @return true if the buff could be used (combines checking if it has the buff and if so decrements its counter)
+     */
+    public static boolean useBuff(GameState gameState, UUID entityId, Buff buff) {
+        BuffsComponent buffsComponent = BuffsComponent.get(gameState.getWorld(), entityId);
+        if (buffsComponent == null)
+            return false;
+        return buffsComponent.useBuff(buff);
     }
 
     public static boolean justCompletedAction(GameState gameState, UUID owner, Action action) {
