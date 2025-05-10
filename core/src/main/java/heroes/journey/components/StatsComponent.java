@@ -53,10 +53,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         return true;
     }
 
-    public int getMoveDistance() {
-        return 0;
-    }
-
     public int getSpeed() {
         return body;
     }

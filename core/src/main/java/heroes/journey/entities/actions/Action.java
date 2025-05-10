@@ -44,7 +44,6 @@ public class Action implements InfoProvider {
 
     public void onHover(GameState gameState, UUID userId) {
         HUD.get().getCursor().setMapPointerLoc(null);
-        gameState.getRangeManager().clearRange();
         onHover.accept(gameState, userId);
     }
 

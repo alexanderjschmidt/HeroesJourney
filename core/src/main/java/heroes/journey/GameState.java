@@ -20,7 +20,6 @@ import heroes.journey.tilemap.TileMap;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
-import heroes.journey.utils.RangeManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import lombok.Getter;
 
@@ -37,8 +36,6 @@ public class GameState implements Cloneable {
     private TileMap map;
 
     private GameWorld world;
-
-    private RangeManager rangeManager;
 
     private int turn;
 
@@ -72,7 +69,6 @@ public class GameState implements Cloneable {
         map = new TileMap(width);
         entities = new EntityManager(width, height);
         history = new History();
-        rangeManager = new RangeManager(this, width, height);
 
         HUDEffectManager.get();
         WorldEffectManager.get();
@@ -107,14 +103,6 @@ public class GameState implements Cloneable {
         UUID e = entities.get(path.x, path.y);
         //System.out.println(queuedAction + " " + path + " " + e);
         if (e != null) {
-            // Move to the end of the Path
-            Cell end = path.getEnd();
-            entities.moveEntity(path.x, path.y, end.x, end.y);
-            PositionComponent positionComponent = PositionComponent.get(world, e);
-            positionComponent.setPos(end.x, end.y);
-            positionComponent.sync();
-            history.add(queuedAction.getPath(), e);
-
             // Apply chosen Action
             Action action = queuedAction.getAction();
             history.add(queuedAction.getAction(),
@@ -123,7 +111,8 @@ public class GameState implements Cloneable {
             // If action adds movement
             MovementComponent movement = MovementComponent.get(world, e);
             if (movement != null) {
-                end = movement.path().getEnd();
+                PositionComponent positionComponent = PositionComponent.get(world, e);
+                Cell end = movement.path().getEnd();
                 entities.moveEntity(path.x, path.y, end.x, end.y);
                 positionComponent.setPos(end.x, end.y);
                 positionComponent.sync();
@@ -145,7 +134,6 @@ public class GameState implements Cloneable {
 
     public void render(SpriteBatch batch, float delta) {
         map.render(batch, delta);
-        rangeManager.render(batch, turn);
     }
 
     private UUID incrementTurn() {
@@ -182,7 +170,6 @@ public class GameState implements Cloneable {
         world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
         updateCurrentEntity();
 
-        getRangeManager().clearRange();
         HUD.get().getCursor().clearSelected();
     }
 

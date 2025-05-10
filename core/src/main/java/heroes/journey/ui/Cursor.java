@@ -1,30 +1,21 @@
 package heroes.journey.ui;
 
-import java.util.UUID;
-
-import com.artemis.EntityEdit;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.ActionComponent;
-import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.LoadTextures;
-import heroes.journey.initializers.base.actions.BaseActions;
-import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.utils.RangeManager.RangeColor;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.UUID;
 
 public class Cursor {
     // coords
@@ -33,13 +24,12 @@ public class Cursor {
 
     private final HUD hud;
 
-    @Getter private UUID selected, hover;
-    // Starting positions of selected to revert to on ESCAPE
-    private int sx = -1, sy = -1;
-    @Setter @Getter private Cell path;
+    @Getter
+    private UUID selected, hover;
 
     private final Animation<TextureRegion> ani, mapPointer;
-    @Setter private Position mapPointerLoc;
+    @Setter
+    private Position mapPointerLoc;
 
     private float elapsed = 0;
 
@@ -55,24 +45,15 @@ public class Cursor {
 
     public void update() {
         hover = GameState.global().getEntities().get(x, y);
-        if (selected != null && GameState.global().getRangeManager().getRange()[x][y] == RangeColor.BLUE &&
-            (path == null || (path.x != x || path.y != y))) {
-            path = new EntityCursorPathing().getPath(GameState.global().getMap(), sx, sy, x, y, selected);
-        }
     }
 
     public void clearSelected() {
         //System.out.println("clear selected");
         selected = null;
-        sx = -1;
-        sy = -1;
-        path = null;
-        GameState.global().getRangeManager().clearRange();
     }
 
     public void render(Batch batch, float delta) {
         elapsed += delta;
-        drawPath(batch, path);
         if (hud.getState() == States.CURSOR_MOVE) {
             if (selected != null) {
                 batch.setColor(Color.BLUE);
@@ -209,37 +190,13 @@ public class Cursor {
 
     public void revertSelectedPosition() {
         if (selected == null) {
-            GameState.global().getRangeManager().clearRange();
             return;
         }
-        GameWorld world = GameState.global().getWorld();
-        PositionComponent positionComponent = PositionComponent.get(world, selected);
-        positionComponent.setPos(sx, sy);
-        StatsComponent statsComponent = StatsComponent.get(world, selected);
-        setPosition(sx, sy);
         clearSelected();
-        if (statsComponent.getMoveDistance() != 0) {
-            update();
-            setSelectedtoHover();
-            GameState.global().getRangeManager().setMoveAndAttackRange(selected, sx, sy);
-        }
     }
 
     public void setSelectedtoHover() {
         selected = hover;
-        sx = x;
-        sy = y;
-    }
-
-    public void moveSelected() {
-        if (GameState.global().getEntities().get(path.x, path.y) == null ||
-            GameState.global().getEntities().get(path.x, path.y).equals(selected)) {
-            EntityEdit entity = GameState.global().getWorld().edit(selected);
-            entity.create(MovementComponent.class).path(path.reverse());
-            entity.create(ActionComponent.class).action(BaseActions.openActionMenu);
-            GameState.global().getRangeManager().clearRange();
-            path = null;
-        }
     }
 
 }

@@ -3,9 +3,7 @@ package heroes.journey.ui.hudstates;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-
 import heroes.journey.GameState;
-import heroes.journey.components.PositionComponent;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -66,19 +64,6 @@ public abstract class HUDState implements State<HUD> {
 
     private static GameState gameState() {
         return GameState.global();
-    }
-
-    void savePath() {
-        Cell holder = Cell.clone(cursor().getPath());
-        if (holder == null) {
-            if (cursor().getSelected() != null) {
-                PositionComponent position = PositionComponent.get(GameState.global().getWorld(),
-                    cursor().getSelected());
-                holder = new Cell(position.getX(), position.getY());
-            } else
-                holder = new Cell(cursor().x, cursor().y);
-        }
-        pathHolder = holder;
     }
 
     @Override

@@ -89,7 +89,6 @@ public class ActionMenu extends UI {
 
         @Override
         public void open(List<ScrollPaneEntry<Action>> options) {
-            GameState.global().getRangeManager().clearRange();
             if (options.isEmpty()) {
                 System.out.println("Options Empty");
                 HUD.get().getCursor().clearSelected();
