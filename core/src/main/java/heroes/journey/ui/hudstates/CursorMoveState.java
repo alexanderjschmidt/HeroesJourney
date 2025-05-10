@@ -27,7 +27,6 @@ class CursorMoveState extends HUDState {
             }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.SELECT)) {
             // System.out.println(hud.getCursor().getSelected());
-            // TODO only show/allow movement if it has a movement component
             if (hud.getCursor().getHover() != null && PlayerInfo.isCurrentlyPlaying() &&
                 Objects.equals(hud.getCursor().getHover(), GameState.global().getCurrentEntity())) {
                 hud.getCursor().setSelectedtoHover();

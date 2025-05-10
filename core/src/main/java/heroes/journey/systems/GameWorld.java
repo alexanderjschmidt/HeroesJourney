@@ -185,6 +185,7 @@ public class GameWorld extends World {
 
         // Deserialize and apply to world
         manager.load(bais, SaveFileFormat.class);
+        this.basicProcess();
 
         Utils.logTime("loaded", start, 20);
     }

@@ -209,8 +209,6 @@ public class GameState implements Cloneable {
     public static void loadFromFile(String save) {
         Initializer.init();
         gameState = new GameState();
-        gameState.world = GameWorld.initGameWorld(gameState);
-        gameState.world.loadWorld(save, true);
 
         Json json = new Json();
         json.setSerializer(GameStateSaveData.class, new GameStateSaveDataSerializer());
@@ -231,9 +229,15 @@ public class GameState implements Cloneable {
             gameState.turn = gameStateSaveData.getTurn();
             gameState.currentEntity = gameStateSaveData.getCurrentEntity();
             gameState.entitiesInActionOrder = gameStateSaveData.getEntitiesInActionOrder();
+
+            PlayerInfo.load(gameStateSaveData.getPlayerInfo());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        gameState.world = GameWorld.initGameWorld(gameState);
+        gameState.world.loadWorld(save, true);
+        
+        HUD.get().getCursor().setPosition(gameState.currentEntity);
 
         HUDEffectManager.get();
         WorldEffectManager.get();
