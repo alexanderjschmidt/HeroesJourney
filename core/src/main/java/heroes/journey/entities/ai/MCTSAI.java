@@ -10,7 +10,6 @@ import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
-import heroes.journey.utils.ai.pathfinding.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +57,7 @@ public class MCTSAI implements AI, Scorer {
                 addUsableActions(possibleActions, result.list(), gameState, entityId, position);
             } else {
                 if (action.requirementsMet(gameState, entityId) == ShowAction.YES) {
-                    Cell path = new Cell(position.getX(), position.getY());
-                    possibleActions.add(new QueuedAction(path, action, -1, -1));
+                    possibleActions.add(new QueuedAction(action, entityId));
                 }
             }
         }

@@ -3,7 +3,6 @@ package heroes.journey.systems.constantsystems;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.EventQueueComponent;
@@ -55,9 +54,6 @@ public class MovementSystem extends IteratingSystem {
         if (movement.hasPath() && actor != null && !actor.hasActions()) {
             if (LoadOptions.debugOption.isTrue()) {
                 System.out.println("Moving " + movement.path());
-            }
-            if (!movement.hasBegunMoving()) {
-                GameState.global().getHistory().add(movement.path(), id);
             }
             //TODO Make duration based on move speed
             actor.addAction(Actions.sequence(

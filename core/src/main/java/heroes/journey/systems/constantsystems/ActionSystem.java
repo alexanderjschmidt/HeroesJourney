@@ -10,7 +10,6 @@ import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.results.*;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
@@ -56,7 +55,7 @@ public class ActionSystem extends IteratingSystem {
                 case EndTurnResult nothing -> {
                     GameState.global()
                         .getHistory()
-                        .add(action.getAction(), new Position(action.targetX(), action.targetY()), id);
+                        .add(action.getAction(), id);
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
                 }

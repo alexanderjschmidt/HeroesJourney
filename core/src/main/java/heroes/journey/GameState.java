@@ -8,7 +8,6 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
-import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.History;
@@ -98,27 +97,22 @@ public class GameState implements Cloneable {
     // For AI to apply a flat action to movement just to update state
     public GameState applyAction(QueuedAction queuedAction) {
         long start = System.nanoTime();
-        Cell path = queuedAction.getPath();
 
-        UUID e = entities.get(path.x, path.y);
         //System.out.println(queuedAction + " " + path + " " + e);
-        if (e != null) {
-            // Apply chosen Action
-            Action action = queuedAction.getAction();
-            history.add(queuedAction.getAction(),
-                new Position(queuedAction.getTargetX(), queuedAction.getTargetY()), e);
-            action.onSelect(this, e, true);
-            // If action adds movement
-            MovementComponent movement = MovementComponent.get(world, e);
-            if (movement != null) {
-                PositionComponent positionComponent = PositionComponent.get(world, e);
-                Cell end = movement.path().getEnd();
-                entities.moveEntity(path.x, path.y, end.x, end.y);
-                positionComponent.setPos(end.x, end.y);
-                positionComponent.sync();
-                history.add(movement.path(), e);
-                world.getEntity(e).edit().remove(MovementComponent.class);
-            }
+        // Apply chosen Action
+        Action action = queuedAction.getAction();
+        history.add(queuedAction.getAction(), queuedAction.getEntityId());
+        action.onSelect(this, queuedAction.getEntityId(), true);
+        // If action adds movement
+        // TODO remove this, onSelectAI should handle this
+        MovementComponent movement = MovementComponent.get(world, queuedAction.getEntityId());
+        if (movement != null) {
+            PositionComponent positionComponent = PositionComponent.get(world, queuedAction.getEntityId());
+            Cell end = movement.path().getEnd();
+            entities.moveEntity(movement.path().x, movement.path().y, end.x, end.y);
+            positionComponent.setPos(end.x, end.y);
+            positionComponent.sync();
+            world.getEntity(queuedAction.getEntityId()).edit().remove(MovementComponent.class);
         }
 
         incrementTurn();

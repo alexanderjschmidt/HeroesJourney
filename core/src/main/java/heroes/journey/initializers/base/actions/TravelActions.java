@@ -158,7 +158,6 @@ public class TravelActions implements InitializerInterface {
             gs.getEntities().moveEntity(path.x, path.y, end.x, end.y);
             positionComponent.setPos(end.x, end.y);
             positionComponent.sync();
-            gs.getHistory().add(path, e);
             return new StringResult("You have traveled to " + locationName);
         }).cost(Cost.builder().stamina(1).multiplier((gs, e) -> {
             PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
