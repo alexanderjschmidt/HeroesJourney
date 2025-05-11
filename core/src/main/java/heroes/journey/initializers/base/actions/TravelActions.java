@@ -32,41 +32,35 @@ import static heroes.journey.initializers.base.actions.BaseActions.popup;
 
 public class TravelActions implements InitializerInterface {
 
-    public static final Action explore, travel;
+    public static final Action travel;
     public static final TargetAction<UUID> journey, wayfare;
+    public static final TargetAction<Direction> explore;
     // TODO Pilgrimage lose a turn but go anywhere?
     // TODO No direction explore that expands in a circle?
-    private static final HashMap<Direction, Action> exploreActions = new HashMap<>();
 
     static {
-        for (Direction dir : Direction.values()) {
-            if (dir != Direction.NODIRECTION) {
-                Action exploreAction = Action.builder().name("Explore " + dir).onSelect((input) -> {
-                    GameState gs = input.getGameState();
-                    UUID e = input.getEntityId();
-                    PositionComponent position = PositionComponent.get(gs.getWorld(), e);
-                    MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
-
-                    // TODO Based on Stamina/Body
-                    int revealDistance = 8; // How far the cone extends
-                    // TODO Based on Vision
-                    int baseWidth = 0;       // Start width (0 = just 1 tile at origin)
-
-                    FogUtils.revealCone(gs, mapComponent, position.getX(), position.getY(), revealDistance,
-                        baseWidth, dir);
-
-                    return new StringResult("You have explored the " + dir);
-                }).cost(Cost.builder().stamina(5).health(2).build()).build().register();
-                exploreActions.put(dir, exploreAction);
-            }
-        }
-
-        explore = Action.builder()
+        explore = TargetAction.<Direction>targetBuilder()
             .name("Explore")
-            .returnsActionList(true)
-            .onSelect((input) -> new ActionListResult(exploreActions.values().stream().toList()))
-            .build()
-            .register();
+            .getTargets((input) -> List.of(Direction.getDirections()))
+            .getTargetDisplayName((input) -> "Explore " + input.getInput())
+            .onSelectTarget((input) -> {
+                GameState gs = input.getGameState();
+                UUID e = input.getEntityId();
+                PositionComponent position = PositionComponent.get(gs.getWorld(), e);
+                MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
+
+                // TODO Based on Stamina/Body
+                int revealDistance = 8; // How far the cone extends
+                // TODO Based on Vision
+                int baseWidth = 0;       // Start width (0 = just 1 tile at origin)
+
+                FogUtils.revealCone(gs, mapComponent, position.getX(), position.getY(), revealDistance,
+                    baseWidth, input.getInput());
+
+                return new StringResult("You have explored the " + input.getInput());
+            }).costTarget(Cost.<TargetInput<Direction>>builder().stamina(5).health(2).build())
+            .build().register();
+        // TODO clean up journey to use more utils?
         journey = TargetAction.<UUID>targetBuilder().name("Journey")
             .getTargets((input) -> {
                 UUID currentLocation = Utils.getLocation(input);

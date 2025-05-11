@@ -17,10 +17,6 @@ import lombok.Getter;
 /*
  * TODO Features
  *
- * Target Actions
- *  actions to update to be target
- *      maybe explore?
- *  Attack action on other entity
  * Add Events
  *  Demon kings arrival
  *  Global Quests

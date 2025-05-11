@@ -1,7 +1,6 @@
 package heroes.journey.utils;
 
 import com.badlogic.gdx.math.Vector2;
-
 import heroes.journey.entities.Position;
 import lombok.Getter;
 
@@ -11,9 +10,14 @@ public enum Direction {
 
     public static final float SQRT_HALF = 0.70710678118f;
 
-    @Getter private final int clockPos;
-    @Getter private final float angle;
+    @Getter
+    private final int clockPos;
+    @Getter
+    private final float angle;
     private final String abbreviation;
+
+    @Getter
+    private static final Direction[] directions = {NORTHWEST, NORTH, NORTHEAST, WEST, EAST, SOUTHWEST, SOUTH, SOUTHWEST};
 
     private Direction(String abbreviation, int clockPos, float angle) {
         this.abbreviation = abbreviation;
@@ -33,6 +37,7 @@ public enum Direction {
         }
         return NODIRECTION;
     }
+
 
     public static Vector2 getVector(Direction dir, int dist) {
         Vector2 v = new Vector2();
