@@ -17,8 +17,11 @@ import lombok.Getter;
 /*
  * TODO Features
  *
- * Target Actions, make Actions take inputs (Target Entity ID),
- *  so travel actions just need a target location instead of an action for every movement.
+ * Target Actions
+ *  actions to update to be target
+ *      travel
+ *      maybe explore?
+ *      Quest board?
  *  Attack action on other entity
  * Add Events
  *  Demon kings arrival

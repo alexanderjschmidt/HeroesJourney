@@ -13,6 +13,7 @@ public class Event {
 
     protected BiFunction<GameState, UUID, ActionResult> trigger;
 
+    @Builder.Default
     protected BiPredicate<GameState, UUID> requirementsMet = (gs, e) -> true;
 
 }

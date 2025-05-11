@@ -1,5 +1,7 @@
 package heroes.journey.tilemap.features;
 
+import heroes.journey.GameState;
+import heroes.journey.components.NamedComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.utils.Direction;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import static heroes.journey.utils.Direction.approximateDirection;
 
 @Getter
 public class Feature {
+
     public UUID entityId;
     public FeatureType type;
     public Position location;
@@ -26,6 +29,11 @@ public class Feature {
     public void add(Feature feature) {
         connections.add(feature.entityId);
         feature.connections.add(entityId);
+    }
+
+    @Override
+    public String toString() {
+        return NamedComponent.get(GameState.global().getWorld(), entityId, "Unnamed Feature");
     }
 
     @Override

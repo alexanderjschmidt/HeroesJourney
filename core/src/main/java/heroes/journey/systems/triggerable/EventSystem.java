@@ -1,8 +1,11 @@
 package heroes.journey.systems.triggerable;
 
+import com.artemis.annotations.Exclude;
 import heroes.journey.GameState;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.systems.TriggerableSystem;
 
+@Exclude({IdComponent.class})
 public class EventSystem extends TriggerableSystem {
 
     private final GameState gameState;

@@ -19,16 +19,14 @@ import java.util.UUID;
 @Getter
 public class ActionComponent extends PooledClonableComponent<ActionComponent> {
 
-    // Split this into Possible Actions component and actively doing action component
     private String action;
-    private int targetX, targetY;
 
     public Action getAction() {
         return ActionManager.get().get(action);
     }
 
     public ActionComponent action(Action action) {
-        this.action = action.toString();
+        this.action = action.getName();
         return this;
     }
 
@@ -39,15 +37,11 @@ public class ActionComponent extends PooledClonableComponent<ActionComponent> {
     @Override
     protected void reset() {
         action = null;
-        targetX = -1;
-        targetY = -1;
     }
 
     @Override
     public void copy(ActionComponent from) {
         action = from.action;
-        targetX = from.targetX;
-        targetY = from.targetY;
     }
 
 }

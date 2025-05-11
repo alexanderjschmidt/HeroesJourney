@@ -19,7 +19,10 @@ import java.util.function.BiFunction;
 public class Action implements InfoProvider {
 
     @NonNull
+    @Getter
     protected final String name;
+    @Builder.Default
+    protected final String displayName = null;
     @Builder.Default
     @Getter
     protected final String description = "";
@@ -63,7 +66,7 @@ public class Action implements InfoProvider {
 
     @Override
     public String toString() {
-        return name;
+        return displayName == null ? name : displayName;
     }
 
     public Action register() {
