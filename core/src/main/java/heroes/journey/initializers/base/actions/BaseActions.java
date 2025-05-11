@@ -5,20 +5,17 @@ import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.utils.Utils;
-import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.CooldownAction;
-import heroes.journey.entities.actions.ShowAction;
-import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.entities.actions.*;
 import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
+import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Buffs;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
 
-import java.util.List;
 import java.util.UUID;
 
 public class BaseActions implements InitializerInterface {
@@ -86,22 +83,23 @@ public class BaseActions implements InitializerInterface {
             .onSelect(((input) -> Utils.adjustMind(input.getGameState(), input.getEntityId(), 1)))
             .build()
             .register();
-        questBoard = Action.builder()
-            .name("Quest Board")
+        questBoard = TargetAction.<Quest>targetBuilder().name("Quest Board")
             .description("See what the people need help with")
-            .returnsActionList(true)
-            .onSelect((input) -> {
-                UUID town = Utils.getLocation(input.getGameState(), input.getEntityId());
-                List<Action> questActions = Utils.getQuestClaimActions(input.getGameState(), town);
-                return new ActionListResult(questActions);
+            .getTargets((input) -> {
+                UUID town = Utils.getLocation(input);
+                return QuestsComponent.get(input.getGameState().getWorld(), town).getQuests();
             })
-            .requirementsMet((input) -> {
-                UUID town = Utils.getLocation(input.getGameState(), input.getEntityId());
-                QuestsComponent questsComponent = QuestsComponent.get(input.getGameState().getWorld(), town);
-                return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
+            .onSelectTarget((input) -> {
+                UUID town = Utils.getLocation(input);
+                QuestsComponent factionsQuestsComponent = QuestsComponent.get(input.getGameState().getWorld(), town);
+
+                if (factionsQuestsComponent != null) {
+                    factionsQuestsComponent.remove(input.getInput());
+                    QuestsComponent.get(input.getGameState().getWorld(), input.getEntityId()).addQuest(input.getInput());
+                }
+                return new EndTurnResult();
             })
-            .build()
-            .register();
+            .build().register();
     }
 
 }

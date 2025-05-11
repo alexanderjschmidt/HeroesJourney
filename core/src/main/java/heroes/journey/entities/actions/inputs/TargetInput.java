@@ -13,4 +13,9 @@ public class TargetInput<I> extends ActionInput {
         super(gameState, entityId);
         this.input = input;
     }
+
+    @Override
+    public String toString() {
+        return input.toString();
+    }
 }

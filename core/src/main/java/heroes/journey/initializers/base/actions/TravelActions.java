@@ -69,10 +69,8 @@ public class TravelActions implements InitializerInterface {
             .register();
         journey = TargetAction.<UUID>targetBuilder().name("Journey")
             .getTargets((input) -> {
-                GameState gs = input.getGameState();
-                UUID e = input.getEntityId();
                 UUID currentLocation = Utils.getLocation(input);
-                MapComponent mapComponent = MapComponent.get(gs.getWorld(), e);
+                MapComponent mapComponent = MapComponent.get(input.getGameState().getWorld(), input.getEntityId());
                 List<UUID> journeyLocations = new ArrayList<>();
                 for (UUID knownLocation : mapComponent.getKnownLocations()) {
                     if (!Objects.equals(currentLocation, knownLocation))
@@ -117,10 +115,9 @@ public class TravelActions implements InitializerInterface {
                 positionComponent.sync();
                 return new StringResult("You have traveled to " + locationName);
             }).costTarget(Cost.<TargetInput<UUID>>builder().stamina(1).multiplier((input) -> {
-                GameState gs = input.getGameState();
                 UUID e = input.getEntityId();
                 Feature feature = FeatureManager.getFeature(input.getInput());
-                PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
+                PositionComponent positionComponent = PositionComponent.get(input.getGameState().getWorld(), e);
                 Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());
                 return (double) entityPos.distanceTo(feature.location);
             }).build()).build().register();

@@ -21,6 +21,10 @@ public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
         return QuestManager.get(quests);
     }
 
+    public boolean remove(Quest quest) {
+        return quests.remove(quest.toString());
+    }
+
     public QuestsComponent addQuest(Quest quest) {
         quests.add(quest.toString());
         return this;

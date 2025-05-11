@@ -4,21 +4,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
-import heroes.journey.components.*;
+import heroes.journey.components.BuffsComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.buffs.Buff;
 import heroes.journey.entities.items.Item;
-import heroes.journey.entities.quests.Quest;
 import heroes.journey.tilemap.FogUtils;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.ResourceBar;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class Utils {
@@ -34,15 +34,6 @@ public class Utils {
         if (positionComponent == null)
             return null;
         return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
-    }
-
-    public static List<Action> getQuestClaimActions(GameState gameState, UUID entityId) {
-        QuestsComponent questsComponent = QuestsComponent.get(gameState.getWorld(), entityId);
-        List<Action> questActions = new ArrayList<>();
-        for (Quest quest : questsComponent.getQuests()) {
-            questActions.add(quest.getClaimAction());
-        }
-        return questActions;
     }
 
     public static StringResult addItem(ActionInput input, Item item, int count) {

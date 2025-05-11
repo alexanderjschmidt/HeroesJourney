@@ -20,7 +20,6 @@ import lombok.Getter;
  * Target Actions
  *  actions to update to be target
  *      maybe explore?
- *      Quest board?
  *  Attack action on other entity
  * Add Events
  *  Demon kings arrival
