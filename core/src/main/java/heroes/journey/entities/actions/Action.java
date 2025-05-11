@@ -3,6 +3,7 @@ package heroes.journey.entities.actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import heroes.journey.GameState;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.InfoProvider;
@@ -11,9 +12,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @SuperBuilder(toBuilder = true)
 public class Action implements InfoProvider {
@@ -30,38 +30,38 @@ public class Action implements InfoProvider {
     @Getter
     protected final boolean returnsActionList = false;
     @Builder.Default
-    protected BiConsumer<GameState, UUID> onHover = (gs, e) -> {
+    protected Consumer<ActionInput> onHover = (input) -> {
     };
-    protected BiFunction<GameState, UUID, ActionResult> onSelect;
+    protected Function<ActionInput, ActionResult> onSelect;
     // This is used for complex actions that need to be simplified for the AI
-    protected BiFunction<GameState, UUID, ActionResult> onSelectAI;
+    protected Function<ActionInput, ActionResult> onSelectAI;
     @Builder.Default
-    protected BiFunction<GameState, UUID, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    protected Function<ActionInput, ShowAction> requirementsMet = (input) -> ShowAction.YES;
 
     @Builder.Default
-    protected Cost cost = Cost.builder().build();
+    protected Cost<ActionInput> cost = Cost.builder().build();
 
-    public ShowAction requirementsMet(GameState gameState, UUID userId) {
-        return requirementsMet.apply(gameState, userId).and(cost.requirementsMet(gameState, userId));
+    public ShowAction requirementsMet(ActionInput input) {
+        return requirementsMet.apply(input).and(cost.requirementsMet(input));
     }
 
-    public void onHover(GameState gameState, UUID userId) {
+    public void onHover(ActionInput input) {
         HUD.get().getCursor().setMapPointerLoc(null);
-        onHover.accept(gameState, userId);
+        onHover.accept(input);
     }
 
     /**
      * @return the results of the action for a popup window
      */
-    public ActionResult onSelect(GameState gameState, UUID userId, boolean ai) {
-        cost.onUse(gameState, userId);
+    public ActionResult onSelect(ActionInput input, boolean ai) {
+        cost.onUse(input);
         if (ai && onSelectAI != null)
-            return onSelectAI.apply(gameState, userId);
-        return onSelect.apply(gameState, userId);
+            return onSelectAI.apply(input);
+        return onSelect.apply(input);
     }
 
-    public ActionResult onSelect(GameState gameState, UUID userId) {
-        return onSelect(gameState, userId, false);
+    public ActionResult onSelect(ActionInput input) {
+        return onSelect(input, false);
     }
 
     @Override
@@ -75,11 +75,11 @@ public class Action implements InfoProvider {
 
     @Override
     public String getTitle() {
-        return name;
+        return toString();
     }
 
     @Override
     public void fillCustomContent(Table table, Skin skin) {
-        table.add(cost.getDisplay()).center().fill().expand();
+        table.add(cost.getDisplay(new ActionInput(GameState.global(), GameState.global().getCurrentEntity()))).center().fill().expand();
     }
 }

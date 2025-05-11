@@ -57,7 +57,7 @@ public class Items implements InitializerInterface {
             .subType(potion)
             .weight(1)
             .value(1)
-            .onConsume((gs, e) -> Utils.addItem(gs, e, ironIngot, 1))
+            .onConsume((input) -> Utils.addItem(input, ironIngot, 1))
             .build()
             .register();
     }

@@ -6,6 +6,7 @@ import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.ui.HUD;
@@ -111,13 +112,13 @@ public class ActionMenu extends UI {
                     .create(ActionComponent.class)
                     .action(action);
             } else {
-                action.onSelect(GameState.global(), null);
+                action.onSelect(new ActionInput(GameState.global(), null));
             }
         }
 
         @Override
         public void onHover() {
-            actions.getSelected().entry().onHover(GameState.global(), HUD.get().getCursor().getSelected());
+            actions.getSelected().entry().onHover(new ActionInput(GameState.global(), HUD.get().getCursor().getSelected()));
             infoUI.showInfo(actions.getSelected().entry());
         }
     }

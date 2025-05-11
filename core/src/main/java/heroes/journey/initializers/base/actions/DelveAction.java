@@ -1,5 +1,6 @@
 package heroes.journey.initializers.base.actions;
 
+import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -22,8 +23,10 @@ public class DelveAction implements InitializerInterface {
             .name("Delve")
             .turnCooldown(5)
             .factionCooldown(true)
-            .onSelect((gs, e) -> {
-                UUID dungeon = Utils.getLocation(gs, e);
+            .onSelect((input) -> {
+                GameState gs = input.getGameState();
+                UUID e = input.getEntityId();
+                UUID dungeon = Utils.getLocation(input);
                 DungeonComponent dungeonComponent = DungeonComponent.get(gs.getWorld(), dungeon);
                 DefaultContainer<String> explorationLog = new DefaultContainer<>();
                 boolean conscious = true;
@@ -58,7 +61,7 @@ public class DelveAction implements InitializerInterface {
                     log.append("You have completed the Dungeon!\nYour rewards are:\n");
                     if (inventoryComponent != null) {
                         for (Item item : inventoryComponent.getInventory().keySet()) {
-                            Utils.addItem(gs, e, item, inventoryComponent.getInventory().get(item));
+                            Utils.addItem(input, item, inventoryComponent.getInventory().get(item));
                             log.append(inventoryComponent.getInventory().get(item))
                                 .append("x ")
                                 .append(item.toString())

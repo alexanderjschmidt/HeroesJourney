@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import heroes.journey.GameState;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.utils.Utils;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,27 +26,27 @@ public class CooldownAction extends Action {
     private final boolean factionCooldown = false;
 
     @Override
-    public ShowAction requirementsMet(GameState gameState, UUID entityId) {
-        PossibleActionsComponent cooldownComponent = getCooldownComponent(gameState, entityId);
+    public ShowAction requirementsMet(ActionInput input) {
+        PossibleActionsComponent cooldownComponent = getCooldownComponent(input);
         if (cooldownComponent.getCooldowns().containsKey(name))
             return ShowAction.GRAYED;
-        return requirementsMet.apply(gameState, entityId);
+        return requirementsMet.apply(input);
     }
 
     @Override
-    public ActionResult onSelect(GameState gameState, UUID entityId) {
-        PossibleActionsComponent cooldownComponent = getCooldownComponent(gameState, entityId);
+    public ActionResult onSelect(ActionInput input) {
+        PossibleActionsComponent cooldownComponent = getCooldownComponent(input);
         cooldownComponent.getCooldowns().put(name, turnCooldown);
-        return onSelect.apply(gameState, entityId);
+        return onSelect.apply(input);
     }
 
-    private PossibleActionsComponent getCooldownComponent(GameState gameState, UUID entityId) {
+    private PossibleActionsComponent getCooldownComponent(ActionInput input) {
         PossibleActionsComponent cooldownComponent;
         if (factionCooldown) {
-            UUID faction = Utils.getLocation(gameState, entityId);
-            cooldownComponent = PossibleActionsComponent.get(gameState.getWorld(), faction);
+            UUID faction = Utils.getLocation(input);
+            cooldownComponent = PossibleActionsComponent.get(input.getGameState().getWorld(), faction);
         } else {
-            cooldownComponent = PossibleActionsComponent.get(gameState.getWorld(), entityId);
+            cooldownComponent = PossibleActionsComponent.get(input.getGameState().getWorld(), input.getEntityId());
         }
         return cooldownComponent;
     }
@@ -57,8 +58,8 @@ public class CooldownAction extends Action {
         if (cooldown == null) {
             cooldown = new Label("", skin);
         }
-        PossibleActionsComponent cooldownComponent = getCooldownComponent(GameState.global(),
-            GameState.global().getCurrentEntity());
+        PossibleActionsComponent cooldownComponent = getCooldownComponent(new ActionInput(GameState.global(),
+            GameState.global().getCurrentEntity()));
         Integer cooldownVal = cooldownComponent.getCooldowns().get(this.name);
         cooldownVal = cooldownVal == null ? turnCooldown : (turnCooldown - cooldownVal - 1);
         cooldown.setText(cooldownVal + "/" + turnCooldown);

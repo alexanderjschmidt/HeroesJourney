@@ -7,35 +7,38 @@ import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.utils.Utils;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 @Builder
-public class Cost {
+public class Cost<I extends ActionInput> {
 
     @Builder.Default
     private int stamina = 0, mana = 0, health = 0, gold = 0;
     @Builder.Default
-    protected BiConsumer<GameState, UUID> onUse = (gs, e) -> {
+    protected Consumer<I> onUse = (input) -> {
     };
     @Builder.Default
-    protected BiFunction<GameState, UUID, ShowAction> requirementsMet = (gs, e) -> ShowAction.YES;
+    protected Function<I, ShowAction> requirementsMet = (input) -> ShowAction.YES;
     @Builder.Default
-    protected BiFunction<GameState, UUID, Double> multiplier = (gs, e) -> 1.0;
+    protected Function<I, Double> multiplier = (input) -> 1.0;
 
-    public void onUse(GameState gameState, UUID userId) {
+    public void onUse(I input) {
+        GameState gameState = input.getGameState();
+        UUID userId = input.getEntityId();
         if (userId == null) {
             return;
         }
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
-        double mult = multiplier.apply(gameState, userId);
+        double mult = multiplier.apply(input);
 
         Utils.adjustStamina(gameState, userId, (int) -(stamina * mult));
         Utils.adjustMana(gameState, userId, (int) -(mana * mult));
@@ -44,16 +47,18 @@ public class Cost {
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         inventoryComponent.adjustGold((int) -(gold * mult));
 
-        onUse.accept(gameState, userId);
+        onUse.accept(input);
     }
 
-    public ShowAction requirementsMet(GameState gameState, UUID userId) {
+    public ShowAction requirementsMet(I input) {
+        GameState gameState = input.getGameState();
+        UUID userId = input.getEntityId();
         if (userId == null) {
             return ShowAction.YES;
         }
         StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
-        double mult = multiplier.apply(gameState, userId);
+        double mult = multiplier.apply(input);
 
         ShowAction enoughStamina =
             statsComponent.getStamina() > this.stamina * mult ? ShowAction.YES : ShowAction.GRAYED;
@@ -71,7 +76,7 @@ public class Cost {
         //System.out.println(enoughHealth);
         //System.out.println(enoughGold);
 
-        return requirementsMet.apply(gameState, userId)
+        return requirementsMet.apply(input)
             .and(enoughStamina)
             .and(enoughMana)
             .and(enoughHealth)
@@ -97,14 +102,14 @@ public class Cost {
         table.defaults().left();
     }
 
-    public Table getDisplay() {
+    public Table getDisplay(I input) {
         if (staminaCost == null) {
             initDisplay();
         }
         table.clear();
         List<Label> costLabels = new ArrayList<>();
 
-        double mult = multiplier.apply(GameState.global(), GameState.global().getCurrentEntity());
+        double mult = multiplier.apply(input);
 
         if (stamina * mult != 0) {
             staminaCost.setText("S: " + (stamina * mult));

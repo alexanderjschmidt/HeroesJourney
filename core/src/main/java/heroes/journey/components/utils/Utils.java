@@ -7,6 +7,7 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.*;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.buffs.Buff;
 import heroes.journey.entities.items.Item;
@@ -21,6 +22,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Utils {
+
+    public static UUID getLocation(ActionInput input) {
+        return getLocation(input.getGameState(), input.getEntityId());
+    }
 
     public static UUID getLocation(GameState gameState, UUID entityId) {
         if (entityId == null)
@@ -38,6 +43,10 @@ public class Utils {
             questActions.add(quest.getClaimAction());
         }
         return questActions;
+    }
+
+    public static StringResult addItem(ActionInput input, Item item, int count) {
+        return addItem(input.getGameState(), input.getEntityId(), item, count);
     }
 
     public static StringResult addItem(GameState gameState, UUID entityId, Item item, int count) {

@@ -13,14 +13,14 @@ public class Quests implements InitializerInterface {
     static {
         delve = Quest.builder()
             .name("Delve a dungeon")
-            .onComplete((gs, e) -> {
-                Utils.addItem(gs, e, Items.ironSword, 1);
-                PlayerComponent playerComponent = PlayerComponent.get(gs.getWorld(), e);
+            .onComplete((input) -> {
+                Utils.addItem(input, Items.ironSword, 1);
+                PlayerComponent playerComponent = PlayerComponent.get(input.getGameState().getWorld(), input.getEntityId());
                 if (playerComponent != null) {
                     playerComponent.fame(playerComponent.fame() + 10);
                 }
             })
-            .isComplete((gs, e) -> Utils.justCompletedAction(gs, e, DelveAction.delve))
+            .isComplete((input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(), DelveAction.delve))
             .build()
             .register();
     }

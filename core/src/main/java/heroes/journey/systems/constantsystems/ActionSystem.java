@@ -13,6 +13,7 @@ import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.TargetAction;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.*;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
@@ -37,15 +38,16 @@ public class ActionSystem extends IteratingSystem {
         }
 
         ActionComponent actionComponent = ActionComponent.get(world, id);
+        ActionInput input = new ActionInput(GameState.global(), id);
         Action action = actionComponent.getAction();
         if (action == null) {
             String[] targetActionParts = actionComponent.action().split(",");
             TargetAction targetAction = (TargetAction) ActionManager.get().get(targetActionParts[0]);
             if (targetAction == null)
                 throw new RuntimeException(actionComponent.action() + " action could not be parsed");
-            action = targetAction.getAction(GameState.global(), id, targetActionParts[1]);
+            action = targetAction.getActionFromSelected(input, targetActionParts[1]);
         }
-        ActionResult result = action.onSelect(GameState.global(), id);
+        ActionResult result = action.onSelect(input);
         if (result != null) {
             switch (result) {
                 case StringResult str -> {

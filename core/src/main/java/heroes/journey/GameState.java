@@ -15,6 +15,7 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
@@ -109,7 +110,7 @@ public class GameState implements Cloneable {
         // Apply chosen Action
         Action action = queuedAction.getAction();
         history.add(queuedAction.getAction(), e);
-        action.onSelect(this, e, true);
+        action.onSelect(new ActionInput(this, e), true);
         // If action adds movement
         // TODO remove this, onSelectAI should handle this
         MovementComponent movement = MovementComponent.get(world, e);

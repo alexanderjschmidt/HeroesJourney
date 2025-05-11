@@ -23,6 +23,7 @@ import java.util.UUID;
 
 public class BaseActions implements InitializerInterface {
 
+    //TODO this is probably bad
     public static String popupMessage = "";
     public static Action openActionMenu, rest, end_turn, exit_game, popup, save;
     public static CooldownAction workout, study;
@@ -32,18 +33,18 @@ public class BaseActions implements InitializerInterface {
         openActionMenu = Action.builder()
             .name("THIS SHOULD NEVER BE DISPLAYED")
             .returnsActionList(true)
-            .requirementsMet((gs, e) -> ShowAction.NO)
-            .onSelect((gs, e) -> new ActionListResult(ActionMenu.getActionsFor(gs, e)))
+            .requirementsMet((input) -> ShowAction.NO)
+            .onSelect((input) -> new ActionListResult(ActionMenu.getActionsFor(input.getGameState(), input.getEntityId())))
             .build()
             .register();
-        exit_game = Action.builder().name("Exit Game").onSelect((gs, e) -> {
+        exit_game = Action.builder().name("Exit Game").onSelect((input) -> {
             Application.get().setScreen(new MainMenuScreen(Application.get()));
             return null;
         }).build().register();
         TeamActions.addTeamAction(exit_game);
-        end_turn = Action.builder().name("End Turn").onSelect((gs, e) -> {
-            UUID entityId = gs.getCurrentEntity();
-            gs.getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.rest);
+        end_turn = Action.builder().name("End Turn").onSelect((input) -> {
+            UUID entityId = input.getGameState().getCurrentEntity();
+            input.getGameState().getWorld().edit(entityId).create(ActionComponent.class).action(BaseActions.rest);
             HUD.get().revertToInitialState();
             return null;
         }).build().register();
@@ -51,20 +52,20 @@ public class BaseActions implements InitializerInterface {
         save = Action.builder()
             .name("Save")
             .description("Save Game")
-            .onSelect((gs, e) -> {
-                gs.save("save", true);
+            .onSelect((input) -> {
+                input.getGameState().save("save", true);
                 return new StringResult("Your Game has been Saved!");
             }).build().register();
         TeamActions.addTeamAction(save);
         popup = Action.builder()
             .name("Popup")
-            .onSelect((gs, e) -> new StringResult(popupMessage))
+            .onSelect((input) -> new StringResult(popupMessage))
             .build().register();
         rest = Action.builder()
             .name("Rest")
             .description("Do nothing, resting your body and mind.")
-            .onSelect((gs, e) -> {
-                BuffsComponent buffsComponent = BuffsComponent.get(gs.getWorld(), e);
+            .onSelect((input) -> {
+                BuffsComponent buffsComponent = BuffsComponent.get(input.getGameState().getWorld(), input.getEntityId());
                 buffsComponent.add(Buffs.rested);
                 return new EndTurnResult();
             })
@@ -75,28 +76,28 @@ public class BaseActions implements InitializerInterface {
             .name("Work out")
             .description("Lift weights, gain body")
             .turnCooldown(1)
-            .onSelect((gs, e) -> Utils.adjustBody(gs, e, 1))
+            .onSelect((input) -> Utils.adjustBody(input.getGameState(), input.getEntityId(), 1))
             .build()
             .register();
         study = CooldownAction.builder()
             .name("Study")
             .description("Expand your mind, increasing your potential")
             .turnCooldown(2)
-            .onSelect(((gs, e) -> Utils.adjustMind(gs, e, 1)))
+            .onSelect(((input) -> Utils.adjustMind(input.getGameState(), input.getEntityId(), 1)))
             .build()
             .register();
         questBoard = Action.builder()
             .name("Quest Board")
             .description("See what the people need help with")
             .returnsActionList(true)
-            .onSelect((gs, e) -> {
-                UUID town = Utils.getLocation(gs, e);
-                List<Action> questActions = Utils.getQuestClaimActions(gs, town);
+            .onSelect((input) -> {
+                UUID town = Utils.getLocation(input.getGameState(), input.getEntityId());
+                List<Action> questActions = Utils.getQuestClaimActions(input.getGameState(), town);
                 return new ActionListResult(questActions);
             })
-            .requirementsMet((gs, e) -> {
-                UUID town = Utils.getLocation(gs, e);
-                QuestsComponent questsComponent = QuestsComponent.get(gs.getWorld(), town);
+            .requirementsMet((input) -> {
+                UUID town = Utils.getLocation(input.getGameState(), input.getEntityId());
+                QuestsComponent questsComponent = QuestsComponent.get(input.getGameState().getWorld(), town);
                 return questsComponent.getQuests().isEmpty() ? ShowAction.GRAYED : ShowAction.YES;
             })
             .build()

@@ -19,7 +19,6 @@ import lombok.Getter;
  *
  * Target Actions
  *  actions to update to be target
- *      travel
  *      maybe explore?
  *      Quest board?
  *  Attack action on other entity

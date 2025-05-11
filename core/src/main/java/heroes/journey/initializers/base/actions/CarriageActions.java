@@ -19,8 +19,8 @@ public class CarriageActions implements InitializerInterface {
     public static TargetAction<Feature> carriage;
 
     static {
-        carriage = TargetAction.<Feature>targetBuilder().name("Carriage").returnsActionList(true).getTargets((gs, e) -> {
-            UUID currentLocation = Utils.getLocation(gs, e);
+        carriage = TargetAction.<Feature>targetBuilder().name("Carriage").getTargets((input) -> {
+            UUID currentLocation = Utils.getLocation(input);
             List<Feature> featuresWithCarriage = new ArrayList<>();
             for (Feature feature : FeatureManager.get().values()) {
                 if (feature.getType() != FeatureType.KINGDOM || currentLocation == feature.entityId) {
@@ -30,7 +30,6 @@ public class CarriageActions implements InitializerInterface {
             }
             return featuresWithCarriage;
         }).onSelectTarget((targetInput) -> {
-            System.out.println("Carriage");
             UUID town = targetInput.getGameState().getEntities().getLocation(targetInput.getInput().location.getX(), targetInput.getInput().location.getY());
             PositionComponent positionComponentLocation = PositionComponent.get(targetInput.getGameState().getWorld(), town);
             String locationName = NamedComponent.get(targetInput.getGameState().getWorld(), town, "Unknown Location");

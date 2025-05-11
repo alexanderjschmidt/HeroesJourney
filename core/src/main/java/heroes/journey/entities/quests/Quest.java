@@ -1,14 +1,13 @@
 package heroes.journey.entities.quests;
 
-import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.ClaimQuestAction;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import lombok.Builder;
 import lombok.NonNull;
 
-import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 @Builder
 public class Quest {
@@ -16,16 +15,16 @@ public class Quest {
     @NonNull
     private final String name;
     @NonNull
-    private final BiConsumer<GameState, UUID> onComplete;
+    private final Consumer<ActionInput> onComplete;
     @NonNull
-    private final BiPredicate<GameState, UUID> isComplete;
+    private final Predicate<ActionInput> isComplete;
 
-    public void onComplete(GameState gameState, UUID completer) {
-        onComplete.accept(gameState, completer);
+    public void onComplete(ActionInput input) {
+        onComplete.accept(input);
     }
 
-    public boolean isComplete(GameState gameState, UUID owner) {
-        return isComplete.test(gameState, owner);
+    public boolean isComplete(ActionInput input) {
+        return isComplete.test(input);
     }
 
     @Override

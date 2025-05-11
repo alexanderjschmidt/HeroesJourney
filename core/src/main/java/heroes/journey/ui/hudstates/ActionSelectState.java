@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
@@ -23,9 +24,10 @@ public class ActionSelectState extends HUDState {
     }
 
     private List<ScrollPaneEntry<Action>> filter(List<Action> input, UUID entityId) {
+        ActionInput actionInput = new ActionInput(GameState.global(), entityId);
         return input.stream()
             .map(action -> {
-                ShowAction result = action.requirementsMet(GameState.global(), entityId);
+                ShowAction result = action.requirementsMet(actionInput);
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)

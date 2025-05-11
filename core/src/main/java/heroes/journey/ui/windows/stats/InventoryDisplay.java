@@ -7,6 +7,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
+import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.ui.ScrollPane;
@@ -85,7 +86,7 @@ public class InventoryDisplay extends Table {
                 case Consumable:
                     removeItem((Item) selectedItem);
                     ConsumableItem c = (ConsumableItem) selectedItem;
-                    c.consume(GameState.global(), entityId);
+                    c.consume(new ActionInput(GameState.global(), entityId));
                     break;
             }
             equipmentDisplay.refreshEntity();
