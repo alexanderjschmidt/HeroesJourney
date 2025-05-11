@@ -14,7 +14,7 @@ public abstract class TriggerableSystem extends BaseEntitySystem {
 
     public abstract EventTrigger getTrigger();
 
-    protected final void processSystem() {
+    protected void processSystem() {
         IntBag actives = this.subscription.getEntities();
         int[] ids = actives.getData();
         int i = 0;
