@@ -1,0 +1,133 @@
+package heroes.journey.utils.worldgen;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+
+import heroes.journey.GameState;
+import heroes.journey.entities.Position;
+import heroes.journey.initializers.base.Map;
+import heroes.journey.initializers.base.Tiles;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.Random;
+import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.ai.pathfinding.RoadPathing;
+
+public class MapGenUtils {
+
+    public static boolean surroundedBySame(Tile[][] tileMap, int x, int y) {
+        Tile t = tileMap[x][y];
+        return (!inBounds(x - 1, y + 1) || t == tileMap[x - 1][y + 1]) &&
+            (!inBounds(x - 1, y) || t == tileMap[x - 1][y]) &&
+            (!inBounds(x - 1, y - 1) || t == tileMap[x - 1][y - 1]) &&
+            (!inBounds(x, y - 1) || t == tileMap[x][y - 1]) &&
+            (!inBounds(x, y + 1) || t == tileMap[x][y + 1]) &&
+            (!inBounds(x + 1, y - 1) || t == tileMap[x + 1][y - 1]) &&
+            (!inBounds(x + 1, y) || t == tileMap[x + 1][y]) &&
+            (!inBounds(x + 1, y + 1) || t == tileMap[x + 1][y + 1]);
+    }
+
+    public static void buildRoad(
+        GameState gameState,
+        Tile connector,
+        Position location1,
+        Position location2) {
+        Cell path = new RoadPathing().getPath(gameState.getMap(), location1.getX(), location1.getY(),
+            location2.getX(), location2.getY());
+        while (path != null) {
+            gameState.getMap().setTile(path.x, path.y, connector);
+            path = path.parent;
+        }
+    }
+
+    public static boolean isLandTile(Tile tile) {
+        return tile == Tiles.PLAINS || tile == Tiles.HILLS;
+    }
+
+    public static boolean inBounds(int x, int y) {
+        return inBounds(x, y, Map.MAP_SIZE, Map.MAP_SIZE);
+    }
+
+    public static boolean inBounds(int x, int y, int width, int height) {
+        return x >= 0 && y >= 0 && x < width && y < height;
+    }
+
+    public static boolean inBounds(int x, int y, Object[][] array) {
+        return x >= 0 && y >= 0 && x < array.length && y < array[x].length;
+    }
+
+    public static Predicate<Position> isLandSurrounded(Tile[][] map) {
+        return pos -> inBounds(pos.getX(), pos.getY()) && isLandTile(map[pos.getX()][pos.getY()]) &&
+            surroundedBySame(map, pos.getX(), pos.getY());
+    }
+
+    public static Predicate<Position> isFarFromFeatures(GameState gameState, int minDistance) {
+        return pos -> {
+            for (int dx = -minDistance; dx <= minDistance; dx++) {
+                for (int dy = -minDistance; dy <= minDistance; dy++) {
+                    int x = pos.getX() + dx;
+                    int y = pos.getY() + dy;
+                    if (!inBounds(x, y))
+                        continue;
+
+                    if (gameState.getMap().getEnvironment(x, y) != null) {
+                        Position other = new Position(x, y);
+                        if (pos.distanceTo(other) < minDistance)
+                            return false;
+                    }
+                }
+            }
+            return true;
+        };
+    }
+
+    public static Position findTileNear(
+        Position center,
+        int minDist,
+        int maxDist,
+        Predicate<Position> isValid) {
+        return findTileNear(center, minDist, maxDist, 0, isValid);
+    }
+
+    public static Position findTileNear(
+        Position center,
+        int minDist,
+        int maxDist,
+        int randomSampling,
+        Predicate<Position> isValid) {
+        if (randomSampling <= 0) {
+            for (int r = minDist; r <= maxDist; r++) {
+                List<Position> ring = new ArrayList<>();
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dy = -r; dy <= r; dy++) {
+                        if (Math.abs(dx) != r && Math.abs(dy) != r)
+                            continue; // only outer ring
+                        ring.add(new Position(center.getX() + dx, center.getY() + dy));
+                    }
+                }
+                Collections.shuffle(ring, Random.get()); // randomize order of checking
+                for (Position pos : ring) {
+                    if (isValid.test(pos))
+                        return pos;
+                }
+            }
+        } else {
+            for (int i = 0; i < randomSampling; i++) {
+                int dx = Random.get().nextInt(-maxDist, maxDist);
+                int dy = Random.get().nextInt(-maxDist, maxDist);
+                if (Math.abs(dx) + Math.abs(dy) < minDist)
+                    continue;
+
+                Position pos = new Position(center.getX() + dx, center.getY() + dy);
+                if (isValid.test(pos))
+                    return pos;
+            }
+            throw new MapGenerationException(
+                "Could not find a randomly sampled location for " + center + " with max dist " + maxDist +
+                    " and min dist " + minDist + " after " + randomSampling + " tries.");
+        }
+
+        return center; // fallback
+    }
+}

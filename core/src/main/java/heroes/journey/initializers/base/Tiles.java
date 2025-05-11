@@ -26,7 +26,7 @@ public class Tiles implements InitializerInterface {
     static {
         TextureRegion[][] tiles = ResourceManager.get(LoadTextures.OverworldTileset);
 
-        NULL = new BaseTile(NULL_TERRAIN, 100, tiles[3][0]);
+        NULL = new BaseTile(NULL_TERRAIN, 100, false, tiles[3][0]);
         baseTile(NULL, NULL_TERRAIN);
 
         // Base Terrains

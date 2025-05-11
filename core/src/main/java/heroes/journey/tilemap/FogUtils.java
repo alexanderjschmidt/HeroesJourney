@@ -6,11 +6,12 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
-import heroes.journey.initializers.base.Map;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 
 import java.util.UUID;
+
+import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
 
 public class FogUtils {
 
@@ -49,7 +50,7 @@ public class FogUtils {
                     int newY = yBase + y;
 
                     // Ensure we are within bounds of the fog array
-                    if (Map.inBounds(newX, newY, fog)) {
+                    if (inBounds(newX, newY, fog)) {
                         // Set fog to None (null) if within the vision range
                         fog[newX][newY] = null; // Assuming `null` indicates visible (no fog).
                     }
@@ -82,7 +83,7 @@ public class FogUtils {
                     int newY = yBase + y;
 
                     // Ensure we are within bounds of the fog array
-                    if (Map.inBounds(newX, newY, mapComponent.getFog())) {
+                    if (inBounds(newX, newY, mapComponent.getFog())) {
                         mapComponent.getFog()[newX][newY] = Fog.LIGHT;
                         UUID locationUuid = gameState.getEntities().getLocationUUID(newX, newY);
                         if (locationUuid != null) {
@@ -116,7 +117,7 @@ public class FogUtils {
                         int newX = centerX + offsetX;
                         int newY = centerY + offsetY;
 
-                        if (Map.inBounds(newX, newY, mapComponent.getFog())) {
+                        if (inBounds(newX, newY, mapComponent.getFog())) {
                             mapComponent.getFog()[newX][newY] = Fog.LIGHT; // Clear fog
                             UUID locationUuid = gameState.getEntities().getLocationUUID(newX, newY);
                             if (locationUuid != null) {

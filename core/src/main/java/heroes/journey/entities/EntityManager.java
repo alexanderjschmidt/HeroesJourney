@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static heroes.journey.initializers.base.Map.inBounds;
+import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
 
 public class EntityManager implements Cloneable {
 

@@ -1,11 +1,11 @@
 package heroes.journey.utils.worldgen.dungeon;
 
-import static heroes.journey.initializers.base.Map.inBounds;
+import heroes.journey.utils.Random;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import heroes.journey.utils.Random;
+import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
 
 public class DungeonGenerator {
     private final int roomWidth;

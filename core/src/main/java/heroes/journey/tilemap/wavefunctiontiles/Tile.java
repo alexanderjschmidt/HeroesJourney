@@ -1,7 +1,6 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
@@ -43,7 +42,7 @@ public abstract class Tile {
     }
 
     public boolean aligns(Direction direction, Tile tile) {
-        if (tile == null || tile == Tiles.NULL)
+        if (tile == null)
             return true;
         switch (direction) {
             case NORTHWEST -> {
