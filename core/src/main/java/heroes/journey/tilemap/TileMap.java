@@ -17,7 +17,7 @@ import lombok.Setter;
 
 import java.util.*;
 
-import static heroes.journey.initializers.base.Map.inBounds;
+import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
 
 public class TileMap implements IndexedGraph<TileNode> {
 

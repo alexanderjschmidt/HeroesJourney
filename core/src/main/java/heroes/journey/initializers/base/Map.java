@@ -1,7 +1,6 @@
 package heroes.journey.initializers.base;
 
 import com.artemis.EntityEdit;
-import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
@@ -15,18 +14,19 @@ import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.RandomWorldGenerator;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 import heroes.journey.utils.worldgen.WeightedRandomPicker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 import static heroes.journey.initializers.base.factories.EntityFactory.*;
 import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
 import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.MapGenUtils.*;
 import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
 import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 
@@ -39,16 +39,15 @@ public class Map implements InitializerInterface {
     public static int KINGDOM_DIST_TO_CENTER = 3;
 
     // Towns
+    public static int townsPerKingdomMin = 3;
+    public static int townsPerKingdomMax = 6;
     public static int minDistanceBetweenTowns = 6;
-    public static int maxAttemptsTowns = 100;
 
     // Dungeons
-    public static int minDistanceFromAnyFeature = 5;
-    public static int minDistanceFromSettlement = 3;
-    public static int maxDistanceFromSettlement = 10;
     public static int dungeonsPerSettlementMin = 2;
     public static int dungeonsPerSettlementMax = 4;
-    public static int maxAttemptsDungeons = 50;
+    public static int minDistanceFromAnyFeature = 5;
+    public static int maxDistanceFromSettlement = 10;
     // Wild Dungeons
     public static int minDistanceFromAllFeatures = 5;
     public static int maxAttemptsWildDungeons = 250;
@@ -87,7 +86,7 @@ public class Map implements InitializerInterface {
                     int y = centerY + (int) (Math.sin(angleRad) * radius);
 
                     // Snap to nearest valid land tile
-                    Position capital = findValidLandTile(x, y, gameState.getMap().getTileMap());
+                    Position capital = findTileNear(new Position(x, y), 0, 10, isLandSurrounded(gameState.getMap().getTileMap()));
 
                     gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
                     UUID kingdomId = generateTown(gameState, capital.getX(), capital.getY(), true);
@@ -97,56 +96,32 @@ public class Map implements InitializerInterface {
             })
             .build()
             .register();
-        // Add Towns
+        // Add Towns off of kingdoms
         MapGenerationEffect townsGen = MapGenerationEffect.builder()
             .name("towns")
             .dependsOn(new String[]{kingdomsGen.getName()})
             .applyEffect(gameState -> {
                 for (Feature kingdom : FeatureManager.get(FeatureType.KINGDOM)) {
-                    int numTowns = Random.get().nextInt(3, 6);
-                    Set<Position> placed = new HashSet<>();
-                    placed.add(kingdom.location); // avoid placing towns right next to the capital
+                    int numTowns = Random.get().nextInt(townsPerKingdomMin, townsPerKingdomMax);
 
                     for (int i = 0; i < numTowns; i++) {
-                        boolean placedTown = false;
+                        Position candidate = findTileNear(
+                            kingdom.location, minDistanceBetweenTowns, minDistanceBetweenTowns * 2,
+                            isFarFromFeatures(gameState, minDistanceBetweenTowns).and(isLandSurrounded(gameState.getMap().getTileMap()))
+                        );
 
-                        for (int attempt = 0; attempt < maxAttemptsTowns; attempt++) {
-                            Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(),
-                                kingdom.location, 4, 8);
-
-                            // Check spacing with existing towns in this kingdom
-                            boolean tooClose = false;
-                            for (Position existing : placed) {
-                                if (candidate.distanceTo(existing) < minDistanceBetweenTowns) {
-                                    tooClose = true;
-                                    break;
-                                }
-                            }
-
-                            if (!tooClose &&
-                                surroundedBySame(gameState.getMap().getTileMap(), candidate.getX(),
-                                    candidate.getY())) {
-                                gameState.getMap()
-                                    .setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
-                                UUID townId = generateTown(gameState, candidate.getX(), candidate.getY(),
-                                    false);
-                                Feature town = new Feature(townId, FeatureType.TOWN, candidate);
-                                kingdom.add(town);
-                                placed.add(candidate);
-                                placedTown = true;
-                                break;
-                            }
-                        }
-
-                        if (!placedTown) {
-                            System.out.println("Warning: Could not place all towns for kingdom");
-                        }
+                        gameState.getMap()
+                            .setEnvironment(candidate.getX(), candidate.getY(), Tiles.TOWN);
+                        UUID townId = generateTown(gameState, candidate.getX(), candidate.getY(),
+                            false);
+                        Feature town = new Feature(townId, FeatureType.TOWN, candidate);
+                        kingdom.add(town);
                     }
                 }
             })
             .build()
             .register();
-        // Add Paths
+        // Add Paths between capitals and towns
         MapGenerationEffect paths = MapGenerationEffect.builder()
             .name("paths")
             .dependsOn(new String[]{townsGen.getName()})
@@ -179,7 +154,7 @@ public class Map implements InitializerInterface {
             })
             .build()
             .register();
-        // Add Dungeons
+        // Add Dungeons off of towns
         MapGenerationEffect dungeonsGen = MapGenerationEffect.builder()
             .name("dungeons")
             .dependsOn(new String[]{monsters.getName()})
@@ -197,33 +172,23 @@ public class Map implements InitializerInterface {
                         .nextInt(dungeonsPerSettlementMin, dungeonsPerSettlementMax);
 
                     for (int i = 0; i < numDungeons; i++) {
-                        boolean placed = false;
+                        Position candidate = findTileNear(
+                            settlement.location, minDistanceFromAnyFeature, maxDistanceFromSettlement,
+                            isFarFromFeatures(gameState, minDistanceFromAnyFeature).and(isLandSurrounded(gameState.getMap().getTileMap()))
+                        );
 
-                        for (int attempt = 0; attempt < maxAttemptsDungeons; attempt++) {
-                            Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(),
-                                settlement.location, minDistanceFromSettlement, maxDistanceFromSettlement);
+                        gameState.getMap()
+                            .setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
+                        UUID dungeonId = generateDungeon(gameState, candidate.getX(),
+                            candidate.getY());
+                        Feature dungeon = new Feature(dungeonId, FeatureType.DUNGEON, candidate);
 
-                            if (isPositionFarFromFeatures(gameState, candidate, minDistanceFromAnyFeature) &&
-                                surroundedBySame(gameState.getMap().getTileMap(), candidate.getX(),
-                                    candidate.getY())) {
-                                gameState.getMap()
-                                    .setEnvironment(candidate.getX(), candidate.getY(), Tiles.DUNGEON);
-                                UUID dungeonId = generateDungeon(gameState, candidate.getX(),
-                                    candidate.getY());
-                                Feature dungeon = new Feature(dungeonId, FeatureType.DUNGEON, candidate);
-                                placed = true;
-                                break;
-                            }
-                        }
-
-                        if (!placed) {
-                            System.out.println("Warning: Could not place a dungeon near " + settlement);
-                        }
                     }
                 }
             })
             .build()
             .register();
+        // Add more dungeons randomly in the wild
         MapGenerationEffect wildDungeons = MapGenerationEffect.builder()
             .name("wildDungeons")
             .dependsOn(new String[]{dungeonsGen.getName()})
@@ -239,7 +204,7 @@ public class Map implements InitializerInterface {
                         Position candidate = new Position(x, y);
 
                         if (inBounds(x, y) && isLandTile(gameState.getMap().getTileMap()[x][y]) &&
-                            isPositionFarFromFeatures(gameState, candidate, minDistanceFromAllFeatures) &&
+                            isFarFromFeatures(gameState, minDistanceFromAllFeatures).test(candidate) &&
                             surroundedBySame(gameState.getMap().getTileMap(), x, y)) {
                             gameState.getMap().setEnvironment(x, y, Tiles.DUNGEON);
                             UUID dungeonId = generateDungeon(gameState, x, y);
@@ -387,102 +352,6 @@ public class Map implements InitializerInterface {
             })
             .build()
             .register();
-    }
-
-    private static boolean surroundedBySame(Tile[][] tileMap, int x, int y) {
-        Tile t = tileMap[x][y];
-        return (!inBounds(x - 1, y + 1) || t == tileMap[x - 1][y + 1]) &&
-            (!inBounds(x - 1, y) || t == tileMap[x - 1][y]) &&
-            (!inBounds(x - 1, y - 1) || t == tileMap[x - 1][y - 1]) &&
-            (!inBounds(x, y - 1) || t == tileMap[x][y - 1]) &&
-            (!inBounds(x, y + 1) || t == tileMap[x][y + 1]) &&
-            (!inBounds(x + 1, y - 1) || t == tileMap[x + 1][y - 1]) &&
-            (!inBounds(x + 1, y) || t == tileMap[x + 1][y]) &&
-            (!inBounds(x + 1, y + 1) || t == tileMap[x + 1][y + 1]);
-    }
-
-    private static void buildRoad(
-        GameState gameState,
-        Tile connector,
-        Position location1,
-        Position location2) {
-        Cell path = new RoadPathing().getPath(gameState.getMap(), location1.getX(), location1.getY(),
-            location2.getX(), location2.getY());
-        while (path != null) {
-            gameState.getMap().setTile(path.x, path.y, connector);
-            path = path.parent;
-        }
-    }
-
-    private static Position findValidLandTile(int startX, int startY, Tile[][] map) {
-        int maxRadius = 10;
-
-        for (int r = 0; r <= maxRadius; r++) {
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dy = -r; dy <= r; dy++) {
-                    if (Math.abs(dx) != r && Math.abs(dy) != r)
-                        continue; // only outer edge
-                    int x = startX + dx;
-                    int y = startY + dy;
-                    if (inBounds(x, y) && isLandTile(map[x][y]) && surroundedBySame(map, x, y)) {
-                        return new Position(x, y);
-                    }
-                }
-            }
-        }
-
-        return new Position(startX, startY); // fallback, might not be land
-    }
-
-    private static boolean isLandTile(Tile tile) {
-        return tile == Tiles.PLAINS || tile == Tiles.HILLS;
-    }
-
-    public static boolean inBounds(int x, int y) {
-        return inBounds(x, y, MAP_SIZE, MAP_SIZE);
-    }
-
-    public static boolean inBounds(int x, int y, int width, int height) {
-        return x >= 0 && y >= 0 && x < width && y < height;
-    }
-
-    public static boolean inBounds(int x, int y, Object[][] array) {
-        return x >= 0 && y >= 0 && x < array.length && y < array[x].length;
-    }
-
-    private static Position getNearbyValidTile(Tile[][] map, Position center, int minDist, int maxDist) {
-        for (int i = 0; i < 100; i++) {
-            int dx = Random.get().nextInt(-maxDist, maxDist);
-            int dy = Random.get().nextInt(-maxDist, maxDist);
-            if (Math.abs(dx) + Math.abs(dy) < minDist)
-                continue;
-
-            int x = center.getX() + dx;
-            int y = center.getY() + dy;
-            if (inBounds(x, y) && isLandTile(map[x][y])) {
-                return new Position(x, y);
-            }
-        }
-        return center; // fallback
-    }
-
-    private static boolean isPositionFarFromFeatures(GameState gameState, Position pos, int minDistance) {
-        for (int dx = -minDistance; dx <= minDistance; dx++) {
-            for (int dy = -minDistance; dy <= minDistance; dy++) {
-                int x = pos.getX() + dx;
-                int y = pos.getY() + dy;
-
-                if (!inBounds(x, y))
-                    continue;
-
-                if (gameState.getMap().getEnvironment(x, y) != null) {
-                    if (pos.distanceTo(new Position(x, y)) < minDistance) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
 }

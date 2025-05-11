@@ -55,8 +55,7 @@ public class WaveFunctionCollapse {
             if (choice == null)
                 System.out.println(data.possibleTilesMap[minEntropyX][minEntropyY]);
             if (!isCompatibleWithNeighbors(data, minEntropyX, minEntropyY, choice)) {
-                throw new RuntimeException(
-                    "Not Compatible " + choice + " " + minEntropyX + ", " + minEntropyY);
+                throw new RuntimeException("Not Compatible " + choice + " " + minEntropyX + ", " + minEntropyY);
             }
 
             Decision decision = new Decision(minEntropyX, minEntropyY, choice,
