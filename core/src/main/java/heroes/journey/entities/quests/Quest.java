@@ -1,5 +1,6 @@
 package heroes.journey.entities.quests;
 
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import lombok.Builder;
 import lombok.NonNull;
@@ -17,8 +18,14 @@ public class Quest {
     private final Consumer<ActionInput> onComplete;
     @NonNull
     private final Predicate<ActionInput> isComplete;
+    @Builder.Default
+    private final int fameReward = 0;
 
     public void onComplete(ActionInput input) {
+        PlayerComponent playerComponent = PlayerComponent.get(input.getGameState().getWorld(), input.getEntityId());
+        if (playerComponent != null) {
+            playerComponent.fame(playerComponent.fame() + fameReward);
+        }
         onComplete.accept(input);
     }
 

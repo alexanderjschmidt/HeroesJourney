@@ -31,7 +31,6 @@ import lombok.Getter;
  *
  * Map Generation
  *  Add variation plain tiles
- *  Move Generation variables out of MapGenEffects
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap

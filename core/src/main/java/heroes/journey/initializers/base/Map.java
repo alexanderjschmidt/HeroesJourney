@@ -34,8 +34,26 @@ import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
 public class Map implements InitializerInterface {
 
     public static int MAP_SIZE = 64;
+    // Kingdoms
     public static int NUM_KINGDOMS = 3;
-    public static MapGenerationEffect trees;
+    public static int KINGDOM_DIST_TO_CENTER = 3;
+
+    // Towns
+    public static int minDistanceBetweenTowns = 6;
+    public static int maxAttemptsTowns = 100;
+
+    // Dungeons
+    public static int minDistanceFromAnyFeature = 5;
+    public static int minDistanceFromSettlement = 3;
+    public static int maxDistanceFromSettlement = 10;
+    public static int dungeonsPerSettlementMin = 2;
+    public static int dungeonsPerSettlementMax = 4;
+    public static int maxAttemptsDungeons = 50;
+    // Wild Dungeons
+    public static int minDistanceFromAllFeatures = 5;
+    public static int maxAttemptsWildDungeons = 250;
+    public static int wildDungeonsMin = 8;
+    public static int wildDungeonsMax = 16;
 
     static {
         // Generate Smooth Noise
@@ -55,15 +73,12 @@ public class Map implements InitializerInterface {
             .name("kingdoms")
             .dependsOn(new String[]{noise.getName()})
             .applyEffect(gameState -> {
-                int centerX = MAP_SIZE / 2;
-                int centerY = MAP_SIZE / 2;
-                int radius = MAP_SIZE / 3; // How far from center the capital should be
+                int centerX = gameState.getWidth() / 2;
+                int centerY = gameState.getHeight() / 2;
+                int radius = Math.min(gameState.getWidth(), gameState.getHeight()) / KINGDOM_DIST_TO_CENTER;
 
-                // Random offset in degrees (0 to 360)
                 double randomOffsetDeg = Random.get().nextDouble() * 360.0;
-
                 for (int i = 0; i < NUM_KINGDOMS; i++) {
-                    // Divide full circle (360°) into thirds
                     double angleDeg = i * (360.0 / NUM_KINGDOMS) + randomOffsetDeg;
                     double angleRad = Math.toRadians(angleDeg);
 
@@ -87,9 +102,6 @@ public class Map implements InitializerInterface {
             .name("towns")
             .dependsOn(new String[]{kingdomsGen.getName()})
             .applyEffect(gameState -> {
-                int minDistanceBetweenTowns = 6;
-                int maxAttempts = 100;
-
                 for (Feature kingdom : FeatureManager.get(FeatureType.KINGDOM)) {
                     int numTowns = Random.get().nextInt(3, 6);
                     Set<Position> placed = new HashSet<>();
@@ -98,7 +110,7 @@ public class Map implements InitializerInterface {
                     for (int i = 0; i < numTowns; i++) {
                         boolean placedTown = false;
 
-                        for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                        for (int attempt = 0; attempt < maxAttemptsTowns; attempt++) {
                             Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(),
                                 kingdom.location, 4, 8);
 
@@ -172,13 +184,6 @@ public class Map implements InitializerInterface {
             .name("dungeons")
             .dependsOn(new String[]{monsters.getName()})
             .applyEffect(gameState -> {
-                int minDistanceFromAnyFeature = 5;
-                int minDistanceFromSettlement = 3;
-                int maxDistanceFromSettlement = 10;
-                int dungeonsPerSettlementMin = 2;
-                int dungeonsPerSettlementMax = 4;
-                int maxAttempts = 50;
-
                 List<Feature> settlements = new ArrayList<>();
                 for (Feature kingdom : FeatureManager.get(FeatureType.KINGDOM)) {
                     settlements.add(kingdom);
@@ -194,7 +199,7 @@ public class Map implements InitializerInterface {
                     for (int i = 0; i < numDungeons; i++) {
                         boolean placed = false;
 
-                        for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                        for (int attempt = 0; attempt < maxAttemptsDungeons; attempt++) {
                             Position candidate = getNearbyValidTile(gameState.getMap().getTileMap(),
                                 settlement.location, minDistanceFromSettlement, maxDistanceFromSettlement);
 
@@ -223,14 +228,12 @@ public class Map implements InitializerInterface {
             .name("wildDungeons")
             .dependsOn(new String[]{dungeonsGen.getName()})
             .applyEffect(gameState -> {
-                int numWildernessDungeons = Random.get().nextInt(8, 16); // Adjust how many you want
-                int minDistanceFromAllFeatures = 5;
-                int maxAttempts = 250;
+                int numWildernessDungeons = Random.get().nextInt(wildDungeonsMin, wildDungeonsMax); // Adjust how many you want
 
                 for (int i = 0; i < numWildernessDungeons; i++) {
                     boolean placed = false;
 
-                    for (int attempt = 0; attempt < maxAttempts; attempt++) {
+                    for (int attempt = 0; attempt < maxAttemptsWildDungeons; attempt++) {
                         int x = Random.get().nextInt(0, MAP_SIZE - 1);
                         int y = Random.get().nextInt(0, MAP_SIZE - 1);
                         Position candidate = new Position(x, y);
@@ -317,7 +320,7 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Create Trees
-        trees = MapGenerationEffect.builder()
+        MapGenerationEffect trees = MapGenerationEffect.builder()
             .name("trees")
             .dependsOn(new String[]{wfcPaths.getName()})
             .applyEffect(gameState -> {

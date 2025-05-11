@@ -1,29 +1,23 @@
 package heroes.journey.initializers.base;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.helpers.WangCorner;
 import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
-import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
-import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
-import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
-import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.tilemap.wavefunctiontiles.*;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.worldgen.WaveFunctionCollapse;
 
+import java.util.List;
+
 public class Tiles implements InitializerInterface {
 
     public static final Terrain NULL_TERRAIN = new Terrain("NULL", 0);
-    public static final Terrain HOLE_TERRAIN = new Terrain("HOLE", 0);
-    public static final Tile NULL, HOLE;
+    public static final Tile NULL;
 
-    public static Terrain PATH, plains;
+    public static Terrain path, plains;
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles, treeTiles;
     public static Tile CAPITAL, TOWN, DUNGEON;
@@ -35,18 +29,12 @@ public class Tiles implements InitializerInterface {
         NULL = new BaseTile(NULL_TERRAIN, 100, tiles[3][0]);
         baseTile(NULL, NULL_TERRAIN);
 
-        HOLE = new BaseTile(HOLE_TERRAIN, 100, tiles[3][0]) {
-            public boolean aligns(Direction direction, Tile tile) {
-                return true;
-            }
-        };
-
         // Base Terrains
         Terrain water = new Terrain("Water", 50);
         plains = new Terrain("Plains", 2);
         Terrain hills = new Terrain("Hills", 2);
         Terrain sand = new Terrain("Sand", 3);
-        PATH = new Terrain("Path", 1);
+        path = new Terrain("Path", 1);
 
         capital = new ActionTerrain("Capital", 0);
         CAPITAL = new BaseTile(capital, 0, false, tiles[9][14]);
@@ -95,7 +83,7 @@ public class Tiles implements InitializerInterface {
 
         treeTiles = WangCorner.create(trees, NULL_TERRAIN, trees, tiles, 500, 0, 7, false);
 
-        pathTiles = WangEdge.create(PATH, plains, tiles, 10000, 12, 0);
+        pathTiles = WangEdge.create(path, plains, tiles, 10000, 12, 0);
     }
 
     public static void baseTile(Tile tile, Terrain terrain, boolean addToBaseTiles) {

@@ -43,7 +43,7 @@ public abstract class Tile {
     }
 
     public boolean aligns(Direction direction, Tile tile) {
-        if (tile == null || tile == Tiles.HOLE)
+        if (tile == null || tile == Tiles.NULL)
             return true;
         switch (direction) {
             case NORTHWEST -> {

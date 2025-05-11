@@ -35,7 +35,7 @@ public class RoadPathing {
         public float estimate(TileNode node, TileNode endNode) {
             float baseHeuristic = Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
             Terrain terrain = map.getTileMap()[node.x][node.y].getTerrain();
-            if (terrain == Tiles.PATH)
+            if (terrain == Tiles.path)
                 return baseHeuristic;
             if (terrain == Tiles.plains)
                 return baseHeuristic * terrain.getTerrainCost() * 10;
