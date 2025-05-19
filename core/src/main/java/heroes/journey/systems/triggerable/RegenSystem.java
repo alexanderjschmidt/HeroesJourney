@@ -9,8 +9,10 @@ import com.artemis.annotations.All;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
+import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.Buffs;
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.initializers.base.tags.Stats;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 
@@ -27,17 +29,17 @@ public class RegenSystem extends TriggerableSystem {
     protected void process(int entityId) {
         GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
-        StatsComponent statsComponent = StatsComponent.get(world, id);
+        Attributes statsComponent = StatsComponent.get(world, id);
 
         if (useBuff(gameState, id, Buffs.rested)) {
-            Utils.adjustHealth(gameState, id, statsComponent.getBody() * 2);
-            Utils.adjustMana(gameState, id, statsComponent.getMind() * 2);
-            Utils.adjustStamina(gameState, id, statsComponent.getBody() * 4);
+            StatsUtils.adjustHealth(gameState, id, statsComponent.get(Stats.BODY) * 2);
+            StatsUtils.adjustMana(gameState, id, statsComponent.get(Stats.MIND) * 2);
+            StatsUtils.adjustStamina(gameState, id, statsComponent.get(Stats.BODY) * 4);
         } else {
             // TODO fix stats ratios
-            Utils.adjustHealth(gameState, id, statsComponent.getBody());
-            Utils.adjustMana(gameState, id, statsComponent.getMind());
-            Utils.adjustStamina(gameState, id, statsComponent.getBody() * 2);
+            StatsUtils.adjustHealth(gameState, id, statsComponent.get(Stats.BODY));
+            StatsUtils.adjustMana(gameState, id, statsComponent.get(Stats.MIND));
+            StatsUtils.adjustStamina(gameState, id, statsComponent.get(Stats.BODY) * 2);
         }
     }
 

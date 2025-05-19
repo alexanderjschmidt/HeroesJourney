@@ -17,6 +17,7 @@ import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.quests.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Buffs;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
@@ -81,14 +82,14 @@ public class BaseActions implements InitializerInterface {
             .name("Work out")
             .description("Lift weights, gain body")
             .turnCooldown(1)
-            .onSelect((input) -> Utils.adjustBody(input.getGameState(), input.getEntityId(), 1))
+            .onSelect((input) -> StatsUtils.adjustBody(input.getGameState(), input.getEntityId(), 1))
             .build()
             .register();
         study = CooldownAction.builder()
             .name("Study")
             .description("Expand your mind, increasing your potential")
             .turnCooldown(2)
-            .onSelect(((input) -> Utils.adjustMind(input.getGameState(), input.getEntityId(), 1)))
+            .onSelect(((input) -> StatsUtils.adjustMind(input.getGameState(), input.getEntityId(), 1)))
             .build()
             .register();
         questBoard = TargetAction.<Quest>targetBuilder()

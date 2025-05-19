@@ -30,6 +30,7 @@ import com.badlogic.gdx.files.FileHandle;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
@@ -127,7 +128,7 @@ public class GameWorld extends World {
         return IntStream.range(0, subscription.getEntities().size())
             .mapToObj(i -> ids[i])
             .sorted(Comparator.comparing(
-                    (Integer e) -> StatsComponent.get(this, IdComponent.get(this, e)).getSpeed())
+                    (Integer e) -> StatsUtils.getSpeed(StatsComponent.get(this, IdComponent.get(this, e))))
                 .thenComparing(Object::toString))
             .map(e -> IdComponent.get(this, e))
             .collect(Collectors.toList());

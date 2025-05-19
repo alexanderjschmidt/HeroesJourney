@@ -56,15 +56,15 @@ public class NewMapManager {
                 if (!loading) {
                     gameState.init(mapData);
                     FeatureManager.get().clear();
-                }
-                for (MapGenerationEffect phase : sorted) {
-                    if (phase instanceof NoOpMapGenerationEffect) {
-                        System.out.println("Running phase: " + phase.getName());
-                        continue;
+                    for (MapGenerationEffect phase : sorted) {
+                        if (phase instanceof NoOpMapGenerationEffect) {
+                            System.out.println("Running phase: " + phase.getName());
+                            continue;
+                        }
+                        System.out.println("Running effect: " + phase.getName());
+                        phase.apply(gameState);
+                        gameState.getWorld().basicProcess();
                     }
-                    System.out.println("Running effect: " + phase.getName());
-                    phase.apply(gameState);
-                    gameState.getWorld().basicProcess();
                 }
             } catch (MapGenerationException e) {
                 continue;

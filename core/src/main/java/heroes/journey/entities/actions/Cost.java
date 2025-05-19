@@ -14,7 +14,9 @@ import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.inputs.ActionInput;
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.initializers.base.tags.Stats;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Builder;
 
@@ -33,13 +35,12 @@ public class Cost<I extends ActionInput> {
         if (userId == null) {
             return;
         }
-        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
         double mult = multiplier.apply(input);
 
-        Utils.adjustStamina(gameState, userId, (int)-(stamina * mult));
-        Utils.adjustMana(gameState, userId, (int)-(mana * mult));
-        Utils.adjustHealth(gameState, userId, (int)-(health * mult));
+        StatsUtils.adjustStamina(gameState, userId, (int)-(stamina * mult));
+        StatsUtils.adjustMana(gameState, userId, (int)-(mana * mult));
+        StatsUtils.adjustHealth(gameState, userId, (int)-(health * mult));
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         inventoryComponent.adjustGold((int)-(gold * mult));
@@ -53,16 +54,16 @@ public class Cost<I extends ActionInput> {
         if (userId == null) {
             return ShowAction.YES;
         }
-        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), userId);
+        Attributes statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
         double mult = multiplier.apply(input);
 
         ShowAction enoughStamina =
-            statsComponent.getStamina() > this.stamina * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.STAMINA) > this.stamina * mult ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughMana =
-            statsComponent.getMana() >= this.mana * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.MANA) >= this.mana * mult ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughHealth =
-            statsComponent.getHealth() >= this.health * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.HEALTH) >= this.health * mult ? ShowAction.YES : ShowAction.GRAYED;
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         ShowAction enoughGold =

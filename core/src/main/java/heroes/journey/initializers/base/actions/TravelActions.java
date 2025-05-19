@@ -149,6 +149,7 @@ public class TravelActions implements InitializerInterface {
                 ShowAction.YES :
                 ShowAction.GRAYED;
         }).costTarget(Cost.<TargetInput<UUID>>builder().stamina(2).build()).build().register();
+
         List<Action> travelActionOptions = new ArrayList<>();
         travelActionOptions.add(explore);
         travelActionOptions.add(wayfare);

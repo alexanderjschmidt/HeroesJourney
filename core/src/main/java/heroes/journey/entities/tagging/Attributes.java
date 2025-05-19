@@ -30,7 +30,9 @@ public class Attributes extends HashMap<Tag,Integer> {
 
     public Attributes put(Tag tag, Integer value, Operation operation) {
         if (this.containsKey(tag)) {
-            this.compute(tag, (k, currentValue) -> operation.apply(currentValue, value));
+            this.compute(tag,
+                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), tag.getMin(),
+                    tag.getMax()));
         } else {
             put(tag, value);
             tags.registerTag(tag);

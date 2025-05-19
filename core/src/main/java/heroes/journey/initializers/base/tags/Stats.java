@@ -4,17 +4,17 @@ import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Tag;
 import heroes.journey.entities.tagging.Tags;
 
-public enum DamageTypes implements Tag {
+public enum Stats implements Tag {
 
-    PHYSICAL, MAGICAL, TRUE;
+    BODY, MIND, HEALTH, STAMINA, MANA;
 
-    DamageTypes() {
+    Stats() {
         Tags.register(this);
     }
 
     @Override
     public int getMin() {
-        return 0;
+        return 1;
     }
 
     @Override
@@ -24,6 +24,6 @@ public enum DamageTypes implements Tag {
 
     @Override
     public Group getGroup() {
-        return Groups.Damage;
+        return Groups.Stats;
     }
 }

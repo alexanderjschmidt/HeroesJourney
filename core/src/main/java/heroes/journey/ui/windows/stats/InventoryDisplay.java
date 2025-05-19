@@ -1,8 +1,11 @@
 package heroes.journey.ui.windows.stats;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
@@ -10,11 +13,11 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.UUID;
 
 public class InventoryDisplay extends Table {
 
@@ -62,8 +65,8 @@ public class InventoryDisplay extends Table {
             .map(key -> new ScrollPaneEntry<>(key, true))
             .toList());
         gold.setText(inventoryComponent.getGold());
-        StatsComponent statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
-        weight.setText(inventoryComponent.getWeight() + "/" + statsComponent.getCarryCapacity());
+        Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
+        weight.setText(inventoryComponent.getWeight() + "/" + StatsUtils.getCarryCapacity(statsComponent));
     }
 
     public void handleInput() {
@@ -81,11 +84,11 @@ public class InventoryDisplay extends Table {
                 case Armor:
                     EquipmentComponent equipment = EquipmentComponent.get(GameState.global().getWorld(),
                         entityId);
-                    equipment.equip((Item) selectedItem);
+                    equipment.equip((Item)selectedItem);
                     break;
                 case Consumable:
-                    removeItem((Item) selectedItem);
-                    ConsumableItem c = (ConsumableItem) selectedItem;
+                    removeItem((Item)selectedItem);
+                    ConsumableItem c = (ConsumableItem)selectedItem;
                     c.consume(new ActionInput(GameState.global(), entityId));
                     break;
             }

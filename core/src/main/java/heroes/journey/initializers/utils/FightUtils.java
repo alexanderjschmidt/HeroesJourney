@@ -13,55 +13,56 @@ import heroes.journey.initializers.base.tags.ConversionSets;
 import heroes.journey.initializers.base.tags.DamageTypes;
 import heroes.journey.initializers.base.tags.DefenseTypes;
 import heroes.journey.initializers.base.tags.Groups;
+import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {
     public static boolean fight(GameState gameState, UUID fighter, UUID enemy) {
         GameWorld world = gameState.getWorld();
-        StatsComponent fighterStats = StatsComponent.get(world, fighter);
-        StatsComponent enemyStats = StatsComponent.get(world, enemy);
+        Attributes fighterStats = StatsComponent.get(world, fighter);
+        Attributes enemyStats = StatsComponent.get(world, enemy);
 
-        UUID attacker = fighterStats.getSpeed() >= enemyStats.getSpeed() ? fighter : enemy;
+        UUID attacker =
+            StatsUtils.getSpeed(fighterStats) >= StatsUtils.getSpeed(enemyStats) ? fighter : enemy;
         UUID defender = attacker == fighter ? enemy : fighter;
 
         // TODO if fast enough attack multiple times
-        while (fighterStats.getHealth() > 0 && enemyStats.getHealth() > 0) {
+        while (fighterStats.get(Stats.HEALTH) > 0 && enemyStats.get(Stats.HEALTH) > 0) {
             attack(gameState, attacker, defender);
             UUID previousDefender = defender;
             defender = attacker;
             attacker = previousDefender;
         }
-        return fighterStats.getHealth() > 0;
+        return fighterStats.get(Stats.HEALTH) > 0;
     }
 
     private static void attack(GameState gameState, UUID attacker, UUID defender) {
         GameWorld world = gameState.getWorld();
-        StatsComponent attackerStats = StatsComponent.get(world, attacker);
-        StatsComponent defenderStats = StatsComponent.get(world, defender);
 
-        Attributes damages = getDamages(world, attacker).applyOperation(attackerStats.getHandicapMult(),
-            Operation.MULTIPLY);
-        Attributes defenses = getDefenses(world, defender).applyOperation(defenderStats.getHandicapMult(),
-            Operation.MULTIPLY).convert(ConversionSets.DEFENSE_TO_DAMAGE);
+        Attributes damages = getDamages(world, attacker).applyOperation(
+            StatsComponent.getHandicap(world, attacker), Operation.MULTIPLY);
+        Attributes defenses = getDefenses(world, defender).applyOperation(
+                StatsComponent.getHandicap(world, defender), Operation.MULTIPLY)
+            .convert(ConversionSets.DEFENSE_TO_DAMAGE);
 
         damages.merge(defenses, Operation.SUBTRACT);
 
         int damage = Math.max(1, damages.getTotal()); // always at least 1
 
-        Utils.adjustHealth(gameState, defender, -damage);
+        StatsUtils.adjustHealth(gameState, defender, -damage);
     }
 
     public static void faint(GameWorld world, UUID e) {
-        StatsComponent statsComponent = StatsComponent.get(world, e);
-        statsComponent.setHealth(1);
+        Attributes statsComponent = StatsComponent.get(world, e);
+        statsComponent.put(Stats.BODY, 1);
         // TODO remove most valuable item
     }
 
     public static Attributes getDamages(GameWorld world, UUID attacker) {
-        StatsComponent attackerStats = StatsComponent.get(world, attacker);
+        Attributes attackerStats = StatsComponent.get(world, attacker);
         EquipmentComponent attackerEquipment = EquipmentComponent.get(world, attacker);
 
-        Attributes damages = new Attributes().add(DamageTypes.PHYSICAL, attackerStats.getBody());
+        Attributes damages = new Attributes().add(DamageTypes.PHYSICAL, attackerStats.get(Stats.BODY));
         if (attackerEquipment != null) {
             damages = safeMerge(damages, attackerEquipment.handOne(), Groups.Damage);
             damages = safeMerge(damages, attackerEquipment.handTwo(), Groups.Damage);
@@ -70,11 +71,11 @@ public class FightUtils {
     }
 
     public static Attributes getDefenses(GameWorld world, UUID defender) {
-        StatsComponent defenderStats = StatsComponent.get(world, defender);
+        Attributes defenderStats = StatsComponent.get(world, defender);
         EquipmentComponent defenderEquipment = EquipmentComponent.get(world, defender);
 
-        Attributes defenses = new Attributes().add(DefenseTypes.PHYSICAL_DEF, defenderStats.getBody())
-            .merge(defenderStats.getAttributes().getTagsWithGroup(Groups.Defense));
+        Attributes defenses = new Attributes().add(DefenseTypes.PHYSICAL_DEF, defenderStats.get(Stats.BODY))
+            .merge(defenderStats.getTagsWithGroup(Groups.Defense));
         if (defenderEquipment != null) {
             defenses = safeMerge(defenses, defenderEquipment.head(), Groups.Defense);
             defenses = safeMerge(defenses, defenderEquipment.chest(), Groups.Defense);

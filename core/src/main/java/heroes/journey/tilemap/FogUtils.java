@@ -11,6 +11,8 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 
@@ -31,10 +33,10 @@ public class FogUtils {
             FogUtils.mergeFog(fog, mapComponent.getFog());
         // Get Playing entities vision
         PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
-        StatsComponent statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
+        Attributes statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent != null && positionComponent != null) {
             FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
-                statsComponent.getVision());
+                StatsUtils.getVision(statsComponent));
         }
         return fog;
     }
@@ -63,10 +65,10 @@ public class FogUtils {
     public static void updateMap(GameWorld world, GameState gameState, UUID id) {
         PositionComponent pos = PositionComponent.get(world, id);
         MapComponent mapComponent = MapComponent.get(world, id);
-        StatsComponent statsComponent = StatsComponent.get(world, id);
+        Attributes statsComponent = StatsComponent.get(world, id);
         if (pos != null && mapComponent != null && statsComponent != null) {
             FogUtils.updateMap(world, gameState, mapComponent, pos.getX(), pos.getY(),
-                statsComponent.getVision());
+                StatsUtils.getVision(statsComponent));
         }
     }
 
