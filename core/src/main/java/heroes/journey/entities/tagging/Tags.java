@@ -8,7 +8,7 @@ import java.util.Set;
 public class Tags extends HashMap<Group,Set<Tag>> {
 
     private static Tags globalTags = new Tags();
-    private Map<String,Tag> tags = new HashMap<>();
+    private final Map<String,Tag> tags = new HashMap<>();
 
     public static Tags get() {
         if (globalTags == null)
@@ -26,5 +26,9 @@ public class Tags extends HashMap<Group,Set<Tag>> {
 
     public static void register(Tag tag) {
         globalTags.registerTag(tag);
+    }
+
+    public static Tag getTag(String tag) {
+        return get().tags.get(tag);
     }
 }
