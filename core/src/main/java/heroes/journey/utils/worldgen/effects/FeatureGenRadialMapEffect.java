@@ -17,7 +17,7 @@ public class FeatureGenRadialMapEffect extends MapGenerationEffect {
 
     private final int distToCenter, numOfFeature;
 
-    @NonNull private final BiConsumer<GameState,Position> generateFeatured;
+    @NonNull private final BiConsumer<GameState,Position> generateFeature;
 
     @Override
     public void apply(GameState gs) {
@@ -38,7 +38,7 @@ public class FeatureGenRadialMapEffect extends MapGenerationEffect {
             Position pos = findTileNear(new Position(x, y), 0, 10,
                 isLandSurrounded(gs.getMap().getTileMap()));
 
-            generateFeatured.accept(gs, pos);
+            generateFeature.accept(gs, pos);
         }
     }
 

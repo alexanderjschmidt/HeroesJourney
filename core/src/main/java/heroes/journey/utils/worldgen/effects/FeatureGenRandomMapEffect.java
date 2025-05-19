@@ -1,0 +1,54 @@
+package heroes.journey.utils.worldgen.effects;
+
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandTile;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+
+import java.util.function.BiConsumer;
+
+import heroes.journey.GameState;
+import heroes.journey.entities.Position;
+import heroes.journey.utils.Random;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+public class FeatureGenRandomMapEffect extends MapGenerationEffect {
+
+    private final int minFeature, maxFeature, generationAttempts, minDistanceFromAllFeatures;
+
+    @NonNull private final BiConsumer<GameState,Position> generateFeature;
+
+    @Override
+    public void apply(GameState gs) {
+        int width = gs.getWidth();
+        int height = gs.getHeight();
+        int numWildernessDungeons = Random.get().nextInt(minFeature, maxFeature);
+
+        for (int i = 0; i < numWildernessDungeons; i++) {
+            boolean placed = false;
+
+            for (int attempt = 0; attempt < generationAttempts; attempt++) {
+                int x = Random.get().nextInt(0, width - 1);
+                int y = Random.get().nextInt(0, height - 1);
+                Position candidate = new Position(x, y);
+
+                if (inBounds(x, y) && isLandTile(gs.getMap().getTileMap()[x][y]) &&
+                    isFarFromFeatures(gs, minDistanceFromAllFeatures).test(candidate) &&
+                    surroundedBySame(gs.getMap().getTileMap(), x, y)) {
+                    generateFeature.accept(gs, new Position(x, y));
+                    placed = true;
+                    System.out.println("Placed a random feature!");
+                    break;
+                }
+            }
+
+            if (!placed) {
+                System.out.println("Warning: Could not place a random feature!");
+            }
+        }
+    }
+
+}
