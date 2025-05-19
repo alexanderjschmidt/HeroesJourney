@@ -1,24 +1,24 @@
 package heroes.journey.ui.windows;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -118,7 +118,9 @@ public class ActionMenu extends UI {
 
         @Override
         public void onHover() {
-            actions.getSelected().entry().onHover(new ActionInput(GameState.global(), HUD.get().getCursor().getSelected()));
+            actions.getSelected()
+                .entry()
+                .onHover(new ActionInput(GameState.global(), HUD.get().getCursor().getSelected()));
             infoUI.showInfo(actions.getSelected().entry());
         }
     }

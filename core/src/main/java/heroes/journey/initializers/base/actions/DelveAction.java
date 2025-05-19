@@ -1,19 +1,19 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
-import heroes.journey.components.utils.FightUtils;
-import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.CooldownAction;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
-
-import java.util.UUID;
+import heroes.journey.initializers.utils.FightUtils;
+import heroes.journey.initializers.utils.Utils;
 
 public class DelveAction implements InitializerInterface {
     public static CooldownAction delve;

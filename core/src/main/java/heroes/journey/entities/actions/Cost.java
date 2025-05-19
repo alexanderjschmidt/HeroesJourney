@@ -1,34 +1,31 @@
 package heroes.journey.entities.actions;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import heroes.journey.GameState;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.utils.Utils;
-import heroes.journey.entities.actions.inputs.ActionInput;
-import heroes.journey.utils.art.ResourceManager;
-import lombok.Builder;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
+import heroes.journey.GameState;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.initializers.utils.Utils;
+import heroes.journey.utils.art.ResourceManager;
+import lombok.Builder;
+
 @Builder
 public class Cost<I extends ActionInput> {
 
-    @Builder.Default
-    private int stamina = 0, mana = 0, health = 0, gold = 0;
-    @Builder.Default
-    protected Consumer<I> onUse = (input) -> {
+    @Builder.Default private int stamina = 0, mana = 0, health = 0, gold = 0;
+    @Builder.Default protected Consumer<I> onUse = (input) -> {
     };
-    @Builder.Default
-    protected Function<I, ShowAction> requirementsMet = (input) -> ShowAction.YES;
-    @Builder.Default
-    protected Function<I, Double> multiplier = (input) -> 1.0;
+    @Builder.Default protected Function<I,ShowAction> requirementsMet = (input) -> ShowAction.YES;
+    @Builder.Default protected Function<I,Double> multiplier = (input) -> 1.0;
 
     public void onUse(I input) {
         GameState gameState = input.getGameState();
@@ -40,12 +37,12 @@ public class Cost<I extends ActionInput> {
 
         double mult = multiplier.apply(input);
 
-        Utils.adjustStamina(gameState, userId, (int) -(stamina * mult));
-        Utils.adjustMana(gameState, userId, (int) -(mana * mult));
-        Utils.adjustHealth(gameState, userId, (int) -(health * mult));
+        Utils.adjustStamina(gameState, userId, (int)-(stamina * mult));
+        Utils.adjustMana(gameState, userId, (int)-(mana * mult));
+        Utils.adjustHealth(gameState, userId, (int)-(health * mult));
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
-        inventoryComponent.adjustGold((int) -(gold * mult));
+        inventoryComponent.adjustGold((int)-(gold * mult));
 
         onUse.accept(input);
     }

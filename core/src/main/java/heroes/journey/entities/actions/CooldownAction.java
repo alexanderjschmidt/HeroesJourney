@@ -1,29 +1,27 @@
 package heroes.journey.entities.actions;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.ActionResult;
+import heroes.journey.initializers.utils.Utils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
 @SuperBuilder
 public class CooldownAction extends Action {
 
     // TODO This could get folded into Action with a default of 1 and false
-    @NonNull
-    @Getter
-    private final Integer turnCooldown;
-    @Builder.Default
-    private final boolean factionCooldown = false;
+    @NonNull @Getter private final Integer turnCooldown;
+    @Builder.Default private final boolean factionCooldown = false;
 
     @Override
     public ShowAction requirementsMet(ActionInput input) {
@@ -46,7 +44,8 @@ public class CooldownAction extends Action {
             UUID faction = Utils.getLocation(input);
             cooldownComponent = PossibleActionsComponent.get(input.getGameState().getWorld(), faction);
         } else {
-            cooldownComponent = PossibleActionsComponent.get(input.getGameState().getWorld(), input.getEntityId());
+            cooldownComponent = PossibleActionsComponent.get(input.getGameState().getWorld(),
+                input.getEntityId());
         }
         return cooldownComponent;
     }
@@ -58,8 +57,8 @@ public class CooldownAction extends Action {
         if (cooldown == null) {
             cooldown = new Label("", skin);
         }
-        PossibleActionsComponent cooldownComponent = getCooldownComponent(new ActionInput(GameState.global(),
-            GameState.global().getCurrentEntity()));
+        PossibleActionsComponent cooldownComponent = getCooldownComponent(
+            new ActionInput(GameState.global(), GameState.global().getCurrentEntity()));
         Integer cooldownVal = cooldownComponent.getCooldowns().get(this.name);
         cooldownVal = cooldownVal == null ? turnCooldown : (turnCooldown - cooldownVal - 1);
         cooldown.setText(cooldownVal + "/" + turnCooldown);
@@ -68,6 +67,6 @@ public class CooldownAction extends Action {
     }
 
     public CooldownAction register() {
-        return (CooldownAction) ActionManager.register(this);
+        return (CooldownAction)ActionManager.register(this);
     }
 }

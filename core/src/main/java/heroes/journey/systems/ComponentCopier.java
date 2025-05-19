@@ -17,7 +17,7 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.components.utils.Utils;
+import heroes.journey.initializers.utils.Utils;
 
 public class ComponentCopier {
 

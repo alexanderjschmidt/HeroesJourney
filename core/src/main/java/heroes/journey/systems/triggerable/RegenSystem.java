@@ -1,17 +1,18 @@
 package heroes.journey.systems.triggerable;
 
-import com.artemis.annotations.All;
-import heroes.journey.GameState;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.utils.Utils;
-import heroes.journey.initializers.base.Buffs;
-import heroes.journey.systems.GameWorld;
-import heroes.journey.systems.TriggerableSystem;
+import static heroes.journey.initializers.utils.Utils.useBuff;
 
 import java.util.UUID;
 
-import static heroes.journey.components.utils.Utils.useBuff;
+import com.artemis.annotations.All;
+
+import heroes.journey.GameState;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.initializers.base.Buffs;
+import heroes.journey.initializers.utils.Utils;
+import heroes.journey.systems.GameWorld;
+import heroes.journey.systems.TriggerableSystem;
 
 @All({StatsComponent.class, IdComponent.class})
 public class RegenSystem extends TriggerableSystem {
@@ -24,7 +25,7 @@ public class RegenSystem extends TriggerableSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
         StatsComponent statsComponent = StatsComponent.get(world, id);
 

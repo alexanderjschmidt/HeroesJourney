@@ -1,4 +1,6 @@
-package heroes.journey.components.utils;
+package heroes.journey.initializers.utils;
+
+import java.util.UUID;
 
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
@@ -12,8 +14,6 @@ import heroes.journey.initializers.base.tags.DamageTypes;
 import heroes.journey.initializers.base.tags.DefenseTypes;
 import heroes.journey.initializers.base.tags.Groups;
 import heroes.journey.systems.GameWorld;
-
-import java.util.UUID;
 
 public class FightUtils {
     public static boolean fight(GameState gameState, UUID fighter, UUID enemy) {

@@ -1,6 +1,5 @@
 package heroes.journey.initializers.base;
 
-import heroes.journey.components.utils.Utils;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemSubType;
@@ -9,6 +8,7 @@ import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.tags.DamageTypes;
 import heroes.journey.initializers.base.tags.DefenseTypes;
+import heroes.journey.initializers.utils.Utils;
 
 public class Items implements InitializerInterface {
 
