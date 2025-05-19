@@ -1,25 +1,24 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import heroes.journey.tilemap.TileManager;
-import heroes.journey.utils.Direction;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import heroes.journey.tilemap.TileManager;
+import heroes.journey.utils.Direction;
+import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
+import lombok.Getter;
+
 public abstract class Tile {
 
-    private final Map<Direction, Terrain> neighbors;
+    private final Map<Direction,Terrain> neighbors;
     private final boolean addToDefaultTiles;
 
-    @Getter
-    private final Terrain terrain;
+    @Getter private final Terrain terrain;
 
-    @Getter
-    private final long weight;
+    @Getter private final long weight;
 
     public Tile(Terrain terrain, int baseWeight, boolean addToDefaultTiles) {
         this.terrain = terrain;
@@ -167,23 +166,15 @@ public abstract class Tile {
             neighbors.get(Direction.SOUTHEAST).toString().substring(0, 2);
     }
 
-    public String getLayout(Map<String, Integer> terrainMap) {
-        return terrainMap.get(neighbors.get(Direction.NORTHWEST).toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.NORTH).toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.NORTHEAST).toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.WEST).toString()) +
-            "," +
-            terrainMap.get(terrain.toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.EAST).toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.SOUTHWEST).toString()) +
-            "," +
-            terrainMap.get(neighbors.get(Direction.SOUTH).toString()) +
-            "," +
+    public String getLayout(Map<String,Integer> terrainMap) {
+        return terrainMap.get(neighbors.get(Direction.NORTHWEST).toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.NORTH).toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.NORTHEAST).toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.WEST).toString()) + "," +
+            terrainMap.get(terrain.toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.EAST).toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.SOUTHWEST).toString()) + "," +
+            terrainMap.get(neighbors.get(Direction.SOUTH).toString()) + "," +
             terrainMap.get(neighbors.get(Direction.SOUTHEAST).toString());
     }
 

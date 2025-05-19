@@ -1,19 +1,22 @@
 package heroes.journey.utils.worldgen;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
 import heroes.journey.tilemap.features.FeatureManager;
 import lombok.Getter;
 
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.Supplier;
-
+@Getter
 public class NewMapManager {
 
     private static NewMapManager newMapManager;
-    @Getter
-    Map<String, MapGenerationEffect> mapGenerationEffects;
+    Map<String,MapGenerationEffect> mapGenerationEffects;
 
     private NewMapManager() {
         mapGenerationEffects = new HashMap<>();
@@ -23,28 +26,6 @@ public class NewMapManager {
         if (newMapManager == null)
             newMapManager = new NewMapManager();
         return newMapManager;
-    }
-
-    public static void timeout(Supplier<Callable<Void>> taskSupplier, int retryCount, int timeout) {
-        int i = 0; // create once outside the loop
-        while (i < retryCount) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
-            i++;
-            Future<Void> future = executorService.submit(taskSupplier.get());
-            try {
-                // Wait for the task to complete or timeout
-                future.get(timeout, TimeUnit.MILLISECONDS);
-                break;  // Break if the task completes successfully
-            } catch (TimeoutException e) {
-                // Handle timeout case (task did not finish in time)
-                System.out.println("Timed out");
-            } catch (ExecutionException | InterruptedException e) {
-                throw new RuntimeException(e);
-            } finally {
-                future.cancel(true); // ensure cancellation if needed
-                executorService.shutdownNow();
-            }
-        }
     }
 
     public void addMapGenerationEffect(String name, MapGenerationEffect effect) {
@@ -60,10 +41,8 @@ public class NewMapManager {
                     FeatureManager.get().clear();
                 }
                 for (MapGenerationEffect phase : sorted) {
-                    System.out.println("Running phase: " + phase.getName() + " " + phase.isRunOnLoad());
-                    if (!loading || phase.isRunOnLoad()) {
-                        phase.apply(gameState);
-                    }
+                    System.out.println("Running phase: " + phase.getName());
+                    phase.apply(gameState);
                     gameState.getWorld().basicProcess();
                 }
             } catch (MapGenerationException e) {
@@ -75,23 +54,9 @@ public class NewMapManager {
             gameState.nextMove();
     }
 
-    public void initMapGenerationTimeout(GameState gameState, MapData mapData) {
-        timeout(() -> (Callable<Void>) () -> {
-            gameState.init(mapData);
-            FeatureManager.get().clear();
-            List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
-            for (MapGenerationEffect phase : sorted) {
-                System.out.println("Running phase: " + phase.getName());
-                phase.apply(gameState);
-                gameState.getWorld().basicProcess();
-            }
-            return null;
-        }, 10, 1000);
-    }
-
-    private List<MapGenerationEffect> topologicalSort(Map<String, MapGenerationEffect> phases) {
-        Map<String, Integer> inDegree = new HashMap<>();
-        Map<String, List<String>> graph = new HashMap<>();
+    private List<MapGenerationEffect> topologicalSort(Map<String,MapGenerationEffect> phases) {
+        Map<String,Integer> inDegree = new HashMap<>();
+        Map<String,List<String>> graph = new HashMap<>();
 
         for (String name : phases.keySet()) {
             inDegree.put(name, 0);

@@ -1,4 +1,4 @@
-package heroes.journey.utils.worldgen;
+package heroes.journey.utils.worldgen.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

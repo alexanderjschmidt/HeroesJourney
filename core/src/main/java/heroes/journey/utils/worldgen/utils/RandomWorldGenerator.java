@@ -3,7 +3,7 @@
  * @version 1.0
  * Random map generator
  */
-package heroes.journey.utils.worldgen;
+package heroes.journey.utils.worldgen.utils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

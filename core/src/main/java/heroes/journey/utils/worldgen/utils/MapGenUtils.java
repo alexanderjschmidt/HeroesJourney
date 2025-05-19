@@ -1,4 +1,4 @@
-package heroes.journey.utils.worldgen;
+package heroes.journey.utils.worldgen.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,12 +7,12 @@ import java.util.function.Predicate;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
+import heroes.journey.utils.worldgen.MapGenerationException;
 
 public class MapGenUtils {
 
@@ -46,7 +46,7 @@ public class MapGenUtils {
     }
 
     public static boolean inBounds(int x, int y) {
-        return inBounds(x, y, Map.MAP_SIZE, Map.MAP_SIZE);
+        return inBounds(x, y, GameState.global().getWidth(), GameState.global().getHeight());
     }
 
     public static boolean inBounds(int x, int y, int width, int height) {

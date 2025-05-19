@@ -1,12 +1,12 @@
 package heroes.journey.entities;
 
-import heroes.journey.utils.ai.pathfinding.Cell;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
+import heroes.journey.utils.ai.pathfinding.Cell;
 
 public class EntityManager implements Cloneable {
 

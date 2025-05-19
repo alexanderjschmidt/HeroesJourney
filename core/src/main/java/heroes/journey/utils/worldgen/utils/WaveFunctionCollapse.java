@@ -1,10 +1,15 @@
-package heroes.journey.utils.worldgen;
+package heroes.journey.utils.worldgen.utils;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Stack;
 
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
-
-import java.util.*;
+import heroes.journey.utils.worldgen.MapGenerationException;
 
 @SuppressWarnings("unchecked")
 public class WaveFunctionCollapse {
@@ -55,7 +60,8 @@ public class WaveFunctionCollapse {
             if (choice == null)
                 System.out.println(data.possibleTilesMap[minEntropyX][minEntropyY]);
             if (!isCompatibleWithNeighbors(data, minEntropyX, minEntropyY, choice)) {
-                throw new RuntimeException("Not Compatible " + choice + " " + minEntropyX + ", " + minEntropyY);
+                throw new RuntimeException(
+                    "Not Compatible " + choice + " " + minEntropyX + ", " + minEntropyY);
             }
 
             Decision decision = new Decision(minEntropyX, minEntropyY, choice,
@@ -71,7 +77,7 @@ public class WaveFunctionCollapse {
 
     private static void propagateConstraints(WFCData data, int sx, int sy, List<ActionDelta> deltas) {
         Queue<int[]> queue = new LinkedList<>();
-        queue.add(new int[]{sx, sy});
+        queue.add(new int[] {sx, sy});
 
         while (!queue.isEmpty()) {
             int[] pos = queue.poll();
@@ -82,8 +88,8 @@ public class WaveFunctionCollapse {
             for (Direction dir : Direction.values()) {
                 if (dir == Direction.NODIRECTION)
                     continue;
-                int nx = (int) (x + dir.getDirVector().x);
-                int ny = (int) (y + dir.getDirVector().y);
+                int nx = (int)(x + dir.getDirVector().x);
+                int ny = (int)(y + dir.getDirVector().y);
                 if (!inBounds(nx, ny, data.map) || data.map[nx][ny] != null)
                     continue;
 
@@ -103,7 +109,7 @@ public class WaveFunctionCollapse {
                         collapseCell(data, nx, ny, t);
                         delta.autoCollapsedTo = t; // <== record the collapse
                         //("collapsed prop " + nx + ", " + ny);
-                        queue.add(new int[]{nx, ny});
+                        queue.add(new int[] {nx, ny});
                     }
                     deltas.add(delta);
                 }
@@ -153,8 +159,8 @@ public class WaveFunctionCollapse {
             if (dir == Direction.NODIRECTION)
                 continue;
 
-            int nx = (int) (x + dir.getDirVector().x);
-            int ny = (int) (y + dir.getDirVector().y);
+            int nx = (int)(x + dir.getDirVector().x);
+            int ny = (int)(y + dir.getDirVector().y);
 
             if (!inBounds(nx, ny, data.map))
                 continue;

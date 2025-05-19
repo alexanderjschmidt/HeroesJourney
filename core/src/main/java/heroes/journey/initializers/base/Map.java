@@ -3,17 +3,13 @@ package heroes.journey.initializers.base;
 import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.MapGenUtils.buildRoad;
-import static heroes.journey.utils.worldgen.MapGenUtils.findTileNear;
-import static heroes.journey.utils.worldgen.MapGenUtils.inBounds;
-import static heroes.journey.utils.worldgen.MapGenUtils.isFarFromFeatures;
-import static heroes.journey.utils.worldgen.MapGenUtils.isLandSurrounded;
-import static heroes.journey.utils.worldgen.MapGenUtils.isLandTile;
-import static heroes.journey.utils.worldgen.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.baseTiles;
-import static heroes.journey.utils.worldgen.WaveFunctionCollapse.possibleTiles;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandTile;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +31,11 @@ import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.RandomWorldGenerator;
-import heroes.journey.utils.worldgen.WaveFunctionCollapse;
-import heroes.journey.utils.worldgen.WeightedRandomPicker;
+import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
+import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
+import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
+import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
+import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
 @SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
@@ -65,49 +63,30 @@ public class Map implements InitializerInterface {
 
     static {
         // Generate Smooth Noise
-        MapGenerationEffect noise = MapGenerationEffect.builder().name("noise").applyEffect(gameState -> {
-            int width = gameState.getWidth();
-
-            RandomWorldGenerator noiseGen = new RandomWorldGenerator(50, 5, .7f, true);
-            int[][] noiseMap = noiseGen.generateMap(width);
-            Tile[][] tileMap = convertToTileMap(noiseMap);
-            smooth(tileMap, baseTiles);
-            smooth(tileMap, baseTiles);
-
-            gameState.getMap().setTileMap(tileMap);
-        }).build().register();
+        MapGenerationEffect noise = NoiseMapEffect.builder()
+            .name("noise")
+            .amplitude(50)
+            .roughness(.7f)
+            .octaves(5)
+            .smooths(2)
+            .build()
+            .register();
         // Capitals
-        MapGenerationEffect kingdomsGen = MapGenerationEffect.builder()
+        MapGenerationEffect kingdomsGen = FeatureGenRadialMapEffect.builder()
             .name("kingdoms")
             .dependsOn(new String[] {noise.getName()})
-            .applyEffect(gameState -> {
-                int centerX = gameState.getWidth() / 2;
-                int centerY = gameState.getHeight() / 2;
-                int radius = Math.min(gameState.getWidth(), gameState.getHeight()) / KINGDOM_DIST_TO_CENTER;
-
-                double randomOffsetDeg = Random.get().nextDouble() * 360.0;
-                for (int i = 0; i < NUM_KINGDOMS; i++) {
-                    double angleDeg = i * (360.0 / NUM_KINGDOMS) + randomOffsetDeg;
-                    double angleRad = Math.toRadians(angleDeg);
-
-                    // Polar to Cartesian
-                    int x = centerX + (int)(Math.cos(angleRad) * radius);
-                    int y = centerY + (int)(Math.sin(angleRad) * radius);
-
-                    // Snap to nearest valid land tile
-                    Position capital = findTileNear(new Position(x, y), 0, 10,
-                        isLandSurrounded(gameState.getMap().getTileMap()));
-
-                    gameState.getMap().setEnvironment(capital.getX(), capital.getY(), Tiles.CAPITAL);
-                    UUID kingdomId = generateTown(gameState, capital.getX(), capital.getY(), true);
-                    Feature kingdom = new Feature(kingdomId, FeatureType.KINGDOM, capital);
-                    //System.out.println("Capital: " + capital.getX() + ", " + capital.getY());
-                }
+            .distToCenter(KINGDOM_DIST_TO_CENTER)
+            .numOfFeature(NUM_KINGDOMS)
+            .generateFeatured((gs, pos) -> {
+                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
+                UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
+                Feature kingdom = new Feature(kingdomId, FeatureType.KINGDOM, pos);
+                //System.out.println("Capital: " + pos.getX() + ", " + pos.getY());
             })
             .build()
             .register();
         // Add Towns off of kingdoms
-        MapGenerationEffect townsGen = MapGenerationEffect.builder()
+        MapGenerationEffect townsGen = BasicMapGenerationEffect.builder()
             .name("towns")
             .dependsOn(new String[] {kingdomsGen.getName()})
             .applyEffect(gameState -> {
@@ -130,7 +109,7 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Add Paths between capitals and towns
-        MapGenerationEffect paths = MapGenerationEffect.builder()
+        MapGenerationEffect paths = BasicMapGenerationEffect.builder()
             .name("paths")
             .dependsOn(new String[] {townsGen.getName()})
             .applyEffect(gameState -> {
@@ -153,7 +132,8 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Add Monsters
-        MapGenerationEffect monsters = MapGenerationEffect.builder()
+        // TODO this really shouldn't be an effect
+        MapGenerationEffect monsters = BasicMapGenerationEffect.builder()
             .name("monsters")
             .dependsOn(new String[] {paths.getName()})
             .applyEffect(gameState -> {
@@ -163,7 +143,7 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Add Dungeons off of towns
-        MapGenerationEffect dungeonsGen = MapGenerationEffect.builder()
+        MapGenerationEffect dungeonsGen = BasicMapGenerationEffect.builder()
             .name("dungeons")
             .dependsOn(new String[] {monsters.getName()})
             .applyEffect(gameState -> {
@@ -195,7 +175,7 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Add more dungeons randomly in the wild
-        MapGenerationEffect wildDungeons = MapGenerationEffect.builder()
+        MapGenerationEffect wildDungeons = BasicMapGenerationEffect.builder()
             .name("wildDungeons")
             .dependsOn(new String[] {dungeonsGen.getName()})
             .applyEffect(gameState -> {
@@ -230,83 +210,49 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Wave Function collapse keeping houses and path placements
-        MapGenerationEffect wfc = MapGenerationEffect.builder()
+        MapGenerationEffect wfc = WaveFunctionCollapseMapEffect.builder()
             .name("waveFunctionCollapse")
             .dependsOn(new String[] {wildDungeons.getName()})
-            .applyEffect(gameState -> {
-                int width = gameState.getWidth();
-
-                WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
-
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < width; y++) {
-                        if (gameState.getMap().getTileMap()[x][y] == Tiles.pathTiles.getFirst()) {
-                            possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                            for (Tile t : Tiles.pathTiles) {
-                                possibleTilesMap[x][y].addItem(t, t.getWeight());
-                            }
-                            possibleTilesMap[x][y].remove(Tiles.pathTiles.getFirst());
-                        } else if (gameState.getMap().getEnvironment()[x][y] != null) {
-                            possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                            possibleTilesMap[x][y].addItem(gameState.getMap().getTileMap()[x][y], 1);
-                        } else if (surroundedBySame(gameState.getMap().getTileMap(), x, y)) {
-                            possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                            possibleTilesMap[x][y].addItem(gameState.getMap().getTileMap()[x][y], 1);
-                        } else {
-                            possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                            for (Tile t : possibleTiles) {
-                                //long weight = computeTileWeight(t, gameState.getMap().getTileMap(), x, y);
-                                possibleTilesMap[x][y].addItem(t, t.getWeight());
-                            }
-                        }
-
+            .applyTile((gs, pos) -> {
+                WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
+                if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathTiles.getFirst()) {
+                    for (Tile t : Tiles.pathTiles) {
+                        possibleTiles.addItem(t, t.getWeight());
                     }
+                    possibleTiles.remove(Tiles.pathTiles.getFirst());
+                } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
+                    surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
+                    possibleTiles.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
+                } else {
+                    return null;
                 }
-
-                Tile[][] tileMap = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
-                gameState.getMap().setTileMap(tileMap);
+                return possibleTiles;
             })
             .build()
             .register();
         // Create Trees
-        MapGenerationEffect trees = MapGenerationEffect.builder()
+        MapGenerationEffect trees = WaveFunctionCollapseMapEffect.builder()
             .name("trees")
             .dependsOn(new String[] {wildDungeons.getName()})
-            .applyEffect(gameState -> {
-                int width = gameState.getWidth();
-
-                WeightedRandomPicker<Tile>[][] possibleTilesMap = new WeightedRandomPicker[width][width];
-
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < width; y++) {
-                        possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                        if (gameState.getMap().getTileMap()[x][y] == Tiles.PLAINS &&
-                            gameState.getMap().getEnvironment()[x][y] == null) {
-                            for (Tile t : Tiles.treeTiles) {
-                                possibleTilesMap[x][y].addItem(t, t.getWeight());
-                            }
-                        }
-                        long totalWeight = possibleTilesMap[x][y].getTotalWeight();
-                        possibleTilesMap[x][y].addItem(Tiles.NULL, totalWeight > 0 ? totalWeight : 100);
+            .environment(true)
+            .applyTile((gs, pos) -> {
+                WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
+                if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
+                    possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
+                } else if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.PLAINS) {
+                    for (Tile t : Tiles.treeTiles) {
+                        possibleTiles.addItem(t, t.getWeight());
                     }
+                    possibleTiles.addItem(Tiles.NULL, possibleTiles.getTotalWeight());
+                } else {
+                    possibleTiles.addItem(Tiles.NULL, 1);
                 }
-                Tile[][] environment = WaveFunctionCollapse.applyWaveFunctionCollapse(possibleTilesMap);
-
-                for (int x = 0; x < width; x++) {
-                    for (int y = 0; y < width; y++) {
-                        if (environment[x][y] == Tiles.NULL)
-                            environment[x][y] = null;
-                        if (gameState.getMap().getEnvironment()[x][y] != null)
-                            environment[x][y] = gameState.getMap().getEnvironment()[x][y];
-                    }
-                }
-
-                gameState.getMap().setEnvironment(environment);
+                return possibleTiles;
             })
             .build()
             .register();
         // Add Entities
-        MapGenerationEffect entities = MapGenerationEffect.builder()
+        MapGenerationEffect entities = BasicMapGenerationEffect.builder()
             .name("entities")
             .dependsOn(new String[] {trees.getName()})
             .applyEffect(gameState -> {
