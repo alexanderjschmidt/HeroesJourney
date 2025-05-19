@@ -1,22 +1,35 @@
 package heroes.journey.utils.worldgen;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
 import heroes.journey.tilemap.features.FeatureManager;
+import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 
 @Getter
 public class NewMapManager {
 
+    public static MapGenerationEffect noisePhase, worldGenPhase, postWorldGenPhase, entityPhase;
     private static NewMapManager newMapManager;
     Map<String,MapGenerationEffect> mapGenerationEffects;
+
+    static {
+        noisePhase = NoOpMapGenerationEffect.builder().name("NoisePhase").build().register();
+        worldGenPhase = NoOpMapGenerationEffect.builder().name("WorldGenPhase").build().register(noisePhase);
+        postWorldGenPhase = NoOpMapGenerationEffect.builder()
+            .name("PostWorldGenPhase")
+            .build()
+            .register(worldGenPhase);
+        entityPhase = NoOpMapGenerationEffect.builder()
+            .name("EntityPhase")
+            .build()
+            .register(postWorldGenPhase);
+    }
 
     private NewMapManager() {
         mapGenerationEffects = new HashMap<>();
@@ -29,6 +42,10 @@ public class NewMapManager {
     }
 
     public void addMapGenerationEffect(String name, MapGenerationEffect effect) {
+        if (mapGenerationEffects.containsKey(name)) {
+            throw new RuntimeException(
+                "Cannot register with name " + name + " because that name is already registered");
+        }
         mapGenerationEffects.put(name, effect);
     }
 
@@ -41,7 +58,11 @@ public class NewMapManager {
                     FeatureManager.get().clear();
                 }
                 for (MapGenerationEffect phase : sorted) {
-                    System.out.println("Running phase: " + phase.getName());
+                    if (phase instanceof NoOpMapGenerationEffect) {
+                        System.out.println("Running phase: " + phase.getName());
+                        continue;
+                    }
+                    System.out.println("Running effect: " + phase.getName());
                     phase.apply(gameState);
                     gameState.getWorld().basicProcess();
                 }
@@ -70,7 +91,7 @@ public class NewMapManager {
             }
         }
 
-        Queue<String> queue = new ArrayDeque<>();
+        List<String> queue = new ArrayList<>();
         for (String name : inDegree.keySet()) {
             if (inDegree.get(name) == 0) {
                 queue.add(name);
@@ -80,7 +101,13 @@ public class NewMapManager {
         List<MapGenerationEffect> result = new ArrayList<>();
 
         while (!queue.isEmpty()) {
-            String name = queue.poll();
+            queue.sort((a, b) -> {
+                boolean aIsNoOp = phases.get(a) instanceof NoOpMapGenerationEffect;
+                boolean bIsNoOp = phases.get(b) instanceof NoOpMapGenerationEffect;
+                return Boolean.compare(aIsNoOp, bIsNoOp); // false < true → NoOps last
+            });
+
+            String name = queue.removeFirst();
             MapGenerationEffect phase = phases.get(name);
             result.add(phase);
 

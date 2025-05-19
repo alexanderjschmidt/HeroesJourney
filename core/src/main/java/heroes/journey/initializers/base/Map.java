@@ -23,6 +23,7 @@ import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.NewMapManager;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
@@ -56,32 +57,36 @@ public class Map implements InitializerInterface {
 
     static {
         // Generate Smooth Noise
-        MapGenerationEffect noise = NoiseMapEffect.builder()
-            .name("noise")
+        NoiseMapEffect.builder()
+            .name("base-noise")
             .amplitude(50)
             .roughness(.7f)
             .octaves(5)
             .smooths(2)
             .build()
-            .register();
+            .register(NewMapManager.noisePhase);
+        // Add Monsters
+        BasicMapGenerationEffect.builder()
+            .name("monsters")
+            .applyEffect(gs -> MonsterFactory.init(gs.getWorld()))
+            .build()
+            .register(NewMapManager.noisePhase);
         // Capitals
         MapGenerationEffect kingdomsGen = FeatureGenRadialMapEffect.builder()
             .name("kingdoms")
-            .dependsOn(new String[] {noise.getName()})
             .distToCenter(KINGDOM_DIST_TO_CENTER)
             .numOfFeature(NUM_KINGDOMS)
             .generateFeature((gs, pos) -> {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
                 UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
-                Feature kingdom = new Feature(kingdomId, FeatureType.KINGDOM, pos);
+                new Feature(kingdomId, FeatureType.KINGDOM, pos);
                 //System.out.println("Capital: " + pos.getX() + ", " + pos.getY());
             })
             .build()
-            .register();
+            .register(NewMapManager.worldGenPhase);
         // Add Towns off of kingdoms
         MapGenerationEffect townsGen = FeatureGenOffFeatureMapEffect.builder()
             .name("towns")
-            .dependsOn(new String[] {kingdomsGen.getName()})
             .minPerFeature(townsPerKingdomMin)
             .maxPerFeature(townsPerKingdomMax)
             .minDistanceFromFeature(minDistanceBetweenTowns)
@@ -97,11 +102,10 @@ public class Map implements InitializerInterface {
                 input.getOffFeature().add(town);
             })
             .build()
-            .register();
+            .register(kingdomsGen);
         // Add Paths between capitals and towns
         MapGenerationEffect paths = BasicMapGenerationEffect.builder()
             .name("paths")
-            .dependsOn(new String[] {townsGen.getName()})
             .applyEffect(gameState -> {
                 // Capitals to towns
                 List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
@@ -120,18 +124,10 @@ public class Map implements InitializerInterface {
                 }
             })
             .build()
-            .register();
-        // Add Monsters
-        MapGenerationEffect monsters = BasicMapGenerationEffect.builder()
-            .name("monsters")
-            .dependsOn(new String[] {paths.getName()})
-            .applyEffect(gs -> MonsterFactory.init(gs.getWorld()))
-            .build()
-            .register();
+            .register(townsGen);
         // Add Dungeons off of towns
         MapGenerationEffect dungeonsGen = FeatureGenOffFeatureMapEffect.builder()
             .name("dungeons")
-            .dependsOn(new String[] {monsters.getName()})
             .minPerFeature(dungeonsPerSettlementMin)
             .maxPerFeature(dungeonsPerSettlementMax)
             .minDistanceFromFeature(minDistanceFromAnyFeature)
@@ -146,11 +142,10 @@ public class Map implements InitializerInterface {
                 new Feature(dungeonId, FeatureType.DUNGEON, input.getPosition());
             })
             .build()
-            .register();
+            .register(paths);
         // Add more dungeons randomly in the wild
-        MapGenerationEffect wildDungeons = FeatureGenRandomMapEffect.builder()
+        FeatureGenRandomMapEffect.builder()
             .name("wildDungeons")
-            .dependsOn(new String[] {dungeonsGen.getName()})
             .minFeature(wildDungeonsMin)
             .maxFeature(wildDungeonsMax)
             .generationAttempts(maxAttemptsWildDungeons)
@@ -161,11 +156,10 @@ public class Map implements InitializerInterface {
                 new Feature(dungeonId, FeatureType.DUNGEON, pos);
             })
             .build()
-            .register();
+            .register(dungeonsGen);
         // Wave Function collapse keeping houses and path placements
-        WaveFunctionCollapseMapEffect.builder()
+        MapGenerationEffect wfc = WaveFunctionCollapseMapEffect.builder()
             .name("waveFunctionCollapse")
-            .dependsOn(new String[] {wildDungeons.getName()})
             .applyTile((gs, pos) -> {
                 WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
                 if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathTiles.getFirst()) {
@@ -182,60 +176,49 @@ public class Map implements InitializerInterface {
                 return possibleTiles;
             })
             .build()
-            .register();
+            .register(NewMapManager.postWorldGenPhase);
         // Create Trees
-        MapGenerationEffect trees = WaveFunctionCollapseMapEffect.builder()
-            .name("trees")
-            .dependsOn(new String[] {wildDungeons.getName()})
-            .environment(true)
-            .applyTile((gs, pos) -> {
-                WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
-                if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
-                    possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
-                } else if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.PLAINS) {
-                    for (Tile t : Tiles.treeTiles) {
-                        possibleTiles.addItem(t, t.getWeight());
-                    }
-                    possibleTiles.addItem(Tiles.NULL, possibleTiles.getTotalWeight());
-                } else {
-                    possibleTiles.addItem(Tiles.NULL, 1);
+        WaveFunctionCollapseMapEffect.builder().name("trees").environment(true).applyTile((gs, pos) -> {
+            WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
+            if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
+                possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
+            } else if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.PLAINS) {
+                for (Tile t : Tiles.treeTiles) {
+                    possibleTiles.addItem(t, t.getWeight());
                 }
-                return possibleTiles;
-            })
-            .build()
-            .register();
+                possibleTiles.addItem(Tiles.NULL, possibleTiles.getTotalWeight());
+            } else {
+                possibleTiles.addItem(Tiles.NULL, 1);
+            }
+            return possibleTiles;
+        }).build().register(wfc);
         // Add Entities
-        BasicMapGenerationEffect.builder()
-            .name("entities")
-            .dependsOn(new String[] {trees.getName()})
-            .applyEffect(gameState -> {
-                List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
-                for (Feature kingdom : kingdoms) {
-                    if (kingdom == kingdoms.getFirst()) {
-                        Feature playerTown = FeatureManager.get()
-                            .get(kingdom.connections.stream().toList().getFirst());
-                        EntityEdit player = gameState.getWorld().createEntity().edit();
-                        UUID playerId = addOverworldComponents(gameState.getWorld(), player,
-                            playerTown.location.getX(), playerTown.location.getY(),
-                            LoadTextures.PLAYER_SPRITE, new MCTSAI());
-                        player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
-                        player.create(NamedComponent.class).name("Player");
-                        InventoryComponent.get(gameState.getWorld(), playerId)
-                            .add(Items.healthPotion, 3)
-                            .add(Items.ironIngot, 5)
-                            .add(Items.chestPlate);
-                        PlayerInfo.get().setPlayerId(playerId);
-                    } else {
-                        Feature opponentTown = FeatureManager.get()
-                            .get(kingdom.connections.stream().toList().getLast());
-                        EntityEdit opponent = gameState.getWorld().createEntity().edit();
-                        addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
-                            opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
-                    }
+        BasicMapGenerationEffect.builder().name("entities").applyEffect(gameState -> {
+            List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
+            for (Feature kingdom : kingdoms) {
+                if (kingdom == kingdoms.getFirst()) {
+                    Feature playerTown = FeatureManager.get()
+                        .get(kingdom.connections.stream().toList().getFirst());
+                    EntityEdit player = gameState.getWorld().createEntity().edit();
+                    UUID playerId = addOverworldComponents(gameState.getWorld(), player,
+                        playerTown.location.getX(), playerTown.location.getY(), LoadTextures.PLAYER_SPRITE,
+                        new MCTSAI());
+                    player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
+                    player.create(NamedComponent.class).name("Player");
+                    InventoryComponent.get(gameState.getWorld(), playerId)
+                        .add(Items.healthPotion, 3)
+                        .add(Items.ironIngot, 5)
+                        .add(Items.chestPlate);
+                    PlayerInfo.get().setPlayerId(playerId);
+                } else {
+                    Feature opponentTown = FeatureManager.get()
+                        .get(kingdom.connections.stream().toList().getLast());
+                    EntityEdit opponent = gameState.getWorld().createEntity().edit();
+                    addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
+                        opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
                 }
-            })
-            .build()
-            .register();
+            }
+        }).build().register(NewMapManager.entityPhase);
     }
 
 }
