@@ -37,7 +37,6 @@ import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
-@SuppressWarnings("unchecked")
 public class Map implements InitializerInterface {
 
     public static int MAP_SIZE = 64;
@@ -132,14 +131,10 @@ public class Map implements InitializerInterface {
             .build()
             .register();
         // Add Monsters
-        // TODO this really shouldn't be an effect
         MapGenerationEffect monsters = BasicMapGenerationEffect.builder()
             .name("monsters")
             .dependsOn(new String[] {paths.getName()})
-            .applyEffect(gameState -> {
-                MonsterFactory.goblin(gameState.getWorld());
-                MonsterFactory.hobGoblin(gameState.getWorld());
-            })
+            .applyEffect(gs -> MonsterFactory.init(gs.getWorld()))
             .build()
             .register();
         // Add Dungeons off of towns

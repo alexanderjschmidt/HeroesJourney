@@ -1,9 +1,26 @@
 package heroes.journey.initializers.base.factories;
 
+import static heroes.journey.initializers.base.factories.MonsterFactory.goblinId;
+import static heroes.journey.initializers.base.factories.MonsterFactory.hobgoblinId;
+
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
-import heroes.journey.components.character.*;
+import heroes.journey.components.BuffsComponent;
+import heroes.journey.components.EquipmentComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.NamedComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.character.MapComponent;
+import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.ai.AI;
@@ -17,11 +34,6 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.factories.MonsterFactory.goblinId;
-import static heroes.journey.initializers.base.factories.MonsterFactory.hobgoblinId;
-
 public class EntityFactory {
 
     public static UUID addOverworldComponents(
@@ -31,8 +43,7 @@ public class EntityFactory {
         int y,
         String render,
         AI ai) {
-        // TODO sync should only happen in position sync system
-        entity.create(PositionComponent.class).setPos(x, y).sync();
+        entity.create(PositionComponent.class).setPos(x, y);
         UUID id = entity.create(IdComponent.class).register(world, entity.getEntityId()).uuid();
         entity.create(RenderComponent.class).sprite(render);
         entity.create(ActorComponent.class);
@@ -52,7 +63,7 @@ public class EntityFactory {
         UUID id = house.create(IdComponent.class).uuid();
         house.create(LocationComponent.class).capital(capital);
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
-        house.create(PositionComponent.class).setPos(x, y).sync();
+        house.create(PositionComponent.class).setPos(x, y);
         house.create(QuestsComponent.class).addQuest(Quests.delve);
         PossibleActionsComponent actions = house.create(PossibleActionsComponent.class)
             .addAction(BaseActions.questBoard)
@@ -67,12 +78,12 @@ public class EntityFactory {
         UUID id = dungeon.create(IdComponent.class).uuid();
         dungeon.create(LocationComponent.class);
         dungeon.create(NamedComponent.class).name(SyllableDungeonNameGenerator.generateName());
-        dungeon.create(PositionComponent.class).setPos(x, y).sync();
+        dungeon.create(PositionComponent.class).setPos(x, y);
         dungeon.create(PossibleActionsComponent.class)
             .addAction(DelveAction.delve)
             .addAction(TravelActions.travel);
         dungeon.create(InventoryComponent.class).add(Items.ironOre, 5);
-        dungeon.create(DungeonComponent.class).layout(new UUID[]{null, goblinId, goblinId, hobgoblinId});
+        dungeon.create(DungeonComponent.class).layout(new UUID[] {null, goblinId, goblinId, hobgoblinId});
         return id;
     }
 }
