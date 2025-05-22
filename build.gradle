@@ -1,4 +1,5 @@
 buildscript {
+  ext.kotlin_version = '2.1.21'
   repositories {
     mavenCentral()
     maven { url 'https://s01.oss.sonatype.org' }
@@ -9,10 +10,10 @@ buildscript {
     maven { url 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
   }
   dependencies {
-
-
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
 }
+apply plugin: 'kotlin'
 
 allprojects {
   apply plugin: 'eclipse'
@@ -29,7 +30,6 @@ allprojects {
 
 configure(subprojects) {
   apply plugin: 'java-library'
-  sourceCompatibility = 21
 
   // From https://lyze.dev/2021/04/29/libGDX-Internal-Assets-List/
   // The article can be helpful when using assets.txt in your project.
@@ -71,3 +71,12 @@ subprojects {
 }
 
 eclipse.project.name = 'HerosJourney' + '-parent'
+repositories {
+  mavenCentral()
+}
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+kotlin {
+  jvmToolchain(8)
+}

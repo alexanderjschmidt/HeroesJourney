@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
+import heroes.journey.utils.RenderBounds;
 import lombok.Getter;
 
 @Getter

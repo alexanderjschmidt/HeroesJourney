@@ -15,12 +15,12 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.RenderBounds;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.RenderBounds;
 import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,8 @@
 package heroes.journey;
 
+import java.io.File;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,6 +11,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import heroes.journey.mods.GameMod;
+import heroes.journey.mods.ModContext;
+import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.MusicManager;
@@ -90,6 +97,11 @@ public class Application extends Game {
         batch = new SpriteBatch();
 
         setScreen(new LoadingScreen(this));
+
+        List<GameMod> mods = ScriptModLoader.INSTANCE.loadModsFrom(new File("mods"));
+        for (GameMod mod : mods) {
+            mod.onLoad(new ModContext(mod.toString(), GameState.global()));
+        }
     }
 
     public void setScreen(Screen screen) {

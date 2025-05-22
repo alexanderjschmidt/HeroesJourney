@@ -1,4 +1,7 @@
-package heroes.journey;
+package heroes.journey.utils;
+
+import heroes.journey.GameCamera;
+import heroes.journey.GameState;
 
 public class RenderBounds {
 

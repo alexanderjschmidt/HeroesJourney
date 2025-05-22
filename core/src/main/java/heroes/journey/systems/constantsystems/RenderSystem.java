@@ -14,7 +14,6 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
-import heroes.journey.RenderBounds;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
@@ -23,6 +22,7 @@ import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.ui.HUD;
+import heroes.journey.utils.RenderBounds;
 
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {

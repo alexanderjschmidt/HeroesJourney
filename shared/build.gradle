@@ -1,13 +1,4 @@
-plugins {
-  id("java")
-}
-
-java.sourceCompatibility = 21
-java.targetCompatibility = 21
-if (JavaVersion.current().isJava9Compatible()) {
-  compileJava.options.release.set(21)
-}
-
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-shared'
 
 dependencies {
