@@ -14,11 +14,12 @@ public class Items implements InitializerInterface {
 
     // Needed for Switch cases of subtype
     public static final String RAW_MATERIAL = "Raw Material", REFINED_MATERIAL = "Refined Material", SWORD = "Sword", CHEST_ARMOR = "Chest Armor", POTION = "Potion";
-    public static final ItemSubType rawMaterial, refinedMaterial, sword, chestArmor, potion;
-    public static final Item wood, ironOre, ironIngot, ironSword, chestPlate;
-    public static final ConsumableItem healthPotion;
+    public static ItemSubType rawMaterial, refinedMaterial, sword, chestArmor, potion;
+    public static Item wood, ironOre, ironIngot, ironSword, chestPlate;
+    public static ConsumableItem healthPotion;
 
-    static {
+    @Override
+    public void init() {
         // SubTypes
         rawMaterial = ItemSubType.builder().name(RAW_MATERIAL).parentType(ItemType.Misc).build();
         refinedMaterial = ItemSubType.builder().name(REFINED_MATERIAL).parentType(ItemType.Misc).build();

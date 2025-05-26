@@ -1,9 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.TargetAction;
@@ -14,11 +10,16 @@ import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.features.FeatureManager;
 import heroes.journey.tilemap.features.FeatureType;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class CarriageActions implements InitializerInterface {
 
     public static TargetAction<Feature> carriage;
 
-    static {
+    @Override
+    public void init() {
         carriage = TargetAction.<Feature>targetBuilder().name("Carriage").getTargets((input) -> {
             UUID currentLocation = Utils.getLocation(input);
             List<Feature> featuresWithCarriage = new ArrayList<>();

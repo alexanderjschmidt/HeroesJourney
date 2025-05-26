@@ -1,16 +1,10 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.UUID;
-
 import heroes.journey.Application;
 import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.CooldownAction;
-import heroes.journey.entities.actions.ShowAction;
-import heroes.journey.entities.actions.TargetAction;
-import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.entities.actions.*;
 import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
@@ -23,6 +17,8 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
 
+import java.util.UUID;
+
 public class BaseActions implements InitializerInterface {
 
     //TODO this is probably bad
@@ -31,7 +27,8 @@ public class BaseActions implements InitializerInterface {
     public static CooldownAction workout, study;
     public static Action questBoard;
 
-    static {
+    @Override
+    public void init() {
         openActionMenu = Action.builder()
             .name("THIS SHOULD NEVER BE DISPLAYED")
             .returnsActionList(true)

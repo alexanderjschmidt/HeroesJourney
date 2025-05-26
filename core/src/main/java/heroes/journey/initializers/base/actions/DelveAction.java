@@ -1,7 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
@@ -15,10 +13,13 @@ import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.utils.FightUtils;
 import heroes.journey.initializers.utils.Utils;
 
+import java.util.UUID;
+
 public class DelveAction implements InitializerInterface {
     public static CooldownAction delve;
 
-    static {
+    @Override
+    public void init() {
         DelveAction.delve = CooldownAction.builder()
             .name("Delve")
             .turnCooldown(5)

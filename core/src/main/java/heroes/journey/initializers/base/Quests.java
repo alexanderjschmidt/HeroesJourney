@@ -8,8 +8,9 @@ import heroes.journey.initializers.utils.Utils;
 public class Quests implements InitializerInterface {
 
     public static Quest delve;
-
-    static {
+    
+    @Override
+    public void init() {
         delve = Quest.builder()
             .name("Delve a dungeon")
             .fameReward(10)

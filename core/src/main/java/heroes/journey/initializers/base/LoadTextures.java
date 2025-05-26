@@ -13,7 +13,8 @@ public class LoadTextures implements InitializerInterface {
 
     public static final String PLAYER_SPRITE = "player";
 
-    static {
+    @Override
+    public void init() {
         ResourceManager.register(PLAYER_SPRITE, ResourceManager.get(LoadTextures.Sprites)[1][1]);
     }
 }

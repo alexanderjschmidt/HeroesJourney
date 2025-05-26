@@ -2,7 +2,7 @@ package heroes.journey.initializers;
 
 import org.reflections.Reflections;
 
-import java.lang.invoke.MethodHandles;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
 
 public class Initializer {
@@ -13,9 +13,11 @@ public class Initializer {
 
         for (Class<? extends InitializerInterface> clazz : classes) {
             try {
+                InitializerInterface instance = clazz.getDeclaredConstructor().newInstance();
+                instance.init();
                 System.out.println("Loaded " + clazz);
-                MethodHandles.lookup().ensureInitialized(clazz);
-            } catch (IllegalAccessException e) {
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationException |
+                     NoSuchMethodException e) {
                 throw new RuntimeException(e);
             }
         }

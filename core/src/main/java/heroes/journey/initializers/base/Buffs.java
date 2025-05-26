@@ -6,8 +6,9 @@ import heroes.journey.initializers.InitializerInterface;
 public class Buffs implements InitializerInterface {
 
     public static Buff rested;
-
-    static {
+    
+    @Override
+    public void init() {
         rested = Buff.builder().name("Rested").turnsBuffLasts(1).build().register();
     }
 

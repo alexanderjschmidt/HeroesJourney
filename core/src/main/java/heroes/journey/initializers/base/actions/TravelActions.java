@@ -1,14 +1,5 @@
 package heroes.journey.initializers.base.actions;
 
-import static heroes.journey.initializers.base.actions.BaseActions.popup;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Queue;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -35,15 +26,20 @@ import heroes.journey.utils.Direction;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 
+import java.util.*;
+
+import static heroes.journey.initializers.base.actions.BaseActions.popup;
+
 public class TravelActions implements InitializerInterface {
 
-    public static final Action travel;
-    public static final TargetAction<UUID> journey, wayfare;
-    public static final TargetAction<Direction> explore;
+    public static Action travel;
+    public static TargetAction<UUID> journey, wayfare;
+    public static TargetAction<Direction> explore;
     // TODO Pilgrimage lose a turn but go anywhere?
     // TODO No direction explore that expands in a circle?
 
-    static {
+    @Override
+    public void init() {
         explore = TargetAction.<Direction>targetBuilder()
             .name("Explore")
             .getTargets((input) -> List.of(Direction.getDirections()))
@@ -129,7 +125,7 @@ public class TravelActions implements InitializerInterface {
                 PositionComponent positionComponent = PositionComponent.get(input.getGameState().getWorld(),
                     e);
                 Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());
-                return (double)entityPos.distanceTo(feature.location);
+                return (double) entityPos.distanceTo(feature.location);
             }).build())
             .build()
             .register();
