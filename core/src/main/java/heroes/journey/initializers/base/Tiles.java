@@ -71,9 +71,9 @@ public class Tiles implements InitializerInterface {
         baseTile(SAND, sand);
 
         WangCorner.create(plainsToHill, plains, hills, tiles, 500, 0, 10, true);
-        WangCorner.cliffTransition(plainsToHill, plains, hills, tiles, 1, 5, 9, true);
+        WangCorner.cliffTransitionTapper(plainsToHill, plains, hills, tiles, 1, 5, 9, true);
         WangCorner.create(sandToHill, sand, hills, tiles, 50, 0, 13, true);
-        WangCorner.cliffTransition(sandToHill, sand, hills, tiles, 1, 5, 13, true);
+        WangCorner.cliffTransitionTapper(sandToHill, sand, hills, tiles, 1, 5, 13, true);
         WangCorner.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 1, 5, 17, true);
         WangCorner.create(plainsToSand, plains, sand, tiles, 500, 0, 16, true);
         WangCornerAnimated.create(plainsToWater, plains, water, tiles, 300, 20, 10);

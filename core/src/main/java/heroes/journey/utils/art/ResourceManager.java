@@ -84,6 +84,11 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/Battle_Animations/Ice 5.png");
         loadTexture("Textures/Battle_Animations/Light 8.png");
         loadTexture("Textures/Battle_Animations/Parameter 10.png");
+
+        loadTexture("Textures/wangcorner.png");
+        loadTexture("Textures/cliffTransitionTapper.png");
+        loadTexture("Textures/cliffTransition.png");
+        loadTexture("Textures/wangEdge.png");
     }
 
     public void loadTextureMap(TextureMap textureMap) {
