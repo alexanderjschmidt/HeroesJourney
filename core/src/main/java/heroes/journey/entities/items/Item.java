@@ -1,5 +1,7 @@
 package heroes.journey.entities.items;
 
+import static heroes.journey.registries.Registries.ItemManager;
+
 import heroes.journey.entities.tagging.Attributes;
 import lombok.Getter;
 import lombok.NonNull;

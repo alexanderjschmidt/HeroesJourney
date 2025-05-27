@@ -1,23 +1,23 @@
 package heroes.journey.components;
 
-import heroes.journey.components.utils.DefaultContainer;
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.items.Item;
-import heroes.journey.entities.items.ItemManager;
-import heroes.journey.systems.GameWorld;
-import lombok.Getter;
+import static heroes.journey.registries.Registries.ItemManager;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import heroes.journey.components.utils.DefaultContainer;
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.entities.items.Item;
+import heroes.journey.systems.GameWorld;
+import lombok.Getter;
+
 public class InventoryComponent extends PooledClonableComponent<InventoryComponent> {
 
     private final DefaultContainer<String> inventory;
 
-    @Getter
-    private int gold;
+    @Getter private int gold;
 
     public InventoryComponent() {
         this.inventory = new DefaultContainer<>();
@@ -60,10 +60,10 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
         gold = from.gold;
     }
 
-    public Map<Item, Integer> getInventory() {
+    public Map<Item,Integer> getInventory() {
         return inventory.entrySet()
             .stream()
-            .collect(Collectors.toMap(entry -> ItemManager.get().get(entry.getKey()), Map.Entry::getValue));
+            .collect(Collectors.toMap(entry -> ItemManager.get(entry.getKey()), Map.Entry::getValue));
     }
 
     public String toString(Item item) {
