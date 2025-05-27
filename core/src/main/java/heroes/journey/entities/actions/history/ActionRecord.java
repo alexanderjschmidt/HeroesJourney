@@ -1,9 +1,10 @@
 package heroes.journey.entities.actions.history;
 
-import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionManager;
+import static heroes.journey.registries.Registries.ActionManager;
 
 import java.util.UUID;
+
+import heroes.journey.entities.actions.Action;
 
 public class ActionRecord extends Record {
 
@@ -15,7 +16,7 @@ public class ActionRecord extends Record {
     }
 
     public Action getAction() {
-        return ActionManager.get().get(action);
+        return ActionManager.get(action);
     }
 
 }

@@ -1,5 +1,12 @@
 package heroes.journey.entities.actions;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.inputs.TargetInput;
 import heroes.journey.entities.actions.results.ActionListResult;
@@ -7,31 +14,22 @@ import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Builder;
 import lombok.experimental.SuperBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 @SuperBuilder(toBuilder = true, builderMethodName = "targetBuilder")
 public class TargetAction<I> extends Action {
 
-    protected Function<ActionInput, List<I>> getTargets;
-    @Builder.Default
-    protected Consumer<TargetInput<I>> onHoverTarget = (input) -> {
+    protected Function<ActionInput,List<I>> getTargets;
+    @Builder.Default protected Consumer<TargetInput<I>> onHoverTarget = (input) -> {
     };
-    protected Function<TargetInput<I>, ActionResult> onSelectTarget;
+    protected Function<TargetInput<I>,ActionResult> onSelectTarget;
     // This is used for complex actions that need to be simplified for the AI
-    protected Function<TargetInput<I>, ActionResult> onSelectAITarget;
+    protected Function<TargetInput<I>,ActionResult> onSelectAITarget;
     @Builder.Default
-    protected Function<TargetInput<I>, ShowAction> requirementsMetTarget = (input) -> ShowAction.YES;
-    @Builder.Default
-    protected Cost<TargetInput<I>> costTarget = Cost.<TargetInput<I>>builder().build();
+    protected Function<TargetInput<I>,ShowAction> requirementsMetTarget = (input) -> ShowAction.YES;
+    @Builder.Default protected Cost<TargetInput<I>> costTarget = Cost.<TargetInput<I>>builder().build();
 
-    @Builder.Default
-    protected Function<TargetInput<I>, String> getTargetDisplayName = Object::toString;
+    @Builder.Default protected Function<TargetInput<I>,String> getTargetDisplayName = Object::toString;
 
-    @Builder.Default
-    protected final boolean returnsActionList = true;
+    @Builder.Default protected final boolean returnsActionList = true;
 
     @Override
     public ShowAction requirementsMet(ActionInput input) {
@@ -56,7 +54,8 @@ public class TargetAction<I> extends Action {
         List<I> options = getTargets.apply(inputBase);
         for (I option : options) {
             if (option.toString().equals(selectedOption)) {
-                TargetInput<I> targetInput = new TargetInput<>(inputBase.getGameState(), inputBase.getEntityId(), option);
+                TargetInput<I> targetInput = new TargetInput<>(inputBase.getGameState(),
+                    inputBase.getEntityId(), option);
                 costTarget.onUse(targetInput);
                 return getAction(targetInput);
             }
@@ -67,11 +66,15 @@ public class TargetAction<I> extends Action {
     private Action getAction(TargetInput<I> targetInput) {
         String displayName = getTargetDisplayName.apply(targetInput);
         I option = targetInput.getInput();
-        return Action.builder().name(name + "," + option.toString()).displayName(displayName)
+        return Action.builder()
+            .name(name + "," + option.toString())
+            .displayName(displayName)
             .onSelect((input) -> onSelectTarget.apply(targetInput))
             .onSelectAI((input) -> onSelectAITarget.apply(targetInput))
             .onHover((input) -> onHoverTarget.accept(targetInput))
-            .requirementsMet((input) -> requirementsMetTarget.apply(targetInput).and(costTarget.requirementsMet(targetInput))).build();
+            .requirementsMet((input) -> requirementsMetTarget.apply(targetInput)
+                .and(costTarget.requirementsMet(targetInput)))
+            .build();
     }
 
     public TargetAction<I> register() {

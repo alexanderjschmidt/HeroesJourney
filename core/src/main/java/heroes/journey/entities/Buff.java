@@ -1,4 +1,6 @@
-package heroes.journey.entities.buffs;
+package heroes.journey.entities;
+
+import static heroes.journey.registries.Registries.BuffManager;
 
 import heroes.journey.entities.tagging.Attributes;
 import lombok.Builder;
@@ -9,12 +11,9 @@ import lombok.NonNull;
 @Getter
 public class Buff {
 
-    @NonNull
-    private String name;
-    @Builder.Default
-    private int turnsBuffLasts = -1;
-    @Builder.Default
-    private int timesBuffCanBeUsed = -1;
+    @NonNull private String name;
+    @Builder.Default private int turnsBuffLasts = -1;
+    @Builder.Default private int timesBuffCanBeUsed = -1;
     private final Attributes attributes = new Attributes();
 
     @Override

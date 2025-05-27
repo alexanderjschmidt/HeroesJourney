@@ -1,5 +1,6 @@
 package heroes.journey.tilemap;
 
+import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 
 import java.util.ArrayList;
@@ -155,10 +156,10 @@ public class TileMap implements IndexedGraph<TileNode> {
 
     public TileMapSaveData getSaveData() {
         // Save Terrain -> Int Terrain Map
-        Map<String,Integer> terrainMap = new HashMap<>(TerrainManager.get().size());
+        Map<String,Integer> terrainMap = new HashMap<>(TerrainManager.size());
         int count = 0;
         terrainMap.put("null", count++);
-        for (String terrain : TerrainManager.get().keySet()) {
+        for (String terrain : TerrainManager.keySet()) {
             terrainMap.put(terrain, count++);
         }
         Map<String,Integer> tileToIntMap = new HashMap<>();

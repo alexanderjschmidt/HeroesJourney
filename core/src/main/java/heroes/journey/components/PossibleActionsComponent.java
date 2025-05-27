@@ -1,19 +1,24 @@
 package heroes.journey.components;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 
-import java.util.*;
-
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
-    @Getter
-    private final Map<String, Integer> cooldowns;
+    @Getter private final Map<String,Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();

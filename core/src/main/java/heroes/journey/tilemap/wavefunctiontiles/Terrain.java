@@ -1,6 +1,6 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
-import heroes.journey.tilemap.TerrainManager;
+import static heroes.journey.registries.Registries.TerrainManager;
 
 public class Terrain {
 
@@ -10,7 +10,7 @@ public class Terrain {
     public Terrain(String name, int terrainCost) {
         this.name = name;
         this.terrainCost = terrainCost;
-        TerrainManager.get().put(name, this);
+        TerrainManager.put(name, this);
     }
 
     public String toString() {

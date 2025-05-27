@@ -1,21 +1,21 @@
 package heroes.journey.components;
 
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.buffs.Buff;
-import heroes.journey.systems.GameWorld;
-import lombok.Getter;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.entities.Buff;
+import heroes.journey.systems.GameWorld;
+import lombok.Getter;
 
 @Getter
 public class BuffsComponent extends PooledClonableComponent<BuffsComponent> {
 
     // For Buffs that run out after x time
-    private final Map<String, Integer> timeLeft;
+    private final Map<String,Integer> timeLeft;
     // For Buffs that run out after x uses
-    private final Map<String, Integer> triggerCount;
+    private final Map<String,Integer> triggerCount;
 
     public BuffsComponent() {
         timeLeft = new HashMap<>();

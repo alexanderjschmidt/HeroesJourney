@@ -1,16 +1,18 @@
 package heroes.journey.components.character;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
+import java.util.UUID;
+
 import com.artemis.annotations.Transient;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-
-import java.util.UUID;
 
 @ToString
 @Transient
@@ -22,7 +24,7 @@ public class ActionComponent extends PooledClonableComponent<ActionComponent> {
     private String action;
 
     public Action getAction() {
-        return ActionManager.get().get(action);
+        return ActionManager.get(action);
     }
 
     public ActionComponent action(Action action) {

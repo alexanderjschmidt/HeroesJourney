@@ -1,13 +1,14 @@
 package heroes.journey.components;
 
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.quests.Quest;
-import heroes.journey.entities.quests.QuestManager;
-import heroes.journey.systems.GameWorld;
+import static heroes.journey.registries.Registries.QuestManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.entities.quests.Quest;
+import heroes.journey.systems.GameWorld;
 
 public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
 

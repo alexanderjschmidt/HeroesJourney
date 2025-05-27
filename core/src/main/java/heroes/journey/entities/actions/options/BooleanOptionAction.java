@@ -1,23 +1,21 @@
 package heroes.journey.entities.actions.options;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
+import java.util.UUID;
+
 import heroes.journey.GameState;
-import heroes.journey.entities.actions.ActionManager;
 import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
-import java.util.UUID;
-
 @SuperBuilder
 public class BooleanOptionAction extends OptionAction {
 
-    @NonNull
-    private Boolean toggle;
-    @Getter
-    @Builder.Default
-    protected final boolean terminal = false;
+    @NonNull private Boolean toggle;
+    @Getter @Builder.Default protected final boolean terminal = false;
 
     public ActionResult onSelect() {
         return onSelect(null, null);
@@ -34,7 +32,7 @@ public class BooleanOptionAction extends OptionAction {
     }
 
     public BooleanOptionAction register() {
-        return (BooleanOptionAction) ActionManager.register(this);
+        return (BooleanOptionAction)ActionManager.register(this);
     }
 
 }

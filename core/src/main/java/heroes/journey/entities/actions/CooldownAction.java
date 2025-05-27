@@ -1,5 +1,7 @@
 package heroes.journey.entities.actions;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
 import java.util.UUID;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
