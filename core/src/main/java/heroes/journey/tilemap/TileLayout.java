@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
@@ -30,21 +31,12 @@ public class TileLayout {
         this.path = path;
     }
 
-    /**
-     * @param tiles
-     * @param weight
-     * @param x
-     * @param y
-     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
-     * @param terrains
-     * @return a list of generated tiles
-     */
-    public List<Tile> generateTiles(
+    private List<Tile> generateTiles(
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
-        boolean addToDefault, Terrain... terrains) {
+        boolean addToDefault, int frameCount, int dist, Terrain... terrains) {
         Texture texture = ResourceManager.get().getTexture(path);
         TextureData data = texture.getTextureData();
 
@@ -81,13 +73,16 @@ public class TileLayout {
 
                 // Guard in case tiles[][] is smaller than layout
                 if (tileX >= tiles.length || tileY >= tiles[0].length) continue;
-
-                TextureRegion tileRegion = tiles[tileX][tileY];
-
+                
                 // Get 3x3 layout block for this tile from the layoutPixmap
                 Map<Direction, Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
 
-                Tile tile = new BaseTile(terrains[0], adjustedWeight, addToDefault, tileRegion);
+                Tile tile;
+                if (frameCount != 0)
+                    tile = new AnimatedTile(terrains[0], adjustedWeight, addToDefault, getFrames(tiles, tileX, tileY, frameCount, dist), 0.2f);
+                else {
+                    tile = new BaseTile(terrains[0], adjustedWeight, addToDefault, tiles[tileX][tileY]);
+                }
                 for (Map.Entry<Direction, Terrain> entry : terrainMap.entrySet()) {
                     tile.add(entry.getKey(), entry.getValue());
                 }
@@ -96,6 +91,43 @@ public class TileLayout {
         }
         layoutPixmap.dispose(); // Clean up when done
         return tileSet;
+    }
+
+    /**
+     * @param tiles
+     * @param weight
+     * @param x
+     * @param y
+     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
+     * @param terrains
+     * @return a list of generated tiles
+     */
+    public List<Tile> generateTiles(
+        TextureRegion[][] tiles,
+        int weight,
+        int x,
+        int y,
+        boolean addToDefault, Terrain... terrains) {
+        return generateTiles(tiles, weight, x, y, addToDefault, 0, 0, terrains);
+    }
+
+    /**
+     * @param tiles
+     * @param weight
+     * @param x
+     * @param y
+     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
+     * @param terrains
+     * @return a list of generated tiles
+     */
+    public List<Tile> generateAnimatedTiles(
+        TextureRegion[][] tiles,
+        int weight,
+        int x,
+        int y,
+        int frameCount, int dist,
+        boolean addToDefault, Terrain... terrains) {
+        return generateTiles(tiles, weight, x, y, addToDefault, frameCount, dist, terrains);
     }
 
     private static final Direction[][] directionGrid = {
@@ -125,6 +157,26 @@ public class TileLayout {
         }
 
         return terrainMap;
+    }
+
+    public static TextureRegion[] getFrames(TextureRegion[][] tiles, int x, int y, int frameCount, int dist) {
+        return getFrames(tiles, x, y, frameCount, dist, false);
+    }
+
+    public static TextureRegion[] getFrames(
+        TextureRegion[][] tiles,
+        int x,
+        int y,
+        int frameCount,
+        int dist,
+        boolean vertical) {
+        TextureRegion[] frames = new TextureRegion[frameCount];
+        for (int i = 0; i < frameCount; i++) {
+            int dx = vertical ? 0 : i * dist;
+            int dy = !vertical ? 0 : i * dist;
+            frames[i] = tiles[x + dx][y + dy];
+        }
+        return frames;
     }
 
 }

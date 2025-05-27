@@ -2,8 +2,8 @@ package heroes.journey.initializers.base;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.tilemap.TileLayout;
 import heroes.journey.tilemap.helpers.WangCorner;
-import heroes.journey.tilemap.helpers.WangCornerAnimated;
 import heroes.journey.tilemap.helpers.WangEdge;
 import heroes.journey.tilemap.wavefunctiontiles.*;
 import heroes.journey.utils.Direction;
@@ -60,7 +60,7 @@ public class Tiles implements InitializerInterface {
         Terrain hillToWater = new Terrain("Cliff", 50);
         Terrain sandToWater = new Terrain("Water", 50);
 
-        WATER = new AnimatedTile(water, 300, WangCornerAnimated.getFrames(tiles, 21, 11, 4, 5), .2f);
+        WATER = new AnimatedTile(water, 300, true, TileLayout.getFrames(tiles, 21, 11, 4, 5), .2f);
         PLAINS = new BaseTile(plains, 1000, tiles[1][5]);
         HILLS = new BaseTile(hills, 500, tiles[1][11]);
         SAND = new BaseTile(sand, 200, tiles[1][17]);
@@ -76,12 +76,12 @@ public class Tiles implements InitializerInterface {
         WangCorner.cliffTransitionTapper(sandToHill, sand, hills, tiles, 1, 5, 13, true);
         WangCorner.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 1, 5, 17, true);
         WangCorner.create(plainsToSand, plains, sand, tiles, 500, 0, 16, true);
-        WangCornerAnimated.create(plainsToWater, plains, water, tiles, 300, 20, 10);
-        WangCornerAnimated.create(hillToWater, hills, water, tiles, 10, 20, 13);
-        WangCornerAnimated.cliffTransition(plainsToWater, hillToWater, plains, hills, water, tiles, 1, 20, 4);
-        WangCornerAnimated.create(sandToWater, sand, water, tiles, 500, 20, 16);
-        WangCornerAnimated.cliffTransition(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
-        WangCornerAnimated.cliffTransition(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
+        WangCorner.createAnimated(plainsToWater, plains, water, tiles, 300, 20, 10);
+        WangCorner.createAnimated(hillToWater, hills, water, tiles, 10, 20, 13);
+        WangCorner.cliffTransitionAnimated(plainsToWater, hillToWater, plains, hills, water, tiles, 1, 20, 4);
+        WangCorner.createAnimated(sandToWater, sand, water, tiles, 500, 20, 16);
+        WangCorner.cliffTransitionAnimated(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6);
+        WangCorner.cliffTransitionAnimated(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8);
 
         treeTiles = WangCorner.create(trees, NULL_TERRAIN, trees, tiles, 500, 0, 7, false);
 

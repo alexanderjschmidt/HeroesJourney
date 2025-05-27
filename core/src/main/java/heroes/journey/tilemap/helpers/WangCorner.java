@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WangCorner {
 
-    public static TileLayout wangCorner = new TileLayout("Textures/wangcorner.png");
+    public static TileLayout wangCorner = new TileLayout("Textures/wangCorner.png");
     public static TileLayout cliffTransitionTapper = new TileLayout("Textures/cliffTransitionTapper.png");
     public static TileLayout cliffTransition = new TileLayout("Textures/cliffTransition.png");
 
@@ -32,6 +32,25 @@ public class WangCorner {
         int y,
         boolean addToDefault) {
         return wangCorner.generateTiles(tiles, transitionWeight, x, y, addToDefault, base, adjacentTileOuter, adjacentTileInner);
+    }
+
+    /**
+     * @param base
+     * @param adjacentTileOuter
+     * @param adjacentTileInner
+     * @param tiles             [y, x]
+     * @param x                 top left corner
+     * @param y                 top left corner
+     */
+    public static void createAnimated(
+        Terrain base,
+        Terrain adjacentTileOuter,
+        Terrain adjacentTileInner,
+        TextureRegion[][] tiles,
+        int transitionWeight,
+        int x,
+        int y) {
+        wangCorner.generateAnimatedTiles(tiles, transitionWeight, x, y, 4, 5, true, base, adjacentTileOuter, adjacentTileInner);
     }
 
     public static void cliffTransitionTapper(
@@ -58,5 +77,18 @@ public class WangCorner {
         int y,
         boolean addToDefault) {
         cliffTransition.generateTiles(tiles, transitionWeight * 1000, x, y, addToDefault, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
+    }
+
+    public static void cliffTransitionAnimated(
+        Terrain cliff1,
+        Terrain cliff2,
+        Terrain adjacentTileOuter1,
+        Terrain adjacentTileOuter2,
+        Terrain adjacentTileInner,
+        TextureRegion[][] tiles,
+        int transitionWeight,
+        int x,
+        int y) {
+        cliffTransition.generateAnimatedTiles(tiles, transitionWeight * 1000, x, y, 4, 4, true, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 }
