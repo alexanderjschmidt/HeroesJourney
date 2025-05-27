@@ -1,10 +1,11 @@
 package heroes.journey.registries;
 
 import heroes.journey.entities.Buff;
+import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.items.Item;
-import heroes.journey.entities.Quest;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
 
 public class Registries {
 
@@ -13,5 +14,6 @@ public class Registries {
     public static Registry<Buff> BuffManager = new Registry<>();
     public static Registry<Terrain> TerrainManager = new Registry<>();
     public static Registry<Quest> QuestManager = new Registry<>();
+    public static Registry<MapGenerationEffect> MapGenerationManager = new Registry<>();
 
 }

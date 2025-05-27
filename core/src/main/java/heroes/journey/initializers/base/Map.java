@@ -23,7 +23,7 @@ import heroes.journey.registries.FeatureType;
 import heroes.journey.tilemap.features.Feature;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.registries.NewMapManager;
+import heroes.journey.utils.worldgen.MapGenerator;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
@@ -65,13 +65,13 @@ public class Map implements InitializerInterface {
             .octaves(5)
             .smooths(2)
             .build()
-            .register(NewMapManager.noisePhase);
+            .register(MapGenerator.noisePhase);
         // Add Monsters
         BasicMapGenerationEffect.builder()
             .name("monsters")
             .applyEffect(gs -> MonsterFactory.init(gs.getWorld()))
             .build()
-            .register(NewMapManager.noisePhase);
+            .register(MapGenerator.noisePhase);
         // Capitals
         MapGenerationEffect kingdomsGen = FeatureGenRadialMapEffect.builder()
             .name("kingdoms")
@@ -84,7 +84,7 @@ public class Map implements InitializerInterface {
                 //System.out.println("Capital: " + pos.getX() + ", " + pos.getY());
             })
             .build()
-            .register(NewMapManager.worldGenPhase);
+            .register(MapGenerator.worldGenPhase);
         // Add Towns off of kingdoms
         MapGenerationEffect townsGen = FeatureGenOffFeatureMapEffect.builder()
             .name("towns")
@@ -177,7 +177,7 @@ public class Map implements InitializerInterface {
                 return possibleTiles;
             })
             .build()
-            .register(NewMapManager.postWorldGenPhase);
+            .register(MapGenerator.postWorldGenPhase);
         // Create Trees
         WaveFunctionCollapseMapEffect.builder().name("trees").environment(true).applyTile((gs, pos) -> {
             WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
@@ -219,7 +219,7 @@ public class Map implements InitializerInterface {
                         opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
                 }
             }
-        }).build().register(NewMapManager.entityPhase);
+        }).build().register(MapGenerator.entityPhase);
     }
 
 }

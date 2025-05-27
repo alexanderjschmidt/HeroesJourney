@@ -1,4 +1,6 @@
-package heroes.journey.registries;
+package heroes.journey.utils.worldgen;
+
+import static heroes.journey.registries.Registries.MapGenerationManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,17 +9,14 @@ import java.util.Map;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationException;
+import heroes.journey.registries.FeatureManager;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 
 @Getter
-public class NewMapManager {
+public class MapGenerator {
 
     public static MapGenerationEffect noisePhase, worldGenPhase, postWorldGenPhase, entityPhase;
-    private static NewMapManager newMapManager;
-    Map<String,MapGenerationEffect> mapGenerationEffects;
 
     static {
         noisePhase = NoOpMapGenerationEffect.builder().name("NoisePhase").build().register();
@@ -32,26 +31,8 @@ public class NewMapManager {
             .register(postWorldGenPhase);
     }
 
-    private NewMapManager() {
-        mapGenerationEffects = new HashMap<>();
-    }
-
-    public static NewMapManager get() {
-        if (newMapManager == null)
-            newMapManager = new NewMapManager();
-        return newMapManager;
-    }
-
-    public void addMapGenerationEffect(String name, MapGenerationEffect effect) {
-        if (mapGenerationEffects.containsKey(name)) {
-            throw new RuntimeException(
-                "Cannot register with name " + name + " because that name is already registered");
-        }
-        mapGenerationEffects.put(name, effect);
-    }
-
-    public void initMapGeneration(GameState gameState, MapData mapData, boolean loading) {
-        List<MapGenerationEffect> sorted = topologicalSort(mapGenerationEffects);
+    public static void initMapGeneration(GameState gameState, MapData mapData, boolean loading) {
+        List<MapGenerationEffect> sorted = topologicalSort(MapGenerationManager);
         while (true) {
             try {
                 if (!loading) {
@@ -76,7 +57,7 @@ public class NewMapManager {
             gameState.nextMove();
     }
 
-    private List<MapGenerationEffect> topologicalSort(Map<String,MapGenerationEffect> phases) {
+    private static List<MapGenerationEffect> topologicalSort(Map<String,MapGenerationEffect> phases) {
         Map<String,Integer> inDegree = new HashMap<>();
         Map<String,List<String>> graph = new HashMap<>();
 

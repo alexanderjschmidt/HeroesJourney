@@ -1,10 +1,11 @@
 package heroes.journey.utils.worldgen;
 
+import static heroes.journey.registries.Registries.MapGenerationManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import heroes.journey.GameState;
-import heroes.journey.registries.NewMapManager;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -18,7 +19,7 @@ public abstract class MapGenerationEffect {
     @Builder.Default public final List<String> dependsOn = new ArrayList<>();
 
     public MapGenerationEffect register(MapGenerationEffect... dependencies) {
-        NewMapManager.get().addMapGenerationEffect(name, this);
+        MapGenerationManager.register(this);
         for (MapGenerationEffect dependency : dependencies) {
             dependsOn.add(dependency.name);
         }

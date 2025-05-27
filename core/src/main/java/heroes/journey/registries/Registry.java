@@ -14,6 +14,10 @@ public class Registry<T> extends HashMap<String,T> {
     }
 
     public T register(T entry) {
+        if (containsKey(entry.toString())) {
+            throw new RuntimeException(this.getClass() + " cannot register with name " + entry.toString() +
+                " because that name is already registered");
+        }
         put(entry.toString(), entry);
         return entry;
     }
