@@ -1,4 +1,4 @@
-package heroes.journey.utils.worldgen;
+package heroes.journey.registries;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,8 @@ import java.util.Map;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
-import heroes.journey.tilemap.features.FeatureManager;
+import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 

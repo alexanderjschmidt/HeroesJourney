@@ -1,11 +1,13 @@
-package heroes.journey.tilemap.features;
+package heroes.journey.registries;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class FeatureManager extends HashMap<UUID, Feature> {
+import heroes.journey.tilemap.features.Feature;
+
+public class FeatureManager extends HashMap<UUID,Feature> {
 
     private static FeatureManager featureManager;
 

@@ -1,9 +1,12 @@
-package heroes.journey.entities.tagging;
+package heroes.journey.registries;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import heroes.journey.entities.tagging.Group;
+import heroes.journey.entities.tagging.Tag;
 
 public class Tags extends HashMap<Group,Set<Tag>> {
 

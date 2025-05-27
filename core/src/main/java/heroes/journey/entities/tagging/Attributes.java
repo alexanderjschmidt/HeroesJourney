@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import heroes.journey.registries.Tags;
+
 public class Attributes extends HashMap<Tag,Integer> {
 
     private final Tags tags;

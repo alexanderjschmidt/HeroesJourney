@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.quests.Quest;
+import heroes.journey.entities.Quest;
 import heroes.journey.systems.GameWorld;
 
 public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {

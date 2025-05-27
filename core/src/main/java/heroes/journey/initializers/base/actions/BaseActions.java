@@ -8,7 +8,7 @@ import heroes.journey.entities.actions.*;
 import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
-import heroes.journey.entities.quests.Quest;
+import heroes.journey.entities.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Buffs;
 import heroes.journey.initializers.utils.StatsUtils;

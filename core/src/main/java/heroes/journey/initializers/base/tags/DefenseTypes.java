@@ -2,7 +2,7 @@ package heroes.journey.initializers.base.tags;
 
 import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Tag;
-import heroes.journey.entities.tagging.Tags;
+import heroes.journey.registries.Tags;
 
 public enum DefenseTypes implements Tag {
 

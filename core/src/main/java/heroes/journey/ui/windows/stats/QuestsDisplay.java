@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
-import heroes.journey.entities.quests.Quest;
+import heroes.journey.entities.Quest;
 import heroes.journey.utils.art.ResourceManager;
 
 public class QuestsDisplay extends Table {

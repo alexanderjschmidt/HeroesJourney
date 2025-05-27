@@ -3,7 +3,7 @@ package heroes.journey.registries;
 import heroes.journey.entities.Buff;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.items.Item;
-import heroes.journey.entities.quests.Quest;
+import heroes.journey.entities.Quest;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 
 public class Registries {

@@ -1,6 +1,16 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+
+import java.util.List;
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
@@ -8,21 +18,19 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
+import heroes.journey.registries.FeatureManager;
+import heroes.journey.registries.FeatureType;
 import heroes.journey.tilemap.features.Feature;
-import heroes.journey.tilemap.features.FeatureManager;
-import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.NewMapManager;
-import heroes.journey.utils.worldgen.effects.*;
+import heroes.journey.registries.NewMapManager;
+import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
+import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
+import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
+import heroes.journey.utils.worldgen.effects.FeatureGenRandomMapEffect;
+import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
+import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
-
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.factories.EntityFactory.*;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
 
 public class Map implements InitializerInterface {
 

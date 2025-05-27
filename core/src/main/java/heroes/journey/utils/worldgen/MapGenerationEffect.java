@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heroes.journey.GameState;
+import heroes.journey.registries.NewMapManager;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;

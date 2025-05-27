@@ -15,7 +15,7 @@ import heroes.journey.ui.*;
 import heroes.journey.utils.MusicManager;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.input.KeyManager;
-import heroes.journey.utils.worldgen.NewMapManager;
+import heroes.journey.registries.NewMapManager;
 
 public class BattleScreen implements Screen {
 

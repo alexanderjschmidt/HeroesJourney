@@ -1,17 +1,18 @@
 package heroes.journey.utils.serializers;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import heroes.journey.entities.Position;
-import heroes.journey.tilemap.features.Feature;
-import heroes.journey.tilemap.features.FeatureType;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import heroes.journey.entities.Position;
+import heroes.journey.registries.FeatureType;
+import heroes.journey.tilemap.features.Feature;
 
 public class FeatureSerializer extends CustomSerializer<Feature> {
     @Override

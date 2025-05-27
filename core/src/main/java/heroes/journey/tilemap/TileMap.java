@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.utils.Utils;
+import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;

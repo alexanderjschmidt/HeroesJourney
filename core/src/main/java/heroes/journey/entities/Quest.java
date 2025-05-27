@@ -1,4 +1,4 @@
-package heroes.journey.entities.quests;
+package heroes.journey.entities;
 
 import static heroes.journey.registries.Registries.QuestManager;
 

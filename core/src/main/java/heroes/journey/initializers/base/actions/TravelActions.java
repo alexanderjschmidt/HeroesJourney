@@ -1,5 +1,14 @@
 package heroes.journey.initializers.base.actions;
 
+import static heroes.journey.initializers.base.actions.BaseActions.popup;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -17,18 +26,14 @@ import heroes.journey.entities.actions.results.MultiStepResult;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.utils.Utils;
+import heroes.journey.registries.FeatureManager;
+import heroes.journey.registries.FeatureType;
 import heroes.journey.tilemap.FogUtils;
 import heroes.journey.tilemap.features.Feature;
-import heroes.journey.tilemap.features.FeatureManager;
-import heroes.journey.tilemap.features.FeatureType;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
-
-import java.util.*;
-
-import static heroes.journey.initializers.base.actions.BaseActions.popup;
 
 public class TravelActions implements InitializerInterface {
 
@@ -125,7 +130,7 @@ public class TravelActions implements InitializerInterface {
                 PositionComponent positionComponent = PositionComponent.get(input.getGameState().getWorld(),
                     e);
                 Position entityPos = new Position(positionComponent.getX(), positionComponent.getY());
-                return (double) entityPos.distanceTo(feature.location);
+                return (double)entityPos.distanceTo(feature.location);
             }).build())
             .build()
             .register();

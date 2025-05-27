@@ -1,18 +1,18 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.TargetAction;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.utils.Utils;
+import heroes.journey.registries.FeatureManager;
+import heroes.journey.registries.FeatureType;
 import heroes.journey.tilemap.features.Feature;
-import heroes.journey.tilemap.features.FeatureManager;
-import heroes.journey.tilemap.features.FeatureType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class CarriageActions implements InitializerInterface {
 

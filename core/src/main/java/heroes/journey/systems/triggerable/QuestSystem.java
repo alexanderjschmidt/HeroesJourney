@@ -5,7 +5,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.entities.actions.inputs.ActionInput;
-import heroes.journey.entities.quests.Quest;
+import heroes.journey.entities.Quest;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 
