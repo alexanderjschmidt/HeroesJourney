@@ -20,10 +20,20 @@ public class Registries {
 
     public Registry<Item> itemManager;
     public Registry<ItemSubType> itemSubTypeManager;
+    public Registry<Action> actionManager;
+    public Registry<Buff> buffManager;
+    public Registry<Terrain> terrainManager;
+    public Registry<Quest> questManager;
+    public Registry<MapGenerationEffect> mapGenerationManager;
 
     public Registries() {
         itemManager = ItemManager;
         itemSubTypeManager = ItemSubTypeManager;
+        actionManager = ActionManager;
+        buffManager = BuffManager;
+        terrainManager = TerrainManager;
+        questManager = QuestManager;
+        mapGenerationManager = MapGenerationManager;
     }
 
 }
