@@ -6,13 +6,8 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 public abstract class OptionAction extends Action {
-    
-    @Builder.Default private String display = "";
 
-    @Override
-    public String toString() {
-        return display;
-    }
+    @Builder.Default private String display = "";
 
     public void setDisplay(String value) {
         this.display = super.toString() + ": " + value;

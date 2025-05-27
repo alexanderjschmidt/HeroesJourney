@@ -17,7 +17,7 @@ public class Item {
     private final Attributes attributes;
 
     public ItemType getType() {
-        return subType.getParentType();
+        return subType.parentType();
     }
 
     public String toString() {
