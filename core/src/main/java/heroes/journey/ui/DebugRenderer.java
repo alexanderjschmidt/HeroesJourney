@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import heroes.journey.GameCamera;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.Feature;
 
 public class DebugRenderer {
 

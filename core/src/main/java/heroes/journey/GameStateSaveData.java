@@ -1,12 +1,12 @@
 package heroes.journey;
 
-import heroes.journey.entities.actions.history.History;
-import heroes.journey.tilemap.TileMapSaveData;
-import heroes.journey.tilemap.features.Feature;
-import lombok.Getter;
-
 import java.util.List;
 import java.util.UUID;
+
+import heroes.journey.entities.actions.history.History;
+import heroes.journey.tilemap.Feature;
+import heroes.journey.tilemap.TileMapSaveData;
+import lombok.Getter;
 
 @Getter
 public class GameStateSaveData {
@@ -20,7 +20,16 @@ public class GameStateSaveData {
     private final PlayerInfo playerInfo;
     private final List<Feature> features;
 
-    public GameStateSaveData(int width, int height, TileMapSaveData map, History history, int turn, UUID currentEntity, List<UUID> entitiesInActionOrder, PlayerInfo playerInfo, List<Feature> features) {
+    public GameStateSaveData(
+        int width,
+        int height,
+        TileMapSaveData map,
+        History history,
+        int turn,
+        UUID currentEntity,
+        List<UUID> entitiesInActionOrder,
+        PlayerInfo playerInfo,
+        List<Feature> features) {
         this.width = width;
         this.height = height;
         this.map = map;

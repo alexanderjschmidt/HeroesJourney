@@ -16,9 +16,9 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.systems.GameWorld;
+import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.tilemap.TileMapSaveData;
-import heroes.journey.tilemap.features.Feature;
 
 public class Serializers {
 

@@ -1,19 +1,20 @@
 package heroes.journey.utils.serializers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+
 import heroes.journey.GameStateSaveData;
 import heroes.journey.PlayerInfo;
 import heroes.journey.entities.actions.history.History;
+import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.TileMapSaveData;
-import heroes.journey.tilemap.features.Feature;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveData> {
     @Override
@@ -57,7 +58,8 @@ public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveD
             features.add(json.readValue(Feature.class, val));
         }
 
-        return new GameStateSaveData(width, height, map, history, turn, currentEntity, entitiesInActionOrder, playerInfo, features);
+        return new GameStateSaveData(width, height, map, history, turn, currentEntity, entitiesInActionOrder,
+            playerInfo, features);
     }
 
     @Override
@@ -87,6 +89,7 @@ public class GameStateSaveDataSerializer extends CustomSerializer<GameStateSaveD
             entitiesInActionOrder.add(UUID.fromString(input.readString()));
         }
 
-        return new GameStateSaveData(10, 10, map, history, turn, currentEntity, entitiesInActionOrder, null, null);
+        return new GameStateSaveData(10, 10, map, history, turn, currentEntity, entitiesInActionOrder, null,
+            null);
     }
 }

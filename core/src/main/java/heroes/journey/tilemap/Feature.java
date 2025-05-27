@@ -1,4 +1,4 @@
-package heroes.journey.tilemap.features;
+package heroes.journey.tilemap;
 
 import static heroes.journey.utils.Direction.approximateDirection;
 
@@ -14,8 +14,8 @@ import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.FeatureType;
 import heroes.journey.utils.Direction;
+import heroes.journey.utils.worldgen.FeatureType;
 import lombok.Getter;
 
 @Getter

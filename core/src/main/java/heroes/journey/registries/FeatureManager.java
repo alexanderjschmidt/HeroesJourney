@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.Feature;
+import heroes.journey.utils.worldgen.FeatureType;
 
 public class FeatureManager extends HashMap<UUID,Feature> {
 

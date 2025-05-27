@@ -19,9 +19,9 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.FeatureType;
-import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerator;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
@@ -55,8 +55,15 @@ public class Map implements InitializerInterface {
     public static int wildDungeonsMin = 8;
     public static int wildDungeonsMax = 16;
 
+    public static FeatureType KINGDOM, TOWN, DUNGEON;
+
     @Override
     public void init() {
+        // feature types
+        KINGDOM = new FeatureType("Kingdom");
+        TOWN = new FeatureType("Town");
+        DUNGEON = new FeatureType("Dungeon");
+
         // Generate Smooth Noise
         NoiseMapEffect.builder()
             .name("base-noise")
@@ -80,7 +87,7 @@ public class Map implements InitializerInterface {
             .generateFeature((gs, pos) -> {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
                 UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
-                new Feature(kingdomId, FeatureType.KINGDOM, pos);
+                new Feature(kingdomId, KINGDOM, pos);
                 //System.out.println("Capital: " + pos.getX() + ", " + pos.getY());
             })
             .build()
@@ -92,14 +99,14 @@ public class Map implements InitializerInterface {
             .maxPerFeature(townsPerKingdomMax)
             .minDistanceFromFeature(minDistanceBetweenTowns)
             .maxDistanceFromFeature(minDistanceBetweenTowns * 2)
-            .offFeature(FeatureType.KINGDOM)
+            .offFeature(KINGDOM)
             .generateFeature(input -> {
                 input.getGameState()
                     .getMap()
                     .setEnvironment(input.getPosition().getX(), input.getPosition().getY(), Tiles.TOWN);
                 UUID townId = generateTown(input.getGameState(), input.getPosition().getX(),
                     input.getPosition().getY(), false);
-                Feature town = new Feature(townId, FeatureType.TOWN, input.getPosition());
+                Feature town = new Feature(townId, TOWN, input.getPosition());
                 input.getOffFeature().add(town);
             })
             .build()
@@ -109,7 +116,7 @@ public class Map implements InitializerInterface {
             .name("paths")
             .applyEffect(gameState -> {
                 // Capitals to towns
-                List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
+                List<Feature> kingdoms = FeatureManager.get(KINGDOM);
                 for (Feature kingdom : kingdoms) {
                     for (UUID townId : kingdom.connections) {
                         Feature town = FeatureManager.get().get(townId);
@@ -133,14 +140,14 @@ public class Map implements InitializerInterface {
             .maxPerFeature(dungeonsPerSettlementMax)
             .minDistanceFromFeature(minDistanceFromAnyFeature)
             .maxDistanceFromFeature(maxDistanceFromSettlement)
-            .offFeature(FeatureType.TOWN)
+            .offFeature(TOWN)
             .generateFeature(input -> {
                 input.getGameState()
                     .getMap()
                     .setEnvironment(input.getPosition().getX(), input.getPosition().getY(), Tiles.DUNGEON);
                 UUID dungeonId = generateDungeon(input.getGameState(), input.getPosition().getX(),
                     input.getPosition().getY());
-                new Feature(dungeonId, FeatureType.DUNGEON, input.getPosition());
+                new Feature(dungeonId, DUNGEON, input.getPosition());
             })
             .build()
             .register(paths);
@@ -154,7 +161,7 @@ public class Map implements InitializerInterface {
             .generateFeature((gameState, pos) -> {
                 gameState.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
                 UUID dungeonId = generateDungeon(gameState, pos.getX(), pos.getY());
-                new Feature(dungeonId, FeatureType.DUNGEON, pos);
+                new Feature(dungeonId, DUNGEON, pos);
             })
             .build()
             .register(dungeonsGen);
@@ -195,7 +202,7 @@ public class Map implements InitializerInterface {
         }).build().register(wfc);
         // Add Entities
         BasicMapGenerationEffect.builder().name("entities").applyEffect(gameState -> {
-            List<Feature> kingdoms = FeatureManager.get(FeatureType.KINGDOM);
+            List<Feature> kingdoms = FeatureManager.get(KINGDOM);
             for (Feature kingdom : kingdoms) {
                 if (kingdom == kingdoms.getFirst()) {
                     Feature playerTown = FeatureManager.get()

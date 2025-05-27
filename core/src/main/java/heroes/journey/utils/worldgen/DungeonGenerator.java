@@ -1,4 +1,4 @@
-package heroes.journey.utils.worldgen.dungeon;
+package heroes.journey.utils.worldgen;
 
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 

@@ -1,5 +1,7 @@
 package heroes.journey.initializers.base.actions;
 
+import static heroes.journey.initializers.base.Map.KINGDOM;
+import static heroes.journey.initializers.base.Map.TOWN;
 import static heroes.journey.initializers.base.actions.BaseActions.popup;
 
 import java.util.ArrayList;
@@ -27,9 +29,8 @@ import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.FeatureType;
+import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.FogUtils;
-import heroes.journey.tilemap.features.Feature;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -146,7 +147,7 @@ public class TravelActions implements InitializerInterface {
         }).requirementsMet((input) -> {
             UUID featureId = Utils.getLocation(input);
             Feature feature = FeatureManager.get().get(featureId);
-            return feature.getType() == FeatureType.KINGDOM || feature.getType() == FeatureType.TOWN ?
+            return feature.getType() == KINGDOM || feature.getType() == TOWN ?
                 ShowAction.YES :
                 ShowAction.GRAYED;
         }).costTarget(Cost.<TargetInput<UUID>>builder().stamina(2).build()).build().register();

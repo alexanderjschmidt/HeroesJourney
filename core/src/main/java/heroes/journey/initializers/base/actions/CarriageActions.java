@@ -1,5 +1,7 @@
 package heroes.journey.initializers.base.actions;
 
+import static heroes.journey.initializers.base.Map.KINGDOM;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,8 +13,7 @@ import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.FeatureType;
-import heroes.journey.tilemap.features.Feature;
+import heroes.journey.tilemap.Feature;
 
 public class CarriageActions implements InitializerInterface {
 
@@ -24,7 +25,7 @@ public class CarriageActions implements InitializerInterface {
             UUID currentLocation = Utils.getLocation(input);
             List<Feature> featuresWithCarriage = new ArrayList<>();
             for (Feature feature : FeatureManager.get().values()) {
-                if (feature.getType() != FeatureType.KINGDOM || currentLocation == feature.entityId) {
+                if (feature.getType() != KINGDOM || currentLocation == feature.entityId) {
                     continue;
                 }
                 featuresWithCarriage.add(feature);
