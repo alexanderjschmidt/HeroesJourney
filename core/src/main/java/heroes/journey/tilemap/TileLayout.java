@@ -73,7 +73,7 @@ public class TileLayout {
 
                 // Guard in case tiles[][] is smaller than layout
                 if (tileX >= tiles.length || tileY >= tiles[0].length) continue;
-                
+
                 // Get 3x3 layout block for this tile from the layoutPixmap
                 Map<Direction, Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
 
@@ -177,6 +177,27 @@ public class TileLayout {
             frames[i] = tiles[x + dx][y + dy];
         }
         return frames;
+    }
+
+    /**
+     * @return Tile from a list whose neighbors dont match it.
+     */
+    public static Tile getDot(List<Tile> tiles) {
+        for (Tile tile : tiles) {
+            if (isDot(tile)) {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    private static boolean isDot(Tile tile) {
+        for (Direction dir : Direction.getDirections()) {
+            if (tile.getNeighbor(dir) == tile.getTerrain()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

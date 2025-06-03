@@ -1,17 +1,53 @@
-package heroes.journey.tilemap.helpers;
+package heroes.journey.tilemap;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import heroes.journey.tilemap.TileLayout;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.Direction;
+import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
 
 import java.util.List;
 
-public class WangCorner {
+public class TileHelpers {
 
     public static TileLayout wangCorner = new TileLayout("Textures/wangCorner.png");
     public static TileLayout cliffTransitionTapper = new TileLayout("Textures/cliffTransitionTapper.png");
     public static TileLayout cliffTransition = new TileLayout("Textures/cliffTransition.png");
+    public static TileLayout wangEdge = new TileLayout("Textures/wangEdge.png");
+
+    public static void baseTile(Tile tile, Terrain terrain, boolean addToBaseTiles) {
+        tile.add(Direction.NORTHWEST, terrain)
+            .add(Direction.NORTH, terrain)
+            .add(Direction.NORTHEAST, terrain)
+            .add(Direction.EAST, terrain)
+            .add(Direction.SOUTHEAST, terrain)
+            .add(Direction.SOUTH, terrain)
+            .add(Direction.SOUTHWEST, terrain)
+            .add(Direction.WEST, terrain);
+        if (addToBaseTiles)
+            WaveFunctionCollapse.baseTiles.add(tile);
+    }
+
+    public static void baseTile(Tile tile, Terrain terrain) {
+        baseTile(tile, terrain, true);
+    }
+
+    /**
+     * @param terrain
+     * @param adjacentTerrain
+     * @param tiles           [y][x]
+     * @param x               top left corner
+     * @param y               top left corner
+     */
+    public static List<Tile> createEdge(
+        Terrain terrain,
+        Terrain adjacentTerrain,
+        TextureRegion[][] tiles,
+        int weight,
+        int x,
+        int y) {
+        return wangEdge.generateTiles(tiles, weight, x, y, false, terrain, adjacentTerrain);
+    }
 
     /**
      * @param base
@@ -22,7 +58,7 @@ public class WangCorner {
      * @param y                 top left cornesr
      * @return
      */
-    public static List<Tile> create(
+    public static List<Tile> createWangCorner(
         Terrain base,
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,
@@ -42,7 +78,7 @@ public class WangCorner {
      * @param x                 top left corner
      * @param y                 top left corner
      */
-    public static void createAnimated(
+    public static void createWangCornerAnimated(
         Terrain base,
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,

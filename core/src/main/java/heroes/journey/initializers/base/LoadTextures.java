@@ -10,8 +10,6 @@ public class LoadTextures implements InitializerInterface {
     public static final TextureMap Sprites = new TextureMap("sprites.png", 16, 16);
     public static final TextureMap OverworldTileset = new TextureMap("Overworld_Tileset.png", 16,
         16);
-    public static final TextureMap WangCornerTileLayout = new TextureMap("wangcorner.png", 3,
-        3);
 
     public static final String PLAYER_SPRITE = "player";
 

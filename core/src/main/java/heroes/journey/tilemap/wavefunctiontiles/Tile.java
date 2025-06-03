@@ -188,7 +188,11 @@ public abstract class Tile {
     }
 
     private String getNeighborString(Direction direction) {
-        Object neighbor = neighbors.get(direction);
+        Terrain neighbor = neighbors.get(direction);
         return neighbor != null ? neighbor.toString() : "null";
+    }
+
+    public Terrain getNeighbor(Direction direction) {
+        return neighbors.get(direction);
     }
 }

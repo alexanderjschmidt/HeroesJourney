@@ -105,13 +105,13 @@ public class Map implements InitializerInterface {
                 for (Feature kingdom : kingdoms) {
                     for (UUID townId : kingdom.connections) {
                         Feature town = FeatureManager.get().get(townId);
-                        buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdom.location, town.location);
+                        buildRoad(gameState, Tiles.pathDot, kingdom.location, town.location);
                     }
                 }
                 // Capitals to Capitals
                 for (int i = 0; i < kingdoms.size(); i++) {
                     for (int j = i + 1; j < kingdoms.size(); j++) {
-                        buildRoad(gameState, Tiles.pathTiles.getFirst(), kingdoms.get(i).location,
+                        buildRoad(gameState, Tiles.pathDot, kingdoms.get(i).location,
                             kingdoms.get(j).location);
                     }
                 }
@@ -155,11 +155,11 @@ public class Map implements InitializerInterface {
             .name("waveFunctionCollapse")
             .applyTile((gs, pos) -> {
                 WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
-                if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathTiles.getFirst()) {
+                if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathDot) {
                     for (Tile t : Tiles.pathTiles) {
                         possibleTiles.addItem(t, t.getWeight());
                     }
-                    possibleTiles.remove(Tiles.pathTiles.getFirst());
+                    possibleTiles.remove(Tiles.pathDot);
                 } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
                     surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
                     possibleTiles.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
