@@ -3,11 +3,10 @@ package heroes.journey.utils.worldgen.effects;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
 
-import java.util.function.BiConsumer;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.utils.Random;
+import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
@@ -16,8 +15,7 @@ import lombok.experimental.SuperBuilder;
 public class FeatureGenRadialMapEffect extends MapGenerationEffect {
 
     private final int distToCenter, numOfFeature;
-
-    @NonNull private final BiConsumer<GameState,Position> generateFeature;
+    @NonNull private FeatureType featureType;
 
     @Override
     public void apply(GameState gs) {
@@ -38,7 +36,7 @@ public class FeatureGenRadialMapEffect extends MapGenerationEffect {
             Position pos = findTileNear(new Position(x, y), 0, 10,
                 isLandSurrounded(gs.getMap().getTileMap()));
 
-            generateFeature.accept(gs, pos);
+            featureType.generateFeature(gs, pos);
         }
     }
 

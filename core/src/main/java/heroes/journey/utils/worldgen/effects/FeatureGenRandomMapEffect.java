@@ -5,11 +5,10 @@ import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandTile;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
 
-import java.util.function.BiConsumer;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.utils.Random;
+import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
@@ -19,7 +18,7 @@ public class FeatureGenRandomMapEffect extends MapGenerationEffect {
 
     private final int minFeature, maxFeature, generationAttempts, minDistanceFromAllFeatures;
 
-    @NonNull private final BiConsumer<GameState,Position> generateFeature;
+    @NonNull private final FeatureType featureType;
 
     @Override
     public void apply(GameState gs) {
@@ -38,7 +37,7 @@ public class FeatureGenRandomMapEffect extends MapGenerationEffect {
                 if (inBounds(x, y) && isLandTile(gs.getMap().getTileMap()[x][y]) &&
                     isFarFromFeatures(gs, minDistanceFromAllFeatures).test(candidate) &&
                     surroundedBySame(gs.getMap().getTileMap(), x, y)) {
-                    generateFeature.accept(gs, new Position(x, y));
+                    featureType.generateFeature(gs, new Position(x, y));
                     placed = true;
                     System.out.println("Placed a random feature!");
                     break;

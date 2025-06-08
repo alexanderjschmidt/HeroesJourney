@@ -4,8 +4,6 @@ import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
 
-import java.util.function.Consumer;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
@@ -22,9 +20,7 @@ import lombok.experimental.SuperBuilder;
 public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
 
     private final int minPerFeature, maxPerFeature, minDistanceFromFeature, maxDistanceFromFeature;
-    @NonNull private final FeatureType offFeature;
-
-    @NonNull private final Consumer<GenerateFeatureOffInput> generateFeature;
+    @NonNull private final FeatureType offFeature, featureType;
 
     public void apply(GameState gameState) {
         for (Feature settlement : FeatureManager.get(offFeature)) {
@@ -35,21 +31,8 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
                     maxDistanceFromFeature, isFarFromFeatures(gameState, minDistanceFromFeature).and(
                         isLandSurrounded(gameState.getMap().getTileMap())));
 
-                generateFeature.accept(new GenerateFeatureOffInput(gameState, candidate, settlement));
+                featureType.generateFeature(gameState, candidate, settlement);
             }
-        }
-    }
-
-    @Getter
-    public static class GenerateFeatureOffInput {
-        GameState gameState;
-        Position position;
-        Feature offFeature;
-
-        public GenerateFeatureOffInput(GameState gameState, Position position, Feature offFeature) {
-            this.gameState = gameState;
-            this.position = position;
-            this.offFeature = offFeature;
         }
     }
 

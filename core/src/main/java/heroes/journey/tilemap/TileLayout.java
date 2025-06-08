@@ -1,20 +1,21 @@
 package heroes.journey.tilemap;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
 
 public class TileLayout {
 
@@ -24,6 +25,7 @@ public class TileLayout {
      * The coloring of the layout should be 0,0,0 (black) for the first terrain passed in
      * (which should also be the base/center tile), and then increasing in
      * rgb (added together) values until 255,255,255 (white) the last terrain
+     * The center tile of a 3x3 area defines its weight multiplier.
      *
      * @param path
      */
@@ -36,7 +38,10 @@ public class TileLayout {
         int weight,
         int x,
         int y,
-        boolean addToDefault, int frameCount, int dist, Terrain... terrains) {
+        boolean addToDefault,
+        int frameCount,
+        int dist,
+        Terrain... terrains) {
         Texture texture = ResourceManager.get().getTexture(path);
         TextureData data = texture.getTextureData();
 
@@ -72,18 +77,20 @@ public class TileLayout {
                 System.out.println(path + " " + i + " " + j + " " + adjustedWeight);
 
                 // Guard in case tiles[][] is smaller than layout
-                if (tileX >= tiles.length || tileY >= tiles[0].length) continue;
+                if (tileX >= tiles.length || tileY >= tiles[0].length)
+                    continue;
 
                 // Get 3x3 layout block for this tile from the layoutPixmap
-                Map<Direction, Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
+                Map<Direction,Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
 
                 Tile tile;
                 if (frameCount != 0)
-                    tile = new AnimatedTile(terrains[0], adjustedWeight, addToDefault, getFrames(tiles, tileX, tileY, frameCount, dist), 0.2f);
+                    tile = new AnimatedTile(terrains[0], adjustedWeight, addToDefault,
+                        getFrames(tiles, tileX, tileY, frameCount, dist), 0.2f);
                 else {
                     tile = new BaseTile(terrains[0], adjustedWeight, addToDefault, tiles[tileX][tileY]);
                 }
-                for (Map.Entry<Direction, Terrain> entry : terrainMap.entrySet()) {
+                for (Map.Entry<Direction,Terrain> entry : terrainMap.entrySet()) {
                     tile.add(entry.getKey(), entry.getValue());
                 }
                 tileSet.add(tile);
@@ -107,7 +114,8 @@ public class TileLayout {
         int weight,
         int x,
         int y,
-        boolean addToDefault, Terrain... terrains) {
+        boolean addToDefault,
+        Terrain... terrains) {
         return generateTiles(tiles, weight, x, y, addToDefault, 0, 0, terrains);
     }
 
@@ -125,24 +133,29 @@ public class TileLayout {
         int weight,
         int x,
         int y,
-        int frameCount, int dist,
-        boolean addToDefault, Terrain... terrains) {
+        int frameCount,
+        int dist,
+        boolean addToDefault,
+        Terrain... terrains) {
         return generateTiles(tiles, weight, x, y, addToDefault, frameCount, dist, terrains);
     }
 
     private static final Direction[][] directionGrid = {
-        {Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST},
-        {Direction.WEST, null, Direction.EAST},
-        {Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST}
-    };
+        {Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST}, {Direction.WEST, null, Direction.EAST},
+        {Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST}};
 
-    private Map<Direction, Terrain> terrainMapFrom(Pixmap pixmap, int offsetX, int offsetY, Terrain[] terrains) {
-        Map<Direction, Terrain> terrainMap = new EnumMap<>(Direction.class);
+    private Map<Direction,Terrain> terrainMapFrom(
+        Pixmap pixmap,
+        int offsetX,
+        int offsetY,
+        Terrain[] terrains) {
+        Map<Direction,Terrain> terrainMap = new EnumMap<>(Direction.class);
 
         for (int dy = 0; dy < 3; dy++) {
             for (int dx = 0; dx < 3; dx++) {
                 Direction dir = directionGrid[dy][dx];
-                if (dir == null) continue;
+                if (dir == null)
+                    continue;
 
                 int pixel = pixmap.getPixel(offsetX + dx, offsetY + dy);
                 int r = (pixel >> 24) & 0xff;
@@ -150,7 +163,7 @@ public class TileLayout {
                 int b = (pixel >> 8) & 0xff;
 
                 float brightness = (r + g + b) / (3f * 255f);
-                int terrainIndex = Math.min((int) (brightness * terrains.length), terrains.length - 1);
+                int terrainIndex = Math.min((int)(brightness * terrains.length), terrains.length - 1);
 
                 terrainMap.put(dir, terrains[terrainIndex]);
             }

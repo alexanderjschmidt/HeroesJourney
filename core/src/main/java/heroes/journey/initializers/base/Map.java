@@ -11,10 +11,12 @@ import java.util.UUID;
 
 import com.artemis.EntityEdit;
 
+import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.character.PlayerComponent;
+import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
@@ -60,9 +62,33 @@ public class Map implements InitializerInterface {
     @Override
     public void init() {
         // feature types
-        KINGDOM = new FeatureType("Kingdom");
-        TOWN = new FeatureType("Town");
-        DUNGEON = new FeatureType("Dungeon");
+        KINGDOM = new FeatureType("Kingdom") {
+            @Override
+            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
+                UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
+                return new Feature(kingdomId, KINGDOM, pos);
+            }
+        };
+        TOWN = new FeatureType("Town") {
+            @Override
+            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
+                UUID townId = generateTown(gs, pos.getX(), pos.getY(), false);
+                Feature town = new Feature(townId, TOWN, pos);
+                for (Feature connection : connections)
+                    town.add(connection);
+                return town;
+            }
+        };
+        DUNGEON = new FeatureType("Dungeon") {
+            @Override
+            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
+                UUID dungeonId = generateDungeon(gs, pos.getX(), pos.getY());
+                return new Feature(dungeonId, DUNGEON, pos);
+            }
+        };
 
         // Generate Smooth Noise
         NoiseMapEffect.builder()
@@ -84,12 +110,7 @@ public class Map implements InitializerInterface {
             .name("kingdoms")
             .distToCenter(KINGDOM_DIST_TO_CENTER)
             .numOfFeature(NUM_KINGDOMS)
-            .generateFeature((gs, pos) -> {
-                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
-                UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
-                new Feature(kingdomId, KINGDOM, pos);
-                //System.out.println("Capital: " + pos.getX() + ", " + pos.getY());
-            })
+            .featureType(KINGDOM)
             .build()
             .register(MapGenerator.worldGenPhase);
         // Add Towns off of kingdoms
@@ -99,19 +120,12 @@ public class Map implements InitializerInterface {
             .maxPerFeature(townsPerKingdomMax)
             .minDistanceFromFeature(minDistanceBetweenTowns)
             .maxDistanceFromFeature(minDistanceBetweenTowns * 2)
+            .featureType(TOWN)
             .offFeature(KINGDOM)
-            .generateFeature(input -> {
-                input.getGameState()
-                    .getMap()
-                    .setEnvironment(input.getPosition().getX(), input.getPosition().getY(), Tiles.TOWN);
-                UUID townId = generateTown(input.getGameState(), input.getPosition().getX(),
-                    input.getPosition().getY(), false);
-                Feature town = new Feature(townId, TOWN, input.getPosition());
-                input.getOffFeature().add(town);
-            })
             .build()
             .register(kingdomsGen);
         // Add Paths between capitals and towns
+        // TODO make connections have a type and then a gen effect that adds paths based on connection type?
         MapGenerationEffect paths = BasicMapGenerationEffect.builder()
             .name("paths")
             .applyEffect(gameState -> {
@@ -140,15 +154,8 @@ public class Map implements InitializerInterface {
             .maxPerFeature(dungeonsPerSettlementMax)
             .minDistanceFromFeature(minDistanceFromAnyFeature)
             .maxDistanceFromFeature(maxDistanceFromSettlement)
+            .featureType(DUNGEON)
             .offFeature(TOWN)
-            .generateFeature(input -> {
-                input.getGameState()
-                    .getMap()
-                    .setEnvironment(input.getPosition().getX(), input.getPosition().getY(), Tiles.DUNGEON);
-                UUID dungeonId = generateDungeon(input.getGameState(), input.getPosition().getX(),
-                    input.getPosition().getY());
-                new Feature(dungeonId, DUNGEON, input.getPosition());
-            })
             .build()
             .register(paths);
         // Add more dungeons randomly in the wild
@@ -158,11 +165,7 @@ public class Map implements InitializerInterface {
             .maxFeature(wildDungeonsMax)
             .generationAttempts(maxAttemptsWildDungeons)
             .minDistanceFromAllFeatures(minDistanceFromAllFeatures)
-            .generateFeature((gameState, pos) -> {
-                gameState.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
-                UUID dungeonId = generateDungeon(gameState, pos.getX(), pos.getY());
-                new Feature(dungeonId, DUNGEON, pos);
-            })
+            .featureType(DUNGEON)
             .build()
             .register(dungeonsGen);
         // Wave Function collapse keeping houses and path placements

@@ -1,12 +1,13 @@
 package heroes.journey.tilemap;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
-
-import java.util.List;
 
 public class TileHelpers {
 
@@ -63,11 +64,12 @@ public class TileHelpers {
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
-        int transitionWeight,
+        int weight,
         int x,
         int y,
         boolean addToDefault) {
-        return wangCorner.generateTiles(tiles, transitionWeight, x, y, addToDefault, base, adjacentTileOuter, adjacentTileInner);
+        return wangCorner.generateTiles(tiles, weight, x, y, addToDefault, base, adjacentTileOuter,
+            adjacentTileInner);
     }
 
     /**
@@ -83,10 +85,11 @@ public class TileHelpers {
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
-        int transitionWeight,
+        int weight,
         int x,
         int y) {
-        wangCorner.generateAnimatedTiles(tiles, transitionWeight, x, y, 4, 5, true, base, adjacentTileOuter, adjacentTileInner);
+        wangCorner.generateAnimatedTiles(tiles, weight, x, y, 4, 5, true, base, adjacentTileOuter,
+            adjacentTileInner);
     }
 
     public static void cliffTransitionTapper(
@@ -94,11 +97,12 @@ public class TileHelpers {
         Terrain adjacentTileOuter,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
-        int transitionWeight,
+        int weight,
         int x,
         int y,
         boolean addToDefault) {
-        cliffTransitionTapper.generateTiles(tiles, transitionWeight * 1000, x, y, addToDefault, base, adjacentTileOuter, adjacentTileInner);
+        cliffTransitionTapper.generateTiles(tiles, weight * 1000, x, y, addToDefault, base, adjacentTileOuter,
+            adjacentTileInner);
     }
 
     public static void cliffTransition(
@@ -108,11 +112,12 @@ public class TileHelpers {
         Terrain adjacentTileOuter2,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
-        int transitionWeight,
+        int weight,
         int x,
         int y,
         boolean addToDefault) {
-        cliffTransition.generateTiles(tiles, transitionWeight * 1000, x, y, addToDefault, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
+        cliffTransition.generateTiles(tiles, weight * 1000, x, y, addToDefault, cliff1, cliff2,
+            adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 
     public static void cliffTransitionAnimated(
@@ -122,9 +127,10 @@ public class TileHelpers {
         Terrain adjacentTileOuter2,
         Terrain adjacentTileInner,
         TextureRegion[][] tiles,
-        int transitionWeight,
+        int weight,
         int x,
         int y) {
-        cliffTransition.generateAnimatedTiles(tiles, transitionWeight * 1000, x, y, 4, 4, true, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
+        cliffTransition.generateAnimatedTiles(tiles, weight * 1000, x, y, 4, 4, true, cliff1, cliff2,
+            adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 }
