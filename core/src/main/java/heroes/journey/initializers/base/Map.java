@@ -3,8 +3,8 @@ package heroes.journey.initializers.base;
 import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +27,8 @@ import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerator;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
+import heroes.journey.utils.worldgen.effects.BuildRoadBetweenFeaturesEffect;
+import heroes.journey.utils.worldgen.effects.FeatureConnectionsEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
 import heroes.journey.utils.worldgen.effects.FeatureGenRandomMapEffect;
@@ -113,6 +115,12 @@ public class Map implements InitializerInterface {
             .featureType(KINGDOM)
             .build()
             .register(MapGenerator.worldGenPhase);
+        FeatureConnectionsEffect.builder()
+            .name("kingdomConnections")
+            .featureType(KINGDOM)
+            .featurePredicate((feature, featureToConnect) -> featureToConnect.getType() == KINGDOM)
+            .build()
+            .register(kingdomsGen);
         // Add Towns off of kingdoms
         MapGenerationEffect townsGen = FeatureGenOffFeatureMapEffect.builder()
             .name("towns")
@@ -125,26 +133,16 @@ public class Map implements InitializerInterface {
             .build()
             .register(kingdomsGen);
         // Add Paths between capitals and towns
-        // TODO make connections have a type and then a gen effect that adds paths based on connection type?
-        MapGenerationEffect paths = BasicMapGenerationEffect.builder()
+        MapGenerationEffect kingdomPaths = BuildRoadBetweenFeaturesEffect.builder()
+            .name("kingdomPaths")
+            .featureType(KINGDOM)
+            .featureTypeToConnect(KINGDOM)
+            .build()
+            .register(townsGen);
+        MapGenerationEffect paths = BuildRoadBetweenFeaturesEffect.builder()
             .name("paths")
-            .applyEffect(gameState -> {
-                // Capitals to towns
-                List<Feature> kingdoms = FeatureManager.get(KINGDOM);
-                for (Feature kingdom : kingdoms) {
-                    for (UUID townId : kingdom.connections) {
-                        Feature town = FeatureManager.get().get(townId);
-                        buildRoad(gameState, Tiles.pathDot, kingdom.location, town.location);
-                    }
-                }
-                // Capitals to Capitals
-                for (int i = 0; i < kingdoms.size(); i++) {
-                    for (int j = i + 1; j < kingdoms.size(); j++) {
-                        buildRoad(gameState, Tiles.pathDot, kingdoms.get(i).location,
-                            kingdoms.get(j).location);
-                    }
-                }
-            })
+            .featureType(KINGDOM)
+            .featureTypeToConnect(TOWN)
             .build()
             .register(townsGen);
         // Add Dungeons off of towns
@@ -172,19 +170,21 @@ public class Map implements InitializerInterface {
         MapGenerationEffect wfc = WaveFunctionCollapseMapEffect.builder()
             .name("waveFunctionCollapse")
             .applyTile((gs, pos) -> {
-                WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
+                WeightedRandomPicker<Tile> possibleTilesPicker = new WeightedRandomPicker<>();
                 if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathDot) {
                     for (Tile t : Tiles.pathTiles) {
-                        possibleTiles.addItem(t, t.getWeight());
+                        possibleTilesPicker.addItem(t, t.getWeight());
                     }
-                    possibleTiles.remove(Tiles.pathDot);
+                    possibleTilesPicker.remove(Tiles.pathDot);
                 } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
                     surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
-                    possibleTiles.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
+                    possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
                 } else {
-                    return null;
+                    for (Tile t : possibleTiles) {
+                        possibleTilesPicker.addItem(t, t.getWeight());
+                    }
                 }
-                return possibleTiles;
+                return possibleTilesPicker;
             })
             .build()
             .register(MapGenerator.postWorldGenPhase);

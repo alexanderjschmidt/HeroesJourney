@@ -1,7 +1,5 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
-
 import java.util.function.BiFunction;
 
 import heroes.journey.GameState;
@@ -35,10 +33,7 @@ public class WaveFunctionCollapseMapEffect extends MapGenerationEffect {
             for (int y = 0; y < height; y++) {
                 possibleTilesMap[x][y] = applyTile.apply(gs, new Position(x, y));
                 if (possibleTilesMap[x][y] == null) {
-                    possibleTilesMap[x][y] = new WeightedRandomPicker<>();
-                    for (Tile t : possibleTiles) {
-                        possibleTilesMap[x][y].addItem(t, t.getWeight());
-                    }
+                    throw new RuntimeException("No Tile should have a null WeightedRandomPicker");
                 }
             }
         }
