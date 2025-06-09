@@ -32,6 +32,7 @@ public class TileMap implements IndexedGraph<TileNode> {
     @Getter private final int width, height;
     @Setter @Getter private Tile[][] tileMap;
     @Setter @Getter private Tile[][] environment;
+    @Setter @Getter int[][] regionMap;
     private float elapsed = 0;
 
     // For Pathfinding
@@ -42,6 +43,7 @@ public class TileMap implements IndexedGraph<TileNode> {
         height = mapSize;
         tileMap = new Tile[width][height];
         environment = new Tile[width][height];
+        regionMap = new int[width][height];
         updateGraph();
     }
 
