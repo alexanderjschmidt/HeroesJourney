@@ -24,6 +24,11 @@ import lombok.Getter;
 
 /*
  * TODO Features
+ * Update Map Generation to:
+        Add Kingdom to center of region
+        Add towns in region off of capital
+        Add other features to regions
+   Update Travel for regions
  *
  * Add Events
  *  Demon kings arrival
