@@ -4,8 +4,11 @@ apply plugin: 'org.jetbrains.kotlin.jvm'
 eclipse.project.name = appName + '-core'
 
 dependencies {
-  // Shared project dependency
+  // Shared server client project dependency
   implementation project(":shared")
+
+  // Shared mod library project dependency
+  implementation project(":modlib")
 
   // LibGDX dependencies
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -24,27 +27,7 @@ dependencies {
   implementation "net.onedaybeard.artemis:artemis-odb-serializer-json-libgdx:2.3.0"
   implementation "net.onedaybeard.artemis:artemis-odb-serializer-kryo:2.3.0"
 
-  // Kotlin scripting support
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-common:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlin_version"
-
   // Lombok
   compileOnly 'org.projectlombok:lombok:1.18.32'
   annotationProcessor 'org.projectlombok:lombok:1.18.32'
-
-  if (enableGraalNative == 'true') {
-    implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"
-  }
-}
-
-sourceSets {
-  main {
-    resources {
-      srcDir '../mods'
-      include '**/*.kts'
-    }
-  }
 }

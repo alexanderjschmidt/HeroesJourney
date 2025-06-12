@@ -1,5 +1,6 @@
 package heroes.journey.mods
 
+import heroes.journey.modding.api.GameMod
 import java.io.File
 import kotlin.script.experimental.api.ResultValue
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
@@ -36,7 +37,6 @@ object ScriptModLoader {
 
             val returnValue = (result.valueOrNull()?.returnValue as? ResultValue.Value)?.value
             if (returnValue is GameMod) {
-                println("Mod: ${returnValue.name} found")
                 mods.add(returnValue)
             } else {
                 println("Invalid mod in ${scriptFile.name}")

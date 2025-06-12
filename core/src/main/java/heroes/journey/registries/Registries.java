@@ -4,38 +4,48 @@ import heroes.journey.entities.Buff;
 import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.items.Item;
-import heroes.journey.entities.items.ItemSubType;
+import heroes.journey.modding.api.definitions.ItemSubType;
+import heroes.journey.modding.api.registration.Registry;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 
-public class Registries {
+public class Registries extends heroes.journey.modding.api.registration.Registries {
 
-    public static Registry<Item> ItemManager = new Registry<>();
-    public static Registry<ItemSubType> ItemSubTypeManager = new Registry<>();
-    public static Registry<Action> ActionManager = new Registry<>();
-    public static Registry<Buff> BuffManager = new Registry<>();
-    public static Registry<Terrain> TerrainManager = new Registry<>();
-    public static Registry<FeatureType> FeatureTypeManager = new Registry<>();
-    public static Registry<Quest> QuestManager = new Registry<>();
-    public static Registry<MapGenerationEffect> MapGenerationManager = new Registry<>();
+    private static final Registries registries = new Registries();
+
+    public static Registries get() {
+        return registries;
+    }
+
+    // Migrated to Modlib
+    public static Registry<ItemSubType> ItemSubTypeManager = registries.getItemSubTypeManager();
+
+    // Definitions still in core
+    public static Registry<Item> ItemManager = registries.itemManager;
+    public static Registry<Action> ActionManager = registries.actionManager;
+    public static Registry<Buff> BuffManager = registries.buffManager;
+    public static Registry<Terrain> TerrainManager = registries.terrainManager;
+    public static Registry<Quest> QuestManager = registries.questManager;
+    public static Registry<MapGenerationEffect> MapGenerationManager = registries.mapGenerationManager;
+    public static Registry<FeatureType> FeatureTypeManager = registries.featureTypeManager;
 
     public Registry<Item> itemManager;
-    public Registry<ItemSubType> itemSubTypeManager;
     public Registry<Action> actionManager;
     public Registry<Buff> buffManager;
     public Registry<Terrain> terrainManager;
     public Registry<Quest> questManager;
     public Registry<MapGenerationEffect> mapGenerationManager;
+    public Registry<FeatureType> featureTypeManager;
 
     public Registries() {
-        itemManager = ItemManager;
-        itemSubTypeManager = ItemSubTypeManager;
-        actionManager = ActionManager;
-        buffManager = BuffManager;
-        terrainManager = TerrainManager;
-        questManager = QuestManager;
-        mapGenerationManager = MapGenerationManager;
+        itemManager = new Registry<Item>();
+        actionManager = new Registry<Action>();
+        buffManager = new Registry<Buff>();
+        terrainManager = new Registry<Terrain>();
+        questManager = new Registry<Quest>();
+        mapGenerationManager = new Registry<MapGenerationEffect>();
+        featureTypeManager = new Registry<FeatureType>();
     }
 
 }

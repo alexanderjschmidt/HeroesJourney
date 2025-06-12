@@ -62,34 +62,21 @@ public class VoronoiRegionGenerator {
         return count;
     }
 
-    // TODO make the edges not smooth, or add jitter to make centers not lined up
     private static int[][] assignTilesToClosestSeed(boolean[][] isLand, List<Position> seeds) {
-        int width = isLand.length;
-        int height = isLand[0].length;
-        int[][] regionMap = new int[width][height];
-        for (int x = 0; x < width; x++)
+        int[][] regionMap = new int[isLand.length][isLand[0].length];
+        for (int x = 0; x < isLand.length; x++)
             Arrays.fill(regionMap[x], -1);
 
-        Random noiseSeed = Random.get();
-        double frequency = 0.1;   // 1 / (noise "wavelength") – tweak this!
-        double warpAmount = 0.5;   // how strongly it warps – tweak this!
-
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = 0; x < isLand.length; x++) {
+            for (int y = 0; y < isLand[0].length; y++) {
                 if (!isLand[x][y])
                     continue;
 
                 double closestDist = Double.MAX_VALUE;
                 int closestSeedIndex = -1;
-
                 for (int i = 0; i < seeds.size(); i++) {
                     Position s = seeds.get(i);
                     double d = distSq(x, y, s.getX(), s.getY());
-
-                    // Add distance bias from value noise
-                    double noise = valueNoise(x, y, frequency, noiseSeed) - 0.5;
-                    d += d * noise * warpAmount;
-
                     if (d < closestDist) {
                         closestDist = d;
                         closestSeedIndex = i;
@@ -101,32 +88,6 @@ public class VoronoiRegionGenerator {
         }
 
         return regionMap;
-    }
-
-    private static double valueNoise(double x, double y, double frequency, Random baseRandom) {
-        x *= frequency;
-        y *= frequency;
-
-        int x0 = (int)Math.floor(x);
-        int y0 = (int)Math.floor(y);
-        int x1 = x0 + 1;
-        int y1 = y0 + 1;
-
-        double sx = x - x0;
-        double sy = y - y0;
-
-        double v00 = baseRandom.nextDouble();
-        double v10 = baseRandom.nextDouble();
-        double v01 = baseRandom.nextDouble();
-        double v11 = baseRandom.nextDouble();
-
-        double ix0 = lerp(v00, v10, sx);
-        double ix1 = lerp(v01, v11, sx);
-        return lerp(ix0, ix1, sy);
-    }
-
-    private static double lerp(double a, double b, double t) {
-        return a + (b - a) * t;
     }
 
     private static double distSq(int x1, int y1, int x2, int y2) {

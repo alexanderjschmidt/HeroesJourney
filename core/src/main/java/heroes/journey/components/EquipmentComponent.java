@@ -1,15 +1,15 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.ItemManager;
-
-import java.util.UUID;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.base.Items;
 import heroes.journey.systems.GameWorld;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
+
+import static heroes.journey.registries.Registries.ItemManager;
 
 @Setter
 @Accessors(fluent = true, chain = true)
@@ -29,35 +29,35 @@ public class EquipmentComponent extends PooledClonableComponent<EquipmentCompone
     }
 
     public Item head() {
-        return ItemManager.get(head);
+        return ItemManager.getOrNull(head);
     }
 
     public Item chest() {
-        return ItemManager.get(chest);
+        return ItemManager.getOrNull(chest);
     }
 
     public Item legs() {
-        return ItemManager.get(legs);
+        return ItemManager.getOrNull(legs);
     }
 
     public Item boots() {
-        return ItemManager.get(boots);
+        return ItemManager.getOrNull(boots);
     }
 
     public Item handOne() {
-        return ItemManager.get(handOne);
+        return ItemManager.getOrNull(handOne);
     }
 
     public Item handTwo() {
-        return ItemManager.get(handTwo);
+        return ItemManager.getOrNull(handTwo);
     }
 
     public Item accessoryOne() {
-        return ItemManager.get(accessoryOne);
+        return ItemManager.getOrNull(accessoryOne);
     }
 
     public Item accessoryTwo() {
-        return ItemManager.get(accessoryTwo);
+        return ItemManager.getOrNull(accessoryTwo);
     }
 
     public static EquipmentComponent get(GameWorld world, UUID entityId) {

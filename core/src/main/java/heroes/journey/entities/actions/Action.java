@@ -1,13 +1,7 @@
 package heroes.journey.entities.actions;
 
-import static heroes.journey.registries.Registries.ActionManager;
-
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.ActionResult;
@@ -18,21 +12,36 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+import static heroes.journey.registries.Registries.ActionManager;
+
 @SuperBuilder(toBuilder = true)
 public class Action implements InfoProvider {
 
-    @NonNull @Getter protected final String name;
-    @Builder.Default protected final String displayName = null;
-    @Builder.Default @Getter protected final String description = "";
-    @Builder.Default @Getter protected final boolean returnsActionList = false;
-    @Builder.Default protected Consumer<ActionInput> onHover = (input) -> {
+    @NonNull
+    @Getter
+    protected final String name;
+    @Builder.Default
+    protected final String displayName = null;
+    @Builder.Default
+    @Getter
+    protected final String description = "";
+    @Builder.Default
+    @Getter
+    protected final boolean returnsActionList = false;
+    @Builder.Default
+    protected Consumer<ActionInput> onHover = (input) -> {
     };
-    protected Function<ActionInput,ActionResult> onSelect;
+    protected Function<ActionInput, ActionResult> onSelect;
     // This is used for complex actions that need to be simplified for the AI
-    protected Function<ActionInput,ActionResult> onSelectAI;
-    @Builder.Default protected Function<ActionInput,ShowAction> requirementsMet = (input) -> ShowAction.YES;
+    protected Function<ActionInput, ActionResult> onSelectAI;
+    @Builder.Default
+    protected Function<ActionInput, ShowAction> requirementsMet = (input) -> ShowAction.YES;
 
-    @Builder.Default protected Cost<ActionInput> cost = Cost.builder().build();
+    @Builder.Default
+    protected Cost<ActionInput> cost = Cost.builder().build();
 
     public ShowAction requirementsMet(ActionInput input) {
         return requirementsMet.apply(input).and(cost.requirementsMet(input));

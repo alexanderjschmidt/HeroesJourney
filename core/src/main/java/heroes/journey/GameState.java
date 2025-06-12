@@ -1,17 +1,7 @@
 package heroes.journey;
 
-import static heroes.journey.utils.serializers.Serializers.jsonGameState;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
@@ -37,17 +27,20 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.serializers.ActionRecordSerializer;
-import heroes.journey.utils.serializers.FeatureSerializer;
-import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
-import heroes.journey.utils.serializers.PlayerInfoSerializer;
-import heroes.journey.utils.serializers.PositionSerializer;
-import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
-import heroes.journey.utils.serializers.UUIDSerializer;
+import heroes.journey.utils.serializers.*;
 import lombok.Getter;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.utils.serializers.Serializers.jsonGameState;
+
 @Getter
-public class GameState implements Cloneable {
+public class GameState implements Cloneable, heroes.journey.modding.api.gamestate.GameState {
 
     private static GameState gameState;
     private int width, height;
@@ -56,7 +49,8 @@ public class GameState implements Cloneable {
     private TileMap map;
     private History history;
     private int turn;
-    @Getter private UUID currentEntity;
+    @Getter
+    private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
 

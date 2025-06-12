@@ -1,0 +1,21 @@
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-modlib'
+
+dependencies {
+  api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  api "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlin_version"
+  api "org.jetbrains.kotlin:kotlin-scripting-common:$kotlin_version"
+  api "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlin_version"
+  api "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlin_version"
+}
+
+sourceSets {
+  main {
+    resources {
+      srcDir '../mods'
+      include '**/*.kts'
+    }
+  }
+}

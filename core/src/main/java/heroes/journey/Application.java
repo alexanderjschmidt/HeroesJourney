@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import heroes.journey.mods.GameMod;
-import heroes.journey.mods.ModContext;
+import heroes.journey.modding.api.GameContext;
+import heroes.journey.modding.api.GameMod;
 import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.registries.Registries;
 import heroes.journey.ui.screens.BattleScreen;
@@ -105,8 +105,9 @@ public class Application extends Game {
         setScreen(new LoadingScreen(this));
 
         List<GameMod> mods = ScriptModLoader.INSTANCE.loadModsFrom(new File("mods"));
+        GameContext context = new GameContext(GameState.global(), Registries.get());
         for (GameMod mod : mods) {
-            mod.onLoad(new ModContext(mod.toString(), GameState.global(), new Registries()));
+            mod.load(context);
         }
     }
 
