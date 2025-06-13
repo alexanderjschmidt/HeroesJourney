@@ -1,15 +1,8 @@
 package heroes.journey.entities.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Consumer;
-import java.util.function.Function;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
@@ -18,37 +11,44 @@ import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.utils.art.ResourceManager;
-import lombok.Builder;
 
-@Builder
-public class Cost<I extends ActionInput> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
-    @Builder.Default private int stamina = 0, mana = 0, health = 0, gold = 0;
-    @Builder.Default protected Consumer<I> onUse = (input) -> {
-    };
-    @Builder.Default protected Function<I,ShowAction> requirementsMet = (input) -> ShowAction.YES;
-    @Builder.Default protected Function<I,Double> multiplier = (input) -> 1.0;
+public class Cost {
+    private final int stamina;
+    private final int mana;
+    private final int health;
+    private final int gold;
 
-    public void onUse(I input) {
+    public Cost(int stamina, int mana, int health, int gold) {
+        this.stamina = stamina;
+        this.mana = mana;
+        this.health = health;
+        this.gold = gold;
+    }
+
+    public Cost() {
+        this(0, 0, 0, 0);
+    }
+
+    public void onUse(ActionInput input) {
         GameState gameState = input.getGameState();
         UUID userId = input.getEntityId();
         if (userId == null) {
             return;
         }
 
-        double mult = multiplier.apply(input);
-
-        StatsUtils.adjustStamina(gameState, userId, (int)-(stamina * mult));
-        StatsUtils.adjustMana(gameState, userId, (int)-(mana * mult));
-        StatsUtils.adjustHealth(gameState, userId, (int)-(health * mult));
+        StatsUtils.adjustStamina(gameState, userId, -(stamina));
+        StatsUtils.adjustMana(gameState, userId, -(mana));
+        StatsUtils.adjustHealth(gameState, userId, -(health));
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
-        inventoryComponent.adjustGold((int)-(gold * mult));
-
-        onUse.accept(input);
+        inventoryComponent.adjustGold(-(gold));
     }
 
-    public ShowAction requirementsMet(I input) {
+    public ShowAction requirementsMet(ActionInput input) {
         GameState gameState = input.getGameState();
         UUID userId = input.getEntityId();
         if (userId == null) {
@@ -56,26 +56,24 @@ public class Cost<I extends ActionInput> {
         }
         Attributes statsComponent = StatsComponent.get(gameState.getWorld(), userId);
 
-        double mult = multiplier.apply(input);
-
+        assert statsComponent != null;
         ShowAction enoughStamina =
-            statsComponent.get(Stats.STAMINA) > this.stamina * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.STAMINA) > this.stamina ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughMana =
-            statsComponent.get(Stats.MANA) >= this.mana * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.MANA) >= this.mana ? ShowAction.YES : ShowAction.GRAYED;
         ShowAction enoughHealth =
-            statsComponent.get(Stats.HEALTH) >= this.health * mult ? ShowAction.YES : ShowAction.GRAYED;
+            statsComponent.get(Stats.HEALTH) >= this.health ? ShowAction.YES : ShowAction.GRAYED;
 
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         ShowAction enoughGold =
-            inventoryComponent.getGold() >= this.gold * mult ? ShowAction.YES : ShowAction.GRAYED;
+            inventoryComponent.getGold() >= this.gold ? ShowAction.YES : ShowAction.GRAYED;
 
         //System.out.println(enoughStamina);
         //System.out.println(enoughMana);
         //System.out.println(enoughHealth);
         //System.out.println(enoughGold);
 
-        return requirementsMet.apply(input)
-            .and(enoughStamina)
+        return enoughStamina
             .and(enoughMana)
             .and(enoughHealth)
             .and(enoughGold);
@@ -100,29 +98,27 @@ public class Cost<I extends ActionInput> {
         table.defaults().left();
     }
 
-    public Table getDisplay(I input) {
+    public Table getDisplay() {
         if (staminaCost == null) {
             initDisplay();
         }
         table.clear();
         List<Label> costLabels = new ArrayList<>();
 
-        double mult = multiplier.apply(input);
-
-        if (stamina * mult != 0) {
-            staminaCost.setText("S: " + (stamina * mult));
+        if (stamina != 0) {
+            staminaCost.setText("S: " + (stamina));
             costLabels.add(staminaCost);
         }
-        if (mana * mult != 0) {
-            manaCost.setText("M: " + (mana * mult));
+        if (mana != 0) {
+            manaCost.setText("M: " + (mana));
             costLabels.add(manaCost);
         }
-        if (health * mult != 0) {
-            healthCost.setText("H: " + (health * mult));
+        if (health != 0) {
+            healthCost.setText("H: " + (health));
             costLabels.add(healthCost);
         }
-        if (gold * mult != 0) {
-            goldCost.setText("G: " + (gold * mult));
+        if (gold != 0) {
+            goldCost.setText("G: " + (gold));
             costLabels.add(goldCost);
         }
         for (int i = 0; i < costLabels.size(); i++) {

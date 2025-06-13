@@ -1,48 +1,40 @@
 package heroes.journey.entities.actions;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.inputs.TargetInput;
+import heroes.journey.entities.actions.results.AIOnSelectNotFound;
+import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.ActionResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
-import heroes.journey.entities.actions.inputs.ActionInput;
-import heroes.journey.entities.actions.inputs.TargetInput;
-import heroes.journey.entities.actions.results.ActionListResult;
-import heroes.journey.entities.actions.results.ActionResult;
-import lombok.Builder;
-import lombok.experimental.SuperBuilder;
+import static heroes.journey.registries.Registries.ActionManager;
 
-@SuperBuilder(toBuilder = true, builderMethodName = "targetBuilder")
-public class TargetAction<I> extends Action {
+public abstract class TargetAction<I> extends Action {
 
-    protected Function<ActionInput,List<I>> getTargets;
-    @Builder.Default protected Consumer<TargetInput<I>> onHoverTarget = (input) -> {
-    };
-    protected Function<TargetInput<I>,ActionResult> onSelectTarget;
-    // This is used for complex actions that need to be simplified for the AI
-    protected Function<TargetInput<I>,ActionResult> onSelectAITarget;
-    @Builder.Default
-    protected Function<TargetInput<I>,ShowAction> requirementsMetTarget = (input) -> ShowAction.YES;
-    @Builder.Default protected Cost<TargetInput<I>> costTarget = Cost.<TargetInput<I>>builder().build();
+    public TargetAction(String name, String displayName, String description, Cost cost) {
+        super(name, displayName, description, true, cost);
+    }
 
-    @Builder.Default protected Function<TargetInput<I>,String> getTargetDisplayName = Object::toString;
+    public abstract List<I> getTargets(ActionInput input);
 
-    @Builder.Default protected final boolean returnsActionList = true;
-
-    @Override
-    public ShowAction requirementsMet(ActionInput input) {
-        List<I> options = getTargets.apply(input);
-        if (options.isEmpty())
-            return ShowAction.GRAYED;
-        return requirementsMet.apply(input);
+    public String getTargetDisplayName(TargetInput<I> input) {
+        return input.getInput().toString();
     }
 
     @Override
-    public ActionResult onSelect(ActionInput input) {
+    public ShowAction requirementsMet(ActionInput input) {
+        List<I> options = getTargets(input);
+        if (options.isEmpty())
+            return ShowAction.GRAYED;
+        return super.requirementsMet(input);
+    }
+
+    @Override
+    public ActionResult internalOnSelect(ActionInput input) {
         List<Action> actionOptions = new ArrayList<>();
-        List<I> options = getTargets.apply(input);
+        List<I> options = getTargets(input);
         for (I option : options) {
             TargetInput<I> targetInput = new TargetInput<>(input.getGameState(), input.getEntityId(), option);
             actionOptions.add(getAction(targetInput));
@@ -51,12 +43,12 @@ public class TargetAction<I> extends Action {
     }
 
     public Action getActionFromSelected(ActionInput inputBase, String selectedOption) {
-        List<I> options = getTargets.apply(inputBase);
+        List<I> options = getTargets(inputBase);
         for (I option : options) {
             if (option.toString().equals(selectedOption)) {
                 TargetInput<I> targetInput = new TargetInput<>(inputBase.getGameState(),
                     inputBase.getEntityId(), option);
-                costTarget.onUse(targetInput);
+                cost.onUse(targetInput);
                 return getAction(targetInput);
             }
         }
@@ -64,17 +56,45 @@ public class TargetAction<I> extends Action {
     }
 
     private Action getAction(TargetInput<I> targetInput) {
-        String displayName = getTargetDisplayName.apply(targetInput);
+        String displayName = getTargetDisplayName(targetInput);
         I option = targetInput.getInput();
-        return Action.builder()
-            .name(name + "," + option.toString())
-            .displayName(displayName)
-            .onSelect((input) -> onSelectTarget.apply(targetInput))
-            .onSelectAI((input) -> onSelectAITarget.apply(targetInput))
-            .onHover((input) -> onHoverTarget.accept(targetInput))
-            .requirementsMet((input) -> requirementsMetTarget.apply(targetInput)
-                .and(costTarget.requirementsMet(targetInput)))
-            .build();
+        return new Action(
+            name + "," + option.toString(),
+            displayName,
+            "",
+            false,
+            null
+        ) {
+
+            public ShowAction internalRequirementsMet(ActionInput input) {
+                return requirementsMetTarget(targetInput);
+            }
+
+            public void internalOnHover(ActionInput input) {
+                onHoverTarget(targetInput);
+            }
+
+            public ActionResult internalOnSelect(ActionInput input) {
+                return onSelectTarget(targetInput);
+            }
+
+            public ActionResult internalOnSelectAI(ActionInput input) {
+                return onSelectAITarget(targetInput);
+            }
+        };
+    }
+
+    protected ShowAction requirementsMetTarget(TargetInput<I> targetInput) {
+        return ShowAction.YES;
+    }
+
+    protected ActionResult onSelectAITarget(TargetInput<I> targetInput) {
+        return new AIOnSelectNotFound();
+    }
+
+    protected abstract ActionResult onSelectTarget(TargetInput<I> targetInput);
+
+    protected void onHoverTarget(TargetInput<I> targetInput) {
     }
 
     public TargetAction<I> register() {

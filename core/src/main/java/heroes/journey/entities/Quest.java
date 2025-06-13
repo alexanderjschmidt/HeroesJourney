@@ -1,23 +1,34 @@
 package heroes.journey.entities;
 
-import static heroes.journey.registries.Registries.QuestManager;
+import heroes.journey.components.character.PlayerComponent;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import lombok.NonNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import heroes.journey.components.character.PlayerComponent;
-import heroes.journey.entities.actions.inputs.ActionInput;
-import lombok.Builder;
-import lombok.NonNull;
+import static heroes.journey.registries.Registries.QuestManager;
 
-@Builder
 public class Quest {
+    @NonNull
+    private final String name;
+    @NonNull
+    private final Consumer<ActionInput> onComplete;
+    @NonNull
+    private final Predicate<ActionInput> isComplete;
+    private final int fameReward;
 
-    @NonNull private final String name;
-    @NonNull private final Consumer<ActionInput> onComplete;
-    @NonNull private final Predicate<ActionInput> isComplete;
-    @Builder.Default private final int fameReward = 0;
+    public Quest(String name, Consumer<ActionInput> onComplete, Predicate<ActionInput> isComplete, int fameReward) {
+        this.name = name;
+        this.onComplete = onComplete;
+        this.isComplete = isComplete;
+        this.fameReward = fameReward;
+    }
+
+    public Quest(String name, Consumer<ActionInput> onComplete, Predicate<ActionInput> isComplete) {
+        this(name, onComplete, isComplete, 0);
+    }
 
     public void onComplete(ActionInput input) {
         PlayerComponent playerComponent = PlayerComponent.get(input.getGameState().getWorld(),

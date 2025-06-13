@@ -19,16 +19,10 @@ public class MapGenerator {
     public static MapGenerationEffect noisePhase, worldGenPhase, postWorldGenPhase, entityPhase;
 
     static {
-        noisePhase = NoOpMapGenerationEffect.builder().name("NoisePhase").build().register();
-        worldGenPhase = NoOpMapGenerationEffect.builder().name("WorldGenPhase").build().register(noisePhase);
-        postWorldGenPhase = NoOpMapGenerationEffect.builder()
-            .name("PostWorldGenPhase")
-            .build()
-            .register(worldGenPhase);
-        entityPhase = NoOpMapGenerationEffect.builder()
-            .name("EntityPhase")
-            .build()
-            .register(postWorldGenPhase);
+        noisePhase = new NoOpMapGenerationEffect("NoisePhase").register();
+        worldGenPhase = new NoOpMapGenerationEffect("WorldGenPhase").register(noisePhase);
+        postWorldGenPhase = new NoOpMapGenerationEffect("PostWorldGenPhase").register(worldGenPhase);
+        entityPhase = new NoOpMapGenerationEffect("EntityPhase").register(postWorldGenPhase);
     }
 
     public static void initMapGeneration(GameState gameState, MapData mapData, boolean loading) {

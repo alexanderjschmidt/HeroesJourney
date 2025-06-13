@@ -1,8 +1,5 @@
 package heroes.journey.utils.worldgen.effects;
 
-import java.util.List;
-import java.util.function.BiPredicate;
-
 import heroes.journey.GameState;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.tilemap.Feature;
@@ -10,18 +7,23 @@ import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.SuperBuilder;
+
+import java.util.List;
+import java.util.function.BiPredicate;
 
 @Getter
-@SuperBuilder
 public class FeatureConnectionsEffect extends MapGenerationEffect {
+    @NonNull
+    private final FeatureType featureType;
+    @NonNull
+    private final BiPredicate<Feature, Feature> featurePredicate;
 
-    @NonNull private final FeatureType featureType;
-
-    /**
-     * first Feature is feature your looking at, second is the one to connect to
-     */
-    @NonNull private final BiPredicate<Feature,Feature> featurePredicate;
+    public FeatureConnectionsEffect(String name, FeatureType featureType,
+                                    BiPredicate<Feature, Feature> featurePredicate) {
+        super(name);
+        this.featureType = featureType;
+        this.featurePredicate = featurePredicate;
+    }
 
     public void apply(GameState gameState) {
         List<Feature> features = FeatureManager.get(featureType);
@@ -32,5 +34,4 @@ public class FeatureConnectionsEffect extends MapGenerationEffect {
             }
         }
     }
-
 }

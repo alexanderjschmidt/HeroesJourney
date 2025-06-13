@@ -11,14 +11,8 @@ public class Quests implements InitializerInterface {
 
     @Override
     public void init() {
-        delve = Quest.builder()
-            .name("Delve a dungeon")
-            .fameReward(10)
-            .onComplete((input) -> Utils.addItem(input, Items.ironSword, 1))
-            .isComplete((input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(),
-                DelveAction.delve))
-            .build()
-            .register();
+        delve = new Quest("Delve a dungeon", (input) -> Utils.addItem(input, Items.ironSword, 1), (input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(),
+            DelveAction.delve), 10);
     }
 
 }

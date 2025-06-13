@@ -1,9 +1,5 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
@@ -13,14 +9,32 @@ import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.experimental.SuperBuilder;
+
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.*;
 
 @Getter
-@SuperBuilder
 public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
+    private final int minPerFeature;
+    private final int maxPerFeature;
+    private final int minDistanceFromFeature;
+    private final int maxDistanceFromFeature;
+    @NonNull
+    private final FeatureType offFeature;
+    @NonNull
+    private final FeatureType featureType;
 
-    private final int minPerFeature, maxPerFeature, minDistanceFromFeature, maxDistanceFromFeature;
-    @NonNull private final FeatureType offFeature, featureType;
+    public FeatureGenOffFeatureMapEffect(String name, int minPerFeature,
+                                         int maxPerFeature, int minDistanceFromFeature,
+                                         int maxDistanceFromFeature, FeatureType offFeature,
+                                         FeatureType featureType) {
+        super(name);
+        this.minPerFeature = minPerFeature;
+        this.maxPerFeature = maxPerFeature;
+        this.minDistanceFromFeature = minDistanceFromFeature;
+        this.maxDistanceFromFeature = maxDistanceFromFeature;
+        this.offFeature = offFeature;
+        this.featureType = featureType;
+    }
 
     public void apply(GameState gameState) {
         for (Feature settlement : FeatureManager.get(offFeature)) {
@@ -35,5 +49,4 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
             }
         }
     }
-
 }

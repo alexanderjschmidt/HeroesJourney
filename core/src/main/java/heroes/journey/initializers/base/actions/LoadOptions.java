@@ -10,19 +10,13 @@ public class LoadOptions implements InitializerInterface {
 
     @Override
     public void init() {
-        debugOption = BooleanOptionAction.builder().toggle(false).name("Debug").build().register();
+        debugOption = new BooleanOptionAction("Debug", false).register();
         Options.addOption(debugOption);
-        autoEndTurnOption = BooleanOptionAction.builder()
-            .toggle(false)
-            .name("Auto End Turn")
-            .build()
-            .register();
+        
+        autoEndTurnOption = new BooleanOptionAction("Auto End Turn", false).register();
         Options.addOption(autoEndTurnOption);
-        backgroundMusic = BooleanOptionAction.builder()
-            .toggle(false)
-            .name("Music")
-            .build()
-            .register();
+        
+        backgroundMusic = new BooleanOptionAction("Music", false).register();
         Options.addOption(backgroundMusic);
     }
 }

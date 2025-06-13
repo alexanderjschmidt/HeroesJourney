@@ -4,11 +4,14 @@ import heroes.journey.Application;
 import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
+import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.*;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.inputs.TargetInput;
 import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
-import heroes.journey.entities.Quest;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Buffs;
 import heroes.journey.initializers.utils.StatsUtils;
@@ -17,6 +20,7 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BaseActions implements InitializerInterface {
@@ -29,74 +33,97 @@ public class BaseActions implements InitializerInterface {
 
     @Override
     public void init() {
-        openActionMenu = Action.builder()
-            .name("THIS SHOULD NEVER BE DISPLAYED")
-            .returnsActionList(true)
-            .requirementsMet((input) -> ShowAction.NO)
-            .onSelect((input) -> new ActionListResult(
-                ActionMenu.getActionsFor(input.getGameState(), input.getEntityId())))
-            .build()
-            .register();
-        exit_game = Action.builder().name("Exit Game").onSelect((input) -> {
-            Application.get().setScreen(new MainMenuScreen(Application.get()));
-            return null;
-        }).build().register();
+        openActionMenu = new Action("THIS SHOULD NEVER BE DISPLAYED", "THIS SHOULD NEVER BE DISPLAYED", "", true, null) {
+            @Override
+            public ShowAction internalRequirementsMet(ActionInput input) {
+                return ShowAction.NO;
+            }
+
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                return new ActionListResult(ActionMenu.getActionsFor(input.getGameState(), input.getEntityId()));
+            }
+        }.register();
+
+        exit_game = new Action("Exit Game", "Exit Game", "Return to main menu", false, null) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                Application.get().setScreen(new MainMenuScreen(Application.get()));
+                return null;
+            }
+        }.register();
         TeamActions.addTeamAction(exit_game);
-        end_turn = Action.builder().name("End Turn").onSelect((input) -> {
-            UUID entityId = input.getGameState().getCurrentEntity();
-            input.getGameState()
-                .getWorld()
-                .edit(entityId)
-                .create(ActionComponent.class)
-                .action(BaseActions.rest);
-            HUD.get().revertToInitialState();
-            return null;
-        }).build().register();
+
+        end_turn = new Action("End Turn", "End Turn", "End your turn", false, null) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                UUID entityId = input.getGameState().getCurrentEntity();
+                input.getGameState()
+                    .getWorld()
+                    .edit(entityId)
+                    .create(ActionComponent.class)
+                    .action(BaseActions.rest);
+                HUD.get().revertToInitialState();
+                return null;
+            }
+        }.register();
         TeamActions.addTeamAction(end_turn);
-        save = Action.builder().name("Save").description("Save Game").onSelect((input) -> {
-            input.getGameState().save("save", true);
-            return new StringResult("Your Game has been Saved!");
-        }).build().register();
+
+        save = new Action("Save", "Save", "Save Game", false, null) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                input.getGameState().save("save", true);
+                return new StringResult("Your Game has been Saved!");
+            }
+        }.register();
         TeamActions.addTeamAction(save);
-        popup = Action.builder()
-            .name("Popup")
-            .onSelect((input) -> new StringResult(popupMessage))
-            .build()
-            .register();
-        rest = Action.builder()
-            .name("Rest")
-            .description("Do nothing, resting your body and mind.")
-            .onSelect((input) -> {
+
+        popup = new Action("Popup", "Popup", "", false, null) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                return new StringResult(popupMessage);
+            }
+        }.register();
+
+        rest = new Action("Rest", "Rest", "Do nothing, resting your body and mind.", false, null) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
                 BuffsComponent buffsComponent = BuffsComponent.get(input.getGameState().getWorld(),
                     input.getEntityId());
                 buffsComponent.add(Buffs.rested);
                 return new EndTurnResult();
-            })
-            .build()
-            .register();
+            }
+        }.register();
 
-        workout = CooldownAction.builder()
-            .name("Work out")
-            .description("Lift weights, gain body")
-            .turnCooldown(1)
-            .onSelect((input) -> StatsUtils.adjustBody(input.getGameState(), input.getEntityId(), 1))
-            .build()
-            .register();
-        study = CooldownAction.builder()
-            .name("Study")
-            .description("Expand your mind, increasing your potential")
-            .turnCooldown(2)
-            .onSelect(((input) -> StatsUtils.adjustMind(input.getGameState(), input.getEntityId(), 1)))
-            .build()
-            .register();
-        questBoard = TargetAction.<Quest>targetBuilder()
-            .name("Quest Board")
-            .description("See what the people need help with")
-            .getTargets((input) -> {
+        workout = new CooldownAction("Work out", "Work out", "Lift weights, gain body", false, new Cost(0, 0, 0, 0), 1, false) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                return StatsUtils.adjustBody(input.getGameState(), input.getEntityId(), 1);
+            }
+        }.register();
+
+        study = new CooldownAction("Study", "Study", "Expand your mind, increasing your potential", false, new Cost(0, 0, 0, 0), 2, false) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
+                return StatsUtils.adjustMind(input.getGameState(), input.getEntityId(), 1);
+            }
+        }.register();
+
+        // TODO FIX
+        questBoard = new TargetAction<Quest>("Quest Board", "Quest Board", "See what the people need help with", new Cost(0, 0, 0, 0)) {
+            @Override
+            public List<Quest> getTargets(ActionInput input) {
                 UUID town = Utils.getLocation(input);
                 return QuestsComponent.get(input.getGameState().getWorld(), town).getQuests();
-            })
-            .onSelectTarget((input) -> {
+            }
+
+            @Override
+            public String getTargetDisplayName(TargetInput<Quest> input) {
+                return input.getInput().toString();
+            }
+
+            @Override
+            protected ActionResult onSelectTarget(TargetInput<Quest> input) {
                 UUID town = Utils.getLocation(input);
                 QuestsComponent factionsQuestsComponent = QuestsComponent.get(input.getGameState().getWorld(),
                     town);
@@ -107,9 +134,8 @@ public class BaseActions implements InitializerInterface {
                         .addQuest(input.getInput());
                 }
                 return new EndTurnResult();
-            })
-            .build()
-            .register();
+            }
+        }.register();
     }
 
 }

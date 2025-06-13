@@ -7,6 +7,8 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.utils.DefaultContainer;
 import heroes.journey.entities.actions.CooldownAction;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 import heroes.journey.initializers.InitializerInterface;
@@ -20,11 +22,9 @@ public class DelveAction implements InitializerInterface {
 
     @Override
     public void init() {
-        DelveAction.delve = CooldownAction.builder()
-            .name("Delve")
-            .turnCooldown(5)
-            .factionCooldown(true)
-            .onSelect((input) -> {
+        DelveAction.delve = new CooldownAction("Delve", "Delve", "Explore a dungeon", false, null, 5, true) {
+            @Override
+            public ActionResult internalOnSelect(ActionInput input) {
                 GameState gs = input.getGameState();
                 UUID e = input.getEntityId();
                 UUID dungeon = Utils.getLocation(input);
@@ -67,7 +67,6 @@ public class DelveAction implements InitializerInterface {
                                 .append("x ")
                                 .append(item.toString())
                                 .append("\n");
-                            ;
                         }
                     }
                     PlayerComponent playerComponent = PlayerComponent.get(gs.getWorld(), e);
@@ -77,8 +76,7 @@ public class DelveAction implements InitializerInterface {
                     }
                 }
                 return new StringResult(log.toString());
-            })
-            .build()
-            .register();
+            }
+        };
     }
 }

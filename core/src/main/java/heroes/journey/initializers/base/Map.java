@@ -1,20 +1,6 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Tiles.water;
-import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.artemis.EntityEdit;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -32,16 +18,20 @@ import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.MapGenerator;
-import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
-import heroes.journey.utils.worldgen.effects.BuildRoadBetweenFeaturesEffect;
-import heroes.journey.utils.worldgen.effects.FeatureConnectionsEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenRandomMapEffect;
-import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
-import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
+import heroes.journey.utils.worldgen.effects.*;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.Tiles.water;
+import static heroes.journey.initializers.base.factories.EntityFactory.*;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -101,35 +91,17 @@ public class Map implements InitializerInterface {
         };
 
         // Generate Smooth Noise
-        NoiseMapEffect.builder()
-            .name("base-noise")
-            .amplitude(50)
-            .roughness(.7f)
-            .octaves(5)
-            .smooths(2)
-            .build()
-            .register(MapGenerator.noisePhase);
+        new NoiseMapEffect("base-noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
+
         // Add Monsters
-        BasicMapGenerationEffect.builder()
-            .name("monsters")
-            .applyEffect(gs -> MonsterFactory.init(gs.getWorld()))
-            .build()
-            .register(MapGenerator.noisePhase);
+        new BasicMapGenerationEffect("monsters", gs -> MonsterFactory.init(gs.getWorld())).register(MapGenerator.noisePhase);
+
         // Capitals
-        MapGenerationEffect kingdomsGen = FeatureGenRadialMapEffect.builder()
-            .name("kingdoms")
-            .distToCenter(KINGDOM_DIST_TO_CENTER)
-            .numOfFeature(NUM_KINGDOMS)
-            .featureType(KINGDOM)
-            .build()
-            .register(MapGenerator.worldGenPhase);
-        FeatureConnectionsEffect.builder()
-            .name("kingdomConnections")
-            .featureType(KINGDOM)
-            .featurePredicate((feature, featureToConnect) -> featureToConnect.getType() == KINGDOM)
-            .build()
-            .register(kingdomsGen);
-        BasicMapGenerationEffect.builder().applyEffect(gs -> {
+        MapGenerationEffect kingdomsGen = new FeatureGenRadialMapEffect("kingdoms", KINGDOM_DIST_TO_CENTER, NUM_KINGDOMS, KINGDOM).register(MapGenerator.worldGenPhase);
+
+        new FeatureConnectionsEffect("kingdomConnections", KINGDOM, (feature, featureToConnect) -> featureToConnect.getType() == KINGDOM).register(kingdomsGen);
+
+        new BasicMapGenerationEffect("voronoiRegions", gs -> {
             List<Position> kingdoms = new ArrayList<>();
             for (Feature kingdom : FeatureManager.get(KINGDOM)) {
                 kingdoms.add(kingdom.location);
@@ -147,76 +119,42 @@ public class Map implements InitializerInterface {
             buildRegionsFromMap(result);
             if (RegionManager.get().size() != REGIONS)
                 throw new MapGenerationException("Could not produce enough regions");
-        }).name("voronoiRegions").build().register(kingdomsGen);
+        }).register(kingdomsGen);
+
         // Add Towns off of kingdoms
-        MapGenerationEffect townsGen = FeatureGenOffFeatureMapEffect.builder()
-            .name("towns")
-            .minPerFeature(townsPerKingdomMin)
-            .maxPerFeature(townsPerKingdomMax)
-            .minDistanceFromFeature(minDistanceBetweenTowns)
-            .maxDistanceFromFeature(minDistanceBetweenTowns * 2)
-            .featureType(TOWN)
-            .offFeature(KINGDOM)
-            .build()
-            .register(kingdomsGen);
+        MapGenerationEffect townsGen = new FeatureGenOffFeatureMapEffect("towns", townsPerKingdomMin, townsPerKingdomMax, minDistanceBetweenTowns, minDistanceBetweenTowns * 2, TOWN, KINGDOM).register(kingdomsGen);
+
         // Add Paths between capitals and towns
-        MapGenerationEffect kingdomPaths = BuildRoadBetweenFeaturesEffect.builder()
-            .name("kingdomPaths")
-            .featureType(KINGDOM)
-            .featureTypeToConnect(KINGDOM)
-            .build()
-            .register(townsGen);
-        MapGenerationEffect paths = BuildRoadBetweenFeaturesEffect.builder()
-            .name("paths")
-            .featureType(KINGDOM)
-            .featureTypeToConnect(TOWN)
-            .build()
-            .register(kingdomPaths);
+        MapGenerationEffect kingdomPaths = new BuildRoadBetweenFeaturesEffect("kingdomPaths", KINGDOM, KINGDOM).register(townsGen);
+        MapGenerationEffect paths = new BuildRoadBetweenFeaturesEffect("paths", KINGDOM, TOWN).register(kingdomPaths);
+
         // Add Dungeons off of towns
-        MapGenerationEffect dungeonsGen = FeatureGenOffFeatureMapEffect.builder()
-            .name("dungeons")
-            .minPerFeature(dungeonsPerSettlementMin)
-            .maxPerFeature(dungeonsPerSettlementMax)
-            .minDistanceFromFeature(minDistanceFromAnyFeature)
-            .maxDistanceFromFeature(maxDistanceFromSettlement)
-            .featureType(DUNGEON)
-            .offFeature(TOWN)
-            .build()
-            .register(paths);
+        MapGenerationEffect dungeonsGen = new FeatureGenOffFeatureMapEffect("dungeons", dungeonsPerSettlementMin, dungeonsPerSettlementMax, minDistanceFromAnyFeature, maxDistanceFromSettlement, DUNGEON, TOWN).register(paths);
+
         // Add more dungeons randomly in the wild
-        FeatureGenRandomMapEffect.builder()
-            .name("wildDungeons")
-            .minFeature(wildDungeonsMin)
-            .maxFeature(wildDungeonsMax)
-            .generationAttempts(maxAttemptsWildDungeons)
-            .minDistanceFromAllFeatures(minDistanceFromAllFeatures)
-            .featureType(DUNGEON)
-            .build()
-            .register(dungeonsGen);
+        new FeatureGenRandomMapEffect("wildDungeons", wildDungeonsMin, wildDungeonsMax, maxAttemptsWildDungeons, minDistanceFromAllFeatures, DUNGEON).register(dungeonsGen);
+
         // Wave Function collapse keeping houses and path placements
-        MapGenerationEffect wfc = WaveFunctionCollapseMapEffect.builder()
-            .name("waveFunctionCollapse")
-            .applyTile((gs, pos) -> {
-                WeightedRandomPicker<Tile> possibleTilesPicker = new WeightedRandomPicker<>();
-                if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathDot) {
-                    for (Tile t : Tiles.pathTiles) {
-                        possibleTilesPicker.addItem(t, t.getWeight());
-                    }
-                    possibleTilesPicker.remove(Tiles.pathDot);
-                } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
-                    surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
-                    possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
-                } else {
-                    for (Tile t : possibleTiles) {
-                        possibleTilesPicker.addItem(t, t.getWeight());
-                    }
+        MapGenerationEffect wfc = new WaveFunctionCollapseMapEffect("waveFunctionCollapse", (gs, pos) -> {
+            WeightedRandomPicker<Tile> possibleTilesPicker = new WeightedRandomPicker<>();
+            if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathDot) {
+                for (Tile t : Tiles.pathTiles) {
+                    possibleTilesPicker.addItem(t, t.getWeight());
                 }
-                return possibleTilesPicker;
-            })
-            .build()
-            .register(MapGenerator.postWorldGenPhase);
+                possibleTilesPicker.remove(Tiles.pathDot);
+            } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
+                surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
+                possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
+            } else {
+                for (Tile t : possibleTiles) {
+                    possibleTilesPicker.addItem(t, t.getWeight());
+                }
+            }
+            return possibleTilesPicker;
+        }).register(MapGenerator.postWorldGenPhase);
+
         // Create Trees
-        WaveFunctionCollapseMapEffect.builder().name("trees").environment(true).applyTile((gs, pos) -> {
+        new WaveFunctionCollapseMapEffect("trees", true, (gs, pos) -> {
             WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
             if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
                 possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
@@ -229,9 +167,10 @@ public class Map implements InitializerInterface {
                 possibleTiles.addItem(Tiles.NULL, 1);
             }
             return possibleTiles;
-        }).build().register(wfc);
+        }).register(wfc);
+
         // Add Entities
-        BasicMapGenerationEffect.builder().name("entities").applyEffect(gameState -> {
+        new BasicMapGenerationEffect("entities", gameState -> {
             List<Feature> kingdoms = FeatureManager.get(KINGDOM);
             for (Feature kingdom : kingdoms) {
                 if (kingdom == kingdoms.getFirst()) {
@@ -256,7 +195,7 @@ public class Map implements InitializerInterface {
                         opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
                 }
             }
-        }).build().register(MapGenerator.entityPhase);
+        }).register(MapGenerator.entityPhase);
     }
 
 }

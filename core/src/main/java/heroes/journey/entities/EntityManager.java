@@ -1,13 +1,14 @@
 package heroes.journey.entities;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import heroes.journey.utils.ai.pathfinding.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import heroes.journey.utils.ai.pathfinding.Cell;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 
+@SuppressWarnings("unchecked")
 public class EntityManager implements Cloneable {
 
     private final int width, height;

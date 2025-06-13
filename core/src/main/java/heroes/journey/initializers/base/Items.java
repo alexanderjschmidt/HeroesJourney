@@ -1,7 +1,5 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.registries.Registries.ItemSubTypeManager;
-
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
@@ -9,6 +7,8 @@ import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.tags.DamageTypes;
 import heroes.journey.initializers.base.tags.DefenseTypes;
 import heroes.journey.initializers.utils.Utils;
+
+import static heroes.journey.registries.Registries.ItemSubTypeManager;
 
 public class Items implements InitializerInterface {
 
@@ -20,51 +20,18 @@ public class Items implements InitializerInterface {
     @Override
     public void init() {
         // Items
-        wood = Item.builder()
-            .name("Wood")
-            .subType(ItemSubTypeManager.get(RAW_MATERIAL))
-            .weight(1)
-            .value(1)
-            .build()
-            .register();
-        ironOre = Item.builder()
-            .name("Iron Ore")
-            .subType(ItemSubTypeManager.get(RAW_MATERIAL))
-            .weight(1)
-            .value(1)
-            .build()
-            .register();
-        ironIngot = Item.builder()
-            .name("Iron Ingot")
-            .subType(ItemSubTypeManager.get(REFINED_MATERIAL))
-            .weight(1)
-            .value(1)
-            .build()
-            .register();
-        ironSword = Item.builder()
-            .name("Iron Sword")
-            .subType(ItemSubTypeManager.get(SWORD))
-            .attributes(new Attributes().add(DamageTypes.PHYSICAL, 3))
-            .weight(1)
-            .value(3)
-            .build()
-            .register();
-        chestPlate = Item.builder()
-            .name("Chest Plate")
-            .subType(ItemSubTypeManager.get(CHEST_ARMOR))
-            .attributes(new Attributes().add(DefenseTypes.PHYSICAL_DEF, 3))
-            .weight(5)
-            .value(1)
-            .build()
-            .register();
-        healthPotion = ConsumableItem.builder()
-            .name("Health Potion")
-            .subType(ItemSubTypeManager.get(POTION))
-            .weight(1)
-            .value(1)
-            .onConsume((input) -> Utils.addItem(input, ironIngot, 1))
-            .build()
-            .register();
+        wood = new Item("Wood", ItemSubTypeManager.get(RAW_MATERIAL), 1, 1, new Attributes()).register();
+
+        ironOre = new Item("Iron Ore", ItemSubTypeManager.get(RAW_MATERIAL), 1, 1, new Attributes()).register();
+
+        ironIngot = new Item("Iron Ingot", ItemSubTypeManager.get(REFINED_MATERIAL), 1, 1, new Attributes()).register();
+
+        ironSword = new Item("Iron Sword", ItemSubTypeManager.get(SWORD), 1, 3, new Attributes().add(DamageTypes.PHYSICAL, 3)).register();
+        
+        chestPlate = new Item("Chest Plate", ItemSubTypeManager.get(CHEST_ARMOR), 5, 1, new Attributes().add(DefenseTypes.PHYSICAL_DEF, 3)).register();
+
+        healthPotion = new ConsumableItem("Health Potion", ItemSubTypeManager.get(POTION), 1, 1, new Attributes(),
+            input -> Utils.addItem(input, ironIngot, 1)).register();
     }
 
 }

@@ -1,22 +1,34 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
-import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.baseTiles;
-
 import heroes.journey.GameState;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.utils.RandomWorldGenerator;
-import lombok.Builder;
-import lombok.experimental.SuperBuilder;
 
-@SuperBuilder
+import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
+import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.baseTiles;
+
 public class NoiseMapEffect extends MapGenerationEffect {
+    private final float amplitude;
+    private final float roughness;
+    private final int octaves;
+    private final int smooths;
+    private final boolean island;
 
-    private final float amplitude, roughness;
-    private final int octaves, smooths;
-    @Builder.Default private final boolean island = true;
+    public NoiseMapEffect(String name, float amplitude, float roughness,
+                          int octaves, int smooths, boolean island) {
+        super(name);
+        this.amplitude = amplitude;
+        this.roughness = roughness;
+        this.octaves = octaves;
+        this.smooths = smooths;
+        this.island = island;
+    }
+
+    public NoiseMapEffect(String name, float amplitude, float roughness, int octaves, int smooths) {
+        this(name, amplitude, roughness, octaves, smooths, true);
+    }
 
     @Override
     public void apply(GameState gs) {
