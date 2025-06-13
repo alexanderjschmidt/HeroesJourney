@@ -1,28 +1,33 @@
 package heroes.journey.entities.actions.options;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
 import heroes.journey.entities.actions.Cost;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.results.ActionResult;
 import lombok.Getter;
 import lombok.NonNull;
 
-import static heroes.journey.registries.Registries.ActionManager;
-
 public class BooleanOptionAction extends OptionAction {
-    @NonNull
-    private Boolean toggle;
-    @Getter
-    protected final boolean terminal;
+    @NonNull private Boolean toggle;
+    @Getter protected final boolean terminal;
 
-    public BooleanOptionAction(String name, String displayName, String description, boolean returnsActionList, Cost cost,
-                               String display, Boolean toggle, boolean terminal) {
-        super(name, displayName, description, returnsActionList, cost, display);
+    public BooleanOptionAction(
+        String id,
+        String name,
+        String description,
+        boolean returnsActionList,
+        Cost cost,
+        String display,
+        Boolean toggle,
+        boolean terminal) {
+        super(id, name, description, returnsActionList, cost, display);
         this.toggle = toggle;
         this.terminal = terminal;
     }
 
-    public BooleanOptionAction(String name, Boolean toggle) {
-        this(name, null, "", false, null, "", toggle, false);
+    public BooleanOptionAction(String id, String name, Boolean toggle) {
+        this(id, name, "", false, null, "", toggle, false);
     }
 
     public boolean isTrue() {
@@ -37,6 +42,6 @@ public class BooleanOptionAction extends OptionAction {
     }
 
     public BooleanOptionAction register() {
-        return (BooleanOptionAction) ActionManager.register(this);
+        return (BooleanOptionAction)ActionManager.register(this);
     }
 }

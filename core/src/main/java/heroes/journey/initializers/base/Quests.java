@@ -11,8 +11,10 @@ public class Quests implements InitializerInterface {
 
     @Override
     public void init() {
-        delve = new Quest("Delve a dungeon", (input) -> Utils.addItem(input, Items.ironSword, 1), (input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(),
-            DelveAction.delve), 10);
+        delve = new Quest("delve_dungeon", "Delve a dungeon",
+            (input) -> Utils.addItem(input, Items.ironSword, 1),
+            (input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(),
+                DelveAction.delve), 10);
     }
 
 }

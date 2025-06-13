@@ -23,7 +23,7 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
         cooldowns = new HashMap<>();
-        possibleActions.add(BaseActions.rest.toString());
+        possibleActions.add(BaseActions.rest.getId());
     }
 
     public List<Action> getPossibleActions() {
@@ -31,7 +31,7 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     }
 
     public PossibleActionsComponent addAction(Action action) {
-        possibleActions.add(action.toString());
+        possibleActions.add(action.getId());
         return this;
     }
 

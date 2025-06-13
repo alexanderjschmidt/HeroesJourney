@@ -1,33 +1,40 @@
 package heroes.journey.entities;
 
-import heroes.journey.components.character.PlayerComponent;
-import heroes.journey.entities.actions.inputs.ActionInput;
-import lombok.NonNull;
+import static heroes.journey.registries.Registries.QuestManager;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static heroes.journey.registries.Registries.QuestManager;
+import heroes.journey.components.character.PlayerComponent;
+import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.registries.Registrable;
+import lombok.NonNull;
 
-public class Quest {
-    @NonNull
-    private final String name;
-    @NonNull
-    private final Consumer<ActionInput> onComplete;
-    @NonNull
-    private final Predicate<ActionInput> isComplete;
+public class Quest extends Registrable {
+
+    @NonNull private final Consumer<ActionInput> onComplete;
+    @NonNull private final Predicate<ActionInput> isComplete;
     private final int fameReward;
 
-    public Quest(String name, Consumer<ActionInput> onComplete, Predicate<ActionInput> isComplete, int fameReward) {
-        this.name = name;
+    public Quest(
+        String id,
+        String name,
+        Consumer<ActionInput> onComplete,
+        Predicate<ActionInput> isComplete,
+        int fameReward) {
+        super(id, name);
         this.onComplete = onComplete;
         this.isComplete = isComplete;
         this.fameReward = fameReward;
     }
 
-    public Quest(String name, Consumer<ActionInput> onComplete, Predicate<ActionInput> isComplete) {
-        this(name, onComplete, isComplete, 0);
+    public Quest(
+        String id,
+        String name,
+        Consumer<ActionInput> onComplete,
+        Predicate<ActionInput> isComplete) {
+        this(id, name, onComplete, isComplete, 0);
     }
 
     public void onComplete(ActionInput input) {
@@ -43,11 +50,6 @@ public class Quest {
         return isComplete.test(input);
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public Quest register() {
         return QuestManager.register(this);
     }
@@ -58,12 +60,12 @@ public class Quest {
             return true;
         if (!(o instanceof Quest quest))
             return false;
-        return Objects.equals(name, quest.name);
+        return Objects.equals(getId(), quest.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(getId());
     }
 
 }

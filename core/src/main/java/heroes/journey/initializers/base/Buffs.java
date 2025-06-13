@@ -9,7 +9,7 @@ public class Buffs implements InitializerInterface {
 
     @Override
     public void init() {
-        rested = new Buff("Rested", 1, 0);
+        rested = new Buff("rested", "Rested", 1, 0);
     }
 
 }

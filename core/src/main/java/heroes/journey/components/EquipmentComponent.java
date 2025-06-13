@@ -20,10 +20,10 @@ public class EquipmentComponent extends PooledClonableComponent<EquipmentCompone
     public void equip(Item item) {
         switch (item.getSubType().toString()) {
             case Items.SWORD:
-                handOne = handOne != null && handOne.equals(item.getName()) ? null : item.getName();
+                handOne = handOne != null && handOne.equals(item.getId()) ? null : item.getId();
                 break;
             case Items.CHEST_ARMOR:
-                chest = chest != null && chest.equals(item.getName()) ? null : item.getName();
+                chest = chest != null && chest.equals(item.getId()) ? null : item.getId();
                 break;
         }
     }

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Registry<T> extends HashMap<String,T> {
+public class Registry<T extends Registrable> extends HashMap<String,T> {
 
     public List<T> get(List<String> entryStrings) {
         return entryStrings.stream().map(this::get) // get the Action for each string
@@ -14,11 +14,11 @@ public class Registry<T> extends HashMap<String,T> {
     }
 
     public T register(T entry) {
-        if (containsKey(entry.toString())) {
-            throw new RuntimeException(this.getClass() + " cannot register with name " + entry.toString() +
-                " because that name is already registered");
+        if (containsKey(entry.getId())) {
+            throw new RuntimeException(this.getClass() + " cannot register with id " + entry.getId() +
+                " because that id is already registered");
         }
-        put(entry.toString(), entry);
+        put(entry.getId(), entry);
         return entry;
     }
 }

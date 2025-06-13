@@ -1,37 +1,32 @@
 package heroes.journey.utils.worldgen;
 
-import heroes.journey.GameState;
-import lombok.Getter;
-import lombok.NonNull;
+import static heroes.journey.registries.Registries.MapGenerationManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static heroes.journey.registries.Registries.MapGenerationManager;
+import heroes.journey.GameState;
+import heroes.journey.registries.Registrable;
+import lombok.Getter;
 
 @Getter
-public abstract class MapGenerationEffect {
-    @NonNull
-    private final String name;
+public abstract class MapGenerationEffect extends Registrable {
+
     public final List<String> dependsOn;
 
-    public MapGenerationEffect(String name) {
-        this.name = name;
+    public MapGenerationEffect(String id) {
+        super(id);
         this.dependsOn = new ArrayList<>();
     }
 
     public MapGenerationEffect register(MapGenerationEffect... dependencies) {
         MapGenerationManager.register(this);
         for (MapGenerationEffect dependency : dependencies) {
-            dependsOn.add(dependency.name);
+            dependsOn.add(dependency.getName());
         }
         return this;
     }
 
     public abstract void apply(GameState gameState);
 
-    @Override
-    public String toString() {
-        return name;
-    }
 }

@@ -42,6 +42,7 @@ public class ActionMenu extends UI {
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
         List<Action> requirementsMetOptions = selectedActions.getPossibleActions();
+        System.out.println(requirementsMetOptions);
         if (selectedPosition != null) {
             // Get Tiles Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),

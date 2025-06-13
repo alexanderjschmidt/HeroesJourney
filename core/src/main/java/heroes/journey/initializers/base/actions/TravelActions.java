@@ -1,5 +1,16 @@
 package heroes.journey.initializers.base.actions;
 
+import static heroes.journey.initializers.base.Map.KINGDOM;
+import static heroes.journey.initializers.base.Map.TOWN;
+import static heroes.journey.initializers.base.actions.BaseActions.popup;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
@@ -27,12 +38,6 @@ import heroes.journey.utils.Direction;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 
-import java.util.*;
-
-import static heroes.journey.initializers.base.Map.KINGDOM;
-import static heroes.journey.initializers.base.Map.TOWN;
-import static heroes.journey.initializers.base.actions.BaseActions.popup;
-
 public class TravelActions implements InitializerInterface {
 
     public static Action travel;
@@ -44,7 +49,8 @@ public class TravelActions implements InitializerInterface {
     // TODO FIX JOURNEY
     @Override
     public void init() {
-        explore = new TargetAction<Direction>("Explore", "Explore", "Explore in a direction", new Cost(5, 2, 0, 0)) {
+        explore = new TargetAction<Direction>("explore", "Explore", "Explore in a direction",
+            new Cost(5, 2, 0, 0)) {
             @Override
             public List<Direction> getTargets(ActionInput input) {
                 return List.of(Direction.getDirections());
@@ -74,7 +80,8 @@ public class TravelActions implements InitializerInterface {
             }
         }.register();
         // TODO clean up journey to use more utils?
-        journey = new TargetAction<UUID>("Journey", "Journey", "Travel to a known location", new Cost(1, 0, 0, 0)) {
+        journey = new TargetAction<UUID>("journey", "Journey", "Travel to a known location",
+            new Cost(1, 0, 0, 0)) {
             @Override
             public List<UUID> getTargets(ActionInput input) {
                 UUID currentLocation = Utils.getLocation(input);
@@ -90,7 +97,8 @@ public class TravelActions implements InitializerInterface {
 
             @Override
             public String getTargetDisplayName(TargetInput<UUID> input) {
-                return NamedComponent.get(input.getGameState().getWorld(), input.getInput(), "Unknown Location");
+                return NamedComponent.get(input.getGameState().getWorld(), input.getInput(),
+                    "Unknown Location");
             }
 
             @Override
@@ -138,7 +146,8 @@ public class TravelActions implements InitializerInterface {
                 return new StringResult("You have traveled to " + locationName);
             }
         }.register();
-        wayfare = new TargetAction<UUID>("Wayfare", "Wayfare", "Travel to a connected location", new Cost(2, 0, 0, 0)) {
+        wayfare = new TargetAction<UUID>("wayfare", "Wayfare", "Travel to a connected location",
+            new Cost(2, 0, 0, 0)) {
             @Override
             public List<UUID> getTargets(ActionInput input) {
                 UUID featureId = Utils.getLocation(input);
@@ -162,7 +171,8 @@ public class TravelActions implements InitializerInterface {
 
             @Override
             public String getTargetDisplayName(TargetInput<UUID> input) {
-                return NamedComponent.get(input.getGameState().getWorld(), input.getInput(), "Unknown Location");
+                return NamedComponent.get(input.getGameState().getWorld(), input.getInput(),
+                    "Unknown Location");
             }
 
             @Override
@@ -215,7 +225,7 @@ public class TravelActions implements InitializerInterface {
         travelActionOptions.add(explore);
         travelActionOptions.add(wayfare);
         travelActionOptions.add(journey);
-        travel = new Action("Travel", "Travel", "Choose a travel option", true, null) {
+        travel = new Action("travel", "Travel", "Choose a travel option", true, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 return new ActionListResult(travelActionOptions);

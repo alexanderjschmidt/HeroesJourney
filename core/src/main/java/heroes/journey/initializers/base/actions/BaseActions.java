@@ -1,11 +1,19 @@
 package heroes.journey.initializers.base.actions;
 
+import java.util.List;
+import java.util.UUID;
+
 import heroes.journey.Application;
 import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.Quest;
-import heroes.journey.entities.actions.*;
+import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.CooldownAction;
+import heroes.journey.entities.actions.Cost;
+import heroes.journey.entities.actions.ShowAction;
+import heroes.journey.entities.actions.TargetAction;
+import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.actions.inputs.TargetInput;
 import heroes.journey.entities.actions.results.ActionListResult;
@@ -20,9 +28,6 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.screens.MainMenuScreen;
 import heroes.journey.ui.windows.ActionMenu;
 
-import java.util.List;
-import java.util.UUID;
-
 public class BaseActions implements InitializerInterface {
 
     //TODO this is probably bad
@@ -33,7 +38,7 @@ public class BaseActions implements InitializerInterface {
 
     @Override
     public void init() {
-        openActionMenu = new Action("THIS SHOULD NEVER BE DISPLAYED", "THIS SHOULD NEVER BE DISPLAYED", "", true, null) {
+        openActionMenu = new Action("open_action_menu", "THIS SHOULD NEVER BE DISPLAYED", "", true, null) {
             @Override
             public ShowAction internalRequirementsMet(ActionInput input) {
                 return ShowAction.NO;
@@ -41,11 +46,12 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
-                return new ActionListResult(ActionMenu.getActionsFor(input.getGameState(), input.getEntityId()));
+                return new ActionListResult(
+                    ActionMenu.getActionsFor(input.getGameState(), input.getEntityId()));
             }
         }.register();
 
-        exit_game = new Action("Exit Game", "Exit Game", "Return to main menu", false, null) {
+        exit_game = new Action("exit_game", "Exit Game", "Return to main menu", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 Application.get().setScreen(new MainMenuScreen(Application.get()));
@@ -54,7 +60,7 @@ public class BaseActions implements InitializerInterface {
         }.register();
         TeamActions.addTeamAction(exit_game);
 
-        end_turn = new Action("End Turn", "End Turn", "End your turn", false, null) {
+        end_turn = new Action("end_turn", "End Turn", "End your turn", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 UUID entityId = input.getGameState().getCurrentEntity();
@@ -69,7 +75,7 @@ public class BaseActions implements InitializerInterface {
         }.register();
         TeamActions.addTeamAction(end_turn);
 
-        save = new Action("Save", "Save", "Save Game", false, null) {
+        save = new Action("save", "Save", "Save Game", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 input.getGameState().save("save", true);
@@ -78,14 +84,14 @@ public class BaseActions implements InitializerInterface {
         }.register();
         TeamActions.addTeamAction(save);
 
-        popup = new Action("Popup", "Popup", "", false, null) {
+        popup = new Action("popup", "Popup", "", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 return new StringResult(popupMessage);
             }
         }.register();
 
-        rest = new Action("Rest", "Rest", "Do nothing, resting your body and mind.", false, null) {
+        rest = new Action("rest", "Rest", "Do nothing, resting your body and mind.", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 BuffsComponent buffsComponent = BuffsComponent.get(input.getGameState().getWorld(),
@@ -95,14 +101,16 @@ public class BaseActions implements InitializerInterface {
             }
         }.register();
 
-        workout = new CooldownAction("Work out", "Work out", "Lift weights, gain body", false, new Cost(0, 0, 0, 0), 1, false) {
+        workout = new CooldownAction("workout", "Work out", "Lift weights, gain body", false,
+            new Cost(0, 0, 0, 0), 1, false) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 return StatsUtils.adjustBody(input.getGameState(), input.getEntityId(), 1);
             }
         }.register();
 
-        study = new CooldownAction("Study", "Study", "Expand your mind, increasing your potential", false, new Cost(0, 0, 0, 0), 2, false) {
+        study = new CooldownAction("study", "Study", "Expand your mind, increasing your potential", false,
+            new Cost(0, 0, 0, 0), 2, false) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 return StatsUtils.adjustMind(input.getGameState(), input.getEntityId(), 1);
@@ -110,7 +118,8 @@ public class BaseActions implements InitializerInterface {
         }.register();
 
         // TODO FIX
-        questBoard = new TargetAction<Quest>("Quest Board", "Quest Board", "See what the people need help with", new Cost(0, 0, 0, 0)) {
+        questBoard = new TargetAction<Quest>("quest_board", "Quest Board",
+            "See what the people need help with", new Cost(0, 0, 0, 0)) {
             @Override
             public List<Quest> getTargets(ActionInput input) {
                 UUID town = Utils.getLocation(input);

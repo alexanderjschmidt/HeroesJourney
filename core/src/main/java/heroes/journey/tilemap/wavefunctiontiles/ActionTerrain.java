@@ -10,8 +10,8 @@ public class ActionTerrain extends Terrain {
 
     private final List<Action> actions;
 
-    public ActionTerrain(String name, int terrainCost, Action... actions) {
-        super(name, terrainCost);
+    public ActionTerrain(String id, String name, int terrainCost, Action... actions) {
+        super(id, name, terrainCost);
         this.actions = new ArrayList<>(Arrays.asList(actions));
     }
 

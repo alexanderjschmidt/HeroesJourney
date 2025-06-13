@@ -1,8 +1,13 @@
 package heroes.journey.entities.actions;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
+import java.util.UUID;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.entities.actions.inputs.ActionInput;
@@ -11,31 +16,31 @@ import heroes.journey.initializers.utils.Utils;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.UUID;
-
-import static heroes.journey.registries.Registries.ActionManager;
-
 public abstract class CooldownAction extends Action {
-    @NonNull
-    @Getter
-    private final Integer turnCooldown;
+    @NonNull @Getter private final Integer turnCooldown;
     private final boolean factionCooldown;
 
-    public CooldownAction(String name, String displayName, String description, boolean returnsActionList, Cost cost,
-                          Integer turnCooldown, boolean factionCooldown) {
-        super(name, displayName, description, returnsActionList, cost);
+    public CooldownAction(
+        String id,
+        String name,
+        String description,
+        boolean returnsActionList,
+        Cost cost,
+        Integer turnCooldown,
+        boolean factionCooldown) {
+        super(id, name, description, returnsActionList, cost);
         this.turnCooldown = turnCooldown;
         this.factionCooldown = factionCooldown;
     }
 
-    public CooldownAction(String name, Integer turnCooldown) {
-        this(name, null, "", false, null, turnCooldown, false);
+    public CooldownAction(String id, String name, Integer turnCooldown) {
+        this(id, name, "", false, null, turnCooldown, false);
     }
 
     @Override
     public ShowAction requirementsMet(ActionInput input) {
         PossibleActionsComponent cooldownComponent = getCooldownComponent(input);
-        if (cooldownComponent.getCooldowns().containsKey(name))
+        if (cooldownComponent.getCooldowns().containsKey(getId()))
             return ShowAction.GRAYED;
         return super.internalRequirementsMet(input);
     }
@@ -43,7 +48,7 @@ public abstract class CooldownAction extends Action {
     @Override
     public ActionResult onSelect(ActionInput input, boolean ai) {
         PossibleActionsComponent cooldownComponent = getCooldownComponent(input);
-        cooldownComponent.getCooldowns().put(name, turnCooldown);
+        cooldownComponent.getCooldowns().put(getId(), turnCooldown);
         return super.onSelect(input, ai);
     }
 
@@ -68,7 +73,7 @@ public abstract class CooldownAction extends Action {
         }
         PossibleActionsComponent cooldownComponent = getCooldownComponent(
             new ActionInput(GameState.global(), GameState.global().getCurrentEntity()));
-        Integer cooldownVal = cooldownComponent.getCooldowns().get(this.name);
+        Integer cooldownVal = cooldownComponent.getCooldowns().get(this.getId());
         cooldownVal = cooldownVal == null ? turnCooldown : (turnCooldown - cooldownVal - 1);
         cooldown.setText(cooldownVal + "/" + turnCooldown);
         table.add(cooldown).fill().row();
@@ -76,6 +81,6 @@ public abstract class CooldownAction extends Action {
     }
 
     public CooldownAction register() {
-        return (CooldownAction) ActionManager.register(this);
+        return (CooldownAction)ActionManager.register(this);
     }
 }

@@ -1,5 +1,8 @@
 package heroes.journey.utils.input;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.entities.actions.inputs.ActionInput;
@@ -7,9 +10,6 @@ import heroes.journey.entities.actions.options.OptionAction;
 import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Options {
 
@@ -21,7 +21,7 @@ public class Options {
     }
 
     static {
-        Action optionsAction = new Action("Options") {
+        Action optionsAction = new Action("options", "Options") {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
                 HUD.get().setState(new ActionSelectState(optionsList));

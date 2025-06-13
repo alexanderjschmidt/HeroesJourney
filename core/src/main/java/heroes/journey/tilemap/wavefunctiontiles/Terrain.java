@@ -2,23 +2,18 @@ package heroes.journey.tilemap.wavefunctiontiles;
 
 import static heroes.journey.registries.Registries.TerrainManager;
 
-public class Terrain {
+import heroes.journey.registries.Registrable;
+import lombok.Getter;
 
-    private final String name;
+@Getter
+public class Terrain extends Registrable {
+
     private final int terrainCost;
 
-    public Terrain(String name, int terrainCost) {
-        this.name = name;
+    public Terrain(String id, String name, int terrainCost) {
+        super(id, name);
         this.terrainCost = terrainCost;
         TerrainManager.put(name, this);
-    }
-
-    public String toString() {
-        return name;
-    }
-
-    public int getTerrainCost() {
-        return terrainCost;
     }
 
 }

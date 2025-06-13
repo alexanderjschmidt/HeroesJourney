@@ -27,7 +27,7 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
         int weight = 0;
         List<Item> items = ItemManager.get(inventory.keySet().stream().toList());
         for (Item item : items) {
-            weight += item.getWeight() * inventory.get(item.getName());
+            weight += item.getWeight() * inventory.get(item.getId());
         }
         return weight;
     }
@@ -41,12 +41,12 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
     }
 
     public InventoryComponent add(Item item, int count) {
-        inventory.add(item.toString(), count);
+        inventory.add(item.getId(), count);
         return this;
     }
 
     public void remove(Item item, int i) {
-        inventory.remove(item.toString(), i);
+        inventory.remove(item.getId(), i);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
     }
 
     public String toString(Item item) {
-        return inventory.toString(item.toString());
+        return inventory.toString(item.getId());
     }
 
     public void adjustGold(int gold) {

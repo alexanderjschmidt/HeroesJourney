@@ -16,7 +16,7 @@ import heroes.journey.utils.art.ResourceManager;
 
 public class Tiles implements InitializerInterface {
 
-    public static final Terrain NULL_TERRAIN = new Terrain("NULL", 0);
+    public static final Terrain NULL_TERRAIN = new Terrain("null", "NULL", 0);
     public static Tile NULL;
 
     public static Terrain path, plains, water;
@@ -34,33 +34,33 @@ public class Tiles implements InitializerInterface {
         TileHelpers.baseTile(NULL, NULL_TERRAIN);
 
         // Base Terrains
-        water = new Terrain("Water", 50);
-        plains = new Terrain("Plains", 2);
-        Terrain hills = new Terrain("Hills", 2);
-        Terrain sand = new Terrain("Sand", 3);
-        path = new Terrain("Path", 1);
+        water = new Terrain("water", "Water", 50);
+        plains = new Terrain("plains", "Plains", 2);
+        Terrain hills = new Terrain("hills", "Hills", 2);
+        Terrain sand = new Terrain("sand", "Sand", 3);
+        path = new Terrain("path", "Path", 1);
 
-        capital = new ActionTerrain("Capital", 0);
+        capital = new ActionTerrain("capital", "Capital", 0);
         CAPITAL = new BaseTile(capital, 0, false, tiles[9][14]);
         TileHelpers.baseTile(CAPITAL, NULL_TERRAIN, false);
 
-        town = new ActionTerrain("Town", 0);
+        town = new ActionTerrain("town", "Town", 0);
         TOWN = new BaseTile(town, 0, false, tiles[7][12]);
         TileHelpers.baseTile(TOWN, NULL_TERRAIN, false);
 
-        dungeon = new ActionTerrain("Dungeon", 1);
+        dungeon = new ActionTerrain("dungeon", "Dungeon", 1);
         DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
         TileHelpers.baseTile(DUNGEON, NULL_TERRAIN, false);
 
-        trees = new ActionTerrain("Trees", 1);
+        trees = new ActionTerrain("trees", "Trees", 1);
 
         // Transition Terrains
-        Terrain plainsToHill = new Terrain("Cliff", 10);
-        Terrain sandToHill = new Terrain("Cliff", 10);
-        Terrain plainsToSand = new Terrain("Sand", 3);
-        Terrain plainsToWater = new Terrain("Water", 50);
-        Terrain hillToWater = new Terrain("Cliff", 50);
-        Terrain sandToWater = new Terrain("Water", 50);
+        Terrain plainsToHill = new Terrain("plains_to_hill", "Cliff", 10);
+        Terrain sandToHill = new Terrain("sand_to_hill", "Cliff", 10);
+        Terrain plainsToSand = new Terrain("plains_to_sand", "Sand", 3);
+        Terrain plainsToWater = new Terrain("plains_to_water", "Water", 50);
+        Terrain hillToWater = new Terrain("hill_to_water", "Cliff", 50);
+        Terrain sandToWater = new Terrain("sand_to_water", "Water", 50);
 
         WATER = new AnimatedTile(water, 300, true, TileLayout.getFrames(tiles, 21, 11, 4, 5), .2f);
         PLAINS = new BaseTile(plains, 1000, tiles[1][5]);
