@@ -14,7 +14,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static heroes.journey.initializers.base.Tiles.water;
+import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
 
@@ -40,7 +40,7 @@ public class VoronoiRegionEffect extends MapGenerationEffect {
 
         for (int x = 0; x < gs.getWidth(); x++) {
             for (int y = 0; y < gs.getHeight(); y++) {
-                isLand[x][y] = inBounds(x, y) && gs.getMap().getTileMap()[x][y].getTerrain() != water;
+                isLand[x][y] = inBounds(x, y) && gs.getMap().getTileMap()[x][y].getTerrain() != TerrainManager.get("water");
             }
         }
 

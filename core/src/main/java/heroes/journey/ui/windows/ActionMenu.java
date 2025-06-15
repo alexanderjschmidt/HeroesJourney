@@ -1,11 +1,5 @@
 package heroes.journey.ui.windows;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -14,11 +8,16 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.GameWorld;
-import heroes.journey.tilemap.wavefunctiontiles.ActionTerrain;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -47,9 +46,6 @@ public class ActionMenu extends UI {
             // Get Tiles Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
                 getLocationActions(gameState, selectedEntity).stream()).collect(Collectors.toList());
-            // Get Tiles Environment Actions
-            requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getTileActions(gameState, selectedPosition).stream()).collect(Collectors.toList());
         }
         return requirementsMetOptions.stream().distinct().toList();
     }
@@ -62,15 +58,6 @@ public class ActionMenu extends UI {
             if (factionActions != null) {
                 return factionActions.getPossibleActions();
             }
-        }
-        return new ArrayList<>();
-    }
-
-    private static List<Action> getTileActions(GameState gameState, PositionComponent selectedPosition) {
-        ActionTerrain environment = gameState.getMap()
-            .getEnvironment(selectedPosition.getX(), selectedPosition.getY());
-        if (environment != null) {
-            return environment.getActions();
         }
         return new ArrayList<>();
     }

@@ -1,13 +1,12 @@
 package heroes.journey.tilemap;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
+
+import java.util.List;
 
 public class TileHelpers {
 
@@ -87,8 +86,9 @@ public class TileHelpers {
         TextureRegion[][] tiles,
         int weight,
         int x,
-        int y) {
-        wangCorner.generateAnimatedTiles(tiles, weight, x, y, 4, 5, true, base, adjacentTileOuter,
+        int y,
+        boolean addToDefault) {
+        wangCorner.generateAnimatedTiles(tiles, weight, x, y, 4, 5, addToDefault, base, adjacentTileOuter,
             adjacentTileInner);
     }
 
@@ -129,8 +129,9 @@ public class TileHelpers {
         TextureRegion[][] tiles,
         int weight,
         int x,
-        int y) {
-        cliffTransition.generateAnimatedTiles(tiles, weight * 1000, x, y, 4, 4, true, cliff1, cliff2,
+        int y,
+        boolean addToDefault) {
+        cliffTransition.generateAnimatedTiles(tiles, weight * 1000, x, y, 4, 4, addToDefault, cliff1, cliff2,
             adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 }

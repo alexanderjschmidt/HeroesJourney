@@ -4,9 +4,10 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.Heuristic;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
-import heroes.journey.initializers.base.Tiles;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+
+import static heroes.journey.registries.Registries.TerrainManager;
 
 public class RoadPathing {
 
@@ -35,11 +36,11 @@ public class RoadPathing {
         public float estimate(TileNode node, TileNode endNode) {
             float baseHeuristic = Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
             Terrain terrain = map.getTileMap()[node.x][node.y].getTerrain();
-            if (terrain == Tiles.path)
+            if (terrain == TerrainManager.get("path"))
                 return baseHeuristic;
-            if (terrain == Tiles.plains)
-                return baseHeuristic * terrain.getTerrainCost() * 10;
-            return baseHeuristic * terrain.getTerrainCost() * 50;
+            if (terrain == TerrainManager.get("plains"))
+                return baseHeuristic * terrain.terrainCost * 10;
+            return baseHeuristic * terrain.terrainCost * 50;
         }
     }
 }
