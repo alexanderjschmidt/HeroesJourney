@@ -65,7 +65,7 @@ public class DelveAction implements InitializerInterface {
                             Utils.addItem(input, item, inventoryComponent.getInventory().get(item));
                             log.append(inventoryComponent.getInventory().get(item))
                                 .append("x ")
-                                .append(item.toString())
+                                .append(item.getId())
                                 .append("\n");
                         }
                     }

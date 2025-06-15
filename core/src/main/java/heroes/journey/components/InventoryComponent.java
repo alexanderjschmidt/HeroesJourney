@@ -67,6 +67,7 @@ public class InventoryComponent extends PooledClonableComponent<InventoryCompone
     }
 
     public String toString(Item item) {
+        //TODO this makes the inventory print the id of the item since its registered under that String in the Container
         return inventory.toString(item.getId());
     }
 

@@ -13,9 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import heroes.journey.mods.GameMod;
-import heroes.journey.mods.ModContext;
 import heroes.journey.mods.ScriptModLoader;
-import heroes.journey.registries.Registries;
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.MusicManager;
@@ -106,7 +104,7 @@ public class Application extends Game {
 
         List<GameMod> mods = ScriptModLoader.INSTANCE.loadModsFrom(new File("mods"));
         for (GameMod mod : mods) {
-            mod.onLoad(new ModContext(mod.toString(), GameState.global(), new Registries()));
+            mod.load();
         }
     }
 

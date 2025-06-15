@@ -34,10 +34,10 @@ public class MapGenerator {
                     FeatureManager.get().clear();
                     for (MapGenerationEffect phase : sorted) {
                         if (phase instanceof NoOpMapGenerationEffect) {
-                            System.out.println("Running phase: " + phase.getName());
+                            System.out.println("Running phase: " + phase.getId());
                             continue;
                         }
-                        System.out.println("Running effect: " + phase.getName());
+                        System.out.println("Running effect: " + phase.getId());
                         phase.apply(gameState);
                         gameState.getWorld().basicProcess();
                     }
@@ -61,9 +61,9 @@ public class MapGenerator {
         }
 
         for (MapGenerationEffect phase : phases.values()) {
-            for (String dep : phase.dependsOn) {
-                graph.get(dep).add(phase.getName());
-                inDegree.put(phase.getName(), inDegree.get(phase.getName()) + 1);
+            for (String dep : phase.getDependsOn()) {
+                graph.get(dep).add(phase.getId());
+                inDegree.put(phase.getId(), inDegree.get(phase.getId()) + 1);
             }
         }
 

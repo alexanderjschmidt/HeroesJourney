@@ -74,7 +74,7 @@ public class TileLayout {
                 // Normalize R+G+B to a 0.0 - 1.0 scale
                 float rgbSum = (r + g + b) / (3f * 255f);
                 int adjustedWeight = Math.max(1, Math.round(weight * rgbSum));
-                System.out.println(path + " " + i + " " + j + " " + adjustedWeight);
+                //System.out.println(path + " " + i + " " + j + " " + adjustedWeight);
 
                 // Guard in case tiles[][] is smaller than layout
                 if (tileX >= tiles.length || tileY >= tiles[0].length)
