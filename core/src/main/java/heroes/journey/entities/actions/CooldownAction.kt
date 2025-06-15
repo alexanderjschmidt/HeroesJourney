@@ -6,35 +6,39 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
 import heroes.journey.entities.actions.inputs.ActionInput
+import heroes.journey.entities.actions.results.AIOnSelectNotFound
 import heroes.journey.entities.actions.results.ActionResult
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
-import lombok.Getter
 
 abstract class CooldownAction(
     id: String,
     name: String?,
-    description: String,
-    returnsActionList: Boolean,
-    cost: Cost?,
-    @field:Getter private val turnCooldown: Int,
+    description: String = "",
+    isReturnsActionList: Boolean = false,
+    cost: Cost = Cost(),
+    requirementsMetFn: (ActionInput?) -> ShowAction = { ShowAction.YES },
+    onHoverFn: (ActionInput?) -> Unit = {},
+    onSelectFn: (ActionInput) -> ActionResult,
+    onSelectAIFn: (ActionInput?) -> ActionResult = { AIOnSelectNotFound() },
+    private val turnCooldown: Int,
     private val factionCooldown: Boolean
-) :
-    Action(id, name, description, returnsActionList, cost) {
-    constructor(id: String, name: String?, turnCooldown: Int) : this(
-        id,
-        name,
-        "",
-        false,
-        null,
-        turnCooldown,
-        false
-    )
+) : Action(
+    id,
+    name,
+    description,
+    isReturnsActionList,
+    cost,
+    requirementsMetFn,
+    onHoverFn,
+    onSelectFn,
+    onSelectAIFn
+) {
 
-    override fun requirementsMet(input: ActionInput): ShowAction? {
+    override fun requirementsMet(input: ActionInput): ShowAction {
         val cooldownComponent = getCooldownComponent(input)
         if (cooldownComponent.cooldowns.containsKey(id)) return ShowAction.GRAYED
-        return super.internalRequirementsMet(input)
+        return super.requirementsMet(input)
     }
 
     override fun onSelect(input: ActionInput?, ai: Boolean): ActionResult? {

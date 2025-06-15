@@ -3,7 +3,6 @@ package heroes.journey.initializers.base.factories;
 import static heroes.journey.initializers.base.factories.MonsterFactory.goblinId;
 import static heroes.journey.initializers.base.factories.MonsterFactory.hobgoblinId;
 import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.ItemSubTypeManager;
 import static heroes.journey.registries.Registries.QuestManager;
 
 import java.util.UUID;
@@ -83,8 +82,6 @@ public class EntityFactory {
         dungeon.create(PossibleActionsComponent.class)
             .addAction(DelveAction.delve)
             .addAction(TravelActions.travel);
-        System.out.println(ItemManager);
-        System.out.println(ItemSubTypeManager);
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(DungeonComponent.class).layout(new UUID[] {null, goblinId, goblinId, hobgoblinId});
         return id;

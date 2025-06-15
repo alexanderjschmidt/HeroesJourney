@@ -10,67 +10,46 @@ import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.windows.InfoProvider
 
-abstract class Action(
+open class Action(
     id: String,
-    name: String?,
+    name: String? = null,
     private val description: String = "",
     val isReturnsActionList: Boolean = false,
-    cost: Cost? = null
-) :
-    Registrable(id, name), InfoProvider {
+    val cost: Cost = Cost(),
+    val requirementsMetFn: (ActionInput?) -> ShowAction = { ShowAction.YES },
+    val onHoverFn: (ActionInput?) -> Unit = {},
+    val onSelectFn: (ActionInput) -> ActionResult,
+    val onSelectAIFn: (ActionInput?) -> ActionResult = { AIOnSelectNotFound() }
+) : Registrable(id, name), InfoProvider {
 
-    protected val cost: Cost = cost ?: Cost()
-
-    open fun internalRequirementsMet(input: ActionInput?): ShowAction {
-        return ShowAction.YES
-    }
-
-    open fun internalOnHover(input: ActionInput?) {
-    }
-
-    abstract fun internalOnSelect(input: ActionInput): ActionResult?
-
-    open fun internalOnSelectAI(input: ActionInput?): ActionResult {
-        return AIOnSelectNotFound()
-    }
-
-    open fun requirementsMet(input: ActionInput): ShowAction? {
-        return internalRequirementsMet(input).and(cost.requirementsMet(input))
+    open fun requirementsMet(input: ActionInput): ShowAction {
+        return requirementsMetFn(input).and(cost.requirementsMet(input))
     }
 
     fun onHover(input: ActionInput?) {
         HUD.get().cursor.setMapPointerLoc(null)
-        internalOnHover(input)
+        onHoverFn(input)
     }
 
-    open fun onSelect(input: ActionInput?, ai: Boolean): ActionResult? {
+    open fun onSelect(input: ActionInput?, ai: Boolean = false): ActionResult? {
         if (input != null) cost.onUse(input)
         if (ai) {
-            val aiResult = internalOnSelectAI(input)
+            val aiResult = onSelectAIFn(input)
             if (aiResult !is AIOnSelectNotFound) {
                 return aiResult
             }
         }
-        return internalOnSelect(input!!)
+        return onSelectFn(input!!)
     }
 
-    fun onSelect(input: ActionInput?): ActionResult? {
-        return onSelect(input, false)
+    override fun getTitle(): String = getName()
+    override fun getDescription(): String = description
+
+    override fun fillCustomContent(table: Table, skin: Skin) {
+        table.add(cost.display).center().fill().expand()
     }
 
     override fun register(): Action {
         return Registries.ActionManager.register(this)
-    }
-
-    override fun getTitle(): String {
-        return toString()
-    }
-
-    override fun getDescription(): String {
-        return description
-    }
-
-    override fun fillCustomContent(table: Table, skin: Skin) {
-        table.add(cost.display).center().fill().expand()
     }
 }

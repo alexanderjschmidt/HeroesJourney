@@ -5,7 +5,7 @@ import lombok.Getter
 @Getter
 abstract class Registrable(val id: String, private val name: String? = null) {
 
-    fun getName(): String {
+    open fun getName(): String {
         return name ?: id
     }
 

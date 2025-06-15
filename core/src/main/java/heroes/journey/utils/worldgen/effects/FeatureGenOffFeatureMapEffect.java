@@ -48,7 +48,7 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
                 Position candidate = findTileNear(settlement.location, minDistanceFromFeature,
                     maxDistanceFromFeature, isFarFromFeatures(gameState, minDistanceFromFeature).and(
                         isLandSurrounded(gameState.getMap().getTileMap())));
-
+                System.out.println("Gen feature off another feature");
                 featureType.generateFeature(gameState, candidate, settlement);
             }
         }

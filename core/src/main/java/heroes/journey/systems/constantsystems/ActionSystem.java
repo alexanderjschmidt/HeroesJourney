@@ -53,7 +53,7 @@ public class ActionSystem extends IteratingSystem {
                 throw new RuntimeException(actionComponent.action() + " action could not be parsed");
             action = targetAction.getActionFromSelected(input, targetActionParts[1]);
         }
-        ActionResult result = action.onSelect(input);
+        ActionResult result = action.onSelect(input, false);
         if (result != null) {
             switch (result) {
                 case StringResult str -> {

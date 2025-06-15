@@ -54,7 +54,7 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position) {
         for (Action action : actions) {
             if (action.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult)action.onSelect(input);
+                ActionListResult result = (ActionListResult)action.onSelect(input, false);
                 addUsableActions(possibleActions, result.list(), input, position);
             } else {
                 if (action.requirementsMet(input) == ShowAction.YES) {

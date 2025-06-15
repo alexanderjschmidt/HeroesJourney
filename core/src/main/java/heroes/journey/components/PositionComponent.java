@@ -1,12 +1,10 @@
 package heroes.journey.components;
 
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.systems.GameWorld;
-import lombok.Getter;
-
 import java.util.UUID;
 
-@Getter
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
+
 public class PositionComponent extends PooledClonableComponent<PositionComponent> {
 
     private int x, y, targetX, targetY;
@@ -47,5 +45,21 @@ public class PositionComponent extends PooledClonableComponent<PositionComponent
 
     public boolean isNotSynced() {
         return targetX != x || targetY != y;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public int getTargetX() {
+        return this.targetX;
+    }
+
+    public int getTargetY() {
+        return this.targetY;
     }
 }

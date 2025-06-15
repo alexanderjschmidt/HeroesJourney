@@ -1,16 +1,10 @@
 package heroes.journey.components.place;
 
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.systems.GameWorld;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import java.util.UUID;
 
-@Setter
-@Getter
-@Accessors(fluent = true, chain = true)
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
+
 public class DungeonComponent extends PooledClonableComponent<DungeonComponent> {
 
     private UUID[] layout;
@@ -34,4 +28,12 @@ public class DungeonComponent extends PooledClonableComponent<DungeonComponent> 
         layout = from.layout;
     }
 
+    public UUID[] layout() {
+        return this.layout;
+    }
+
+    public DungeonComponent layout(UUID[] layout) {
+        this.layout = layout;
+        return this;
+    }
 }

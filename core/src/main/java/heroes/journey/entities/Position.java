@@ -1,8 +1,5 @@
 package heroes.journey.entities;
 
-import lombok.Getter;
-
-@Getter
 public class Position {
 
     private int x, y;
@@ -37,5 +34,13 @@ public class Position {
         int dy = this.y - other.y;
         // return (int) Math.sqrt(dx * dx + dy * dy); // Euclidean
         return Math.abs(this.x - other.x) + Math.abs(this.y - other.y); // Manhattan
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
     }
 }

@@ -113,7 +113,7 @@ public class ActionMenu extends UI {
                     .create(ActionComponent.class)
                     .action(action);
             } else {
-                action.onSelect(new ActionInput(GameState.global(), null));
+                action.onSelect(new ActionInput(GameState.global(), null), false);
             }
         }
 

@@ -16,9 +16,7 @@ import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.FeatureType;
-import lombok.Getter;
 
-@Getter
 public class Feature {
 
     public UUID entityId;
@@ -86,5 +84,21 @@ public class Feature {
                 featuresAdded++;
             }
         }
+    }
+
+    public UUID getEntityId() {
+        return this.entityId;
+    }
+
+    public FeatureType getType() {
+        return this.type;
+    }
+
+    public Position getLocation() {
+        return this.location;
+    }
+
+    public Set<UUID> getConnections() {
+        return this.connections;
     }
 }
