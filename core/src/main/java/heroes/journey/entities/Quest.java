@@ -29,14 +29,6 @@ public class Quest extends Registrable {
         this.fameReward = fameReward;
     }
 
-    public Quest(
-        String id,
-        String name,
-        Consumer<ActionInput> onComplete,
-        Predicate<ActionInput> isComplete) {
-        this(id, name, onComplete, isComplete, 0);
-    }
-
     public void onComplete(ActionInput input) {
         PlayerComponent playerComponent = PlayerComponent.get(input.getGameState().getWorld(),
             input.getEntityId());
@@ -50,6 +42,7 @@ public class Quest extends Registrable {
         return isComplete.test(input);
     }
 
+    @Override
     public Quest register() {
         return QuestManager.register(this);
     }

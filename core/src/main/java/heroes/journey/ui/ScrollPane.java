@@ -1,18 +1,20 @@
 package heroes.journey.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
+import heroes.journey.registries.Registrable;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.input.KeyManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public abstract class ScrollPane<T> extends Table {
+public abstract class ScrollPane<T extends Registrable> extends Table {
 
     private final List<Label> optionLabels = new ArrayList<>();
     private List<ScrollPaneEntry<T>> options;
@@ -72,7 +74,7 @@ public abstract class ScrollPane<T> extends Table {
     }
 
     public String getText(T option) {
-        return option.toString();
+        return option.getName();
     }
 
     public ScrollPaneEntry<T> getSelected() {

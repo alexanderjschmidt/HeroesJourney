@@ -1,5 +1,7 @@
 package heroes.journey.utils.worldgen.effects;
 
+import java.util.function.BiFunction;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
@@ -9,24 +11,25 @@ import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 import lombok.Getter;
 import lombok.NonNull;
 
-import java.util.function.BiFunction;
-
 @Getter
 @SuppressWarnings("unchecked")
 public class WaveFunctionCollapseMapEffect extends MapGenerationEffect {
     private final boolean environment;
-    @NonNull
-    private final BiFunction<GameState, Position, WeightedRandomPicker<Tile>> applyTile;
+    @NonNull private final BiFunction<GameState,Position,WeightedRandomPicker<Tile>> applyTile;
 
-    public WaveFunctionCollapseMapEffect(String name, boolean environment,
-                                         BiFunction<GameState, Position, WeightedRandomPicker<Tile>> applyTile) {
-        super(name);
+    public WaveFunctionCollapseMapEffect(
+        String id,
+        boolean environment,
+        BiFunction<GameState,Position,WeightedRandomPicker<Tile>> applyTile) {
+        super(id);
         this.environment = environment;
         this.applyTile = applyTile;
     }
 
-    public WaveFunctionCollapseMapEffect(String name, BiFunction<GameState, Position, WeightedRandomPicker<Tile>> applyTile) {
-        this(name, false, applyTile);
+    public WaveFunctionCollapseMapEffect(
+        String id,
+        BiFunction<GameState,Position,WeightedRandomPicker<Tile>> applyTile) {
+        this(id, false, applyTile);
     }
 
     @Override

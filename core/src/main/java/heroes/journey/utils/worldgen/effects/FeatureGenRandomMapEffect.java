@@ -1,5 +1,10 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandTile;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.utils.Random;
@@ -7,20 +12,21 @@ import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.NonNull;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.*;
-
 public class FeatureGenRandomMapEffect extends MapGenerationEffect {
     private final int minFeature;
     private final int maxFeature;
     private final int generationAttempts;
     private final int minDistanceFromAllFeatures;
-    @NonNull
-    private final FeatureType featureType;
+    @NonNull private final FeatureType featureType;
 
-    public FeatureGenRandomMapEffect(String name, int minFeature, int maxFeature,
-                                     int generationAttempts, int minDistanceFromAllFeatures,
-                                     FeatureType featureType) {
-        super(name);
+    public FeatureGenRandomMapEffect(
+        String id,
+        int minFeature,
+        int maxFeature,
+        int generationAttempts,
+        int minDistanceFromAllFeatures,
+        FeatureType featureType) {
+        super(id);
         this.minFeature = minFeature;
         this.maxFeature = maxFeature;
         this.generationAttempts = generationAttempts;

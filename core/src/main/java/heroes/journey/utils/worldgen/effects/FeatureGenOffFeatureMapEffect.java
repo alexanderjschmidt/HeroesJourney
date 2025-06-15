@@ -1,5 +1,9 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
@@ -10,24 +14,24 @@ import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.*;
-
 @Getter
 public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
     private final int minPerFeature;
     private final int maxPerFeature;
     private final int minDistanceFromFeature;
     private final int maxDistanceFromFeature;
-    @NonNull
-    private final FeatureType offFeature;
-    @NonNull
-    private final FeatureType featureType;
+    @NonNull private final FeatureType offFeature;
+    @NonNull private final FeatureType featureType;
 
-    public FeatureGenOffFeatureMapEffect(String name, int minPerFeature,
-                                         int maxPerFeature, int minDistanceFromFeature,
-                                         int maxDistanceFromFeature, FeatureType offFeature,
-                                         FeatureType featureType) {
-        super(name);
+    public FeatureGenOffFeatureMapEffect(
+        String id,
+        int minPerFeature,
+        int maxPerFeature,
+        int minDistanceFromFeature,
+        int maxDistanceFromFeature,
+        FeatureType offFeature,
+        FeatureType featureType) {
+        super(id);
         this.minPerFeature = minPerFeature;
         this.maxPerFeature = maxPerFeature;
         this.minDistanceFromFeature = minDistanceFromFeature;

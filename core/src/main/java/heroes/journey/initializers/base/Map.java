@@ -101,7 +101,7 @@ public class Map implements InitializerInterface {
         };
 
         // Generate Smooth Noise
-        new NoiseMapEffect("base-noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
+        new NoiseMapEffect("base_noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
 
         // Add Monsters
         new BasicMapGenerationEffect("monsters", gs -> MonsterFactory.init(gs.getWorld())).register(

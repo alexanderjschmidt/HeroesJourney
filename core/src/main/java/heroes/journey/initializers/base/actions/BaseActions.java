@@ -128,7 +128,7 @@ public class BaseActions implements InitializerInterface {
 
             @Override
             public String getTargetDisplayName(TargetInput<Quest> input) {
-                return input.getInput().toString();
+                return input.getInput().getName();
             }
 
             @Override

@@ -6,8 +6,8 @@ public class Container<I, C extends Container<I,C>> extends HashMap<I,Integer> {
 
     public static final int ENTRY_LENGTH = 20;
 
-    public String toString(I item) {
-        return String.format("%-" + (ENTRY_LENGTH - 3) + "s x%d", item, get(item));
+    public String toString(I item, String displayName) {
+        return String.format("%-" + (ENTRY_LENGTH - 3) + "s x%d", displayName, get(item));
     }
 
     public C add(I item) {

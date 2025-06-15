@@ -11,7 +11,7 @@ import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.GameMod
 
 val mod = object : GameMod("Base Game") {
-    override fun onLoad(context: ModContext) {
+    override fun onLoad() {
         // Item Sub Types
         val raw_material = ItemSubType("raw_material", "Raw Material", ItemType.Misc).register()
         val refined_material =
@@ -19,7 +19,7 @@ val mod = object : GameMod("Base Game") {
         val sword = ItemSubType("sword", "Sword", ItemType.Weapon).register()
         val chest_armor = ItemSubType("chest_armor", "Chest Armor", ItemType.Armor).register()
         val potion = ItemSubType("potion", "Potion", ItemType.Consumable).register()
-        context.log("Loaded item sub types")
+        log("Loaded item sub types")
 
         // Items
         Item(
@@ -59,7 +59,7 @@ val mod = object : GameMod("Base Game") {
                 1
             )
         }.register()
-        context.log("Loaded items")
+        log("Loaded items")
     }
 }
 

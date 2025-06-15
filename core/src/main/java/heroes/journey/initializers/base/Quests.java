@@ -14,7 +14,7 @@ public class Quests implements InitializerInterface {
         delve = new Quest("delve_dungeon", "Delve a dungeon",
             (input) -> Utils.addItem(input, Items.ironSword, 1),
             (input) -> Utils.justCompletedAction(input.getGameState(), input.getEntityId(),
-                DelveAction.delve), 10);
+                DelveAction.delve), 10).register();
     }
 
 }

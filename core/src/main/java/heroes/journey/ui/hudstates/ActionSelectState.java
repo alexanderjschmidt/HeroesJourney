@@ -1,6 +1,11 @@
 package heroes.journey.ui.hudstates;
 
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ShowAction;
@@ -8,10 +13,6 @@ import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.UUID;
 
 public class ActionSelectState extends HUDState {
 
@@ -35,10 +36,6 @@ public class ActionSelectState extends HUDState {
             .toList();
     }
 
-    public List<ScrollPaneEntry<Action>> getOptions() {
-        return options;
-    }
-
     @Override
     public void enter(HUD hud) {
         hud.getActionMenu().setVisible(true);
@@ -49,8 +46,7 @@ public class ActionSelectState extends HUDState {
     @Override
     public void update(HUD hud) {
         HUD.get().getActionMenu().handleInputs();
-        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) ||
-            Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
+        if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();
             if (!(HUD.get().getState() instanceof ActionSelectState))
                 hud.getCursor().revertSelectedPosition();

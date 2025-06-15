@@ -27,7 +27,7 @@ public class QuestsComponent extends PooledClonableComponent<QuestsComponent> {
     }
 
     public QuestsComponent addQuest(Quest quest) {
-        quests.add(quest.toString());
+        quests.add(quest.getId());
         return this;
     }
 

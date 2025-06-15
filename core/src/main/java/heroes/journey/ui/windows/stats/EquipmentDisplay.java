@@ -1,12 +1,14 @@
 package heroes.journey.ui.windows.stats;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
+import heroes.journey.entities.items.Item;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.UUID;
 
 public class EquipmentDisplay extends Table {
 
@@ -64,8 +66,7 @@ public class EquipmentDisplay extends Table {
         accessoryTwo.setText("Acc Two: " + str(equipmentComponent.accessoryTwo()));
     }
 
-
-    private String str(Object o) {
-        return o == null ? "---" : o.toString();
+    private String str(Item i) {
+        return i == null ? "---" : i.getName();
     }
 }
