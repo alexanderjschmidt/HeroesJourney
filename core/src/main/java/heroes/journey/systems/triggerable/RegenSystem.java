@@ -1,6 +1,7 @@
 package heroes.journey.systems.triggerable;
 
 import static heroes.journey.initializers.utils.Utils.useBuff;
+import static heroes.journey.registries.Registries.BuffManager;
 
 import java.util.UUID;
 
@@ -10,7 +11,6 @@ import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.initializers.base.Buffs;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.systems.GameWorld;
@@ -31,7 +31,7 @@ public class RegenSystem extends TriggerableSystem {
         UUID id = IdComponent.get(world, entityId);
         Attributes statsComponent = StatsComponent.get(world, id);
 
-        if (useBuff(gameState, id, Buffs.rested)) {
+        if (useBuff(gameState, id, BuffManager.get("rested"))) {
             StatsUtils.adjustHealth(gameState, id, statsComponent.get(Stats.BODY) * 2);
             StatsUtils.adjustMana(gameState, id, statsComponent.get(Stats.MIND) * 2);
             StatsUtils.adjustStamina(gameState, id, statsComponent.get(Stats.BODY) * 4);

@@ -1,5 +1,7 @@
 package heroes.journey.initializers.base.actions;
 
+import static heroes.journey.registries.Registries.BuffManager;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +23,6 @@ import heroes.journey.entities.actions.results.ActionResult;
 import heroes.journey.entities.actions.results.EndTurnResult;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.Buffs;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.ui.HUD;
@@ -96,7 +97,7 @@ public class BaseActions implements InitializerInterface {
             public ActionResult internalOnSelect(ActionInput input) {
                 BuffsComponent buffsComponent = BuffsComponent.get(input.getGameState().getWorld(),
                     input.getEntityId());
-                buffsComponent.add(Buffs.rested);
+                buffsComponent.add(BuffManager.get("rested"));
                 return new EndTurnResult();
             }
         }.register();

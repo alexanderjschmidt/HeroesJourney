@@ -1,3 +1,4 @@
+import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.inputs.ActionInput
 import heroes.journey.initializers.base.actions.DelveAction
@@ -5,7 +6,7 @@ import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.Registries
 
-gameMod("Base Game Quests") {
+gameMod("Base Game Quests and Buffs") {
     Quest(
         "delve_dungeon", "Delve a dungeon",
         { input: ActionInput? ->
@@ -21,4 +22,6 @@ gameMod("Base Game Quests") {
             )
         }, 10
     ).register();
+
+    Buff("rested", "Rested", 1, 0).register();
 }
