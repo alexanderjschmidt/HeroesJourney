@@ -1,23 +1,25 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
-
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.tilemap.Feature;
-import heroes.journey.utils.worldgen.FeatureType;
+import heroes.journey.tilemap.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
 
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.buildRoad;
+
 @Getter
 public class BuildRoadBetweenFeaturesEffect extends MapGenerationEffect {
-    @NonNull private final FeatureType featureType;
-    @NonNull private final FeatureType featureTypeToConnect;
+    @NonNull
+    private final FeatureType featureType;
+    @NonNull
+    private final FeatureType featureTypeToConnect;
 
     public BuildRoadBetweenFeaturesEffect(
         String id,

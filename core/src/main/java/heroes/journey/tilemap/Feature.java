@@ -1,21 +1,14 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.utils.Direction.approximateDirection;
-
-import java.util.Comparator;
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.utils.Direction;
-import heroes.journey.utils.worldgen.FeatureType;
+
+import java.util.*;
+
+import static heroes.journey.utils.Direction.approximateDirection;
 
 public class Feature {
 
@@ -49,7 +42,7 @@ public class Feature {
         if (o == null || getClass() != o.getClass())
             return false;
 
-        Feature feature = (Feature)o;
+        Feature feature = (Feature) o;
 
         return Objects.equals(location, feature.location);
     }
@@ -69,7 +62,7 @@ public class Feature {
             .toList();
 
         // Step 2: Assign closest features to directions
-        EnumMap<Direction,Feature> result = new EnumMap<>(Direction.class);
+        EnumMap<Direction, Feature> result = new EnumMap<>(Direction.class);
         int featuresAdded = 0;
 
         for (Feature info : sorted) {

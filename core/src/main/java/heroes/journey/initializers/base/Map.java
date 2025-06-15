@@ -1,21 +1,6 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Tiles.water;
-import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
-import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.artemis.EntityEdit;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -26,23 +11,21 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.tilemap.Feature;
+import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
-import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.MapGenerator;
-import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
-import heroes.journey.utils.worldgen.effects.BuildRoadBetweenFeaturesEffect;
-import heroes.journey.utils.worldgen.effects.FeatureConnectionsEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenOffFeatureMapEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenRadialMapEffect;
-import heroes.journey.utils.worldgen.effects.FeatureGenRandomMapEffect;
-import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
-import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
-import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
+import heroes.journey.utils.worldgen.effects.*;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
+
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.factories.EntityFactory.*;
+import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -115,29 +98,11 @@ public class Map implements InitializerInterface {
         new FeatureConnectionsEffect("kingdomConnections", KINGDOM,
             (feature, featureToConnect) -> featureToConnect.getType() == KINGDOM).register(kingdomsGen);
 
-        new BasicMapGenerationEffect("voronoiRegions", gs -> {
-            List<Position> kingdoms = new ArrayList<>();
-            for (Feature kingdom : FeatureManager.get(KINGDOM)) {
-                kingdoms.add(kingdom.location);
-            }
-            boolean[][] isLand = new boolean[gs.getWidth()][gs.getHeight()];
-
-            for (int x = 0; x < gs.getWidth(); x++) {
-                for (int y = 0; y < gs.getHeight(); y++) {
-                    isLand[x][y] = inBounds(x, y) && gs.getMap().getTileMap()[x][y].getTerrain() != water;
-                }
-            }
-
-            int[][] result = VoronoiRegionGenerator.generateRegionMap(isLand, kingdoms, REGIONS);
-            gs.getMap().setRegionMap(result);
-            buildRegionsFromMap(result);
-            if (RegionManager.get().size() != REGIONS)
-                throw new MapGenerationException("Could not produce enough regions");
-        }).register(kingdomsGen);
+        new VoronoiRegionEffect("voronoiRegions", REGIONS, KINGDOM).register(kingdomsGen);
 
         // Add Towns off of kingdoms
         MapGenerationEffect townsGen = new FeatureGenOffFeatureMapEffect("towns", townsPerKingdomMin,
-            townsPerKingdomMax, minDistanceBetweenTowns, minDistanceBetweenTowns * 2, TOWN, KINGDOM).register(
+            townsPerKingdomMax, minDistanceBetweenTowns, minDistanceBetweenTowns * 2, KINGDOM, TOWN).register(
             kingdomsGen);
 
         // Add Paths between capitals and towns
@@ -149,7 +114,7 @@ public class Map implements InitializerInterface {
         // Add Dungeons off of towns
         MapGenerationEffect dungeonsGen = new FeatureGenOffFeatureMapEffect("dungeons",
             dungeonsPerSettlementMin, dungeonsPerSettlementMax, minDistanceFromAnyFeature,
-            maxDistanceFromSettlement, DUNGEON, TOWN).register(paths);
+            maxDistanceFromSettlement, TOWN, DUNGEON).register(paths);
 
         // Add more dungeons randomly in the wild
         new FeatureGenRandomMapEffect("wildDungeons", wildDungeonsMin, wildDungeonsMax,

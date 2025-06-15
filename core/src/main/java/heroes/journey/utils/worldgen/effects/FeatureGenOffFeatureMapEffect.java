@@ -1,18 +1,16 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.tilemap.Feature;
+import heroes.journey.tilemap.FeatureType;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
+
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.*;
 
 @Getter
 public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
@@ -20,8 +18,10 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
     private final int maxPerFeature;
     private final int minDistanceFromFeature;
     private final int maxDistanceFromFeature;
-    @NonNull private final FeatureType offFeature;
-    @NonNull private final FeatureType featureType;
+    @NonNull
+    private final FeatureType offFeature;
+    @NonNull
+    private final FeatureType featureType;
 
     public FeatureGenOffFeatureMapEffect(
         String id,
@@ -41,14 +41,16 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
     }
 
     public void apply(GameState gameState) {
+        System.out.println(FeatureManager.get());
+        System.out.println(FeatureManager.get(offFeature));
+        System.out.println(offFeature);
         for (Feature settlement : FeatureManager.get(offFeature)) {
-            int numDungeons = Random.get().nextInt(minPerFeature, maxPerFeature);
+            int numFeatures = Random.get().nextInt(minPerFeature, maxPerFeature);
 
-            for (int i = 0; i < numDungeons; i++) {
+            for (int i = 0; i < numFeatures; i++) {
                 Position candidate = findTileNear(settlement.location, minDistanceFromFeature,
                     maxDistanceFromFeature, isFarFromFeatures(gameState, minDistanceFromFeature).and(
                         isLandSurrounded(gameState.getMap().getTileMap())));
-                System.out.println("Gen feature off another feature");
                 featureType.generateFeature(gameState, candidate, settlement);
             }
         }

@@ -1,15 +1,15 @@
 package heroes.journey.tilemap;
 
+import heroes.journey.entities.Position;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import heroes.journey.entities.Position;
-
 public class Region {
     public final int id;
-    private int biome;
+    private Biome biome;
     private final Set<Position> tiles = new HashSet<>();
     private final List<Object> features = new ArrayList<>(); // Placeholder
     public Position center;

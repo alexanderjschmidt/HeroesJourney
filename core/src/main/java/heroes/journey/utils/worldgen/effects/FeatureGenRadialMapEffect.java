@@ -2,8 +2,8 @@ package heroes.journey.utils.worldgen.effects;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
+import heroes.journey.tilemap.FeatureType;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.worldgen.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.NonNull;
 
