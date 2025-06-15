@@ -30,13 +30,14 @@ object ScriptModLoader {
 
         folder.walkTopDown().filter { it.extension == "kts" }.forEach { scriptFile ->
             val result = scriptingHost.eval(scriptFile.toScriptSource(), compilationConfig, evaluationConfig)
-            result.reports.forEach {
-                println("[${it.severity}] ${it.message}")
-            }
+            result.reports
+                .filter { it.severity.name != "DEBUG" }
+                .forEach {
+                    println("[${it.severity}] ${it.message}")
+                }
 
             val returnValue = (result.valueOrNull()?.returnValue as? ResultValue.Value)?.value
             if (returnValue is GameMod) {
-                println("Mod: ${returnValue.name} found")
                 mods.add(returnValue)
             } else {
                 println("Invalid mod in ${scriptFile.name}")

@@ -1,15 +1,11 @@
 package heroes.journey.components.character;
 
-import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.systems.GameWorld;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import java.util.UUID;
 
-@Setter
-@Getter
+import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.systems.GameWorld;
+import lombok.experimental.Accessors;
+
 @Accessors(fluent = true, chain = true)
 public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
 
@@ -30,5 +26,23 @@ public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
     public void copy(PlayerComponent from) {
         playerId = from.playerId;
         fame = from.fame;
+    }
+
+    public PlayerComponent playerId(UUID playerId) {
+        this.playerId = playerId;
+        return this;
+    }
+
+    public PlayerComponent fame(int fame) {
+        this.fame = fame;
+        return this;
+    }
+
+    public UUID playerId() {
+        return this.playerId;
+    }
+
+    public int fame() {
+        return this.fame;
     }
 }

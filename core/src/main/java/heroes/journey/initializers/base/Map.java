@@ -4,6 +4,7 @@ import static heroes.journey.initializers.base.Tiles.water;
 import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
+import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
 import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
@@ -203,9 +204,9 @@ public class Map implements InitializerInterface {
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                     player.create(NamedComponent.class).name("Player");
                     InventoryComponent.get(gameState.getWorld(), playerId)
-                        .add(Items.healthPotion, 3)
-                        .add(Items.ironIngot, 5)
-                        .add(Items.chestPlate);
+                        .add(ItemManager.get("health_potion"), 3)
+                        .add(ItemManager.get("iron_ingot"), 5)
+                        .add(ItemManager.get("chest_plate"));
                     PlayerInfo.get().setPlayerId(playerId);
                 } else {
                     Feature opponentTown = FeatureManager.get()

@@ -44,9 +44,7 @@ import heroes.journey.utils.serializers.PlayerInfoSerializer;
 import heroes.journey.utils.serializers.PositionSerializer;
 import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
 import heroes.journey.utils.serializers.UUIDSerializer;
-import lombok.Getter;
 
-@Getter
 public class GameState implements Cloneable {
 
     private static GameState gameState;
@@ -56,7 +54,7 @@ public class GameState implements Cloneable {
     private TileMap map;
     private History history;
     private int turn;
-    @Getter private UUID currentEntity;
+    private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
 
@@ -248,5 +246,41 @@ public class GameState implements Cloneable {
 
         HUDEffectManager.get();
         WorldEffectManager.get();
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public EntityManager getEntities() {
+        return this.entities;
+    }
+
+    public GameWorld getWorld() {
+        return this.world;
+    }
+
+    public TileMap getMap() {
+        return this.map;
+    }
+
+    public History getHistory() {
+        return this.history;
+    }
+
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public List<UUID> getEntitiesInActionOrder() {
+        return this.entitiesInActionOrder;
+    }
+
+    public UUID getCurrentEntity() {
+        return this.currentEntity;
     }
 }

@@ -1,13 +1,13 @@
 package heroes.journey.mods
 
-abstract class GameMod(val name: String) {
+class GameMod(val name: String, private val onLoadBlock: GameMod.() -> Unit) {
 
     init {
         log("Found")
     }
 
     fun load() {
-        onLoad()
+        onLoadBlock()
         log("Loaded")
     }
 
@@ -15,9 +15,11 @@ abstract class GameMod(val name: String) {
         println("[MOD: $name] $message")
     }
 
-    abstract fun onLoad()
-
     override fun toString(): String {
         return name
     }
+}
+
+fun gameMod(name: String, onLoad: GameMod.() -> Unit): GameMod {
+    return GameMod(name, onLoad)
 }

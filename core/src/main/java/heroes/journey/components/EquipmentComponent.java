@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.items.Item;
-import heroes.journey.initializers.base.Items;
 import heroes.journey.systems.GameWorld;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,10 +18,10 @@ public class EquipmentComponent extends PooledClonableComponent<EquipmentCompone
 
     public void equip(Item item) {
         switch (item.getSubType().getId()) {
-            case Items.SWORD:
+            case "sword":
                 handOne = handOne != null && handOne.equals(item.getId()) ? null : item.getId();
                 break;
-            case Items.CHEST_ARMOR:
+            case "chest_armor":
                 chest = chest != null && chest.equals(item.getId()) ? null : item.getId();
                 break;
         }

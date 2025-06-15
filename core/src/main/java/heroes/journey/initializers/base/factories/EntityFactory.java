@@ -4,6 +4,7 @@ import static heroes.journey.initializers.base.factories.MonsterFactory.goblinId
 import static heroes.journey.initializers.base.factories.MonsterFactory.hobgoblinId;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.ItemSubTypeManager;
+import static heroes.journey.registries.Registries.QuestManager;
 
 import java.util.UUID;
 
@@ -26,7 +27,6 @@ import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.ai.AI;
-import heroes.journey.initializers.base.Quests;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.CarriageActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -65,7 +65,7 @@ public class EntityFactory {
         house.create(LocationComponent.class).capital(capital);
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y);
-        house.create(QuestsComponent.class).addQuest(Quests.delve);
+        house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
         PossibleActionsComponent actions = house.create(PossibleActionsComponent.class)
             .addAction(BaseActions.questBoard)
             .addAction(TravelActions.travel);
