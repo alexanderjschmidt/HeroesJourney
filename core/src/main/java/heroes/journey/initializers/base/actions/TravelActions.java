@@ -7,7 +7,6 @@ import static heroes.journey.initializers.base.actions.BaseActions.popup;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.UUID;
 
@@ -41,7 +40,7 @@ import heroes.journey.utils.ai.pathfinding.EntityCursorPathing;
 public class TravelActions implements InitializerInterface {
 
     public static Action travel;
-    public static TargetAction<UUID> journey, wayfare;
+    public static TargetAction<UUID> wayfare;
     public static TargetAction<Direction> explore;
     // TODO Pilgrimage lose a turn but go anywhere?
     // TODO No direction explore that expands in a circle?
@@ -77,73 +76,6 @@ public class TravelActions implements InitializerInterface {
                     baseWidth, input.getInput());
 
                 return new StringResult("You have explored the " + input.getInput());
-            }
-        }.register();
-        // TODO clean up journey to use more utils?
-        journey = new TargetAction<UUID>("journey", "Journey", "Travel to a known location",
-            new Cost(1, 0, 0, 0)) {
-            @Override
-            public List<UUID> getTargets(ActionInput input) {
-                UUID currentLocation = Utils.getLocation(input);
-                MapComponent mapComponent = MapComponent.get(input.getGameState().getWorld(),
-                    input.getEntityId());
-                List<UUID> journeyLocations = new ArrayList<>();
-                for (UUID knownLocation : mapComponent.getKnownLocations()) {
-                    if (!Objects.equals(currentLocation, knownLocation))
-                        journeyLocations.add(knownLocation);
-                }
-                return journeyLocations;
-            }
-
-            @Override
-            public String getTargetDisplayName(TargetInput<UUID> input) {
-                return NamedComponent.get(input.getGameState().getWorld(), input.getInput(),
-                    "Unknown Location");
-            }
-
-            @Override
-            protected void onHoverTarget(TargetInput<UUID> input) {
-                Feature feature = FeatureManager.getFeature(input.getInput());
-                HUD.get()
-                    .getCursor()
-                    .setMapPointerLoc(new Position(feature.location.getX(), feature.location.getY()));
-            }
-
-            @Override
-            protected ActionResult onSelectTarget(TargetInput<UUID> input) {
-                GameState gs = input.getGameState();
-                UUID e = input.getEntityId();
-                Feature feature = FeatureManager.getFeature(input.getInput());
-                String locationName = NamedComponent.get(gs.getWorld(), input.getInput(), "Unknown Location");
-                PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-                Cell path = new EntityCursorPathing().getPath(gs.getMap(), positionComponent.getX(),
-                    positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
-
-                Queue<Runnable> events = new LinkedList<>();
-                events.add(() -> {
-                    gs.getWorld().edit(e).create(MovementComponent.class).path(path.reverse());
-                });
-                events.add(() -> {
-                    BaseActions.popupMessage = "You have traveled to " + locationName;
-                    gs.getWorld().edit(e).create(ActionComponent.class).action(popup);
-                });
-                return new MultiStepResult(events);
-            }
-
-            @Override
-            protected ActionResult onSelectAITarget(TargetInput<UUID> input) {
-                GameState gs = input.getGameState();
-                UUID e = input.getEntityId();
-                Feature feature = FeatureManager.getFeature(input.getInput());
-                String locationName = NamedComponent.get(gs.getWorld(), input.getInput(), "Unknown Location");
-                PositionComponent positionComponent = PositionComponent.get(gs.getWorld(), e);
-                Cell path = new EntityCursorPathing().getPath(gs.getMap(), positionComponent.getX(),
-                    positionComponent.getY(), feature.location.getX(), feature.location.getY(), e);
-
-                Cell end = gs.getEntities().moveEntity(e, path);
-                positionComponent.setPos(end.x, end.y);
-                positionComponent.sync();
-                return new StringResult("You have traveled to " + locationName);
             }
         }.register();
         wayfare = new TargetAction<UUID>("wayfare", "Wayfare", "Travel to a connected location",
@@ -224,7 +156,6 @@ public class TravelActions implements InitializerInterface {
         List<Action> travelActionOptions = new ArrayList<>();
         travelActionOptions.add(explore);
         travelActionOptions.add(wayfare);
-        travelActionOptions.add(journey);
         travel = new Action("travel", "Travel", "Choose a travel option", true, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {

@@ -33,9 +33,9 @@ public class BaseActions implements InitializerInterface {
 
     //TODO this is probably bad
     public static String popupMessage = "";
-    public static Action openActionMenu, rest, end_turn, exit_game, popup, save;
+    public static Action openActionMenu, end_turn, exit_game, popup, save;
     public static CooldownAction workout, study;
-    public static Action questBoard;
+    public static Action rest, questBoard;
 
     @Override
     public void init() {
@@ -92,6 +92,7 @@ public class BaseActions implements InitializerInterface {
             }
         }.register();
 
+        // Used in End Turn
         rest = new Action("rest", "Rest", "Do nothing, resting your body and mind.", false, null) {
             @Override
             public ActionResult internalOnSelect(ActionInput input) {
@@ -118,7 +119,6 @@ public class BaseActions implements InitializerInterface {
             }
         }.register();
 
-        // TODO FIX
         questBoard = new TargetAction<Quest>("quest_board", "Quest Board",
             "See what the people need help with", new Cost(0, 0, 0, 0)) {
             @Override

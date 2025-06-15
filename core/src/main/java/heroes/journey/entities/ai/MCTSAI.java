@@ -1,5 +1,9 @@
 package heroes.journey.entities.ai;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -11,10 +15,6 @@ import heroes.journey.entities.actions.results.ActionListResult;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class MCTSAI implements AI, Scorer {
 
@@ -36,7 +36,8 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
         ActionInput input = new ActionInput(gameState, playingEntity);
-        addUsableActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), input, position);
+        addUsableActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), input,
+            position);
         return possibleActions;
     }
 
@@ -53,7 +54,7 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position) {
         for (Action action : actions) {
             if (action.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult) action.onSelect(input);
+                ActionListResult result = (ActionListResult)action.onSelect(input);
                 addUsableActions(possibleActions, result.list(), input, position);
             } else {
                 if (action.requirementsMet(input) == ShowAction.YES) {

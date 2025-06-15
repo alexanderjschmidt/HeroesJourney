@@ -13,12 +13,11 @@ import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.systems.GameWorld;
-import lombok.Getter;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
-    @Getter private final Map<String,Integer> cooldowns;
+    private final Map<String,Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
@@ -54,5 +53,9 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     public void copy(PossibleActionsComponent from) {
         possibleActions.addAll(from.possibleActions);
         cooldowns.putAll(from.cooldowns);
+    }
+
+    public Map<String,Integer> getCooldowns() {
+        return this.cooldowns;
     }
 }

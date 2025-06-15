@@ -28,7 +28,7 @@ public class Tiles implements InitializerInterface {
 
     @Override
     public void init() {
-        TextureRegion[][] tiles = ResourceManager.get(LoadTextures.OverworldTileset);
+        TextureRegion[][] tiles = ResourceManager.get(ResourceManager.OverworldTileset);
 
         NULL = new BaseTile(NULL_TERRAIN, 100, false, tiles[3][0]);
         TileHelpers.baseTile(NULL, NULL_TERRAIN);

@@ -1,5 +1,7 @@
 package heroes.journey.utils.art;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -12,12 +14,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import heroes.journey.initializers.base.LoadTextures;
-
-import java.util.HashMap;
 
 public class ResourceManager extends AssetManager {
 
+    public static final TextureMap UI = new TextureMap("UI/cursor.png", 32, 32);
+    public static final TextureMap Sprites = new TextureMap("sprites.png", 16, 16);
+    public static final TextureMap OverworldTileset = new TextureMap("Overworld_Tileset.png", 16, 16);
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
     public BitmapFont font12;
@@ -35,9 +37,9 @@ public class ResourceManager extends AssetManager {
     public TextureRegion[] bless;
     public TextureRegion[] rally;
 
-    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
 
-    public HashMap<String, TextureRegion> sprites;
+    public HashMap<String,TextureRegion> sprites;
 
     private static ResourceManager manager;
 
@@ -54,7 +56,8 @@ public class ResourceManager extends AssetManager {
 
     public static void register(String spriteName, TextureRegion sprite) {
         if (get().sprites.containsKey(spriteName))
-            throw new RuntimeException("Registering sprite with the same name as existing sprite " + spriteName);
+            throw new RuntimeException(
+                "Registering sprite with the same name as existing sprite " + spriteName);
         get().sprites.put(spriteName, sprite);
     }
 
@@ -64,7 +67,7 @@ public class ResourceManager extends AssetManager {
     }
 
     private ResourceManager() {
-        textureRegions = new HashMap<TextureMap, TextureRegion[][]>();
+        textureRegions = new HashMap<TextureMap,TextureRegion[][]>();
         sprites = new HashMap<>();
 
         initFonts();
@@ -108,7 +111,7 @@ public class ResourceManager extends AssetManager {
     }
 
     public void splits() {
-        select = get(LoadTextures.UI)[1][3];
+        select = get(UI)[1][3];
         slash = TextureRegion.split(getTexture("Textures/Battle_Animations/Slashing.png"), 32, 32);
         arrow = arrangeFrames(
             TextureRegion.split(getTexture("Textures/Battle_Animations/Arrow 1.png"), 32, 32));

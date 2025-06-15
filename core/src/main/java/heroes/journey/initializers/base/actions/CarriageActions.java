@@ -24,8 +24,7 @@ public class CarriageActions implements InitializerInterface {
 
     @Override
     public void init() {
-        carriage = new TargetAction<Feature>("carriage", "Carriage", "Travel to a kingdom by carriage",
-            null) {
+        carriage = new TargetAction<>("carriage", "Carriage", "Travel to a kingdom by carriage", null) {
             @Override
             public List<Feature> getTargets(ActionInput input) {
                 UUID currentLocation = Utils.getLocation(input);
