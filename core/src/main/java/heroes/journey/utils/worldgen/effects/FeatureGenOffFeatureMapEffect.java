@@ -1,5 +1,9 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
 import heroes.journey.registries.FeatureManager;
@@ -10,18 +14,14 @@ import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.*;
-
 @Getter
 public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
     private final int minPerFeature;
     private final int maxPerFeature;
     private final int minDistanceFromFeature;
     private final int maxDistanceFromFeature;
-    @NonNull
-    private final FeatureType offFeature;
-    @NonNull
-    private final FeatureType featureType;
+    @NonNull private final FeatureType offFeature;
+    @NonNull private final FeatureType featureType;
 
     public FeatureGenOffFeatureMapEffect(
         String id,
@@ -51,7 +51,7 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
                 Position candidate = findTileNear(settlement.location, minDistanceFromFeature,
                     maxDistanceFromFeature, isFarFromFeatures(gameState, minDistanceFromFeature).and(
                         isLandSurrounded(gameState.getMap().getTileMap())));
-                featureType.generateFeature(gameState, candidate, settlement);
+                featureType.generateFeature(gameState, candidate);
             }
         }
     }

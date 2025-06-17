@@ -130,4 +130,51 @@ public class MapGenUtils {
 
         return center; // fallback
     }
+
+    /**
+     * Returns a Position in the region that is at least minDist away from all existing features.
+     * Scans outward in rings from the region center, shuffling each ring for variance.
+     * Falls back to the center if no valid tile is found.
+     */
+    public static Position poisonDiskSample(int minDist, heroes.journey.registries.FeatureManager features, heroes.journey.tilemap.Region region) {
+        // Gather all existing feature positions
+        List<Position> featurePositions = new ArrayList<>();
+        for (heroes.journey.tilemap.Feature f : features.values()) {
+            featurePositions.add(f.getLocation());
+        }
+        // All tiles in the region
+        List<Position> regionTiles = new ArrayList<>(region.getTiles());
+        Position center = region.center;
+        // Compute max possible radius (Manhattan distance from center to farthest tile)
+        int maxRadius = 0;
+        for (Position p : regionTiles) {
+            int dist = Math.abs(center.getX() - p.getX()) + Math.abs(center.getY() - p.getY());
+            if (dist > maxRadius) maxRadius = dist;
+        }
+        // For each ring, starting at radius 0 (center), scan outward
+        for (int r = 0; r <= maxRadius; r++) {
+            List<Position> ring = new ArrayList<>();
+            for (Position p : regionTiles) {
+                int dist = Math.abs(center.getX() - p.getX()) + Math.abs(center.getY() - p.getY());
+                if (dist == r) {
+                    ring.add(p);
+                }
+            }
+            // Shuffle the ring for random starting point
+            Collections.shuffle(ring, Random.get());
+            for (Position candidate : ring) {
+                boolean farEnough = true;
+                for (Position existing : featurePositions) {
+                    if (candidate.distanceTo(existing) < minDist) {
+                        farEnough = false;
+                        break;
+                    }
+                }
+                if (farEnough) {
+                    return candidate;
+                }
+            }
+        }
+        return null;
+    }
 }

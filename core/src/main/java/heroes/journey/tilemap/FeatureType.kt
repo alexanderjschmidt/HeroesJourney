@@ -13,5 +13,5 @@ abstract class FeatureType(id: String, name: String?) : Registrable(id, name) {
         return FeatureTypeManager.register(this)
     }
 
-    abstract fun generateFeature(gs: GameState, pos: Position, vararg connections: Feature): Feature
+    abstract fun generateFeature(gs: GameState, pos: Position): Feature
 }

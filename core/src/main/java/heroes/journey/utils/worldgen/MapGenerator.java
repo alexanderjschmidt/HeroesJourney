@@ -10,6 +10,7 @@ import java.util.Map;
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
 import heroes.journey.registries.FeatureManager;
+import heroes.journey.registries.RegionManager;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 
@@ -43,6 +44,8 @@ public class MapGenerator {
                     }
                 }
             } catch (MapGenerationException e) {
+                System.out.println(e.getMessage());
+                RegionManager.get().clear();
                 continue;
             }
             break;

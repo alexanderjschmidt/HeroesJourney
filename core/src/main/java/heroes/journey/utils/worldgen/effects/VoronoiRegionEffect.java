@@ -1,53 +1,58 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
+import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.generateInwardRegionRings;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
-import heroes.journey.registries.FeatureManager;
 import heroes.journey.registries.RegionManager;
-import heroes.journey.tilemap.Feature;
-import heroes.journey.tilemap.FeatureType;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.registries.Registries.TerrainManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
-import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
-
 @Getter
 public class VoronoiRegionEffect extends MapGenerationEffect {
 
-    private final int numRegions;
-    private final List<FeatureType> featuresToMakeRegionsAround;
+    private final List<Integer> regionsPerRing;
+    private final List<Boolean> offsetRings;
 
-    public VoronoiRegionEffect(String id, int numRegions, FeatureType... featuresToMakeRegionsAround) {
+    public VoronoiRegionEffect(String id, List<Integer> regionsPerRing, List<Boolean> offsetRings) {
         super(id);
-        this.numRegions = numRegions;
-        this.featuresToMakeRegionsAround = List.of(featuresToMakeRegionsAround);
+        this.regionsPerRing = regionsPerRing;
+        this.offsetRings = offsetRings;
     }
 
     public void apply(GameState gs) {
-        List<Position> centerPoints = new ArrayList<>();
-        for (Feature feature : FeatureManager.get().values()) {
-            if (featuresToMakeRegionsAround.contains(feature.getType()))
-                centerPoints.add(feature.location);
-        }
+        int centerX = gs.getWidth() / 2;
+        int centerY = gs.getHeight() / 2;
+        Position center = new Position(centerX, centerY);
+        List<List<Position>> centerPoints = generateInwardRegionRings(center,
+            (float)centerX / regionsPerRing.size(), regionsPerRing, offsetRings, 0.05f);
         boolean[][] isLand = new boolean[gs.getWidth()][gs.getHeight()];
 
         for (int x = 0; x < gs.getWidth(); x++) {
             for (int y = 0; y < gs.getHeight(); y++) {
-                isLand[x][y] = inBounds(x, y) && gs.getMap().getTileMap()[x][y].getTerrain() != TerrainManager.get("water");
+                isLand[x][y] = inBounds(x, y) &&
+                    gs.getMap().getTileMap()[x][y].getTerrain() != TerrainManager.get("water");
             }
         }
 
-        int[][] result = VoronoiRegionGenerator.generateRegionMap(isLand, centerPoints, numRegions);
+        List<Position> centerPointsFlat = centerPoints.stream()
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
+        int[][] result = VoronoiRegionGenerator.generateRegionMap(isLand, centerPointsFlat,
+            centerPointsFlat.size());
         gs.getMap().setRegionMap(result);
-        buildRegionsFromMap(result);
-        if (RegionManager.get().size() != numRegions)
-            throw new MapGenerationException("Could not produce enough regions");
+        buildRegionsFromMap(centerPoints, result);
+        if (RegionManager.get().size() != centerPointsFlat.size())
+            throw new MapGenerationException(
+                "Could not produce enough regions, target: " + centerPointsFlat.size() + ", created: " +
+                    RegionManager.get().size());
     }
 }

@@ -1,6 +1,19 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
+import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
+
+import java.util.List;
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -11,21 +24,22 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.registries.FeatureManager;
+import heroes.journey.registries.RegionManager;
+import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.Feature;
+import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.FeatureType;
+import heroes.journey.tilemap.Region;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
+import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.MapGenerator;
-import heroes.journey.utils.worldgen.effects.*;
+import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
+import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
+import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
+import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
-
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.factories.EntityFactory.*;
-import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -58,7 +72,7 @@ public class Map implements InitializerInterface {
         // feature types
         KINGDOM = new FeatureType("kingdom", "Kingdom") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+            public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
                 UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
                 return new Feature(kingdomId, KINGDOM, pos);
@@ -66,23 +80,47 @@ public class Map implements InitializerInterface {
         };
         TOWN = new FeatureType("town", "Town") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+            public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
                 UUID townId = generateTown(gs, pos.getX(), pos.getY(), false);
                 Feature town = new Feature(townId, TOWN, pos);
-                for (Feature connection : connections)
-                    town.add(connection);
                 return town;
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos, Feature... connections) {
+            public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
                 UUID dungeonId = generateDungeon(gs, pos.getX(), pos.getY());
                 return new Feature(dungeonId, DUNGEON, pos);
             }
         };
+
+        /**
+         * New Gen Plan
+         * Noise (create continent)
+         * Generate kingdom region starting points
+         * generate voronoi regions using starting points as seeds and X regions to gen
+         * apply region generation
+         *  set tile to biome base tile
+         *  generate features random in region
+         * cross region generation (roads)
+         * wavefunctioncollapse tilemap layer
+         * wavefunctioncollapse env layer
+         * Add players (this could be a part of kingdom biome generation?)
+         */
+
+        /**
+         * Ideal Gen Plan
+         * Noise (create continent)
+         * generate voronoi regions using ring region inputs
+         * apply region generation
+         *  set tile to biome base tile
+         *  generate features random in region
+         *  Add entities (players)
+         * cross region generation (roads)
+         * wavefunctioncollapse tilemap and env layer
+         */
 
         // Generate Smooth Noise
         new NoiseMapEffect("base_noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
@@ -92,33 +130,55 @@ public class Map implements InitializerInterface {
             MapGenerator.noisePhase);
 
         // Capitals
-        MapGenerationEffect kingdomsGen = new FeatureGenRadialMapEffect("kingdoms", KINGDOM_DIST_TO_CENTER,
-            NUM_KINGDOMS, KINGDOM).register(MapGenerator.worldGenPhase);
+        MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",
+            List.of(new Integer[] {6, 3, 1}), List.of(new Boolean[] {false, true, false})).register(
+            MapGenerator.worldGenPhase);
 
-        new FeatureConnectionsEffect("kingdomConnections", KINGDOM,
-            (feature, featureToConnect) -> featureToConnect.getType() == KINGDOM).register(kingdomsGen);
+        MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
+            Tile[][] map = gameState.getMap().getTileMap();
+            // Set tiles to base tiles
+            for (Region region : RegionManager.get().values()) {
+                for (Position pos : region.getTiles()) {
+                    map[pos.getX()][pos.getY()] = TileManager.get()
+                        .getBaseTile(TerrainManager.get(region.getBiome().getBaseTerrain()));
+                }
+                for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
+                    for (int i = 0; i < genData.getMinInRegion(); i++) {
+                        Position pos = poisonDiskSample(genData.getMinDist(), FeatureManager.get(), region);
+                        if (pos == null) {
+                            throw new MapGenerationException(
+                                "Failed to generate minimum number (" + genData.getMinInRegion() + ") of " +
+                                    genData.getFeatureType().getId() + " features for " +
+                                    region.getBiome().getId() + " biome.");
+                        }
+                        region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
+                    }
+                }
+                for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
+                    int bound = genData.getMaxInRegion() - genData.getMinInRegion();
+                    if (bound <= 0) {
+                        continue;
+                    }
+                    int randomVariance = Random.get().nextInt(bound);
+                    for (int i = 0; i < randomVariance; i++) {
+                        Position pos = poisonDiskSample(genData.getMinDist(), FeatureManager.get(), region);
+                        if (pos == null)
+                            break;
+                        region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
+                    }
+                }
+            }
 
-        new VoronoiRegionEffect("voronoiRegions", REGIONS, KINGDOM).register(kingdomsGen);
-
-        // Add Towns off of kingdoms
-        MapGenerationEffect townsGen = new FeatureGenOffFeatureMapEffect("towns", townsPerKingdomMin,
-            townsPerKingdomMax, minDistanceBetweenTowns, minDistanceBetweenTowns * 2, KINGDOM, TOWN).register(
-            kingdomsGen);
+            // for every feature data in biome, create min number using poison disk sampling on all features.
+            // then generate up to max extras
+            gameState.getMap().setTileMap(map);
+        }).register(voronoiRegion);
 
         // Add Paths between capitals and towns
-        MapGenerationEffect kingdomPaths = new BuildRoadBetweenFeaturesEffect("kingdomPaths", KINGDOM,
-            KINGDOM).register(townsGen);
+        /*MapGenerationEffect kingdomPaths = new BuildRoadBetweenFeaturesEffect("kingdomPaths", KINGDOM,
+            KINGDOM).register(kingdomConnection);
         MapGenerationEffect paths = new BuildRoadBetweenFeaturesEffect("paths", KINGDOM, TOWN).register(
-            kingdomPaths);
-
-        // Add Dungeons off of towns
-        MapGenerationEffect dungeonsGen = new FeatureGenOffFeatureMapEffect("dungeons",
-            dungeonsPerSettlementMin, dungeonsPerSettlementMax, minDistanceFromAnyFeature,
-            maxDistanceFromSettlement, TOWN, DUNGEON).register(paths);
-
-        // Add more dungeons randomly in the wild
-        new FeatureGenRandomMapEffect("wildDungeons", wildDungeonsMin, wildDungeonsMax,
-            maxAttemptsWildDungeons, minDistanceFromAllFeatures, DUNGEON).register(dungeonsGen);
+            kingdomPaths);*/
 
         // Wave Function collapse keeping houses and path placements
         MapGenerationEffect wfc = new WaveFunctionCollapseMapEffect("waveFunctionCollapse", (gs, pos) -> {
@@ -160,11 +220,9 @@ public class Map implements InitializerInterface {
             List<Feature> kingdoms = FeatureManager.get(KINGDOM);
             for (Feature kingdom : kingdoms) {
                 if (kingdom == kingdoms.getFirst()) {
-                    Feature playerTown = FeatureManager.get()
-                        .get(kingdom.connections.stream().toList().getFirst());
                     EntityEdit player = gameState.getWorld().createEntity().edit();
                     UUID playerId = addOverworldComponents(gameState.getWorld(), player,
-                        playerTown.location.getX(), playerTown.location.getY(), LoadTextures.PLAYER_SPRITE,
+                        kingdom.location.getX(), kingdom.location.getY(), LoadTextures.PLAYER_SPRITE,
                         new MCTSAI());
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                     player.create(NamedComponent.class).name("Player");
@@ -174,11 +232,9 @@ public class Map implements InitializerInterface {
                         .add(ItemManager.get("chest_plate"));
                     PlayerInfo.get().setPlayerId(playerId);
                 } else {
-                    Feature opponentTown = FeatureManager.get()
-                        .get(kingdom.connections.stream().toList().getLast());
                     EntityEdit opponent = gameState.getWorld().createEntity().edit();
-                    addOverworldComponents(gameState.getWorld(), opponent, opponentTown.location.getX(),
-                        opponentTown.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
+                    addOverworldComponents(gameState.getWorld(), opponent, kingdom.location.getX(),
+                        kingdom.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
                 }
             }
         }).register(MapGenerator.entityPhase);

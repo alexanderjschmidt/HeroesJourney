@@ -28,6 +28,19 @@ public class Utils {
         return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
     }
 
+    public static int getRegion(ActionInput input) {
+        return getRegion(input.getGameState(), input.getEntityId());
+    }
+
+    public static int getRegion(GameState gameState, UUID entityId) {
+        if (entityId == null)
+            return -1;
+        PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
+        if (positionComponent == null)
+            return -1;
+        return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()];
+    }
+
     public static StringResult addItem(ActionInput input, Item item, int count) {
         return addItem(input.getGameState(), input.getEntityId(), item, count);
     }

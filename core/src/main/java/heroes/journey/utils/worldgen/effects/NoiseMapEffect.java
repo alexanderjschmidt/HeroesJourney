@@ -1,8 +1,8 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.registries.TileManager.baseTiles;
 import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
 import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.baseTiles;
 
 import heroes.journey.GameState;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;

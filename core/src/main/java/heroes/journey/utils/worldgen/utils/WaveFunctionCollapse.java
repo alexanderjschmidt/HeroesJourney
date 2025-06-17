@@ -15,7 +15,6 @@ import heroes.journey.utils.worldgen.MapGenerationException;
 public class WaveFunctionCollapse {
 
     public static final WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
-    public static final List<Tile> baseTiles = new ArrayList<>();
 
     public static Tile[][] applyWaveFunctionCollapse(
         final WeightedRandomPicker<Tile>[][] possibleTilesMapPrime) {

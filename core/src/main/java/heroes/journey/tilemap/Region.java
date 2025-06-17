@@ -1,22 +1,24 @@
 package heroes.journey.tilemap;
 
-import heroes.journey.entities.Position;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import heroes.journey.entities.Position;
+
 public class Region {
     public final int id;
     private Biome biome;
+    private int ring;
     private final Set<Position> tiles = new HashSet<>();
-    private final List<Object> features = new ArrayList<>(); // Placeholder
+    private final List<Feature> features = new ArrayList<>();
     public Position center;
     public final Set<Integer> neighborRegionIds = new HashSet<>();
 
-    public Region(int id) {
+    public Region(int id, int ring) {
         this.id = id;
+        this.ring = ring;
     }
 
     public void addTile(Position pos) {
@@ -28,6 +30,14 @@ public class Region {
             neighborRegionIds.add(neighborId);
     }
 
+    public Set<Position> getTiles() {
+        return tiles;
+    }
+
+    public List<Feature> getFeatures() {
+        return features;
+    }
+
     public void finalizeCenter() {
         int sumX = 0, sumY = 0;
         for (Position p : tiles) {
@@ -36,5 +46,21 @@ public class Region {
         }
         int count = tiles.size();
         this.center = new Position(sumX / count, sumY / count);
+    }
+
+    public Biome getBiome() {
+        return biome;
+    }
+
+    public void setBiome(Biome biome) {
+        this.biome = biome;
+    }
+
+    public int getRing() {
+        return ring;
+    }
+
+    public Integer getId() {
+        return id;
     }
 }

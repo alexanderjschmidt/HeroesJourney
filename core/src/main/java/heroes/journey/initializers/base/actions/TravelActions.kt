@@ -1,6 +1,5 @@
 package heroes.journey.initializers.base.actions
 
-import heroes.journey.components.NamedComponent
 import heroes.journey.components.PositionComponent
 import heroes.journey.components.character.ActionComponent
 import heroes.journey.components.character.MapComponent
@@ -14,6 +13,7 @@ import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.base.Map
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.FeatureManager
+import heroes.journey.registries.RegionManager
 import heroes.journey.tilemap.FogUtils
 import heroes.journey.ui.HUD
 import heroes.journey.utils.Direction
@@ -55,18 +55,18 @@ class TravelActions : InitializerInterface {
             }
         }.register()
 
-        wayfare = targetAction<UUID> {
+        wayfare = targetAction<Int> {
             id = "wayfare"
             name = "Wayfare"
             description = "Travel to a connected location"
             cost = Cost(2, 0, 0, 0)
             getTargets = { input ->
-                val featureId = Utils.getLocation(input)
-                val feature = FeatureManager.get()[featureId]
-                val wayfareLocations = ArrayList<UUID>()
-                for (connectionId in feature!!.getConnections()) {
-                    val connection = FeatureManager.getFeature(connectionId)
-                    wayfareLocations.add(connection.entityId)
+                val regionId = Utils.getRegion(input)
+                val region = RegionManager.get()[regionId]
+                val wayfareLocations = ArrayList<Int>()
+                for (connectionId in region!!.neighborRegionIds) {
+                    val connection = RegionManager.getRegion(connectionId)
+                    wayfareLocations.add(connection.id)
                 }
                 wayfareLocations
             }
@@ -76,26 +76,22 @@ class TravelActions : InitializerInterface {
                 if (feature!!.getType() === Map.KINGDOM || feature!!.getType() === Map.TOWN) ShowAction.YES else ShowAction.GRAYED
             }
             getTargetDisplayName = { input ->
-                NamedComponent.get(
-                    input.gameState.world, input.input,
-                    "Unknown Location"
-                )
+                input.input.toString()
             }
             onHoverTargetFn = { input ->
-                val feature = FeatureManager.getFeature(input.input)
+                val region = RegionManager.getRegion(input.input)
                 HUD.get()
                     .cursor
-                    .setMapPointerLoc(Position(feature.location.x, feature.location.y))
+                    .setMapPointerLoc(Position(region.center.x, region.center.y))
             }
             onSelectTargetFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val feature = FeatureManager.getFeature(input.input)
-                val locationName = NamedComponent.get(gs.world, input.input, "Unknown Location")
+                val region = RegionManager.getRegion(input.input)
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
-                    positionComponent.y, feature.location.x, feature.location.y, e
+                    positionComponent.y, region.center.x, region.center.y, e
                 )
 
                 val events: Queue<Runnable> = LinkedList()
@@ -105,7 +101,7 @@ class TravelActions : InitializerInterface {
                     ).path(path.reverse())
                 })
                 events.add(Runnable {
-                    BaseActions.popupMessage = "You have traveled to $locationName"
+                    BaseActions.popupMessage = "You have traveled to $input.input"
                     gs.world.edit(e).create<ActionComponent>(ActionComponent::class.java)
                         .action(BaseActions.popup)
                 })
@@ -114,18 +110,17 @@ class TravelActions : InitializerInterface {
             onSelectAITargetFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val feature = FeatureManager.getFeature(input.input)
-                val locationName = NamedComponent.get(gs.world, input.input, "Unknown Location")
+                val region = RegionManager.getRegion(input.input)
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
-                    positionComponent.y, feature.location.x, feature.location.y, e
+                    positionComponent.y, region.center.x, region.center.y, e
                 )
 
                 val end = gs.entities.moveEntity(e, path)
                 positionComponent.setPos(end.x, end.y)
                 positionComponent.sync()
-                StringResult("You have traveled to $locationName")
+                StringResult("You have traveled to ${region.id}")
             }
         }.register()
 
@@ -146,7 +141,7 @@ class TravelActions : InitializerInterface {
     companion object {
         @JvmField
         var travel: Action? = null
-        var wayfare: TargetAction<UUID>? = null
+        var wayfare: TargetAction<Int>? = null
         var explore: TargetAction<Direction>? = null
     }
 }

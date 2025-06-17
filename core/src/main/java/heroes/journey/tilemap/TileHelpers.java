@@ -1,12 +1,13 @@
 package heroes.journey.tilemap;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
-import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
-
-import java.util.List;
 
 public class TileHelpers {
 
@@ -25,7 +26,7 @@ public class TileHelpers {
             .add(Direction.SOUTHWEST, terrain)
             .add(Direction.WEST, terrain);
         if (addToBaseTiles)
-            WaveFunctionCollapse.baseTiles.add(tile);
+            TileManager.baseTiles.add(tile);
     }
 
     public static void baseTile(Tile tile, Terrain terrain) {
