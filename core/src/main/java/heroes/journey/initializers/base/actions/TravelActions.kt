@@ -2,62 +2,29 @@ package heroes.journey.initializers.base.actions
 
 import heroes.journey.components.PositionComponent
 import heroes.journey.components.character.ActionComponent
-import heroes.journey.components.character.MapComponent
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Position
-import heroes.journey.entities.actions.*
-import heroes.journey.entities.actions.results.ActionListResult
+import heroes.journey.entities.actions.Cost
+import heroes.journey.entities.actions.ShowAction
+import heroes.journey.entities.actions.TargetAction
 import heroes.journey.entities.actions.results.MultiStepResult
 import heroes.journey.entities.actions.results.StringResult
+import heroes.journey.entities.actions.targetAction
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.base.Map
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.FeatureManager
 import heroes.journey.registries.RegionManager
-import heroes.journey.tilemap.FogUtils
 import heroes.journey.ui.HUD
-import heroes.journey.utils.Direction
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import java.util.*
 
 class TravelActions : InitializerInterface {
     // TODO Pilgrimage lose a turn but go anywhere?
-    // TODO No direction explore that expands in a circle?
     override fun init() {
-        explore = targetAction<Direction> {
-            id = "explore"
-            name = "Explore"
-            description = "Explore in a direction"
-            cost = Cost(5, 2, 0, 0)
-            getTargets = { input ->
-                Direction.getDirections().toList()
-            }
-            getTargetDisplayName = { input ->
-                "Explore ${input.input}"
-            }
-            onSelectTargetFn = { input ->
-                val gs = input.gameState
-                val e = input.entityId
-                val position = PositionComponent.get(gs.world, e)
-                val mapComponent = MapComponent.get(gs.world, e)
-
-                // TODO Based on Stamina/Body
-                val revealDistance = 8 // How far the cone extends
-                // TODO Based on Vision
-                val baseWidth = 0 // Start width (0 = just 1 tile at origin)
-
-                FogUtils.revealCone(
-                    gs, mapComponent, position.x, position.y, revealDistance,
-                    baseWidth, input.input
-                )
-
-                StringResult("You have explored the ${input.input}")
-            }
-        }.register()
-
-        wayfare = targetAction<Int> {
-            id = "wayfare"
-            name = "Wayfare"
+        travel = targetAction<Int> {
+            id = "travel"
+            name = "Travel"
             description = "Travel to a connected location"
             cost = Cost(2, 0, 0, 0)
             getTargets = { input ->
@@ -123,25 +90,10 @@ class TravelActions : InitializerInterface {
                 StringResult("You have traveled to ${region.id}")
             }
         }.register()
-
-        val travelActionOptions: MutableList<Action?> = ArrayList()
-        travelActionOptions.add(explore)
-        travelActionOptions.add(wayfare)
-        travel = action {
-            id = "travel"
-            name = "Travel"
-            description = "Choose a travel option"
-            isReturnsActionList = true
-            onSelectFn = { input ->
-                ActionListResult(travelActionOptions)
-            }
-        }.register()
     }
 
     companion object {
         @JvmField
-        var travel: Action? = null
-        var wayfare: TargetAction<Int>? = null
-        var explore: TargetAction<Direction>? = null
+        var travel: TargetAction<Int>? = null
     }
 }
