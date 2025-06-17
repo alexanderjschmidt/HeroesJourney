@@ -1,5 +1,12 @@
 package heroes.journey.ui.windows;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -7,17 +14,14 @@ import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.initializers.utils.Utils;
+import heroes.journey.registries.RegionManager;
 import heroes.journey.systems.GameWorld;
+import heroes.journey.tilemap.Feature;
+import heroes.journey.tilemap.Region;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ActionMenu extends UI {
 
@@ -43,23 +47,26 @@ public class ActionMenu extends UI {
         List<Action> requirementsMetOptions = selectedActions.getPossibleActions();
         System.out.println(requirementsMetOptions);
         if (selectedPosition != null) {
-            // Get Tiles Locations Actions
+            // Get Region Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getLocationActions(gameState, selectedEntity).stream()).collect(Collectors.toList());
+                getRegionFeatures(gameState, selectedEntity).stream()).collect(Collectors.toList());
         }
         return requirementsMetOptions.stream().distinct().toList();
     }
 
-    private static List<Action> getLocationActions(GameState gameState, UUID selectedEntity) {
-        UUID faction = Utils.getLocation(gameState, selectedEntity);
-        if (faction != null) {
+    // Make this return a list of locations to interact with. and they will have sub lists of what you can do there
+    private static Set<Action> getRegionFeatures(GameState gameState, UUID selectedEntity) {
+        int regionId = Utils.getRegion(gameState, selectedEntity);
+        Region region = RegionManager.getRegion(regionId);
+        Set<Action> actions = new HashSet<>();
+        for (Feature feature : region.getFeatures()) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
-                faction);
+                feature.getEntityId());
             if (factionActions != null) {
-                return factionActions.getPossibleActions();
+                actions.addAll(factionActions.getPossibleActions());
             }
         }
-        return new ArrayList<>();
+        return actions;
     }
 
     public void open(List<ScrollPaneEntry<Action>> options) {
