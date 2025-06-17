@@ -46,24 +46,6 @@ public class Map implements InitializerInterface {
     public static int MAP_SIZE = 100;
     // Kingdoms
     public static int NUM_KINGDOMS = 3;
-    public static int KINGDOM_DIST_TO_CENTER = 3;
-    public static int REGIONS = NUM_KINGDOMS * 4;
-
-    // Towns
-    public static int townsPerKingdomMin = 3;
-    public static int townsPerKingdomMax = 6;
-    public static int minDistanceBetweenTowns = 6;
-
-    // Dungeons
-    public static int dungeonsPerSettlementMin = 2;
-    public static int dungeonsPerSettlementMax = 4;
-    public static int minDistanceFromAnyFeature = 5;
-    public static int maxDistanceFromSettlement = 10;
-    // Wild Dungeons
-    public static int minDistanceFromAllFeatures = 5;
-    public static int maxAttemptsWildDungeons = 250;
-    public static int wildDungeonsMin = 8;
-    public static int wildDungeonsMax = 16;
 
     public static FeatureType KINGDOM, TOWN, DUNGEON;
 
@@ -131,8 +113,8 @@ public class Map implements InitializerInterface {
 
         // Capitals
         MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",
-            List.of(new Integer[] {6, 3, 1}), List.of(new Boolean[] {false, true, false})).register(
-            MapGenerator.worldGenPhase);
+            List.of(new Integer[] {NUM_KINGDOMS * 2, NUM_KINGDOMS, 1}),
+            List.of(new Boolean[] {false, true, false})).register(MapGenerator.worldGenPhase);
 
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
             Tile[][] map = gameState.getMap().getTileMap();

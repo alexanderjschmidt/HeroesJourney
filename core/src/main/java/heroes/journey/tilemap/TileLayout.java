@@ -1,9 +1,13 @@
 package heroes.journey.tilemap;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -149,27 +153,60 @@ public class TileLayout {
         int offsetX,
         int offsetY,
         Terrain[] terrains) {
-        Map<Direction,Terrain> terrainMap = new EnumMap<>(Direction.class);
 
+        // Step 1: Scan all unique colors in the Pixmap
+        Set<Integer> uniqueColors = new HashSet<>();
+        for (int y = 0; y < pixmap.getHeight() - 2; y += 3) {
+            for (int x = 0; x < pixmap.getWidth() - 2; x += 3) {
+                for (int dy = 0; dy < 3; dy++) {
+                    for (int dx = 0; dx < 3; dx++) {
+                        if (dx == 1 && dy == 1)
+                            continue; // skip center
+                        int px = x + dx;
+                        int py = y + dy;
+                        if (px < pixmap.getWidth() && py < pixmap.getHeight()) {
+                            uniqueColors.add(pixmap.getPixel(px, py));
+                        }
+                    }
+                }
+            }
+        }
+
+        // Step 2: Sort colors by brightness (or any comparator you prefer)
+        List<Integer> sortedColors = new ArrayList<>(uniqueColors);
+        sortedColors.sort(Comparator.comparingDouble(this::colorBrightness));
+
+        // Step 3: Map colors to terrain indexes
+        Map<Integer,Terrain> colorToTerrain = new HashMap<>();
+        for (int i = 0; i < sortedColors.size(); i++) {
+            int color = sortedColors.get(i);
+            Terrain terrain = terrains[Math.min(i, terrains.length - 1)];
+            colorToTerrain.put(color, terrain);
+        }
+
+        // Step 4: Use the map to build terrain map
+        Map<Direction,Terrain> terrainMap = new EnumMap<>(Direction.class);
         for (int dy = 0; dy < 3; dy++) {
             for (int dx = 0; dx < 3; dx++) {
                 Direction dir = directionGrid[dy][dx];
                 if (dir == null)
                     continue;
 
-                int pixel = pixmap.getPixel(offsetX + dx, offsetY + dy);
-                int r = (pixel >> 24) & 0xff;
-                int g = (pixel >> 16) & 0xff;
-                int b = (pixel >> 8) & 0xff;
-
-                float brightness = (r + g + b) / (3f * 255f);
-                int terrainIndex = Math.min((int)(brightness * terrains.length), terrains.length - 1);
-
-                terrainMap.put(dir, terrains[terrainIndex]);
+                int pixelColor = pixmap.getPixel(offsetX + dx, offsetY + dy);
+                Terrain terrain = colorToTerrain.getOrDefault(pixelColor, terrains[0]);
+                terrainMap.put(dir, terrain);
             }
         }
 
         return terrainMap;
+    }
+
+    // Utility function to calculate brightness of an int-packed RGBA color
+    private double colorBrightness(int color) {
+        int r = (color >> 24) & 0xff;
+        int g = (color >> 16) & 0xff;
+        int b = (color >> 8) & 0xff;
+        return (r + g + b) / (3.0 * 255.0);
     }
 
     public static TextureRegion[] getFrames(TextureRegion[][] tiles, int x, int y, int frameCount, int dist) {

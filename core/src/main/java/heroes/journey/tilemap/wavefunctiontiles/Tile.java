@@ -152,14 +152,11 @@ public abstract class Tile {
     public abstract void render(SpriteBatch batch, float elapsed, int x, int y);
 
     public String toString() {
-        return "\n" + neighbors.get(Direction.NORTHWEST).toString().substring(0, 2) +
-            neighbors.get(Direction.NORTH).toString().substring(0, 2) +
-            neighbors.get(Direction.NORTHEAST).toString().substring(0, 2) + '\n' +
-            neighbors.get(Direction.WEST).toString().substring(0, 2) + "  " +
-            neighbors.get(Direction.EAST).toString().substring(0, 2) + '\n' +
-            neighbors.get(Direction.SOUTHWEST).toString().substring(0, 2) +
-            neighbors.get(Direction.SOUTH).toString().substring(0, 2) +
-            neighbors.get(Direction.SOUTHEAST).toString().substring(0, 2);
+        return "\n" + neighbors.get(Direction.NORTHWEST).toString() +
+            neighbors.get(Direction.NORTH).toString() + neighbors.get(Direction.NORTHEAST).toString() + '\n' +
+            neighbors.get(Direction.WEST).toString() + "  " + neighbors.get(Direction.EAST).toString() +
+            '\n' + neighbors.get(Direction.SOUTHWEST).toString() + neighbors.get(Direction.SOUTH).toString() +
+            neighbors.get(Direction.SOUTHEAST).toString();
     }
 
     public String getLayout(Map<String,Integer> terrainMap) {

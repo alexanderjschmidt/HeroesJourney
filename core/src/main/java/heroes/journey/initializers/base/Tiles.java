@@ -1,12 +1,6 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Map.KINGDOM;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureGenerationData;
@@ -17,6 +11,11 @@ import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static heroes.journey.initializers.base.Map.KINGDOM;
 
 public class Tiles implements InitializerInterface {
 
@@ -99,17 +98,17 @@ public class Tiles implements InitializerInterface {
         TileHelpers.cliffTransitionTapper(plainsToHill, plains, hills, tiles, 1, 5, 9, true);
         TileHelpers.createWangCorner(sandToHill, sand, hills, tiles, 50, 0, 13, true);
         TileHelpers.cliffTransitionTapper(sandToHill, sand, hills, tiles, 1, 5, 13, true);
-        TileHelpers.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 1, 5, 17, true);
+        TileHelpers.cliffTransition(sandToHill, plainsToHill, sand, plains, hills, tiles, 10, 5, 17, true);
         TileHelpers.createWangCorner(plainsToSand, plains, sand, tiles, 500, 0, 16, true);
         TileHelpers.createWangCornerAnimated(plainsToWater, plains, water, tiles, 100, 20, 10, true);
         TileHelpers.createWangCornerAnimated(hillToWater, hills, water, tiles, 10, 20, 13, true);
-        TileHelpers.cliffTransitionAnimated(plainsToWater, hillToWater, plains, hills, water, tiles, 1, 20, 4,
-            true);
+        TileHelpers.cliffTransitionAnimated(plainsToWater, hillToWater, plains, hills, water, tiles, 10, 20,
+            4, true);
         TileHelpers.createWangCornerAnimated(sandToWater, sand, water, tiles, 500, 20, 16, true);
-        TileHelpers.cliffTransitionAnimated(sandToWater, hillToWater, sand, hills, water, tiles, 1, 20, 6,
+        TileHelpers.cliffTransitionAnimated(sandToWater, hillToWater, sand, hills, water, tiles, 10, 20, 6,
             true);
-        TileHelpers.cliffTransitionAnimated(sandToWater, plainsToWater, sand, plains, water, tiles, 1, 20, 8,
-            true);
+        TileHelpers.cliffTransitionAnimated(sandToWater, plainsToWater, sand, plains, water, tiles, 10, 20,
+            8, true);
 
         treeTiles = TileHelpers.createWangCorner(trees, NULL_TERRAIN, trees, tiles, 500, 0, 7, false);
 

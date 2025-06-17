@@ -1,13 +1,12 @@
 package heroes.journey.tilemap;
 
-import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
+
+import java.util.List;
 
 public class TileHelpers {
 
@@ -132,7 +131,7 @@ public class TileHelpers {
         int x,
         int y,
         boolean addToDefault) {
-        cliffTransition.generateAnimatedTiles(tiles, weight * 1000, x, y, 4, 4, addToDefault, cliff1, cliff2,
-            adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
+        cliffTransition.generateAnimatedTiles(tiles, weight * 10, x, y, 4, 4,
+            addToDefault, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 }
