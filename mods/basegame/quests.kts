@@ -1,6 +1,6 @@
 import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
-import heroes.journey.entities.actions.inputs.ActionInput
+import heroes.journey.entities.actions.ActionInput
 import heroes.journey.initializers.base.actions.DelveAction
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod

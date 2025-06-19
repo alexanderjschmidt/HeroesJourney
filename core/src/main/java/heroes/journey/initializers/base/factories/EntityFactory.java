@@ -27,7 +27,6 @@ import heroes.journey.components.place.DungeonComponent;
 import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.actions.BaseActions;
-import heroes.journey.initializers.base.actions.CarriageActions;
 import heroes.journey.initializers.base.actions.DelveAction;
 import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.systems.GameWorld;
@@ -47,7 +46,7 @@ public class EntityFactory {
         UUID id = entity.create(IdComponent.class).register(world, entity.getEntityId()).uuid();
         entity.create(RenderComponent.class).sprite(render);
         entity.create(ActorComponent.class);
-        entity.create(PossibleActionsComponent.class);
+        entity.create(PossibleActionsComponent.class).addAction(BaseActions.rest);
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AIComponent.class).ai(ai);
@@ -65,11 +64,9 @@ public class EntityFactory {
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y);
         house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
-        PossibleActionsComponent actions = house.create(PossibleActionsComponent.class)
+        house.create(PossibleActionsComponent.class)
             .addAction(BaseActions.questBoard)
             .addAction(TravelActions.travel);
-        if (capital)
-            actions.addAction(CarriageActions.carriage);
         return id;
     }
 

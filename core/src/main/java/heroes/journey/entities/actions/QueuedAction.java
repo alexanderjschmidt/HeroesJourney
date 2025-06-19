@@ -1,22 +1,22 @@
 package heroes.journey.entities.actions;
 
-import lombok.Getter;
-
 import java.util.UUID;
+
+import lombok.Getter;
 
 @Getter
 public class QueuedAction {
 
-    private Action action;
-    private UUID entityId;
+    private final ActionEntry action;
+    private final UUID entityId;
 
-    public QueuedAction(Action action, UUID entityId) {
+    public QueuedAction(ActionEntry action, UUID entityId) {
         this.action = action;
         this.entityId = entityId;
     }
 
     public String toString() {
-        return action + " " + entityId;
+        return action.getId() + " " + entityId;
     }
 
 }

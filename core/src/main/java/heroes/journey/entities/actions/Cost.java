@@ -3,10 +3,10 @@ package heroes.journey.entities.actions;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.initializers.utils.StatsUtils;
@@ -73,10 +73,7 @@ public class Cost {
         //System.out.println(enoughHealth);
         //System.out.println(enoughGold);
 
-        return enoughStamina
-            .and(enoughMana)
-            .and(enoughHealth)
-            .and(enoughGold);
+        return enoughStamina.and(enoughMana).and(enoughHealth).and(enoughGold);
     }
 
     private Table table;

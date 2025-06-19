@@ -7,28 +7,28 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.actions.ShowAction;
-import heroes.journey.entities.actions.inputs.ActionInput;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
 
 public class ActionSelectState extends HUDState {
 
-    private final List<ScrollPaneEntry<Action>> options;
+    private final List<ScrollPaneEntry<ActionEntry>> options;
 
-    public ActionSelectState(List<Action> options) {
+    public ActionSelectState(List<ActionEntry> options) {
         super();
         UUID selectedEntity = GameState.global().getCurrentEntity();
         this.options = filter(options, selectedEntity);
     }
 
-    private List<ScrollPaneEntry<Action>> filter(List<Action> input, UUID entityId) {
+    private List<ScrollPaneEntry<ActionEntry>> filter(List<ActionEntry> input, UUID entityId) {
         ActionInput actionInput = new ActionInput(GameState.global(), entityId);
         return input.stream()
             .map(action -> {
-                ShowAction result = action.requirementsMet(actionInput);
+                ShowAction result = action.getAction().requirementsMet(actionInput);
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)

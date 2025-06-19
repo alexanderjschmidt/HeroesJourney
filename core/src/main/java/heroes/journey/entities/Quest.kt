@@ -1,7 +1,7 @@
 package heroes.journey.entities
 
 import heroes.journey.components.character.PlayerComponent
-import heroes.journey.entities.actions.inputs.ActionInput
+import heroes.journey.entities.actions.ActionInput
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
 import java.util.*

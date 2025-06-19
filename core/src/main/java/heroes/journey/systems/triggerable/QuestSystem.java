@@ -1,17 +1,18 @@
 package heroes.journey.systems.triggerable;
 
-import com.artemis.annotations.All;
-import heroes.journey.GameState;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.character.IdComponent;
-import heroes.journey.entities.actions.inputs.ActionInput;
-import heroes.journey.entities.Quest;
-import heroes.journey.systems.GameWorld;
-import heroes.journey.systems.TriggerableSystem;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
+import com.artemis.annotations.All;
+
+import heroes.journey.GameState;
+import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.entities.Quest;
+import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.systems.GameWorld;
+import heroes.journey.systems.TriggerableSystem;
 
 @All({QuestsComponent.class, IdComponent.class})
 public class QuestSystem extends TriggerableSystem {
@@ -24,7 +25,7 @@ public class QuestSystem extends TriggerableSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
         QuestsComponent quests = QuestsComponent.get(world, id);
         List<Quest> completedQuests = new ArrayList<>();

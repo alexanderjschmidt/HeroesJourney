@@ -1,12 +1,9 @@
 package heroes.journey.registries
 
-import lombok.Getter
-
-@Getter
-abstract class Registrable(val id: String, private val name: String? = null) {
+abstract class Registrable(val id: String, protected var nameInternal: String? = null) {
 
     open fun getName(): String {
-        return name ?: id
+        return nameInternal ?: id
     }
 
     override fun toString(): String {

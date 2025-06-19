@@ -5,34 +5,37 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
-import heroes.journey.entities.actions.inputs.ActionInput
 import heroes.journey.entities.actions.results.AIOnSelectNotFound
 import heroes.journey.entities.actions.results.ActionResult
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
 
-abstract class CooldownAction(
+open class CooldownAction(
     id: String,
     name: String?,
     description: String = "",
+    hasInput: Boolean = false,
     isReturnsActionList: Boolean = false,
     cost: Cost = Cost(),
-    requirementsMetFn: (ActionInput?) -> ShowAction = { ShowAction.YES },
-    onHoverFn: (ActionInput?) -> Unit = {},
+    requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
+    onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
-    onSelectAIFn: (ActionInput?) -> ActionResult = { AIOnSelectNotFound() },
+    onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
+    inputDisplayNameFn: ((String) -> String)? = null,
     private val turnCooldown: Int,
     private val factionCooldown: Boolean
 ) : Action(
     id,
     name,
     description,
+    hasInput,
     isReturnsActionList,
     cost,
     requirementsMetFn,
     onHoverFn,
     onSelectFn,
-    onSelectAIFn
+    onSelectAIFn,
+    inputDisplayNameFn
 ) {
 
     override fun requirementsMet(input: ActionInput): ShowAction {
@@ -41,8 +44,7 @@ abstract class CooldownAction(
         return super.requirementsMet(input)
     }
 
-    override fun onSelect(input: ActionInput?, ai: Boolean): ActionResult? {
-        if (input == null) return null
+    override fun onSelect(input: ActionInput, ai: Boolean): ActionResult? {
         val cooldownComponent = getCooldownComponent(input)
         cooldownComponent.cooldowns[id] = turnCooldown
         return super.onSelect(input, ai)
@@ -69,7 +71,7 @@ abstract class CooldownAction(
             cooldown = Label("", skin)
         }
         val cooldownComponent = getCooldownComponent(
-            ActionInput(GameState.global(), GameState.global().currentEntity)
+            ActionInput(GameState.global(), GameState.global().currentEntity, null)
         )
         var cooldownVal = cooldownComponent.cooldowns[id]
         cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)

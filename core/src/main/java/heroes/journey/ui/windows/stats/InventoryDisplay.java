@@ -10,7 +10,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;

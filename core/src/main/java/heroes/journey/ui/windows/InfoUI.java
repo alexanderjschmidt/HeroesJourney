@@ -36,10 +36,10 @@ public class InfoUI extends UI {
         bodyLabel.setText("");
     }
 
-    public void showInfo(InfoProvider provider) {
+    public void showInfo(InfoProvider provider, String input) {
         clearContent();
-        titleLabel.setText(provider.getTitle());
-        bodyLabel.setText(provider.getDescription());
+        titleLabel.setText(provider.getTitle(input));
+        bodyLabel.setText(provider.getDescription(input));
         provider.fillCustomContent(contentTable, ResourceManager.get().skin);
         setVisible(true);
         pack();

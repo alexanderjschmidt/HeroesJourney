@@ -1,6 +1,6 @@
 package heroes.journey.entities.items
 
-import heroes.journey.entities.actions.inputs.ActionInput
+import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.registries.Registries.ItemManager
 import java.util.function.Consumer

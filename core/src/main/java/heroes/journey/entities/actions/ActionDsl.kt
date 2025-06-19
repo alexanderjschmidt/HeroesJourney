@@ -1,7 +1,5 @@
 package heroes.journey.entities.actions
 
-import heroes.journey.entities.actions.inputs.ActionInput
-import heroes.journey.entities.actions.inputs.TargetInput
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.entities.actions.results.AIOnSelectNotFound
@@ -12,36 +10,36 @@ open class ActionBuilder {
     var id: String = ""
     var name: String? = null
     var description: String = ""
+    var hasInput: Boolean = false
     open var isReturnsActionList: Boolean = false
     var cost: Cost = Cost()
-    var requirementsMetFn: (ActionInput?) -> ShowAction = { ShowAction.YES }
-    var onHoverFn: (ActionInput?) -> Unit = {}
+    var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (ActionInput) -> Unit = {}
     var onSelectFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
-    var onSelectAIFn: (ActionInput?) -> ActionResult = { AIOnSelectNotFound() }
+    var onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
+    var inputDisplayNameFn: ((String) -> String)? = null
 
     open fun build(): Action = Action(
         id = id,
         name = name,
         description = description,
+        hasInput = hasInput,
         isReturnsActionList = isReturnsActionList,
         cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn
+        onSelectAIFn = onSelectAIFn,
+        inputDisplayNameFn = inputDisplayNameFn
     )
 }
 
 // TargetAction DSL
 class TargetActionBuilder<I> : ActionBuilder() {
     var getTargets: (ActionInput) -> List<I> = { emptyList() }
-    var getTargetDisplayName: (TargetInput<I>) -> String = { input -> input.input.toString() }
-    var onSelectTargetFn: (TargetInput<I>) -> ActionResult = { AIOnSelectNotFound() }
-    var onSelectAITargetFn: (TargetInput<I>) -> ActionResult = { AIOnSelectNotFound() }
-    var onHoverTargetFn: (TargetInput<I>) -> Unit = {}
-    var requirementsMetTargetFn: (TargetInput<I>) -> ShowAction = { ShowAction.YES }
+    var targetAction: String = ""
 
-    override fun build(): TargetAction<I> = object : TargetAction<I>(
+    override fun build(): TargetAction<I> = TargetAction(
         id = id,
         name = name,
         description = description,
@@ -49,21 +47,18 @@ class TargetActionBuilder<I> : ActionBuilder() {
         cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
+        inputDisplayNameFn = inputDisplayNameFn,
         getTargets = getTargets,
-        getTargetDisplayName = getTargetDisplayName,
-        onSelectTargetFn = onSelectTargetFn,
-        onSelectAITargetFn = onSelectAITargetFn,
-        onHoverTargetFn = onHoverTargetFn,
-        requirementsMetTargetFn = requirementsMetTargetFn
-    ) {}
+        targetAction = targetAction,
+    )
 }
 
 // CooldownAction DSL
-class CooldownActionBuilder : ActionBuilder() {
+open class CooldownActionBuilder : ActionBuilder() {
     var turnCooldown: Int = 0
     var factionCooldown: Boolean = false
 
-    override fun build(): CooldownAction = object : CooldownAction(
+    override fun build(): CooldownAction = CooldownAction(
         id = id,
         name = name,
         description = description,
@@ -73,9 +68,10 @@ class CooldownActionBuilder : ActionBuilder() {
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
         onSelectAIFn = onSelectAIFn,
+        inputDisplayNameFn = inputDisplayNameFn,
         turnCooldown = turnCooldown,
         factionCooldown = factionCooldown
-    ) {}
+    )
 }
 
 // OptionAction DSL

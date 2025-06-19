@@ -2,9 +2,9 @@ package heroes.journey.entities.actions.results;
 
 import java.util.List;
 
-import heroes.journey.entities.actions.Action;
+import heroes.journey.entities.actions.ActionEntry;
 
-public record ActionListResult(List<Action> list) implements ActionResult {
+public record ActionListResult(List<ActionEntry> list) implements ActionResult {
 
     public String toString() {
         return list.toString();

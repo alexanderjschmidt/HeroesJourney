@@ -11,8 +11,8 @@ import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.registries.RegionManager;
 import heroes.journey.systems.GameWorld;
@@ -25,7 +25,7 @@ import heroes.journey.ui.UI;
 
 public class ActionMenu extends UI {
 
-    private final ScrollPane<Action> actions;
+    private final ScrollPane<ActionEntry> actions;
     private final InfoUI infoUI;
 
     public ActionMenu(InfoUI infoUI) {
@@ -39,12 +39,12 @@ public class ActionMenu extends UI {
         pack();
     }
 
-    public static List<Action> getActionsFor(GameState gameState, UUID selectedEntity) {
+    public static List<ActionEntry> getActionsFor(GameState gameState, UUID selectedEntity) {
         GameWorld world = gameState.getWorld();
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
-        List<Action> requirementsMetOptions = selectedActions.getPossibleActions();
+        List<ActionEntry> requirementsMetOptions = selectedActions.getPossibleActions();
         System.out.println(requirementsMetOptions);
         if (selectedPosition != null) {
             // Get Region Locations Actions
@@ -55,10 +55,10 @@ public class ActionMenu extends UI {
     }
 
     // Make this return a list of locations to interact with. and they will have sub lists of what you can do there
-    private static Set<Action> getRegionFeatures(GameState gameState, UUID selectedEntity) {
+    private static Set<ActionEntry> getRegionFeatures(GameState gameState, UUID selectedEntity) {
         int regionId = Utils.getRegion(gameState, selectedEntity);
         Region region = RegionManager.getRegion(regionId);
-        Set<Action> actions = new HashSet<>();
+        Set<ActionEntry> actions = new HashSet<>();
         for (Feature feature : region.getFeatures()) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
                 feature.getEntityId());
@@ -69,7 +69,7 @@ public class ActionMenu extends UI {
         return actions;
     }
 
-    public void open(List<ScrollPaneEntry<Action>> options) {
+    public void open(List<ScrollPaneEntry<ActionEntry>> options) {
         actions.open(options);
     }
 
@@ -81,10 +81,10 @@ public class ActionMenu extends UI {
         actions.handleInput();
     }
 
-    private class ActionScrollPane extends ScrollPane<Action> {
+    private class ActionScrollPane extends ScrollPane<ActionEntry> {
 
         @Override
-        public void open(List<ScrollPaneEntry<Action>> options) {
+        public void open(List<ScrollPaneEntry<ActionEntry>> options) {
             if (options.isEmpty()) {
                 System.out.println("Options Empty");
                 HUD.get().getCursor().clearSelected();
@@ -96,8 +96,7 @@ public class ActionMenu extends UI {
 
         @Override
         public void select() {
-            // TODO add back TargetAction logic
-            Action action = getSelected().entry();
+            ActionEntry action = getSelected().entry();
             UUID selectedEntity = HUD.get().getCursor().getSelected();
             System.out.println("Selected " + action + " " + selectedEntity);
             if (selectedEntity != null) {
@@ -107,16 +106,17 @@ public class ActionMenu extends UI {
                     .create(ActionComponent.class)
                     .action(action);
             } else {
-                action.onSelect(new ActionInput(GameState.global(), null), false);
+                action.getAction().onSelect(new ActionInput(GameState.global(), null), false);
             }
         }
 
         @Override
         public void onHover() {
-            actions.getSelected()
-                .entry()
-                .onHover(new ActionInput(GameState.global(), HUD.get().getCursor().getSelected()));
-            infoUI.showInfo(actions.getSelected().entry());
+            ActionEntry actionEntry = actions.getSelected().entry();
+            ActionInput input = new ActionInput(GameState.global(), HUD.get().getCursor().getSelected(),
+                actionEntry.getInput());
+            actionEntry.getAction().onHover(input);
+            infoUI.showInfo(actionEntry.getAction(), actionEntry.getInput());
         }
     }
 

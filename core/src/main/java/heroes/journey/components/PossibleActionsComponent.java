@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
@@ -22,11 +22,13 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
         cooldowns = new HashMap<>();
-        possibleActions.add(BaseActions.rest.getId());
     }
 
-    public List<Action> getPossibleActions() {
-        return ActionManager.get(possibleActions.stream().toList());
+    public List<ActionEntry> getPossibleActions() {
+        return ActionManager.get(possibleActions.stream().toList())
+            .stream()
+            .map(e -> new ActionEntry(e.getId(), ""))
+            .toList();
     }
 
     public PossibleActionsComponent addAction(Action action) {

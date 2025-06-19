@@ -1,4 +1,4 @@
-import heroes.journey.entities.actions.inputs.ActionInput
+import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.items.ConsumableItem
 import heroes.journey.entities.items.Item
 import heroes.journey.entities.items.ItemSubType

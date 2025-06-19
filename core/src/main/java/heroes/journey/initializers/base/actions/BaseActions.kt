@@ -14,6 +14,7 @@ import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
+import heroes.journey.registries.Registries.QuestManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
@@ -118,32 +119,38 @@ class BaseActions : InitializerInterface {
             }
         }.register()
 
-        questBoard = targetAction<Quest> {
-            id = "quest_board"
-            name = "Quest Board"
-            description = "See what the people need help with"
-            cost = Cost(0, 0, 0, 0)
-            getTargets = { input ->
-                val town = Utils.getLocation(input)
-                QuestsComponent.get(input.gameState.world, town).quests
+        quest = action {
+            id = "quest"
+            name = "Accept Quest"
+            description = "Accept a quest to complete"
+            inputDisplayNameFn = { input ->
+                QuestManager[input]!!.getName()
             }
-            getTargetDisplayName = { input ->
-                input.input.getName()
-            }
-            onSelectTargetFn = { input ->
+            onSelectFn = { input ->
                 val town = Utils.getLocation(input)
                 val factionsQuestsComponent = QuestsComponent.get(
                     input.gameState.world,
                     town
                 )
 
+                val quest: Quest? = QuestManager[input.input]
                 if (factionsQuestsComponent != null) {
-                    factionsQuestsComponent.remove(input.input)
+                    factionsQuestsComponent.remove(quest)
                     QuestsComponent.get(input.gameState.world, input.entityId)
-                        .addQuest(input.input)
+                        .addQuest(quest)
                 }
                 EndTurnResult()
             }
+        }.register()
+        questBoard = targetAction<Quest> {
+            id = "quest_board"
+            name = "Quest Board"
+            description = "See what the people need help with"
+            getTargets = { input ->
+                val town = Utils.getLocation(input)
+                QuestsComponent.get(input.gameState.world, town).quests
+            }
+            targetAction = quest!!.id
         }.register()
     }
 
@@ -167,7 +174,9 @@ class BaseActions : InitializerInterface {
         @JvmField
         var rest: Action? = null
 
+        var quest: Action? = null
+
         @JvmField
-        var questBoard: Action? = null
+        var questBoard: TargetAction<Quest>? = null
     }
 }

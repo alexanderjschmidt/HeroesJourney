@@ -38,6 +38,10 @@ public class Region {
         return features;
     }
 
+    public String toString() {
+        return Integer.toString(id);
+    }
+
     public void finalizeCenter() {
         int sumX = 0, sumY = 0;
         for (Position p : tiles) {

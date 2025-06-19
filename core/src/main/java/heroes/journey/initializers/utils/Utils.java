@@ -9,7 +9,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.Buff;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.actions.inputs.ActionInput;
+import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
 
