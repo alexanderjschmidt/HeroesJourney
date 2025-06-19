@@ -9,7 +9,6 @@ import heroes.journey.registries.Registries
 class TargetAction<I>(
     id: String, name: String?,
     description: String = "",
-    isReturnsActionList: Boolean = false,
     cost: Cost = Cost(),
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
@@ -20,8 +19,7 @@ class TargetAction<I>(
     id,
     name,
     description,
-    false,
-    isReturnsActionList,
+    true,
     cost,
     requirementsMetFn,
     onHoverFn,

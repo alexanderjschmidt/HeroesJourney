@@ -13,7 +13,6 @@ open class Action(
     id: String,
     name: String? = null,
     private val description: String = "",
-    val hasInput: Boolean = false,
     val isReturnsActionList: Boolean = false,
     val cost: Cost = Cost(),
     private val requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
@@ -22,6 +21,9 @@ open class Action(
     private val onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
     private val inputDisplayNameFn: ((String) -> String)? = null,
 ) : Registrable(id, name), InfoProvider {
+
+    val hasInput: Boolean
+        get() = inputDisplayNameFn != null
 
     open fun requirementsMet(input: ActionInput): ShowAction {
         return requirementsMetFn(input).and(cost.requirementsMet(input))

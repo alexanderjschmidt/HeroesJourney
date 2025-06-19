@@ -10,7 +10,6 @@ open class ActionBuilder {
     var id: String = ""
     var name: String? = null
     var description: String = ""
-    var hasInput: Boolean = false
     open var isReturnsActionList: Boolean = false
     var cost: Cost = Cost()
     var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
@@ -23,7 +22,6 @@ open class ActionBuilder {
         id = id,
         name = name,
         description = description,
-        hasInput = hasInput,
         isReturnsActionList = isReturnsActionList,
         cost = cost,
         requirementsMetFn = requirementsMetFn,
@@ -43,7 +41,6 @@ class TargetActionBuilder<I> : ActionBuilder() {
         id = id,
         name = name,
         description = description,
-        isReturnsActionList = isReturnsActionList,
         cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,

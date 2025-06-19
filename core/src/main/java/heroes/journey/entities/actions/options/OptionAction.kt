@@ -21,7 +21,6 @@ abstract class OptionAction(
     name,
     description,
     false,
-    false,
     cost,
     requirementsMetFn,
     onHoverFn,

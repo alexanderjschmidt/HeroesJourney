@@ -73,10 +73,13 @@ class BaseActions : InitializerInterface {
 
         popup = action {
             id = "popup"
-            name = "Popup"
-            description = ""
+            name = "THIS SHOULDNT DISPLAY"
+            description = "THIS SHOULDNT DISPLAY"
+            inputDisplayNameFn = { input ->
+                input
+            }
             onSelectFn = { input ->
-                StringResult(popupMessage)
+                StringResult(input.input)
             }
         }.register()
 
@@ -155,8 +158,6 @@ class BaseActions : InitializerInterface {
     }
 
     companion object {
-        //TODO this is probably bad
-        var popupMessage: String = ""
 
         @JvmField
         var openActionMenu: Action? = null

@@ -22,7 +22,6 @@ class TravelActions : InitializerInterface {
             id = "travel_to"
             name = "Travel to"
             description = "Travel to "
-            hasInput = true
             cost = Cost(2, 0, 0, 0)
             inputDisplayNameFn = { input ->
                 description + input
@@ -50,9 +49,8 @@ class TravelActions : InitializerInterface {
                     ).path(path.reverse())
                 })
                 events.add(Runnable {
-                    BaseActions.popupMessage = "You have traveled to $input.input"
                     gs.world.edit(e).create<ActionComponent>(ActionComponent::class.java)
-                        .action(BaseActions.popup)
+                        .action(BaseActions.popup, "You have traveled to $input.input")
                 })
                 MultiStepResult(events)
             }
