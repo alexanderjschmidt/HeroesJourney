@@ -14,7 +14,7 @@ public enum Stats implements Tag {
 
     @Override
     public int getMin() {
-        return 1;
+        return 0;
     }
 
     @Override

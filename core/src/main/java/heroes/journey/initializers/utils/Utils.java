@@ -15,6 +15,7 @@ import heroes.journey.entities.items.Item;
 
 public class Utils {
 
+    // This gets the location of the entity included in the input, the entity taking action
     public static UUID getLocation(ActionInput input) {
         return getLocation(input.getGameState(), input.getEntityId());
     }

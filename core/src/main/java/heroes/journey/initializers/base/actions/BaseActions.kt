@@ -1,7 +1,9 @@
 package heroes.journey.initializers.base.actions
 
 import heroes.journey.Application
+import heroes.journey.GameState
 import heroes.journey.components.BuffsComponent
+import heroes.journey.components.NamedComponent
 import heroes.journey.components.QuestsComponent
 import heroes.journey.components.character.ActionComponent
 import heroes.journey.entities.Quest
@@ -12,12 +14,12 @@ import heroes.journey.entities.actions.results.NullResult
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
-import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.QuestManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
+import java.util.*
 
 class BaseActions : InitializerInterface {
     override fun init() {
@@ -120,15 +122,19 @@ class BaseActions : InitializerInterface {
             }
         }.register()
 
+        // TODO this needs to know the selected quest and its location.
+        // This is a result of it being a target action for a location
         quest = action {
             id = "quest"
             name = "Accept Quest"
             description = "Accept a quest to complete"
             inputDisplayNameFn = { input ->
-                QuestManager[input]!!.getName()
+                val items: List<String> = input.split(',')
+                QuestManager[items[1]]!!.getName()
             }
             onSelectFn = { input ->
-                val town = Utils.getLocation(input)
+                val items: List<String> = input.input!!.split(',')
+                val town: UUID = UUID.fromString(items[0])
                 val factionsQuestsComponent = QuestsComponent.get(
                     input.gameState.world,
                     town
@@ -147,8 +153,12 @@ class BaseActions : InitializerInterface {
             id = "quest_board"
             name = "Quest Board"
             description = "See what the people need help with"
+            inputDisplayNameFn = { input ->
+                val gs: GameState = GameState.global()
+                "Quest Board for " + NamedComponent.get(gs.world, UUID.fromString(input), "Unknown")
+            }
             getTargets = { input ->
-                val town = Utils.getLocation(input)
+                val town = UUID.fromString(input.input!!)
                 QuestsComponent.get(input.gameState.world, town).quests
             }
             targetAction = quest!!.id

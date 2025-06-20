@@ -24,10 +24,10 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
         cooldowns = new HashMap<>();
     }
 
-    public List<ActionEntry> getPossibleActions() {
+    public List<ActionEntry> getPossibleActions(UUID entityId) {
         return ActionManager.get(possibleActions.stream().toList())
             .stream()
-            .map(e -> new ActionEntry(e.getId(), ""))
+            .map(action -> new ActionEntry(action.getId(), entityId + ""))
             .toList();
     }
 

@@ -1,5 +1,6 @@
 package heroes.journey.initializers.base.actions
 
+import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.character.PlayerComponent
@@ -11,6 +12,7 @@ import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.FightUtils
 import heroes.journey.initializers.utils.Utils
+import java.util.*
 
 class DelveAction : InitializerInterface {
     override fun init() {
@@ -18,12 +20,17 @@ class DelveAction : InitializerInterface {
             id = "delve"
             name = "Delve"
             description = "Explore a dungeon"
+            inputDisplayNameFn = { input ->
+                val gs: GameState = GameState.global()
+                val factionId: UUID = Utils.getLocation(GameState.global(), UUID.fromString(input))
+                "Delve " + NamedComponent.get(gs.world, factionId, "Unknown")
+            }
             turnCooldown = 5
             factionCooldown = true
             onSelectFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val dungeon = Utils.getLocation(input)
+                val dungeon = UUID.fromString(input.input)
                 val dungeonComponent = DungeonComponent.get(gs.world, dungeon)
                 val explorationLog = DefaultContainer<String>()
                 var conscious = true

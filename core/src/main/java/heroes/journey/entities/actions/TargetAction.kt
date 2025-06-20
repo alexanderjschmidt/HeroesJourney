@@ -34,8 +34,12 @@ class TargetAction<I>(
     }
 
     override fun onSelect(input: ActionInput, ai: Boolean): ActionResult {
+        var parentInputStr = ""
+        if (input.hasInput()) {
+            parentInputStr = input.input + ","
+        }
         val actionOptions: List<ActionEntry> = getTargets(input).map { option ->
-            ActionEntry(targetAction, option.toString())
+            ActionEntry(targetAction, parentInputStr + option.toString())
         }
         return ActionListResult(actionOptions)
     }

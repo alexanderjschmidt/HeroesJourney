@@ -1,26 +1,27 @@
 package heroes.journey.utils.ai;
 
+import static heroes.journey.utils.ai.MCTS.DEPTH_TO_SIMULATE;
+import static heroes.journey.utils.ai.MCTS.EXPLORATION_FACTOR;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.utils.Random;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.*;
-
-import static heroes.journey.utils.ai.MCTS.DEPTH_TO_SIMULATE;
-import static heroes.journey.utils.ai.MCTS.EXPLORATION_FACTOR;
-
 public class Node {
 
-    @Getter
-    Node parent;
+    @Getter Node parent;
     final List<Node> children;
     private int visitCount;
     private double winScore;
-    @Getter
-    @Setter
-    private QueuedAction queuedAction;
+    @Getter @Setter private QueuedAction queuedAction;
     private final Scorer scorer;
     private final UUID player;
 

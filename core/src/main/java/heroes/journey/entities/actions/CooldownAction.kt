@@ -7,8 +7,8 @@ import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
 import heroes.journey.entities.actions.results.AIOnSelectNotFound
 import heroes.journey.entities.actions.results.ActionResult
-import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
+import java.util.*
 
 open class CooldownAction(
     id: String,
@@ -51,7 +51,7 @@ open class CooldownAction(
     private fun getCooldownComponent(input: ActionInput): PossibleActionsComponent {
         val cooldownComponent: PossibleActionsComponent
         if (factionCooldown) {
-            val faction = Utils.getLocation(input)
+            val faction = UUID.fromString(input.input)
             cooldownComponent = PossibleActionsComponent.get(input.gameState.world, faction)
         } else {
             cooldownComponent = PossibleActionsComponent.get(
@@ -64,18 +64,18 @@ open class CooldownAction(
 
     private var cooldown: Label? = null
 
-    override fun fillCustomContent(table: Table, skin: Skin) {
+    override fun fillCustomContent(table: Table, skin: Skin, input: String) {
         if (cooldown == null) {
             cooldown = Label("", skin)
         }
         val cooldownComponent = getCooldownComponent(
-            ActionInput(GameState.global(), GameState.global().currentEntity, null)
+            ActionInput(GameState.global(), GameState.global().currentEntity, input)
         )
         var cooldownVal = cooldownComponent.cooldowns[id]
         cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
         cooldown!!.setText("$cooldownVal/$turnCooldown")
         table.add(cooldown).fill().row()
-        super.fillCustomContent(table, skin)
+        super.fillCustomContent(table, skin, input)
     }
 
     override fun register(): CooldownAction {

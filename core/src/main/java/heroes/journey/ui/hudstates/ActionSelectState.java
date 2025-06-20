@@ -25,10 +25,10 @@ public class ActionSelectState extends HUDState {
     }
 
     private List<ScrollPaneEntry<ActionEntry>> filter(List<ActionEntry> input, UUID entityId) {
-        ActionInput actionInput = new ActionInput(GameState.global(), entityId);
         return input.stream()
             .map(action -> {
-                ShowAction result = action.getAction().requirementsMet(actionInput);
+                ShowAction result = action.getAction()
+                    .requirementsMet(new ActionInput(GameState.global(), entityId, action.getInput()));
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)

@@ -8,6 +8,6 @@ public interface InfoProvider {
 
     String getDescription(String input);
 
-    void fillCustomContent(Table table, Skin skin);
+    void fillCustomContent(Table table, Skin skin, String input);
 }
 

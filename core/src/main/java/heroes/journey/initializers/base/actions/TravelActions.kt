@@ -24,7 +24,9 @@ class TravelActions : InitializerInterface {
             description = "Travel to "
             cost = Cost(2, 0, 0, 0)
             inputDisplayNameFn = { input ->
-                description + RegionManager[input]!!.getName()
+                val items: List<String> = input.split(',')
+                val name = description + RegionManager[items[1]]!!.getName()
+                name
             }
             onHoverFn = { input ->
                 val region: Region = RegionManager[input.input]!!

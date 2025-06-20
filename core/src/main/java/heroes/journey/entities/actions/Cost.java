@@ -1,5 +1,9 @@
 package heroes.journey.entities.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -11,10 +15,6 @@ import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class Cost {
     private final int stamina;
@@ -67,11 +67,6 @@ public class Cost {
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), userId);
         ShowAction enoughGold =
             inventoryComponent.getGold() >= this.gold ? ShowAction.YES : ShowAction.GRAYED;
-
-        //System.out.println(enoughStamina);
-        //System.out.println(enoughMana);
-        //System.out.println(enoughHealth);
-        //System.out.println(enoughGold);
 
         return enoughStamina.and(enoughMana).and(enoughHealth).and(enoughGold);
     }

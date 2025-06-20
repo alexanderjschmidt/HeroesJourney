@@ -48,12 +48,13 @@ open class Action(
     override fun getTitle(input: String): String {
         if (inputDisplayNameFn == null)
             return getName()
-        return inputDisplayNameFn.invoke(input)
+        val title: String = inputDisplayNameFn.invoke(input)
+        return title
     }
 
     override fun getDescription(input: String): String = description
 
-    override fun fillCustomContent(table: Table, skin: Skin) {
+    override fun fillCustomContent(table: Table, skin: Skin, input: String) {
         table.add(cost.display).center().fill().expand()
     }
 

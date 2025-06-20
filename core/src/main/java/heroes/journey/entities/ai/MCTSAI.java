@@ -50,9 +50,11 @@ public class MCTSAI implements AI, Scorer {
     private void addUsableActions(
         List<QueuedAction> possibleActions,
         List<ActionEntry> actions,
-        ActionInput input,
+        ActionInput inputBase,
         PositionComponent position) {
         for (ActionEntry action : actions) {
+            ActionInput input = new ActionInput(inputBase.getGameState(), inputBase.getEntityId(),
+                action.getInput());
             if (action.getAction().isReturnsActionList()) {
                 ActionListResult result = (ActionListResult)action.getAction().onSelect(input, false);
                 assert result != null;

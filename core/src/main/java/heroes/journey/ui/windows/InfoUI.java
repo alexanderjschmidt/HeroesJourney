@@ -40,7 +40,7 @@ public class InfoUI extends UI {
         clearContent();
         titleLabel.setText(provider.getTitle(input));
         bodyLabel.setText(provider.getDescription(input));
-        provider.fillCustomContent(contentTable, ResourceManager.get().skin);
+        provider.fillCustomContent(contentTable, ResourceManager.get().skin, input);
         setVisible(true);
         pack();
     }

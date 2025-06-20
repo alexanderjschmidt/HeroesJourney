@@ -45,8 +45,7 @@ public class ActionMenu extends UI {
         PossibleActionsComponent selectedActions = PossibleActionsComponent.get(world, selectedEntity);
         PositionComponent selectedPosition = PositionComponent.get(world, selectedEntity);
         // Get selected Entities Actions
-        List<ActionEntry> requirementsMetOptions = selectedActions.getPossibleActions();
-        System.out.println(requirementsMetOptions);
+        List<ActionEntry> requirementsMetOptions = selectedActions.getPossibleActions(selectedEntity);
         if (selectedPosition != null) {
             // Get Region Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
@@ -64,7 +63,7 @@ public class ActionMenu extends UI {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
                 feature.getEntityId());
             if (factionActions != null) {
-                actions.addAll(factionActions.getPossibleActions());
+                actions.addAll(factionActions.getPossibleActions(feature.getEntityId()));
             }
         }
         return actions;
