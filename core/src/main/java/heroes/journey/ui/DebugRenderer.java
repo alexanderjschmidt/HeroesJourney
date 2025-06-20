@@ -1,5 +1,7 @@
 package heroes.journey.ui;
 
+import static heroes.journey.registries.Registries.RegionManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +12,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.tilemap.Region;
 
 public class DebugRenderer {
@@ -59,10 +60,11 @@ public class DebugRenderer {
         shapeRenderer.setColor(Color.YELLOW);
         float tileSize = GameCamera.get().getSize();
 
-        for (Region region : RegionManager.get().values()) {
-            for (int neighborId : region.neighborRegionIds) {
-                Region neighbor = RegionManager.get().get(neighborId);
-                if (region.id < neighbor.id) { // avoid double-drawing
+        for (Region region : RegionManager.values()) {
+            for (String neighborId : region.neighborRegionIds) {
+                Region neighbor = RegionManager.get(neighborId);
+                if (Integer.parseInt(region.getId()) <
+                    Integer.parseInt(neighbor.getId())) { // avoid double-drawing
                     shapeRenderer.line(region.center.getX() * tileSize + tileSize / 2f,
                         region.center.getY() * tileSize + tileSize / 2f,
                         neighbor.center.getX() * tileSize + tileSize / 2f,
@@ -75,7 +77,7 @@ public class DebugRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
 
-        for (Region region : RegionManager.get().values()) {
+        for (Region region : RegionManager.values()) {
             shapeRenderer.circle(region.center.getX() * tileSize + tileSize / 2f,
                 region.center.getY() * tileSize + tileSize / 2f, tileSize / 3f);
         }

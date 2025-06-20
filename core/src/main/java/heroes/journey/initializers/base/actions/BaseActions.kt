@@ -102,7 +102,6 @@ class BaseActions : InitializerInterface {
             id = "workout"
             name = "Work out"
             description = "Lift weights, gain body"
-            cost = Cost(0, 0, 0, 0)
             turnCooldown = 1
             factionCooldown = false
             onSelectFn = { input ->
@@ -114,7 +113,6 @@ class BaseActions : InitializerInterface {
             id = "study"
             name = "Study"
             description = "Expand your mind, increasing your potential"
-            cost = Cost(0, 0, 0, 0)
             turnCooldown = 2
             factionCooldown = false
             onSelectFn = { input ->

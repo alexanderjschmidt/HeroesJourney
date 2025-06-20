@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 import heroes.journey.entities.Position;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.tilemap.Region;
 import heroes.journey.utils.Random;
 
@@ -179,7 +178,7 @@ public class VoronoiRegionGenerator {
         for (int ringIndex = 0; ringIndex < centerPoints.size(); ringIndex++) {
             List<Position> ring = centerPoints.get(ringIndex);
             for (int i = 0; i < ring.size(); i++) {
-                regionMapObj.put(regionId, new Region(regionId, ringIndex));
+                regionMapObj.put(regionId, new Region(Integer.toString(regionId), ringIndex));
                 regionId++;
             }
         }
@@ -199,14 +198,12 @@ public class VoronoiRegionGenerator {
         for (Region region : regionMapObj.values()) {
             region.finalizeCenter();
 
-            if (region.getRing() == 0 && region.getId() % 2 == 0) {
+            if (region.getRing() == 0 && Integer.parseInt(region.getId()) % 2 == 0) {
                 region.setBiome(kingdom); // assign special biome to alternating outer ring
             } else {
                 int randomBiome = Random.get().nextInt(BiomeManager.size());
                 region.setBiome(BiomeManager.values().stream().toList().get(randomBiome));
             }
-
-            RegionManager.get().put(region.getId(), region);
         }
 
         // === Build regionIdToRingIndex ===
@@ -240,11 +237,11 @@ public class VoronoiRegionGenerator {
                 Region left = regionMapObj.get(leftId);
                 Region right = regionMapObj.get(rightId);
 
-                thisRegion.addNeighbor(left.id);
-                left.addNeighbor(thisRegion.id);
+                thisRegion.addNeighbor(left.getId());
+                left.addNeighbor(thisRegion.getId());
 
-                thisRegion.addNeighbor(right.id);
-                right.addNeighbor(thisRegion.id);
+                thisRegion.addNeighbor(right.getId());
+                right.addNeighbor(thisRegion.getId());
             }
         }
 
@@ -272,15 +269,15 @@ public class VoronoiRegionGenerator {
 
                     int neighborRing = regionIdToRingIndex.get(neighborId);
                     if (Math.abs(currentRing - neighborRing) == 1) {
-                        current.addNeighbor(neighborId);
-                        regionMapObj.get(neighborId).addNeighbor(currentId);
+                        current.addNeighbor(neighborId + "");
+                        regionMapObj.get(neighborId).addNeighbor(currentId + "");
                     }
                 }
             }
         }
 
         for (Region region : regionMapObj.values()) {
-            RegionManager.get().put(region.id, region);
+            region.register();
         }
     }
 }

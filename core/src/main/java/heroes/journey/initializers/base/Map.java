@@ -4,6 +4,7 @@ import static heroes.journey.initializers.base.factories.EntityFactory.addOverwo
 import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
 import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.registries.Registries.RegionManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
@@ -24,7 +25,6 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.registries.FeatureManager;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.FeatureGenerationData;
@@ -119,7 +119,7 @@ public class Map implements InitializerInterface {
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
             Tile[][] map = gameState.getMap().getTileMap();
             // Set tiles to base tiles
-            for (Region region : RegionManager.get().values()) {
+            for (Region region : RegionManager.values()) {
                 for (Position pos : region.getTiles()) {
                     map[pos.getX()][pos.getY()] = TileManager.get()
                         .getBaseTile(TerrainManager.get(region.getBiome().getBaseTerrain()));

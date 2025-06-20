@@ -9,7 +9,7 @@ import heroes.journey.entities.actions.results.MultiStepResult
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.Utils
-import heroes.journey.registries.RegionManager
+import heroes.journey.registries.Registries.RegionManager
 import heroes.journey.tilemap.Region
 import heroes.journey.ui.HUD
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
@@ -24,10 +24,10 @@ class TravelActions : InitializerInterface {
             description = "Travel to "
             cost = Cost(2, 0, 0, 0)
             inputDisplayNameFn = { input ->
-                description + input
+                description + RegionManager[input]!!.getName()
             }
             onHoverFn = { input ->
-                val region: Region = RegionManager.getRegion(input.input!!.toInt())!!
+                val region: Region = RegionManager[input.input]!!
                 HUD.get()
                     .cursor
                     .setMapPointerLoc(Position(region.center.x, region.center.y))
@@ -35,7 +35,7 @@ class TravelActions : InitializerInterface {
             onSelectFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val region: Region = RegionManager.getRegion(input.input!!.toInt())!!
+                val region: Region = RegionManager[input.input]!!
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
@@ -57,7 +57,7 @@ class TravelActions : InitializerInterface {
             onSelectAIFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val region: Region = RegionManager.getRegion(input.input!!.toInt())!!
+                val region: Region = RegionManager[input.input]!!
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
@@ -76,10 +76,10 @@ class TravelActions : InitializerInterface {
             description = "Travel to a connected location"
             getTargets = { input ->
                 val regionId = Utils.getRegion(input)
-                val region = RegionManager.get()[regionId]
+                val region = RegionManager[regionId]
                 val wayfareLocations = ArrayList<Region>()
                 for (connectionId in region!!.neighborRegionIds) {
-                    val connection = RegionManager.getRegion(connectionId)
+                    val connection = RegionManager[connectionId]!!
                     wayfareLocations.add(connection)
                 }
                 wayfareLocations

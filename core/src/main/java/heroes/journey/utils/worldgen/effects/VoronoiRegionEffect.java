@@ -1,5 +1,6 @@
 package heroes.journey.utils.worldgen.effects;
 
+import static heroes.journey.registries.Registries.RegionManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
@@ -10,7 +11,6 @@ import java.util.stream.Collectors;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
@@ -50,9 +50,9 @@ public class VoronoiRegionEffect extends MapGenerationEffect {
             centerPointsFlat.size());
         gs.getMap().setRegionMap(result);
         buildRegionsFromMap(centerPoints, result);
-        if (RegionManager.get().size() != centerPointsFlat.size())
+        if (RegionManager.size() != centerPointsFlat.size())
             throw new MapGenerationException(
                 "Could not produce enough regions, target: " + centerPointsFlat.size() + ", created: " +
-                    RegionManager.get().size());
+                    RegionManager.size());
     }
 }

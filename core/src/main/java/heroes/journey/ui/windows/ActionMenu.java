@@ -1,5 +1,7 @@
 package heroes.journey.ui.windows;
 
+import static heroes.journey.registries.Registries.RegionManager;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +16,6 @@ import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.initializers.utils.Utils;
-import heroes.journey.registries.RegionManager;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.Region;
@@ -56,8 +57,8 @@ public class ActionMenu extends UI {
 
     // Make this return a list of locations to interact with. and they will have sub lists of what you can do there
     private static Set<ActionEntry> getRegionFeatures(GameState gameState, UUID selectedEntity) {
-        int regionId = Utils.getRegion(gameState, selectedEntity);
-        Region region = RegionManager.getRegion(regionId);
+        String regionId = Utils.getRegion(gameState, selectedEntity);
+        Region region = RegionManager.get(regionId);
         Set<ActionEntry> actions = new HashSet<>();
         for (Feature feature : region.getFeatures()) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
