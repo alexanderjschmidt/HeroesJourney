@@ -33,13 +33,13 @@ public class EquipmentDisplay extends Table {
 
         Table gear = new Table();
         gear.defaults().fill().expandX().left().pad(2.5f);
-        gear.add(head);
+        gear.add(head).row();
         gear.add(handOne).row();
-        gear.add(chest);
+        gear.add(chest).row();
         gear.add(handTwo).row();
-        gear.add(legs);
+        gear.add(legs).row();
         gear.add(accessoryOne).row();
-        gear.add(boots);
+        gear.add(boots).row();
         gear.add(accessoryTwo).row();
 
         this.add(gear).row();
