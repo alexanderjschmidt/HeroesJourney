@@ -22,7 +22,7 @@ class DelveAction : InitializerInterface {
             description = "Explore a dungeon"
             inputDisplayNameFn = { input ->
                 val gs: GameState = GameState.global()
-                val factionId: UUID = Utils.getLocation(GameState.global(), UUID.fromString(input))
+                val factionId: UUID = Utils.getLocation(GameState.global(), UUID.fromString(input["owner"]))
                 "Delve " + NamedComponent.get(gs.world, factionId, "Unknown")
             }
             turnCooldown = 5
@@ -30,7 +30,7 @@ class DelveAction : InitializerInterface {
             onSelectFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val dungeon = UUID.fromString(input.input)
+                val dungeon = UUID.fromString(input["owner"])
                 val dungeonComponent = DungeonComponent.get(gs.world, dungeon)
                 val explorationLog = DefaultContainer<String>()
                 var conscious = true

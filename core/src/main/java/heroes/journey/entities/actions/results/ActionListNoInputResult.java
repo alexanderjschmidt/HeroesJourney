@@ -1,5 +1,6 @@
 package heroes.journey.entities.actions.results;
 
+import java.util.HashMap;
 import java.util.List;
 
 import heroes.journey.entities.actions.Action;
@@ -14,7 +15,7 @@ public class ActionListNoInputResult implements ActionResult {
     }
 
     public List<ActionEntry> list() {
-        return list.stream().map(e -> new ActionEntry(e.getId(), "")).toList();
+        return list.stream().map(e -> new ActionEntry(e.getId(), new HashMap<>(0))).toList();
     }
 
     public String toString() {

@@ -1,5 +1,7 @@
 package heroes.journey.ui.windows;
 
+import java.util.Map;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -36,7 +38,7 @@ public class InfoUI extends UI {
         bodyLabel.setText("");
     }
 
-    public void showInfo(InfoProvider provider, String input) {
+    public void showInfo(InfoProvider provider, Map<String,String> input) {
         clearContent();
         titleLabel.setText(provider.getTitle(input));
         bodyLabel.setText(provider.getDescription(input));

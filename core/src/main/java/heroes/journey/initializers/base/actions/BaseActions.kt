@@ -78,10 +78,10 @@ class BaseActions : InitializerInterface {
             name = "THIS SHOULDNT DISPLAY"
             description = "THIS SHOULDNT DISPLAY"
             inputDisplayNameFn = { input ->
-                input
+                input["message"]!!
             }
             onSelectFn = { input ->
-                StringResult(input.input)
+                StringResult(input["message"])
             }
         }.register()
 
@@ -129,18 +129,16 @@ class BaseActions : InitializerInterface {
             name = "Accept Quest"
             description = "Accept a quest to complete"
             inputDisplayNameFn = { input ->
-                val items: List<String> = input.split(',')
-                QuestManager[items[1]]!!.getName()
+                QuestManager[input["target"]]!!.getName()
             }
             onSelectFn = { input ->
-                val items: List<String> = input.input!!.split(',')
-                val town: UUID = UUID.fromString(items[0])
+                val town: UUID = UUID.fromString(input["owner"])
                 val factionsQuestsComponent = QuestsComponent.get(
                     input.gameState.world,
                     town
                 )
 
-                val quest: Quest? = QuestManager[input.input]
+                val quest: Quest = QuestManager[input["target"]]!!
                 if (factionsQuestsComponent != null) {
                     factionsQuestsComponent.remove(quest)
                     QuestsComponent.get(input.gameState.world, input.entityId)
@@ -155,10 +153,10 @@ class BaseActions : InitializerInterface {
             description = "See what the people need help with"
             inputDisplayNameFn = { input ->
                 val gs: GameState = GameState.global()
-                "Quest Board for " + NamedComponent.get(gs.world, UUID.fromString(input), "Unknown")
+                "Quest Board for " + NamedComponent.get(gs.world, UUID.fromString(input["owner"]), "Unknown")
             }
             getTargets = { input ->
-                val town = UUID.fromString(input.input!!)
+                val town = UUID.fromString(input["owner"])
                 QuestsComponent.get(input.gameState.world, town).quests
             }
             targetAction = quest!!.id

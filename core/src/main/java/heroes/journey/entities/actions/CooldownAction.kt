@@ -20,7 +20,7 @@ open class CooldownAction(
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
     onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
-    inputDisplayNameFn: ((String) -> String)? = null,
+    inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
     private val turnCooldown: Int,
     private val factionCooldown: Boolean
 ) : Action(
@@ -51,7 +51,7 @@ open class CooldownAction(
     private fun getCooldownComponent(input: ActionInput): PossibleActionsComponent {
         val cooldownComponent: PossibleActionsComponent
         if (factionCooldown) {
-            val faction = UUID.fromString(input.input)
+            val faction = UUID.fromString(input["owner"])
             cooldownComponent = PossibleActionsComponent.get(input.gameState.world, faction)
         } else {
             cooldownComponent = PossibleActionsComponent.get(
@@ -64,12 +64,14 @@ open class CooldownAction(
 
     private var cooldown: Label? = null
 
-    override fun fillCustomContent(table: Table, skin: Skin, input: String) {
+    override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
         if (cooldown == null) {
             cooldown = Label("", skin)
         }
+        val actionInput: ActionInput = ActionInput(GameState.global(), GameState.global().currentEntity)
+        actionInput.putAll(input)
         val cooldownComponent = getCooldownComponent(
-            ActionInput(GameState.global(), GameState.global().currentEntity, input)
+            actionInput
         )
         var cooldownVal = cooldownComponent.cooldowns[id]
         cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)

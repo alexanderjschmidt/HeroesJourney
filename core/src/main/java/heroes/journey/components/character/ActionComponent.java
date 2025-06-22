@@ -2,6 +2,8 @@ package heroes.journey.components.character;
 
 import static heroes.journey.registries.Registries.ActionManager;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import com.artemis.annotations.Transient;
@@ -23,7 +25,7 @@ import lombok.experimental.Accessors;
 public class ActionComponent extends PooledClonableComponent<ActionComponent> {
 
     private String action;
-    private String input;
+    private Map<String,String> input;
 
     public Action getAction() {
         return ActionManager.get(action);
@@ -31,6 +33,7 @@ public class ActionComponent extends PooledClonableComponent<ActionComponent> {
 
     public ActionComponent action(Action action) {
         this.action = action.getId();
+        this.input = new HashMap<>(0);
         return this;
     }
 
@@ -40,7 +43,7 @@ public class ActionComponent extends PooledClonableComponent<ActionComponent> {
         return this;
     }
 
-    public ActionComponent action(Action action, String input) {
+    public ActionComponent action(Action action, Map<String,String> input) {
         this.action = action.getId();
         this.input = input;
         return this;

@@ -31,7 +31,7 @@ object Options {
         if (action is BooleanOptionAction) {
             action.onSelect(
                 ActionInput(
-                    GameState.global(), null, null
+                    GameState.global()
                 ), false
             )
         }

@@ -19,7 +19,7 @@ open class Action(
     private val onHoverFn: (ActionInput) -> Unit = {},
     private val onSelectFn: (ActionInput) -> ActionResult,
     private val onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
-    private val inputDisplayNameFn: ((String) -> String)? = null,
+    private val inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
 ) : Registrable(id, name), InfoProvider {
 
     val hasInput: Boolean
@@ -45,16 +45,16 @@ open class Action(
         return onSelectFn(input)
     }
 
-    override fun getTitle(input: String): String {
+    override fun getTitle(input: Map<String, String>): String {
         if (inputDisplayNameFn == null)
             return getName()
         val title: String = inputDisplayNameFn.invoke(input)
         return title
     }
 
-    override fun getDescription(input: String): String = description
+    override fun getDescription(input: Map<String, String>): String = description
 
-    override fun fillCustomContent(table: Table, skin: Skin, input: String) {
+    override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
         table.add(cost.display).center().fill().expand()
     }
 

@@ -12,7 +12,7 @@ class TargetAction<I>(
     cost: Cost = Cost(),
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
-    inputDisplayNameFn: ((String) -> String)? = null,
+    inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
     val getTargets: (ActionInput) -> List<I>,
     private val targetAction: String
 ) : Action(
@@ -34,12 +34,10 @@ class TargetAction<I>(
     }
 
     override fun onSelect(input: ActionInput, ai: Boolean): ActionResult {
-        var parentInputStr = ""
-        if (input.hasInput()) {
-            parentInputStr = input.input + ","
-        }
         val actionOptions: List<ActionEntry> = getTargets(input).map { option ->
-            ActionEntry(targetAction, parentInputStr + option.toString())
+            val copyInput: HashMap<String, String> = input.getHashMapCopy()
+            copyInput["target"] = option.toString()
+            ActionEntry(targetAction, copyInput)
         }
         return ActionListResult(actionOptions)
     }

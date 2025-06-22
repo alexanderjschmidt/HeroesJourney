@@ -3,7 +3,7 @@ package heroes.journey.entities.actions
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries.ActionManager
 
-class ActionEntry(private val action: String, val input: String) : Registrable(action) {
+class ActionEntry(private val action: String, val input: Map<String, String>) : Registrable(action) {
 
     init {
         nameInternal = getAction().getTitle(input)

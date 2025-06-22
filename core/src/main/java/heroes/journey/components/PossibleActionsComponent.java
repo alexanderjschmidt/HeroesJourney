@@ -25,10 +25,11 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     }
 
     public List<ActionEntry> getPossibleActions(UUID entityId) {
-        return ActionManager.get(possibleActions.stream().toList())
-            .stream()
-            .map(action -> new ActionEntry(action.getId(), entityId + ""))
-            .toList();
+        return ActionManager.get(possibleActions.stream().toList()).stream().map(action -> {
+            Map<String,String> inputs = new HashMap<>(1);
+            inputs.put("owner", entityId + "");
+            return new ActionEntry(action.getId(), inputs);
+        }).toList();
     }
 
     public PossibleActionsComponent addAction(Action action) {

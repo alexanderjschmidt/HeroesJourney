@@ -47,7 +47,7 @@ public class ActionSystem extends IteratingSystem {
         if (result != null) {
             switch (result) {
                 case StringResult str -> {
-                    GameState.global().getHistory().add(action.getId(), input.getInput(), id);
+                    GameState.global().getHistory().add(action.getId(), input, id);
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
                     if (PlayerInfo.isPlayer(id)) {
@@ -62,7 +62,7 @@ public class ActionSystem extends IteratingSystem {
                     world.edit(entityId).create(EventQueueComponent.class).events(multi.getEvents());
                 }
                 case EndTurnResult nothing -> {
-                    GameState.global().getHistory().add(action.getId(), input.getInput(), id);
+                    GameState.global().getHistory().add(action.getId(), input, id);
                     GameState.global().nextMove();
                     HUD.get().revertToInitialState();
                 }

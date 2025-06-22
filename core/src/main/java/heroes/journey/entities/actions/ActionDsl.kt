@@ -16,7 +16,7 @@ open class ActionBuilder {
     var onHoverFn: (ActionInput) -> Unit = {}
     var onSelectFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
     var onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
-    var inputDisplayNameFn: ((String) -> String)? = null
+    var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
 
     open fun build(): Action = Action(
         id = id,

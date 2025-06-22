@@ -24,12 +24,10 @@ class TravelActions : InitializerInterface {
             description = "Travel to "
             cost = Cost(2, 0, 0, 0)
             inputDisplayNameFn = { input ->
-                val items: List<String> = input.split(',')
-                val name = description + RegionManager[items[1]]!!.getName()
-                name
+                description + RegionManager[input["target"]]!!.getName()
             }
             onHoverFn = { input ->
-                val region: Region = RegionManager[input.input]!!
+                val region: Region = RegionManager[input["target"]]!!
                 HUD.get()
                     .cursor
                     .setMapPointerLoc(Position(region.center.x, region.center.y))
@@ -37,7 +35,7 @@ class TravelActions : InitializerInterface {
             onSelectFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val region: Region = RegionManager[input.input]!!
+                val region: Region = RegionManager[input["target"]]!!
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
@@ -51,15 +49,17 @@ class TravelActions : InitializerInterface {
                     ).path(path.reverse())
                 })
                 events.add(Runnable {
+                    val inputs: HashMap<String, String> = HashMap()
+                    inputs["message"] = "You have traveled to $input['target']"
                     gs.world.edit(e).create<ActionComponent>(ActionComponent::class.java)
-                        .action(BaseActions.popup, "You have traveled to $input.input")
+                        .action(BaseActions.popup, inputs)
                 })
                 MultiStepResult(events)
             }
             onSelectAIFn = { input ->
                 val gs = input.gameState
                 val e = input.entityId
-                val region: Region = RegionManager[input.input]!!
+                val region: Region = RegionManager[input["target"]]!!
                 val positionComponent = PositionComponent.get(gs.world, e)
                 val path = EntityCursorPathing().getPath(
                     gs.map, positionComponent.x,
