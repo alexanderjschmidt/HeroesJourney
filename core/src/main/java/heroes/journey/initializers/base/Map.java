@@ -1,8 +1,8 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.factories.EntityFactory.addOverworldComponents;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateDungeon;
-import static heroes.journey.initializers.base.factories.EntityFactory.generateTown;
+import static heroes.journey.initializers.base.EntityFactory.addOverworldComponents;
+import static heroes.journey.initializers.base.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.EntityFactory.generateTown;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.RegionManager;
 import static heroes.journey.registries.Registries.TerrainManager;
@@ -23,7 +23,6 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.initializers.base.factories.MonsterFactory;
 import heroes.journey.registries.FeatureManager;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.Feature;
@@ -106,10 +105,6 @@ public class Map implements InitializerInterface {
 
         // Generate Smooth Noise
         new NoiseMapEffect("base_noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
-
-        // Add Monsters
-        new BasicMapGenerationEffect("monsters", gs -> MonsterFactory.init(gs.getWorld())).register(
-            MapGenerator.noisePhase);
 
         // Capitals
         MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",

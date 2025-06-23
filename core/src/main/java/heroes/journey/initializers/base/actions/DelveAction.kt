@@ -4,7 +4,6 @@ import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.character.PlayerComponent
-import heroes.journey.components.place.DungeonComponent
 import heroes.journey.components.utils.DefaultContainer
 import heroes.journey.entities.actions.CooldownAction
 import heroes.journey.entities.actions.cooldownAction
@@ -31,21 +30,13 @@ class DelveAction : InitializerInterface {
                 val gs = input.gameState
                 val e = input.entityId
                 val dungeon = UUID.fromString(input["owner"])
-                val dungeonComponent = DungeonComponent.get(gs.world, dungeon)
                 val explorationLog = DefaultContainer<String>()
                 var conscious = true
-                for (room in dungeonComponent.layout()) {
-                    if (room == null) {
-                        explorationLog.add("Empty")
-                        continue
-                    }
-                    if (FightUtils.fight(gs, e, room)) {
-                        explorationLog.add(NamedComponent.get(gs.world, room, "Enemy"))
-                    } else {
-                        conscious = false
-                        FightUtils.faint(gs.world, e)
-                        break
-                    }
+                if (FightUtils.fight(gs, e, dungeon)) {
+                    explorationLog.add(NamedComponent.get(gs.world, dungeon, "Enemy"))
+                } else {
+                    conscious = false
+                    FightUtils.faint(gs.world, e)
                 }
 
                 val log = StringBuilder()

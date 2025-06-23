@@ -6,9 +6,9 @@ import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 
 import heroes.journey.GameState;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.place.LocationComponent;
 import heroes.journey.systems.GameWorld;
 
 @All({PositionComponent.class, LocationComponent.class, IdComponent.class})

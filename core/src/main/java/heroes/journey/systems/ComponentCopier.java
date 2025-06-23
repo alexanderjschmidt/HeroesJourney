@@ -5,6 +5,7 @@ import com.artemis.World;
 
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -14,8 +15,6 @@ import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.PlayerComponent;
-import heroes.journey.components.place.DungeonComponent;
-import heroes.journey.components.place.LocationComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.initializers.utils.Utils;
 
@@ -30,7 +29,6 @@ public class ComponentCopier {
         copyComponent(world, newEntity, oldId, PlayerComponent.class);
         copyComponent(world, newEntity, oldId, PositionComponent.class);
         copyComponent(world, newEntity, oldId, PossibleActionsComponent.class);
-        copyComponent(world, newEntity, oldId, DungeonComponent.class);
         copyComponent(world, newEntity, oldId, LocationComponent.class);
         copyComponent(world, newEntity, oldId, EquipmentComponent.class);
         copyComponent(world, newEntity, oldId, InventoryComponent.class);

@@ -1,6 +1,7 @@
 package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
+
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 
@@ -22,6 +23,7 @@ public class PopupUIState extends HUDState {
     @Override
     public void update(HUD hud) {
         if (Gdx.input.isKeyJustPressed(KeyManager.ANY) && !justOpened) {
+            System.out.println("close popup");
             HUD.get().revertToPreviousState();
         }
         justOpened = false;

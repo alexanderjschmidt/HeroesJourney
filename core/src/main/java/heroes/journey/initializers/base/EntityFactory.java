@@ -1,7 +1,5 @@
-package heroes.journey.initializers.base.factories;
+package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.factories.MonsterFactory.goblinId;
-import static heroes.journey.initializers.base.factories.MonsterFactory.hobgoblinId;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.QuestManager;
 
@@ -13,6 +11,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
@@ -23,8 +22,6 @@ import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
-import heroes.journey.components.place.DungeonComponent;
-import heroes.journey.components.place.LocationComponent;
 import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -79,7 +76,7 @@ public class EntityFactory {
         dungeon.create(PositionComponent.class).setPos(x, y);
         dungeon.create(PossibleActionsComponent.class).addAction(DelveAction.delve);
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
-        dungeon.create(DungeonComponent.class).layout(new UUID[] {null, goblinId, goblinId, hobgoblinId});
+        dungeon.create(StatsComponent.class);
         return id;
     }
 }
