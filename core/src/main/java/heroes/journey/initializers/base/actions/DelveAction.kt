@@ -9,6 +9,7 @@ import heroes.journey.entities.actions.CooldownAction
 import heroes.journey.entities.actions.cooldownAction
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
+import heroes.journey.initializers.base.tags.Stats
 import heroes.journey.initializers.utils.FightUtils
 import heroes.journey.initializers.utils.Utils
 import java.util.*
@@ -32,7 +33,7 @@ class DelveAction : InitializerInterface {
                 val dungeon = UUID.fromString(input["owner"])
                 val explorationLog = DefaultContainer<String>()
                 var conscious = true
-                if (FightUtils.fight(gs, e, dungeon)) {
+                if (FightUtils.struggle(gs, e, dungeon, Stats.BODY)) {
                     explorationLog.add(NamedComponent.get(gs.world, dungeon, "Enemy"))
                 } else {
                     conscious = false

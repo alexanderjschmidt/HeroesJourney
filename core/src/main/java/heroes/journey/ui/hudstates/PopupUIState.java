@@ -8,6 +8,7 @@ import heroes.journey.utils.input.KeyManager;
 public class PopupUIState extends HUDState {
 
     private boolean justOpened = false;
+    private boolean resetOnClose = false;
 
     public PopupUIState() {
         super();
@@ -15,7 +16,9 @@ public class PopupUIState extends HUDState {
 
     @Override
     public void enter(HUD hud) {
+        System.out.println("open popup");
         justOpened = true;
+        resetOnClose = false;
         hud.updateCenterPanel();
         hud.getPopupUI().setVisible(true);
     }
@@ -24,13 +27,21 @@ public class PopupUIState extends HUDState {
     public void update(HUD hud) {
         if (Gdx.input.isKeyJustPressed(KeyManager.ANY) && !justOpened) {
             System.out.println("close popup");
-            HUD.get().revertToPreviousState();
+            if (resetOnClose)
+                HUD.get().revertToInitialState(true);
+            else
+                HUD.get().revertToPreviousState();
         }
         justOpened = false;
     }
 
     @Override
     public void exit(HUD hud) {
+        resetOnClose = false;
         hud.getPopupUI().setVisible(false);
+    }
+
+    public void resetOnClose() {
+        resetOnClose = true;
     }
 }

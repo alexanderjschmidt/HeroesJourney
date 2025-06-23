@@ -4,8 +4,7 @@ import heroes.journey.entities.items.Item
 import heroes.journey.entities.items.ItemSubType
 import heroes.journey.entities.items.ItemType
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.initializers.base.tags.DamageTypes
-import heroes.journey.initializers.base.tags.DefenseTypes
+import heroes.journey.initializers.base.tags.Stats
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 
@@ -38,13 +37,13 @@ gameMod("Base Game Items") {
     Item(
         "iron_sword", "Iron Sword",
         sword, 1,
-        Attributes().add(DamageTypes.PHYSICAL, 3)
+        Attributes().add(Stats.BODY, 3)
     ).register()
 
     Item(
         "chest_plate", "Chest Plate",
         chest_armor, 5,
-        Attributes().add(DefenseTypes.PHYSICAL_DEF, 3)
+        Attributes().add(Stats.BODY, 3)
     ).register()
 
     ConsumableItem(

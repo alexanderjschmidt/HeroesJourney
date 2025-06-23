@@ -11,12 +11,9 @@ import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.registries.Tags;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {
-
-    @Setter private int handicapMult = 10;
 
     private final Attributes attributes = new Attributes();
 
@@ -36,11 +33,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         return stats == null ? null : stats.getAttributes();
     }
 
-    public static int getHandicap(GameWorld world, UUID entityId) {
-        StatsComponent stats = world.getEntity(StatsComponent.class, entityId);
-        return stats == null ? 1 : stats.getHandicapMult();
-    }
-
     @Override
     protected void reset() {
         attributes.clear();
@@ -48,7 +40,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     @Override
     public void copy(StatsComponent from) {
-        handicapMult = from.getHandicapMult();
         attributes.putAll(from.attributes);
     }
 }

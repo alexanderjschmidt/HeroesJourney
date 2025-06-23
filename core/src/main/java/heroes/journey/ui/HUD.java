@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.ui.hudstates.HUDState;
+import heroes.journey.ui.hudstates.PopupUIState;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.ui.windows.EntityUI;
@@ -153,6 +154,16 @@ public class HUD extends Stage {
     }
 
     public void revertToInitialState() {
+        revertToInitialState(false);
+    }
+
+    public void revertToInitialState(boolean force) {
+        System.out.println(force);
+        if (stateMachine.getCurrentState() instanceof PopupUIState popupState && !force) {
+            System.out.println("plan to reset on close");
+            popupState.resetOnClose();
+            return;
+        }
         while (stateMachine.revertToPreviousState()) {
         }
         if (LoadOptions.debugOption.isTrue()) {
