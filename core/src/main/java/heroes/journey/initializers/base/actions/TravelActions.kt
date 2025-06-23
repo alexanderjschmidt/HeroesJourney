@@ -4,9 +4,12 @@ import heroes.journey.components.PositionComponent
 import heroes.journey.components.character.ActionComponent
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Position
-import heroes.journey.entities.actions.*
+import heroes.journey.entities.actions.Action
+import heroes.journey.entities.actions.TargetAction
+import heroes.journey.entities.actions.action
 import heroes.journey.entities.actions.results.MultiStepResult
 import heroes.journey.entities.actions.results.StringResult
+import heroes.journey.entities.actions.targetAction
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries.RegionManager
@@ -22,7 +25,6 @@ class TravelActions : InitializerInterface {
             id = "travel_to"
             name = "Travel to"
             description = "Travel to "
-            cost = Cost(2, 0, 0, 0)
             inputDisplayNameFn = { input ->
                 description + RegionManager[input["target"]]!!.getName()
             }

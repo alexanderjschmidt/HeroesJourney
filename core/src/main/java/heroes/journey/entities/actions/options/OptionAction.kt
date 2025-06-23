@@ -2,7 +2,6 @@ package heroes.journey.entities.actions.options
 
 import heroes.journey.entities.actions.Action
 import heroes.journey.entities.actions.ActionInput
-import heroes.journey.entities.actions.Cost
 import heroes.journey.entities.actions.ShowAction
 import heroes.journey.entities.actions.results.AIOnSelectNotFound
 import heroes.journey.entities.actions.results.ActionResult
@@ -11,7 +10,6 @@ abstract class OptionAction(
     id: String,
     name: String?,
     description: String = "",
-    cost: Cost = Cost(),
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
@@ -21,7 +19,6 @@ abstract class OptionAction(
     name,
     description,
     false,
-    cost,
     requirementsMetFn,
     onHoverFn,
     onSelectFn,

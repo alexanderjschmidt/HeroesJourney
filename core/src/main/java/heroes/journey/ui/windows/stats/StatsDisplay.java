@@ -14,7 +14,6 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.tags.Stats;
-import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -53,11 +52,6 @@ public class StatsDisplay extends Table {
         PlayerComponent playerComponent = PlayerComponent.get(GameState.global().getWorld(), entityId);
 
         assert statsComponent != null;
-        health.setText(
-            "Health: " + statsComponent.get(Stats.HEALTH) + "/" + StatsUtils.getMaxHealth(statsComponent));
-        mana.setText("Mana: " + statsComponent.get(Stats.MANA) + "/" + StatsUtils.getMaxMana(statsComponent));
-        stamina.setText(
-            "Stamina: " + statsComponent.get(Stats.STAMINA) + "/" + StatsUtils.getMaxStamina(statsComponent));
         body.setText("Body: " + statsComponent.get(Stats.BODY));
         mind.setText("Mind: " + statsComponent.get(Stats.MIND));
         fame.setText("Fame: " + playerComponent.fame());

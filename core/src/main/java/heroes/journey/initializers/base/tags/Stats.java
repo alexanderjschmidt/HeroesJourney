@@ -6,7 +6,7 @@ import heroes.journey.registries.Tags;
 
 public enum Stats implements Tag {
 
-    BODY, MIND, HEALTH, STAMINA, MANA;
+    BODY, MIND;
 
     Stats() {
         Tags.register(this);

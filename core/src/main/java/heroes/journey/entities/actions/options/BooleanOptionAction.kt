@@ -1,7 +1,6 @@
 package heroes.journey.entities.actions.options
 
 import heroes.journey.entities.actions.ActionInput
-import heroes.journey.entities.actions.Cost
 import heroes.journey.entities.actions.ShowAction
 import heroes.journey.entities.actions.results.AIOnSelectNotFound
 import heroes.journey.entities.actions.results.ActionResult
@@ -11,7 +10,6 @@ class BooleanOptionAction(
     id: String,
     name: String?,
     description: String = "",
-    cost: Cost = Cost(),
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
@@ -21,7 +19,6 @@ class BooleanOptionAction(
     id,
     name,
     description,
-    cost,
     requirementsMetFn,
     onHoverFn,
     onSelectFn,

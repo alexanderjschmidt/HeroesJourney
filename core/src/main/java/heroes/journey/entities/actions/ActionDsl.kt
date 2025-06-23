@@ -11,7 +11,6 @@ open class ActionBuilder {
     var name: String? = null
     var description: String = ""
     open var isReturnsActionList: Boolean = false
-    var cost: Cost = Cost()
     var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
     var onHoverFn: (ActionInput) -> Unit = {}
     var onSelectFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
@@ -23,7 +22,6 @@ open class ActionBuilder {
         name = name,
         description = description,
         isReturnsActionList = isReturnsActionList,
-        cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
@@ -41,7 +39,6 @@ class TargetActionBuilder<I> : ActionBuilder() {
         id = id,
         name = name,
         description = description,
-        cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         inputDisplayNameFn = inputDisplayNameFn,
@@ -60,7 +57,6 @@ open class CooldownActionBuilder : ActionBuilder() {
         name = name,
         description = description,
         isReturnsActionList = isReturnsActionList,
-        cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
@@ -84,7 +80,6 @@ open class OptionActionBuilder : ActionBuilder() {
         id = id,
         name = name,
         description = description,
-        cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
@@ -109,7 +104,6 @@ class BooleanOptionActionBuilder : OptionActionBuilder() {
         id = id,
         name = name,
         description = description,
-        cost = cost,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,

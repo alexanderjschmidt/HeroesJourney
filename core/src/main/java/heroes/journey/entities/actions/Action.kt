@@ -14,7 +14,6 @@ open class Action(
     name: String? = null,
     private val description: String = "",
     val isReturnsActionList: Boolean = false,
-    val cost: Cost = Cost(),
     private val requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     private val onHoverFn: (ActionInput) -> Unit = {},
     private val onSelectFn: (ActionInput) -> ActionResult,
@@ -26,7 +25,7 @@ open class Action(
         get() = inputDisplayNameFn != null
 
     open fun requirementsMet(input: ActionInput): ShowAction {
-        return requirementsMetFn(input).and(cost.requirementsMet(input))
+        return requirementsMetFn(input)
     }
 
     fun onHover(input: ActionInput) {
@@ -35,7 +34,6 @@ open class Action(
     }
 
     open fun onSelect(input: ActionInput, ai: Boolean = false): ActionResult? {
-        cost.onUse(input)
         if (ai) {
             val aiResult = onSelectAIFn(input)
             if (aiResult !is AIOnSelectNotFound) {
@@ -55,7 +53,6 @@ open class Action(
     override fun getDescription(input: Map<String, String>): String = description
 
     override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
-        table.add(cost.display).center().fill().expand()
     }
 
     override fun register(): Action {

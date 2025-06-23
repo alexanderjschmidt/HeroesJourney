@@ -6,8 +6,6 @@ import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Tag;
 import heroes.journey.initializers.base.tags.Groups;
-import heroes.journey.initializers.base.tags.Stats;
-import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.registries.Tags;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
@@ -19,9 +17,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     public StatsComponent() {
         // TODO how to auto load things with maxes
-        attributes.put(Stats.HEALTH, StatsUtils.getMaxHealth(attributes));
-        attributes.put(Stats.MANA, StatsUtils.getMaxMana(attributes));
-        attributes.put(Stats.STAMINA, StatsUtils.getMaxStamina(attributes));
         for (Tag stat : Tags.get().get(Groups.Stats)) {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, stat.getMin());
