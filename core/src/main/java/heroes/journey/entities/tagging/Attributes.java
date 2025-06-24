@@ -58,17 +58,6 @@ public class Attributes extends HashMap<Tag,Integer> {
         return this;
     }
 
-    public Attributes convert(ConversionSet conversionSet) {
-        Map<Tag,Integer> converted = this.entrySet()
-            .stream()
-            .collect(Collectors.toMap(entry -> conversionSet.getOrDefault(entry.getKey(), entry.getKey()),
-                Map.Entry::getValue));
-        this.clear();
-        this.putAll(converted);
-        refreshTags();
-        return this;
-    }
-
     public Attributes getTagsWithGroup(Group group) {
         Set<Tag> tagsInGroup = tags.get(group);
         if (tagsInGroup == null) {
