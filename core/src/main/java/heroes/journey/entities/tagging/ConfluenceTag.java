@@ -36,6 +36,14 @@ public class ConfluenceTag extends Tag {
         totalParts = partsCount;
     }
 
+    public Map<Tag,Integer> getParts() {
+        return parts;
+    }
+
+    public int getTotalParts() {
+        return totalParts;
+    }
+
     @NotNull
     @Override
     public ConfluenceTag register() {

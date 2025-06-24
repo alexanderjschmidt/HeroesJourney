@@ -21,6 +21,18 @@ public class Attributes extends HashMap<Tag,Integer> {
         refreshTags();
     }
 
+    public int get(Tag tag) {
+        if (tag instanceof ConfluenceTag confluenceTag) {
+            int total = this.get(tag);
+            for (Tag tagPart : confluenceTag.getParts().keySet()) {
+                total += super.get(tagPart) * confluenceTag.getParts().get(tagPart);
+            }
+            return total / confluenceTag.getTotalParts();
+        } else {
+            return super.get(tag);
+        }
+    }
+
     private void refreshTags() {
         this.tags.clear();
         this.forEach((tag, val) -> tags.registerTag(tag));

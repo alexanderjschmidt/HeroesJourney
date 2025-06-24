@@ -9,7 +9,7 @@ public class Stats implements InitializerInterface {
 
     public static Tag BODY, MIND, MAGIC, CHARISMA;
 
-    public static ConfluenceTag CHARM;
+    public static ConfluenceTag CHARM, MIGHT;
 
     static {
         BODY = new Tag("body", "Body", 1, 10, Groups.Body, Groups.BaseStats).register();
