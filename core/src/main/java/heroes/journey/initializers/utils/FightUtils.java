@@ -7,19 +7,14 @@ import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Operation;
-import heroes.journey.initializers.base.tags.Groups;
+import heroes.journey.entities.tagging.Tag;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {
 
-    public static boolean struggle(
-        GameState gameState,
-        UUID challenger,
-        UUID challenged,
-        Stats challengeType) {
+    public static boolean struggle(GameState gameState, UUID challenger, UUID challenged, Tag challengeType) {
         GameWorld world = gameState.getWorld();
 
         Attributes damages = getEquipmentStats(world, challenger);
@@ -42,19 +37,19 @@ public class FightUtils {
 
         Attributes stats = new Attributes(attackerStats);
         if (equipment != null) {
-            stats = safeMerge(stats, equipment.handOne(), Groups.Stats);
-            stats = safeMerge(stats, equipment.handTwo(), Groups.Stats);
-            stats = safeMerge(stats, equipment.head(), Groups.Stats);
-            stats = safeMerge(stats, equipment.chest(), Groups.Stats);
-            stats = safeMerge(stats, equipment.legs(), Groups.Stats);
-            stats = safeMerge(stats, equipment.boots(), Groups.Stats);
+            stats = safeMerge(stats, equipment.handOne());
+            stats = safeMerge(stats, equipment.handTwo());
+            stats = safeMerge(stats, equipment.head());
+            stats = safeMerge(stats, equipment.chest());
+            stats = safeMerge(stats, equipment.legs());
+            stats = safeMerge(stats, equipment.boots());
         }
         return stats;
     }
 
-    private static Attributes safeMerge(Attributes base, Item item, Group group) {
+    private static Attributes safeMerge(Attributes base, Item item) {
         if (item != null && item.getAttributes() != null) {
-            return base.merge(item.getAttributes().getTagsWithGroup(group));
+            return base.merge(item.getAttributes());
         }
         return base;
     }

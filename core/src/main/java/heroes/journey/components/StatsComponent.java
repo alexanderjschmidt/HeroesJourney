@@ -17,7 +17,7 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     public StatsComponent() {
         // TODO how to auto load things with maxes
-        for (Tag stat : Tags.get().get(Groups.Stats)) {
+        for (Tag stat : Tags.get().get(Groups.BaseStats)) {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, stat.getMin());
         }
