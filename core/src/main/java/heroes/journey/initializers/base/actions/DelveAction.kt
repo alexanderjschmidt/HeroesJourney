@@ -4,7 +4,6 @@ import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.character.PlayerComponent
-import heroes.journey.components.utils.DefaultContainer
 import heroes.journey.entities.actions.CooldownAction
 import heroes.journey.entities.actions.cooldownAction
 import heroes.journey.entities.actions.results.StringResult
@@ -31,30 +30,13 @@ class DelveAction : InitializerInterface {
                 val gs = input.gameState
                 val e = input.entityId
                 val dungeon = UUID.fromString(input["owner"])
-                val explorationLog = DefaultContainer<String>()
-                var conscious = true
-                if (FightUtils.struggle(gs, e, dungeon, Stats.BODY)) {
-                    explorationLog.add(NamedComponent.get(gs.world, dungeon, "Enemy"))
-                } else {
-                    conscious = false
-                    FightUtils.faint(gs.world, e)
-                }
-
                 val log = StringBuilder()
+                if (FightUtils.struggle(gs, e, dungeon, Stats.BODY)) {
+                    log.append("You have completed the ")
+                        .append(NamedComponent.get(gs.world, dungeon, "Dungeon"))
+                        .append("!\nYour rewards are:\n")
 
-                for (enemy in explorationLog.keys) {
-                    log.append("You have defeated: ")
-                        .append(explorationLog[enemy])
-                        .append("x ")
-                        .append(enemy)
-                        .append("\n")
-                }
-
-                if (!conscious) {
-                    log.append("You have lost too much health and fainted")
-                } else {
                     val inventoryComponent = InventoryComponent.get(gs.world, dungeon)
-                    log.append("You have completed the Dungeon!\nYour rewards are:\n")
                     if (inventoryComponent != null) {
                         for (item in inventoryComponent.inventory.keys) {
                             Utils.addItem(
@@ -72,7 +54,11 @@ class DelveAction : InitializerInterface {
                         playerComponent.fame(playerComponent.fame() + 5)
                         log.append("You have gained ").append(5).append(" fame")
                     }
+                } else {
+                    log.append("You have lost too much health and fainted")
+                    FightUtils.faint(gs.world, e)
                 }
+
                 StringResult(log.toString())
             }
         }.register()
