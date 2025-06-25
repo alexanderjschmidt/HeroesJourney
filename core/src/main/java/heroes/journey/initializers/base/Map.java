@@ -164,7 +164,7 @@ public class Map implements InitializerInterface {
                 }
                 possibleTilesPicker.remove(Tiles.pathDot);
             } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
-                surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY())) {
+                surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY(), 1)) {
                 possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
             } else {
                 for (Tile t : possibleTiles) {

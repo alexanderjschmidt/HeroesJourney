@@ -28,6 +28,30 @@ public class MapGenUtils {
             (!inBounds(x + 1, y + 1) || t == tileMap[x + 1][y + 1]);
     }
 
+    public static boolean surroundedBySame(Tile[][] tileMap, int x, int y, int radius) {
+        Tile center = tileMap[x][y];
+
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dy = -radius; dy <= radius; dy++) {
+                // Skip the center tile itself
+                if (dx == 0 && dy == 0)
+                    continue;
+
+                int nx = x + dx;
+                int ny = y + dy;
+
+                if (inBounds(nx, ny)) {
+                    if (tileMap[nx][ny] != center) {
+                        return false;
+                    }
+                }
+                // If out of bounds, treat it as a match (like your original code)
+            }
+        }
+
+        return true;
+    }
+
     public static void buildRoad(
         GameState gameState,
         Tile connector,
@@ -136,7 +160,10 @@ public class MapGenUtils {
      * Scans outward in rings from the region center, shuffling each ring for variance.
      * Falls back to the center if no valid tile is found.
      */
-    public static Position poisonDiskSample(int minDist, heroes.journey.registries.FeatureManager features, heroes.journey.tilemap.Region region) {
+    public static Position poisonDiskSample(
+        int minDist,
+        heroes.journey.registries.FeatureManager features,
+        heroes.journey.tilemap.Region region) {
         // Gather all existing feature positions
         List<Position> featurePositions = new ArrayList<>();
         for (heroes.journey.tilemap.Feature f : features.values()) {
@@ -149,7 +176,8 @@ public class MapGenUtils {
         int maxRadius = 0;
         for (Position p : regionTiles) {
             int dist = Math.abs(center.getX() - p.getX()) + Math.abs(center.getY() - p.getY());
-            if (dist > maxRadius) maxRadius = dist;
+            if (dist > maxRadius)
+                maxRadius = dist;
         }
         // For each ring, starting at radius 0 (center), scan outward
         for (int r = 0; r <= maxRadius; r++) {
