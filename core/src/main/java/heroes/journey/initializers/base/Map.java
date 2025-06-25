@@ -63,9 +63,7 @@ public class Map implements InitializerInterface {
             @Override
             public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
-                UUID townId = generateTown(gs, pos.getX(), pos.getY(), false);
-                Feature town = new Feature(townId, TOWN, pos);
-                return town;
+                return new Feature(null, TOWN, pos);
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {

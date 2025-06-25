@@ -2,6 +2,7 @@ package heroes.journey.utils.worldgen.utils;
 
 import static heroes.journey.initializers.base.Tiles.kingdom;
 import static heroes.journey.registries.Registries.BiomeManager;
+import static heroes.journey.registries.Registries.RegionManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -276,6 +277,7 @@ public class VoronoiRegionGenerator {
             }
         }
 
+        RegionManager.clear();
         for (Region region : regionMapObj.values()) {
             region.register();
         }

@@ -60,6 +60,8 @@ public class ActionMenu extends UI {
         Region region = RegionManager.get(regionId);
         Set<ActionEntry> actions = new HashSet<>();
         for (Feature feature : region.getFeatures()) {
+            if (feature.getEntityId() == null)
+                continue;
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
                 feature.getEntityId());
             if (factionActions != null) {
