@@ -44,9 +44,9 @@ public class Map implements InitializerInterface {
 
     public static int MAP_SIZE = 100;
     // Kingdoms
-    public static int NUM_KINGDOMS = 3;
+    public static int NUM_PLAYERS = 3;
 
-    public static FeatureType KINGDOM, TOWN, DUNGEON;
+    public static FeatureType KINGDOM, TOWN, DUNGEON, MINE;
 
     @Override
     public void init() {
@@ -56,14 +56,14 @@ public class Map implements InitializerInterface {
             public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
                 UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
-                return new Feature(kingdomId, KINGDOM, pos);
+                return new Feature(kingdomId, this, pos);
             }
         };
         TOWN = new FeatureType("town", "Town") {
             @Override
             public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
-                return new Feature(null, TOWN, pos);
+                return new Feature(null, this, pos);
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {
@@ -71,14 +71,21 @@ public class Map implements InitializerInterface {
             public Feature generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
                 UUID dungeonId = generateDungeon(gs, pos.getX(), pos.getY());
-                return new Feature(dungeonId, DUNGEON, pos);
+                return new Feature(dungeonId, this, pos);
+            }
+        };
+        MINE = new FeatureType("dungeon", "Dungeon") {
+            @Override
+            public Feature generateFeature(GameState gs, Position pos) {
+                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
+                return new Feature(null, this, pos);
             }
         };
 
         /**
          * New Gen Plan
          * Noise (create continent)
-         * Generate kingdom region starting points
+         * Generate starting cities
          * generate voronoi regions using starting points as seeds and X regions to gen
          * apply region generation
          *  set tile to biome base tile
@@ -89,24 +96,12 @@ public class Map implements InitializerInterface {
          * Add players (this could be a part of kingdom biome generation?)
          */
 
-        /**
-         * Ideal Gen Plan
-         * Noise (create continent)
-         * generate voronoi regions using ring region inputs
-         * apply region generation
-         *  set tile to biome base tile
-         *  generate features random in region
-         *  Add entities (players)
-         * cross region generation (roads)
-         * wavefunctioncollapse tilemap and env layer
-         */
-
         // Generate Smooth Noise
         new NoiseMapEffect("base_noise", 50, 0.7f, 5, 2).register(MapGenerator.noisePhase);
 
         // Capitals
         MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",
-            List.of(new Integer[] {NUM_KINGDOMS * 2, NUM_KINGDOMS, 1}),
+            List.of(new Integer[] {NUM_PLAYERS * 2, NUM_PLAYERS, 1}),
             List.of(new Boolean[] {false, true, false})).register(MapGenerator.worldGenPhase);
 
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {

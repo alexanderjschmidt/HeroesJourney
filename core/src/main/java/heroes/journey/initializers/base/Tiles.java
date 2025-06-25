@@ -1,6 +1,12 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.Map.KINGDOM;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureGenerationData;
@@ -11,11 +17,6 @@ import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.initializers.base.Map.KINGDOM;
 
 public class Tiles implements InitializerInterface {
 
@@ -54,23 +55,27 @@ public class Tiles implements InitializerInterface {
         Terrain sandToWater = new Terrain("sand_to_water", "Water", 50).register();
 
         // Biomes
-        List<FeatureGenerationData> kingdomData = new ArrayList<>();
-        kingdomData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        kingdomData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
-        kingdomData.add(new FeatureGenerationData(Map.DUNGEON, 5, 5, 8));
-        kingdom = new Biome("kingdom", "Kingdom", plains.getId(), kingdomData);
-
         List<FeatureGenerationData> plainsData = new ArrayList<>();
-        plainsData.add(new FeatureGenerationData(Map.DUNGEON, 8, 5, 8));
-        Biome plainsBiome = new Biome("plains", "Plains", plains.getId(), plainsData).register();
+        plainsData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
+        plainsData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
+        plainsData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
+        plainsData.add(new FeatureGenerationData(Map.MINE, 5, 5, 8));
+        kingdom = new Biome("kingdom", "Kingdom", plains.getId(), plainsData).register();
 
         List<FeatureGenerationData> desertData = new ArrayList<>();
-        desertData.add(new FeatureGenerationData(Map.DUNGEON, 8, 5, 12));
-        Biome desert = new Biome("desert", "Desert", sand.getId(), desertData).register();
+        desertData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
+        desertData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
+        desertData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
+        desertData.add(new FeatureGenerationData(Map.MINE, 5, 5, 10));
+        Biome desertKingdom = new Biome("desert_kingdom", "Desert Kingdom", sand.getId(),
+            desertData).register();
 
-        List<FeatureGenerationData> hillsData = new ArrayList<>();
-        hillsData.add(new FeatureGenerationData(Map.DUNGEON, 8, 5, 15));
-        Biome mesa = new Biome("mesa", "Mesa", hills.getId(), hillsData).register();
+        List<FeatureGenerationData> mesaData = new ArrayList<>();
+        mesaData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
+        mesaData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
+        mesaData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
+        mesaData.add(new FeatureGenerationData(Map.MINE, 5, 7, 12));
+        Biome mesaKingdom = new Biome("mesa_kingdom", "Mesa Kingdom", hills.getId(), mesaData).register();
 
         NULL = new BaseTile(NULL_TERRAIN, 100, false, tiles[3][0]);
         TileHelpers.baseTile(NULL, NULL_TERRAIN);
@@ -107,8 +112,8 @@ public class Tiles implements InitializerInterface {
         TileHelpers.createWangCornerAnimated(sandToWater, sand, water, tiles, 500, 20, 16, true);
         TileHelpers.cliffTransitionAnimated(sandToWater, hillToWater, sand, hills, water, tiles, 10, 20, 6,
             true);
-        TileHelpers.cliffTransitionAnimated(sandToWater, plainsToWater, sand, plains, water, tiles, 10, 20,
-            8, true);
+        TileHelpers.cliffTransitionAnimated(sandToWater, plainsToWater, sand, plains, water, tiles, 10, 20, 8,
+            true);
 
         treeTiles = TileHelpers.createWangCorner(trees, NULL_TERRAIN, trees, tiles, 500, 0, 7, false);
 
