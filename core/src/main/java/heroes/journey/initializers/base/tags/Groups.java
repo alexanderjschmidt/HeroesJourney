@@ -4,6 +4,6 @@ import heroes.journey.entities.tagging.Group;
 
 public enum Groups implements Group {
 
-    Body, Mind, Magic, Charisma, BaseStats;
+    Body, Mind, Magic, Charisma, BaseStats, Renown;
 
 }

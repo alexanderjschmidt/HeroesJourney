@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.registries.Tags;
 import heroes.journey.utils.art.ResourceManager;
 
 public class ResourceBar extends Stack {
@@ -33,6 +35,12 @@ public class ResourceBar extends Stack {
     public void update(int currentVal, int maxVal) {
         this.currentVal = currentVal;
         this.maxVal = maxVal;
+        resource.setText(currentVal + "/" + maxVal);
+    }
+
+    public void update(Attributes stats, String tagId) {
+        this.currentVal = stats.get(Tags.getTag(tagId));
+        this.maxVal = Tags.getTag(tagId).getMax();
         resource.setText(currentVal + "/" + maxVal);
     }
 }

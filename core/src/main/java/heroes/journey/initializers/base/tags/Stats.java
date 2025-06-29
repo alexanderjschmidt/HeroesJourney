@@ -10,6 +10,8 @@ public class Stats implements InitializerInterface {
     // BASE
     public static Tag BODY, MIND, MAGIC, CHARISMA;
 
+    public static Tag VALOR, INSIGHT, ARCANUM, INSPIRATION;
+
     // DOUBLES
     // BODY, BODY, (BODY, MIND, MAGIC, CHARISMA)
     public static ConfluenceTag MIGHT, SKILL, EMPOWERMENT, BRAVADO;
@@ -26,6 +28,12 @@ public class Stats implements InitializerInterface {
         MIND = new Tag("mind", "Mind", 1, 10, Groups.Mind, Groups.BaseStats).register();
         MAGIC = new Tag("magic", "Magic", 1, 10, Groups.Magic, Groups.BaseStats).register();
         CHARISMA = new Tag("charisma", "Charisma", 1, 10, Groups.Charisma, Groups.BaseStats).register();
+
+        // RENOWN
+        VALOR = new Tag("valor", "Valor", 0, 10, Groups.Renown).register();
+        INSIGHT = new Tag("insight", "Insight", 0, 10, Groups.Renown).register();
+        ARCANUM = new Tag("arcanum", "Arcanum", 0, 10, Groups.Renown).register();
+        INSPIRATION = new Tag("inspiration", "Inspiration", 0, 10, Groups.Renown).register();
 
         // BODY Physical problem solving
         MIGHT = new ConfluenceTag("might", "Might", 1, 10, BODY, BODY, BODY).register();

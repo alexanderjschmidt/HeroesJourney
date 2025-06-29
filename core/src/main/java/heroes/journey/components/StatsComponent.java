@@ -21,6 +21,10 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, stat.getMin());
         }
+        for (Tag stat : Tags.get().get(Groups.Renown)) {
+            if (!attributes.containsKey(stat))
+                attributes.put(stat, 3);
+        }
     }
 
     public static Attributes get(GameWorld world, UUID entityId) {

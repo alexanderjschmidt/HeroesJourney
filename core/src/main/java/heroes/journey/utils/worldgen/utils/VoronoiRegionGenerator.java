@@ -220,8 +220,6 @@ public class VoronoiRegionGenerator {
                 sumY += p.getY();
             }
             int count = region.getTiles().size();
-            System.out.println(centerPoints);
-            System.out.println((sumX / count) + " " + (sumY / count));
             world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count).sync();
 
             int randomBiome = Random.get().nextInt(BiomeManager.size());

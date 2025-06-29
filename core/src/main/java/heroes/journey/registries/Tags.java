@@ -18,7 +18,7 @@ public class Tags extends HashMap<Group,Set<Tag>> {
             globalTags = new Tags();
         return globalTags;
     }
-    
+
     private final Map<String,Tag> tags = new HashMap<>();
 
     public void registerTag(Tag tag) {
@@ -26,9 +26,9 @@ public class Tags extends HashMap<Group,Set<Tag>> {
         for (Group group : groups) {
             if (!containsKey(group)) {
                 put(group, new HashSet<>());
-                tags.put(tag.toString(), tag);
             }
             get(group).add(tag);
+            tags.put(tag.toString(), tag);
         }
     }
 
