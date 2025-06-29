@@ -10,7 +10,7 @@ public class Stats implements InitializerInterface {
     // BASE
     public static Tag BODY, MIND, MAGIC, CHARISMA;
 
-    public static Tag VALOR, INSIGHT, ARCANUM, INSPIRATION;
+    public static Tag VALOR, INSIGHT, ARCANUM, INFLUENCE;
 
     // DOUBLES
     // BODY, BODY, (BODY, MIND, MAGIC, CHARISMA)
@@ -33,7 +33,7 @@ public class Stats implements InitializerInterface {
         VALOR = new Tag("valor", "Valor", 0, 10, Groups.Renown).register();
         INSIGHT = new Tag("insight", "Insight", 0, 10, Groups.Renown).register();
         ARCANUM = new Tag("arcanum", "Arcanum", 0, 10, Groups.Renown).register();
-        INSPIRATION = new Tag("inspiration", "Inspiration", 0, 10, Groups.Renown).register();
+        INFLUENCE = new Tag("influence", "Influence", 0, 10, Groups.Renown).register();
 
         // BODY Physical problem solving
         MIGHT = new ConfluenceTag("might", "Might", 1, 10, BODY, BODY, BODY).register();

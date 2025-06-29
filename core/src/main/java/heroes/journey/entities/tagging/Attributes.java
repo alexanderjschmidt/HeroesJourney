@@ -42,6 +42,10 @@ public class Attributes extends HashMap<Tag,Integer> {
         return put(tag, value, Operation.ADD);
     }
 
+    public Attributes add(String tag, Integer value) {
+        return put(Tags.getTag(tag), value, Operation.ADD);
+    }
+
     public Attributes put(Tag tag, Integer value, Operation operation) {
         if (this.containsKey(tag)) {
             this.compute(tag,

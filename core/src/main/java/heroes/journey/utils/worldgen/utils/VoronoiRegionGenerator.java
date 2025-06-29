@@ -192,7 +192,13 @@ public class VoronoiRegionGenerator {
             for (int i = 0; i < ring.size(); i++) {
                 EntityEdit region = world.createEntity().edit();
                 IdComponent id = region.create(IdComponent.class);
-                region.create(RegionComponent.class).ring(ringIndex).ringPos(i);
+                region.create(RegionComponent.class)
+                    .ring(ringIndex)
+                    .ringPos(i)
+                    .addChallenge("fight_monsters")
+                    .addChallenge("solve_mystery")
+                    .addChallenge("cure_curse")
+                    .addChallenge("resolve_dispute");
                 region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
                 regionIdMap.put(regionId, id.uuid());
                 regionId++;

@@ -45,7 +45,8 @@ public class EntityFactory {
         entity.create(ActorComponent.class);
         entity.create(PossibleActionsComponent.class)
             .addAction(BaseActions.rest)
-            .addAction(TravelActions.travel);
+            .addAction(TravelActions.travel)
+            .addAction(BaseActions.faceChallenges);
 
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);

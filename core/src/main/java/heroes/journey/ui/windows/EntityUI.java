@@ -16,7 +16,7 @@ import heroes.journey.utils.art.ResourceManager;
 public class EntityUI extends UI {
 
     private final Label entity;
-    private final ResourceBar valor, insight, arcanum, inspiration;
+    private final ResourceBar valor, insight, arcanum, influence;
 
     public EntityUI() {
         super();
@@ -27,12 +27,12 @@ public class EntityUI extends UI {
         this.valor = new ResourceBar(ResourceManager.get(ResourceManager.UI)[2][0], null);
         this.insight = new ResourceBar(ResourceManager.get(ResourceManager.UI)[4][1], null);
         this.arcanum = new ResourceBar(ResourceManager.get(ResourceManager.UI)[4][0], null);
-        this.inspiration = new ResourceBar(ResourceManager.get(ResourceManager.UI)[3][1], null);
+        this.influence = new ResourceBar(ResourceManager.get(ResourceManager.UI)[3][1], null);
 
         this.mainTable.add(valor).expandX().row();
         this.mainTable.add(insight).expandX().row();
         this.mainTable.add(arcanum).expandX().row();
-        this.mainTable.add(inspiration).expandX().row();
+        this.mainTable.add(influence).expandX().row();
 
         pack();
     }
@@ -51,7 +51,7 @@ public class EntityUI extends UI {
             valor.update(statsComponent, "valor");
             insight.update(statsComponent, "insight");
             arcanum.update(statsComponent, "arcanum");
-            inspiration.update(statsComponent, "inspiration");
+            influence.update(statsComponent, "influence");
         }
     }
 }

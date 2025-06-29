@@ -2,10 +2,9 @@ package heroes.journey.initializers.base.actions
 
 import heroes.journey.Application
 import heroes.journey.GameState
-import heroes.journey.components.BuffsComponent
-import heroes.journey.components.NamedComponent
-import heroes.journey.components.QuestsComponent
+import heroes.journey.components.*
 import heroes.journey.components.character.ActionComponent
+import heroes.journey.entities.Challenge
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.*
 import heroes.journey.entities.actions.results.ActionListResult
@@ -14,7 +13,9 @@ import heroes.journey.entities.actions.results.NullResult
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
+import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
+import heroes.journey.registries.Registries.ChallengeManager
 import heroes.journey.registries.Registries.QuestManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
@@ -161,6 +162,39 @@ class BaseActions : InitializerInterface {
             }
             targetAction = quest!!.id
         }.register()
+
+        faceChallenge = action {
+            id = "face_challenge"
+            name = "Face Challenge"
+            description = "Face down a challenge to prove your legend to the realm."
+            inputDisplayNameFn = { input ->
+                ChallengeManager[input["target"]]!!.getName()
+            }
+            onSelectFn = { input ->
+                val regionId = Utils.getRegion(input)
+                val regionComponent = RegionComponent.get(
+                    input.gameState.world,
+                    regionId
+                )
+
+                val challenge: Challenge = ChallengeManager[input["target"]]!!
+                if (regionComponent != null) {
+                    regionComponent.removeChallenge(challenge)
+                    StatsComponent.get(input.gameState.world, input.entityId).merge(challenge.reward)
+                }
+                EndTurnResult()
+            }
+        }.register()
+        faceChallenges = targetAction<Challenge> {
+            id = "face_challenges"
+            name = "Face Challenges"
+            description = "See what challenges you can face"
+            getTargets = { input ->
+                val regionId = Utils.getRegion(input)
+                RegionComponent.get(input.gameState.world, regionId).challenges
+            }
+            targetAction = faceChallenge!!.id
+        }.register()
     }
 
     companion object {
@@ -174,6 +208,11 @@ class BaseActions : InitializerInterface {
 
         @JvmField
         var workout: CooldownAction? = null
+
+        @JvmField
+        var faceChallenges: TargetAction<Challenge>? = null
+
+        var faceChallenge: Action? = null
 
         @JvmField
         var study: CooldownAction? = null
