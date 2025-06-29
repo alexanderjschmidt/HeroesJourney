@@ -1,5 +1,8 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 
 import com.artemis.Aspect;
@@ -14,6 +17,7 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
@@ -42,10 +46,18 @@ public class RenderSystem extends BaseEntitySystem {
 
         IntBag actives = this.subscription.getEntities();
         int[] ids = actives.getData();
-        int i = 0;
 
-        for (int s = actives.size(); s > i; ++i) {
-            this.process(world, IdComponent.get(world, ids[i]));
+        List<UUID> sortedIds = new ArrayList<>(actives.size());
+
+        for (int i = 0; i < actives.size(); ++i) {
+            UUID id = IdComponent.get(world, ids[i]);
+            sortedIds.add(id);
+        }
+
+        sortedIds.sort(Comparator.comparingInt(eid -> computeRenderPriority(world, eid)));
+
+        for (UUID entityUuid : sortedIds) {
+            this.process(world, entityUuid);
         }
 
         PlayerInfo.updateFog();
@@ -83,5 +95,14 @@ public class RenderSystem extends BaseEntitySystem {
                 .draw(render.sprite(), x, y, GameCamera.get().getSize(),
                     heroes.journey.GameCamera.get().getSize());
         }
+    }
+
+    private int computeRenderPriority(GameWorld world, UUID entityId) {
+        // Lower number means "render first"
+        boolean hasLocation = LocationComponent.get(world, entityId) != null;
+
+        if (hasLocation)
+            return 0;
+        return 2; // fallback for everything else
     }
 }
