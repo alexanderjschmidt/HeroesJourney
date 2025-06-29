@@ -20,7 +20,6 @@ import com.artemis.utils.IntBag;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LocationComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
@@ -199,10 +198,17 @@ public class Map implements InitializerInterface {
 
         // Add Entities
         new BasicMapGenerationEffect("entities", gameState -> {
-            List<UUID> kingdoms = LocationComponent.get(gameState.getWorld(), KINGDOM);
-            for (UUID kingdom : kingdoms) {
-                PositionComponent pos = PositionComponent.get(gameState.getWorld(), kingdom);
-                if (kingdom == kingdoms.getFirst()) {
+            IntBag regions = GameState.global().getWorld().getRegionSubscription().getEntities();
+            int[] regionIds = regions.getData();
+
+            for (int r = 0; r < regions.size(); r++) {
+                int entityId = regionIds[r];
+                UUID id = IdComponent.get(GameState.global().getWorld(), entityId);
+                RegionComponent region = RegionComponent.get(GameState.global().getWorld(), id);
+                if (region.ring() != 0)
+                    continue;
+                PositionComponent pos = PositionComponent.get(gameState.getWorld(), id);
+                if (region.ringPos() == 0) {
                     EntityEdit player = gameState.getWorld().createEntity().edit();
                     UUID playerId = addOverworldComponents(gameState.getWorld(), player, pos.getX(),
                         pos.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
@@ -213,7 +219,7 @@ public class Map implements InitializerInterface {
                         .add(ItemManager.get("iron_ingot"), 5)
                         .add(ItemManager.get("chest_plate"));
                     PlayerInfo.get().setPlayerId(playerId);
-                } else {
+                } else if (region.ringPos() % 2 == 0) {
                     EntityEdit opponent = gameState.getWorld().createEntity().edit();
                     addOverworldComponents(gameState.getWorld(), opponent, pos.getX(), pos.getY(),
                         LoadTextures.PLAYER_SPRITE, new MCTSAI());

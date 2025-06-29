@@ -12,6 +12,7 @@ import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Biome;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
@@ -20,7 +21,7 @@ import lombok.experimental.Accessors;
 public class RegionComponent extends PooledClonableComponent<RegionComponent> {
 
     private String biome;
-    private int ring;
+    @Getter private int ring, ringPos;
     private final Set<Position> tiles = new HashSet<>();
     private final List<UUID> features = new ArrayList<>();
     public final Set<UUID> neighborRegionIds = new HashSet<>();
