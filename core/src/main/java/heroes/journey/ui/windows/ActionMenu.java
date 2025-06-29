@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import heroes.journey.GameState;
@@ -46,7 +45,7 @@ public class ActionMenu extends UI {
         if (selectedPosition != null) {
             // Get Region Locations Actions
             requirementsMetOptions = Stream.concat(requirementsMetOptions.stream(),
-                getRegionFeatures(gameState, selectedEntity).stream()).collect(Collectors.toList());
+                getRegionFeatures(gameState, selectedEntity).stream()).toList();
         }
         return requirementsMetOptions.stream().distinct().toList();
     }

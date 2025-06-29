@@ -30,6 +30,7 @@ class CursorMoveState extends HUDState {
             if (hud.getCursor().getHover() != null && PlayerInfo.isCurrentlyPlaying() &&
                 Objects.equals(hud.getCursor().getHover(), GameState.global().getCurrentEntity())) {
                 hud.getCursor().setSelectedtoHover();
+                assert BaseActions.openActionMenu != null;
                 GameState.global()
                     .getWorld()
                     .edit(hud.getCursor().getSelected())

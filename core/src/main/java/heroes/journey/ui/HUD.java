@@ -158,7 +158,6 @@ public class HUD extends Stage {
     }
 
     public void revertToInitialState(boolean force) {
-        System.out.println(force);
         if (stateMachine.getCurrentState() instanceof PopupUIState popupState && !force) {
             System.out.println("plan to reset on close");
             popupState.resetOnClose();

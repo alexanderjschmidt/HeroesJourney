@@ -14,12 +14,14 @@ import java.util.UUID;
 import com.artemis.EntityEdit;
 
 import heroes.journey.GameState;
+import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Random;
+import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 
 public class VoronoiRegionGenerator {
 
@@ -191,6 +193,7 @@ public class VoronoiRegionGenerator {
                 EntityEdit region = world.createEntity().edit();
                 IdComponent id = region.create(IdComponent.class);
                 region.create(RegionComponent.class).ring(ringIndex);
+                region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
                 regionIdMap.put(regionId, id.uuid());
                 regionId++;
             }
@@ -208,7 +211,7 @@ public class VoronoiRegionGenerator {
             }
         }
 
-        // === Step 3: Finalize and assign biome ===
+        // === Step 3: Finalize center and assign biome ===
         for (UUID id : regionIdMap.values()) {
             RegionComponent region = RegionComponent.get(world, id);
             int sumX = 0, sumY = 0;
@@ -217,11 +220,14 @@ public class VoronoiRegionGenerator {
                 sumY += p.getY();
             }
             int count = region.getTiles().size();
-            world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count);
+            System.out.println(centerPoints);
+            System.out.println((sumX / count) + " " + (sumY / count));
+            world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count).sync();
 
             int randomBiome = Random.get().nextInt(BiomeManager.size());
             region.setBiome(BiomeManager.values().stream().toList().get(randomBiome));
         }
+        world.basicProcess();
 
         // === Build regionIdToRingIndex ===
         Map<Integer,Integer> regionIdToRingIndex = new HashMap<>();

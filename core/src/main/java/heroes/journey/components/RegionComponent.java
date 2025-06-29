@@ -53,15 +53,22 @@ public class RegionComponent extends PooledClonableComponent<RegionComponent> {
         this.biome = biome.getId();
     }
 
-    public int getRing() {
-        return ring;
-    }
-
     @Override
     protected void reset() {
+        biome = "";
+        ring = -1;
+        tiles.clear();
+        features.clear();
+        neighborRegionIds.clear();
     }
 
     @Override
     public void copy(RegionComponent from) {
+        reset();
+        biome = from.biome;
+        ring = from.ring;
+        tiles.addAll(from.tiles);
+        features.addAll(from.features);
+        neighborRegionIds.addAll(from.neighborRegionIds);
     }
 }

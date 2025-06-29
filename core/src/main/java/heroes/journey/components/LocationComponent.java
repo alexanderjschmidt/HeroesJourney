@@ -32,6 +32,8 @@ public class LocationComponent extends PooledClonableComponent<LocationComponent
 
     @Override
     public void copy(LocationComponent from) {
+        region = from.region;
+        featureType = from.featureType;
     }
 
     public static List<UUID> get(GameWorld world) {

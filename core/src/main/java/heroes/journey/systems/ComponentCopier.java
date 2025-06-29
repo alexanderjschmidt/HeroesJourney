@@ -10,6 +10,7 @@ import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.RegionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AIComponent;
 import heroes.journey.components.character.IdComponent;
@@ -30,6 +31,7 @@ public class ComponentCopier {
         copyComponent(world, newEntity, oldId, PositionComponent.class);
         copyComponent(world, newEntity, oldId, PossibleActionsComponent.class);
         copyComponent(world, newEntity, oldId, LocationComponent.class);
+        copyComponent(world, newEntity, oldId, RegionComponent.class);
         copyComponent(world, newEntity, oldId, EquipmentComponent.class);
         copyComponent(world, newEntity, oldId, InventoryComponent.class);
         copyComponent(world, newEntity, oldId, QuestsComponent.class);

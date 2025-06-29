@@ -9,12 +9,13 @@ import com.artemis.systems.IteratingSystem;
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.FogUtils;
 
 @All({PositionComponent.class, IdComponent.class})
-@Exclude({LocationComponent.class})
+@Exclude({LocationComponent.class, RegionComponent.class})
 public class PositionSyncSystem extends IteratingSystem {
 
     private final GameState gameState;

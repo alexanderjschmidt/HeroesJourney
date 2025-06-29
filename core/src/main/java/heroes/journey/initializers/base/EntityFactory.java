@@ -76,8 +76,6 @@ public class EntityFactory {
         house.create(LocationComponent.class).featureType("town").region(region);
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y);
-        house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
-        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
         return id;
     }
 
