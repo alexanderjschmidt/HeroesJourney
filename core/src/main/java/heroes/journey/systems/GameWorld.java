@@ -29,6 +29,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
+import heroes.journey.components.RegionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.initializers.utils.StatsUtils;
@@ -55,7 +56,7 @@ public class GameWorld extends World {
     private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
     private final WorldSerializationManager manager;
 
-    private EntitySubscription locationSubscription;
+    private EntitySubscription locationSubscription, regionSubscription;
 
     private GameWorld(WorldConfiguration config) {
         super(config);
@@ -64,6 +65,7 @@ public class GameWorld extends World {
         entityMap = new HashMap<>();
 
         locationSubscription = getAspectSubscriptionManager().get(Aspect.all(LocationComponent.class));
+        regionSubscription = getAspectSubscriptionManager().get(Aspect.all(RegionComponent.class));
     }
 
     public static GameWorld initGameWorld(GameState gameState) {
@@ -252,5 +254,9 @@ public class GameWorld extends World {
 
     public EntitySubscription getLocationSubscription() {
         return locationSubscription;
+    }
+
+    public EntitySubscription getRegionSubscription() {
+        return regionSubscription;
     }
 }

@@ -1,8 +1,6 @@
 package heroes.journey.utils.worldgen.utils;
 
-import static heroes.journey.initializers.base.Tiles.kingdom;
 import static heroes.journey.registries.Registries.BiomeManager;
-import static heroes.journey.registries.Registries.RegionManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,9 +9,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
+import com.artemis.EntityEdit;
+
+import heroes.journey.GameState;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.RegionComponent;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.entities.Position;
-import heroes.journey.tilemap.Region;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Random;
 
 public class VoronoiRegionGenerator {
@@ -169,8 +174,12 @@ public class VoronoiRegionGenerator {
         return accepted;
     }
 
-    public static void buildRegionsFromMap(List<List<Position>> centerPoints, int[][] regionMap) {
-        Map<Integer,Region> regionMapObj = new HashMap<>();
+    public static void buildRegionsFromMap(
+        GameState gameState,
+        List<List<Position>> centerPoints,
+        int[][] regionMap) {
+        GameWorld world = gameState.getWorld();
+        Map<Integer,UUID> regionIdMap = new HashMap<>();
         int width = regionMap.length;
         int height = regionMap[0].length;
 
@@ -179,10 +188,14 @@ public class VoronoiRegionGenerator {
         for (int ringIndex = 0; ringIndex < centerPoints.size(); ringIndex++) {
             List<Position> ring = centerPoints.get(ringIndex);
             for (int i = 0; i < ring.size(); i++) {
-                regionMapObj.put(regionId, new Region(Integer.toString(regionId), ringIndex));
+                EntityEdit region = world.createEntity().edit();
+                IdComponent id = region.create(IdComponent.class);
+                region.create(RegionComponent.class).ring(ringIndex);
+                regionIdMap.put(regionId, id.uuid());
                 regionId++;
             }
         }
+        world.basicProcess();
 
         // === Step 2: Add tiles to each region ===
         for (int x = 0; x < width; x++) {
@@ -190,21 +203,24 @@ public class VoronoiRegionGenerator {
                 int id = regionMap[x][y];
                 if (id == -1)
                     continue;
-                Region region = regionMapObj.get(id);
+                RegionComponent region = RegionComponent.get(world, regionIdMap.get(id));
                 region.addTile(new Position(x, y));
             }
         }
 
         // === Step 3: Finalize and assign biome ===
-        for (Region region : regionMapObj.values()) {
-            region.finalizeCenter();
-
-            if (region.getRing() == 0 && Integer.parseInt(region.getId()) % 2 == 0) {
-                region.setBiome(kingdom); // assign special biome to alternating outer ring
-            } else {
-                int randomBiome = Random.get().nextInt(BiomeManager.size());
-                region.setBiome(BiomeManager.values().stream().toList().get(randomBiome));
+        for (UUID id : regionIdMap.values()) {
+            RegionComponent region = RegionComponent.get(world, id);
+            int sumX = 0, sumY = 0;
+            for (Position p : region.getTiles()) {
+                sumX += p.getX();
+                sumY += p.getY();
             }
+            int count = region.getTiles().size();
+            world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count);
+
+            int randomBiome = Random.get().nextInt(BiomeManager.size());
+            region.setBiome(BiomeManager.values().stream().toList().get(randomBiome));
         }
 
         // === Build regionIdToRingIndex ===
@@ -234,28 +250,35 @@ public class VoronoiRegionGenerator {
                 int leftId = ring.get((i - 1 + size) % size);
                 int rightId = ring.get((i + 1) % size);
 
-                Region thisRegion = regionMapObj.get(thisId);
-                Region left = regionMapObj.get(leftId);
-                Region right = regionMapObj.get(rightId);
+                UUID thisUUID = regionIdMap.get(thisId);
+                UUID leftUUID = regionIdMap.get(leftId);
+                UUID rightUUID = regionIdMap.get(rightId);
 
-                thisRegion.addNeighbor(left.getId());
-                left.addNeighbor(thisRegion.getId());
+                RegionComponent thisRegion = RegionComponent.get(world, thisUUID);
+                RegionComponent left = RegionComponent.get(world, leftUUID);
+                RegionComponent right = RegionComponent.get(world, rightUUID);
 
-                thisRegion.addNeighbor(right.getId());
-                right.addNeighbor(thisRegion.getId());
+                thisRegion.addNeighbor(leftUUID);
+                left.addNeighbor(thisUUID);
+
+                thisRegion.addNeighbor(rightUUID);
+                right.addNeighbor(thisUUID);
             }
         }
 
         // Add connections to regions touching
         int[][] directions8 = {{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
+        UUID[][] regionUUIDMap = new UUID[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 currentId = regionMap[x][y];
                 if (currentId == -1)
                     continue;
+                UUID currentUUID = regionIdMap.get(currentId);
+                regionUUIDMap[x][y] = currentUUID;
 
-                Region current = regionMapObj.get(currentId);
+                RegionComponent region = RegionComponent.get(world, currentUUID);
                 int currentRing = regionIdToRingIndex.get(currentId);
 
                 for (int[] dir : directions8) {
@@ -267,19 +290,17 @@ public class VoronoiRegionGenerator {
                     int neighborId = regionMap[nx][ny];
                     if (neighborId == -1 || neighborId == currentId)
                         continue;
+                    UUID neighborUUID = regionIdMap.get(neighborId);
 
                     int neighborRing = regionIdToRingIndex.get(neighborId);
                     if (Math.abs(currentRing - neighborRing) == 1) {
-                        current.addNeighbor(neighborId + "");
-                        regionMapObj.get(neighborId).addNeighbor(currentId + "");
+                        region.addNeighbor(neighborUUID);
+                        RegionComponent.get(world, neighborUUID).addNeighbor(currentUUID);
                     }
                 }
             }
         }
-
-        RegionManager.clear();
-        for (Region region : regionMapObj.values()) {
-            region.register();
-        }
+        gameState.getMap().setRegionMap(regionUUIDMap);
+        world.basicProcess();
     }
 }

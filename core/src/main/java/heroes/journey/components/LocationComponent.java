@@ -10,7 +10,6 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.FeatureType;
-import heroes.journey.tilemap.Region;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,7 +18,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class LocationComponent extends PooledClonableComponent<LocationComponent> {
 
-    @NonNull private String region, featureType;
+    @NonNull private String featureType;
+    @NonNull private UUID region;
 
     public static LocationComponent get(GameWorld world, UUID entityId) {
         return world.getEntity(LocationComponent.class, entityId);
@@ -27,6 +27,7 @@ public class LocationComponent extends PooledClonableComponent<LocationComponent
 
     @Override
     protected void reset() {
+        featureType = "";
     }
 
     @Override
@@ -57,23 +58,6 @@ public class LocationComponent extends PooledClonableComponent<LocationComponent
             LocationComponent feature = world.getMapper(LocationComponent.class).get(entityId);
 
             if (type.getId().equals(feature.featureType)) {
-                idsList.add(id);
-            }
-        }
-        return idsList;
-    }
-
-    public static List<UUID> get(GameWorld world, Region region) {
-        IntBag entities = world.getLocationSubscription().getEntities();
-        int[] ids = entities.getData();
-
-        List<UUID> idsList = new ArrayList<>();
-        for (int i = 0; i < entities.size(); i++) {
-            int entityId = ids[i];
-            UUID id = IdComponent.get(world, entityId);
-            LocationComponent feature = world.getMapper(LocationComponent.class).get(entityId);
-
-            if (region.getId().equals(feature.featureType)) {
                 idsList.add(id);
             }
         }

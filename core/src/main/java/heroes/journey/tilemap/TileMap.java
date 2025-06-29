@@ -1,10 +1,19 @@
 package heroes.journey.tilemap;
 
+import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
@@ -14,39 +23,23 @@ import heroes.journey.utils.ai.pathfinding.TileNode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static heroes.journey.registries.Registries.TerrainManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
-
 public class TileMap implements IndexedGraph<TileNode> {
 
-    @Getter
-    private final int width, height;
-    @Setter
-    @Getter
-    private Tile[][] tileMap;
-    @Setter
-    @Getter
-    private Tile[][] environment;
-    @Setter
-    @Getter
-    int[][] regionMap;
+    @Getter private final int width, height;
+    @Setter @Getter private Tile[][] tileMap;
+    @Setter @Getter private Tile[][] environment;
+    @Setter @Getter UUID[][] regionMap;
     private float elapsed = 0;
 
     // For Pathfinding
-    @Getter
-    private TileNode[][] nodes;
+    @Getter private TileNode[][] nodes;
 
     public TileMap(int mapSize) {
         width = mapSize;
         height = mapSize;
         tileMap = new Tile[width][height];
         environment = new Tile[width][height];
-        regionMap = new int[width][height];
+        regionMap = new UUID[width][height];
         updateGraph();
     }
 
@@ -153,13 +146,13 @@ public class TileMap implements IndexedGraph<TileNode> {
 
     public TileMapSaveData getSaveData() {
         // Save Terrain -> Int Terrain Map
-        Map<String, Integer> terrainMap = new HashMap<>(TerrainManager.size());
+        Map<String,Integer> terrainMap = new HashMap<>(TerrainManager.size());
         int count = 0;
         terrainMap.put("null", count++);
         for (String terrain : TerrainManager.keySet()) {
             terrainMap.put(terrain, count++);
         }
-        Map<String, Integer> tileToIntMap = new HashMap<>();
+        Map<String,Integer> tileToIntMap = new HashMap<>();
         int tileCount = 0;
         int[][] map = new int[width][height];
         int[][] env = new int[width][height];
@@ -187,12 +180,12 @@ public class TileMap implements IndexedGraph<TileNode> {
     }
 
     public void load(TileMapSaveData saveData) {
-        Map<Integer, String> intToTileMap = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : saveData.getTileToIntMap().entrySet()) {
+        Map<Integer,String> intToTileMap = new HashMap<>();
+        for (Map.Entry<String,Integer> entry : saveData.getTileToIntMap().entrySet()) {
             intToTileMap.put(entry.getValue(), entry.getKey());
         }
-        Map<Integer, String> intToTerrainMap = new HashMap<>();
-        for (Map.Entry<String, Integer> entry : saveData.getTerrainMap().entrySet()) {
+        Map<Integer,String> intToTerrainMap = new HashMap<>();
+        for (Map.Entry<String,Integer> entry : saveData.getTerrainMap().entrySet()) {
             intToTerrainMap.put(entry.getValue(), entry.getKey());
         }
         for (int x = 0; x < width; x++) {

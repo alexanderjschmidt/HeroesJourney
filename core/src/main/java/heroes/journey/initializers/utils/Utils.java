@@ -29,17 +29,17 @@ public class Utils {
         return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
     }
 
-    public static String getRegion(ActionInput input) {
+    public static UUID getRegion(ActionInput input) {
         return getRegion(input.getGameState(), input.getEntityId());
     }
 
-    public static String getRegion(GameState gameState, UUID entityId) {
+    public static UUID getRegion(GameState gameState, UUID entityId) {
         if (entityId == null)
             return null;
         PositionComponent positionComponent = PositionComponent.get(gameState.getWorld(), entityId);
         if (positionComponent == null)
             return null;
-        return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()] + "";
+        return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()];
     }
 
     public static StringResult addItem(ActionInput input, Item item, int count) {

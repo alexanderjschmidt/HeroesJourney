@@ -1,10 +1,10 @@
 package heroes.journey.ui;
 
-import static heroes.journey.registries.Registries.RegionManager;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,7 +12,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.tilemap.Region;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.RegionComponent;
+import heroes.journey.components.character.IdComponent;
 
 public class DebugRenderer {
 
@@ -34,16 +36,14 @@ public class DebugRenderer {
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
 
-    private void renderRegions(int[][] regionMap) {
+    private void renderRegions(UUID[][] regionMap) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        Map<Integer,Color> regionColors = new HashMap<>();
+        Map<UUID,Color> regionColors = new HashMap<>();
         float tileSize = GameCamera.get().getSize();
 
         for (int x = 0; x < regionMap.length; x++) {
             for (int y = 0; y < regionMap[0].length; y++) {
-                int regionId = regionMap[x][y];
-                if (regionId < 0)
-                    continue;
+                UUID regionId = regionMap[x][y];
 
                 Color color = regionColors.computeIfAbsent(regionId, id -> generateColorFromId(id));
                 shapeRenderer.setColor(color);
@@ -59,17 +59,21 @@ public class DebugRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.YELLOW);
         float tileSize = GameCamera.get().getSize();
+        IntBag regions = GameState.global().getWorld().getRegionSubscription().getEntities();
+        int[] regionIds = regions.getData();
 
-        for (Region region : RegionManager.values()) {
-            for (String neighborId : region.neighborRegionIds) {
-                Region neighbor = RegionManager.get(neighborId);
-                if (Integer.parseInt(region.getId()) <
-                    Integer.parseInt(neighbor.getId())) { // avoid double-drawing
-                    shapeRenderer.line(region.center.getX() * tileSize + tileSize / 2f,
-                        region.center.getY() * tileSize + tileSize / 2f,
-                        neighbor.center.getX() * tileSize + tileSize / 2f,
-                        neighbor.center.getY() * tileSize + tileSize / 2f);
-                }
+        for (int i = 0; i < regions.size(); i++) {
+            int entityId = regionIds[i];
+            UUID id = IdComponent.get(GameState.global().getWorld(), entityId);
+            RegionComponent region = RegionComponent.get(GameState.global().getWorld(), id);
+            PositionComponent regionPos = PositionComponent.get(GameState.global().getWorld(), id);
+            for (UUID neighborId : region.neighborRegionIds) {
+                PositionComponent neighborPos = PositionComponent.get(GameState.global().getWorld(),
+                    neighborId);
+                shapeRenderer.line(regionPos.getX() * tileSize + tileSize / 2f,
+                    regionPos.getY() * tileSize + tileSize / 2f,
+                    neighborPos.getX() * tileSize + tileSize / 2f,
+                    neighborPos.getY() * tileSize + tileSize / 2f);
             }
         }
         shapeRenderer.end();
@@ -77,15 +81,27 @@ public class DebugRenderer {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.GREEN);
 
-        for (Region region : RegionManager.values()) {
-            shapeRenderer.circle(region.center.getX() * tileSize + tileSize / 2f,
-                region.center.getY() * tileSize + tileSize / 2f, tileSize / 3f);
+        for (int i = 0; i < regions.size(); i++) {
+            int entityId = regionIds[i];
+            UUID id = IdComponent.get(GameState.global().getWorld(), entityId);
+            PositionComponent regionPos = PositionComponent.get(GameState.global().getWorld(), id);
+            shapeRenderer.circle(regionPos.getX() * tileSize + tileSize / 2f,
+                regionPos.getY() * tileSize + tileSize / 2f, tileSize / 3f);
         }
 
         shapeRenderer.end();
     }
 
-    private Color generateColorFromId(int id) {
+    private Color generateColorFromId(UUID uuid) {
+        if (uuid == null) {
+            return new Color(0, 0, 0, 0); // Clear color (fully transparent)
+        }
+        // Convert UUID to a consistent hash code (use hashCode or better: combine both halves)
+        long most = uuid.getMostSignificantBits();
+        long least = uuid.getLeastSignificantBits();
+        long combined = most ^ least; // combine both halves for more entropy
+        int id = (int)(combined & 0xFFFFFFFFL); // get a consistent 32-bit int from the long
+
         // Spread hues using golden angle for even distribution
         float hue = (id * 137.508f) % 360f; // golden angle degrees
         float saturation = 0.6f;

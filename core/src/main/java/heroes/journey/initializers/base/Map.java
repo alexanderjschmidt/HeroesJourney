@@ -6,7 +6,6 @@ import static heroes.journey.initializers.base.EntityFactory.generateDungeon;
 import static heroes.journey.initializers.base.EntityFactory.generateMine;
 import static heroes.journey.initializers.base.EntityFactory.generateTown;
 import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.RegionManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.artemis.EntityEdit;
+import com.artemis.utils.IntBag;
 
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
@@ -23,6 +23,8 @@ import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.RegionComponent;
+import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
@@ -30,7 +32,6 @@ import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.FeatureType;
-import heroes.journey.tilemap.Region;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
@@ -107,14 +108,22 @@ public class Map implements InitializerInterface {
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
             Tile[][] map = gameState.getMap().getTileMap();
             // Set tiles to base tiles
-            for (Region region : RegionManager.values()) {
+            IntBag regions = GameState.global().getWorld().getRegionSubscription().getEntities();
+            int[] regionIds = regions.getData();
+
+            for (int r = 0; r < regions.size(); r++) {
+                int entityId = regionIds[r];
+                UUID id = IdComponent.get(GameState.global().getWorld(), entityId);
+                RegionComponent region = RegionComponent.get(GameState.global().getWorld(), id);
+                PositionComponent regionCenter = PositionComponent.get(GameState.global().getWorld(), id);
                 for (Position pos : region.getTiles()) {
                     map[pos.getX()][pos.getY()] = TileManager.get()
                         .getBaseTile(TerrainManager.get(region.getBiome().getBaseTerrain()));
                 }
                 for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
                     for (int i = 0; i < genData.getMinInRegion(); i++) {
-                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region);
+                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region,
+                            regionCenter);
                         if (pos == null) {
                             throw new MapGenerationException(
                                 "Failed to generate minimum number (" + genData.getMinInRegion() + ") of " +
@@ -133,7 +142,8 @@ public class Map implements InitializerInterface {
                     }
                     int randomVariance = Random.get().nextInt(bound);
                     for (int i = 0; i < randomVariance; i++) {
-                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region);
+                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region,
+                            regionCenter);
                         if (pos == null)
                             break;
                         region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));

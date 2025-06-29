@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
+import heroes.journey.components.RegionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.systems.GameWorld;
@@ -167,7 +168,8 @@ public class MapGenUtils {
     public static Position poisonDiskSample(
         GameWorld world,
         int minDist,
-        heroes.journey.tilemap.Region region) {
+        RegionComponent region,
+        PositionComponent regionPos) {
         // Gather all existing feature positions
         List<Position> featurePositions = new ArrayList<>();
         List<UUID> ids = LocationComponent.get(world);
@@ -177,11 +179,10 @@ public class MapGenUtils {
         }
         // All tiles in the region
         List<Position> regionTiles = new ArrayList<>(region.getTiles());
-        Position center = region.center;
         // Compute max possible radius (Manhattan distance from center to farthest tile)
         int maxRadius = 0;
         for (Position p : regionTiles) {
-            int dist = Math.abs(center.getX() - p.getX()) + Math.abs(center.getY() - p.getY());
+            int dist = Math.abs(regionPos.getX() - p.getX()) + Math.abs(regionPos.getY() - p.getY());
             if (dist > maxRadius)
                 maxRadius = dist;
         }
@@ -189,7 +190,7 @@ public class MapGenUtils {
         for (int r = 0; r <= maxRadius; r++) {
             List<Position> ring = new ArrayList<>();
             for (Position p : regionTiles) {
-                int dist = Math.abs(center.getX() - p.getX()) + Math.abs(center.getY() - p.getY());
+                int dist = Math.abs(regionPos.getX() - p.getX()) + Math.abs(regionPos.getY() - p.getY());
                 if (dist == r) {
                     ring.add(p);
                 }

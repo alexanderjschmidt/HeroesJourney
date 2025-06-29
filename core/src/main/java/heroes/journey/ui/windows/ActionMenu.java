@@ -1,7 +1,5 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.registries.Registries.RegionManager;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,15 +8,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import heroes.journey.GameState;
-import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.GameWorld;
-import heroes.journey.tilemap.Region;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
@@ -56,12 +53,11 @@ public class ActionMenu extends UI {
 
     // Make this return a list of locations to interact with. and they will have sub lists of what you can do there
     private static Set<ActionEntry> getRegionFeatures(GameState gameState, UUID selectedEntity) {
-        String regionId = Utils.getRegion(gameState, selectedEntity);
-        Region region = RegionManager.get(regionId);
+        UUID regionId = Utils.getRegion(gameState, selectedEntity);
+        RegionComponent region = RegionComponent.get(gameState.getWorld(), regionId);
         Set<ActionEntry> actions = new HashSet<>();
 
-        List<UUID> ids = LocationComponent.get(gameState.getWorld(), region);
-        for (UUID id : ids) {
+        for (UUID id : region.getFeatures()) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(), id);
             if (factionActions != null) {
                 actions.addAll(factionActions.getPossibleActions(id));
