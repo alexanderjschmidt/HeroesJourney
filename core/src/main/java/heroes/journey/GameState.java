@@ -27,10 +27,8 @@ import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
-import heroes.journey.registries.FeatureManager;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.tilemap.TileMapSaveData;
 import heroes.journey.ui.HUD;
@@ -38,7 +36,6 @@ import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.serializers.ActionRecordSerializer;
-import heroes.journey.utils.serializers.FeatureSerializer;
 import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
 import heroes.journey.utils.serializers.PlayerInfoSerializer;
 import heroes.journey.utils.serializers.PositionSerializer;
@@ -196,8 +193,7 @@ public class GameState implements Cloneable {
         TileMapSaveData mapSaveData = map.getSaveData();
 
         GameStateSaveData gameStateSaveData = new GameStateSaveData(width, height, mapSaveData, history, turn,
-            currentEntity, entitiesInActionOrder, PlayerInfo.get(),
-            FeatureManager.get().values().stream().toList());
+            currentEntity, entitiesInActionOrder, PlayerInfo.get());
 
         Json json = jsonGameState();
 
@@ -219,7 +215,6 @@ public class GameState implements Cloneable {
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
         json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
         json.setSerializer(UUID.class, new UUIDSerializer());
-        json.setSerializer(Feature.class, new FeatureSerializer());
         json.setSerializer(Position.class, new PositionSerializer());
 
         try (FileReader reader = new FileReader("saves/" + save + "/gamestate.json")) {

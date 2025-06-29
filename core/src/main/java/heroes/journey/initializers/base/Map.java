@@ -1,7 +1,9 @@
 package heroes.journey.initializers.base;
 
 import static heroes.journey.initializers.base.EntityFactory.addOverworldComponents;
+import static heroes.journey.initializers.base.EntityFactory.generateCapital;
 import static heroes.journey.initializers.base.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.EntityFactory.generateMine;
 import static heroes.journey.initializers.base.EntityFactory.generateTown;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.RegionManager;
@@ -18,14 +20,14 @@ import com.artemis.EntityEdit;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.NamedComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.initializers.InitializerInterface;
-import heroes.journey.registries.FeatureManager;
 import heroes.journey.registries.TileManager;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.Region;
@@ -53,32 +55,30 @@ public class Map implements InitializerInterface {
         // feature types
         KINGDOM = new FeatureType("kingdom", "Kingdom") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos) {
+            public UUID generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
-                UUID kingdomId = generateTown(gs, pos.getX(), pos.getY(), true);
-                return new Feature(kingdomId, this, pos);
+                return generateCapital(gs, pos.getX(), pos.getY());
             }
         };
         TOWN = new FeatureType("town", "Town") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos) {
+            public UUID generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
-                return new Feature(null, this, pos);
+                return generateTown(gs, pos.getX(), pos.getY());
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos) {
+            public UUID generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
-                UUID dungeonId = generateDungeon(gs, pos.getX(), pos.getY());
-                return new Feature(dungeonId, this, pos);
+                return generateDungeon(gs, pos.getX(), pos.getY());
             }
         };
-        MINE = new FeatureType("dungeon", "Dungeon") {
+        MINE = new FeatureType("mine", "Mine") {
             @Override
-            public Feature generateFeature(GameState gs, Position pos) {
+            public UUID generateFeature(GameState gs, Position pos) {
                 gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
-                return new Feature(null, this, pos);
+                return generateMine(gs, pos.getX(), pos.getY());
             }
         };
 
@@ -114,7 +114,7 @@ public class Map implements InitializerInterface {
                 }
                 for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
                     for (int i = 0; i < genData.getMinInRegion(); i++) {
-                        Position pos = poisonDiskSample(genData.getMinDist(), FeatureManager.get(), region);
+                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region);
                         if (pos == null) {
                             throw new MapGenerationException(
                                 "Failed to generate minimum number (" + genData.getMinInRegion() + ") of " +
@@ -122,6 +122,8 @@ public class Map implements InitializerInterface {
                                     region.getBiome().getId() + " biome.");
                         }
                         region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
+                        //TODO remove this at some point, seems aggressive
+                        gameState.getWorld().basicProcess();
                     }
                 }
                 for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
@@ -131,7 +133,7 @@ public class Map implements InitializerInterface {
                     }
                     int randomVariance = Random.get().nextInt(bound);
                     for (int i = 0; i < randomVariance; i++) {
-                        Position pos = poisonDiskSample(genData.getMinDist(), FeatureManager.get(), region);
+                        Position pos = poisonDiskSample(gameState.getWorld(), genData.getMinDist(), region);
                         if (pos == null)
                             break;
                         region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
@@ -187,13 +189,13 @@ public class Map implements InitializerInterface {
 
         // Add Entities
         new BasicMapGenerationEffect("entities", gameState -> {
-            List<Feature> kingdoms = FeatureManager.get(KINGDOM);
-            for (Feature kingdom : kingdoms) {
+            List<UUID> kingdoms = LocationComponent.get(gameState.getWorld(), KINGDOM);
+            for (UUID kingdom : kingdoms) {
+                PositionComponent pos = PositionComponent.get(gameState.getWorld(), kingdom);
                 if (kingdom == kingdoms.getFirst()) {
                     EntityEdit player = gameState.getWorld().createEntity().edit();
-                    UUID playerId = addOverworldComponents(gameState.getWorld(), player,
-                        kingdom.location.getX(), kingdom.location.getY(), LoadTextures.PLAYER_SPRITE,
-                        new MCTSAI());
+                    UUID playerId = addOverworldComponents(gameState.getWorld(), player, pos.getX(),
+                        pos.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                     player.create(NamedComponent.class).name("Player");
                     InventoryComponent.get(gameState.getWorld(), playerId)
@@ -203,8 +205,8 @@ public class Map implements InitializerInterface {
                     PlayerInfo.get().setPlayerId(playerId);
                 } else {
                     EntityEdit opponent = gameState.getWorld().createEntity().edit();
-                    addOverworldComponents(gameState.getWorld(), opponent, kingdom.location.getX(),
-                        kingdom.location.getY(), LoadTextures.PLAYER_SPRITE, new MCTSAI());
+                    addOverworldComponents(gameState.getWorld(), opponent, pos.getX(), pos.getY(),
+                        LoadTextures.PLAYER_SPRITE, new MCTSAI());
                 }
             }
         }).register(MapGenerator.entityPhase);

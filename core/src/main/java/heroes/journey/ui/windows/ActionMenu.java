@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import heroes.journey.GameState;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.character.ActionComponent;
@@ -17,7 +18,6 @@ import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.GameWorld;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.Region;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
@@ -59,13 +59,12 @@ public class ActionMenu extends UI {
         String regionId = Utils.getRegion(gameState, selectedEntity);
         Region region = RegionManager.get(regionId);
         Set<ActionEntry> actions = new HashSet<>();
-        for (Feature feature : region.getFeatures()) {
-            if (feature.getEntityId() == null)
-                continue;
-            PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(),
-                feature.getEntityId());
+
+        List<UUID> ids = LocationComponent.get(gameState.getWorld(), region);
+        for (UUID id : ids) {
+            PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(), id);
             if (factionActions != null) {
-                actions.addAll(factionActions.getPossibleActions(feature.getEntityId()));
+                actions.addAll(factionActions.getPossibleActions(id));
             }
         }
         return actions;

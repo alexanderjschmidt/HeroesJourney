@@ -46,7 +46,7 @@ public class EntityFactory {
         entity.create(PossibleActionsComponent.class)
             .addAction(BaseActions.rest)
             .addAction(TravelActions.travel);
-        ;
+        
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AIComponent.class).ai(ai);
@@ -57,10 +57,23 @@ public class EntityFactory {
         return id;
     }
 
-    public static UUID generateTown(GameState gameState, int x, int y, boolean capital) {
+    public static UUID generateCapital(GameState gameState, int x, int y) {
         EntityEdit house = gameState.getWorld().createEntity().edit();
         UUID id = house.create(IdComponent.class).uuid();
-        house.create(LocationComponent.class).capital(capital);
+        int region = gameState.getMap().getRegionMap()[x][y];
+        house.create(LocationComponent.class).featureType("kingdom").region(region + "");
+        house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
+        house.create(PositionComponent.class).setPos(x, y);
+        house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
+        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
+        return id;
+    }
+
+    public static UUID generateTown(GameState gameState, int x, int y) {
+        EntityEdit house = gameState.getWorld().createEntity().edit();
+        UUID id = house.create(IdComponent.class).uuid();
+        int region = gameState.getMap().getRegionMap()[x][y];
+        house.create(LocationComponent.class).featureType("town").region(region + "");
         house.create(NamedComponent.class).name(SyllableTownNameGenerator.generateName());
         house.create(PositionComponent.class).setPos(x, y);
         house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
@@ -71,12 +84,23 @@ public class EntityFactory {
     public static UUID generateDungeon(GameState gameState, int x, int y) {
         EntityEdit dungeon = gameState.getWorld().createEntity().edit();
         UUID id = dungeon.create(IdComponent.class).uuid();
-        dungeon.create(LocationComponent.class);
+        int region = gameState.getMap().getRegionMap()[x][y];
+        dungeon.create(LocationComponent.class).featureType("dungeon").region(region + "");
         dungeon.create(NamedComponent.class).name(SyllableDungeonNameGenerator.generateName());
         dungeon.create(PositionComponent.class).setPos(x, y);
         dungeon.create(PossibleActionsComponent.class).addAction(DelveAction.delve);
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
+        return id;
+    }
+
+    public static UUID generateMine(GameState gameState, int x, int y) {
+        EntityEdit dungeon = gameState.getWorld().createEntity().edit();
+        UUID id = dungeon.create(IdComponent.class).uuid();
+        int region = gameState.getMap().getRegionMap()[x][y];
+        dungeon.create(LocationComponent.class).featureType("mine").region(region + "");
+        dungeon.create(NamedComponent.class).name("Mine");
+        dungeon.create(PositionComponent.class).setPos(x, y);
         return id;
     }
 }

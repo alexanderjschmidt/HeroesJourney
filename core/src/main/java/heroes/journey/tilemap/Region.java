@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ public class Region extends Registrable {
     private Biome biome;
     private int ring;
     private final Set<Position> tiles = new HashSet<>();
-    private final List<Feature> features = new ArrayList<>();
+    private final List<UUID> features = new ArrayList<>();
     public Position center;
     public final Set<String> neighborRegionIds = new HashSet<>();
 
@@ -41,7 +42,7 @@ public class Region extends Registrable {
         return tiles;
     }
 
-    public List<Feature> getFeatures() {
+    public List<UUID> getFeatures() {
         return features;
     }
 

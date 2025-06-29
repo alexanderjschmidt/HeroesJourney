@@ -3,11 +3,15 @@ package heroes.journey.utils.worldgen.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import heroes.journey.GameState;
+import heroes.journey.components.LocationComponent;
+import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.Tiles;
+import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
@@ -161,13 +165,15 @@ public class MapGenUtils {
      * Falls back to the center if no valid tile is found.
      */
     public static Position poisonDiskSample(
+        GameWorld world,
         int minDist,
-        heroes.journey.registries.FeatureManager features,
         heroes.journey.tilemap.Region region) {
         // Gather all existing feature positions
         List<Position> featurePositions = new ArrayList<>();
-        for (heroes.journey.tilemap.Feature f : features.values()) {
-            featurePositions.add(f.getLocation());
+        List<UUID> ids = LocationComponent.get(world);
+        for (UUID id : ids) {
+            PositionComponent pos = PositionComponent.get(world, id);
+            featurePositions.add(new Position(pos.getX(), pos.getY()));
         }
         // All tiles in the region
         List<Position> regionTiles = new ArrayList<>(region.getTiles());

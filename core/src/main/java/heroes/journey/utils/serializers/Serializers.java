@@ -16,7 +16,6 @@ import heroes.journey.entities.Position;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.systems.GameWorld;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.tilemap.TileMapSaveData;
 
@@ -45,7 +44,6 @@ public class Serializers {
         json.setSerializer(TileMapSaveData.class, new TileMapSaveDataSerializer());
         json.setSerializer(ActionRecord.class, new ActionRecordSerializer());
         json.setSerializer(UUID.class, new UUIDSerializer());
-        json.setSerializer(Feature.class, new FeatureSerializer());
         json.setSerializer(Position.class, new PositionSerializer());
 
         json.setOutputType(JsonWriter.OutputType.json); // Pretty JSON, use OutputType.minimal for compact

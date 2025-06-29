@@ -28,6 +28,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import heroes.journey.GameState;
+import heroes.journey.components.LocationComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.initializers.utils.StatsUtils;
@@ -54,11 +55,15 @@ public class GameWorld extends World {
     private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
     private final WorldSerializationManager manager;
 
+    private EntitySubscription locationSubscription;
+
     private GameWorld(WorldConfiguration config) {
         super(config);
         manager = this.getSystem(WorldSerializationManager.class);
         manager.setSerializer(Serializers.kryo(this));
         entityMap = new HashMap<>();
+
+        locationSubscription = getAspectSubscriptionManager().get(Aspect.all(LocationComponent.class));
     }
 
     public static GameWorld initGameWorld(GameState gameState) {
@@ -243,5 +248,9 @@ public class GameWorld extends World {
 
     public EntityEdit edit(UUID entityId) {
         return super.edit(entityMap.get(entityId));
+    }
+
+    public EntitySubscription getLocationSubscription() {
+        return locationSubscription;
     }
 }

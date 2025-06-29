@@ -1,15 +1,7 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.findTileNear;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isFarFromFeatures;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.isLandSurrounded;
-
 import heroes.journey.GameState;
-import heroes.journey.entities.Position;
-import heroes.journey.registries.FeatureManager;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.FeatureType;
-import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import lombok.Getter;
 import lombok.NonNull;
@@ -41,10 +33,7 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
     }
 
     public void apply(GameState gameState) {
-        System.out.println(FeatureManager.get());
-        System.out.println(FeatureManager.get(offFeature));
-        System.out.println(offFeature);
-        for (Feature settlement : FeatureManager.get(offFeature)) {
+/*        for (Feature settlement : FeatureManager.get(offFeature)) {
             int numFeatures = Random.get().nextInt(minPerFeature, maxPerFeature);
 
             for (int i = 0; i < numFeatures; i++) {
@@ -53,6 +42,6 @@ public class FeatureGenOffFeatureMapEffect extends MapGenerationEffect {
                         isLandSurrounded(gameState.getMap().getTileMap())));
                 featureType.generateFeature(gameState, candidate);
             }
-        }
+        }*/
     }
 }

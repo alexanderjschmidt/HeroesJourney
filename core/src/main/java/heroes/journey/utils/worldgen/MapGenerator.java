@@ -9,7 +9,6 @@ import java.util.Map;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
-import heroes.journey.registries.FeatureManager;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 
@@ -31,7 +30,6 @@ public class MapGenerator {
             try {
                 if (!loading) {
                     gameState.init(mapData);
-                    FeatureManager.get().clear();
                     for (MapGenerationEffect phase : sorted) {
                         if (phase instanceof NoOpMapGenerationEffect) {
                             System.out.println("Running phase: " + phase.getId());

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.UUID;
 
 import heroes.journey.entities.actions.history.History;
-import heroes.journey.tilemap.Feature;
 import heroes.journey.tilemap.TileMapSaveData;
 import lombok.Getter;
 
@@ -18,7 +17,6 @@ public class GameStateSaveData {
     private final UUID currentEntity;
     private final List<UUID> entitiesInActionOrder;
     private final PlayerInfo playerInfo;
-    private final List<Feature> features;
 
     public GameStateSaveData(
         int width,
@@ -28,8 +26,7 @@ public class GameStateSaveData {
         int turn,
         UUID currentEntity,
         List<UUID> entitiesInActionOrder,
-        PlayerInfo playerInfo,
-        List<Feature> features) {
+        PlayerInfo playerInfo) {
         this.width = width;
         this.height = height;
         this.map = map;
@@ -38,6 +35,5 @@ public class GameStateSaveData {
         this.currentEntity = currentEntity;
         this.entitiesInActionOrder = entitiesInActionOrder;
         this.playerInfo = playerInfo;
-        this.features = features;
     }
 }
