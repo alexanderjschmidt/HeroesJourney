@@ -209,10 +209,10 @@ class BaseActions : InitializerInterface {
         @JvmField
         var workout: CooldownAction? = null
 
+        var faceChallenge: Action? = null
+
         @JvmField
         var faceChallenges: TargetAction<Challenge>? = null
-
-        var faceChallenge: Action? = null
 
         @JvmField
         var study: CooldownAction? = null
