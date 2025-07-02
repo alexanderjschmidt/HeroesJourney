@@ -3,7 +3,7 @@ package heroes.journey.initializers.base.actions
 import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
-import heroes.journey.components.character.PlayerComponent
+import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.CooldownAction
 import heroes.journey.entities.actions.cooldownAction
 import heroes.journey.entities.actions.results.StringResult
@@ -49,11 +49,12 @@ class DelveAction : InitializerInterface {
                                 .append("\n")
                         }
                     }
-                    val playerComponent = PlayerComponent.get(gs.world, e)
-                    if (playerComponent != null) {
-                        playerComponent.fame(playerComponent.fame() + 5)
-                        log.append("You have gained ").append(5).append(" fame")
-                    }
+                    StatsComponent.addFame(
+                        gs.getWorld(),
+                        e,
+                        5
+                    )
+                    log.append("You have gained ").append(5).append(" fame")
                 } else {
                     log.append("You have lost too much health and fainted")
                     FightUtils.faint(gs.world, e)

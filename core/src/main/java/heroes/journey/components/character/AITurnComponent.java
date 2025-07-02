@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
-public class AIComponent extends PooledClonableComponent<AIComponent> {
+public class AITurnComponent extends PooledClonableComponent<AITurnComponent> {
 
     @Getter
     private transient Future<QueuedAction> futureResult = null;
@@ -22,7 +22,7 @@ public class AIComponent extends PooledClonableComponent<AIComponent> {
     @Setter
     private transient AI ai;
 
-    public AIComponent() {
+    public AITurnComponent() {
         this.ai = new MCTSAI();
     }
 
@@ -36,8 +36,8 @@ public class AIComponent extends PooledClonableComponent<AIComponent> {
         futureResult = null;
     }
 
-    public static AIComponent get(GameWorld world, UUID entityId) {
-        return world.getEntity(AIComponent.class, entityId);
+    public static AITurnComponent get(GameWorld world, UUID entityId) {
+        return world.getEntity(AITurnComponent.class, entityId);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AIComponent extends PooledClonableComponent<AIComponent> {
     }
 
     @Override
-    public void copy(AIComponent from) {
+    public void copy(AITurnComponent from) {
         ai = from.ai;
     }
 }

@@ -1,21 +1,19 @@
 package heroes.journey.ui.windows.stats;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.initializers.base.tags.Stats;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.UUID;
 
 public class StatsDisplay extends Table {
 
@@ -49,12 +47,11 @@ public class StatsDisplay extends Table {
     public void setEntity(UUID entityId) {
         this.entityId = entityId;
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
-        PlayerComponent playerComponent = PlayerComponent.get(GameState.global().getWorld(), entityId);
 
         assert statsComponent != null;
         body.setText("Body: " + statsComponent.get(Stats.BODY));
         mind.setText("Mind: " + statsComponent.get(Stats.MIND));
-        fame.setText("Fame: " + playerComponent.fame());
+        fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
     }
 
     public void draw(Batch batch, float parentAlpha) {

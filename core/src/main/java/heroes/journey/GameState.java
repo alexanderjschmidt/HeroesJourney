@@ -1,20 +1,10 @@
 package heroes.journey;
 
-import static heroes.journey.utils.serializers.Serializers.jsonGameState;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.AIComponent;
+import heroes.journey.components.character.AITurnComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
@@ -35,12 +25,16 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.serializers.ActionRecordSerializer;
-import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
-import heroes.journey.utils.serializers.PlayerInfoSerializer;
-import heroes.journey.utils.serializers.PositionSerializer;
-import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
-import heroes.journey.utils.serializers.UUIDSerializer;
+import heroes.journey.utils.serializers.*;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.utils.serializers.Serializers.jsonGameState;
 
 public class GameState implements Cloneable {
 
@@ -141,7 +135,7 @@ public class GameState implements Cloneable {
 
     private UUID incrementTurn() {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
-            entitiesInActionOrder = world.getEntitiesWith(StatsComponent.class, AIComponent.class,
+            entitiesInActionOrder = world.getEntitiesWith(StatsComponent.class, AITurnComponent.class,
                 IdComponent.class);
             turn++;
             world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
@@ -160,7 +154,7 @@ public class GameState implements Cloneable {
             }
         } else {
             System.out.println("ai turn");
-            AIComponent ai = AIComponent.get(world, currentEntity);
+            AITurnComponent ai = AITurnComponent.get(world, currentEntity);
             ai.startProcessingNextMove(this, currentEntity);
         }
     }
@@ -178,7 +172,7 @@ public class GameState implements Cloneable {
 
     public UUID getNextPlayer(UUID player) {
         if (entitiesInActionOrder == null || entitiesInActionOrder.isEmpty()) {
-            return world.getEntitiesWith(StatsComponent.class, AIComponent.class, IdComponent.class)
+            return world.getEntitiesWith(StatsComponent.class, AITurnComponent.class, IdComponent.class)
                 .getFirst();
         }
         return entitiesInActionOrder.getFirst();

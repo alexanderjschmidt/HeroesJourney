@@ -1,32 +1,12 @@
 package heroes.journey.systems;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import com.artemis.Aspect;
-import com.artemis.AspectSubscriptionManager;
-import com.artemis.BaseSystem;
-import com.artemis.Component;
-import com.artemis.EntityEdit;
-import com.artemis.EntitySubscription;
-import com.artemis.World;
-import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
+import com.artemis.*;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.RegionComponent;
@@ -42,24 +22,30 @@ import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
 import heroes.journey.systems.listeners.StatsActionsListener;
-import heroes.journey.systems.triggerable.BuffSystem;
-import heroes.journey.systems.triggerable.CooldownSystem;
-import heroes.journey.systems.triggerable.EventSystem;
-import heroes.journey.systems.triggerable.QuestSystem;
+import heroes.journey.systems.triggerable.*;
 import heroes.journey.utils.serializers.Serializers;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class GameWorld extends World {
 
     private static final List<Class<? extends Component>> nonBasicSystems = new ArrayList<>();
     // TODO use this registration for any entity references since I cant trust the entityId will stay the same across GameWorlds
-    public final Map<UUID,Integer> entityMap;
+    public final Map<UUID, Integer> entityMap;
     private final List<TriggerableSystem> triggerableSystems = new ArrayList<>();
     private final WorldSerializationManager manager;
 
     private EntitySubscription locationSubscription, regionSubscription;
 
-    private GameWorld(WorldConfiguration config) {
+    private final GameState gameState;
+
+    private GameWorld(WorldConfiguration config, GameState gameState) {
         super(config);
+        this.gameState = gameState;
         manager = this.getSystem(WorldSerializationManager.class);
         manager.setSerializer(Serializers.kryo(this));
         entityMap = new HashMap<>();
@@ -69,7 +55,7 @@ public class GameWorld extends World {
     }
 
     public static GameWorld initGameWorld(GameState gameState) {
-        GameWorld world = new GameWorld(buildConfig(gameState, false));
+        GameWorld world = new GameWorld(buildConfig(gameState, false), gameState);
         world.collectTriggerableSystems();  // Auto-detect end-of-turn systems, if needed
 
         return world;
@@ -85,7 +71,8 @@ public class GameWorld extends World {
             .with(new LocationPositionSyncSystem(gameState))
             .with(new EventSystem(gameState))
             .with(new StatsActionsListener())
-            .with(new BuffSystem());
+            .with(new BuffSystem())
+            .with(new AIWanderSystem());
         if (!limited) {
             builder.with(new RenderSystem())
                 .with(new MovementSystem())
@@ -147,12 +134,12 @@ public class GameWorld extends World {
      */
     public GameWorld cloneWorld(GameState gameState) {
         long start = System.nanoTime();
-        GameWorld cloned = new GameWorld(buildConfig(gameState, true));
+        GameWorld cloned = new GameWorld(buildConfig(gameState, true), gameState);
 
         IntBag entities = this.getAspectSubscriptionManager().get(Aspect.all()).getEntities();
         int[] ids = entities.getData();
 
-        Map<Integer,Integer> oldToNew = new HashMap<>();
+        Map<Integer, Integer> oldToNew = new HashMap<>();
         for (int id : ids) {
             oldToNew.put(id, cloned.create());
             ComponentCopier.copyEntity(this, cloned, id, oldToNew.get(id));
@@ -258,5 +245,9 @@ public class GameWorld extends World {
 
     public EntitySubscription getRegionSubscription() {
         return regionSubscription;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 }

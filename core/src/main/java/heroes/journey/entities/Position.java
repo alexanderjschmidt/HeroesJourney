@@ -43,4 +43,9 @@ public class Position {
     public int getY() {
         return this.y;
     }
+
+    public void reset() {
+        x = -1;
+        y = -1;
+    }
 }

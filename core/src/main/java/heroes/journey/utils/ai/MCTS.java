@@ -1,71 +1,70 @@
 package heroes.journey.utils.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.initializers.utils.Utils;
 
+import java.util.UUID;
+import java.util.concurrent.*;
+
 public class MCTS {
-    protected static final int SIMULATIONS = 2000;
-    protected static final int THREADS = 10;
+    protected static final int THREADS = 25;
     protected static final double EXPLORATION_FACTOR = Math.sqrt(2);
-    protected static final double DEPTH_TO_SIMULATE = 10;
+    protected static final double DEPTH_TO_SIMULATE = 100;
     protected static final long TIME_LIMIT_NANOS = 1_000_000_000L; // 1 second in nanoseconds
 
     public QueuedAction runMCTS(GameState rootState, UUID playingEntity, Scorer scorer) {
-        long start = System.nanoTime();
+        final long start = System.nanoTime();
 
         Node root = new Node(null, scorer, playingEntity);
         ExecutorService executor = Executors.newFixedThreadPool(THREADS);
-        List<Callable<Void>> tasks = new ArrayList<>();
+        CompletionService<Void> completionService = new ExecutorCompletionService<>(executor);
 
-        for (int i = 0; i < SIMULATIONS; i++) {
-            int finalI = i;
-            tasks.add(() -> {
-                Node selectedNode;
-                synchronized (root) {
-                    selectedNode = select(root, playingEntity);
+        int submitted = 0;
+        int completed = 0;
+
+        while (System.nanoTime() - start < TIME_LIMIT_NANOS) {
+            if (submitted - completed < THREADS) {
+                // Submit a new task
+                completionService.submit(() -> {
+                    Node selectedNode;
+                    synchronized (root) {
+                        selectedNode = select(root, playingEntity);
+                    }
+
+                    GameState clonedState = selectedNode.reconstructGameStateFromRoot(rootState);
+
+                    synchronized (selectedNode) {
+                        selectedNode = expand(selectedNode, clonedState);
+                    }
+
+                    double result = selectedNode.rollout(playingEntity, clonedState);
+                    clonedState.getWorld().dispose();
+
+                    synchronized (root) {
+                        backpropagate(selectedNode, result, playingEntity);
+                    }
+
+                    return null;
+                });
+                submitted++;
+            }
+
+            // Poll for completed tasks to avoid overfilling
+            Future<Void> result = completionService.poll();
+            if (result != null) {
+                try {
+                    result.get(); // Make sure it's not throwing
+                    completed++;
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                GameState clonedState = selectedNode.reconstructGameStateFromRoot(rootState);
-
-                synchronized (selectedNode) {
-                    selectedNode = expand(selectedNode, clonedState);
-                }
-
-                long startSim = System.nanoTime();
-                double result = selectedNode.rollout(playingEntity, clonedState);
-                Utils.logTime("simulation " + finalI + "took", startSim, 50);
-
-                clonedState.getWorld().dispose();
-
-                synchronized (root) {
-                    backpropagate(selectedNode, result, playingEntity);
-                }
-
-                return null;
-            });
+            }
         }
 
-        long completedCount = 0;
-        try {
-            List<Future<Void>> results = executor.invokeAll(tasks, TIME_LIMIT_NANOS, TimeUnit.NANOSECONDS);
-            completedCount = results.stream().filter(f -> !f.isCancelled()).count();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        executor.shutdownNow();
 
-        executor.shutdownNow(); // force shutdown to cancel any remaining tasks
-
-        Utils.logTime("runMCTS completed " + completedCount + " simulations in ", start, 100);
+        Utils.logTime("runMCTS completed " + completed + " simulations in ", start, 100);
         return root.bestChildByVisits().getQueuedAction();
     }
 

@@ -1,27 +1,10 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.QuestManager;
-
-import java.util.UUID;
-
 import com.artemis.EntityEdit;
-
 import heroes.journey.GameState;
-import heroes.journey.components.BuffsComponent;
-import heroes.journey.components.EquipmentComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LocationComponent;
-import heroes.journey.components.NamedComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.AIComponent;
-import heroes.journey.components.character.ActorComponent;
-import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.character.MapComponent;
-import heroes.journey.components.character.RenderComponent;
+import heroes.journey.components.*;
+import heroes.journey.components.character.*;
+import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -29,6 +12,11 @@ import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
+
+import java.util.UUID;
+
+import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.registries.Registries.QuestManager;
 
 public class EntityFactory {
 
@@ -50,7 +38,8 @@ public class EntityFactory {
 
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
-        entity.create(AIComponent.class).ai(ai);
+        entity.create(AITurnComponent.class).ai(ai);
+        entity.create(AIWanderComponent.class).setWanderType(WanderType.Region);
         entity.create(StatsComponent.class);
         entity.create(InventoryComponent.class);
         entity.create(EquipmentComponent.class);

@@ -1,6 +1,6 @@
 package heroes.journey.entities
 
-import heroes.journey.components.character.PlayerComponent
+import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.ActionInput
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
@@ -16,11 +16,11 @@ class Quest(
     private val fameReward: Int
 ) : Registrable(id, name) {
     fun onComplete(input: ActionInput) {
-        val playerComponent = PlayerComponent.get(
+        StatsComponent.addFame(
             input.gameState.getWorld(),
-            input.entityId
+            input.entityId,
+            fameReward
         )
-        playerComponent?.fame(playerComponent.fame() + fameReward)
         onComplete.accept(input)
     }
 

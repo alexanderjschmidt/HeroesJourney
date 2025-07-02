@@ -1,11 +1,5 @@
 package heroes.journey.utils.worldgen.utils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
-
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
@@ -18,6 +12,12 @@ import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.worldgen.MapGenerationException;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 public class MapGenUtils {
 
@@ -71,7 +71,7 @@ public class MapGenUtils {
     }
 
     public static boolean isLandTile(Tile tile) {
-        return tile == Tiles.PLAINS || tile == Tiles.HILLS;
+        return tile == Tiles.PLAINS || tile == Tiles.HILLS || tile == Tiles.SAND;
     }
 
     public static boolean inBounds(int x, int y) {
