@@ -1,7 +1,5 @@
 package heroes.journey.utils.art;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -15,11 +13,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import java.util.HashMap;
+
 public class ResourceManager extends AssetManager {
 
     public static final TextureMap UI = new TextureMap("UI/cursor.png", 32, 32);
-    public static final TextureMap Sprites = new TextureMap("sprites.png", 16, 16);
+    public static final TextureMap Sprites = new TextureMap("fog.png", 16, 16);
     public static final TextureMap OverworldTileset = new TextureMap("Overworld_Tileset.png", 16, 16);
+
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
     public BitmapFont font12;
@@ -37,9 +38,9 @@ public class ResourceManager extends AssetManager {
     public TextureRegion[] bless;
     public TextureRegion[] rally;
 
-    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
 
-    public HashMap<String,TextureRegion> sprites;
+    public HashMap<String, TextureRegion> sprites;
 
     private static ResourceManager manager;
 
@@ -67,7 +68,7 @@ public class ResourceManager extends AssetManager {
     }
 
     private ResourceManager() {
-        textureRegions = new HashMap<TextureMap,TextureRegion[][]>();
+        textureRegions = new HashMap<TextureMap, TextureRegion[][]>();
         sprites = new HashMap<>();
 
         initFonts();
