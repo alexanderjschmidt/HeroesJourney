@@ -53,29 +53,25 @@ public class Map implements InitializerInterface {
         // feature types
         KINGDOM = new FeatureType("kingdom", "Kingdom") {
             @Override
-            public UUID generateFeature(GameState gs, Position pos) {
-                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.CAPITAL);
+            public UUID generateFeatureInner(GameState gs, Position pos) {
                 return generateCapital(gs, pos.getX(), pos.getY());
             }
         };
         TOWN = new FeatureType("town", "Town") {
             @Override
-            public UUID generateFeature(GameState gs, Position pos) {
-                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.TOWN);
+            public UUID generateFeatureInner(GameState gs, Position pos) {
                 return generateTown(gs, pos.getX(), pos.getY());
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {
             @Override
-            public UUID generateFeature(GameState gs, Position pos) {
-                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
+            public UUID generateFeatureInner(GameState gs, Position pos) {
                 return generateDungeon(gs, pos.getX(), pos.getY());
             }
         };
         MINE = new FeatureType("mine", "Mine") {
             @Override
-            public UUID generateFeature(GameState gs, Position pos) {
-                gs.getMap().setEnvironment(pos.getX(), pos.getY(), Tiles.DUNGEON);
+            public UUID generateFeatureInner(GameState gs, Position pos) {
                 return generateMine(gs, pos.getX(), pos.getY());
             }
         };

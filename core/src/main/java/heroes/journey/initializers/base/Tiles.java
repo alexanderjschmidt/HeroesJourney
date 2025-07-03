@@ -26,7 +26,6 @@ public class Tiles implements InitializerInterface {
     public static Tile WATER, SAND, PLAINS, HILLS;
     public static List<Tile> pathTiles, treeTiles;
     public static Tile pathDot;
-    public static Tile CAPITAL, TOWN, DUNGEON;
 
     public static Biome kingdom;
 
@@ -41,9 +40,6 @@ public class Tiles implements InitializerInterface {
         Terrain sand = new Terrain("sand", "Sand", 3).register();
         Terrain path = new Terrain("path", "Path", 1).register();
 
-        Terrain capital = new Terrain("capital", "Capital", 0).register();
-        Terrain town = new Terrain("town", "Town", 0).register();
-        Terrain dungeon = new Terrain("dungeon", "Dungeon", 1).register();
         Terrain trees = new Terrain("trees", "Trees", 1).register();
 
         // Transition Terrains
@@ -79,15 +75,6 @@ public class Tiles implements InitializerInterface {
 
         NULL = new BaseTile(NULL_TERRAIN, 100, false, tiles[3][0]);
         TileHelpers.baseTile(NULL, NULL_TERRAIN);
-
-        CAPITAL = new BaseTile(capital, 0, false, tiles[9][14]);
-        TileHelpers.baseTile(CAPITAL, NULL_TERRAIN, false);
-
-        TOWN = new BaseTile(town, 0, false, tiles[7][12]);
-        TileHelpers.baseTile(TOWN, NULL_TERRAIN, false);
-
-        DUNGEON = new BaseTile(dungeon, 0, false, tiles[17][4]);
-        TileHelpers.baseTile(DUNGEON, NULL_TERRAIN, false);
 
         WATER = new AnimatedTile(water, 300, true, TileLayout.getFrames(tiles, 21, 11, 4, 5), .2f);
         PLAINS = new BaseTile(plains, 1000, tiles[1][5]);

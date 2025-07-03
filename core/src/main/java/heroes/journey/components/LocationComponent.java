@@ -9,7 +9,6 @@ import com.artemis.utils.IntBag;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
-import heroes.journey.tilemap.FeatureType;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -18,7 +17,6 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = true, chain = true)
 public class LocationComponent extends PooledClonableComponent<LocationComponent> {
 
-    @NonNull private String featureType;
     @NonNull private UUID region;
 
     public static LocationComponent get(GameWorld world, UUID entityId) {
@@ -27,13 +25,11 @@ public class LocationComponent extends PooledClonableComponent<LocationComponent
 
     @Override
     protected void reset() {
-        featureType = "";
     }
 
     @Override
     public void copy(LocationComponent from) {
         region = from.region;
-        featureType = from.featureType;
     }
 
     public static List<UUID> get(GameWorld world) {
@@ -45,23 +41,6 @@ public class LocationComponent extends PooledClonableComponent<LocationComponent
             int entityId = ids[i];
             UUID id = IdComponent.get(world, entityId);
             idsList.add(id);
-        }
-        return idsList;
-    }
-
-    public static List<UUID> get(GameWorld world, FeatureType type) {
-        IntBag entities = world.getLocationSubscription().getEntities();
-        int[] ids = entities.getData();
-
-        List<UUID> idsList = new ArrayList<>();
-        for (int i = 0; i < entities.size(); i++) {
-            int entityId = ids[i];
-            UUID id = IdComponent.get(world, entityId);
-            LocationComponent feature = world.getMapper(LocationComponent.class).get(entityId);
-
-            if (type.getId().equals(feature.featureType)) {
-                idsList.add(id);
-            }
         }
         return idsList;
     }
