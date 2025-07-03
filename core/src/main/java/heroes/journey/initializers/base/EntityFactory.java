@@ -1,9 +1,28 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.registries.Registries.QuestManager;
+
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
+
 import heroes.journey.GameState;
-import heroes.journey.components.*;
-import heroes.journey.components.character.*;
+import heroes.journey.components.BuffsComponent;
+import heroes.journey.components.EquipmentComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LocationComponent;
+import heroes.journey.components.NamedComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.AITurnComponent;
+import heroes.journey.components.character.AIWanderComponent;
+import heroes.journey.components.character.ActorComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.character.MapComponent;
+import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -12,37 +31,53 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 
-import java.util.UUID;
-
-import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.QuestManager;
-
 public class EntityFactory {
 
-    public static UUID addOverworldComponents(
-        GameWorld world,
-        EntityEdit entity,
-        int x,
-        int y,
-        String render) {
+    private final GameWorld world;
+
+    public EntityFactory(GameWorld world) {
+        this.world = world;
+    }
+
+    public UUID createEntity() {
+        EntityEdit entity = world.createEntity().edit();
+        return entity.create(IdComponent.class).register(world, entity.getEntityId()).uuid();
+    }
+
+    public EntityEdit addRenderComponents(UUID entityId, String name, int x, int y, String render) {
+        EntityEdit entity = world.getEntity(entityId).edit();
+        entity.create(NamedComponent.class).name(name);
         entity.create(PositionComponent.class).setPos(x, y);
-        UUID id = entity.create(IdComponent.class).register(world, entity.getEntityId()).uuid();
         entity.create(RenderComponent.class).sprite(render);
+        return entity;
+    }
+
+    public EntityEdit addMovableComponents(UUID entityId) {
+        return addMovableComponents(entityId, null);
+    }
+
+    public EntityEdit addMovableComponents(UUID entityId, WanderType wanderType) {
+        EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(ActorComponent.class);
+        if (wanderType != null)
+            entity.create(AIWanderComponent.class).setWanderType(wanderType);
+        return entity;
+    }
+
+    public EntityEdit addPlayerComponents(UUID entityId) {
+        EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
             .addAction(BaseActions.rest)
             .addAction(TravelActions.travel)
             .addAction(BaseActions.faceChallenges);
-
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
-        entity.create(AIWanderComponent.class).setWanderType(WanderType.Region);
         entity.create(StatsComponent.class);
         entity.create(InventoryComponent.class);
         entity.create(EquipmentComponent.class);
         entity.create(QuestsComponent.class);
-        return id;
+        return entity;
     }
 
     public static UUID generateCapital(GameState gameState, int x, int y) {

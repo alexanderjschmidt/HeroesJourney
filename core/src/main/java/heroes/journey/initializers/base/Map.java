@@ -1,15 +1,29 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.EntityFactory.generateCapital;
+import static heroes.journey.initializers.base.EntityFactory.generateDungeon;
+import static heroes.journey.initializers.base.EntityFactory.generateMine;
+import static heroes.journey.initializers.base.EntityFactory.generateTown;
+import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
+
+import java.util.List;
+import java.util.UUID;
+
 import com.artemis.EntityEdit;
 import com.artemis.utils.IntBag;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
+import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.registries.TileManager;
@@ -25,16 +39,6 @@ import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
 import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
-
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.EntityFactory.*;
-import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.TerrainManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 public class Map implements InitializerInterface {
 
@@ -95,8 +99,8 @@ public class Map implements InitializerInterface {
 
         // Capitals
         MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",
-            List.of(new Integer[]{NUM_PLAYERS * 2, NUM_PLAYERS, 1}),
-            List.of(new Boolean[]{false, true, false})).register(MapGenerator.worldGenPhase);
+            List.of(new Integer[] {NUM_PLAYERS * 2, NUM_PLAYERS, 1}),
+            List.of(new Boolean[] {false, true, false})).register(MapGenerator.worldGenPhase);
 
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
             Tile[][] map = gameState.getMap().getTileMap();
@@ -192,6 +196,7 @@ public class Map implements InitializerInterface {
 
         // Add Entities
         new BasicMapGenerationEffect("entities", gameState -> {
+            EntityFactory factory = gameState.getWorld().getEntityFactory();
             IntBag regions = GameState.global().getWorld().getRegionSubscription().getEntities();
             int[] regionIds = regions.getData();
 
@@ -203,20 +208,23 @@ public class Map implements InitializerInterface {
                     continue;
                 PositionComponent pos = PositionComponent.get(gameState.getWorld(), id);
                 if (region.ringPos() == 0) {
-                    EntityEdit player = gameState.getWorld().createEntity().edit();
-                    UUID playerId = addOverworldComponents(gameState.getWorld(), player, pos.getX(),
-                        pos.getY(), LoadTextures.PLAYER_SPRITE);
+                    UUID playerId = factory.createEntity();
+                    factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(),
+                        LoadTextures.PLAYER_SPRITE);
+                    factory.addMovableComponents(playerId, WanderType.Region);
+                    EntityEdit player = factory.addPlayerComponents(playerId);
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
-                    player.create(NamedComponent.class).name("Player");
                     InventoryComponent.get(gameState.getWorld(), playerId)
                         .add(ItemManager.get("health_potion"), 3)
                         .add(ItemManager.get("iron_ingot"), 5)
                         .add(ItemManager.get("chest_plate"));
                     PlayerInfo.get().setPlayerId(playerId);
                 } else if (region.ringPos() % 2 == 0) {
-                    EntityEdit opponent = gameState.getWorld().createEntity().edit();
-                    addOverworldComponents(gameState.getWorld(), opponent, pos.getX(), pos.getY(),
+                    UUID opponentId = factory.createEntity();
+                    factory.addRenderComponents(opponentId, "Opponent", pos.getX(), pos.getY(),
                         LoadTextures.PLAYER_SPRITE);
+                    factory.addMovableComponents(opponentId, WanderType.Region);
+                    factory.addPlayerComponents(opponentId);
                 }
             }
         }).register(MapGenerator.entityPhase);
