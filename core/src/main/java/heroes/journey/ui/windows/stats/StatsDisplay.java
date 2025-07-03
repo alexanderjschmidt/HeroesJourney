@@ -54,9 +54,10 @@ public class StatsDisplay extends Table {
         fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
     }
 
+    // TODO this should be a widget
     public void draw(Batch batch, float parentAlpha) {
         RenderComponent renderComponent = RenderComponent.get(GameState.global().getWorld(), entityId);
-        batch.draw(renderComponent.sprite(), getX() + HUD.FONT_SIZE, getY() + HUD.FONT_SIZE,
+        batch.draw(renderComponent.sprite().getRender(), getX() + HUD.FONT_SIZE, getY() + HUD.FONT_SIZE,
             GameCamera.get().getSize() * 2, GameCamera.get().getSize() * 2);
         super.draw(batch, parentAlpha);
     }

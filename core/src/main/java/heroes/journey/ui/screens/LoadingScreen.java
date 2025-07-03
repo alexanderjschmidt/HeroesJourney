@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
-
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.utils.art.ResourceManager;
@@ -25,6 +24,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void show() {
+        ResourceManager.get().startLoadingTextures();
         shapeRenderer.setProjectionMatrix(GameCamera.get().combined);
         this.progress = 0f;
     }

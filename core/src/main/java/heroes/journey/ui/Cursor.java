@@ -1,12 +1,7 @@
 package heroes.journey.ui;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -14,6 +9,12 @@ import heroes.journey.entities.Position;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.LoadTextures.CURSOR;
+import static heroes.journey.initializers.base.LoadTextures.MAP_POINTER;
+import static heroes.journey.utils.art.ResourceManager.RenderableManager;
 
 public class Cursor {
     // coords
@@ -24,19 +25,12 @@ public class Cursor {
 
     private UUID selected, hover;
 
-    private final Animation<TextureRegion> ani, mapPointer;
     private Position mapPointerLoc;
 
     private float elapsed = 0;
 
     public Cursor(HUD hud) {
         this.hud = hud;
-        TextureRegion[] frames = {ResourceManager.get(ResourceManager.UI)[0][0],
-            ResourceManager.get(ResourceManager.UI)[0][0], ResourceManager.get(ResourceManager.UI)[1][0]};
-        ani = new Animation<TextureRegion>(.5f, frames);
-        TextureRegion[] framesPointer = {ResourceManager.get(ResourceManager.UI)[3][3],
-            ResourceManager.get(ResourceManager.UI)[3][3], ResourceManager.get(ResourceManager.UI)[4][3]};
-        mapPointer = new Animation<TextureRegion>(.5f, framesPointer);
     }
 
     public void update() {
@@ -59,10 +53,10 @@ public class Cursor {
                 batch.setColor(Color.RED);
             }
         }
-        batch.draw(ani.getKeyFrame(elapsed, true), x * GameCamera.get().getSize(),
+        batch.draw(RenderableManager.get(CURSOR).getRender(elapsed), x * GameCamera.get().getSize(),
             y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         if (mapPointerLoc != null) {
-            batch.draw(mapPointer.getKeyFrame(elapsed, true),
+            batch.draw(RenderableManager.get(MAP_POINTER).getRender(elapsed),
                 mapPointerLoc.getX() * GameCamera.get().getSize(),
                 mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(),
                 GameCamera.get().getSize());

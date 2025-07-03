@@ -6,7 +6,7 @@ public record TextureMap(String location, int width, int height) {
         this.location = location.startsWith("Textures/") ? location : "Textures/" + location;
         this.width = width;
         this.height = height;
-        ResourceManager.get().loadTextureMap(this);
+        ResourceManager.get().textureRegions.put(this, null);
     }
 
 }

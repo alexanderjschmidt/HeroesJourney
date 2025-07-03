@@ -1,11 +1,8 @@
 package heroes.journey.utils.art;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -14,12 +11,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import heroes.journey.registries.Registry;
+
+import java.util.HashMap;
 
 public class ResourceManager extends AssetManager {
 
-    public static final TextureMap UI = new TextureMap("UI/cursor.png", 32, 32);
-    public static final TextureMap Sprites = new TextureMap("sprites.png", 16, 16);
-    public static final TextureMap OverworldTileset = new TextureMap("Overworld_Tileset.png", 16, 16);
+    public static Registry<Renderable> RenderableManager = new Registry<>();
+
+    public static TextureMap UI, Sprites, OverworldTileset;
 
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
@@ -28,38 +28,19 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font36;
     public BitmapFont font72;
     public Skin skin;
-    public TextureRegion select;
 
-    public TextureRegion[][] slash;
-    public TextureRegion[] arrow;
-    public TextureRegion[] poison;
-    public TextureRegion[] heal;
-    public TextureRegion[] magicMissile;
-    public TextureRegion[] bless;
-    public TextureRegion[] rally;
-
-    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
-
-    public HashMap<String,TextureRegion> sprites;
+    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
 
     public static synchronized ResourceManager get() {
         if (manager == null) {
             manager = new ResourceManager();
+            UI = new TextureMap("UI/cursor.png", 32, 32);
+            Sprites = new TextureMap("sprites.png", 16, 16);
+            OverworldTileset = new TextureMap("Overworld_Tileset.png", 16, 16);
         }
         return manager;
-    }
-
-    public static TextureRegion getSprite(String sprite) {
-        return get().sprites.get(sprite);
-    }
-
-    public static void register(String spriteName, TextureRegion sprite) {
-        if (get().sprites.containsKey(spriteName))
-            throw new RuntimeException(
-                "Registering sprite with the same name as existing sprite " + spriteName);
-        get().sprites.put(spriteName, sprite);
     }
 
     @Override
@@ -68,9 +49,10 @@ public class ResourceManager extends AssetManager {
     }
 
     private ResourceManager() {
-        textureRegions = new HashMap<TextureMap,TextureRegion[][]>();
-        sprites = new HashMap<>();
+        textureRegions = new HashMap<>();
+    }
 
+    public void startLoadingTextures() {
         initFonts();
         loadSkin("uiskin");
         loadTexture("Textures/UI/cursor.png");
@@ -81,23 +63,22 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/splash/aschmidtlogo.png");
         loadTexture("Textures/UI/Background.png");
         menu = new NinePatch(new Texture(Gdx.files.internal("Textures/UI/menu9.png")), 12, 12, 12, 12);
-        loadTexture("Textures/Battle_Animations/Slashing.png");
-        loadTexture("Textures/Battle_Animations/Arrow 1.png");
-        loadTexture("Textures/Battle_Animations/Dark 8.png");
-        loadTexture("Textures/Battle_Animations/Healing 4.png");
-        loadTexture("Textures/Battle_Animations/Ice 5.png");
-        loadTexture("Textures/Battle_Animations/Light 8.png");
-        loadTexture("Textures/Battle_Animations/Parameter 10.png");
 
         loadTexture("Textures/wangCorner.png");
         loadTexture("Textures/cliffTransitionTapper.png");
         loadTexture("Textures/cliffTransition.png");
         loadTexture("Textures/wangEdge.png");
+
+        for (TextureMap map : textureRegions.keySet())
+            loadTexture(map.location());
+    }
+
+    public void splits() {
+        for (TextureMap map : textureRegions.keySet())
+            loadTextureMap(map);
     }
 
     public void loadTextureMap(TextureMap textureMap) {
-        loadTexture(textureMap.location());
-
         TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.location()),
             textureMap.width(), textureMap.height());
         // Because fuck [y][x]
@@ -108,34 +89,6 @@ public class ResourceManager extends AssetManager {
             }
         }
         textureRegions.put(textureMap, transposed);
-
-    }
-
-    public void splits() {
-        select = get(UI)[1][3];
-        slash = TextureRegion.split(getTexture("Textures/Battle_Animations/Slashing.png"), 32, 32);
-        arrow = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Arrow 1.png"), 32, 32));
-        poison = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Dark 8.png"), 32, 32));
-        heal = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Healing 4.png"), 32, 32));
-        magicMissile = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Ice 5.png"), 32, 32));
-        bless = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Light 8.png"), 32, 32));
-        rally = arrangeFrames(
-            TextureRegion.split(getTexture("Textures/Battle_Animations/Parameter 10.png"), 32, 32));
-    }
-
-    private TextureRegion[] arrangeFrames(TextureRegion[][] split) {
-        TextureRegion[] frames = new TextureRegion[split.length * split[0].length];
-        for (int i = 0; i < split.length; i++) {
-            for (int j = 0; j < split[0].length; j++) {
-                frames[j + (i * split[0].length)] = split[i][j];
-            }
-        }
-        return frames;
     }
 
     private void loadSkin(String skinName) {
@@ -164,12 +117,6 @@ public class ResourceManager extends AssetManager {
         font72 = generator.generateFont(parameter);
     }
 
-    public void load() {
-        while (!update()) {
-            System.out.println("Loaded: " + getProgress() * 100 + "%");
-        }
-    }
-
     public String loadTexture(String path) {
         if (isLoaded(path))
             return path;
@@ -180,34 +127,16 @@ public class ResourceManager extends AssetManager {
         return path;
     }
 
-    public String loadPixmap(String path) {
-        load(path, Pixmap.class);
-        // manager.finishLoading();
-        return path;
-    }
-
     // could cause issues from creating file handles over and over
     public Texture getTexture(String path) {
         if (!Gdx.files.internal(path).exists()) {
             return null;
         }
         if (!isLoaded(path)) {
+            this.load(path, Texture.class);
             this.finishLoadingAsset(path);
         }
         return get(path, Texture.class);
-    }
-
-    public Pixmap getPixmap(String path) {
-        if (!isLoaded(path)) {
-            finishLoadingAsset(path);
-        }
-        return get(path, Pixmap.class);
-    }
-
-    public Boolean isLoaded() {
-        if (getProgress() >= 1)
-            return true;
-        return false;
     }
 
     @Override

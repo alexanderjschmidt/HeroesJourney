@@ -1,9 +1,6 @@
 package heroes.journey.ui.windows;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
@@ -12,6 +9,10 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ResourceBar;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.UUID;
+
+import static heroes.journey.initializers.base.LoadTextures.*;
 
 public class EntityUI extends UI {
 
@@ -24,10 +25,10 @@ public class EntityUI extends UI {
         this.entity.setWrap(true);
         this.mainTable.add(entity).expandX().row();
 
-        this.valor = new ResourceBar(ResourceManager.get(ResourceManager.UI)[2][0], null);
-        this.insight = new ResourceBar(ResourceManager.get(ResourceManager.UI)[4][1], null);
-        this.arcanum = new ResourceBar(ResourceManager.get(ResourceManager.UI)[4][0], null);
-        this.influence = new ResourceBar(ResourceManager.get(ResourceManager.UI)[3][1], null);
+        this.valor = new ResourceBar(RED, null);
+        this.insight = new ResourceBar(LIGHT_BLUE, null);
+        this.arcanum = new ResourceBar(PURPLE, null);
+        this.influence = new ResourceBar(YELLOW, null);
 
         this.mainTable.add(valor).expandX().row();
         this.mainTable.add(insight).expandX().row();

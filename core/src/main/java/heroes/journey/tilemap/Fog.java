@@ -1,9 +1,11 @@
 package heroes.journey.tilemap;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-
 import heroes.journey.GameCamera;
-import heroes.journey.utils.art.ResourceManager;
+
+import static heroes.journey.initializers.base.LoadTextures.DENSE_FOG;
+import static heroes.journey.initializers.base.LoadTextures.LIGHT_FOG;
+import static heroes.journey.utils.art.ResourceManager.RenderableManager;
 
 public enum Fog {
 
@@ -18,10 +20,10 @@ public enum Fog {
             return;
         }
         if (this == LIGHT) {
-            batch.draw(ResourceManager.get(ResourceManager.Sprites)[0][1], x * GameCamera.get().getSize(),
+            batch.draw(RenderableManager.get(LIGHT_FOG).getRender(), x * GameCamera.get().getSize(),
                 y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         } else {
-            batch.draw(ResourceManager.get(ResourceManager.Sprites)[0][0], x * GameCamera.get().getSize(),
+            batch.draw(RenderableManager.get(DENSE_FOG).getRender(), x * GameCamera.get().getSize(),
                 y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         }
     }
