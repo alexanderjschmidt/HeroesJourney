@@ -44,6 +44,6 @@ object ScriptModLoader {
             }
         }
 
-        return mods
+        return mods.stream().sorted().toList()
     }
 }

@@ -1,5 +1,5 @@
 import heroes.journey.mods.gameMod
 
-gameMod("Base Game Terrains") {
+gameMod("Base Game Terrains", 1) {
 
 }

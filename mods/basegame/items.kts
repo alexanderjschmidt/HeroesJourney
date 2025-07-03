@@ -8,7 +8,7 @@ import heroes.journey.initializers.base.tags.Stats
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 
-gameMod("Base Game Items") {
+gameMod("Base Game Items", 1) {
     // Item Sub Types
     val raw_material = ItemSubType("raw_material", "Raw Material", ItemType.Misc).register()
     val refined_material =

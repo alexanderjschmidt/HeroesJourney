@@ -1,6 +1,6 @@
 import heroes.journey.mods.gameMod
 
-gameMod("Base Game Actions") {
+gameMod("Base Game Actions", 1) {
     /*
         CooldownAction(
             "workout", "Work out", "Lift weights, gain body", false,

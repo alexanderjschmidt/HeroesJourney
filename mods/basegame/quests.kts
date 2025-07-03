@@ -9,7 +9,7 @@ import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.Registries
 
-gameMod("Base Game Quests and Buffs") {
+gameMod("Base Game Quests and Buffs", 1) {
     Quest(
         "delve_dungeon", "Delve a dungeon",
         { input: ActionInput? ->
