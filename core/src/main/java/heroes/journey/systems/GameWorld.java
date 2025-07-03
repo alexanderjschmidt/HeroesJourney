@@ -32,7 +32,6 @@ import heroes.journey.components.LocationComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.initializers.base.EntityFactory;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.constantsystems.AISystem;

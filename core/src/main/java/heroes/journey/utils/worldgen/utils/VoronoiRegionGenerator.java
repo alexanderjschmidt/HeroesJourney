@@ -11,17 +11,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import com.artemis.EntityEdit;
-
 import heroes.journey.GameState;
-import heroes.journey.components.NamedComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
-import heroes.journey.components.character.IdComponent;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 
 public class VoronoiRegionGenerator {
 
@@ -190,17 +185,8 @@ public class VoronoiRegionGenerator {
         for (int ringIndex = 0; ringIndex < centerPoints.size(); ringIndex++) {
             List<Position> ring = centerPoints.get(ringIndex);
             for (int i = 0; i < ring.size(); i++) {
-                EntityEdit region = world.createEntity().edit();
-                IdComponent id = region.create(IdComponent.class);
-                region.create(RegionComponent.class)
-                    .ring(ringIndex)
-                    .ringPos(i)
-                    .addChallenge("fight_monsters")
-                    .addChallenge("solve_mystery")
-                    .addChallenge("cure_curse")
-                    .addChallenge("resolve_dispute");
-                region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
-                regionIdMap.put(regionId, id.uuid());
+                UUID regionUUId = world.getEntityFactory().createRegion(ringIndex, i);
+                regionIdMap.put(regionId, regionUUId);
                 regionId++;
             }
         }

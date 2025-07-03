@@ -1,9 +1,7 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.EntityFactory.generateCapital;
-import static heroes.journey.initializers.base.EntityFactory.generateDungeon;
-import static heroes.journey.initializers.base.EntityFactory.generateMine;
-import static heroes.journey.initializers.base.EntityFactory.generateTown;
+import static heroes.journey.initializers.base.LoadTextures.DUNGEON_SPRITE;
+import static heroes.journey.initializers.base.LoadTextures.TOWN_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
@@ -27,6 +25,7 @@ import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.registries.TileManager;
+import heroes.journey.systems.EntityFactory;
 import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
@@ -38,6 +37,7 @@ import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
 import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
 import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
+import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
 public class Map implements InitializerInterface {
@@ -54,25 +54,30 @@ public class Map implements InitializerInterface {
         KINGDOM = new FeatureType("kingdom", "Kingdom") {
             @Override
             public UUID generateFeatureInner(GameState gs, Position pos) {
-                return generateCapital(gs, pos.getX(), pos.getY());
+                return gs.getWorld().getEntityFactory().generateCapital(pos.getX(), pos.getY());
             }
         };
         TOWN = new FeatureType("town", "Town") {
             @Override
             public UUID generateFeatureInner(GameState gs, Position pos) {
-                return generateTown(gs, pos.getX(), pos.getY());
+                return gs.getWorld()
+                    .getEntityFactory()
+                    .generateBasicLocation(SyllableTownNameGenerator.generateName(), pos.getX(), pos.getY(),
+                        TOWN_SPRITE);
             }
         };
         DUNGEON = new FeatureType("dungeon", "Dungeon") {
             @Override
             public UUID generateFeatureInner(GameState gs, Position pos) {
-                return generateDungeon(gs, pos.getX(), pos.getY());
+                return gs.getWorld().getEntityFactory().generateDungeon(pos.getX(), pos.getY());
             }
         };
         MINE = new FeatureType("mine", "Mine") {
             @Override
             public UUID generateFeatureInner(GameState gs, Position pos) {
-                return generateMine(gs, pos.getX(), pos.getY());
+                return gs.getWorld()
+                    .getEntityFactory()
+                    .generateBasicLocation("Mine", pos.getX(), pos.getY(), DUNGEON_SPRITE);
             }
         };
 
@@ -208,7 +213,10 @@ public class Map implements InitializerInterface {
                     factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(),
                         LoadTextures.PLAYER_SPRITE);
                     factory.addMovableComponents(playerId, WanderType.Region);
-                    EntityEdit player = factory.addPlayerComponents(playerId);
+                    factory.addPlayerComponents(playerId);
+
+                    //TODO move to entitiyFactory
+                    EntityEdit player = gameState.getWorld().edit(playerId);
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                     InventoryComponent.get(gameState.getWorld(), playerId)
                         .add(ItemManager.get("health_potion"), 3)
