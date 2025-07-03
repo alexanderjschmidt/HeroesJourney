@@ -8,8 +8,6 @@ import heroes.journey.entities.ai.MCTSAI;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.constantsystems.AISystem;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
 
 import java.util.UUID;
 import java.util.concurrent.Future;
@@ -18,9 +16,7 @@ public class AITurnComponent extends PooledClonableComponent<AITurnComponent> {
 
     @Getter
     private transient Future<QueuedAction> futureResult = null;
-    @Accessors(fluent = true, chain = true)
-    @Setter
-    private transient AI ai;
+    private final transient AI ai;
 
     public AITurnComponent() {
         this.ai = new MCTSAI();
@@ -42,13 +38,11 @@ public class AITurnComponent extends PooledClonableComponent<AITurnComponent> {
 
     @Override
     protected void reset() {
-        ai = null;
         futureResult.cancel(true);
         futureResult = null;
     }
 
     @Override
     public void copy(AITurnComponent from) {
-        ai = from.ai;
     }
 }

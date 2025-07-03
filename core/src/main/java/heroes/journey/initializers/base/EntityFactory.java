@@ -5,7 +5,6 @@ import heroes.journey.GameState;
 import heroes.journey.components.*;
 import heroes.journey.components.character.*;
 import heroes.journey.components.utils.WanderType;
-import heroes.journey.entities.ai.AI;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
 import heroes.journey.initializers.base.actions.TravelActions;
@@ -25,8 +24,7 @@ public class EntityFactory {
         EntityEdit entity,
         int x,
         int y,
-        String render,
-        AI ai) {
+        String render) {
         entity.create(PositionComponent.class).setPos(x, y);
         UUID id = entity.create(IdComponent.class).register(world, entity.getEntityId()).uuid();
         entity.create(RenderComponent.class).sprite(render);
@@ -38,7 +36,7 @@ public class EntityFactory {
 
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
-        entity.create(AITurnComponent.class).ai(ai);
+        entity.create(AITurnComponent.class);
         entity.create(AIWanderComponent.class).setWanderType(WanderType.Region);
         entity.create(StatsComponent.class);
         entity.create(InventoryComponent.class);
