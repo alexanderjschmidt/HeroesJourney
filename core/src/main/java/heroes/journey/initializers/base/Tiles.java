@@ -15,7 +15,9 @@ import heroes.journey.utils.art.ResourceManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import static heroes.journey.initializers.base.LoadTextures.OVERWORLD_TILESET;
 import static heroes.journey.initializers.base.Map.KINGDOM;
+import static heroes.journey.utils.art.ResourceManager.TextureManager;
 
 public class Tiles implements InitializerInterface {
 
@@ -30,7 +32,7 @@ public class Tiles implements InitializerInterface {
 
     @Override
     public void init() {
-        TextureRegion[][] tiles = ResourceManager.get(ResourceManager.OverworldTileset);
+        TextureRegion[][] tiles = ResourceManager.get(TextureManager.get(OVERWORLD_TILESET));
 
         // Base Terrains
         Terrain water = new Terrain("water", "Water", 50).register();

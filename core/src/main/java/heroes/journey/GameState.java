@@ -165,6 +165,7 @@ public class GameState implements Cloneable {
         System.out.print("turn " + turn + ", " + currentEntity + " " + entitiesInActionOrder + " ");
 
         world.enableTriggerableSystems(TriggerableSystem.EventTrigger.MOVE);
+        // TODO make this happen after the triggerable systems execute so that the cursor is on the player
         updateCurrentEntity();
 
         HUD.get().getCursor().clearSelected();

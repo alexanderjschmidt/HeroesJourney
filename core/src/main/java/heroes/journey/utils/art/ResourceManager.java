@@ -18,8 +18,9 @@ import java.util.HashMap;
 public class ResourceManager extends AssetManager {
 
     public static Registry<Renderable> RenderableManager = new Registry<>();
+    public static Registry<TextureMap> TextureManager = new Registry<>();
 
-    public static TextureMap UI, Sprites, OverworldTileset;
+    public static TextureMap UI;
 
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
@@ -36,9 +37,7 @@ public class ResourceManager extends AssetManager {
     public static synchronized ResourceManager get() {
         if (manager == null) {
             manager = new ResourceManager();
-            UI = new TextureMap("UI/cursor.png", 32, 32);
-            Sprites = new TextureMap("sprites.png", 16, 16);
-            OverworldTileset = new TextureMap("Overworld_Tileset.png", 16, 16);
+            UI = new TextureMap("ui", "UI/cursor.png", 32, 32).register();
         }
         return manager;
     }
@@ -70,7 +69,7 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/wangEdge.png");
 
         for (TextureMap map : textureRegions.keySet())
-            loadTexture(map.location());
+            loadTexture(map.getLocation());
     }
 
     public void splits() {
@@ -79,8 +78,8 @@ public class ResourceManager extends AssetManager {
     }
 
     public void loadTextureMap(TextureMap textureMap) {
-        TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.location()),
-            textureMap.width(), textureMap.height());
+        TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.getLocation()),
+            textureMap.getWidth(), textureMap.getHeight());
         // Because fuck [y][x]
         TextureRegion[][] transposed = new TextureRegion[textures[0].length][textures.length];
         for (int y = 0; y < textures.length; y++) {
