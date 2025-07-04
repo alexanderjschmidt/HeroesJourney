@@ -68,6 +68,7 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/cliffTransition.png");
         loadTexture("Textures/wangEdge.png");
 
+        System.out.println(textureRegions);
         for (TextureMap map : textureRegions.keySet())
             loadTexture(map.getLocation());
     }
@@ -78,6 +79,7 @@ public class ResourceManager extends AssetManager {
     }
 
     public void loadTextureMap(TextureMap textureMap) {
+        System.out.println("load map " + textureMap.getLocation());
         TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.getLocation()),
             textureMap.getWidth(), textureMap.getHeight());
         // Because fuck [y][x]
@@ -90,33 +92,8 @@ public class ResourceManager extends AssetManager {
         textureRegions.put(textureMap, transposed);
     }
 
-    private void loadSkin(String skinName) {
-        load("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class);
-        finishLoadingAsset("skin/" + skinName + "/" + skinName + ".atlas");
-        skin = new Skin();
-        skin.addRegions(get("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class));
-        skin.add("default-font", font24);
-        skin.add("title", font72);
-        skin.load(Gdx.files.internal("skin/" + skinName + "/" + skinName + ".json"));
-    }
-
-    private void initFonts() {
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("skin/bulletinV1.ttf"));
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-
-        parameter.color = Color.WHITE;
-
-        parameter.size = 12;
-        font12 = generator.generateFont(parameter);
-        parameter.size = 24;
-        font24 = generator.generateFont(parameter);
-        parameter.size = 36;
-        font36 = generator.generateFont(parameter);
-        parameter.size = 72;
-        font72 = generator.generateFont(parameter);
-    }
-
     public String loadTexture(String path) {
+        System.out.println("load texture " + path);
         if (isLoaded(path))
             return path;
         if (Gdx.files.internal(path).exists()) {
@@ -154,6 +131,32 @@ public class ResourceManager extends AssetManager {
 
     public static TextureRegion get(TextureMap textureMap, int x, int y) {
         return manager.textureRegions.get(textureMap)[x][y];
+    }
+
+    private void loadSkin(String skinName) {
+        load("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class);
+        finishLoadingAsset("skin/" + skinName + "/" + skinName + ".atlas");
+        skin = new Skin();
+        skin.addRegions(get("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class));
+        skin.add("default-font", font24);
+        skin.add("title", font72);
+        skin.load(Gdx.files.internal("skin/" + skinName + "/" + skinName + ".json"));
+    }
+
+    private void initFonts() {
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("skin/bulletinV1.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
+        parameter.color = Color.WHITE;
+
+        parameter.size = 12;
+        font12 = generator.generateFont(parameter);
+        parameter.size = 24;
+        font24 = generator.generateFont(parameter);
+        parameter.size = 36;
+        font36 = generator.generateFont(parameter);
+        parameter.size = 72;
+        font72 = generator.generateFont(parameter);
     }
 
 }

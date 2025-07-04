@@ -9,12 +9,16 @@ class AnimationRenderable(
 ) : Renderable(id) {
 
     private var animation: Animation<TextureRegion>? = null
+    private var stateTime = 0f
 
     override fun getRender(delta: Float): TextureRegion {
         if (animation == null) {
             animation = animationBuilder()
         }
-        return animation!!.getKeyFrame(delta)
+        stateTime += delta
+        if (stateTime > 60)
+            stateTime -= 60
+        return animation!!.getKeyFrame(stateTime)
     }
 }
 
@@ -45,9 +49,17 @@ class AnimationRenderableBuilder(
     fun build(): AnimationRenderable {
         return AnimationRenderable(id) {
             val textureRegions = ResourceManager.get(textureMap)
-            val keyFrames = frameCoords.map { (x, y) -> textureRegions[y][x] }.toTypedArray()
+
+            val keyFrames: Array<TextureRegion> = if (frameCoords.isEmpty()) {
+                textureRegions
+                    .flatMap { row -> row.toList() } // flatten 2D array to list
+                    .toTypedArray()
+            } else {
+                frameCoords.map { (x, y) -> textureRegions[y][x] }.toTypedArray()
+            }
+
             Animation(frameDuration, *keyFrames).apply {
-                this.playMode = this@AnimationRenderableBuilder.playMode
+                playMode = this@AnimationRenderableBuilder.playMode
             }
         }
     }

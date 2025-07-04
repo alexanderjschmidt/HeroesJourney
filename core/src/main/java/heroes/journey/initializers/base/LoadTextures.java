@@ -14,4 +14,6 @@ public class LoadTextures {
     public static final String RED = "red", LIGHT_BLUE = "light_blue", PURPLE = "purple", YELLOW = "yellow";
 
     public static final String CURSOR = "cursor", MAP_POINTER = "map_pointer";
+
+    public static final String ADVENTURER = "adventurer";
 }

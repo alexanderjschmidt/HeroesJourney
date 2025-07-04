@@ -91,7 +91,7 @@ public class RenderSystem extends BaseEntitySystem {
             Application.get().getBatch().setColor(Color.WHITE);
             Application.get()
                 .getBatch()
-                .draw(render.sprite().getRender(getWorld().getDelta()), x, y, GameCamera.get().getSize(),
+                .draw(render.sprite().getRender(world.getDelta()), x, y, GameCamera.get().getSize(),
                     heroes.journey.GameCamera.get().getSize());
         }
     }

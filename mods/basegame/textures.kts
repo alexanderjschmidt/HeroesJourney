@@ -9,6 +9,12 @@ import heroes.journey.utils.art.animationRenderable
 gameMod("Base Game Textures", 0) {
     val Sprites = TextureMap("sprites", "sprites.png", 16, 16).register()
     val OverworldTileset = TextureMap(OVERWORLD_TILESET, "Overworld_Tileset.png", 16, 16).register()
+    val Adventurer = TextureMap(
+        "adventurer",
+        "deepdivegamingsprites/Basic Humanoid II Animations/Adventurous Adolescent/AdventurousAdolescent.png",
+        16,
+        16
+    ).register()
 
     StillRenderable(LoadTextures.PLAYER_SPRITE, Sprites, 1, 1).register()
     StillRenderable(LoadTextures.CAPITAL_SPRITE, OverworldTileset, 9, 14).register()
@@ -35,5 +41,9 @@ gameMod("Base Game Textures", 0) {
         frame(3, 3)
         frame(3, 3) // repeated
         frame(3, 4)
+    }.register()
+
+    animationRenderable(LoadTextures.ADVENTURER, Adventurer) {
+        frameDuration = 0.25f
     }.register()
 }

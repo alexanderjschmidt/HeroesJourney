@@ -27,8 +27,6 @@ public class Cursor {
 
     private Position mapPointerLoc;
 
-    private float elapsed = 0;
-
     public Cursor(HUD hud) {
         this.hud = hud;
     }
@@ -45,7 +43,6 @@ public class Cursor {
     }
 
     public void render(Batch batch, float delta) {
-        elapsed += delta;
         if (hud.getState() == States.CURSOR_MOVE) {
             if (selected != null) {
                 batch.setColor(Color.BLUE);
@@ -53,10 +50,10 @@ public class Cursor {
                 batch.setColor(Color.RED);
             }
         }
-        batch.draw(RenderableManager.get(CURSOR).getRender(elapsed), x * GameCamera.get().getSize(),
+        batch.draw(RenderableManager.get(CURSOR).getRender(delta), x * GameCamera.get().getSize(),
             y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         if (mapPointerLoc != null) {
-            batch.draw(RenderableManager.get(MAP_POINTER).getRender(elapsed),
+            batch.draw(RenderableManager.get(MAP_POINTER).getRender(delta),
                 mapPointerLoc.getX() * GameCamera.get().getSize(),
                 mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(),
                 GameCamera.get().getSize());
