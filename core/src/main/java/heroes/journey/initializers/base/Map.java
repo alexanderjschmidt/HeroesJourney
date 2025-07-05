@@ -1,5 +1,6 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.Ids.CAPITAL_SPRITE;
 import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
 import static heroes.journey.initializers.base.Ids.TOWN_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
@@ -54,7 +55,10 @@ public class Map implements InitializerInterface {
         KINGDOM = new FeatureType("kingdom", "Kingdom") {
             @Override
             public UUID generateFeatureInner(GameState gs, Position pos) {
-                return gs.getWorld().getEntityFactory().generateCapital(pos.getX(), pos.getY());
+                return gs.getWorld()
+                    .getEntityFactory()
+                    .generateBasicLocation(SyllableTownNameGenerator.generateName(), pos.getX(), pos.getY(),
+                        CAPITAL_SPRITE);
             }
         };
         TOWN = new FeatureType("town", "Town") {

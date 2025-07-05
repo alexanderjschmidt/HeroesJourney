@@ -1,6 +1,5 @@
 package heroes.journey.systems;
 
-import static heroes.journey.initializers.base.Ids.CAPITAL_SPRITE;
 import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.QuestManager;
@@ -34,7 +33,6 @@ import heroes.journey.initializers.base.actions.DelveAction;
 import heroes.journey.initializers.base.actions.TravelActions;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
-import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 
 public class EntityFactory {
 
@@ -102,6 +100,8 @@ public class EntityFactory {
             .addChallenge("cure_curse")
             .addChallenge("resolve_dispute");
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
+        region.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
+        region.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
         return regionId;
     }
 
@@ -118,16 +118,6 @@ public class EntityFactory {
         addRenderComponents(id, name, x, y, render);
         addLocationsComponent(id, x, y);
         return id;
-    }
-
-    public UUID generateCapital(int x, int y) {
-        UUID houseId = generateBasicLocation(SyllableTownNameGenerator.generateName(), x, y, CAPITAL_SPRITE);
-
-        EntityEdit house = world.getEntity(houseId).edit();
-        house.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
-        house.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
-
-        return houseId;
     }
 
     public UUID generateDungeon(int x, int y) {

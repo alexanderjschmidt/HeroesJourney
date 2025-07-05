@@ -79,7 +79,7 @@ public class ResourceManager extends AssetManager {
     }
 
     public void loadTextureMap(TextureMap textureMap) {
-        System.out.println("load map " + textureMap.getLocation());
+        //System.out.println("load map " + textureMap.getLocation());
         TextureRegion[][] textures = TextureRegion.split(getTexture(textureMap.getLocation()),
             textureMap.getWidth(), textureMap.getHeight());
         // Because fuck [y][x]
@@ -93,7 +93,7 @@ public class ResourceManager extends AssetManager {
     }
 
     public String loadTexture(String path) {
-        System.out.println("load texture " + path);
+        //System.out.println("load texture " + path);
         if (isLoaded(path))
             return path;
         if (Gdx.files.internal(path).exists()) {

@@ -54,7 +54,12 @@ public class ActionMenu extends UI {
     private static Set<ActionEntry> getRegionFeatures(GameState gameState, UUID selectedEntity) {
         UUID regionId = Utils.getRegion(gameState, selectedEntity);
         RegionComponent region = RegionComponent.get(gameState.getWorld(), regionId);
+
         Set<ActionEntry> actions = new HashSet<>();
+        PossibleActionsComponent regionActions = PossibleActionsComponent.get(gameState.getWorld(), regionId);
+        if (regionActions != null) {
+            actions.addAll(regionActions.getPossibleActions(regionId));
+        }
 
         for (UUID id : region.getFeatures()) {
             PossibleActionsComponent factionActions = PossibleActionsComponent.get(gameState.getWorld(), id);
