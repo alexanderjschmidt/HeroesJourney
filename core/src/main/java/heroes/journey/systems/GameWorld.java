@@ -47,6 +47,7 @@ import heroes.journey.systems.triggerable.BuffSystem;
 import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.EventSystem;
 import heroes.journey.systems.triggerable.QuestSystem;
+import heroes.journey.systems.triggerable.RegionManagementSystem;
 import heroes.journey.utils.serializers.Serializers;
 
 public class GameWorld extends World {
@@ -87,6 +88,7 @@ public class GameWorld extends World {
         builder.with(new IdSyncSystem())
             .with(new CooldownSystem())
             .with(new QuestSystem(gameState))
+            .with(new RegionManagementSystem(gameState))
             .with(new PositionSyncSystem(gameState))
             .with(new LocationPositionSyncSystem(gameState))
             .with(new EventSystem(gameState))
