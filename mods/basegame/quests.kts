@@ -2,8 +2,7 @@ import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.challenge
-import heroes.journey.initializers.base.Ids.MOLE
-import heroes.journey.initializers.base.Ids.OGRE
+import heroes.journey.initializers.base.Ids.*
 import heroes.journey.initializers.base.actions.DelveAction
 import heroes.journey.initializers.base.tags.Stats
 import heroes.journey.initializers.utils.Utils
@@ -30,7 +29,7 @@ gameMod("Base Game Quests and Buffs", 1) {
     challenge("fight_monsters") {
         name = "Fight Monsters"
         description = "Kill some monsters terrorizing the locals."
-        render = OGRE
+        render = BRAWNY_OGRE
         approaches(Stats.MIGHT, Stats.EMPOWERMENT, Stats.SKILL, Stats.BRAVADO)
         reward {
             attr("valor", 2)
@@ -40,7 +39,7 @@ gameMod("Base Game Quests and Buffs", 1) {
     challenge("exterminate_vermin") {
         name = "Exterminate Vermin"
         description = "Get rid of tunneling moles."
-        render = MOLE
+        render = TUNNELING_MOLE
         approaches(Stats.LOGIC, Stats.CUNNING, Stats.TECHNIQUE, Stats.RUNE_CRAFT)
         reward {
             attr("insight", 2)
@@ -50,7 +49,7 @@ gameMod("Base Game Quests and Buffs", 1) {
     challenge("cure_curse") {
         name = "Cure Curse"
         description = "Remove a curse from a local townsfolk."
-        render = "events/curse"
+        render = BOUND_CADAVER
         approaches(Stats.WIZARDRY, Stats.SORCERY, Stats.ILLUSION, Stats.ENCHANTING)
         reward {
             attr("arcanum", 2)
@@ -60,7 +59,7 @@ gameMod("Base Game Quests and Buffs", 1) {
     challenge("resolve_dispute") {
         name = "Resolve Dispute"
         description = "Resolve a dispute between disgruntled townsfolk."
-        render = "events/dispute"
+        render = OVERWORKED_VILLAGER
         approaches(Stats.CHARM, Stats.INTIMIDATION, Stats.PERSUASION, Stats.SEDUCTION)
         reward {
             attr("influence", 2)
