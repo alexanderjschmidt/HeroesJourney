@@ -107,7 +107,7 @@ val textures = gameMod("Base Game Textures", 0) {
     deepDiveAnimation(LIZARDFOLK_SPEARMAN, "Humanoid", "Lizardfolk Spearman")
 
     // Humanoid II Animations
-    deepDiveAnimation(ADVENTURER, "Humanoid II", "Adventurous Adolescent")
+    deepDiveAnimation(ADVENTUROUS_ADOLESCENT, "Humanoid II", "Adventurous Adolescent")
     deepDiveAnimation(BOISTEROUS_YOUTH, "Humanoid II", "Boisterous Youth")
     deepDiveAnimation(ELF_BLADEDANCER, "Humanoid II", "Elf Bladedancer")
     deepDiveAnimation(ELF_ENCHANTER, "Humanoid II", "Elf Enchanter")

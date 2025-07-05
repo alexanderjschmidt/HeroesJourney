@@ -31,25 +31,25 @@ public enum Stat {
     MIGHT("might", "Might", 1, 10, BODY, BODY, BODY),
     SKILL("skill", "Skill", 1, 10, BODY, BODY, MIND),
     EMPOWERMENT("empowerment", "Empowerment", 1, 10, BODY, BODY, MAGIC),
-    BRAVADO("bravado", "Bravado", 1, 10, BODY, BODY, CHARISMA),
+    CHIVALRY("chivalry", "Chivalry", 1, 10, BODY, BODY, CHARISMA),
 
     // MIND Mental problem solving
     TECHNIQUE("technique", "Technique", 1, 10, MIND, MIND, BODY),
     LOGIC("logic", "Logic", 1, 10, MIND, MIND, MIND),
-    RUNE_CRAFT("rune_craft", "Rune Craft", 1, 10, MIND, MIND, MAGIC),
+    CONCENTRATION("concentration", "Concentration", 1, 10, MIND, MIND, MAGIC),
     CUNNING("cunning", "Cunning", 1, 10, MIND, MIND, CHARISMA),
 
     // MAGIC magically problem solving
     ENCHANTING("enchanting", "Enchanting", 1, 10, MAGIC, MAGIC, BODY),
-    WIZARDRY("wizardry", "Wizardry", 1, 10, MAGIC, MAGIC, MIND),
+    ILLUSION("illusion", "Illusion", 1, 10, MAGIC, MAGIC, MIND),
     SORCERY("sorcery", "Sorcery", 1, 10, MAGIC, MAGIC, MAGIC),
-    ILLUSION("illusion", "Illusion", 1, 10, MAGIC, MAGIC, CHARISMA),
+    BEWITCHING("bewitching", "Bewitching", 1, 10, MAGIC, MAGIC, CHARISMA),
 
     // CHARISMA social problem solving
-    INTIMIDATION("intimidation", "Intimidation", 1, 10, CHARISMA, CHARISMA, BODY),
+    BRAVADO("bravado", "Bravado", 1, 10, CHARISMA, CHARISMA, BODY),
     PERSUASION("persuasion", "Persuasion", 1, 10, CHARISMA, CHARISMA, MIND),
-    CHARM("charm", "Charm", 1, 10, CHARISMA, CHARISMA, MAGIC),
-    SEDUCTION("seduction", "Seduction", 1, 10, CHARISMA, CHARISMA, CHARISMA);
+    MESMERISM("mesmerism", "Mesmerism", 1, 10, CHARISMA, CHARISMA, MAGIC),
+    CHARM("charm", "Charm", 1, 10, CHARISMA, CHARISMA, CHARISMA);
 
     private final String id;
     private final String nameInternal;

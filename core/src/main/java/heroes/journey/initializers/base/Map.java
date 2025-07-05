@@ -214,7 +214,8 @@ public class Map implements InitializerInterface {
                 PositionComponent pos = PositionComponent.get(gameState.getWorld(), id);
                 if (region.ringPos() == 0) {
                     UUID playerId = factory.createEntity();
-                    factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(), Ids.ADVENTURER);
+                    factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(),
+                        Ids.ADVENTUROUS_ADOLESCENT);
                     factory.addMovableComponents(playerId, WanderType.Region);
                     factory.addPlayerComponents(playerId);
 
@@ -229,7 +230,7 @@ public class Map implements InitializerInterface {
                 } else if (region.ringPos() % 2 == 0) {
                     UUID opponentId = factory.createEntity();
                     factory.addRenderComponents(opponentId, "Opponent", pos.getX(), pos.getY(),
-                        Ids.ADVENTURER);
+                        Ids.ADVENTUROUS_ADOLESCENT);
                     factory.addMovableComponents(opponentId, WanderType.Region);
                     factory.addPlayerComponents(opponentId);
                 }
