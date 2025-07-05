@@ -1,4 +1,5 @@
 package heroes.journey.entities.tagging;
 
-public interface Group {
+public enum Group {
+    Body, Mind, Magic, Charisma, BaseStats, Renown;
 }

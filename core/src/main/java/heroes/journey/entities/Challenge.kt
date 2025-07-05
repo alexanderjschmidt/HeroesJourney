@@ -2,7 +2,7 @@ package heroes.journey.entities
 
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.AttributesBuilder
-import heroes.journey.entities.tagging.Tag
+import heroes.journey.entities.tagging.Stat
 import heroes.journey.entities.tagging.attributes
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
@@ -12,7 +12,7 @@ class Challenge(
     nameInternal: String?,
     val description: String,
     val render: String,
-    val approaches: Array<Tag>,
+    val approaches: Array<Stat>,
     val reward: Attributes
 ) : Registrable(id, nameInternal) {
     override fun register(): Challenge {
@@ -24,10 +24,10 @@ class ChallengeBuilder(private val id: String) {
     var name: String? = null
     var description: String = ""
     var render: String = ""
-    private val approachTags = mutableListOf<Tag>()
+    private val approachTags = mutableListOf<Stat>()
     private var rewardAttributes = Attributes()
 
-    fun approaches(vararg tags: Tag) {
+    fun approaches(vararg tags: Stat) {
         approachTags.addAll(tags)
     }
 

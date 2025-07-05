@@ -9,7 +9,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.initializers.base.tags.Stats;
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -49,8 +49,8 @@ public class StatsDisplay extends Table {
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
 
         assert statsComponent != null;
-        body.setText("Body: " + statsComponent.get(Stats.BODY));
-        mind.setText("Mind: " + statsComponent.get(Stats.MIND));
+        body.setText("Body: " + statsComponent.get(Stat.BODY));
+        mind.setText("Mind: " + statsComponent.get(Stat.MIND));
         fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
     }
 

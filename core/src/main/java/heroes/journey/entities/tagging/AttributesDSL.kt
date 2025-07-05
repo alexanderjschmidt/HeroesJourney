@@ -1,6 +1,6 @@
 package heroes.journey.entities.tagging
 
-import heroes.journey.registries.Tags
+import heroes.journey.entities.tagging.Stat
 
 fun attributes(init: AttributesBuilder.() -> Unit): Attributes {
     val builder = AttributesBuilder()
@@ -14,11 +14,11 @@ class AttributesBuilder {
     fun build(): Attributes = attributes
 
     fun attr(tagName: String, value: Int) {
-        val tag = Tags.getTag(tagName)
+        val tag = Stat.getById(tagName)
         attributes.add(tag, value)
     }
 
-    fun set(tag: Tag, value: Int) {
+    fun set(tag: Stat, value: Int) {
         attributes.add(tag, value)
     }
 }

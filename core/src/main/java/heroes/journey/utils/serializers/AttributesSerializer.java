@@ -9,15 +9,15 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Tag;
-import heroes.journey.registries.Tags;
+import heroes.journey.entities.tagging.Stat;
+
 
 public class AttributesSerializer extends CustomSerializer<Attributes> {
 
     @Override
     public void write(Json json, Attributes attributes, Class aClass) {
         json.writeObjectStart();
-        for (Map.Entry<Tag,Integer> entry : attributes.entrySet()) {
+        for (Map.Entry<Stat,Integer> entry : attributes.entrySet()) {
             json.writeValue(entry.getKey().toString(), entry.getValue());
         }
         json.writeObjectEnd();
@@ -27,7 +27,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
     public Attributes read(Json json, JsonValue jsonValue, Class aClass) {
         Attributes attributes = new Attributes();
         for (JsonValue entry = jsonValue.child; entry != null; entry = entry.next) {
-            Tag tag = Tags.getTag(entry.name());
+            Stat tag = Stat.getById(entry.name());
             int value = entry.asInt();
             attributes.put(tag, value);
         }
@@ -37,7 +37,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
     @Override
     public void write(Kryo kryo, Output output, Attributes attributes) {
         output.writeInt(attributes.size());
-        for (Map.Entry<Tag,Integer> entry : attributes.entrySet()) {
+        for (Map.Entry<Stat,Integer> entry : attributes.entrySet()) {
             output.writeString(entry.getKey().toString());
             output.writeInt(entry.getValue());
         }
@@ -50,7 +50,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
         for (int i = 0; i < size; i++) {
             String tagString = input.readString();
             int value = input.readInt();
-            Tag tag = Tags.getTag(tagString);
+            Stat tag = Stat.getById(tagString);
             attributes.put(tag, value);
         }
         return attributes;

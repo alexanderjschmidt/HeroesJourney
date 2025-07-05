@@ -8,13 +8,13 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Operation;
-import heroes.journey.entities.tagging.Tag;
-import heroes.journey.initializers.base.tags.Stats;
+import heroes.journey.entities.tagging.Stat;
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {
 
-    public static boolean struggle(GameState gameState, UUID challenger, UUID challenged, Tag challengeType) {
+    public static boolean struggle(GameState gameState, UUID challenger, UUID challenged, Stat challengeType) {
         GameWorld world = gameState.getWorld();
 
         Attributes damages = getEquipmentStats(world, challenger);
@@ -27,7 +27,7 @@ public class FightUtils {
 
     public static void faint(GameWorld world, UUID e) {
         Attributes statsComponent = StatsComponent.get(world, e);
-        statsComponent.put(Stats.BODY, 1);
+        statsComponent.put(Stat.BODY, 1);
         // TODO remove most valuable item
     }
 

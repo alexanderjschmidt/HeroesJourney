@@ -4,7 +4,7 @@ import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.challenge
 import heroes.journey.initializers.base.Ids.*
 import heroes.journey.initializers.base.actions.DelveAction
-import heroes.journey.initializers.base.tags.Stats
+import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.Registries
@@ -30,7 +30,7 @@ gameMod("Base Game Quests and Buffs", 1) {
         name = "Fight Monsters"
         description = "Kill some monsters terrorizing the locals."
         render = BRAWNY_OGRE
-        approaches(Stats.MIGHT, Stats.EMPOWERMENT, Stats.SKILL, Stats.BRAVADO)
+        approaches(Stat.MIGHT, Stat.EMPOWERMENT, Stat.SKILL, Stat.BRAVADO)
         reward {
             attr("valor", 2)
         }
@@ -40,7 +40,7 @@ gameMod("Base Game Quests and Buffs", 1) {
         name = "Exterminate Vermin"
         description = "Get rid of tunneling moles."
         render = TUNNELING_MOLE
-        approaches(Stats.LOGIC, Stats.CUNNING, Stats.TECHNIQUE, Stats.RUNE_CRAFT)
+        approaches(Stat.LOGIC, Stat.CUNNING, Stat.TECHNIQUE, Stat.RUNE_CRAFT)
         reward {
             attr("insight", 2)
         }
@@ -50,7 +50,7 @@ gameMod("Base Game Quests and Buffs", 1) {
         name = "Cure Curse"
         description = "Remove a curse from a local townsfolk."
         render = BOUND_CADAVER
-        approaches(Stats.WIZARDRY, Stats.SORCERY, Stats.ILLUSION, Stats.ENCHANTING)
+        approaches(Stat.WIZARDRY, Stat.SORCERY, Stat.ILLUSION, Stat.ENCHANTING)
         reward {
             attr("arcanum", 2)
         }
@@ -60,7 +60,7 @@ gameMod("Base Game Quests and Buffs", 1) {
         name = "Resolve Dispute"
         description = "Resolve a dispute between disgruntled townsfolk."
         render = OVERWORKED_VILLAGER
-        approaches(Stats.CHARM, Stats.INTIMIDATION, Stats.PERSUASION, Stats.SEDUCTION)
+        approaches(Stat.CHARM, Stat.INTIMIDATION, Stat.PERSUASION, Stat.SEDUCTION)
         reward {
             attr("influence", 2)
         }

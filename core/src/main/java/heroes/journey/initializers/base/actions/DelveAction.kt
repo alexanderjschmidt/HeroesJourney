@@ -8,7 +8,7 @@ import heroes.journey.entities.actions.CooldownAction
 import heroes.journey.entities.actions.cooldownAction
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.initializers.InitializerInterface
-import heroes.journey.initializers.base.tags.Stats
+import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.utils.FightUtils
 import heroes.journey.initializers.utils.Utils
 import java.util.*
@@ -31,7 +31,7 @@ class DelveAction : InitializerInterface {
                 val e = input.entityId
                 val dungeon = UUID.fromString(input["owner"])
                 val log = StringBuilder()
-                if (FightUtils.struggle(gs, e, dungeon, Stats.BODY)) {
+                if (FightUtils.struggle(gs, e, dungeon, Stat.BODY)) {
                     log.append("You have completed the ")
                         .append(NamedComponent.get(gs.world, dungeon, "Dungeon"))
                         .append("!\nYour rewards are:\n")

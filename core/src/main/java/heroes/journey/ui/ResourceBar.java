@@ -1,14 +1,15 @@
 package heroes.journey.ui;
 
+import static heroes.journey.utils.art.ResourceManager.RenderableManager;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.registries.Tags;
-import heroes.journey.utils.art.ResourceManager;
 
-import static heroes.journey.utils.art.ResourceManager.RenderableManager;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.entities.tagging.Stat;
+import heroes.journey.utils.art.ResourceManager;
 
 public class ResourceBar extends Stack {
 
@@ -29,7 +30,7 @@ public class ResourceBar extends Stack {
     public void draw(Batch batch, float parentAlpha) {
         if (background != null)
             batch.draw(background, getX(), getY(), getWidth(), getHeight());
-        batch.draw(front, getX(), getY(), getWidth() * ((float) currentVal / maxVal), getHeight());
+        batch.draw(front, getX(), getY(), getWidth() * ((float)currentVal / maxVal), getHeight());
         super.draw(batch, parentAlpha);
     }
 
@@ -40,8 +41,8 @@ public class ResourceBar extends Stack {
     }
 
     public void update(Attributes stats, String tagId) {
-        this.currentVal = stats.get(Tags.getTag(tagId));
-        this.maxVal = Tags.getTag(tagId).getMax();
+        this.currentVal = stats.get(Stat.getById(tagId));
+        this.maxVal = Stat.getById(tagId).getMax();
         resource.setText(currentVal + "/" + maxVal);
     }
 }

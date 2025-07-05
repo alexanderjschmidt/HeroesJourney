@@ -5,61 +5,52 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import heroes.journey.registries.Tags;
 
-public class Attributes extends HashMap<Tag,Integer> {
 
-    private final Tags tags;
+public class Attributes extends HashMap<Stat,Integer> {
 
     public Attributes() {
-        this.tags = new Tags();
     }
 
-    public Attributes(Map<? extends Tag,? extends Integer> map) {
+    public Attributes(Map<? extends Stat,? extends Integer> map) {
         super(map);
-        this.tags = new Tags();
-        refreshTags();
     }
 
-    public int get(Tag tag) {
-        if (tag instanceof ConfluenceTag confluenceTag) {
-            int total = this.get(tag);
-            for (Tag tagPart : confluenceTag.getParts().keySet()) {
-                total += super.get(tagPart) * confluenceTag.getParts().get(tagPart);
+    public int get(Stat stat) {
+        if (stat.isConfluenceStat()) {
+            int total = this.get(stat);
+            for (Stat statPart : stat.getParts().keySet()) {
+                total += super.get(statPart) * stat.getParts().get(statPart);
             }
-            return total / confluenceTag.getTotalParts();
+            return total / stat.getTotalParts();
         } else {
-            return super.get(tag);
+            return super.get(stat);
         }
     }
 
-    private void refreshTags() {
-        this.tags.clear();
-        this.forEach((tag, val) -> tags.registerTag(tag));
+
+
+    public Attributes add(Stat stat, Integer value) {
+        return put(stat, value, Operation.ADD);
     }
 
-    public Attributes add(Tag tag, Integer value) {
-        return put(tag, value, Operation.ADD);
+    public Attributes add(String stat, Integer value) {
+        return put(Stat.getById(stat), value, Operation.ADD);
     }
 
-    public Attributes add(String tag, Integer value) {
-        return put(Tags.getTag(tag), value, Operation.ADD);
-    }
-
-    public Attributes put(Tag tag, Integer value, Operation operation) {
-        if (this.containsKey(tag)) {
-            this.compute(tag,
-                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), tag.getMin(),
-                    tag.getMax()));
+    public Attributes put(Stat stat, Integer value, Operation operation) {
+        if (this.containsKey(stat)) {
+            this.compute(stat,
+                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(),
+                    stat.getMax()));
         } else {
-            put(tag, value);
-            tags.registerTag(tag);
+            put(stat, value);
         }
         return this;
     }
 
     public Attributes applyOperation(Integer valueToApply, Operation operation) {
-        this.forEach((tag, value) -> this.put(tag, valueToApply, operation));
+        this.forEach((stat, value) -> this.put(stat, valueToApply, operation));
         return this;
     }
 
@@ -69,19 +60,19 @@ public class Attributes extends HashMap<Tag,Integer> {
 
     public Attributes merge(Attributes attributesToMerge, Operation operation) {
         if (attributesToMerge != null) {
-            attributesToMerge.forEach((tag, value) -> this.put(tag, value, operation));
+            attributesToMerge.forEach((stat, value) -> this.put(stat, value, operation));
         }
         return this;
     }
 
     public Attributes getTagsWithGroup(Group group) {
-        Set<Tag> tagsInGroup = tags.get(group);
-        if (tagsInGroup == null) {
+        Set<Stat> statsInGroup = Stat.getByGroup(group);
+        if (statsInGroup == null) {
             return null;
         }
-        Map<Tag,Integer> filteredMap = this.entrySet()
+        Map<Stat,Integer> filteredMap = this.entrySet()
             .stream()
-            .filter(entry -> tagsInGroup.contains(entry.getKey()))
+            .filter(entry -> statsInGroup.contains(entry.getKey()))
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
         return new Attributes(filteredMap);
     }
