@@ -1,7 +1,14 @@
 package heroes.journey.ui;
 
+import static heroes.journey.initializers.base.Ids.CURSOR;
+import static heroes.journey.initializers.base.Ids.MAP_POINTER;
+import static heroes.journey.utils.art.ResourceManager.RenderableManager;
+
+import java.util.UUID;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
@@ -9,12 +16,6 @@ import heroes.journey.entities.Position;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.UUID;
-
-import static heroes.journey.initializers.base.LoadTextures.CURSOR;
-import static heroes.journey.initializers.base.LoadTextures.MAP_POINTER;
-import static heroes.journey.utils.art.ResourceManager.RenderableManager;
 
 public class Cursor {
     // coords

@@ -1,5 +1,7 @@
 package heroes.journey.utils.art;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -11,9 +13,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import heroes.journey.registries.Registry;
 
-import java.util.HashMap;
+import heroes.journey.registries.Registry;
 
 public class ResourceManager extends AssetManager {
 
@@ -30,7 +31,7 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font72;
     public Skin skin;
 
-    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
 
@@ -68,7 +69,6 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/cliffTransition.png");
         loadTexture("Textures/wangEdge.png");
 
-        System.out.println(textureRegions);
         for (TextureMap map : textureRegions.keySet())
             loadTexture(map.getLocation());
     }

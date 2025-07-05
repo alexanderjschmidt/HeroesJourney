@@ -1,6 +1,14 @@
 package heroes.journey.initializers.base;
 
+import static heroes.journey.initializers.base.Ids.OVERWORLD_TILESET;
+import static heroes.journey.initializers.base.Map.KINGDOM;
+import static heroes.journey.utils.art.ResourceManager.TextureManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureGenerationData;
@@ -11,13 +19,6 @@ import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static heroes.journey.initializers.base.LoadTextures.OVERWORLD_TILESET;
-import static heroes.journey.initializers.base.Map.KINGDOM;
-import static heroes.journey.utils.art.ResourceManager.TextureManager;
 
 public class Tiles implements InitializerInterface {
 

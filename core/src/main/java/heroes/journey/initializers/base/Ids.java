@@ -1,6 +1,6 @@
 package heroes.journey.initializers.base;
 
-public class LoadTextures {
+public class Ids {
 
     // TextureMaps
     public static final String OVERWORLD_TILESET = "overworld_tileset";
@@ -15,5 +15,5 @@ public class LoadTextures {
 
     public static final String CURSOR = "cursor", MAP_POINTER = "map_pointer";
 
-    public static final String ADVENTURER = "adventurer";
+    public static final String ADVENTURER = "adventurer", BOUND_CADAVER = "bound_cadaver", OVERWORKED_VILLAGER = "overworked_villager", OGRE = "ogre", MOLE = "mole";
 }

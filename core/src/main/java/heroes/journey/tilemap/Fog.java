@@ -1,11 +1,12 @@
 package heroes.journey.tilemap;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import heroes.journey.GameCamera;
-
-import static heroes.journey.initializers.base.LoadTextures.DENSE_FOG;
-import static heroes.journey.initializers.base.LoadTextures.LIGHT_FOG;
+import static heroes.journey.initializers.base.Ids.DENSE_FOG;
+import static heroes.journey.initializers.base.Ids.LIGHT_FOG;
 import static heroes.journey.utils.art.ResourceManager.RenderableManager;
+
+import com.badlogic.gdx.graphics.g2d.Batch;
+
+import heroes.journey.GameCamera;
 
 public enum Fog {
 

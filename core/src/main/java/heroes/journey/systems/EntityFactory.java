@@ -1,7 +1,7 @@
 package heroes.journey.systems;
 
-import static heroes.journey.initializers.base.LoadTextures.CAPITAL_SPRITE;
-import static heroes.journey.initializers.base.LoadTextures.DUNGEON_SPRITE;
+import static heroes.journey.initializers.base.Ids.CAPITAL_SPRITE;
+import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.QuestManager;
 
@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.artemis.EntityEdit;
 
 import heroes.journey.components.BuffsComponent;
+import heroes.journey.components.ChallengeComponent;
 import heroes.journey.components.EquipmentComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.LocationComponent;
@@ -26,6 +27,7 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
+import heroes.journey.entities.Challenge;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -65,6 +67,15 @@ public class EntityFactory {
             entity.create(AIWanderComponent.class).setWanderType(wanderType);
     }
 
+    public void createChallenge(Challenge challenge, int x, int y) {
+        UUID entityId = createEntity();
+        addMovableComponents(entityId);
+        addRenderComponents(entityId, challenge.getName(), x, y, challenge.getRender());
+
+        EntityEdit entity = world.getEntity(entityId).edit();
+        entity.create(ChallengeComponent.class).challenge(challenge);
+    }
+
     public void addPlayerComponents(UUID entityId) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
@@ -87,7 +98,7 @@ public class EntityFactory {
             .ring(ringIndex)
             .ringPos(ringPos)
             .addChallenge("fight_monsters")
-            .addChallenge("solve_mystery")
+            .addChallenge("exterminate_vermin")
             .addChallenge("cure_curse")
             .addChallenge("resolve_dispute");
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());

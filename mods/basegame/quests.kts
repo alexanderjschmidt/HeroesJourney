@@ -1,8 +1,9 @@
 import heroes.journey.entities.Buff
-import heroes.journey.entities.Challenge
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.ActionInput
-import heroes.journey.entities.tagging.Attributes
+import heroes.journey.entities.challenge
+import heroes.journey.initializers.base.Ids.MOLE
+import heroes.journey.initializers.base.Ids.OGRE
 import heroes.journey.initializers.base.actions.DelveAction
 import heroes.journey.initializers.base.tags.Stats
 import heroes.journey.initializers.utils.Utils
@@ -26,33 +27,45 @@ gameMod("Base Game Quests and Buffs", 1) {
         }, 10
     ).register()
 
-    Challenge(
-        "fight_monsters",
-        "Fight Monsters",
-        "Kill some monsters terrorizing the locals.",
-        Attributes().add(Stats.VALOR, 2)
-    ).register()
+    challenge("fight_monsters") {
+        name = "Fight Monsters"
+        description = "Kill some monsters terrorizing the locals."
+        render = OGRE
+        approaches(Stats.MIGHT, Stats.EMPOWERMENT, Stats.SKILL, Stats.BRAVADO)
+        reward {
+            attr("valor", 2)
+        }
+    }.register()
 
-    Challenge(
-        "solve_mystery",
-        "Solve Mystery",
-        "Solve a mystery for some locals.",
-        Attributes().add(Stats.INSIGHT, 2)
-    ).register()
+    challenge("exterminate_vermin") {
+        name = "Exterminate Vermin"
+        description = "Get rid of tunneling moles."
+        render = MOLE
+        approaches(Stats.LOGIC, Stats.CUNNING, Stats.TECHNIQUE, Stats.RUNE_CRAFT)
+        reward {
+            attr("insight", 2)
+        }
+    }.register()
 
-    Challenge(
-        "cure_curse",
-        "Cure Curse",
-        "Remove a curse from a local townsfolk.",
-        Attributes().add(Stats.ARCANUM, 2)
-    ).register()
+    challenge("cure_curse") {
+        name = "Cure Curse"
+        description = "Remove a curse from a local townsfolk."
+        render = "events/curse"
+        approaches(Stats.WIZARDRY, Stats.SORCERY, Stats.ILLUSION, Stats.ENCHANTING)
+        reward {
+            attr("arcanum", 2)
+        }
+    }.register()
 
-    Challenge(
-        "resolve_dispute",
-        "Resolve Dispute",
-        "Resolve a dispute between disgruntled townsfolk.",
-        Attributes().add(Stats.INFLUENCE, 2)
-    ).register()
+    challenge("resolve_dispute") {
+        name = "Resolve Dispute"
+        description = "Resolve a dispute between disgruntled townsfolk."
+        render = "events/dispute"
+        approaches(Stats.CHARM, Stats.INTIMIDATION, Stats.PERSUASION, Stats.SEDUCTION)
+        reward {
+            attr("influence", 2)
+        }
+    }.register()
 
     Buff("rested", "Rested", 1, 0).register();
 }

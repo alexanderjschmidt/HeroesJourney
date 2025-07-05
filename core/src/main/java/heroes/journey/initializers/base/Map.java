@@ -1,7 +1,7 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.LoadTextures.DUNGEON_SPRITE;
-import static heroes.journey.initializers.base.LoadTextures.TOWN_SPRITE;
+import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
+import static heroes.journey.initializers.base.Ids.TOWN_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
@@ -210,8 +210,7 @@ public class Map implements InitializerInterface {
                 PositionComponent pos = PositionComponent.get(gameState.getWorld(), id);
                 if (region.ringPos() == 0) {
                     UUID playerId = factory.createEntity();
-                    factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(),
-                        LoadTextures.ADVENTURER);
+                    factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(), Ids.ADVENTURER);
                     factory.addMovableComponents(playerId, WanderType.Region);
                     factory.addPlayerComponents(playerId);
 
@@ -226,7 +225,7 @@ public class Map implements InitializerInterface {
                 } else if (region.ringPos() % 2 == 0) {
                     UUID opponentId = factory.createEntity();
                     factory.addRenderComponents(opponentId, "Opponent", pos.getX(), pos.getY(),
-                        LoadTextures.ADVENTURER);
+                        Ids.ADVENTURER);
                     factory.addMovableComponents(opponentId, WanderType.Region);
                     factory.addPlayerComponents(opponentId);
                 }
