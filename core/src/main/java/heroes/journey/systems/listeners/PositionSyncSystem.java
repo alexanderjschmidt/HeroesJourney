@@ -6,7 +6,6 @@ import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
 
-import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
@@ -18,21 +17,15 @@ import heroes.journey.tilemap.FogUtils;
 @Exclude({LocationComponent.class, RegionComponent.class})
 public class PositionSyncSystem extends IteratingSystem {
 
-    private final GameState gameState;
-
-    public PositionSyncSystem(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     @Override
     public void inserted(int entityId) {
         GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
         pos.sync();
-        gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
+        world.getGameState().getEntities().addEntity(id, pos.getX(), pos.getY());
 
-        FogUtils.updateMap(world, gameState, id);
+        FogUtils.updateMap(world, world.getGameState(), id);
     }
 
     @Override
@@ -42,9 +35,9 @@ public class PositionSyncSystem extends IteratingSystem {
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
 
-        gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
+        world.getGameState().getEntities().removeEntity(id, pos.getX(), pos.getY());
         pos.sync();
-        gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
+        world.getGameState().getEntities().removeEntity(id, pos.getX(), pos.getY());
     }
 
     @Override
@@ -55,11 +48,11 @@ public class PositionSyncSystem extends IteratingSystem {
         if (pos.isNotSynced()) {
             //System.out.println(pos.getX() + ", " + pos.getY());
             //System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
-            gameState.getEntities().removeEntity(id, pos.getX(), pos.getY());
+            world.getGameState().getEntities().removeEntity(id, pos.getX(), pos.getY());
             pos.sync();
-            gameState.getEntities().addEntity(id, pos.getX(), pos.getY());
+            world.getGameState().getEntities().addEntity(id, pos.getX(), pos.getY());
 
-            FogUtils.updateMap(world, gameState, id);
+            FogUtils.updateMap(world, world.getGameState(), id);
         }
     }
 }

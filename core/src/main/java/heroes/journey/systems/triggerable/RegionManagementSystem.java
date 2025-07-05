@@ -1,7 +1,6 @@
 package heroes.journey.systems.triggerable;
 
 import com.artemis.annotations.All;
-import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
@@ -15,12 +14,6 @@ import java.util.UUID;
 
 @All({RegionComponent.class, IdComponent.class})
 public class RegionManagementSystem extends TriggerableSystem {
-
-    private final GameState gameState;
-
-    public RegionManagementSystem(GameState gameState) {
-        this.gameState = gameState;
-    }
 
     @Override
     protected void process(int entityId) {

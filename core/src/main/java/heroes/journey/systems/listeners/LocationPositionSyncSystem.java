@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 
-import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.IdComponent;
@@ -14,12 +13,6 @@ import heroes.journey.systems.GameWorld;
 @All({PositionComponent.class, LocationComponent.class, IdComponent.class})
 public class LocationPositionSyncSystem extends IteratingSystem {
 
-    private final GameState gameState;
-
-    public LocationPositionSyncSystem(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     @Override
     public void inserted(int entityId) {
         GameWorld world = (GameWorld)getWorld();
@@ -27,7 +20,7 @@ public class LocationPositionSyncSystem extends IteratingSystem {
         PositionComponent pos = PositionComponent.get(world, id);
 
         pos.sync();
-        gameState.getEntities().addLocation(id, pos.getX(), pos.getY());
+        world.getGameState().getEntities().addLocation(id, pos.getX(), pos.getY());
     }
 
     @Override
@@ -37,9 +30,9 @@ public class LocationPositionSyncSystem extends IteratingSystem {
         UUID id = IdComponent.get(world, entityId);
         PositionComponent pos = PositionComponent.get(world, id);
 
-        gameState.getEntities().removeLocation(pos.getX(), pos.getY());
+        world.getGameState().getEntities().removeLocation(pos.getX(), pos.getY());
         pos.sync();
-        gameState.getEntities().removeLocation(pos.getX(), pos.getY());
+        world.getGameState().getEntities().removeLocation(pos.getX(), pos.getY());
     }
 
     @Override
@@ -50,9 +43,9 @@ public class LocationPositionSyncSystem extends IteratingSystem {
         if (pos.getTargetX() != pos.getX() || pos.getTargetY() != pos.getY()) {
             // System.out.println(pos.getX() + ", " + pos.getY());
             // System.out.println(pos.getTargetX() + ", " + pos.getTargetY());
-            gameState.getEntities().removeLocation(pos.getX(), pos.getY());
+            world.getGameState().getEntities().removeLocation(pos.getX(), pos.getY());
             pos.sync();
-            gameState.getEntities().addLocation(id, pos.getX(), pos.getY());
+            world.getGameState().getEntities().addLocation(id, pos.getX(), pos.getY());
         }
 
     }

@@ -87,11 +87,11 @@ public class GameWorld extends World {
             new WorldSerializationManager());
         builder.with(new IdSyncSystem())
             .with(new CooldownSystem())
-            .with(new QuestSystem(gameState))
-            .with(new RegionManagementSystem(gameState))
-            .with(new PositionSyncSystem(gameState))
-            .with(new LocationPositionSyncSystem(gameState))
-            .with(new EventSystem(gameState))
+            .with(new QuestSystem())
+            .with(new RegionManagementSystem())
+            .with(new PositionSyncSystem())
+            .with(new LocationPositionSyncSystem())
+            .with(new EventSystem())
             .with(new StatsActionsListener())
             .with(new BuffSystem())
             .with(new AIWanderSystem());
