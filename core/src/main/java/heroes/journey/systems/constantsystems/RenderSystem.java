@@ -1,5 +1,10 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.annotations.All;
@@ -7,6 +12,7 @@ import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
@@ -22,13 +28,11 @@ import heroes.journey.tilemap.Fog;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.RenderBounds;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {
+
+    private float deltaTime = 0f;
+
     public RenderSystem(Aspect.Builder aspect) {
         super(aspect);
     }
@@ -37,7 +41,10 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     protected final void processSystem() {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
+        deltaTime += world.getDelta();
+        if (deltaTime >= 60)
+            deltaTime -= 60;
 
         SpriteBatch batch = Application.get().getBatch();
         batch.begin();
@@ -91,7 +98,7 @@ public class RenderSystem extends BaseEntitySystem {
             Application.get().getBatch().setColor(Color.WHITE);
             Application.get()
                 .getBatch()
-                .draw(render.sprite().getRender(world.getDelta()), x, y, GameCamera.get().getSize(),
+                .draw(render.sprite().getRender(deltaTime), x, y, GameCamera.get().getSize(),
                     heroes.journey.GameCamera.get().getSize());
         }
     }

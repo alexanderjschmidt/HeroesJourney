@@ -6,7 +6,7 @@ import heroes.journey.utils.art.ResourceManager.RenderableManager
 
 abstract class Renderable(id: String) : Registrable(id) {
 
-    abstract fun getRender(delta: Float): TextureRegion
+    abstract fun getRender(deltaTime: Float): TextureRegion
 
     fun getRender(): TextureRegion {
         return getRender(0f)

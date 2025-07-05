@@ -40,7 +40,7 @@ public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent
 
     public void resetTime() {
         this.timeSinceLastMove = 0f;
-        targetWaitTime = 1f + Random.get().nextFloat() * 2f;
+        targetWaitTime = 2f + Random.get().nextFloat() * 5f;
     }
 
     public boolean incrementTime(float delta) {

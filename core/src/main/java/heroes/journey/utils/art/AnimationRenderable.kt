@@ -9,16 +9,12 @@ class AnimationRenderable(
 ) : Renderable(id) {
 
     private var animation: Animation<TextureRegion>? = null
-    private var stateTime = 0f
 
-    override fun getRender(delta: Float): TextureRegion {
+    override fun getRender(deltaTime: Float): TextureRegion {
         if (animation == null) {
             animation = animationBuilder()
         }
-        stateTime += delta
-        if (stateTime > 60)
-            stateTime -= 60
-        return animation!!.getKeyFrame(stateTime)
+        return animation!!.getKeyFrame(deltaTime)
     }
 }
 
