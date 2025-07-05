@@ -37,6 +37,7 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.initializers.utils.StatsUtils;
 import heroes.journey.initializers.utils.Utils;
 import heroes.journey.systems.constantsystems.AISystem;
+import heroes.journey.systems.constantsystems.AIWanderSystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
 import heroes.journey.systems.constantsystems.MovementSystem;
 import heroes.journey.systems.constantsystems.RenderSystem;
@@ -44,7 +45,6 @@ import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
 import heroes.journey.systems.listeners.StatsActionsListener;
-import heroes.journey.systems.triggerable.AIWanderSystem;
 import heroes.journey.systems.triggerable.BuffSystem;
 import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.EventSystem;
@@ -95,13 +95,13 @@ public class GameWorld extends World {
             .with(new LocationPositionSyncSystem())
             .with(new EventSystem())
             .with(new StatsActionsListener())
-            .with(new BuffSystem())
-            .with(new AIWanderSystem());
+            .with(new BuffSystem());
         if (!limited) {
             builder.with(new RenderSystem())
                 .with(new MovementSystem())
                 .with(new ActionSystem())
-                .with(new AISystem());
+                .with(new AISystem())
+                .with(new AIWanderSystem());
         }
 
         return builder.build();

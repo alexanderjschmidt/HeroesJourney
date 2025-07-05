@@ -6,11 +6,13 @@ import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
+import heroes.journey.utils.Random;
 
 public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent> {
 
     private WanderType wanderType;
     private Position localPosition;
+    private transient float timeSinceLastMove = 0f, targetWaitTime = 0f;
 
     public static AIWanderComponent get(GameWorld world, UUID entityId) {
         return world.getEntity(AIWanderComponent.class, entityId);
@@ -20,6 +22,7 @@ public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent
     protected void reset() {
         wanderType = null;
         localPosition.reset();
+        resetTime();
     }
 
     @Override
@@ -33,6 +36,16 @@ public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent
 
     public Position getLocalPosition() {
         return localPosition;
+    }
+
+    public void resetTime() {
+        this.timeSinceLastMove = 0f;
+        targetWaitTime = 1f + Random.get().nextFloat() * 2f;
+    }
+
+    public boolean incrementTime(float delta) {
+        this.timeSinceLastMove += delta;
+        return timeSinceLastMove < targetWaitTime;
     }
 
     public AIWanderComponent setWanderType(WanderType wanderType) {
