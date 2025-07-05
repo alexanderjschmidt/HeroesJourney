@@ -25,7 +25,16 @@ public class StatsActionsListener extends IteratingSystem {
     @Override
     public void removed(int entityId) {
         GameWorld world = (GameWorld) getWorld();
-        UUID id = IdComponent.get(world, entityId);
+        
+        // Try to get the ID component - if it doesn't exist, all components are gone
+        UUID id = null;
+        try {
+            id = IdComponent.get(world, entityId);
+        } catch (Exception e) {
+            return;
+        }
+        
+        // If we have the ID, we can safely access other components
         PossibleActionsComponent actionComponent = PossibleActionsComponent.get(world, id);
         actionComponent.removeAction(BaseActions.workout);
         actionComponent.removeAction(BaseActions.study);

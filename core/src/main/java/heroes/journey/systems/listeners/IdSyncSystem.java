@@ -20,10 +20,6 @@ public class IdSyncSystem extends BaseEntitySystem {
 
     @Override
     public void removed(int entityId) {
-        // TODO make sure its target and current pos is cleared
-        GameWorld world = (GameWorld)getWorld();
-        UUID id = IdComponent.get(world, entityId);
-        world.unregister(id);
     }
 
     @Override

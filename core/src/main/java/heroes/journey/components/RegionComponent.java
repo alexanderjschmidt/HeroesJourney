@@ -1,7 +1,6 @@
 package heroes.journey.components;
 
 import static heroes.journey.registries.Registries.BiomeManager;
-import static heroes.journey.registries.Registries.ChallengeManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.Challenge;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Biome;
@@ -27,7 +25,7 @@ public class RegionComponent extends PooledClonableComponent<RegionComponent> {
     private final Set<Position> tiles = new HashSet<>();
     private final List<UUID> features = new ArrayList<>();
     public final Set<UUID> neighborRegionIds = new HashSet<>();
-    private final List<String> challenges = new ArrayList<>();
+    private final List<UUID> challenges = new ArrayList<>();
 
     public static RegionComponent get(GameWorld world, UUID entityId) {
         return world.getEntity(RegionComponent.class, entityId);
@@ -49,20 +47,16 @@ public class RegionComponent extends PooledClonableComponent<RegionComponent> {
         return features;
     }
 
-    public List<Challenge> getChallenges() {
-        return ChallengeManager.get(challenges);
+    public List<UUID> getChallenges() {
+        return challenges;
     }
 
-    public RegionComponent addChallenge(Challenge challenge) {
-        return addChallenge(challenge.getId());
+    public void removeChallenge(UUID challengeId) {
+        challenges.remove(challengeId);
     }
 
-    public void removeChallenge(Challenge challenge) {
-        challenges.remove(challenge.getId());
-    }
-
-    public RegionComponent addChallenge(String challenge) {
-        challenges.add(challenge);
+    public RegionComponent addChallenge(UUID challengeId) {
+        challenges.add(challengeId);
         return this;
     }
 

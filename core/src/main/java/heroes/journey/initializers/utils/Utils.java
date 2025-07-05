@@ -15,11 +15,6 @@ import heroes.journey.entities.items.Item;
 
 public class Utils {
 
-    // This gets the location of the entity included in the input, the entity taking action
-    public static UUID getLocation(ActionInput input) {
-        return getLocation(input.getGameState(), input.getEntityId());
-    }
-
     public static UUID getLocation(GameState gameState, UUID entityId) {
         if (entityId == null)
             return null;
@@ -68,10 +63,6 @@ public class Utils {
         return !gameState.getHistory().isEmpty() &&
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
             record.getEntity() == owner;
-    }
-
-    public static void popUp(String message) {
-
     }
 
     public static void logTime(String log, long start, long printIfLongerThan) {

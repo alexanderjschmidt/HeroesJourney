@@ -1,11 +1,11 @@
 package heroes.journey.components.character;
 
+import java.util.UUID;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.systems.GameWorld;
-
-import java.util.UUID;
 
 public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent> {
 
@@ -37,6 +37,11 @@ public class AIWanderComponent extends PooledClonableComponent<AIWanderComponent
 
     public AIWanderComponent setWanderType(WanderType wanderType) {
         this.wanderType = wanderType;
+        return this;
+    }
+
+    public AIWanderComponent setLocalPosition(Position position) {
+        this.localPosition = position;
         return this;
     }
 }

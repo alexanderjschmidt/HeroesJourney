@@ -70,7 +70,16 @@ public class ActionSystem extends IteratingSystem {
     @Override
     public void removed(int entityId) {
         GameWorld world = (GameWorld) getWorld();
-        UUID id = IdComponent.get(world, entityId);
+        
+        // Try to get the ID component - if it doesn't exist, all components are gone
+        UUID id = null;
+        try {
+            id = IdComponent.get(world, entityId);
+        } catch (Exception e) {
+            return;
+        }
+        
+        // If we have the ID, we can safely access other components
         EventQueueComponent events = EventQueueComponent.get(world, id);
         if (events != null) {
             Objects.requireNonNull(events.events().poll()).run();

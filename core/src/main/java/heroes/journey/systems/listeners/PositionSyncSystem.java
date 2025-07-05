@@ -32,9 +32,18 @@ public class PositionSyncSystem extends IteratingSystem {
     public void removed(int entityId) {
         // TODO make sure its target and current pos is cleared
         GameWorld world = (GameWorld)getWorld();
-        UUID id = IdComponent.get(world, entityId);
-        PositionComponent pos = PositionComponent.get(world, id);
 
+        // Try to get the ID component - if it doesn't exist, all components are gone
+        UUID id = null;
+        try {
+            id = IdComponent.get(world, entityId);
+        } catch (Exception e) {
+            return;
+        }
+        System.out.println(id);
+
+        // If we have the ID, we can safely access other components
+        PositionComponent pos = PositionComponent.get(world, id);
         world.getGameState().getEntities().removeEntity(id, pos.getX(), pos.getY());
         pos.sync();
         world.getGameState().getEntities().removeEntity(id, pos.getX(), pos.getY());

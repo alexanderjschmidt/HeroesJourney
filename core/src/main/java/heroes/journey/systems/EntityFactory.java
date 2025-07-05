@@ -27,6 +27,7 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
+import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.initializers.base.actions.BaseActions;
 import heroes.journey.initializers.base.actions.DelveAction;
@@ -54,24 +55,28 @@ public class EntityFactory {
         entity.create(RenderComponent.class).sprite(render);
     }
 
-    public void addMovableComponents(UUID entityId) {
-        addMovableComponents(entityId, null);
-    }
-
     public void addMovableComponents(UUID entityId, WanderType wanderType) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(ActorComponent.class);
-        if (wanderType != null)
-            entity.create(AIWanderComponent.class).setWanderType(wanderType);
+        if (wanderType != null) {
+            AIWanderComponent wander = entity.create(AIWanderComponent.class).setWanderType(wanderType);
+            if (wanderType == WanderType.Local) {
+                PositionComponent positionComponent = PositionComponent.get(world, entityId);
+                wander.setLocalPosition(
+                    new Position(positionComponent.getTargetX(), positionComponent.getTargetY()));
+            }
+        }
+
     }
 
-    public void createChallenge(Challenge challenge, int x, int y) {
+    public UUID createChallenge(Challenge challenge, int x, int y) {
         UUID entityId = createEntity();
-        addMovableComponents(entityId);
         addRenderComponents(entityId, challenge.getName(), x, y, challenge.getRender());
+        addMovableComponents(entityId, WanderType.Local);
 
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(ChallengeComponent.class).challenge(challenge);
+        return entityId;
     }
 
     public void addPlayerComponents(UUID entityId) {
@@ -92,16 +97,10 @@ public class EntityFactory {
     public UUID createRegion(int ringIndex, int ringPos) {
         UUID regionId = this.createEntity();
         EntityEdit region = world.getEntity(regionId).edit();
-        region.create(RegionComponent.class)
-            .ring(ringIndex)
-            .ringPos(ringPos)
-            .addChallenge("fight_monsters")
-            .addChallenge("exterminate_vermin")
-            .addChallenge("cure_curse")
-            .addChallenge("resolve_dispute");
+        region.create(RegionComponent.class).ring(ringIndex).ringPos(ringPos);
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
         region.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
-        region.create(PossibleActionsComponent.class).addAction(BaseActions.questBoard);
+        region.create(PossibleActionsComponent.class);
         return regionId;
     }
 

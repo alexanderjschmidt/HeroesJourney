@@ -15,7 +15,6 @@ import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.registries.Registries
-import heroes.journey.registries.Registries.ChallengeManager
 import heroes.journey.registries.Registries.QuestManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
@@ -168,7 +167,7 @@ class BaseActions : InitializerInterface {
             name = "Face Challenge"
             description = "Face down a challenge to prove your legend to the realm."
             inputDisplayNameFn = { input ->
-                ChallengeManager[input["target"]]!!.getName()
+                NamedComponent.get(GameState.global().world, UUID.fromString(input["target"]), "---")
             }
             onSelectFn = { input ->
                 val regionId = Utils.getRegion(input)
@@ -177,15 +176,20 @@ class BaseActions : InitializerInterface {
                     regionId
                 )
 
-                val challenge: Challenge = ChallengeManager[input["target"]]!!
+                val challengeEntityId = UUID.fromString(input["target"])
+                val challengeComponent: ChallengeComponent =
+                    ChallengeComponent.get(input.gameState.world, challengeEntityId)
+                val challenge: Challenge = challengeComponent.challenge()
                 if (regionComponent != null) {
-                    regionComponent.removeChallenge(challenge)
-                    StatsComponent.get(input.gameState.world, input.entityId).merge(challenge.reward)
+                    regionComponent.removeChallenge(challengeEntityId)
+                    input.gameState.world.delete(challengeEntityId)
+                    StatsComponent.get(input.gameState.world, input.entityId)
+                        .merge(challenge.reward)
                 }
                 EndTurnResult()
             }
         }.register()
-        faceChallenges = targetAction<Challenge> {
+        faceChallenges = targetAction<UUID> {
             id = "face_challenges"
             name = "Face Challenges"
             description = "See what challenges you can face"
@@ -212,7 +216,7 @@ class BaseActions : InitializerInterface {
         var faceChallenge: Action? = null
 
         @JvmField
-        var faceChallenges: TargetAction<Challenge>? = null
+        var faceChallenges: TargetAction<UUID>? = null
 
         @JvmField
         var study: CooldownAction? = null

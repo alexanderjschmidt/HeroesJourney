@@ -15,6 +15,7 @@ import com.artemis.Aspect;
 import com.artemis.AspectSubscriptionManager;
 import com.artemis.BaseSystem;
 import com.artemis.Component;
+import com.artemis.Entity;
 import com.artemis.EntityEdit;
 import com.artemis.EntitySubscription;
 import com.artemis.World;
@@ -23,6 +24,7 @@ import com.artemis.WorldConfigurationBuilder;
 import com.artemis.io.KryoArtemisSerializer;
 import com.artemis.io.SaveFileFormat;
 import com.artemis.managers.WorldSerializationManager;
+import com.artemis.systems.IteratingSystem;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -251,6 +253,51 @@ public class GameWorld extends World {
             System.out.println(entityMap);
             throw e;
         }
+    }
+
+    public void delete(UUID entityId) {
+        Integer internalId = get(entityId);
+        if (internalId == null) {
+            // Entity doesn't exist, nothing to do
+            return;
+        }
+
+        // Call removed methods on all systems before deletion
+        Entity e = callSystemRemovedMethods(entityId);
+
+        // Now delete the entity
+        e.edit().remove(IdComponent.class);
+        this.delete(internalId);
+        entityMap.remove(entityId);
+    }
+
+    /**
+     * Calls the removed method on all systems that have one, before the entity is actually deleted.
+     * This allows systems to access components that will be removed during deletion.
+     */
+    private Entity callSystemRemovedMethods(UUID entityId) {
+        Entity e = this.getEntity(entityId);
+
+        // Create an IntBag with just this entity ID
+        IntBag entities = new IntBag();
+        entities.add(e.getId());
+
+        for (BaseSystem system : getSystems()) {
+            if (system instanceof IteratingSystem iteratingSystem) {
+                // Check if the entity matches the system's aspect
+                if (iteratingSystem.getSubscription().getAspect().isInterested(e)) {
+                    try {
+                        iteratingSystem.removed(entities);
+                    } catch (Exception exception) {
+                        // Log any errors but don't fail the deletion
+                        System.err.println(
+                            "Error calling removed method on " + system.getClass().getSimpleName() + ": " +
+                                exception.getMessage());
+                    }
+                }
+            }
+        }
+        return e;
     }
 
     public com.artemis.Entity getEntity(UUID entityId) {
