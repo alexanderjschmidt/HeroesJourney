@@ -1,7 +1,17 @@
 package heroes.journey;
 
+import static heroes.journey.utils.serializers.Serializers.jsonGameState;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
+
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.AITurnComponent;
@@ -15,6 +25,9 @@ import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.entities.tagging.Group;
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
@@ -25,16 +38,12 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
 import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.serializers.*;
-
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.utils.serializers.Serializers.jsonGameState;
+import heroes.journey.utils.serializers.ActionRecordSerializer;
+import heroes.journey.utils.serializers.GameStateSaveDataSerializer;
+import heroes.journey.utils.serializers.PlayerInfoSerializer;
+import heroes.journey.utils.serializers.PositionSerializer;
+import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
+import heroes.journey.utils.serializers.UUIDSerializer;
 
 public class GameState implements Cloneable {
 
@@ -48,6 +57,8 @@ public class GameState implements Cloneable {
     private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
+    private Attributes realmsAttention, realmsAttentionBase;
+    private MapData mapData;
 
     private GameState() {
         entitiesInActionOrder = new ArrayList<>();
@@ -66,11 +77,17 @@ public class GameState implements Cloneable {
             world.getEntityManager().reset();
         world = GameWorld.initGameWorld(this);
 
+        this.mapData = mapData;
         this.width = mapData.getMapSize();
         this.height = mapData.getMapSize();
         map = new TileMap(width);
         entities = new EntityManager(width, height);
         history = new History();
+        realmsAttention = new Attributes();
+        realmsAttentionBase = new Attributes();
+        for (Stat renown : Stat.getByGroup(Group.Renown)) {
+            realmsAttentionBase.put(renown, mapData.getRealmAttentionBase());
+        }
 
         HUDEffectManager.get();
         WorldEffectManager.get();
@@ -94,6 +111,9 @@ public class GameState implements Cloneable {
         //Utils.logTime("clone after map", start, 200);
         clone.turn = turn;
         clone.currentEntity = currentEntity;
+        clone.mapData = mapData;
+        clone.realmsAttention = new Attributes(realmsAttention);
+        clone.realmsAttentionBase = new Attributes(realmsAttentionBase);
         return clone;
     }
 
@@ -139,6 +159,8 @@ public class GameState implements Cloneable {
                 IdComponent.class);
             turn++;
             world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
+            realmsAttention.clear();
+            realmsAttention.putAll(realmsAttentionBase);
         }
         return entitiesInActionOrder.removeFirst();
     }
@@ -272,5 +294,13 @@ public class GameState implements Cloneable {
 
     public UUID getCurrentEntity() {
         return this.currentEntity;
+    }
+
+    public Attributes getRealmsAttention() {
+        return this.realmsAttention;
+    }
+
+    public MapData getMapData() {
+        return this.mapData;
     }
 }

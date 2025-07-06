@@ -11,6 +11,7 @@ import heroes.journey.entities.actions.results.ActionListResult
 import heroes.journey.entities.actions.results.EndTurnResult
 import heroes.journey.entities.actions.results.NullResult
 import heroes.journey.entities.actions.results.StringResult
+import heroes.journey.entities.tagging.Attributes
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
 import heroes.journey.initializers.utils.Utils
@@ -183,8 +184,22 @@ class BaseActions : InitializerInterface {
                 if (regionComponent != null) {
                     regionComponent.removeChallenge(challengeEntityId)
                     input.gameState.world.delete(challengeEntityId)
-                    StatsComponent.get(input.gameState.world, input.entityId)
-                        .merge(challenge.reward)
+
+                    val stats: Attributes = StatsComponent.get(input.gameState.world, input.entityId)
+                    val realmAttention = input.gameState.getRealmsAttention()
+                    
+                    // Check if the realm has enough attention for each reward attribute
+                    // For every reward attribute gained, subtract one from the realm's attention (down to 0)
+                    // If the realm doesn't have enough attention, the player can still gain that part of the reward
+                    challenge.reward.forEach { (stat, rewardValue) ->
+                        val currentRealmAttention = realmAttention.get(stat)
+                        val actualReward = minOf(rewardValue, currentRealmAttention)
+                        
+                        if (actualReward > 0) {
+                            stats.add(stat, actualReward)
+                            realmAttention.put(stat, currentRealmAttention - actualReward)
+                        }
+                    }
                 }
                 EndTurnResult()
             }

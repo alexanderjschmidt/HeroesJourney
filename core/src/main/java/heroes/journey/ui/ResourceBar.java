@@ -45,4 +45,10 @@ public class ResourceBar extends Stack {
         this.maxVal = Stat.getById(tagId).getMax();
         resource.setText(currentVal + "/" + maxVal);
     }
+
+    public void update(Attributes stats, String tagId, int customMaxVal) {
+        this.currentVal = stats.get(Stat.getById(tagId));
+        this.maxVal = customMaxVal;
+        resource.setText(currentVal + "/" + maxVal);
+    }
 }

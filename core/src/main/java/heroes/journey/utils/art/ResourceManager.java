@@ -25,7 +25,7 @@ public class ResourceManager extends AssetManager {
 
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
-    public BitmapFont font12;
+    public BitmapFont font18;
     public BitmapFont font24;
     public BitmapFont font36;
     public BitmapFont font72;
@@ -119,7 +119,7 @@ public class ResourceManager extends AssetManager {
     public void dispose() {
         super.dispose();
         generator.dispose();
-        font12.dispose();
+        font18.dispose();
         font24.dispose();
         font36.dispose();
         font72.dispose();
@@ -138,7 +138,7 @@ public class ResourceManager extends AssetManager {
         finishLoadingAsset("skin/" + skinName + "/" + skinName + ".atlas");
         skin = new Skin();
         skin.addRegions(get("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class));
-        skin.add("default-font", font24);
+        skin.add("default-font", font18);
         skin.add("title", font72);
         skin.load(Gdx.files.internal("skin/" + skinName + "/" + skinName + ".json"));
     }
@@ -149,8 +149,8 @@ public class ResourceManager extends AssetManager {
 
         parameter.color = Color.WHITE;
 
-        parameter.size = 12;
-        font12 = generator.generateFont(parameter);
+        parameter.size = 18;
+        font18 = generator.generateFont(parameter);
         parameter.size = 24;
         font24 = generator.generateFont(parameter);
         parameter.size = 36;

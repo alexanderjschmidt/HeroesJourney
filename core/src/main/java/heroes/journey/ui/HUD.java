@@ -17,6 +17,7 @@ import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.ui.windows.EntityUI;
 import heroes.journey.ui.windows.InfoUI;
 import heroes.journey.ui.windows.PopupUI;
+import heroes.journey.ui.windows.RealmAttentionUI;
 import heroes.journey.ui.windows.StatsUI;
 import heroes.journey.ui.windows.TerrainUI;
 import heroes.journey.ui.windows.TurnUI;
@@ -37,6 +38,7 @@ public class HUD extends Stage {
     private final TerrainUI terrainUI;
     private final EntityUI entityUI;
     private final TurnUI turnUI;
+    private final RealmAttentionUI realmAttentionUI;
 
     // TODO move this into its own center screen class
     private final Cell<?> centerWindow;
@@ -66,6 +68,7 @@ public class HUD extends Stage {
         terrainUI = new TerrainUI();
         entityUI = new EntityUI();
         turnUI = new TurnUI();
+        realmAttentionUI = new RealmAttentionUI();
         statsUI = new StatsUI();
         popupUI = new PopupUI();
 
@@ -100,6 +103,8 @@ public class HUD extends Stage {
         leftCol.clearChildren();
         leftCol.defaults().expandX().fill();
         leftCol.add(turnUI).height(Value.percentHeight(.075f, leftCol)).padBottom(2.5f).top();
+        leftCol.row();
+        leftCol.add(realmAttentionUI).height(Value.percentHeight(.175f, leftCol)).padBottom(2.5f).top();
         leftCol.row();
         leftCol.add().expandY();
         leftCol.row();
@@ -188,6 +193,10 @@ public class HUD extends Stage {
 
     public EntityUI getEntityUI() {
         return this.entityUI;
+    }
+
+    public RealmAttentionUI getRealmAttentionUI() {
+        return this.realmAttentionUI;
     }
 
     public StatsUI getStatsUI() {

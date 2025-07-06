@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
-
 public class Attributes extends HashMap<Stat,Integer> {
 
     public Attributes() {
@@ -27,8 +25,6 @@ public class Attributes extends HashMap<Stat,Integer> {
             return super.get(stat);
         }
     }
-
-
 
     public Attributes add(Stat stat, Integer value) {
         return put(stat, value, Operation.ADD);
