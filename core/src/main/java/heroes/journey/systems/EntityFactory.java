@@ -80,9 +80,10 @@ public class EntityFactory {
     public void addPlayerComponents(UUID entityId) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
-            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("rest"))
-            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("travel"))
-            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("face_challenges"));
+            .addAction(Registries.ActionManager.get("rest"))
+            .addAction(Registries.ActionManager.get("travel"))
+            .addAction(Registries.ActionManager.get("face_challenges"))
+            .addAction(Registries.ActionManager.get("training"));
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
@@ -122,7 +123,7 @@ public class EntityFactory {
             DUNGEON_SPRITE);
 
         EntityEdit dungeon = world.getEntity(dungeonId).edit();
-        dungeon.create(PossibleActionsComponent.class).addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("delve"));
+        dungeon.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get("delve"));
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
         return dungeonId;

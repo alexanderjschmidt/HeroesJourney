@@ -41,4 +41,20 @@ public class StatsUtils {
         return new StringResult("Successful Study! Gain 1 Mind");
     }
 
+    public static StringResult adjustMagic(GameState gameState, UUID entityId, int count) {
+        Attributes statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
+        if (statsComponent == null)
+            return null;
+        statsComponent.add(Stat.MAGIC, count);
+        return new StringResult("Successful Practice! Gain 1 Magic");
+    }
+
+    public static StringResult adjustCharisma(GameState gameState, UUID entityId, int count) {
+        Attributes statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
+        if (statsComponent == null)
+            return null;
+        statsComponent.add(Stat.CHARISMA, count);
+        return new StringResult("Successful Socializing! Gain 1 Charisma");
+    }
+
 }

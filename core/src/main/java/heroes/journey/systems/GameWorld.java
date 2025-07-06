@@ -44,7 +44,6 @@ import heroes.journey.systems.constantsystems.RenderSystem;
 import heroes.journey.systems.listeners.IdSyncSystem;
 import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
-import heroes.journey.systems.listeners.StatsActionsListener;
 import heroes.journey.systems.triggerable.BuffSystem;
 import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.EventSystem;
@@ -94,7 +93,6 @@ public class GameWorld extends World {
             .with(new PositionSyncSystem())
             .with(new LocationPositionSyncSystem())
             .with(new EventSystem())
-            .with(new StatsActionsListener())
             .with(new BuffSystem());
         if (!limited) {
             builder.with(new RenderSystem())

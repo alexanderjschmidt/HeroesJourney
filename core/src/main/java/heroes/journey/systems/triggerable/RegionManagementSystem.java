@@ -45,19 +45,21 @@ public class RegionManagementSystem extends TriggerableSystem {
         // Challenge management: Add random challenges if less than 3
         while (challenges.size() < 3) {
             String randomChallengeId = Registries.ChallengeManager.keySet()
-                .toArray(new String[0])[Random.get().nextInt(Registries.ChallengeManager.size())];
+                .toArray(new String[0])[Random.get().nextInt(Registries.ChallengeManager.size() - 1)];
             Challenge randomChallenge = Registries.ChallengeManager.get(randomChallengeId);
             Set<Position> regionTiles = regionComponent.getTiles();
-            
+
             // Find a random position from the region tiles
             // TODO make this use poison disk sampling so the new challenge is far away from existing entities
             Position[] tilesArray = regionTiles.toArray(new Position[0]);
             Position randomPosition = tilesArray[Random.get().nextInt(tilesArray.length)];
-            
-            UUID challengeEntityId = world.getEntityFactory().createChallenge(randomChallenge, randomPosition.getX(), randomPosition.getY());
+
+            UUID challengeEntityId = world.getEntityFactory()
+                .createChallenge(randomChallenge, randomPosition.getX(), randomPosition.getY());
             regionComponent.addChallenge(challengeEntityId);
             System.out.println(
-                "Added random challenge '" + randomChallenge.getName() + "' to region " + regionId + " at position (" + randomPosition.getX() + ", " + randomPosition.getY() + ")");
+                "Added random challenge '" + randomChallenge.getName() + "' to region " + regionId +
+                    " at position (" + randomPosition.getX() + ", " + randomPosition.getY() + ")");
             // Refresh the challenges list after adding a new challenge
             challenges = regionComponent.getChallenges();
         }

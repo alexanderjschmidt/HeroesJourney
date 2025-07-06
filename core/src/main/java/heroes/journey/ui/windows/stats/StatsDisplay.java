@@ -18,27 +18,24 @@ import java.util.UUID;
 public class StatsDisplay extends Table {
 
     private UUID entityId;
-    private final Label health, mana, stamina;
-    private final Label body, mind, fame;
+    private final Label body, mind, magic, charisma, fame;
     private final Image character;
 
     public StatsDisplay() {
         Label title = new Label("===== Stats =====", ResourceManager.get().skin);
-        health = new Label("", ResourceManager.get().skin);
-        mana = new Label("", ResourceManager.get().skin);
-        stamina = new Label("", ResourceManager.get().skin);
         body = new Label("", ResourceManager.get().skin);
         mind = new Label("", ResourceManager.get().skin);
+        magic = new Label("", ResourceManager.get().skin);
+        charisma = new Label("", ResourceManager.get().skin);
         fame = new Label("", ResourceManager.get().skin);
         character = new Image();
 
         this.defaults().fill().expandX().left().pad(2.5f);
         this.add(title).row();
-        this.add(health).row();
-        this.add(mana).row();
-        this.add(stamina).row();
         this.add(body).row();
         this.add(mind).row();
+        this.add(magic).row();
+        this.add(charisma).row();
         this.add(fame).row();
         this.add().expandY().row();
         this.add(character).row();
@@ -51,6 +48,8 @@ public class StatsDisplay extends Table {
         assert statsComponent != null;
         body.setText("Body: " + statsComponent.get(Stat.BODY));
         mind.setText("Mind: " + statsComponent.get(Stat.MIND));
+        magic.setText("Magic: " + statsComponent.get(Stat.MAGIC));
+        charisma.setText("Charisma: " + statsComponent.get(Stat.CHARISMA));
         fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
     }
 

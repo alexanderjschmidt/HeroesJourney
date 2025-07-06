@@ -1,18 +1,17 @@
 import heroes.journey.Application
-import heroes.journey.GameState
 import heroes.journey.components.BuffsComponent
+import heroes.journey.components.StatsComponent
 import heroes.journey.components.character.ActionComponent
-import heroes.journey.entities.actions.*
-import heroes.journey.entities.actions.results.ActionListResult
-import heroes.journey.entities.actions.results.EndTurnResult
-import heroes.journey.entities.actions.results.NullResult
-import heroes.journey.entities.actions.results.StringResult
+import heroes.journey.entities.actions.ShowAction
+import heroes.journey.entities.actions.TeamActions
+import heroes.journey.entities.actions.action
+import heroes.journey.entities.actions.results.*
+import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.utils.StatsUtils
 import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
-import heroes.journey.entities.actions.TeamActions
 
 // Core Actions - included by basegame mod
 
@@ -95,26 +94,106 @@ action {
     }
 }.register()
 
-// Workout
-cooldownAction {
-    id = "workout"
-    name = "Work out"
-    description = "Lift weights, gain body"
-    turnCooldown = 1
-    factionCooldown = false
+object TrainingOptions {
+    val optionsList: MutableList<heroes.journey.entities.actions.Action> = ArrayList(4)
+    fun addOption(option: heroes.journey.entities.actions.Action) {
+        optionsList.add(option)
+    }
+}
+
+// Workout Training Option
+action {
+    id = "workout_training"
+    name = "Workout"
+    description = "Intensive physical training to increase BODY (Cost: 5 VALOR)"
+    requirementsMetFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        if (stats.get(Stat.VALOR) >= 5) {
+            ShowAction.YES
+        } else {
+            ShowAction.GRAYED
+        }
+    }
     onSelectFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        stats.add(Stat.VALOR, -5)
         StatsUtils.adjustBody(input.gameState, input.entityId, 1)
+        StringResult("You completed an intense workout! BODY +1")
+    }
+}.register().also { TrainingOptions.addOption(it) }
+
+// Study Training Option
+action {
+    id = "study_training"
+    name = "Study"
+    description = "Intensive mental training to increase MIND (Cost: 5 INSIGHT)"
+    requirementsMetFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        if (stats.get(Stat.INSIGHT) >= 5) {
+            ShowAction.YES
+        } else {
+            ShowAction.GRAYED
+        }
+    }
+    onSelectFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        stats.add(Stat.INSIGHT, -5)
+        StatsUtils.adjustMind(input.gameState, input.entityId, 1)
+        StringResult("You completed intensive study! MIND +1")
+    }
+}.register().also { TrainingOptions.addOption(it) }
+
+// Practice Training Option
+action {
+    id = "practice_training"
+    name = "Practice"
+    description = "Intensive magical training to increase MAGIC (Cost: 5 ARCANUM)"
+    requirementsMetFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        if (stats.get(Stat.ARCANUM) >= 5) {
+            ShowAction.YES
+        } else {
+            ShowAction.GRAYED
+        }
+    }
+    onSelectFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        stats.add(Stat.ARCANUM, -5)
+        StatsUtils.adjustMagic(input.gameState, input.entityId, 1)
+        StringResult("You completed magical practice! MAGIC +1")
+    }
+}.register().also { TrainingOptions.addOption(it) }
+
+// Socialize Training Option
+action {
+    id = "socialize_training"
+    name = "Socialize"
+    description = "Intensive social training to increase CHARISMA (Cost: 5 INFLUENCE)"
+    requirementsMetFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        if (stats.get(Stat.INFLUENCE) >= 5) {
+            ShowAction.YES
+        } else {
+            ShowAction.GRAYED
+        }
+    }
+    onSelectFn = { input ->
+        val stats = StatsComponent.get(input.gameState.world, input.entityId)
+        stats.add(Stat.INFLUENCE, -5)
+        StatsUtils.adjustCharisma(input.gameState, input.entityId, 1)
+        StringResult("You completed social training! CHARISMA +1")
+    }
+}.register().also { TrainingOptions.addOption(it) }
+
+// Main Training Action
+action {
+    id = "training"
+    name = "Training"
+    description = "Intensive training to improve your base stats"
+    isReturnsActionList = true
+    onSelectFn = { input ->
+        ActionListResult(TrainingOptions.optionsList.map { action ->
+            heroes.journey.entities.actions.ActionEntry(action.id, emptyMap())
+        })
     }
 }.register()
-
-// Study
-cooldownAction {
-    id = "study"
-    name = "Study"
-    description = "Expand your mind, increasing your potential"
-    turnCooldown = 2
-    factionCooldown = false
-    onSelectFn = { input ->
-        StatsUtils.adjustMind(input.gameState, input.entityId, 1)
-    }
-}.register() 
