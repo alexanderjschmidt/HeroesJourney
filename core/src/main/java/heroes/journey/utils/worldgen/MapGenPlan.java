@@ -24,7 +24,6 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.initializers.base.Ids;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.registries.TileManager;
@@ -40,7 +39,7 @@ import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
-public class MapGenPlan implements InitializerInterface {
+public class MapGenPlan {
 
     public static int MAP_SIZE = 100;
     // Kingdoms
@@ -48,7 +47,6 @@ public class MapGenPlan implements InitializerInterface {
 
     public static FeatureType KINGDOM, TOWN, DUNGEON, MINE;
 
-    @Override
     public void init() {
         // feature types
         KINGDOM = new FeatureType("kingdom", "Kingdom") {

@@ -5,5 +5,4 @@ class FeatureGenerationData(
     val minDist: Int = 2,
     val minInRegion: Int = 0,
     val maxInRegion: Int = 1
-) {
-}
+)

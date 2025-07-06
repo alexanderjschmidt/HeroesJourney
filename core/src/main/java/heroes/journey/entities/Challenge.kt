@@ -13,7 +13,6 @@ class Challenge(
     val description: String,
     val render: String,
     val approaches: Array<Stat>,
-    val reward: Attributes
 ) : Registrable(id, nameInternal) {
     override fun register(): Challenge {
         return Registries.ChallengeManager.register(this)
@@ -42,7 +41,6 @@ class ChallengeBuilder(private val id: String) {
             description = description,
             render = render,
             approaches = approachTags.toTypedArray(),
-            reward = rewardAttributes
         )
     }
 }

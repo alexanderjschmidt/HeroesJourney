@@ -40,6 +40,7 @@ public class BattleScreen implements Screen {
         this.client = new GameClient();
         this.lightManager = new LightManager();
         this.debugRenderer = new DebugRenderer();
+        new MapGenPlan().init();
         Initializer.init();
     }
 

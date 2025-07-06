@@ -24,6 +24,8 @@ import heroes.journey.ui.windows.TurnUI;
 
 public class HUD extends Stage {
 
+    public static boolean isReverting = false;
+
     public static final int FONT_SIZE = 24;
 
     private final Cursor cursor;
@@ -168,8 +170,10 @@ public class HUD extends Stage {
             popupState.resetOnClose();
             return;
         }
+        isReverting = true;
         while (stateMachine.revertToPreviousState()) {
         }
+        isReverting = false;
         if (LoadOptions.debugOption.isTrue()) {
             System.out.println("reset to " + stateMachine.getCurrentState());
         }

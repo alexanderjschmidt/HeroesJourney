@@ -38,6 +38,9 @@ public class ActionSelectState extends HUDState {
 
     @Override
     public void enter(HUD hud) {
+        if (HUD.isReverting) {
+            return;
+        }
         hud.getActionMenu().setVisible(true);
         hud.getActionDetailedUI().setVisible(true);
         HUD.get().getActionMenu().open(options);

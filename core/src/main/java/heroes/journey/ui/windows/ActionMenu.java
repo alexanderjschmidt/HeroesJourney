@@ -99,7 +99,7 @@ public class ActionMenu extends UI {
         public void select() {
             ActionEntry action = getSelected().entry();
             UUID selectedEntity = HUD.get().getCursor().getSelected();
-            System.out.println("Selected " + action + " " + selectedEntity);
+            System.out.println("Selected " + action + " " + selectedEntity + " " + action.getInput());
             if (selectedEntity != null) {
                 GameState.global()
                     .getWorld()

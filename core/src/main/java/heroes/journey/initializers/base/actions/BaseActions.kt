@@ -12,6 +12,7 @@ import heroes.journey.entities.actions.results.EndTurnResult
 import heroes.journey.entities.actions.results.NullResult
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.entities.tagging.Attributes
+import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.InitializerInterface
 import heroes.journey.initializers.utils.StatsUtils
 import heroes.journey.initializers.utils.Utils
@@ -163,12 +164,12 @@ class BaseActions : InitializerInterface {
             targetAction = quest!!.id
         }.register()
 
-        faceChallenge = action {
-            id = "face_challenge"
-            name = "Face Challenge"
-            description = "Face down a challenge to prove your legend to the realm."
+        chooseApproach = action {
+            id = "choose_approach"
+            name = "Choose Approach"
+            description = "Select an approach to handle the challenge."
             inputDisplayNameFn = { input ->
-                NamedComponent.get(GameState.global().world, UUID.fromString(input["target"]), "---")
+                Stat.valueOf(input["target"]!!).name
             }
             onSelectFn = { input ->
                 val regionId = Utils.getRegion(input)
@@ -176,33 +177,55 @@ class BaseActions : InitializerInterface {
                     input.gameState.world,
                     regionId
                 )
-
-                val challengeEntityId = UUID.fromString(input["target"])
-                val challengeComponent: ChallengeComponent =
-                    ChallengeComponent.get(input.gameState.world, challengeEntityId)
-                val challenge: Challenge = challengeComponent.challenge()
+                val approach: Stat = Stat.valueOf(input["target"]!!)
+                val challengeEntityId = UUID.fromString(input["challenge"])
                 if (regionComponent != null) {
                     regionComponent.removeChallenge(challengeEntityId)
                     input.gameState.world.delete(challengeEntityId)
 
                     val stats: Attributes = StatsComponent.get(input.gameState.world, input.entityId)
                     val realmAttention = input.gameState.getRealmsAttention()
-                    
-                    // Check if the realm has enough attention for each reward attribute
-                    // For every reward attribute gained, subtract one from the realm's attention (down to 0)
-                    // If the realm doesn't have enough attention, the player can still gain that part of the reward
-                    challenge.reward.forEach { (stat, rewardValue) ->
-                        val currentRealmAttention = realmAttention.get(stat)
-                        val actualReward = minOf(rewardValue, currentRealmAttention)
-                        
+
+                    // Reward: 1 renown per base stat part in the chosen approach, limited by realm attention
+                    val baseToRenown = mapOf(
+                        Stat.BODY to Stat.VALOR,
+                        Stat.MIND to Stat.INSIGHT,
+                        Stat.MAGIC to Stat.ARCANUM,
+                        Stat.CHARISMA to Stat.INFLUENCE
+                    )
+                    val partCounts = mutableMapOf<Stat, Int>()
+                    approach.getParts().forEach { (baseStat, count) ->
+                        partCounts[baseStat] = count
+                    }
+                    for ((baseStat, count) in partCounts) {
+                        val renownStat = baseToRenown[baseStat] ?: continue
+                        val currentRealmAttention = realmAttention.get(renownStat)
+                        val actualReward = minOf(count, currentRealmAttention)
                         if (actualReward > 0) {
-                            stats.add(stat, actualReward)
-                            realmAttention.put(stat, currentRealmAttention - actualReward)
+                            stats.add(renownStat, actualReward)
+                            realmAttention.put(renownStat, currentRealmAttention - actualReward)
                         }
                     }
                 }
                 EndTurnResult()
             }
+        }.register()
+        faceChallenge = targetAction<Stat> {
+            id = "face_challenge"
+            name = "Face Challenge"
+            description = "Face down a challenge to prove your legend to the realm."
+            inputDisplayNameFn = { input ->
+                NamedComponent.get(GameState.global().world, UUID.fromString(input["target"]), "---")
+            }
+            getTargets = { input ->
+                input["challenge"] = input["target"]!!
+                val challengeEntityId = UUID.fromString(input["target"])
+                val challengeComponent: ChallengeComponent =
+                    ChallengeComponent.get(input.gameState.world, challengeEntityId)
+                val challenge: Challenge = challengeComponent.challenge()
+                challenge.approaches.toList()
+            }
+            targetAction = chooseApproach!!.id
         }.register()
         faceChallenges = targetAction<UUID> {
             id = "face_challenges"
@@ -228,7 +251,9 @@ class BaseActions : InitializerInterface {
         @JvmField
         var workout: CooldownAction? = null
 
-        var faceChallenge: Action? = null
+        var chooseApproach: Action? = null
+
+        var faceChallenge: TargetAction<Stat>? = null
 
         @JvmField
         var faceChallenges: TargetAction<UUID>? = null

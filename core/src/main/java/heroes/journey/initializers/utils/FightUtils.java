@@ -9,12 +9,15 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Operation;
 import heroes.journey.entities.tagging.Stat;
-import heroes.journey.entities.tagging.Stat;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {
 
-    public static boolean struggle(GameState gameState, UUID challenger, UUID challenged, Stat challengeType) {
+    public static boolean struggle(
+        GameState gameState,
+        UUID challenger,
+        UUID challenged,
+        Stat challengeType) {
         GameWorld world = gameState.getWorld();
 
         Attributes damages = getEquipmentStats(world, challenger);
