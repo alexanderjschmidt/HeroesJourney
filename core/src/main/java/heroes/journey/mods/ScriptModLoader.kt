@@ -12,7 +12,7 @@ import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 
 object ScriptModLoader {
-    fun loadModsFrom(folder: File): List<GameMod> {
+    fun loadModsFrom(folder: File, debug: Boolean = true): List<GameMod> {
         val compilationConfig = ScriptCompilationConfiguration {
             jvm {
                 dependenciesFromCurrentContext(wholeClasspath = true)
@@ -26,24 +26,60 @@ object ScriptModLoader {
         }
 
         val scriptingHost = BasicJvmScriptingHost()
-        val mods = mutableListOf<GameMod>()
+        var mods = mutableListOf<GameMod>()
 
-        folder.walkTopDown().filter { it.extension == "kts" }.forEach { scriptFile ->
-            val result = scriptingHost.eval(scriptFile.toScriptSource(), compilationConfig, evaluationConfig)
-            result.reports
-                .filter { it.severity.name != "DEBUG" }
-                .forEach {
-                    println("[${it.severity}] ${it.message}")
+        for (scriptFile in folder.walkTopDown().filter { it.extension == "kts" }) {
+            if (debug) println("\n=== Finding mod from: ${scriptFile.name} ===")
+            try {
+                val result =
+                    scriptingHost.eval(scriptFile.toScriptSource(), compilationConfig, evaluationConfig)
+                // Log all reports (errors, warnings, etc.)
+                if (result.reports.isNotEmpty()) {
+                    if (debug) println("Script reports:")
+                    result.reports.forEach { report ->
+                        val isError = report.severity.name == "ERROR"
+                        if (debug || isError) {
+                            println("  [${report.severity}] ${report.message}")
+                            if (report.location != null) {
+                                println("    Location: ${report.location}")
+                            }
+                            if (report.exception != null) {
+                                println("    Exception: ${report.exception}")
+                                report.exception!!.printStackTrace()
+                            }
+                        }
+                    }
                 }
 
-            val returnValue = (result.valueOrNull()?.returnValue as? ResultValue.Value)?.value
-            if (returnValue is GameMod) {
-                mods.add(returnValue)
-            } else {
-                println("Invalid mod in ${scriptFile.name}")
+                val returnValue = (result.valueOrNull()?.returnValue as? ResultValue.Value)?.value
+                if (returnValue == null) {
+                    println("ERROR: No return value found in ${scriptFile.name}")
+                    println("  Expected: A GameMod object returned directly from the script")
+                    println("  Actual: null")
+                    continue
+                }
+                if (debug) println("Found return value of type: ${returnValue::class.simpleName}")
+                if (returnValue is GameMod) {
+                    mods.add(returnValue)
+                    if (debug) println("SUCCESS: Added mod '${returnValue.name}' from ${scriptFile.name}")
+                } else {
+                    println("ERROR: Return value in ${scriptFile.name} is not a GameMod")
+                    println("  Return value type: ${returnValue::class.simpleName}")
+                    println("  Return value: $returnValue")
+                    println("  Expected: A GameMod object returned directly from the script")
+                }
+            } catch (e: Exception) {
+                println("ERROR: Exception while loading ${scriptFile.name}")
+                println("  Exception: ${e.message}")
+                e.printStackTrace()
             }
         }
-
-        return mods.stream().sorted().toList()
+        println("\n=== Mod Finding Summary ===")
+        println("Successfully found ${mods.size} mod(s):")
+        mods = mods.sortedDescending().stream().toList()
+        mods.forEach { mod ->
+            println("  - ${mod.name} (priority: ${mod.priority})")
+        }
+        return mods
     }
 }

@@ -29,9 +29,7 @@ import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.base.Tiles;
-import heroes.journey.initializers.base.actions.BaseActions;
-import heroes.journey.initializers.base.actions.DelveAction;
-import heroes.journey.initializers.base.actions.TravelActions;
+import heroes.journey.registries.Registries;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 
@@ -82,9 +80,9 @@ public class EntityFactory {
     public void addPlayerComponents(UUID entityId) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
-            .addAction(BaseActions.rest)
-            .addAction(TravelActions.travel)
-            .addAction(BaseActions.faceChallenges);
+            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("rest"))
+            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("travel"))
+            .addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("face_challenges"));
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
@@ -124,7 +122,7 @@ public class EntityFactory {
             DUNGEON_SPRITE);
 
         EntityEdit dungeon = world.getEntity(dungeonId).edit();
-        dungeon.create(PossibleActionsComponent.class).addAction(DelveAction.delve);
+        dungeon.create(PossibleActionsComponent.class).addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("delve"));
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
         return dungeonId;

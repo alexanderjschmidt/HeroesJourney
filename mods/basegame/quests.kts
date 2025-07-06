@@ -1,10 +1,6 @@
 import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.ActionInput
-import heroes.journey.entities.challenge
-import heroes.journey.initializers.base.Ids.*
-import heroes.journey.initializers.base.actions.DelveAction
-import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.utils.Utils
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.Registries
@@ -21,7 +17,7 @@ gameMod("Base Game Quests and Buffs", 1) {
         { input: ActionInput ->
             Utils.justCompletedAction(
                 input.gameState, input.entityId,
-                DelveAction.delve
+                "delve"
             )
         }, 10
     ).register()

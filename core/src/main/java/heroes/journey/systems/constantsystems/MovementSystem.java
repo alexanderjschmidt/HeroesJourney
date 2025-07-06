@@ -8,7 +8,7 @@ import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.initializers.base.actions.LoadOptions;
+import heroes.journey.registries.Registries;
 import heroes.journey.systems.GameWorld;
 
 import java.util.Objects;
@@ -61,9 +61,9 @@ public class MovementSystem extends IteratingSystem {
         ActorComponent actor,
         MovementComponent movement) {
         if (movement.hasPath() && actor != null && !actor.hasActions()) {
-            if (LoadOptions.debugOption.isTrue()) {
-                System.out.println("Moving " + movement.path());
-            }
+                    if (((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get("debug")).isTrue()) {
+            System.out.println("Moving " + movement.path());
+        }
             //TODO Make duration based on move speed
             actor.addAction(Actions.sequence(
                 Actions.moveTo(movement.path().x - position.getX(), movement.path().y - position.getY(), .2f),
@@ -82,7 +82,7 @@ public class MovementSystem extends IteratingSystem {
         if (movement.hasPath()) {
             return;
         }
-        if (LoadOptions.debugOption.isTrue()) {
+        if (((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get("debug")).isTrue()) {
             System.out.println("Finished Moving");
         }
         world.edit(entityId).remove(MovementComponent.class);

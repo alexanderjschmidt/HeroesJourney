@@ -5,7 +5,7 @@ import com.artemis.systems.IteratingSystem;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.initializers.base.actions.BaseActions;
+import heroes.journey.registries.Registries;
 import heroes.journey.systems.GameWorld;
 
 import java.util.UUID;
@@ -18,8 +18,8 @@ public class StatsActionsListener extends IteratingSystem {
         GameWorld world = (GameWorld) getWorld();
         UUID id = IdComponent.get(world, entityId);
         PossibleActionsComponent actionComponent = PossibleActionsComponent.get(world, id);
-        actionComponent.addAction(BaseActions.workout);
-        actionComponent.addAction(BaseActions.study);
+        actionComponent.addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("workout"));
+        actionComponent.addAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("study"));
     }
 
     @Override
@@ -36,8 +36,8 @@ public class StatsActionsListener extends IteratingSystem {
         
         // If we have the ID, we can safely access other components
         PossibleActionsComponent actionComponent = PossibleActionsComponent.get(world, id);
-        actionComponent.removeAction(BaseActions.workout);
-        actionComponent.removeAction(BaseActions.study);
+        actionComponent.removeAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("workout"));
+        actionComponent.removeAction((heroes.journey.entities.actions.Action) Registries.ActionManager.get("study"));
     }
 
     @Override

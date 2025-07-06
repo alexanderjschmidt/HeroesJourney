@@ -1,5 +1,7 @@
 package heroes.journey.initializers.utils;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
 import java.util.UUID;
 
 import heroes.journey.GameState;
@@ -59,7 +61,8 @@ public class Utils {
         return buffsComponent.useBuff(buff);
     }
 
-    public static boolean justCompletedAction(GameState gameState, UUID owner, Action action) {
+    public static boolean justCompletedAction(GameState gameState, UUID owner, String actionId) {
+        Action action = ActionManager.get(actionId);
         return !gameState.getHistory().isEmpty() &&
             gameState.getHistory().getLast() instanceof ActionRecord record && record.getAction() == action &&
             record.getEntity() == owner;

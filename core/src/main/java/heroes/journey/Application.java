@@ -100,7 +100,7 @@ public class Application extends Game {
         viewport.apply();
         batch = new SpriteBatch();
 
-        List<GameMod> mods = ScriptModLoader.INSTANCE.loadModsFrom(new File("mods"));
+        List<GameMod> mods = ScriptModLoader.INSTANCE.loadModsFrom(new File("mods"), false);
         for (GameMod mod : mods) {
             mod.load();
         }
