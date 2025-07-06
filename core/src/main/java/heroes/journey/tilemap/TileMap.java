@@ -145,7 +145,7 @@ public class TileMap implements IndexedGraph<TileNode> {
     }
 
     public TileMapSaveData getSaveData() {
-        // Save Terrain -> Int Terrain Map
+        // Save Terrain -> Int Terrain MapGenPlan
         Map<String,Integer> terrainMap = new HashMap<>(TerrainManager.size());
         int count = 0;
         terrainMap.put("null", count++);

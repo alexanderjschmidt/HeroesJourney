@@ -2,7 +2,7 @@ package heroes.journey.utils.worldgen
 
 import heroes.journey.GameState
 import heroes.journey.registries.Registrable
-import heroes.journey.registries.Registries.MapGenerationManager
+import heroes.journey.utils.worldgen.MapGenerator.MapGenerationManager
 import lombok.Getter
 
 @Getter

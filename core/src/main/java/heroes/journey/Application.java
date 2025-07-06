@@ -1,5 +1,8 @@
 package heroes.journey;
 
+import java.io.File;
+import java.util.List;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.mods.GameMod;
 import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.ui.screens.BattleScreen;
@@ -16,12 +20,9 @@ import heroes.journey.utils.MusicManager;
 import heroes.journey.utils.art.ResourceManager;
 import lombok.Getter;
 
-import java.io.File;
-import java.util.List;
-
 /*
  * TODO Features
- * Update Map Generation to:
+ * Update MapGenPlan Generation to:
         Add Kingdom to center of region
         Add towns in region off of capital
         Add other features to regions
@@ -39,7 +40,7 @@ import java.util.List;
  */
 /* TODO Improvements
  *
- * Map Generation
+ * MapGenPlan Generation
  *  Add variation plain tiles
  * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?

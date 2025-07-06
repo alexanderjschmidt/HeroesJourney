@@ -62,7 +62,7 @@ public class MapSettingScreen implements Screen {
             }
         });
 
-        Label sizeLabel = new Label("Map Size: ", ResourceManager.get().skin);
+        Label sizeLabel = new Label("MapGenPlan Size: ", ResourceManager.get().skin);
         Label sizeOutput = new Label(mapSize + "", ResourceManager.get().skin);
         Slider sizeText = new Slider(3, 8, 1, false, ResourceManager.get().skin);
         sizeText.addListener(new ChangeListener() {

@@ -9,7 +9,6 @@ import heroes.journey.entities.items.ItemSubType;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
 
 public class Registries {
 
@@ -20,7 +19,6 @@ public class Registries {
     public static Registry<Terrain> TerrainManager = new Registry<>();
     public static Registry<FeatureType> FeatureTypeManager = new Registry<>();
     public static Registry<Quest> QuestManager = new Registry<>();
-    public static Registry<MapGenerationEffect> MapGenerationManager = new Registry<>();
     public static Registry<Biome> BiomeManager = new Registry<>();
     public static Registry<Challenge> ChallengeManager = new Registry<>();
 
@@ -30,7 +28,6 @@ public class Registries {
     public Registry<Buff> buffManager;
     public Registry<Terrain> terrainManager;
     public Registry<Quest> questManager;
-    public Registry<MapGenerationEffect> mapGenerationManager;
     public Registry<Biome> biomeManager;
 
     public Registries() {
@@ -40,7 +37,6 @@ public class Registries {
         buffManager = BuffManager;
         terrainManager = TerrainManager;
         questManager = QuestManager;
-        mapGenerationManager = MapGenerationManager;
         biomeManager = BiomeManager;
     }
 

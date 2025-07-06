@@ -3,10 +3,10 @@ package heroes.journey;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import heroes.journey.initializers.base.Map;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.RenderBounds;
+import heroes.journey.utils.worldgen.MapGenPlan;
 import lombok.Getter;
 
 @Getter
@@ -66,12 +66,12 @@ public class GameCamera extends OrthographicCamera {
     }
 
     private void setX(int x) {
-        position.x = Math.min(Math.max(x * size, getXBound()), (size * Map.MAP_SIZE) - getXBound());
+        position.x = Math.min(Math.max(x * size, getXBound()), (size * MapGenPlan.MAP_SIZE) - getXBound());
         super.update();
     }
 
     private void setY(int y) {
-        position.y = Math.min(Math.max(y * size, getYBound()), (size * Map.MAP_SIZE) - getYBound());
+        position.y = Math.min(Math.max(y * size, getYBound()), (size * MapGenPlan.MAP_SIZE) - getYBound());
         super.update();
     }
 

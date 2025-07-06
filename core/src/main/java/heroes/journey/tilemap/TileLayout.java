@@ -176,7 +176,7 @@ public class TileLayout {
         List<Integer> sortedColors = new ArrayList<>(uniqueColors);
         sortedColors.sort(Comparator.comparingDouble(this::colorBrightness));
 
-        // Step 3: Map colors to terrain indexes
+        // Step 3: MapGenPlan colors to terrain indexes
         Map<Integer,Terrain> colorToTerrain = new HashMap<>();
         for (int i = 0; i < sortedColors.size(); i++) {
             int color = sortedColors.get(i);

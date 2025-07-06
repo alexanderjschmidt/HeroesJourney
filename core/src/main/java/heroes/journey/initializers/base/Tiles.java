@@ -1,8 +1,8 @@
 package heroes.journey.initializers.base;
 
 import static heroes.journey.initializers.base.Ids.OVERWORLD_TILESET;
-import static heroes.journey.initializers.base.Map.KINGDOM;
 import static heroes.journey.utils.art.ResourceManager.TextureManager;
+import static heroes.journey.utils.worldgen.MapGenPlan.KINGDOM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.worldgen.MapGenPlan;
 
 public class Tiles implements InitializerInterface {
 
@@ -55,24 +56,24 @@ public class Tiles implements InitializerInterface {
         // Biomes
         List<FeatureGenerationData> plainsData = new ArrayList<>();
         plainsData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        plainsData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
-        plainsData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
-        plainsData.add(new FeatureGenerationData(Map.MINE, 5, 5, 8));
+        plainsData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
+        plainsData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
+        plainsData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 5, 8));
         kingdom = new Biome("kingdom", "Kingdom", plains.getId(), plainsData).register();
 
         List<FeatureGenerationData> desertData = new ArrayList<>();
         desertData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        desertData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
-        desertData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
-        desertData.add(new FeatureGenerationData(Map.MINE, 5, 5, 10));
+        desertData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
+        desertData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
+        desertData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 5, 10));
         Biome desertKingdom = new Biome("desert_kingdom", "Desert Kingdom", sand.getId(),
             desertData).register();
 
         List<FeatureGenerationData> mesaData = new ArrayList<>();
         mesaData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        mesaData.add(new FeatureGenerationData(Map.TOWN, 5, 3, 5));
-        mesaData.add(new FeatureGenerationData(Map.DUNGEON, 5, 1, 2));
-        mesaData.add(new FeatureGenerationData(Map.MINE, 5, 7, 12));
+        mesaData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
+        mesaData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
+        mesaData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 7, 12));
         Biome mesaKingdom = new Biome("mesa_kingdom", "Mesa Kingdom", hills.getId(), mesaData).register();
 
         NULL = new BaseTile(NULL_TERRAIN, 100, false, tiles[3][0]);

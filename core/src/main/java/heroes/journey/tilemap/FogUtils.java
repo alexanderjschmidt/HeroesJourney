@@ -27,7 +27,7 @@ public class FogUtils {
 
     public static Fog[][] getFog(GameState gameState, UUID entityId) {
         Fog[][] fog = new Fog[gameState.getWidth()][gameState.getHeight()];
-        // Get Playing entities Map
+        // Get Playing entities MapGenPlan
         MapComponent mapComponent = MapComponent.get(gameState.getWorld(), entityId);
         if (mapComponent != null)
             FogUtils.mergeFog(fog, mapComponent.getFog());

@@ -1,7 +1,5 @@
 package heroes.journey.utils.worldgen;
 
-import static heroes.journey.registries.Registries.MapGenerationManager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +7,7 @@ import java.util.Map;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
+import heroes.journey.registries.Registry;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 
@@ -16,6 +15,7 @@ import lombok.Getter;
 public class MapGenerator {
 
     public static MapGenerationEffect noisePhase, worldGenPhase, postWorldGenPhase, entityPhase;
+    public static Registry<MapGenerationEffect> MapGenerationManager = new Registry<>();
 
     static {
         noisePhase = new NoOpMapGenerationEffect("NoisePhase").register();

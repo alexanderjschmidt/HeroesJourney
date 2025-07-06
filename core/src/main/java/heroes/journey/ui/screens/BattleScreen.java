@@ -9,7 +9,6 @@ import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
 import heroes.journey.initializers.Initializer;
-import heroes.journey.initializers.base.Map;
 import heroes.journey.initializers.base.actions.LoadOptions;
 import heroes.journey.models.MapData;
 import heroes.journey.ui.DebugRenderer;
@@ -20,6 +19,7 @@ import heroes.journey.ui.WorldEffectManager;
 import heroes.journey.utils.MusicManager;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.input.KeyManager;
+import heroes.journey.utils.worldgen.MapGenPlan;
 import heroes.journey.utils.worldgen.MapGenerator;
 
 public class BattleScreen implements Screen {
@@ -36,7 +36,7 @@ public class BattleScreen implements Screen {
     // quickStart constructor
     public BattleScreen(Application app, boolean quickStart) {
         this.app = app;
-        this.mapData = new MapData((int)(Math.random() * 10000000), Map.MAP_SIZE, 3, false);
+        this.mapData = new MapData((int)(Math.random() * 10000000), MapGenPlan.MAP_SIZE, 3, false);
         this.client = new GameClient();
         this.lightManager = new LightManager();
         this.debugRenderer = new DebugRenderer();

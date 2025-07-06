@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.utils.worldgen;
 
 import static heroes.journey.initializers.base.Ids.CAPITAL_SPRITE;
 import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
@@ -25,15 +25,14 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.InitializerInterface;
+import heroes.journey.initializers.base.Ids;
+import heroes.journey.initializers.base.Tiles;
 import heroes.journey.registries.TileManager;
 import heroes.journey.systems.EntityFactory;
 import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
-import heroes.journey.utils.worldgen.MapGenerationEffect;
-import heroes.journey.utils.worldgen.MapGenerationException;
-import heroes.journey.utils.worldgen.MapGenerator;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
 import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
@@ -41,7 +40,7 @@ import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
-public class Map implements InitializerInterface {
+public class MapGenPlan implements InitializerInterface {
 
     public static int MAP_SIZE = 100;
     // Kingdoms
