@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Humanoid Challenges", 0) {
+// Humanoid Challenges - included by basegame mod
     challenge("outmaneuver_goblin_archer") {
         name = "Outmaneuver Goblin Archer"
         description =
@@ -117,4 +116,3 @@ gameMod("Humanoid Challenges", 0) {
         approaches(Stat.MIGHT, Stat.PERSUASION, Stat.SKILL)
         reward { attr("valor", 2) }
     }.register()
-}

@@ -210,12 +210,29 @@ Each approach provides fixed rewards based on the approach chosen:
 * **Script-based loading** - Mods loaded from `mods/` directory at runtime
 * **Registry system** - Centralized registration for all game content
 * **Hot-reloading** - Mods can be reloaded without restarting the game
+* **Unified mod structure** - Single main mod file that includes all content files
 
-### **Basegame Mod** (`mods/basegame/`)
-The core mod containing all essential game content:
+### **Mod Loading System**
+* **`ScriptModLoader`** - Intelligent mod discovery and loading system
+* **`mod.kts` convention** - Only files named `mod.kts` are treated as main mod files
+* **Fast discovery** - Skips non-mod files during initial scan for improved performance
+* **Strict validation** - Ensures `mod.kts` files return proper `GameMod` objects
+* **Parallel loading** - Optional parallel script loading for improved performance
+* **Directory loading** - Load all `.kts` files from a directory with `includeScriptsFromDirectory()`
 
-**Content Files:**
-* **`actions.kts`** - Player actions and abilities (workout, study, quest board, etc.)
+### **Basegame Mod** (`mods/basegame/mod.kts`)
+The core mod containing all essential game content, structured as a unified mod that includes all content files:
+
+**Main Mod File:**
+* **`mod.kts`** - Main mod file that returns a `GameMod` object and includes all other content
+
+**Content Files (included by main mod):**
+* **`actions/`** - Player actions and abilities organized by category:
+  * `core_actions.kts` - Basic actions (workout, study, etc.)
+  * `challenge_actions.kts` - Challenge-related actions
+  * `travel_actions.kts` - Movement and exploration actions
+  * `delve_actions.kts` - Dungeon and exploration actions
+  * `options_actions.kts` - Menu and UI actions
 * **`quests.kts`** - Quest definitions and completion logic
 * **`items.kts`** - Item definitions, properties, and effects
 * **`textures.kts`** - Animation and sprite definitions for all 135 challenges
@@ -233,31 +250,40 @@ The core mod containing all essential game content:
   * `undead_challenges.kts` - 15 Undead challenges
   * `vermin_challenges.kts` - 15 Vermin challenges
 
-### **Mod Development**
+### **Mod Loading Features**
+* **`includeScript(path)`** - Load a single script file
+* **`includeScripts(paths..., parallel = false)`** - Load multiple scripts (sequential or parallel)
+* **`includeScriptsFromDirectory(dir, parallel = false)`** - Load all `.kts` files from a directory
+* **Parallel processing** - Optional multithreaded loading for improved performance
+* **Error handling** - Comprehensive error reporting and timeout protection
+* **Debug logging** - Detailed logging for mod loading process
+
+### **Mod Development Workflow**
 * **Content creation** - Define challenges, actions, items using Kotlin DSL
+* **Modular organization** - Separate content into logical files and directories
+* **Unified loading** - Single main mod file includes all content files
 * **Asset integration** - Link sprites and animations to game content
 * **Balance testing** - Iterate on approach usage and reward distribution
 * **Thematic consistency** - Ensure descriptions match animations and approaches
 
-### **Planned Code Reorganization**
-**Moving from `initializers/` folder to proper mod structure:**
+### **Completed Code Reorganization**
+**Successfully moved from `initializers/` folder to proper mod structure:**
 
-**Actions & Tiles → Basegame Mod:**
-* **Actions** - Move from `initializers/actions/` to `mods/basegame/actions/`
-* **Tiles** - Move from `initializers/tiles/` to `mods/basegame/tiles/`
+**Actions → Basegame Mod:**
+* ✅ **Actions** - Moved from `initializers/actions/` to `mods/basegame/actions/`
 
-**Maps → Map Generation Utils:**
-* **Map generation** - Move from `initializers/maps/` to `utils/mapgen/`
-* **Biome system** - Customizable biome definitions and generation rules
-* **Procedural algorithms** - Terrain generation and feature placement
-
-**IDs & Utils → Core Systems:**
-* **IDs** - Move from `initializers/ids/` to `core/ids/` or `utils/ids/`
-* **Utils** - Move from `initializers/utils/` to `utils/` or appropriate system folders
+**Mod System Improvements:**
+* ✅ **Unified mod structure** - Single main mod file includes all content
+* ✅ **Performance optimization** - Only scans for `mod.kts` files
+* ✅ **Parallel loading** - Optional multithreaded script loading
+* ✅ **Directory loading** - Load entire directories of scripts
+* ✅ **Error handling** - Comprehensive validation and error reporting
 
 ### **Modding Benefits**
 * **Content separation** - Game logic separate from content definitions
 * **Easy iteration** - Quick changes to challenges, rewards, and balance
+* **Performance optimized** - Fast mod discovery and parallel loading
+* **Modular organization** - Clean separation of content by type and category
 * **Community expansion** - Third-party mods for additional content
 * **Testing flexibility** - Isolated testing of specific content categories
 

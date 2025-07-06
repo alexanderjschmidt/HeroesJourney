@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Holy Challenges", 0) {
+// Holy Challenges - included by basegame mod
     challenge("aid_resolute_angel") {
         name = "Aid Resolute Angel"
         description =
@@ -120,4 +119,3 @@ gameMod("Holy Challenges", 0) {
         approaches(Stat.BRAVADO, Stat.LOGIC, Stat.MESMERISM)
         reward { attr("valor", 2) }
     }.register()
-}

@@ -1,5 +1,3 @@
-import heroes.journey.mods.gameMod
+// Terrains - included by basegame mod
 
-gameMod("Base Game Terrains", 1) {
-
-}
+// Currently empty - add terrain definitions here when needed

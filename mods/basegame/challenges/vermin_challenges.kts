@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Vermin Challenges", 0) {
+// Vermin Challenges - included by basegame mod
     challenge("defeat_acid_ant") {
         name = "Defeat Acid Ant"
         description = "An acid-spitting ant is burning crops. Use cunning, skill, or technique to defeat it."
@@ -114,4 +113,3 @@ gameMod("Vermin Challenges", 0) {
         approaches(Stat.CUNNING, Stat.SKILL, Stat.TECHNIQUE)
         reward { attr("valor", 2) }
     }.register()
-}

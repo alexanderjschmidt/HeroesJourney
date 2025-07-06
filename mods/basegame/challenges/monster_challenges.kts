@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Monster Challenges", 0) {
+// Monster Challenges - included by basegame mod
     challenge("guide_blinded_grimlock") {
         name = "Guide Blinded Grimlock"
         description = "A blind grimlock is lost in the caves. Use charm, cunning, or skill to guide it."
@@ -117,4 +116,3 @@ gameMod("Monster Challenges", 0) {
         approaches(Stat.CUNNING, Stat.SKILL, Stat.TECHNIQUE)
         reward { attr("valor", 2) }
     }.register()
-}

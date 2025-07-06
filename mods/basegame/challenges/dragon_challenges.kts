@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Dragon Challenges", 0) {
+// Dragon Challenges - included by basegame mod
     challenge("befriend_aqua_drake") {
         name = "Befriend Aqua Drake"
         description =
@@ -122,4 +121,3 @@ gameMod("Dragon Challenges", 0) {
         approaches(Stat.CHARM, Stat.MESMERISM, Stat.PERSUASION)
         reward { attr("influence", 3) }
     }.register()
-}

@@ -28,7 +28,7 @@ object ScriptModLoader {
         val scriptingHost = BasicJvmScriptingHost()
         var mods = mutableListOf<GameMod>()
 
-        for (scriptFile in folder.walkTopDown().filter { it.extension == "kts" }) {
+        for (scriptFile in folder.walkTopDown().filter { it.name == "mod.kts" }) {
             if (debug) println("\n=== Finding mod from: ${scriptFile.name} ===")
             try {
                 val result =
@@ -81,5 +81,49 @@ object ScriptModLoader {
             println("  - ${mod.name} (priority: ${mod.priority})")
         }
         return mods
+    }
+
+    // Function to include other script files within a mod
+    fun includeScript(scriptPath: String, debug: Boolean = false) {
+        val scriptFile = File(scriptPath)
+        if (!scriptFile.exists()) {
+            println("WARNING: Include file not found: $scriptPath")
+            return
+        }
+
+        if (debug) println("Including script: $scriptPath")
+
+        val compilationConfig = ScriptCompilationConfiguration {
+            jvm {
+                dependenciesFromCurrentContext(wholeClasspath = true)
+            }
+        }
+
+        val evaluationConfig = ScriptEvaluationConfiguration {
+            jvm {
+                baseClassLoader(this::class.java.classLoader)
+            }
+        }
+
+        val scriptingHost = BasicJvmScriptingHost()
+
+        try {
+            val result = scriptingHost.eval(scriptFile.toScriptSource(), compilationConfig, evaluationConfig)
+
+            if (result.reports.isNotEmpty()) {
+                result.reports.forEach { report ->
+                    val isError = report.severity.name == "ERROR"
+                    if (debug || isError) {
+                        println("  [${report.severity}] ${report.message} in $scriptPath")
+                    }
+                }
+            }
+
+            if (debug) println("Successfully included: $scriptPath")
+        } catch (e: Exception) {
+            println("ERROR: Failed to include $scriptPath")
+            println("  Exception: ${e.message}")
+            e.printStackTrace()
+        }
     }
 }

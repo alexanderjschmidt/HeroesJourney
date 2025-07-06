@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Undead Challenges", 0) {
+// Undead Challenges - included by basegame mod
     challenge("lay_bound_cadaver") {
         name = "Lay Bound Cadaver to Rest"
         description =
@@ -115,4 +114,3 @@ gameMod("Undead Challenges", 0) {
         approaches(Stat.BRAVADO, Stat.ENCHANTING, Stat.MIGHT)
         reward { attr("valor", 2) }
     }.register()
-}

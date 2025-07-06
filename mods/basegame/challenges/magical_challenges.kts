@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Magical Challenges", 0) {
+// Magical Challenges - included by basegame mod
     challenge("defeat_adept_necromancer") {
         name = "Defeat Adept Necromancer"
         description = "A necromancer is raising undead. Use concentration, logic, or sorcery to defeat it."
@@ -120,4 +119,3 @@ gameMod("Magical Challenges", 0) {
         approaches(Stat.BEWITCHING, Stat.LOGIC, Stat.SORCERY)
         reward { attr("arcanum", 2) }
     }.register()
-}

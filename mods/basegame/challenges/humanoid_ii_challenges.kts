@@ -1,9 +1,8 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.initializers.base.Ids.*
-import heroes.journey.mods.gameMod
 
-gameMod("Humanoid II Challenges", 0) {
+// Humanoid II Challenges - included by basegame mod
     challenge("mentor_adventurous_adolescent") {
         name = "Mentor Adventurous Adolescent"
         description = "A young adventurer seeks guidance. Use charm, mesmerism, or persuasion to mentor it."
@@ -116,4 +115,3 @@ gameMod("Humanoid II Challenges", 0) {
         approaches(Stat.BEWITCHING, Stat.CHARM, Stat.MESMERISM)
         reward { attr("influence", 2) }
     }.register()
-}
