@@ -222,7 +222,6 @@ public class GameState implements Cloneable {
     }
 
     public static void loadFromFile(String save) {
-        Initializer.init();
         gameState = new GameState();
 
         Json json = new Json();

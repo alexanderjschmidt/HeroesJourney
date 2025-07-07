@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
-import heroes.journey.client.GameClient;
 import heroes.journey.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.client.GameClient;
 import heroes.journey.models.MapData;
+import heroes.journey.registries.Registries;
 import heroes.journey.ui.DebugRenderer;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;
@@ -41,7 +41,6 @@ public class BattleScreen implements Screen {
         this.lightManager = new LightManager();
         this.debugRenderer = new DebugRenderer();
         new MapGenPlan().init();
-        Initializer.init();
     }
 
     public void startGame() {
