@@ -2,7 +2,7 @@ package heroes.journey.tilemap
 
 import heroes.journey.GameState
 import heroes.journey.entities.Position
-import heroes.journey.initializers.base.Tiles
+import heroes.journey.initializers.Tiles
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries.FeatureTypeManager
 import lombok.Getter

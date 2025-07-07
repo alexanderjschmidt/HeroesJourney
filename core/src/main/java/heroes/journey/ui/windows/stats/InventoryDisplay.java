@@ -14,7 +14,7 @@ import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.initializers.utils.StatsUtils;
+import heroes.journey.utils.gamestate.StatsUtils;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.art.ResourceManager;

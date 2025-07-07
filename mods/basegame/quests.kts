@@ -1,7 +1,7 @@
 import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.ActionInput
-import heroes.journey.initializers.utils.Utils
+import heroes.journey.utils.gamestate.Utils
 import heroes.journey.registries.Registries
 
 // Quests and Buffs - included by basegame mod

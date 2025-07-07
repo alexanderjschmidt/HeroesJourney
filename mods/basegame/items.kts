@@ -5,7 +5,7 @@ import heroes.journey.entities.items.ItemSubType
 import heroes.journey.entities.items.ItemType
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.utils.Utils
+import heroes.journey.utils.gamestate.Utils
 
 // Items - included by basegame mod
 

@@ -7,7 +7,7 @@ import heroes.journey.entities.actions.TeamActions
 import heroes.journey.entities.actions.action
 import heroes.journey.entities.actions.results.*
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.utils.StatsUtils
+import heroes.journey.utils.gamestate.StatsUtils
 import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen

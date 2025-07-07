@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import heroes.journey.initializers.base.Tiles;
+import heroes.journey.initializers.Tiles;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 
 public class CellularAutomata {

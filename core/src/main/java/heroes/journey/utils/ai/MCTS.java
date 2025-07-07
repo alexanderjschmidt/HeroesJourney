@@ -2,7 +2,7 @@ package heroes.journey.utils.ai;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.QueuedAction;
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.utils.gamestate.Utils;
 
 import java.util.UUID;
 import java.util.concurrent.*;

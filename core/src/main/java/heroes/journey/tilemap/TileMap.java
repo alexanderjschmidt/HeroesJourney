@@ -14,7 +14,7 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;

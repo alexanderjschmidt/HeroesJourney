@@ -1,4 +1,4 @@
-package heroes.journey.initializers.utils;
+package heroes.journey.utils.gamestate;
 
 import java.util.UUID;
 

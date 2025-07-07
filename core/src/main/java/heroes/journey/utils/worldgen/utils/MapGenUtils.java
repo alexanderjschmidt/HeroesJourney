@@ -5,7 +5,7 @@ import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.base.Tiles;
+import heroes.journey.initializers.Tiles;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;

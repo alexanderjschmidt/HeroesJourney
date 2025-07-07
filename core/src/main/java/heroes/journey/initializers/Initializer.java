@@ -1,15 +1,16 @@
 package heroes.journey.initializers;
 
-import org.reflections.Reflections;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Set;
+
+import org.reflections.Reflections;
 
 public class Initializer {
 
     public static void init() {
         Reflections reflections = new Reflections("heroes.journey.initializers");
-        Set<Class<? extends InitializerInterface>> classes = reflections.getSubTypesOf(InitializerInterface.class);
+        Set<Class<? extends InitializerInterface>> classes = reflections.getSubTypesOf(
+            InitializerInterface.class);
 
         for (Class<? extends InitializerInterface> clazz : classes) {
             try {

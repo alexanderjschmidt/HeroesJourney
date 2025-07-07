@@ -10,8 +10,7 @@ import heroes.journey.entities.actions.*
 import heroes.journey.entities.actions.results.EndTurnResult
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.utils.Utils
-import heroes.journey.registries.Registries
+import heroes.journey.utils.gamestate.Utils
 import heroes.journey.registries.Registries.QuestManager
 import java.util.*
 
@@ -135,4 +134,4 @@ targetAction<UUID> {
         RegionComponent.get(input.gameState.world, regionId).challenges
     }
     targetAction = heroes.journey.initializers.Ids.FACE_CHALLENGE
-}.register() 
+}.register()

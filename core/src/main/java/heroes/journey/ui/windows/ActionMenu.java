@@ -13,7 +13,7 @@ import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;

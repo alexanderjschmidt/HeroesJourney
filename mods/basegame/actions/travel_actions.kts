@@ -8,8 +8,7 @@ import heroes.journey.entities.Position
 import heroes.journey.entities.actions.*
 import heroes.journey.entities.actions.results.MultiStepResult
 import heroes.journey.entities.actions.results.StringResult
-import heroes.journey.initializers.utils.Utils
-import heroes.journey.mods.gameMod
+import heroes.journey.utils.gamestate.Utils
 import heroes.journey.ui.HUD
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import heroes.journey.registries.Registries
@@ -94,4 +93,4 @@ targetAction<UUID> {
         wayfareLocations
     }
     targetAction = heroes.journey.initializers.Ids.TRAVEL_TO
-}.register() 
+}.register()

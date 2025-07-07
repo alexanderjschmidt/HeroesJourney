@@ -25,7 +25,7 @@ import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
 import heroes.journey.initializers.Ids;
-import heroes.journey.initializers.base.Tiles;
+import heroes.journey.initializers.Tiles;
 import heroes.journey.registries.TileManager;
 import heroes.journey.systems.EntityFactory;
 import heroes.journey.tilemap.FeatureGenerationData;

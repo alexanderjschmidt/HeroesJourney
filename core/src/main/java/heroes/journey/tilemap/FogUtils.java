@@ -12,7 +12,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.initializers.utils.StatsUtils;
+import heroes.journey.utils.gamestate.StatsUtils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 

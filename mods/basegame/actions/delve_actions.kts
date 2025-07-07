@@ -5,8 +5,8 @@ import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.*
 import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.utils.FightUtils
-import heroes.journey.initializers.utils.Utils
+import heroes.journey.utils.gamestate.FightUtils
+import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
 // Delve Actions - included by basegame mod
@@ -59,4 +59,4 @@ cooldownAction {
 
         StringResult(log.toString())
     }
-}.register() 
+}.register()

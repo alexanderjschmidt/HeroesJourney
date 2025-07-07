@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers;
 
 import static heroes.journey.initializers.Ids.OVERWORLD_TILESET;
 import static heroes.journey.utils.art.ResourceManager.TextureManager;
@@ -9,7 +9,6 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import heroes.journey.initializers.InitializerInterface;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.TileHelpers;

@@ -2,10 +2,11 @@ package heroes.journey.systems;
 
 import com.artemis.EntityEdit;
 import com.artemis.World;
+
 import heroes.journey.components.*;
 import heroes.journey.components.character.*;
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.initializers.utils.Utils;
+import heroes.journey.utils.gamestate.Utils;
 
 public class ComponentCopier {
 

@@ -34,7 +34,7 @@ import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.base.Tiles;
+import heroes.journey.initializers.Tiles;
 import heroes.journey.registries.Registries;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
