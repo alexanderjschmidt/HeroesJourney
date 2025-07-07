@@ -45,43 +45,9 @@ public class MapGenPlan {
     // Kingdoms
     public static int NUM_PLAYERS = 3;
 
-    public static FeatureType KINGDOM, TOWN, DUNGEON, MINE;
+    // feature types are now defined in mod scripts
 
     public void init() {
-        // feature types
-        KINGDOM = new FeatureType("kingdom", "Kingdom") {
-            @Override
-            public UUID generateFeatureInner(GameState gs, Position pos) {
-                return gs.getWorld()
-                    .getEntityFactory()
-                    .generateBasicLocation(SyllableTownNameGenerator.generateName(), pos.getX(), pos.getY(),
-                        CAPITAL_SPRITE);
-            }
-        };
-        TOWN = new FeatureType("town", "Town") {
-            @Override
-            public UUID generateFeatureInner(GameState gs, Position pos) {
-                return gs.getWorld()
-                    .getEntityFactory()
-                    .generateBasicLocation(SyllableTownNameGenerator.generateName(), pos.getX(), pos.getY(),
-                        TOWN_SPRITE);
-            }
-        };
-        DUNGEON = new FeatureType("dungeon", "Dungeon") {
-            @Override
-            public UUID generateFeatureInner(GameState gs, Position pos) {
-                return gs.getWorld().getEntityFactory().generateDungeon(pos.getX(), pos.getY());
-            }
-        };
-        MINE = new FeatureType("mine", "Mine") {
-            @Override
-            public UUID generateFeatureInner(GameState gs, Position pos) {
-                return gs.getWorld()
-                    .getEntityFactory()
-                    .generateBasicLocation("Mine", pos.getX(), pos.getY(), DUNGEON_SPRITE);
-            }
-        };
-
         /**
          * New Gen Plan
          * Noise (create continent)

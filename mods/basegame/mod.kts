@@ -13,5 +13,11 @@ gameMod("Base Game", 0) {
 
     log("Loading challenge files...")
     includeScriptsFromDirectory("mods/basegame/challenges")
-    includeScriptsFromDirectory("mods/basegame/worldgen")
+
+    log("Loading world gen files...")
+    includeScripts(
+        "mods/basegame/worldgen/terrains.kts",
+        "mods/basegame/worldgen/biomes.kts",
+        parallel = false
+    )
 }

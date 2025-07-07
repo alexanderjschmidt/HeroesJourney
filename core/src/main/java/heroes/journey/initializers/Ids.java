@@ -90,4 +90,15 @@ public class Ids {
     public static final String TERRAIN_PLAINS_TO_WATER = "plains_to_water";
     public static final String TERRAIN_HILL_TO_WATER = "hill_to_water";
     public static final String TERRAIN_SAND_TO_WATER = "sand_to_water";
+
+    // Biome IDs
+    public static final String BIOME_KINGDOM = "kingdom";
+    public static final String BIOME_DESERT_KINGDOM = "desert_kingdom";
+    public static final String BIOME_MESA_KINGDOM = "mesa_kingdom";
+
+    // FeatureType IDs
+    public static final String KINGDOM = "kingdom";
+    public static final String TOWN = "town";
+    public static final String DUNGEON = "dungeon";
+    public static final String MINE = "mine";
 }

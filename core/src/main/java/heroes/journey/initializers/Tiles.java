@@ -15,7 +15,6 @@ import static heroes.journey.initializers.Ids.TERRAIN_SAND_TO_WATER;
 import static heroes.journey.initializers.Ids.TERRAIN_TREES;
 import static heroes.journey.initializers.Ids.TERRAIN_WATER;
 import static heroes.journey.utils.art.ResourceManager.TextureManager;
-import static heroes.journey.utils.worldgen.MapGenPlan.KINGDOM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,34 +39,9 @@ public class Tiles implements InitializerInterface {
     public static List<Tile> pathTiles, treeTiles;
     public static Tile pathDot;
 
-    public static Biome kingdom;
-
     @Override
     public void init() {
         TextureRegion[][] tiles = ResourceManager.get(TextureManager.get(OVERWORLD_TILESET));
-
-        // Biomes
-        List<FeatureGenerationData> plainsData = new ArrayList<>();
-        plainsData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        plainsData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
-        plainsData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
-        plainsData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 5, 8));
-        kingdom = new Biome("kingdom", "Kingdom", TERRAIN_PLAINS, plainsData).register();
-
-        List<FeatureGenerationData> desertData = new ArrayList<>();
-        desertData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        desertData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
-        desertData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
-        desertData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 5, 10));
-        Biome desertKingdom = new Biome("desert_kingdom", "Desert Kingdom", TERRAIN_SAND,
-            desertData).register();
-
-        List<FeatureGenerationData> mesaData = new ArrayList<>();
-        mesaData.add(new FeatureGenerationData(KINGDOM, 0, 1, 1));
-        mesaData.add(new FeatureGenerationData(MapGenPlan.TOWN, 5, 3, 5));
-        mesaData.add(new FeatureGenerationData(MapGenPlan.DUNGEON, 5, 1, 2));
-        mesaData.add(new FeatureGenerationData(MapGenPlan.MINE, 5, 7, 12));
-        Biome mesaKingdom = new Biome("mesa_kingdom", "Mesa Kingdom", TERRAIN_HILLS, mesaData).register();
 
         NULL = new BaseTile(TERRAIN_NULL, 100, false, tiles[3][0]);
         TileHelpers.baseTile(NULL, TERRAIN_NULL);
