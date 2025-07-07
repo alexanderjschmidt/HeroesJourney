@@ -1,5 +1,7 @@
 package heroes.journey.tilemap;
 
+import static heroes.journey.registries.Registries.TileLayoutManager;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import heroes.journey.registries.Registrable;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
@@ -21,9 +24,10 @@ import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 
-public class TileLayout {
-
+public class TileLayout extends Registrable {
+    private final String id;
     private final String path;
+    private final List<String> terrainRoles;
 
     /**
      * The coloring of the layout should be 0,0,0 (black) for the first terrain passed in
@@ -33,8 +37,28 @@ public class TileLayout {
      *
      * @param path
      */
-    public TileLayout(String path) {
+    public TileLayout(String id, String path, List<String> terrainRoles) {
+        super(id, id);
+        this.id = id;
         this.path = path;
+        this.terrainRoles = terrainRoles;
+    }
+
+    public TileLayout register() {
+        TileLayoutManager.register(this);
+        return this;
+    }
+
+    public static TileLayout get(String id) {
+        return TileLayoutManager.get(id);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public List<String> getTerrainRoles() {
+        return terrainRoles;
     }
 
     private List<Tile> generateTiles(
@@ -71,6 +95,11 @@ public class TileLayout {
                 int tileX = x + i;
                 int tileY = y + j;
 
+                // Guard in case tiles[][] is smaller than layout
+                if (tileX >= tiles.length || tileY >= tiles[0].length) {
+                    continue;
+                }
+
                 int color = layoutPixmap.getPixel((i * 3) + 1, (j * 3) + 1);
                 int r = (color & 0xff000000) >>> 24;
                 int g = (color & 0x00ff0000) >>> 16;
@@ -79,10 +108,6 @@ public class TileLayout {
                 float rgbSum = (r + g + b) / (3f * 255f);
                 int adjustedWeight = Math.max(1, Math.round(weight * rgbSum));
                 //System.out.println(path + " " + i + " " + j + " " + adjustedWeight);
-
-                // Guard in case tiles[][] is smaller than layout
-                if (tileX >= tiles.length || tileY >= tiles[0].length)
-                    continue;
 
                 // Get 3x3 layout block for this tile from the layoutPixmap
                 Map<Direction,Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
@@ -227,27 +252,6 @@ public class TileLayout {
             frames[i] = tiles[x + dx][y + dy];
         }
         return frames;
-    }
-
-    /**
-     * @return Tile from a list whose neighbors dont match it.
-     */
-    public static Tile getDot(List<Tile> tiles) {
-        for (Tile tile : tiles) {
-            if (isDot(tile)) {
-                return tile;
-            }
-        }
-        return null;
-    }
-
-    private static boolean isDot(Tile tile) {
-        for (Direction dir : Direction.getDirections()) {
-            if (tile.getNeighbor(dir) == tile.getTerrain()) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

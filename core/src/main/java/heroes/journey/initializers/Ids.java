@@ -101,4 +101,27 @@ public class Ids {
     public static final String TOWN = "town";
     public static final String DUNGEON = "dungeon";
     public static final String MINE = "mine";
+
+    // TileLayout IDs
+    public static final String TILE_LAYOUT_WANG_CORNER = "wang_corner";
+    public static final String TILE_LAYOUT_CLIFF_TRANSITION_TAPPER = "cliff_transition_tapper";
+    public static final String TILE_LAYOUT_CLIFF_TRANSITION = "cliff_transition";
+    public static final String TILE_LAYOUT_WANG_EDGE = "wang_edge";
+
+    // TileBatch IDs
+    public static final String TILE_BATCH_PLAINS_TO_HILL_CORNER = "plains_to_hill_corner";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_TAPPER_PLAINS_HILLS = "cliff_transition_tapper_plains_hills";
+    public static final String TILE_BATCH_SAND_TO_HILL_CORNER = "sand_to_hill_corner";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_TAPPER_SAND_HILLS = "cliff_transition_tapper_sand_hills";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_SAND_HILL = "cliff_transition_sand_hill";
+    public static final String TILE_BATCH_PLAINS_TO_SAND_CORNER = "plains_to_sand_corner";
+    public static final String TILE_BATCH_TREES_CORNER = "trees_corner";
+    public static final String TILE_BATCH_PATH_EDGE = "path_edge";
+    // Animated Water Transitions
+    public static final String TILE_BATCH_PLAINS_TO_WATER_CORNER_ANIMATED = "plains_to_water_corner_animated";
+    public static final String TILE_BATCH_HILL_TO_WATER_CORNER_ANIMATED = "hill_to_water_corner_animated";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_PLAINS_HILL_WATER_ANIMATED = "cliff_transition_plains_hill_water_animated";
+    public static final String TILE_BATCH_SAND_TO_WATER_CORNER_ANIMATED = "sand_to_water_corner_animated";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_SAND_HILL_WATER_ANIMATED = "cliff_transition_sand_hill_water_animated";
+    public static final String TILE_BATCH_CLIFF_TRANSITION_SAND_PLAINS_WATER_ANIMATED = "cliff_transition_sand_plains_water_animated";
 }

@@ -18,6 +18,7 @@ gameMod("Base Game", 0) {
     includeScripts(
         "mods/basegame/worldgen/terrains.kts",
         "mods/basegame/worldgen/biomes.kts",
+        "mods/basegame/worldgen/tiles.kts",
         parallel = false
     )
 }

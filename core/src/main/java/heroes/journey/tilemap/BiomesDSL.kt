@@ -54,7 +54,5 @@ class FeatureTypeBuilder {
 fun featureType(init: FeatureTypeBuilder.() -> Unit): FeatureType {
     val builder = FeatureTypeBuilder()
     builder.init()
-    val ft = builder.build()
-    FeatureTypeManager.register(ft)
-    return ft
+    return builder.build()
 }

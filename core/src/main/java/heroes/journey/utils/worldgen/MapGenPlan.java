@@ -1,10 +1,8 @@
 package heroes.journey.utils.worldgen;
 
-import static heroes.journey.initializers.Ids.CAPITAL_SPRITE;
-import static heroes.journey.initializers.Ids.DUNGEON_SPRITE;
-import static heroes.journey.initializers.Ids.TOWN_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.registries.Registries.TileBatchManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
 import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
@@ -29,14 +27,12 @@ import heroes.journey.initializers.Tiles;
 import heroes.journey.registries.TileManager;
 import heroes.journey.systems.EntityFactory;
 import heroes.journey.tilemap.FeatureGenerationData;
-import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
 import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
 import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
-import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
 
 public class MapGenPlan {
@@ -127,14 +123,15 @@ public class MapGenPlan {
         MapGenerationEffect paths = new BuildRoadBetweenFeaturesEffect("paths", KINGDOM, TOWN).register(
             kingdomPaths);*/
 
+        Tile pathDot = TileBatchManager.get(Ids.TILE_BATCH_PATH_EDGE).getDot();
         // Wave Function collapse keeping houses and path placements
         MapGenerationEffect wfc = new WaveFunctionCollapseMapEffect("waveFunctionCollapse", (gs, pos) -> {
             WeightedRandomPicker<Tile> possibleTilesPicker = new WeightedRandomPicker<>();
-            if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.pathDot) {
-                for (Tile t : Tiles.pathTiles) {
+            if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == pathDot) {
+                for (Tile t : TileBatchManager.get(Ids.TILE_BATCH_PATH_EDGE).getTiles()) {
                     possibleTilesPicker.addItem(t, t.getWeight());
                 }
-                possibleTilesPicker.remove(Tiles.pathDot);
+                possibleTilesPicker.remove(pathDot);
             } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
                 surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY(), 1)) {
                 possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
@@ -152,7 +149,7 @@ public class MapGenPlan {
             if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
                 possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
             } else if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == Tiles.PLAINS) {
-                for (Tile t : Tiles.treeTiles) {
+                for (Tile t : TileBatchManager.get(Ids.TILE_BATCH_TREES_CORNER).getTiles()) {
                     possibleTiles.addItem(t, t.getWeight());
                 }
                 possibleTiles.addItem(Tiles.NULL, possibleTiles.getTotalWeight());

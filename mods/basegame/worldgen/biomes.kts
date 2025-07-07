@@ -12,7 +12,7 @@ featureType {
             pos.x, pos.y, Ids.CAPITAL_SPRITE
         )
     }
-}
+}.register()
 
 featureType {
     id = Ids.TOWN
@@ -23,7 +23,7 @@ featureType {
             pos.x, pos.y, Ids.TOWN_SPRITE
         )
     }
-}
+}.register()
 
 featureType {
     id = Ids.DUNGEON
@@ -31,7 +31,7 @@ featureType {
     onGenerate = { gs, pos ->
         gs.world.entityFactory.generateDungeon(pos.x, pos.y)
     }
-}
+}.register()
 
 featureType {
     id = Ids.MINE
@@ -42,7 +42,7 @@ featureType {
             pos.x, pos.y, Ids.DUNGEON_SPRITE
         )
     }
-}
+}.register()
 
 biome {
     id = "kingdom"

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import heroes.journey.registries.Registry;
+import heroes.journey.tilemap.TileBatch;
 
 public class ResourceManager extends AssetManager {
 
@@ -76,6 +77,7 @@ public class ResourceManager extends AssetManager {
     public void splits() {
         for (TextureMap map : textureRegions.keySet())
             loadTextureMap(map);
+        TileBatch.finalizeAllBatches();
     }
 
     public void loadTextureMap(TextureMap textureMap) {

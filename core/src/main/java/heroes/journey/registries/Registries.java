@@ -8,7 +8,9 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemSubType;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureType;
+import heroes.journey.tilemap.TileLayout;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.tilemap.TileBatch;
 
 public class Registries {
 
@@ -21,6 +23,8 @@ public class Registries {
     public static Registry<Quest> QuestManager = new Registry<>();
     public static Registry<Biome> BiomeManager = new Registry<>();
     public static Registry<Challenge> ChallengeManager = new Registry<>();
+    public static Registry<TileLayout> TileLayoutManager = new Registry<>();
+    public static Registry<TileBatch> TileBatchManager = new Registry<>();
 
     public Registry<Item> itemManager;
     public Registry<ItemSubType> itemSubTypeManager;
@@ -29,6 +33,8 @@ public class Registries {
     public Registry<Terrain> terrainManager;
     public Registry<Quest> questManager;
     public Registry<Biome> biomeManager;
+    public Registry<TileLayout> tileLayoutManager;
+    public Registry<TileBatch> tileBatchManager;
 
     public Registries() {
         itemManager = ItemManager;
@@ -38,6 +44,8 @@ public class Registries {
         terrainManager = TerrainManager;
         questManager = QuestManager;
         biomeManager = BiomeManager;
+        tileLayoutManager = TileLayoutManager;
+        tileBatchManager = TileBatchManager;
     }
 
 }
