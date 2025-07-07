@@ -7,6 +7,8 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 
+import static heroes.journey.initializers.Ids.TERRAIN_PATH;
+import static heroes.journey.initializers.Ids.TERRAIN_PLAINS;
 import static heroes.journey.registries.Registries.TerrainManager;
 
 public class RoadPathing {
@@ -36,9 +38,9 @@ public class RoadPathing {
         public float estimate(TileNode node, TileNode endNode) {
             float baseHeuristic = Math.abs(node.x - endNode.x) + Math.abs(node.y - endNode.y);
             Terrain terrain = map.getTileMap()[node.x][node.y].getTerrain();
-            if (terrain == TerrainManager.get("path"))
+            if (terrain == TerrainManager.get(TERRAIN_PATH))
                 return baseHeuristic;
-            if (terrain == TerrainManager.get("plains"))
+            if (terrain == TerrainManager.get(TERRAIN_PLAINS))
                 return baseHeuristic * terrain.terrainCost * 10;
             return baseHeuristic * terrain.terrainCost * 50;
         }

@@ -74,4 +74,20 @@ public class Ids {
     // Action IDs - Options Actions
     public static final String DEBUG = "debug";
     public static final String MUSIC = "music";
+
+    // Terrain IDs
+    public static final String TERRAIN_NULL = "null";
+
+    public static final String TERRAIN_WATER = "water";
+    public static final String TERRAIN_PLAINS = "plains";
+    public static final String TERRAIN_HILLS = "hills";
+    public static final String TERRAIN_SAND = "sand";
+    public static final String TERRAIN_PATH = "path";
+    public static final String TERRAIN_TREES = "trees";
+    public static final String TERRAIN_PLAINS_TO_HILL = "plains_to_hill";
+    public static final String TERRAIN_SAND_TO_HILL = "sand_to_hill";
+    public static final String TERRAIN_PLAINS_TO_SAND = "plains_to_sand";
+    public static final String TERRAIN_PLAINS_TO_WATER = "plains_to_water";
+    public static final String TERRAIN_HILL_TO_WATER = "hill_to_water";
+    public static final String TERRAIN_SAND_TO_WATER = "sand_to_water";
 }

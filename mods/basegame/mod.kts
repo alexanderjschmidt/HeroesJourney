@@ -13,4 +13,5 @@ gameMod("Base Game", 0) {
 
     log("Loading challenge files...")
     includeScriptsFromDirectory("mods/basegame/challenges")
+    includeScriptsFromDirectory("mods/basegame/worldgen")
 }

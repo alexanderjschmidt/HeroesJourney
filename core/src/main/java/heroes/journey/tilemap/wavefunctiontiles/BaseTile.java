@@ -1,5 +1,7 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
+import static heroes.journey.registries.Registries.TerrainManager;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -14,9 +16,17 @@ public class BaseTile extends Tile {
         this.texture = texture;
     }
 
+    public BaseTile(String terrain, int weight, boolean addToDefaultTiles, TextureRegion texture) {
+        this(TerrainManager.get(terrain), weight, addToDefaultTiles, texture);
+    }
+
     public BaseTile(Terrain terrain, int weight, TextureRegion texture) {
         super(terrain, weight, true);
         this.texture = texture;
+    }
+
+    public BaseTile(String terrain, int weight, TextureRegion texture) {
+        this(TerrainManager.get(terrain), weight, texture);
     }
 
     public void render(SpriteBatch batch, float elapsed, int x, int y) {

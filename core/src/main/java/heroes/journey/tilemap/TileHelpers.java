@@ -1,12 +1,15 @@
 package heroes.journey.tilemap;
 
+import static heroes.journey.registries.Registries.TerrainManager;
+
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
-
-import java.util.List;
 
 public class TileHelpers {
 
@@ -15,7 +18,8 @@ public class TileHelpers {
     public static TileLayout cliffTransition = new TileLayout("Textures/cliffTransition.png");
     public static TileLayout wangEdge = new TileLayout("Textures/wangEdge.png");
 
-    public static void baseTile(Tile tile, Terrain terrain, boolean addToBaseTiles) {
+    public static void baseTile(Tile tile, String terrainStr, boolean addToBaseTiles) {
+        Terrain terrain = TerrainManager.get(terrainStr);
         tile.add(Direction.NORTHWEST, terrain)
             .add(Direction.NORTH, terrain)
             .add(Direction.NORTHEAST, terrain)
@@ -28,7 +32,7 @@ public class TileHelpers {
             TileManager.baseTiles.add(tile);
     }
 
-    public static void baseTile(Tile tile, Terrain terrain) {
+    public static void baseTile(Tile tile, String terrain) {
         baseTile(tile, terrain, true);
     }
 
@@ -40,12 +44,14 @@ public class TileHelpers {
      * @param y               top left corner
      */
     public static List<Tile> createEdge(
-        Terrain terrain,
-        Terrain adjacentTerrain,
+        String terrainId,
+        String adjacentTerrainId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y) {
+        Terrain terrain = TerrainManager.get(terrainId);
+        Terrain adjacentTerrain = TerrainManager.get(adjacentTerrainId);
         return wangEdge.generateTiles(tiles, weight, x, y, false, terrain, adjacentTerrain);
     }
 
@@ -59,14 +65,17 @@ public class TileHelpers {
      * @return
      */
     public static List<Tile> createWangCorner(
-        Terrain base,
-        Terrain adjacentTileOuter,
-        Terrain adjacentTileInner,
+        String baseId,
+        String adjacentTileOuterId,
+        String adjacentTileInnerId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
         boolean addToDefault) {
+        Terrain base = TerrainManager.get(baseId);
+        Terrain adjacentTileOuter = TerrainManager.get(adjacentTileOuterId);
+        Terrain adjacentTileInner = TerrainManager.get(adjacentTileInnerId);
         return wangCorner.generateTiles(tiles, weight, x, y, addToDefault, base, adjacentTileOuter,
             adjacentTileInner);
     }
@@ -80,58 +89,74 @@ public class TileHelpers {
      * @param y                 top left corner
      */
     public static void createWangCornerAnimated(
-        Terrain base,
-        Terrain adjacentTileOuter,
-        Terrain adjacentTileInner,
+        String baseId,
+        String adjacentTileOuterId,
+        String adjacentTileInnerId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
         boolean addToDefault) {
+        Terrain base = TerrainManager.get(baseId);
+        Terrain adjacentTileOuter = TerrainManager.get(adjacentTileOuterId);
+        Terrain adjacentTileInner = TerrainManager.get(adjacentTileInnerId);
         wangCorner.generateAnimatedTiles(tiles, weight, x, y, 4, 5, addToDefault, base, adjacentTileOuter,
             adjacentTileInner);
     }
 
     public static void cliffTransitionTapper(
-        Terrain base,
-        Terrain adjacentTileOuter,
-        Terrain adjacentTileInner,
+        String baseId,
+        String adjacentTileOuterId,
+        String adjacentTileInnerId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
         boolean addToDefault) {
+        Terrain base = TerrainManager.get(baseId);
+        Terrain adjacentTileOuter = TerrainManager.get(adjacentTileOuterId);
+        Terrain adjacentTileInner = TerrainManager.get(adjacentTileInnerId);
         cliffTransitionTapper.generateTiles(tiles, weight * 1000, x, y, addToDefault, base, adjacentTileOuter,
             adjacentTileInner);
     }
 
     public static void cliffTransition(
-        Terrain cliff1,
-        Terrain cliff2,
-        Terrain adjacentTileOuter1,
-        Terrain adjacentTileOuter2,
-        Terrain adjacentTileInner,
+        String cliff1Id,
+        String cliff2Id,
+        String adjacentTileOuter1Id,
+        String adjacentTileOuter2Id,
+        String adjacentTileInnerId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
         boolean addToDefault) {
+        Terrain cliff1 = TerrainManager.get(cliff1Id);
+        Terrain cliff2 = TerrainManager.get(cliff2Id);
+        Terrain adjacentTileOuter1 = TerrainManager.get(adjacentTileOuter1Id);
+        Terrain adjacentTileOuter2 = TerrainManager.get(adjacentTileOuter2Id);
+        Terrain adjacentTileInner = TerrainManager.get(adjacentTileInnerId);
         cliffTransition.generateTiles(tiles, weight * 1000, x, y, addToDefault, cliff1, cliff2,
             adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 
     public static void cliffTransitionAnimated(
-        Terrain cliff1,
-        Terrain cliff2,
-        Terrain adjacentTileOuter1,
-        Terrain adjacentTileOuter2,
-        Terrain adjacentTileInner,
+        String cliff1Id,
+        String cliff2Id,
+        String adjacentTileOuter1Id,
+        String adjacentTileOuter2Id,
+        String adjacentTileInnerId,
         TextureRegion[][] tiles,
         int weight,
         int x,
         int y,
         boolean addToDefault) {
-        cliffTransition.generateAnimatedTiles(tiles, weight * 10, x, y, 4, 4,
-            addToDefault, cliff1, cliff2, adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
+        Terrain cliff1 = TerrainManager.get(cliff1Id);
+        Terrain cliff2 = TerrainManager.get(cliff2Id);
+        Terrain adjacentTileOuter1 = TerrainManager.get(adjacentTileOuter1Id);
+        Terrain adjacentTileOuter2 = TerrainManager.get(adjacentTileOuter2Id);
+        Terrain adjacentTileInner = TerrainManager.get(adjacentTileInnerId);
+        cliffTransition.generateAnimatedTiles(tiles, weight * 10, x, y, 4, 4, addToDefault, cliff1, cliff2,
+            adjacentTileOuter1, adjacentTileOuter2, adjacentTileInner);
     }
 }

@@ -14,6 +14,7 @@ import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
 import lombok.Getter;
+import heroes.journey.initializers.Ids;
 
 @Getter
 public class VoronoiRegionEffect extends MapGenerationEffect {
@@ -38,7 +39,7 @@ public class VoronoiRegionEffect extends MapGenerationEffect {
         for (int x = 0; x < gs.getWidth(); x++) {
             for (int y = 0; y < gs.getHeight(); y++) {
                 isLand[x][y] = inBounds(x, y) &&
-                    gs.getMap().getTileMap()[x][y].getTerrain() != TerrainManager.get("water");
+                    gs.getMap().getTileMap()[x][y].getTerrain() != TerrainManager.get(Ids.TERRAIN_WATER);
             }
         }
 
