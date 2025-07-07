@@ -1,6 +1,6 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.registries.TileManager.baseTiles;
+import static heroes.journey.registries.TileManager.BASE_TILES;
 import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
 import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
 
@@ -43,7 +43,7 @@ public class NoiseMapEffect extends MapGenerationEffect {
         int[][] noiseMap = noiseGen.generateMap(width);
         Tile[][] tileMap = convertToTileMap(noiseMap);
         for (int i = 0; i < smooths; i++) {
-            smooth(tileMap, baseTiles);
+            smooth(tileMap, BASE_TILES.values().stream().toList());
         }
 
         gs.getMap().setTileMap(tileMap);

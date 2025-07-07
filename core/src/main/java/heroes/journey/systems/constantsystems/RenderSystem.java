@@ -22,7 +22,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.RenderComponent;
-import heroes.journey.initializers.Ids;
+import heroes.journey.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
@@ -69,7 +69,8 @@ public class RenderSystem extends BaseEntitySystem {
 
         PlayerInfo.updateFog();
 
-        if (!((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue())
+        if (!((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
+            Ids.DEBUG)).isTrue())
             renderFog(batch, PlayerInfo.get().getFog());
 
         HUD.get().getCursor().render(batch, world.getDelta());

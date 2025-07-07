@@ -165,4 +165,6 @@ public class TileBatch extends Registrable {
             batch.generateTilesIfNeeded();
         }
     }
+
+    // After ResourceManager has loaded and split textures, call TilesDSL.finalizeAllBaseTiles() to generate all base tiles.
 }

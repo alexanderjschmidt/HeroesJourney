@@ -2,9 +2,10 @@ package heroes.journey.tilemap
 
 import heroes.journey.GameState
 import heroes.journey.entities.Position
-import heroes.journey.initializers.Tiles
+import heroes.journey.Ids
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries.FeatureTypeManager
+import heroes.journey.registries.TileManager
 import lombok.Getter
 import java.util.*
 
@@ -16,7 +17,7 @@ abstract class FeatureType(id: String, name: String?) : Registrable(id, name) {
     }
 
     fun generateFeature(gs: GameState, pos: Position): UUID {
-        gs.map.setEnvironment(pos.x, pos.y, Tiles.NULL)
+        gs.map.setEnvironment(pos.x, pos.y, TileManager.BASE_TILES[Ids.BASE_TILE_NULL])
         return generateFeatureInner(gs, pos)
     }
 

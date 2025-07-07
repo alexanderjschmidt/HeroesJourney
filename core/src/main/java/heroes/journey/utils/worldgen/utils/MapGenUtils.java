@@ -1,23 +1,24 @@
 package heroes.journey.utils.worldgen.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.function.Predicate;
+
 import heroes.journey.GameState;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.Tiles;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.worldgen.MapGenerationException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
-import java.util.function.Predicate;
+import heroes.journey.registries.TileManager;
+import heroes.journey.Ids;
 
 public class MapGenUtils {
 
@@ -71,7 +72,9 @@ public class MapGenUtils {
     }
 
     public static boolean isLandTile(Tile tile) {
-        return tile == Tiles.PLAINS || tile == Tiles.HILLS || tile == Tiles.SAND;
+        return tile == TileManager.BASE_TILES.get(Ids.BASE_TILE_PLAINS) ||
+            tile == TileManager.BASE_TILES.get(Ids.BASE_TILE_HILLS) ||
+            tile == TileManager.BASE_TILES.get(Ids.BASE_TILE_SAND);
     }
 
     public static boolean inBounds(int x, int y) {

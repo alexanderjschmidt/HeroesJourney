@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import heroes.journey.initializers.Tiles;
+import heroes.journey.Ids;
+import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 
 public class CellularAutomata {
@@ -57,13 +58,13 @@ public class CellularAutomata {
 
     private static Tile getTile(int nextInt) {
         if (nextInt < 20)
-            return Tiles.WATER;
+            return TileManager.BASE_TILES.get(Ids.BASE_TILE_WATER);
         else if (nextInt < 35)
-            return Tiles.SAND;
+            return TileManager.BASE_TILES.get(Ids.BASE_TILE_SAND);
         else if (nextInt < 80)
-            return Tiles.PLAINS;
+            return TileManager.BASE_TILES.get(Ids.BASE_TILE_PLAINS);
         else
-            return Tiles.HILLS;
+            return TileManager.BASE_TILES.get(Ids.BASE_TILE_HILLS);
     }
 
     public static void smooth(Tile[][] map, List<Tile> baseTiles) {

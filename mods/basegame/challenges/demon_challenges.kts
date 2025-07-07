@@ -1,6 +1,6 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.Ids.*
+import heroes.journey.Ids.*
 
 // Demon Challenges - included by basegame mod
 

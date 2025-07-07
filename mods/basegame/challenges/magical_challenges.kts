@@ -1,6 +1,6 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.initializers.Ids.*
+import heroes.journey.Ids.*
 
 // Magical Challenges - included by basegame mod
 challenge("defeat_adept_necromancer") {

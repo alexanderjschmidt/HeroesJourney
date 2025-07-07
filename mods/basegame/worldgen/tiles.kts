@@ -1,4 +1,5 @@
-import heroes.journey.initializers.Ids
+import heroes.journey.Ids
+import heroes.journey.tilemap.baseTile
 import heroes.journey.tilemap.tileBatch
 import heroes.journey.tilemap.tileLayout
 
@@ -257,3 +258,57 @@ tileBatch {
     frameCount = 4
     frameDist = 4
 }.register()
+
+// Base Tiles (migrated from Tiles.java)
+baseTile {
+    id = Ids.BASE_TILE_NULL
+    terrain = Ids.TERRAIN_NULL
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 3
+    y = 0
+    weight = 100
+    addToBaseTiles = true
+}
+
+baseTile {
+    id = Ids.BASE_TILE_WATER
+    terrain = Ids.TERRAIN_WATER
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 21
+    y = 11
+    weight = 300
+    addToBaseTiles = true
+    frameCount = 4
+    frameDist = 5
+    frameRate = 0.2f
+}
+
+baseTile {
+    id = Ids.BASE_TILE_PLAINS
+    terrain = Ids.TERRAIN_PLAINS
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 5
+    weight = 1000
+    addToBaseTiles = true
+}
+
+baseTile {
+    id = Ids.BASE_TILE_HILLS
+    terrain = Ids.TERRAIN_HILLS
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 11
+    weight = 500
+    addToBaseTiles = true
+}
+
+baseTile {
+    id = Ids.BASE_TILE_SAND
+    terrain = Ids.TERRAIN_SAND
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 17
+    weight = 200
+    addToBaseTiles = true
+}

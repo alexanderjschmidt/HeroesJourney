@@ -14,7 +14,7 @@ import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
 import lombok.Getter;
-import heroes.journey.initializers.Ids;
+import heroes.journey.Ids;
 
 @Getter
 public class VoronoiRegionEffect extends MapGenerationEffect {

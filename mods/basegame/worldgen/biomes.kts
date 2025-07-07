@@ -1,4 +1,4 @@
-import heroes.journey.initializers.Ids
+import heroes.journey.Ids
 import heroes.journey.tilemap.biome
 import heroes.journey.tilemap.featureType
 import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator

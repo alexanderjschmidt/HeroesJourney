@@ -1,12 +1,13 @@
 package heroes.journey.systems;
 
-import static heroes.journey.initializers.Ids.DELVE;
-import static heroes.journey.initializers.Ids.DUNGEON_SPRITE;
-import static heroes.journey.initializers.Ids.FACE_CHALLENGES;
-import static heroes.journey.initializers.Ids.QUEST_BOARD;
-import static heroes.journey.initializers.Ids.REST;
-import static heroes.journey.initializers.Ids.TRAINING;
-import static heroes.journey.initializers.Ids.TRAVEL;
+import static heroes.journey.Ids.BASE_TILE_NULL;
+import static heroes.journey.Ids.DELVE;
+import static heroes.journey.Ids.DUNGEON_SPRITE;
+import static heroes.journey.Ids.FACE_CHALLENGES;
+import static heroes.journey.Ids.QUEST_BOARD;
+import static heroes.journey.Ids.REST;
+import static heroes.journey.Ids.TRAINING;
+import static heroes.journey.Ids.TRAVEL;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.QuestManager;
 
@@ -34,8 +35,8 @@ import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.Tiles;
 import heroes.journey.registries.Registries;
+import heroes.journey.registries.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 
@@ -114,7 +115,7 @@ public class EntityFactory {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(LocationComponent.class).region(region);
 
-        world.getGameState().getMap().setEnvironment(x, y, Tiles.NULL);
+        world.getGameState().getMap().setEnvironment(x, y, TileManager.BASE_TILES.get(BASE_TILE_NULL));
     }
 
     public UUID generateBasicLocation(String name, int x, int y, String render) {

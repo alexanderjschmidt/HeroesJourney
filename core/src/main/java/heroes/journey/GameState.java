@@ -28,7 +28,6 @@ import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Stat;
-import heroes.journey.initializers.Initializer;
 import heroes.journey.models.MapData;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;

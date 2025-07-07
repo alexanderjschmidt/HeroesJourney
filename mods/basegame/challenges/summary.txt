@@ -184,8 +184,8 @@ mods/basegame/
 ### Import Requirements
 Each challenge file includes:
 ```kotlin
-import heroes.journey.initializers.Ids
-import heroes.journey.initializers.Ids.*
+import heroes.journey.Ids
+import heroes.journey.Ids.*
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.ChallengeManager

@@ -1,10 +1,7 @@
 package heroes.journey.tilemap
 
-import heroes.journey.registries.Registries
+import heroes.journey.registries.TileManager
 import heroes.journey.tilemap.wavefunctiontiles.Terrain
-import heroes.journey.tilemap.wavefunctiontiles.Tile
-import heroes.journey.utils.art.ResourceManager
-import heroes.journey.utils.art.ResourceManager.TextureManager
 
 class TerrainBuilder {
     var id: String = ""
@@ -52,7 +49,19 @@ class TileBatchBuilder {
 
     fun build(): TileBatch {
         val isAnimated = frameDist > 0
-        return TileBatch(id, layout, textureMap, terrains, weight, startX, startY, addToDefault, isAnimated, frameCount, frameDist)
+        return TileBatch(
+            id,
+            layout,
+            textureMap,
+            terrains,
+            weight,
+            startX,
+            startY,
+            addToDefault,
+            isAnimated,
+            frameCount,
+            frameDist
+        )
     }
 }
 
@@ -60,5 +69,53 @@ fun tileBatch(init: TileBatchBuilder.() -> Unit): TileBatch {
     val builder = TileBatchBuilder()
     builder.init()
     return builder.build()
+}
+
+class BaseTileDef(
+    val id: String,
+    val terrain: String,
+    val textureMap: String,
+    val x: Int,
+    val y: Int,
+    val weight: Int,
+    val addToBaseTiles: Boolean,
+    val frameCount: Int,
+    val frameDist: Int,
+    val frameRate: Float
+)
+
+class BaseTileBuilder {
+    var id: String = ""
+    var terrain: String = ""
+    var textureMap: String = ""
+    var x: Int = 0
+    var y: Int = 0
+    var weight: Int = 1
+    var addToBaseTiles: Boolean = true
+    var frameCount: Int = 0
+    var frameDist: Int = 0
+    var frameRate: Float = 0.2f
+
+    fun build(): BaseTileDef {
+        return BaseTileDef(
+            id,
+            terrain,
+            textureMap,
+            x,
+            y,
+            weight,
+            addToBaseTiles,
+            frameCount,
+            frameDist,
+            frameRate
+        )
+    }
+}
+
+fun baseTile(init: BaseTileBuilder.() -> Unit) {
+    val builder = BaseTileBuilder()
+    builder.init()
+    val def = builder.build()
+    TileManager.addBaseTileDef(def)
 }
 

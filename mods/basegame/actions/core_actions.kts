@@ -1,4 +1,5 @@
 import heroes.journey.Application
+import heroes.journey.Ids
 import heroes.journey.components.BuffsComponent
 import heroes.journey.components.StatsComponent
 import heroes.journey.components.character.ActionComponent
@@ -49,7 +50,7 @@ action {
             .world
             .edit(entityId)
             .create(ActionComponent::class.java)
-            .action(Registries.ActionManager.get(heroes.journey.initializers.Ids.REST))
+            .action(Registries.ActionManager.get(Ids.REST))
         HUD.get().revertToInitialState()
         NullResult()
     }

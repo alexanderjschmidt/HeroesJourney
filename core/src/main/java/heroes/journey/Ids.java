@@ -1,4 +1,4 @@
-package heroes.journey.initializers;
+package heroes.journey;
 
 public class Ids {
 
@@ -124,4 +124,11 @@ public class Ids {
     public static final String TILE_BATCH_SAND_TO_WATER_CORNER_ANIMATED = "sand_to_water_corner_animated";
     public static final String TILE_BATCH_CLIFF_TRANSITION_SAND_HILL_WATER_ANIMATED = "cliff_transition_sand_hill_water_animated";
     public static final String TILE_BATCH_CLIFF_TRANSITION_SAND_PLAINS_WATER_ANIMATED = "cliff_transition_sand_plains_water_animated";
+
+    // BaseTile IDs
+    public static final String BASE_TILE_NULL = "base_tile_null";
+    public static final String BASE_TILE_WATER = "base_tile_water";
+    public static final String BASE_TILE_PLAINS = "base_tile_plains";
+    public static final String BASE_TILE_HILLS = "base_tile_hills";
+    public static final String BASE_TILE_SAND = "base_tile_sand";
 }
