@@ -3,6 +3,7 @@ package heroes.journey.ui.windows;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
+import heroes.journey.initializers.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.ui.Cursor;
@@ -31,7 +32,7 @@ public class TerrainUI extends UI {
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         Terrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
 
-        String locationCoords = ((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get("debug")).isTrue() ?
+        String locationCoords = ((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue() ?
             " (" + cursor.x + ", " + cursor.y + ")" :
             "";
         String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));

@@ -16,7 +16,7 @@ This document summarizes the complete challenges system implementation for Heroe
 All challenge files are organized in the `mods/basegame/challenges/` subfolder:
 
 1. `demon_challenges.kts` - 15 Demon challenges
-2. `dragon_challenges.kts` - 15 Dragon challenges  
+2. `dragon_challenges.kts` - 15 Dragon challenges
 3. `holy_challenges.kts` - 15 Holy challenges
 4. `humanoid_challenges.kts` - 15 Humanoid challenges
 5. `humanoid_ii_challenges.kts` - 15 Humanoid II challenges
@@ -138,7 +138,7 @@ challenge("unique_challenge_id") {
 
 ### Reward Types
 - **valor** - Combat and physical achievements
-- **arcanum** - Magical and mystical achievements  
+- **arcanum** - Magical and mystical achievements
 - **influence** - Social and diplomatic achievements
 - **insight** - Knowledge and discovery achievements
 
@@ -184,8 +184,8 @@ mods/basegame/
 ### Import Requirements
 Each challenge file includes:
 ```kotlin
-import heroes.journey.initializers.base.Ids
-import heroes.journey.initializers.base.Ids.*
+import heroes.journey.initializers.Ids
+import heroes.journey.initializers.Ids.*
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.mods.gameMod
 import heroes.journey.registries.ChallengeManager
@@ -210,7 +210,7 @@ val [category]Challenges = gameMod("[Category] Challenges", 0) {
 
 ### Usage Distribution
 - Physical approaches: ~100 uses total
-- Mental approaches: ~100 uses total  
+- Mental approaches: ~100 uses total
 - Magical approaches: ~100 uses total
 - Social approaches: ~100 uses total
 
@@ -271,4 +271,4 @@ This challenges system provides a comprehensive, balanced, and extensible founda
 
 The system successfully integrates with the existing game architecture while providing clear separation between different challenge types. Each challenge file is self-contained and follows consistent patterns, making the codebase maintainable and extensible.
 
-For future development, the system provides clear pathways for expansion while maintaining the core design principles of approach balance and thematic consistency. 
+For future development, the system provides clear pathways for expansion while maintaining the core design principles of approach balance and thematic consistency.

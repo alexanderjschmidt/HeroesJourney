@@ -49,7 +49,7 @@ action {
             .world
             .edit(entityId)
             .create(ActionComponent::class.java)
-            .action(Registries.ActionManager.get("rest"))
+            .action(Registries.ActionManager.get(heroes.journey.initializers.Ids.REST))
         HUD.get().revertToInitialState()
         NullResult()
     }

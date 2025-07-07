@@ -44,8 +44,14 @@ public class RegionManagementSystem extends TriggerableSystem {
 
         // Challenge management: Add random challenges if less than 3
         while (challenges.size() < 3) {
-            String randomChallengeId = Registries.ChallengeManager.keySet()
-                .toArray(new String[0])[Random.get().nextInt(Registries.ChallengeManager.size() - 1)];
+            String[] keySet = Registries.ChallengeManager.keySet().toArray(new String[0]);
+            String randomChallengeId;
+            try {
+                randomChallengeId = keySet[Random.get().nextInt(Registries.ChallengeManager.size())];
+            } catch (Exception e) {
+                System.out.println(keySet.length + " " + Registries.ChallengeManager.size());
+                throw new RuntimeException(e);
+            }
             Challenge randomChallenge = Registries.ChallengeManager.get(randomChallengeId);
             Set<Position> regionTiles = regionComponent.getTiles();
 

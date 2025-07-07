@@ -55,7 +55,7 @@ targetAction<Quest> {
         val town = UUID.fromString(input["owner"])
         QuestsComponent.get(input.gameState.world, town).quests
     }
-    targetAction = "quest"
+    targetAction = heroes.journey.initializers.Ids.QUEST
 }.register()
 
 // Choose Approach
@@ -122,7 +122,7 @@ targetAction<Stat> {
         val challenge: Challenge = challengeComponent.challenge()
         challenge.approaches.toList()
     }
-    targetAction = "choose_approach"
+    targetAction = heroes.journey.initializers.Ids.CHOOSE_APPROACH
 }.register()
 
 // Face Challenges
@@ -134,5 +134,5 @@ targetAction<UUID> {
         val regionId = Utils.getRegion(input)
         RegionComponent.get(input.gameState.world, regionId).challenges
     }
-    targetAction = "face_challenge"
+    targetAction = heroes.journey.initializers.Ids.FACE_CHALLENGE
 }.register() 

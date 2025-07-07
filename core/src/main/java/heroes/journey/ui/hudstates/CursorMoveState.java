@@ -6,6 +6,7 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.character.AITurnComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
+import heroes.journey.initializers.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
@@ -33,7 +34,7 @@ class CursorMoveState extends HUDState {
                     .getWorld()
                     .edit(hud.getCursor().getSelected())
                     .create(ActionComponent.class)
-                    .action((heroes.journey.entities.actions.Action) Registries.ActionManager.get("open_action_menu"));
+                    .action((heroes.journey.entities.actions.Action) Registries.ActionManager.get(Ids.OPEN_ACTION_MENU));
             } else if (hud.getCursor().getHover() == null) {
                 HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));
             }

@@ -1,4 +1,4 @@
-package heroes.journey.initializers.base;
+package heroes.journey.initializers;
 
 public class Ids {
 
@@ -41,4 +41,37 @@ public class Ids {
 
     // Vermin Animations
     public static final String ACID_ANT = "acid_ant", BLOATED_BEDBUG = "bloated_bedbug", DUNG_BEETLE = "dung_beetle", ENGORGED_TICK = "engorged_tick", FAMISHED_TICK = "famished_tick", FORAGING_MAGGOT = "foraging_maggot", INFECTED_MOUSE = "infected_mouse", LAVA_ANT = "lava_ant", MAWING_BEAVER = "mawing_beaver", TUNNELING_MOLE = "tunneling_mole", PLAGUE_BAT = "plague_bat", RHINO_BEETLE = "rhino_beetle", SOLDIER_ANT = "soldier_ant", SWOOPING_BAT = "swooping_bat", TAINTED_COCKROACH = "tainted_cockroach";
+
+    // Action IDs - Core Actions
+    public static final String OPEN_ACTION_MENU = "open_action_menu";
+    public static final String EXIT_GAME = "exit_game";
+    public static final String END_TURN = "end_turn";
+    public static final String SAVE = "save";
+    public static final String POPUP = "popup";
+    public static final String REST = "rest";
+
+    // Action IDs - Training Actions
+    public static final String WORKOUT_TRAINING = "workout_training";
+    public static final String STUDY_TRAINING = "study_training";
+    public static final String PRACTICE_TRAINING = "practice_training";
+    public static final String SOCIALIZE_TRAINING = "socialize_training";
+    public static final String TRAINING = "training";
+
+    // Action IDs - Travel Actions
+    public static final String TRAVEL_TO = "travel_to";
+    public static final String TRAVEL = "travel";
+
+    // Action IDs - Challenge Actions
+    public static final String QUEST = "quest";
+    public static final String QUEST_BOARD = "quest_board";
+    public static final String CHOOSE_APPROACH = "choose_approach";
+    public static final String FACE_CHALLENGE = "face_challenge";
+    public static final String FACE_CHALLENGES = "face_challenges";
+
+    // Action IDs - Delve Actions
+    public static final String DELVE = "delve";
+
+    // Action IDs - Options Actions
+    public static final String DEBUG = "debug";
+    public static final String MUSIC = "music";
 }

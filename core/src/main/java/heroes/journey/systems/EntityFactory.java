@@ -1,6 +1,12 @@
 package heroes.journey.systems;
 
-import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
+import static heroes.journey.initializers.Ids.DELVE;
+import static heroes.journey.initializers.Ids.DUNGEON_SPRITE;
+import static heroes.journey.initializers.Ids.FACE_CHALLENGES;
+import static heroes.journey.initializers.Ids.QUEST_BOARD;
+import static heroes.journey.initializers.Ids.REST;
+import static heroes.journey.initializers.Ids.TRAINING;
+import static heroes.journey.initializers.Ids.TRAVEL;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.QuestManager;
 
@@ -80,10 +86,10 @@ public class EntityFactory {
     public void addPlayerComponents(UUID entityId) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
-            .addAction(Registries.ActionManager.get("rest"))
-            .addAction(Registries.ActionManager.get("travel"))
-            .addAction(Registries.ActionManager.get("face_challenges"))
-            .addAction(Registries.ActionManager.get("training"));
+            .addAction(Registries.ActionManager.get(REST))
+            .addAction(Registries.ActionManager.get(TRAVEL))
+            .addAction(Registries.ActionManager.get(FACE_CHALLENGES))
+            .addAction(Registries.ActionManager.get(TRAINING));
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
@@ -99,7 +105,7 @@ public class EntityFactory {
         region.create(RegionComponent.class).ring(ringIndex).ringPos(ringPos);
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
         region.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
-        region.create(PossibleActionsComponent.class);
+        region.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get(QUEST_BOARD));
         return regionId;
     }
 
@@ -123,7 +129,7 @@ public class EntityFactory {
             DUNGEON_SPRITE);
 
         EntityEdit dungeon = world.getEntity(dungeonId).edit();
-        dungeon.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get("delve"));
+        dungeon.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get(DELVE));
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
         return dungeonId;

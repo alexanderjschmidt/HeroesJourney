@@ -1,6 +1,6 @@
 package heroes.journey.initializers.base;
 
-import static heroes.journey.initializers.base.Ids.OVERWORLD_TILESET;
+import static heroes.journey.initializers.Ids.OVERWORLD_TILESET;
 import static heroes.journey.utils.art.ResourceManager.TextureManager;
 import static heroes.journey.utils.worldgen.MapGenPlan.KINGDOM;
 

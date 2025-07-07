@@ -1,8 +1,8 @@
 package heroes.journey.utils.worldgen;
 
-import static heroes.journey.initializers.base.Ids.CAPITAL_SPRITE;
-import static heroes.journey.initializers.base.Ids.DUNGEON_SPRITE;
-import static heroes.journey.initializers.base.Ids.TOWN_SPRITE;
+import static heroes.journey.initializers.Ids.CAPITAL_SPRITE;
+import static heroes.journey.initializers.Ids.DUNGEON_SPRITE;
+import static heroes.journey.initializers.Ids.TOWN_SPRITE;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
@@ -24,7 +24,7 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
-import heroes.journey.initializers.base.Ids;
+import heroes.journey.initializers.Ids;
 import heroes.journey.initializers.base.Tiles;
 import heroes.journey.registries.TileManager;
 import heroes.journey.systems.EntityFactory;

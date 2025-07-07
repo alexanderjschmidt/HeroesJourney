@@ -55,7 +55,7 @@ action {
             val inputs: HashMap<String, String> = HashMap()
             inputs["message"] = "You have traveled to $input['target']"
             gs.world.edit(e).create<ActionComponent>(ActionComponent::class.java)
-                .action(Registries.ActionManager.get("popup"), inputs)
+                .action(Registries.ActionManager.get(heroes.journey.initializers.Ids.POPUP), inputs)
         })
         MultiStepResult(events)
     }
@@ -93,5 +93,5 @@ targetAction<UUID> {
         }
         wayfareLocations
     }
-    targetAction = "travel_to"
+    targetAction = heroes.journey.initializers.Ids.TRAVEL_TO
 }.register() 

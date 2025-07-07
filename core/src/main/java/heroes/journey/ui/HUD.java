@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heroes.journey.entities.actions.options.BooleanOptionAction;
+import heroes.journey.initializers.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.PopupUIState;
@@ -124,7 +125,7 @@ public class HUD extends Stage {
         this.delta = delta;
         stateMachine.update();
         act();
-        this.setDebugAll(((BooleanOptionAction)Registries.ActionManager.get("debug")).isTrue());
+        this.setDebugAll(((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue());
 
         draw();
     }
@@ -155,7 +156,7 @@ public class HUD extends Stage {
 
     public void setState(HUDState newState) {
         stateMachine.changeState(newState);
-        if (((BooleanOptionAction)Registries.ActionManager.get("debug")).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
                 stateMachine.getPreviousState());
         }
@@ -175,14 +176,14 @@ public class HUD extends Stage {
         while (stateMachine.revertToPreviousState()) {
         }
         isReverting = false;
-        if (((BooleanOptionAction)Registries.ActionManager.get("debug")).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("reset to " + stateMachine.getCurrentState());
         }
     }
 
     public void revertToPreviousState() {
         stateMachine.revertToPreviousState();
-        if (((BooleanOptionAction)Registries.ActionManager.get("debug")).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
                 stateMachine.getPreviousState());
         }

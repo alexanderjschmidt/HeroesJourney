@@ -1,7 +1,7 @@
 package heroes.journey.ui;
 
-import static heroes.journey.initializers.base.Ids.CURSOR;
-import static heroes.journey.initializers.base.Ids.MAP_POINTER;
+import static heroes.journey.initializers.Ids.CURSOR;
+import static heroes.journey.initializers.Ids.MAP_POINTER;
 import static heroes.journey.utils.art.ResourceManager.RenderableManager;
 
 import java.util.UUID;
