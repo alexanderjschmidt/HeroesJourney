@@ -1,8 +1,12 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
@@ -12,14 +16,15 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionInput;
-import heroes.journey.entities.actions.results.*;
+import heroes.journey.entities.actions.results.ActionListResult;
+import heroes.journey.entities.actions.results.ActionResult;
+import heroes.journey.entities.actions.results.EndTurnResult;
+import heroes.journey.entities.actions.results.MultiStepResult;
+import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.hudstates.States;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @All({PositionComponent.class, IdComponent.class, ActionComponent.class})
 @Exclude({MovementComponent.class})
@@ -27,7 +32,7 @@ public class ActionSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID id = IdComponent.get(world, entityId);
         PositionComponent positionComponent = PositionComponent.get(world, id);
 
@@ -42,6 +47,9 @@ public class ActionSystem extends IteratingSystem {
         if (result != null) {
             switch (result) {
                 case StringResult str -> {
+                    if (!str.isEndTurn()) {
+                        world.getGameState().getEntitiesInActionOrder().addFirst(id);
+                    }
                     world.getGameState().getHistory().add(action.getId(), input, id);
                     world.getGameState().nextMove();
                     HUD.get().revertToInitialState();
@@ -69,8 +77,8 @@ public class ActionSystem extends IteratingSystem {
 
     @Override
     public void removed(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
-        
+        GameWorld world = (GameWorld)getWorld();
+
         // Try to get the ID component - if it doesn't exist, all components are gone
         UUID id = null;
         try {
@@ -78,7 +86,7 @@ public class ActionSystem extends IteratingSystem {
         } catch (Exception e) {
             return;
         }
-        
+
         // If we have the ID, we can safely access other components
         EventQueueComponent events = EventQueueComponent.get(world, id);
         if (events != null) {

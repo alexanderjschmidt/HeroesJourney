@@ -9,7 +9,6 @@ import static heroes.journey.Ids.REST;
 import static heroes.journey.Ids.TRAINING;
 import static heroes.journey.Ids.TRAVEL;
 import static heroes.journey.registries.Registries.ItemManager;
-import static heroes.journey.registries.Registries.QuestManager;
 
 import java.util.UUID;
 
@@ -90,6 +89,7 @@ public class EntityFactory {
             .addAction(Registries.ActionManager.get(REST))
             .addAction(Registries.ActionManager.get(TRAVEL))
             .addAction(Registries.ActionManager.get(FACE_CHALLENGES))
+            .addAction(Registries.ActionManager.get("complete_quest"))
             .addAction(Registries.ActionManager.get(TRAINING));
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
@@ -105,7 +105,7 @@ public class EntityFactory {
         EntityEdit region = world.getEntity(regionId).edit();
         region.create(RegionComponent.class).ring(ringIndex).ringPos(ringPos);
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
-        region.create(QuestsComponent.class).addQuest(QuestManager.get("delve_dungeon"));
+        region.create(QuestsComponent.class);
         region.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get(QUEST_BOARD));
         return regionId;
     }

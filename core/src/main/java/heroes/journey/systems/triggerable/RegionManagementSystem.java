@@ -44,14 +44,14 @@ public class RegionManagementSystem extends TriggerableSystem {
 
         // Challenge management: Add random challenges if less than 3
         while (challenges.size() < 3) {
-            String[] keySet = Registries.ChallengeManager.keySet().toArray(new String[0]);
-            String randomChallengeId;
+            String[] keySet;
             try {
-                randomChallengeId = keySet[Random.get().nextInt(Registries.ChallengeManager.size())];
+                keySet = Registries.ChallengeManager.keySet().toArray(new String[0]);
             } catch (Exception e) {
-                System.out.println(keySet.length + " " + Registries.ChallengeManager.size());
-                throw new RuntimeException(e);
+                System.out.println(Registries.ChallengeManager.size());
+                throw e;
             }
+            String randomChallengeId = keySet[Random.get().nextInt(Registries.ChallengeManager.size())];
             Challenge randomChallenge = Registries.ChallengeManager.get(randomChallengeId);
             Set<Position> regionTiles = regionComponent.getTiles();
 
@@ -73,6 +73,6 @@ public class RegionManagementSystem extends TriggerableSystem {
 
     @Override
     public EventTrigger getTrigger() {
-        return EventTrigger.MOVE;
+        return EventTrigger.TURN;
     }
 }

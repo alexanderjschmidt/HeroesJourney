@@ -26,9 +26,9 @@ class TargetAction<I>(
     inputDisplayNameFn
 ) {
     override fun requirementsMet(input: ActionInput): ShowAction {
-        val options = getTargets(input)
-        if (options.isEmpty()) return ShowAction.GRAYED
-        return super.requirementsMet(input)
+        var targetShowAction: ShowAction = ShowAction.YES
+        if (getTargets(input).isEmpty()) targetShowAction = ShowAction.GRAYED
+        return super.requirementsMet(input).and(targetShowAction)
     }
 
     override fun onSelect(input: ActionInput, ai: Boolean): ActionResult {
