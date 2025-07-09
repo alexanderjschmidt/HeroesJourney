@@ -1,13 +1,36 @@
 package heroes.journey.entities.tagging;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Attributes extends HashMap<Stat,Integer> {
+    private Operation defaultOperation = Operation.ADD;
+    // Standard order of operations: ADD, SUBTRACT, MULTIPLY, DIVIDE
+    private static final List<Operation> DEFAULT_OPERATIONS_ORDER = Collections.unmodifiableList(
+        Arrays.asList(Operation.ADD, Operation.SUBTRACT, Operation.MULTIPLY, Operation.DIVIDE));
+
+    public static List<Operation> getDefaultOperationsOrder() {
+        return DEFAULT_OPERATIONS_ORDER;
+    }
 
     public Attributes() {
+    }
+
+    public Attributes(Operation defaultOperation) {
+        this.defaultOperation = defaultOperation;
+    }
+
+    public void setDefaultOperation(Operation op) {
+        this.defaultOperation = op;
+    }
+
+    public Operation getDefaultOperation() {
+        return defaultOperation;
     }
 
     public Attributes(Map<? extends Stat,? extends Integer> map) {
@@ -51,7 +74,25 @@ public class Attributes extends HashMap<Stat,Integer> {
     }
 
     public Attributes merge(Attributes attributesToMerge) {
-        return merge(attributesToMerge, Operation.ADD);
+        return merge(attributesToMerge, defaultOperation);
+    }
+
+    // Multi-merge with order
+    public Attributes merge(List<Attributes> attributesList, List<Operation> operationsOrder) {
+        List<Operation> order = operationsOrder != null ? operationsOrder : DEFAULT_OPERATIONS_ORDER;
+        for (Operation op : order) {
+            for (Attributes attrs : attributesList) {
+                if (attrs.getDefaultOperation() != op)
+                    continue;
+                this.merge(attrs, op);
+            }
+        }
+        return this;
+    }
+
+    // Overload: use default order
+    public Attributes merge(List<Attributes> attributesList) {
+        return merge(attributesList, DEFAULT_OPERATIONS_ORDER);
     }
 
     public Attributes merge(Attributes attributesToMerge, Operation operation) {

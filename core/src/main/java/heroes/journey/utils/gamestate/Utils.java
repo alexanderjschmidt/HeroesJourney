@@ -5,10 +5,8 @@ import static heroes.journey.registries.Registries.ActionManager;
 import java.util.UUID;
 
 import heroes.journey.GameState;
-import heroes.journey.components.BuffsComponent;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.entities.Buff;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.actions.history.ActionRecord;
@@ -49,16 +47,6 @@ public class Utils {
             inventoryComponent.add(item, count);
         }
         return new StringResult("Gained " + count + " " + item);
-    }
-
-    /**
-     * @return true if the buff could be used (combines checking if it has the buff and if so decrements its counter)
-     */
-    public static boolean useBuff(GameState gameState, UUID entityId, Buff buff) {
-        BuffsComponent buffsComponent = BuffsComponent.get(gameState.getWorld(), entityId);
-        if (buffsComponent == null)
-            return false;
-        return buffsComponent.useBuff(buff);
     }
 
     public static boolean justCompletedAction(GameState gameState, UUID owner, String actionId) {

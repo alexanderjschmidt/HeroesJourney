@@ -2,8 +2,8 @@ import heroes.journey.entities.Buff
 import heroes.journey.entities.Quest
 import heroes.journey.entities.questCost
 import heroes.journey.entities.questRewards
+import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.registries.Registries
 
 // Quests and Buffs - included by basegame mod
 
@@ -61,4 +61,4 @@ Quest(
     35
 ).register()
 
-Buff("rested", "Rested", 1, 0).register();
+Buff("rested", "Rested", 1, Attributes()).register();

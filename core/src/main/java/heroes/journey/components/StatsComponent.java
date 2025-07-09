@@ -1,14 +1,13 @@
 package heroes.journey.components;
 
+import java.util.UUID;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Stat;
 import heroes.journey.entities.tagging.Group;
-
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
-
-import java.util.UUID;
 
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {
@@ -31,7 +30,14 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     public static Attributes get(GameWorld world, UUID entityId) {
         StatsComponent stats = world.getEntity(StatsComponent.class, entityId);
-        return stats == null ? null : stats.getAttributes();
+        if (stats == null)
+            return null;
+        Attributes attr = stats.getAttributes();
+        BuffsComponent buffs = world.getEntity(BuffsComponent.class, entityId);
+        if (buffs != null) {
+            attr.merge(buffs.getAttributes());
+        }
+        return attr;
     }
 
     public static int getFame(GameWorld world, UUID entityId) {
