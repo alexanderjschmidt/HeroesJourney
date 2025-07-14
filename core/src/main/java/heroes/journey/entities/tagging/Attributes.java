@@ -38,15 +38,15 @@ public class Attributes extends HashMap<Stat,Integer> {
     }
 
     public int get(Stat stat) {
-        if (stat.isConfluenceStat()) {
-            int total = this.get(stat);
-            for (Stat statPart : stat.getParts().keySet()) {
-                total += super.get(statPart) * stat.getParts().get(statPart);
-            }
-            return total / stat.getTotalParts();
-        } else {
-            return super.get(stat);
-        }
+        return stat.get(this);
+    }
+
+    public int getDirect(Stat stat) {
+        return super.get(stat);
+    }
+
+    public int getDirect(String stat) {
+        return super.get(Stat.getById(stat));
     }
 
     public Attributes add(Stat stat, Integer value) {

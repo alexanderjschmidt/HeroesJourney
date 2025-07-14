@@ -12,7 +12,6 @@ import heroes.journey.tilemap.FogUtils;
 public class StatsUtils {
 
     public static int getSpeed(Attributes stats) {
-        stats.put(Stat.BODY, stats.get(Stat.BODY));
         return stats.get(Stat.BODY);
     }
 
