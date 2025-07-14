@@ -1,0 +1,17 @@
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+eclipse.project.name = appName + '-mods'
+
+dependencies {
+  implementation project(":modlib")
+  implementation project(":core")
+}
+
+sourceSets {
+  main {
+    kotlin {
+      srcDir 'basegame'
+    }
+  }
+}

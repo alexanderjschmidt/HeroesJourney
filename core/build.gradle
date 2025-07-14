@@ -6,6 +6,7 @@ eclipse.project.name = appName + '-core'
 dependencies {
   // Shared project dependency
   implementation project(":shared")
+  implementation project(":modlib")
 
   // LibGDX dependencies
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -24,13 +25,6 @@ dependencies {
   implementation "net.onedaybeard.artemis:artemis-odb-serializer-json-libgdx:2.3.0"
   implementation "net.onedaybeard.artemis:artemis-odb-serializer-kryo:2.3.0"
 
-  // Kotlin scripting support
-  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-common:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-jvm:$kotlin_version"
-  implementation "org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlin_version"
-
   // Lombok
   compileOnly 'org.projectlombok:lombok:1.18.32'
   annotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -40,11 +34,14 @@ dependencies {
   }
 }
 
-sourceSets {
-  main {
-    resources {
-      srcDir '../mods'
-      include '**/*.kts'
-    }
-  }
+tasks.withType(JavaCompile).configureEach {
+  options.compilerArgs += '--enable-preview'
+}
+
+tasks.withType(Test).configureEach {
+  jvmArgs += '--enable-preview'
+}
+
+tasks.withType(JavaExec).configureEach {
+  jvmArgs += '--enable-preview'
 }
