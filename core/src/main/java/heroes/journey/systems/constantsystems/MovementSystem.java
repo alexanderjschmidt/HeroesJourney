@@ -1,5 +1,8 @@
 package heroes.journey.systems.constantsystems;
 
+import java.util.Objects;
+import java.util.UUID;
+
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -9,12 +12,9 @@ import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.Ids;
+import heroes.journey.modlib.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.systems.GameWorld;
-
-import java.util.Objects;
-import java.util.UUID;
 
 @All({PositionComponent.class, ActorComponent.class, MovementComponent.class, IdComponent.class})
 public class MovementSystem extends IteratingSystem {

@@ -1,5 +1,5 @@
-import heroes.journey.Ids
-import heroes.journey.Ids.*
+import heroes.journey.modlib.Ids
+import heroes.journey.modlib.Ids.*
 import heroes.journey.utils.art.ResourceManager
 import heroes.journey.utils.art.StillRenderable
 import heroes.journey.utils.art.TextureMap

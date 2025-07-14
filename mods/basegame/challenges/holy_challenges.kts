@@ -1,6 +1,6 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.Ids.*
+import heroes.journey.modlib.Ids.*
 
 // Holy Challenges - included by basegame mod
 challenge("aid_resolute_angel") {

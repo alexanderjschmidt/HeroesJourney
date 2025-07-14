@@ -22,7 +22,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.RenderComponent;
-import heroes.journey.Ids;
+import heroes.journey.modlib.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;

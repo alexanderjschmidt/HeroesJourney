@@ -1,4 +1,4 @@
-package heroes.journey;
+package heroes.journey.modlib;
 
 public class Ids {
 

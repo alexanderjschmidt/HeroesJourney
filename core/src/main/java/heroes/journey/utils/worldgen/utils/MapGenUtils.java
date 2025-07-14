@@ -11,14 +11,14 @@ import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.entities.Position;
+import heroes.journey.modlib.Ids;
+import heroes.journey.registries.TileManager;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.ai.pathfinding.RoadPathing;
 import heroes.journey.utils.worldgen.MapGenerationException;
-import heroes.journey.registries.TileManager;
-import heroes.journey.Ids;
 
 public class MapGenUtils {
 

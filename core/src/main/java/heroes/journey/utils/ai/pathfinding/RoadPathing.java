@@ -1,5 +1,9 @@
 package heroes.journey.utils.ai.pathfinding;
 
+import static heroes.journey.modlib.Ids.TERRAIN_PATH;
+import static heroes.journey.modlib.Ids.TERRAIN_PLAINS;
+import static heroes.journey.registries.Registries.TerrainManager;
+
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.ai.pfa.Heuristic;
@@ -7,10 +11,6 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 
 import heroes.journey.tilemap.TileMap;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
-
-import static heroes.journey.Ids.TERRAIN_PATH;
-import static heroes.journey.Ids.TERRAIN_PLAINS;
-import static heroes.journey.registries.Registries.TerrainManager;
 
 public class RoadPathing {
 

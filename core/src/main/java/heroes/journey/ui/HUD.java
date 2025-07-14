@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heroes.journey.entities.actions.options.BooleanOptionAction;
-import heroes.journey.Ids;
+import heroes.journey.modlib.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.PopupUIState;

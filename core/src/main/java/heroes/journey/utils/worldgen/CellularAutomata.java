@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import heroes.journey.Ids;
+import heroes.journey.modlib.Ids;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 

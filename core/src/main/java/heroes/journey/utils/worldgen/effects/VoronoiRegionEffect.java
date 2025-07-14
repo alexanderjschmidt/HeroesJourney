@@ -10,11 +10,11 @@ import java.util.stream.Collectors;
 
 import heroes.journey.GameState;
 import heroes.journey.entities.Position;
+import heroes.journey.modlib.Ids;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;
 import lombok.Getter;
-import heroes.journey.Ids;
 
 @Getter
 public class VoronoiRegionEffect extends MapGenerationEffect {

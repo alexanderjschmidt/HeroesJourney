@@ -1,6 +1,6 @@
 import heroes.journey.entities.challenge
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.Ids.*
+import heroes.journey.modlib.Ids.*
 
 // Monster Challenges - included by basegame mod
 challenge("guide_blinded_grimlock") {

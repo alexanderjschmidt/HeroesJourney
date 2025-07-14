@@ -1,13 +1,13 @@
 package heroes.journey.systems;
 
-import static heroes.journey.Ids.BASE_TILE_NULL;
-import static heroes.journey.Ids.DELVE;
-import static heroes.journey.Ids.DUNGEON_SPRITE;
-import static heroes.journey.Ids.FACE_CHALLENGES;
-import static heroes.journey.Ids.QUEST_BOARD;
-import static heroes.journey.Ids.REST;
-import static heroes.journey.Ids.TRAINING;
-import static heroes.journey.Ids.TRAVEL;
+import static heroes.journey.modlib.Ids.BASE_TILE_NULL;
+import static heroes.journey.modlib.Ids.DELVE;
+import static heroes.journey.modlib.Ids.DUNGEON_SPRITE;
+import static heroes.journey.modlib.Ids.FACE_CHALLENGES;
+import static heroes.journey.modlib.Ids.QUEST_BOARD;
+import static heroes.journey.modlib.Ids.REST;
+import static heroes.journey.modlib.Ids.TRAINING;
+import static heroes.journey.modlib.Ids.TRAVEL;
 import static heroes.journey.registries.Registries.ItemManager;
 
 import java.util.UUID;

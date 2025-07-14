@@ -1,5 +1,4 @@
 import heroes.journey.GameState
-import heroes.journey.Ids
 import heroes.journey.components.ChallengeComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.RegionComponent
@@ -10,6 +9,7 @@ import heroes.journey.entities.actions.results.EndTurnResult
 import heroes.journey.entities.actions.targetAction
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
+import heroes.journey.modlib.Ids
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
 

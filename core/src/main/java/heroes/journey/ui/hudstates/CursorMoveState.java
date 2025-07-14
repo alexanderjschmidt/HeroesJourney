@@ -1,5 +1,7 @@
 package heroes.journey.ui.hudstates;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
@@ -7,12 +9,10 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.character.AITurnComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
-import heroes.journey.Ids;
+import heroes.journey.modlib.Ids;
 import heroes.journey.registries.Registries;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
-
-import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override

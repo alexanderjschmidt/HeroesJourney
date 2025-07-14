@@ -1,7 +1,7 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.Ids.DENSE_FOG;
-import static heroes.journey.Ids.LIGHT_FOG;
+import static heroes.journey.modlib.Ids.DENSE_FOG;
+import static heroes.journey.modlib.Ids.LIGHT_FOG;
 import static heroes.journey.utils.art.ResourceManager.RenderableManager;
 
 import com.badlogic.gdx.graphics.g2d.Batch;

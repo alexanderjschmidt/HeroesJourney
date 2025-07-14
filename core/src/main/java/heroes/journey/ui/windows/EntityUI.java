@@ -1,9 +1,9 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.Ids.LIGHT_BLUE;
-import static heroes.journey.Ids.PURPLE;
-import static heroes.journey.Ids.RED;
-import static heroes.journey.Ids.YELLOW;
+import static heroes.journey.modlib.Ids.LIGHT_BLUE;
+import static heroes.journey.modlib.Ids.PURPLE;
+import static heroes.journey.modlib.Ids.RED;
+import static heroes.journey.modlib.Ids.YELLOW;
 
 import java.util.UUID;
 
