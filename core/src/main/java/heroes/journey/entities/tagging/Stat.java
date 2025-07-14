@@ -44,7 +44,12 @@ public enum Stat {
     BRAVADO("bravado", "Bravado", 1, 10, attributes -> (attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA) + attributes.getDirect(BODY)) / 3 + attributes.getDirect("bravado"), Group.Charisma, Group.Body),
     PERSUASION("persuasion", "Persuasion", 1, 10, attributes -> (attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA) + attributes.getDirect(MIND)) / 3 + attributes.getDirect("persuasion"), Group.Charisma, Group.Mind),
     MESMERISM("mesmerism", "Mesmerism", 1, 10, attributes -> (attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA) + attributes.getDirect(MAGIC)) / 3 + attributes.getDirect("mesmerism"), Group.Charisma, Group.Magic),
-    CHARM("charm", "Charm", 1, 10, attributes -> (attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA)) / 3 + attributes.getDirect("charm"), Group.Charisma);
+    CHARM("charm", "Charm", 1, 10, attributes -> (attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA) + attributes.getDirect(CHARISMA)) / 3 + attributes.getDirect("charm"), Group.Charisma),
+
+    // CALCULATED STATS (derived from base stats)
+    SPEED("speed", "Speed", 1, 10, attributes -> attributes.getDirect(BODY), Group.Body),
+    VISION("vision", "Vision", 1, 10, attributes -> attributes.getDirect(BODY) + 3, Group.Body),
+    CARRY_CAPACITY("carry_capacity", "Carry Capacity", 1, 100, attributes -> attributes.getDirect(BODY) * 10, Group.Body);
 
     private final String id;
     private final String nameInternal;

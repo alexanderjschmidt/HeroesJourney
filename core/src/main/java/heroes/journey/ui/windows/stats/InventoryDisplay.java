@@ -14,10 +14,10 @@ import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.utils.gamestate.StatsUtils;
 
 public class InventoryDisplay extends Table {
 
@@ -66,7 +66,7 @@ public class InventoryDisplay extends Table {
             .toList());
         gold.setText(inventoryComponent.getGold());
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
-        weight.setText(inventoryComponent.getWeight() + "/" + StatsUtils.getCarryCapacity(statsComponent));
+        weight.setText(inventoryComponent.getWeight() + "/" + Stat.CARRY_CAPACITY.get(statsComponent));
     }
 
     public void handleInput() {

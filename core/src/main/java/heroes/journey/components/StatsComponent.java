@@ -50,6 +50,13 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         stats.fame += amount;
     }
 
+    public static void adjustStat(GameWorld world, UUID entityId, Stat stat, int count) {
+        StatsComponent statsComponent = world.getEntity(StatsComponent.class, entityId);
+        if (statsComponent == null)
+            return;
+        statsComponent.getAttributes().add(stat, count);
+    }
+
     @Override
     protected void reset() {
         attributes.clear();

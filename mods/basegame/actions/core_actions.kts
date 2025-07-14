@@ -15,7 +15,6 @@ import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
-import heroes.journey.utils.gamestate.StatsUtils
 
 // Core Actions - included by basegame mod
 
@@ -107,7 +106,7 @@ action {
     onSelectFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         stats.add(Stat.VALOR, -5)
-        StatsUtils.adjustBody(input.gameState, input.entityId, 1)
+        StatsComponent.adjustStat(input.gameState.world, input.entityId, Stat.BODY, 1)
         StringResult("You completed an intense workout! BODY +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -126,7 +125,7 @@ action {
     onSelectFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         stats.add(Stat.INSIGHT, -5)
-        StatsUtils.adjustMind(input.gameState, input.entityId, 1)
+        StatsComponent.adjustStat(input.gameState.world, input.entityId, Stat.MIND, 1)
         StringResult("You completed intensive study! MIND +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -145,7 +144,7 @@ action {
     onSelectFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         stats.add(Stat.ARCANUM, -5)
-        StatsUtils.adjustMagic(input.gameState, input.entityId, 1)
+        StatsComponent.adjustStat(input.gameState.world, input.entityId, Stat.MAGIC, 1)
         StringResult("You completed magical practice! MAGIC +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -164,7 +163,7 @@ action {
     onSelectFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         stats.add(Stat.INFLUENCE, -5)
-        StatsUtils.adjustCharisma(input.gameState, input.entityId, 1)
+        StatsComponent.adjustStat(input.gameState.world, input.entityId, Stat.CHARISMA, 1)
         StringResult("You completed social training! CHARISMA +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
