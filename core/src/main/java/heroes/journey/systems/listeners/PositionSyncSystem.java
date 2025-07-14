@@ -40,7 +40,6 @@ public class PositionSyncSystem extends IteratingSystem {
         } catch (Exception e) {
             return;
         }
-        System.out.println(id);
 
         // If we have the ID, we can safely access other components
         PositionComponent pos = PositionComponent.get(world, id);

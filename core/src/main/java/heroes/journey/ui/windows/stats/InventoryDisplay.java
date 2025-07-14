@@ -14,10 +14,10 @@ import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.utils.gamestate.StatsUtils;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.gamestate.StatsUtils;
 
 public class InventoryDisplay extends Table {
 
@@ -78,7 +78,7 @@ public class InventoryDisplay extends Table {
         @Override
         public void select() {
             Item selectedItem = getSelected().entry();
-            System.out.println(selectedItem);
+            //System.out.println(selectedItem);
             switch (selectedItem.getType()) {
                 case Weapon:
                 case Armor:

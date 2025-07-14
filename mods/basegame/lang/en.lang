@@ -113,6 +113,12 @@ complete_quest_name=Complete Quest
 complete_quest_description=Complete a quest you have accepted
 complete_specific_quest_name=Complete Quest
 complete_specific_quest_description=Complete this specific quest
+options_name=Options
+options_description=Configure game settings
+end_turn_name=End Turn
+end_turn_description=End your turn
+exit_game_name=Exit Game
+exit_game_description=Return to main menu
 
 # Option Actions
 
