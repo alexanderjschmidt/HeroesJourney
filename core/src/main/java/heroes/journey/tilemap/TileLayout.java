@@ -38,7 +38,7 @@ public class TileLayout extends Registrable {
      * @param path
      */
     public TileLayout(String id, String path, List<String> terrainRoles) {
-        super(id, id);
+        super(id);
         this.id = id;
         this.path = path;
         this.terrainRoles = terrainRoles;

@@ -12,6 +12,7 @@ import heroes.journey.entities.actions.targetAction
 import heroes.journey.modlib.Ids
 import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
+import heroes.journey.utils.Lang
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
@@ -21,12 +22,10 @@ import java.util.*
 // Go Action
 action {
     id = "travel_to"
-    name = "Travel to"
-    description = "Travel to "
     inputDisplayNameFn = { input ->
         val name =
             NamedComponent.get(GameState.global().world, UUID.fromString(input["target"]), "---")
-        description + name
+        Lang.get("travel_to_description") + name
     }
     onHoverFn = { input ->
         val pos: PositionComponent =
@@ -83,8 +82,6 @@ action {
 // Travel Action
 targetAction<UUID> {
     id = "travel"
-    name = "Travel"
-    description = "Travel to a connected location"
     getTargets = { input ->
         val regionId = Utils.getRegion(input)
         val region: RegionComponent = RegionComponent.get(input.gameState.getWorld(), regionId)

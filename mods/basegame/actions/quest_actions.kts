@@ -17,8 +17,6 @@ import java.util.*
 // Quest Action
 action {
     id = "quest"
-    name = "Accept Quest"
-    description = "Accept a quest to complete"
     inputDisplayNameFn = { input ->
         QuestManager.get(input["target"])!!.getName()
     }
@@ -42,8 +40,6 @@ action {
 // Quest Board
 targetAction<Quest> {
     id = "quest_board"
-    name = "Quest Board"
-    description = "See what the people need help with"
     inputDisplayNameFn = { input ->
         val gs: GameState = GameState.global()
         "Quest Board for " + NamedComponent.get(gs.world, UUID.fromString(input["owner"]), "Unknown")
@@ -58,8 +54,6 @@ targetAction<Quest> {
 // Complete Quest Action (shows list of available quests)
 targetAction<Quest> {
     id = "complete_quest"
-    name = "Complete Quest"
-    description = "Complete a quest you have accepted"
     requirementsMetFn = { input ->
         val quests = QuestsComponent.get(input.gameState.world, input.entityId)
         if (quests != null && quests.quests.isNotEmpty()) {
@@ -78,8 +72,6 @@ targetAction<Quest> {
 // Complete Specific Quest Action
 action {
     id = "complete_specific_quest"
-    name = "Complete Quest"
-    description = "Complete this specific quest"
     inputDisplayNameFn = { input ->
         val questId = input["target"]
         val quest = Registries.QuestManager[questId]

@@ -16,7 +16,6 @@ class FeatureBuilder {
 
 class BiomeBuilder {
     var id: String = ""
-    var name: String = ""
     var baseTerrain: String = ""
     private val featuresList = mutableListOf<FeatureGenerationData>()
     fun feature(init: FeatureBuilder.() -> Unit) {
@@ -25,7 +24,7 @@ class BiomeBuilder {
         featuresList.add(builder.build())
     }
 
-    fun build(): Biome = Biome(id, name, baseTerrain, featuresList)
+    fun build(): Biome = Biome(id, baseTerrain, featuresList)
 }
 
 fun biome(init: BiomeBuilder.() -> Unit): Biome {
@@ -36,13 +35,11 @@ fun biome(init: BiomeBuilder.() -> Unit): Biome {
 
 class FeatureTypeBuilder {
     var id: String = ""
-    var name: String? = null
     var onGenerate: ((GameState, Position) -> UUID)? = null
     fun build(): FeatureType {
         val idCopy = id
-        val nameCopy = name
         val onGen = onGenerate
-        return object : FeatureType(idCopy, nameCopy) {
+        return object : FeatureType(idCopy) {
             override fun generateFeatureInner(gs: GameState, pos: Position): UUID {
                 return onGen?.invoke(gs, pos)
                     ?: throw IllegalStateException("No onGenerate lambda provided for FeatureType $idCopy")

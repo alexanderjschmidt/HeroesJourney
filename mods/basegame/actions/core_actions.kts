@@ -22,8 +22,6 @@ import heroes.journey.utils.gamestate.StatsUtils
 // Open Action Menu
 action {
     id = "open_action_menu"
-    name = "THIS SHOULD NEVER BE DISPLAYED"
-    description = ""
     isReturnsActionList = true
     requirementsMetFn = { ShowAction.NO }
     onSelectFn = { input ->
@@ -34,8 +32,6 @@ action {
 // Exit Game
 action {
     id = "exit_game"
-    name = "Exit Game"
-    description = "Return to main menu"
     onSelectFn = { input ->
         Application.get().screen = MainMenuScreen(Application.get())
         NullResult()
@@ -45,8 +41,6 @@ action {
 // End Turn
 action {
     id = "end_turn"
-    name = "End Turn"
-    description = "End your turn"
     onSelectFn = { input ->
         val entityId = input.gameState.currentEntity
         input.gameState
@@ -62,8 +56,6 @@ action {
 // Save Game
 action {
     id = "save"
-    name = "Save"
-    description = "Save Game"
     onSelectFn = { input ->
         input.gameState.save("save", true)
         StringResult("Your Game has been Saved!")
@@ -73,8 +65,6 @@ action {
 // Popup
 action {
     id = "popup"
-    name = "THIS SHOULDNT DISPLAY"
-    description = "THIS SHOULDNT DISPLAY"
     inputDisplayNameFn = { input ->
         input["message"]!!
     }
@@ -86,8 +76,6 @@ action {
 // Rest (Used in End Turn)
 action {
     id = "rest"
-    name = "Rest"
-    description = "Do nothing, resting your body and mind."
     onSelectFn = { input ->
         val buffsComponent = BuffsComponent.get(
             input.gameState.world,
@@ -108,8 +96,6 @@ object TrainingOptions {
 // Workout Training Option
 action {
     id = "workout_training"
-    name = "Workout"
-    description = "Intensive physical training to increase BODY (Cost: 5 VALOR)"
     requirementsMetFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         if (stats.get(Stat.VALOR) >= 5) {
@@ -129,8 +115,6 @@ action {
 // Study Training Option
 action {
     id = "study_training"
-    name = "Study"
-    description = "Intensive mental training to increase MIND (Cost: 5 INSIGHT)"
     requirementsMetFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         if (stats.get(Stat.INSIGHT) >= 5) {
@@ -150,8 +134,6 @@ action {
 // Practice Training Option
 action {
     id = "practice_training"
-    name = "Practice"
-    description = "Intensive magical training to increase MAGIC (Cost: 5 ARCANUM)"
     requirementsMetFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         if (stats.get(Stat.ARCANUM) >= 5) {
@@ -171,8 +153,6 @@ action {
 // Socialize Training Option
 action {
     id = "socialize_training"
-    name = "Socialize"
-    description = "Intensive social training to increase CHARISMA (Cost: 5 INFLUENCE)"
     requirementsMetFn = { input ->
         val stats = StatsComponent.get(input.gameState.world, input.entityId)
         if (stats.get(Stat.INFLUENCE) >= 5) {
@@ -192,12 +172,7 @@ action {
 // Main Training Action
 action {
     id = "training"
-    name = "Training"
-    description = "Intensive training to improve your base stats"
-    isReturnsActionList = true
     onSelectFn = { input ->
-        ActionListResult(TrainingOptions.optionsList.map { action ->
-            heroes.journey.entities.actions.ActionEntry(action.id, emptyMap())
-        })
+        StringResult("Training complete!")
     }
 }.register()

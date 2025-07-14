@@ -8,16 +8,12 @@ import heroes.journey.entities.actions.results.ActionResult
 
 abstract class OptionAction(
     id: String,
-    name: String?,
-    description: String = "",
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
     onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
 ) : Action(
     id,
-    name,
-    description,
     false,
     requirementsMetFn,
     onHoverFn,

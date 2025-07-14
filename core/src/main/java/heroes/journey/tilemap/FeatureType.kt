@@ -10,7 +10,7 @@ import lombok.Getter
 import java.util.*
 
 @Getter
-abstract class FeatureType(id: String, name: String?) : Registrable(id, name) {
+abstract class FeatureType(id: String) : Registrable(id) {
 
     override fun register(): FeatureType {
         return FeatureTypeManager.register(this)

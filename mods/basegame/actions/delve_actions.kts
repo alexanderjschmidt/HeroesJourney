@@ -14,8 +14,6 @@ import java.util.*
 // Delve Action
 cooldownAction {
     id = "delve"
-    name = "Delve"
-    description = "Explore a dungeon"
     inputDisplayNameFn = { input ->
         val gs: GameState = GameState.global()
         val factionId: UUID = Utils.getLocation(GameState.global(), UUID.fromString(input["owner"]))

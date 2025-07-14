@@ -9,11 +9,10 @@ import java.util.*
 
 class Quest(
     id: String,
-    name: String?,
     private val cost: Attributes = Attributes(),
     private val rewards: Attributes = Attributes(),
     private val fameReward: Int = 0
-) : Registrable(id, name) {
+) : Registrable(id) {
     
     fun onComplete(input: ActionInput): Boolean {
         // Check if player can afford the cost

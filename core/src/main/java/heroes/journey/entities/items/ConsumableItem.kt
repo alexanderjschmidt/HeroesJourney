@@ -7,12 +7,11 @@ import java.util.function.Consumer
 
 class ConsumableItem(
     id: String,
-    name: String?,
     subType: ItemSubType,
     weight: Int,
     attributes: Attributes = Attributes(),
     protected val onConsume: Consumer<ActionInput>
-) : Item(id, name, subType, weight, attributes) {
+) : Item(id, subType, weight, attributes) {
 
     fun consume(input: ActionInput) {
         onConsume.accept(input)

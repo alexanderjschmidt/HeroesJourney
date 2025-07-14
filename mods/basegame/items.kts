@@ -10,43 +10,43 @@ import heroes.journey.utils.gamestate.Utils
 // Items - included by basegame mod
 
 // Item Sub Types
-val raw_material = ItemSubType("raw_material", "Raw Material", ItemType.Misc).register()
+val raw_material = ItemSubType("raw_material", ItemType.Misc).register()
 val refined_material =
-    ItemSubType("refined_material", "Refined Material", ItemType.Misc).register()
-val sword = ItemSubType("sword", "Sword", ItemType.Weapon).register()
-val chest_armor = ItemSubType("chest_armor", "Chest Armor", ItemType.Armor).register()
-val potion = ItemSubType("potion", "Potion", ItemType.Consumable).register()
+    ItemSubType("refined_material", ItemType.Misc).register()
+val sword = ItemSubType("sword", ItemType.Weapon).register()
+val chest_armor = ItemSubType("chest_armor", ItemType.Armor).register()
+val potion = ItemSubType("potion", ItemType.Consumable).register()
 
 // Items
 Item(
-    id = "wood", name = "Wood",
+    id = "wood",
     subType = raw_material, weight = 1
 ).register()
 
 Item(
-    "iron_ore", "Iron Ore",
+    "iron_ore",
     raw_material, 1
 ).register()
 
 val ironIngot = Item(
-    "iron_ingot", "Iron Ingot",
+    "iron_ingot",
     refined_material, 1
 ).register()
 
 Item(
-    "iron_sword", "Iron Sword",
+    "iron_sword",
     sword, 1,
     Attributes().add(Stat.BODY, 3)
 ).register()
 
 Item(
-    "chest_plate", "Chest Plate",
+    "chest_plate",
     chest_armor, 5,
     Attributes().add(Stat.BODY, 3)
 ).register()
 
 ConsumableItem(
-    "health_potion", "Health Potion",
+    "health_potion",
     potion, 1
 ) { input: ActionInput ->
     Utils.addItem(

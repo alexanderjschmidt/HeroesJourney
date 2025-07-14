@@ -7,8 +7,7 @@ import heroes.journey.entities.actions.results.NullResult
 import heroes.journey.registries.Registries
 
 class TargetAction<I>(
-    id: String, name: String?,
-    description: String = "",
+    id: String,
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
     inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
@@ -16,8 +15,6 @@ class TargetAction<I>(
     private val targetAction: String
 ) : Action(
     id,
-    name,
-    description,
     true,
     requirementsMetFn,
     onHoverFn,

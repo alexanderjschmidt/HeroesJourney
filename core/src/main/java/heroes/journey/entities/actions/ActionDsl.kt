@@ -8,8 +8,6 @@ import heroes.journey.entities.actions.results.ActionResult
 // Base Action DSL
 open class ActionBuilder {
     var id: String = ""
-    var name: String? = null
-    var description: String = ""
     open var isReturnsActionList: Boolean = false
     var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
     var onHoverFn: (ActionInput) -> Unit = {}
@@ -19,8 +17,6 @@ open class ActionBuilder {
 
     open fun build(): Action = Action(
         id = id,
-        name = name,
-        description = description,
         isReturnsActionList = isReturnsActionList,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
@@ -37,8 +33,6 @@ class TargetActionBuilder<I> : ActionBuilder() {
 
     override fun build(): TargetAction<I> = TargetAction(
         id = id,
-        name = name,
-        description = description,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         inputDisplayNameFn = inputDisplayNameFn,
@@ -54,8 +48,6 @@ open class CooldownActionBuilder : ActionBuilder() {
 
     override fun build(): CooldownAction = CooldownAction(
         id = id,
-        name = name,
-        description = description,
         isReturnsActionList = isReturnsActionList,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
@@ -78,8 +70,6 @@ open class OptionActionBuilder : ActionBuilder() {
 
     override fun build(): OptionAction = object : OptionAction(
         id = id,
-        name = name,
-        description = description,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
@@ -102,8 +92,6 @@ class BooleanOptionActionBuilder : OptionActionBuilder() {
 
     override fun build(): BooleanOptionAction = BooleanOptionAction(
         id = id,
-        name = name,
-        description = description,
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,

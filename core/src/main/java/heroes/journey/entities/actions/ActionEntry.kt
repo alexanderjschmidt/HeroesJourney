@@ -5,10 +5,6 @@ import heroes.journey.registries.Registries.ActionManager
 
 class ActionEntry(private val action: String, val input: Map<String, String>) : Registrable(action) {
 
-    init {
-        nameInternal = getAction().getTitle(input)
-    }
-
     fun getAction(): Action {
         return ActionManager.get(action)!!
     }

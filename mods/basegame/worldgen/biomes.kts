@@ -5,7 +5,6 @@ import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator
 
 featureType {
     id = Ids.KINGDOM
-    name = "Kingdom"
     onGenerate = { gs, pos ->
         gs.world.entityFactory.generateBasicLocation(
             SyllableTownNameGenerator.generateName(),
@@ -16,7 +15,6 @@ featureType {
 
 featureType {
     id = Ids.TOWN
-    name = "Town"
     onGenerate = { gs, pos ->
         gs.world.entityFactory.generateBasicLocation(
             SyllableTownNameGenerator.generateName(),
@@ -27,7 +25,6 @@ featureType {
 
 featureType {
     id = Ids.DUNGEON
-    name = "Dungeon"
     onGenerate = { gs, pos ->
         gs.world.entityFactory.generateDungeon(pos.x, pos.y)
     }
@@ -35,7 +32,6 @@ featureType {
 
 featureType {
     id = Ids.MINE
-    name = "Mine"
     onGenerate = { gs, pos ->
         gs.world.entityFactory.generateBasicLocation(
             "Mine",
@@ -46,7 +42,6 @@ featureType {
 
 biome {
     id = "kingdom"
-    name = "Kingdom"
     baseTerrain = Ids.TERRAIN_PLAINS
     feature {
         id = Ids.KINGDOM
@@ -76,7 +71,6 @@ biome {
 
 biome {
     id = "desert_kingdom"
-    name = "Desert Kingdom"
     baseTerrain = Ids.TERRAIN_SAND
     feature {
         id = Ids.KINGDOM
@@ -106,7 +100,6 @@ biome {
 
 biome {
     id = "mesa_kingdom"
-    name = "Mesa Kingdom"
     baseTerrain = Ids.TERRAIN_HILLS
     feature {
         id = Ids.KINGDOM

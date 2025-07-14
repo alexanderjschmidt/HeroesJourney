@@ -6,13 +6,11 @@ import heroes.journey.utils.input.Options
 // Debug Option
 booleanOptionAction {
     id = "debug"
-    name = "Debug"
     isTrue = false
 }.register().also { Options.addOption(it) }
 
 // Background Music Option
 booleanOptionAction {
     id = "music"
-    name = "Music"
     isTrue = false
 }.register().also { Options.addOption(it) } 

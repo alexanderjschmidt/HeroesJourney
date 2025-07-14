@@ -8,8 +8,6 @@ import heroes.journey.registries.Registries
 
 class BooleanOptionAction(
     id: String,
-    name: String?,
-    description: String = "",
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
@@ -17,8 +15,6 @@ class BooleanOptionAction(
     var isTrue: Boolean = true,
 ) : OptionAction(
     id,
-    name,
-    description,
     requirementsMetFn,
     onHoverFn,
     onSelectFn,

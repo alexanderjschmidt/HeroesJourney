@@ -11,15 +11,13 @@ import heroes.journey.ui.windows.InfoProvider
 
 open class Action(
     id: String,
-    name: String? = null,
-    private val description: String = "",
     val isReturnsActionList: Boolean = false,
     private val requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     private val onHoverFn: (ActionInput) -> Unit = {},
     private val onSelectFn: (ActionInput) -> ActionResult,
     private val onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
     private val inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
-) : Registrable(id, name), InfoProvider {
+) : Registrable(id), InfoProvider {
 
     val hasInput: Boolean
         get() = inputDisplayNameFn != null
@@ -50,7 +48,7 @@ open class Action(
         return title
     }
 
-    override fun getDescription(input: Map<String, String>): String = description
+    override fun getDescription(input: Map<String, String>): String = getDescription()
 
     override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
     }

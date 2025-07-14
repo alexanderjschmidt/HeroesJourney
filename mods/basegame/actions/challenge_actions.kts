@@ -18,8 +18,6 @@ import java.util.*
 // Choose Approach
 action {
     id = "choose_approach"
-    name = "Choose Approach"
-    description = "Select an approach to handle the challenge."
     inputDisplayNameFn = { input ->
         Stat.valueOf(input["target"]!!).name
     }
@@ -46,9 +44,7 @@ action {
                 Stat.CHARISMA to Stat.INFLUENCE
             )
             val partCounts = mutableMapOf<Stat, Int>()
-            approach.getParts().forEach { (baseStat, count) ->
-                partCounts[baseStat] = count
-            }
+            // TODO fix
             for ((baseStat, count) in partCounts) {
                 val renownStat = baseToRenown[baseStat] ?: continue
                 val currentRealmAttention = realmAttention.get(renownStat)
@@ -66,8 +62,6 @@ action {
 // Face Challenge
 targetAction<Stat> {
     id = "face_challenge"
-    name = "Face Challenge"
-    description = "Face down a challenge to prove your legend to the realm."
     inputDisplayNameFn = { input ->
         NamedComponent.get(GameState.global().world, UUID.fromString(input["target"]), "---")
     }
@@ -85,8 +79,6 @@ targetAction<Stat> {
 // Face Challenges
 targetAction<UUID> {
     id = "face_challenges"
-    name = "Face Challenges"
-    description = "See what challenges you can face"
     getTargets = { input ->
         val regionId = Utils.getRegion(input)
         RegionComponent.get(input.gameState.world, regionId).challenges

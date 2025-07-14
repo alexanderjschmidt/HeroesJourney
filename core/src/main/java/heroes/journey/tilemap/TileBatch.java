@@ -40,7 +40,7 @@ public class TileBatch extends Registrable {
         boolean animated,
         int frameCount,
         int frameDist) {
-        super(id, id);
+        super(id);
         this.id = id;
         this.layoutId = layoutId;
         this.textureMapId = textureMapId;

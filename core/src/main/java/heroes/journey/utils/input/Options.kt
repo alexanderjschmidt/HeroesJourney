@@ -40,8 +40,6 @@ object Options {
     init {
         val optionsAction = action {
             id = "options"
-            name = "Options"
-            description = ""
             isReturnsActionList = true
             onSelectFn = { input ->
                 ActionListNoInputResult(optionsList as List<Action>?)

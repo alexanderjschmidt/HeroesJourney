@@ -1,0 +1,428 @@
+# English language file for basegame
+# Format: <id>_name=Name
+#         <id>_description=Description
+
+# Items
+wood_name=Wood
+wood_description=
+iron_ore_name=Iron Ore
+iron_ore_description=
+iron_ingot_name=Iron Ingot
+iron_ingot_description=
+iron_sword_name=Iron Sword
+iron_sword_description=
+chest_plate_name=Chest Plate
+chest_plate_description=
+health_potion_name=Health Potion
+health_potion_description=
+
+# Item SubTypes
+raw_material_name=Raw Material
+refined_material_name=Refined Material
+sword_name=Sword
+chest_armor_name=Chest Armor
+potion_name=Potion
+
+# Quests
+# (Add more as needed)
+delve_dungeon_name=Delve a dungeon
+delve_dungeon_description=
+gain_fitness_name=Gain Physical Fitness
+gain_fitness_description=
+find_lost_ruin_name=Find the Lost Ruin
+find_lost_ruin_description=
+study_texts_name=Study Ancient Texts
+study_texts_description=
+noble_deed_name=Perform a Noble Deed
+noble_deed_description=
+master_arcane_name=Master the Arcane
+master_arcane_description=
+
+# Buffs
+rested_name=Rested
+rested_description=
+
+# Terrains
+null_name=NULL
+null_description=
+water_name=Water
+water_description=
+plains_name=Plains
+plains_description=
+hills_name=Hills
+hills_description=
+sand_name=Sand
+sand_description=
+path_name=Path
+path_description=
+trees_name=Trees
+trees_description=
+plains_to_hill_name=Cliff
+plains_to_hill_description=
+sand_to_hill_name=Cliff
+sand_to_hill_description=
+plains_to_sand_name=Sand
+plains_to_sand_description=
+plains_to_water_name=Water
+plains_to_water_description=
+hill_to_water_name=Cliff
+hill_to_water_description=
+sand_to_water_name=Water
+sand_to_water_description=
+
+# Biomes
+kingdom_name=Kingdom
+kingdom_description=
+
+# FeatureTypes
+KINGDOM_name=Kingdom
+KINGDOM_description=
+TOWN_name=Town
+TOWN_description=
+DUNGEON_name=Dungeon
+DUNGEON_description=
+MINE_name=Mine
+MINE_description=
+
+# Actions (sample, add more as needed)
+delve_name=Delve
+delve_description=Explore a dungeon
+save_name=Save
+save_description=Save Game
+popup_name=Popup
+popup_description=Popup
+rest_name=Rest
+rest_description=Do nothing, resting your body and mind.
+workout_training_name=Workout
+workout_training_description=Intensive physical training to increase BODY (Cost: 5 VALOR)
+study_training_name=Study
+study_training_description=Intensive mental training to increase MIND (Cost: 5 INSIGHT)
+practice_training_name=Practice
+practice_training_description=Intensive magical training to increase MAGIC (Cost: 5 ARCANUM)
+socialize_training_name=Socialize
+socialize_training_description=Intensive social training to increase CHARISMA (Cost: 5 INFLUENCE)
+training_name=Training
+training_description=Intensive training to improve your base stats
+choose_approach_name=Choose Approach
+choose_approach_description=Select an approach to handle the challenge.
+quest_name=Accept Quest
+quest_description=Accept a quest to complete
+quest_board_name=Quest Board
+quest_board_description=See what the people need help with
+complete_quest_name=Complete Quest
+complete_quest_description=Complete a quest you have accepted
+complete_specific_quest_name=Complete Quest
+complete_specific_quest_description=Complete this specific quest
+
+# Option Actions
+
+debug_name=Debug
+music_name=Music
+
+debug_description=Enable or disable debug mode
+music_description=Enable or disable background music
+
+# Challenge Actions
+
+face_challenge_name=Face Challenge
+face_challenge_description=Face down a challenge to prove your legend to the realm.
+face_challenges_name=Face Challenges
+face_challenges_description=See what challenges you can face
+
+# Travel Actions
+
+travel_name=Travel
+travel_description=Travel to a connected location
+travel_to_name=Travel to
+travel_to_description=Travel to 
+
+# (Add all challenge names/descriptions from challenges/*.kts as needed) 
+
+# Challenges
+# --- HOLY CHALLENGES ---
+aid_resolute_angel_name=Aid Resolute Angel
+aid_resolute_angel_description=A celestial angel is fighting dark forces. Use chivalry, empowerment, or illusion to aid it.
+bless_blessed_gladiator_name=Bless Blessed Gladiator
+bless_blessed_gladiator_description=A holy warrior seeks divine blessing. Use concentration, enchanting, or persuasion to bless it.
+train_bold_man_at_arms_name=Train Bold Man at Arms
+train_bold_man_at_arms_description=A brave soldier needs combat training. Use charm, chivalry, or technique to train it.
+commune_with_divine_planetar_name=Commune with Divine Planetar
+commune_with_divine_planetar_description=A powerful celestial being offers wisdom. Use charm, concentration, or sorcery to commune.
+guide_devout_acolyte_name=Guide Devout Acolyte
+guide_devout_acolyte_description=A young priest seeks spiritual guidance. Use concentration, illusion, or persuasion to guide it.
+heal_favored_cleric_name=Heal Favored Cleric
+heal_favored_cleric_description=A holy cleric is wounded and needs healing. Use empowerment, enchanting, or logic to heal it.
+befriend_floating_cherub_name=Befriend Floating Cherub
+befriend_floating_cherub_description=A small angelic being is curious about you. Use bewitching magic, charm, or persuasion to befriend it.
+guide_gentle_shepard_name=Guide Gentle Shepard
+guide_gentle_shepard_description=A holy shepherd guides lost souls. Use charm, logic, or mesmerism to guide it.
+join_holy_crusader_name=Join Holy Crusader
+join_holy_crusader_description=A holy warrior invites you to join a sacred quest. Use charm, chivalry, or might to join it.
+learn_from_jovial_friar_name=Learn from Jovial Friar
+learn_from_jovial_friar_description=A cheerful monk offers spiritual teachings. Use charm, logic, or persuasion to learn from it.
+commune_with_righteous_deva_name=Commune with Righteous Deva
+commune_with_righteous_deva_description=A divine being offers celestial wisdom. Use charm, logic, or sorcery to commune.
+train_with_sword_archon_name=Train with Sword Archon
+train_with_sword_archon_description=A celestial warrior offers combat training. Use logic, skill, or technique to train.
+honor_veteran_swordsman_name=Honor Veteran Swordsman
+honor_veteran_swordsman_description=A battle-hardened holy warrior seeks recognition. Use charm, chivalry, or might to honor it.
+guide_zealous_priest_name=Guide Zealous Priest
+guide_zealous_priest_description=A passionate priest seeks spiritual direction. Use bravado, mesmerism, or persuasion to guide it.
+inspire_determined_soldier_name=Inspire Determined Soldier
+inspire_determined_soldier_description=A holy soldier needs motivation for battle. Use bravado, logic, or mesmerism to inspire it.
+# --- DEMON CHALLENGES ---
+banish_antlered_rascal_name=Banish Antlered Rascal
+banish_antlered_rascal_description=A mischievous demon with antlers is warping reality and deceiving villagers. Outsmart and banish it using illusion, logic, or persuasion.
+subdue_clawed_abomination_name=Subdue Clawed Abomination
+subdue_clawed_abomination_description=A monstrous demon with razor claws is terrorizing the countryside. Use charm, magical enchantment, or focused concentration to subdue it.
+trick_crimson_imp_name=Trick Crimson Imp
+trick_crimson_imp_description=A cunning imp is causing magical mischief. Outsmart it with cleverness, illusion, or tactical technique.
+capture_depraved_blackguard_name=Capture Depraved Blackguard
+capture_depraved_blackguard_description=A fallen demon knight is preying on travelers. Use charm, might, or skill to bring him to justice.
+redeem_fledgling_demon_name=Redeem Fledgling Demon
+redeem_fledgling_demon_description=A young demon is torn between good and evil. Use bewitching magic, logic, or mesmerism to guide it toward redemption.
+destroy_floating_eye_name=Destroy Floating Eye
+destroy_floating_eye_description=A floating demon eye spies on and curses villagers. Use concentration, illusion, or sorcery to destroy it.
+stop_foul_gouger_name=Stop Foul Gouger
+stop_foul_gouger_description=A demon gouges out eyes and spreads terror. Use charm, empowerment, or persuasion to stop it.
+outwit_grinning_gremlin_name=Outwit Grinning Gremlin
+outwit_grinning_gremlin_description=A gremlin is sabotaging machinery with tricks. Outsmart it with cunning, logic, or technique.
+catch_nefarious_scamp_name=Catch Nefarious Scamp
+catch_nefarious_scamp_description=A demonic thief is stealing magical artifacts. Use cunning, illusion, or technique to catch it.
+duel_pit_balor_name=Duel Pit Balor
+duel_pit_balor_description=A mighty demon lord challenges you to a duel. Use bravado, charm, or might to win.
+banish_pointed_demonspawn_name=Banish Pointed Demonspawn
+banish_pointed_demonspawn_description=A demon with deadly spikes threatens the land. Use enchanting magic, persuasion, or sorcery to banish it.
+discipline_rascally_demonling_name=Discipline Rascally Demonling
+discipline_rascally_demonling_description=A mischievous demonling is causing trouble. Use charm, logic, or mesmerism to teach it a lesson.
+hunt_skewering_stalker_name=Hunt Skewering Stalker
+hunt_skewering_stalker_description=A demon impales its victims on spikes. Use illusion, skill, or technique to hunt it down.
+reform_tainted_scoundrel_name=Reform Tainted Scoundrel
+reform_tainted_scoundrel_description=A corrupted demon seeks redemption. Use bravado, cunning, or logic to help it change.
+shatter_warp_skull_name=Shatter Warp Skull
+shatter_warp_skull_description=A demonic skull warps reality and minds. Use illusion, sorcery, or bewitching to shatter it.
+# (Repeat for all other challenges...) 
+# --- DRAGON CHALLENGES ---
+befriend_aqua_drake_name=Befriend Aqua Drake
+befriend_aqua_drake_description=A graceful water dragon swims in the lake. Use bewitching magic, charm, or enchanting to befriend it.
+rescue_baby_brass_dragon_name=Rescue Baby Brass Dragon
+rescue_baby_brass_dragon_description=A young brass dragon is trapped in a cave. Use bravado, chivalry, or logic to rescue it.
+heal_baby_copper_dragon_name=Heal Baby Copper Dragon
+heal_baby_copper_dragon_description=A sick copper dragon needs magical healing. Use concentration, illusion, or sorcery to cure it.
+guide_baby_green_dragon_name=Guide Baby Green Dragon
+guide_baby_green_dragon_description=A young green dragon is lost in the forest. Use enchanting magic, mesmerism, or persuasion to guide it home.
+rescue_baby_white_dragon_name=Rescue Baby White Dragon
+rescue_baby_white_dragon_description=A white dragon cub is caught in an ice storm. Use charm, might, or skill to rescue it.
+train_juvenile_bronze_dragon_name=Train Juvenile Bronze Dragon
+train_juvenile_bronze_dragon_description=A young bronze dragon needs training in combat. Use cunning, logic, or technique to train it.
+challenge_mature_bronze_dragon_name=Challenge Mature Bronze Dragon
+challenge_mature_bronze_dragon_description=A powerful bronze dragon tests your worthiness. Use charm, chivalry, or might to prove yourself.
+defeat_mud_wyvern_name=Defeat Mud Wyvern
+defeat_mud_wyvern_description=A wyvern lurks in the swamp, attacking travelers. Use illusion, skill, or technique to defeat it.
+outsmart_poison_drake_name=Outsmart Poison Drake
+outsmart_poison_drake_description=A venomous drake is poisoning the water supply. Use bewitching magic, cunning, or logic to outsmart it.
+befriend_pygmy_wyvern_name=Befriend Pygmy Wyvern
+befriend_pygmy_wyvern_description=A small wyvern is curious about you. Use charm, mesmerism, or persuasion to befriend it.
+guide_viridian_drake_name=Guide Viridian Drake
+guide_viridian_drake_description=A green drake is lost in the jungle. Use bewitching magic, enchanting, or logic to guide it.
+challenge_young_brass_dragon_name=Challenge Young Brass Dragon
+challenge_young_brass_dragon_description=A young brass dragon challenges you to a test of strength. Use bravado, charm, or might to win.
+defeat_young_red_dragon_name=Defeat Young Red Dragon
+defeat_young_red_dragon_description=A fierce red dragon is burning villages. Use bravado, charm, or empowerment to defeat it.
+survive_adult_white_dragon_name=Survive Adult White Dragon
+survive_adult_white_dragon_description=A massive white dragon is hunting you. Use empowerment, logic, or might to survive.
+negotiate_adult_green_dragon_name=Negotiate with Adult Green Dragon
+negotiate_adult_green_dragon_description=A wise green dragon guards ancient knowledge. Use charm, mesmerism, or persuasion to negotiate.
+# --- MAGICAL CHALLENGES ---
+defeat_adept_necromancer_name=Defeat Adept Necromancer
+defeat_adept_necromancer_description=A necromancer is raising undead. Use concentration, logic, or sorcery to defeat it.
+purify_corrupted_treant_name=Purify Corrupted Treant
+purify_corrupted_treant_description=A treant is corrupted by dark magic. Use charm, empowerment, or enchanting to purify it.
+outsmart_deft_sorceress_name=Outsmart Deft Sorceress
+outsmart_deft_sorceress_description=A sorceress is casting dangerous spells. Use cunning, illusion, or logic to outsmart it.
+negotiate_earth_elemental_name=Negotiate with Earth Elemental
+negotiate_earth_elemental_description=An earth elemental blocks your path. Use enchanting magic, might, or persuasion to negotiate.
+learn_expert_druid_name=Learn from Expert Druid
+learn_expert_druid_description=A druid offers to teach nature magic. Use charm, concentration, or sorcery to learn.
+defeat_fire_elemental_name=Defeat Fire Elemental
+defeat_fire_elemental_description=A fire elemental is burning the forest. Use bewitching magic, empowerment, or logic to defeat it.
+befriend_fluttering_pixie_name=Befriend Fluttering Pixie
+befriend_fluttering_pixie_description=A pixie is curious about you. Use bewitching magic, charm, or mesmerism to befriend it.
+follow_glowing_wisp_name=Follow Glowing Wisp
+follow_glowing_wisp_description=A magical wisp leads you through the forest. Use cunning, illusion, or logic to follow it.
+aid_grizzled_treant_name=Aid Grizzled Treant
+aid_grizzled_treant_description=An ancient treant needs help. Use empowerment, enchanting, or persuasion to aid it.
+defeat_ice_golem_name=Defeat Ice Golem
+defeat_ice_golem_description=An ice golem is freezing the village. Use enchanting magic, logic, or might to defeat it.
+outmaneuver_iron_golem_name=Outmaneuver Iron Golem
+outmaneuver_iron_golem_description=An iron golem guards ancient treasure. Use cunning, skill, or technique to outmaneuver it.
+befriend_magical_fairy_name=Befriend Magical Fairy
+befriend_magical_fairy_description=A fairy offers magical assistance. Use bewitching magic, charm, or mesmerism to befriend it.
+teach_novice_pyromancer_name=Teach Novice Pyromancer
+teach_novice_pyromancer_description=A young pyromancer needs guidance. Use concentration, persuasion, or sorcery to teach it.
+negotiate_water_elemental_name=Negotiate with Water Elemental
+negotiate_water_elemental_description=A water elemental controls the river. Use charm, enchanting, or mesmerism to negotiate.
+defeat_vile_witch_name=Defeat Vile Witch
+defeat_vile_witch_description=A witch is cursing villagers. Use bewitching magic, logic, or sorcery to defeat it.
+# --- MONSTER CHALLENGES ---
+guide_blinded_grimlock_name=Guide Blinded Grimlock
+guide_blinded_grimlock_description=A blind grimlock is lost in the caves. Use charm, cunning, or skill to guide it.
+defeat_bloodshot_eye_name=Defeat Bloodshot Eye
+defeat_bloodshot_eye_description=A monstrous eye is cursing villagers. Use bewitching magic, illusion, or persuasion to defeat it.
+defeat_brawny_ogre_name=Defeat Brawny Ogre
+defeat_brawny_ogre_description=A massive ogre is terrorizing the village. Use bravado, might, or skill to defeat it.
+outsmart_crimson_slaad_name=Outsmart Crimson Slaad
+outsmart_crimson_slaad_description=A chaotic slaad is causing destruction. Use cunning, logic, or technique to outsmart it.
+defeat_crushing_cyclops_name=Defeat Crushing Cyclops
+defeat_crushing_cyclops_description=A cyclops is crushing everything in its path. Use bravado, might, or skill to defeat it.
+purify_death_slime_name=Purify Death Slime
+purify_death_slime_description=A deadly slime is poisoning the water. Use concentration, logic, or sorcery to purify it.
+befriend_fungal_myconid_name=Befriend Fungal Myconid
+befriend_fungal_myconid_description=A myconid offers to share its spores. Use charm, enchanting, or mesmerism to befriend it.
+defeat_humongous_ettin_name=Defeat Humongous Ettin
+defeat_humongous_ettin_description=A two-headed giant is attacking travelers. Use bravado, enchanting, or might to defeat it.
+outsmart_murky_slaad_name=Outsmart Murky Slaad
+outsmart_murky_slaad_description=A murky slaad is spreading chaos. Use cunning, logic, or technique to outsmart it.
+defeat_ochre_jelly_name=Defeat Ochre Jelly
+defeat_ochre_jelly_description=A jelly is consuming everything it touches. Use cunning, skill, or technique to defeat it.
+defeat_ocular_watcher_name=Defeat Ocular Watcher
+defeat_ocular_watcher_description=A watcher is spying on the village. Use bewitching magic, illusion, or persuasion to defeat it.
+outsmart_red_cap_name=Outsmart Red Cap
+outsmart_red_cap_description=A red cap is hunting travelers. Use cunning, logic, or technique to outsmart it.
+defeat_shrieker_mushroom_name=Defeat Shrieker Mushroom
+defeat_shrieker_mushroom_description=A shrieker is alerting enemies. Use cunning, skill, or technique to defeat it.
+defeat_stone_troll_name=Defeat Stone Troll
+defeat_stone_troll_description=A stone troll is blocking the bridge. Use chivalry, enchanting, or might to defeat it.
+defeat_swamp_troll_name=Defeat Swamp Troll
+defeat_swamp_troll_description=A swamp troll is terrorizing the marsh. Use cunning, skill, or technique to defeat it.
+# --- UNDEAD CHALLENGES ---
+lay_bound_cadaver_name=Lay Bound Cadaver to Rest
+lay_bound_cadaver_description=A bound cadaver is haunting the graveyard. Use concentration, logic, or sorcery to lay it to rest.
+defeat_brittle_archer_name=Defeat Brittle Archer
+defeat_brittle_archer_description=A skeletal archer is shooting travelers. Use cunning, skill, or technique to defeat it.
+defeat_carcass_feeder_name=Defeat Carcass Feeder
+defeat_carcass_feeder_description=A ghoul is feeding on corpses. Use bravado, enchanting, or might to defeat it.
+destroy_decrepit_bones_name=Destroy Decrepit Bones
+destroy_decrepit_bones_description=Animated bones are attacking the village. Use bravado, might, or skill to destroy them.
+defeat_dismembered_crawler_name=Defeat Dismembered Crawler
+defeat_dismembered_crawler_description=A crawling undead is spreading disease. Use cunning, skill, or technique to defeat it.
+defeat_ghastly_eye_name=Defeat Ghastly Eye
+defeat_ghastly_eye_description=A ghastly eye is cursing the living. Use bewitching magic, illusion, or persuasion to defeat it.
+defeat_grave_revenant_name=Defeat Grave Revenant
+defeat_grave_revenant_description=A revenant seeks vengeance. Use concentration, logic, or sorcery to defeat it.
+defeat_mutilated_stumbler_name=Defeat Mutilated Stumbler
+defeat_mutilated_stumbler_description=A mutilated zombie is spreading plague. Use bravado, might, or skill to defeat it.
+defeat_sand_ghoul_name=Defeat Sand Ghoul
+defeat_sand_ghoul_description=A ghoul is hunting in the desert. Use bravado, might, or skill to defeat it.
+defeat_skittering_hand_name=Defeat Skittering Hand
+defeat_skittering_hand_description=A severed hand is crawling around. Use cunning, skill, or technique to defeat it.
+defeat_unraveling_crawler_name=Defeat Unraveling Crawler
+defeat_unraveling_crawler_description=A decaying undead is falling apart. Use cunning, skill, or technique to defeat it.
+defeat_vampire_bat_name=Defeat Vampire Bat
+defeat_vampire_bat_description=A vampire bat is draining blood. Use bewitching magic, illusion, or persuasion to defeat it.
+defeat_giant_royal_scarab_name=Defeat Giant Royal Scarab
+defeat_giant_royal_scarab_description=A giant scarab is guarding ancient treasures. Use bravado, might, or skill to defeat it.
+defeat_royal_scarab_name=Defeat Royal Scarab
+defeat_royal_scarab_description=A royal scarab is protecting sacred artifacts. Use cunning, skill, or technique to defeat it.
+defeat_toxic_hound_name=Defeat Toxic Hound
+defeat_toxic_hound_description=A toxic hound is poisoning the water. Use bravado, enchanting, or might to defeat it.
+# --- VERMIN CHALLENGES ---
+defeat_acid_ant_name=Defeat Acid Ant
+defeat_acid_ant_description=An acid-spitting ant is burning crops. Use cunning, skill, or technique to defeat it.
+defeat_bloated_bedbug_name=Defeat Bloated Bedbug
+defeat_bloated_bedbug_description=A bloated bedbug is infesting the inn. Use bravado, might, or skill to defeat it.
+defeat_dung_beetle_name=Defeat Dung Beetle
+defeat_dung_beetle_description=A giant dung beetle is rolling dung into town. Use might, skill, or technique to defeat it.
+defeat_engorged_tick_name=Defeat Engorged Tick
+defeat_engorged_tick_description=An engorged tick is draining livestock. Use bravado, enchanting, or might to defeat it.
+defeat_famished_tick_name=Defeat Famished Tick
+defeat_famished_tick_description=A hungry tick is hunting for blood. Use cunning, skill, or technique to defeat it.
+defeat_foraging_maggot_name=Defeat Foraging Maggot
+defeat_foraging_maggot_description=A maggot is eating stored food. Use bravado, might, or skill to defeat it.
+defeat_plague_bat_name=Defeat Plague Bat
+defeat_plague_bat_description=A plague bat is spreading disease. Use bewitching magic, illusion, or persuasion to defeat it.
+defeat_infected_mouse_name=Defeat Infected Mouse
+defeat_infected_mouse_description=An infected mouse is spreading disease. Use cunning, skill, or technique to defeat it.
+defeat_lava_ant_name=Defeat Lava Ant
+defeat_lava_ant_description=A lava ant is burning the forest. Use bewitching magic, empowerment, or logic to defeat it.
+defeat_mawing_beaver_name=Defeat Mawing Beaver
+defeat_mawing_beaver_description=A beaver is destroying the dam. Use might, skill, or technique to defeat it.
+defeat_rhino_beetle_name=Defeat Rhino Beetle
+defeat_rhino_beetle_description=A rhino beetle is charging through town. Use bravado, enchanting, or might to defeat it.
+defeat_soldier_ant_name=Defeat Soldier Ant
+defeat_soldier_ant_description=A soldier ant is attacking travelers. Use bravado, might, or skill to defeat it.
+defeat_tainted_cockroach_name=Defeat Tainted Cockroach
+defeat_tainted_cockroach_description=A tainted cockroach is spreading poison. Use bravado, might, or skill to defeat it.
+defeat_swooping_bat_name=Defeat Swooping Bat
+defeat_swooping_bat_description=A swooping bat is attacking travelers. Use cunning, skill, or technique to defeat it.
+defeat_tunneling_mole_name=Defeat Tunneling Mole
+defeat_tunneling_mole_description=A tunneling mole is undermining buildings. Use cunning, skill, or technique to defeat it.
+# --- HUMANOID CHALLENGES ---
+outmaneuver_goblin_archer_name=Outmaneuver Goblin Archer
+outmaneuver_goblin_archer_description=A goblin archer is ambushing travelers. Use cunning, logic, or skill to outmaneuver it.
+calm_goblin_fanatic_name=Calm Goblin Fanatic
+calm_goblin_fanatic_description=A goblin is in a religious frenzy. Use bewitching magic, charm, or mesmerism to calm it.
+defeat_goblin_fighter_name=Defeat Goblin Fighter
+defeat_goblin_fighter_description=A goblin warrior is attacking the village. Use chivalry, might, or skill to defeat it.
+expose_goblin_occultist_name=Expose Goblin Occultist
+expose_goblin_occultist_description=A goblin is practicing dark magic. Use concentration, logic, or sorcery to expose it.
+outrun_goblin_wolf_rider_name=Outrun Goblin Wolf Rider
+outrun_goblin_wolf_rider_description=A goblin on a wolf is chasing you. Use cunning, skill, or technique to outrun it.
+capture_halfling_assassin_name=Capture Halfling Assassin
+capture_halfling_assassin_description=A halfling assassin is targeting nobles. Use cunning, logic, or skill to capture it.
+perform_with_halfling_bard_name=Perform with Halfling Bard
+perform_with_halfling_bard_description=A halfling bard invites you to perform. Use bewitching magic, charm, or mesmerism to perform.
+track_with_halfling_ranger_name=Track with Halfling Ranger
+track_with_halfling_ranger_description=A halfling ranger offers to teach tracking. Use logic, skill, or technique to track.
+outwit_halfling_rogue_name=Outwit Halfling Rogue
+outwit_halfling_rogue_description=A halfling rogue is stealing from merchants. Use cunning, logic, or technique to outwit it.
+compete_with_halfling_slinger_name=Compete with Halfling Slinger
+compete_with_halfling_slinger_description=A halfling slinger challenges you to a contest. Use charm, skill, or technique to compete.
+scout_with_lizardfolk_scout_name=Scout with Lizardfolk Scout
+scout_with_lizardfolk_scout_description=A lizardfolk scout offers to teach scouting. Use cunning, logic, or skill to scout.
+spar_lizardfolk_gladiator_name=Spar with Lizardfolk Gladiator
+spar_lizardfolk_gladiator_description=A lizardfolk gladiator offers combat training. Use charm, chivalry, or might to spar.
+train_lizardfolk_archer_name=Train with Lizardfolk Archer
+train_lizardfolk_archer_description=A lizardfolk archer offers archery training. Use persuasion, skill, or technique to train.
+tame_bestial_lizardfolk_name=Tame Bestial Lizardfolk
+tame_bestial_lizardfolk_description=A savage lizardfolk is attacking travelers. Use bravado, mesmerism, or persuasion to tame it.
+train_lizardfolk_spearman_name=Train with Lizardfolk Spearman
+train_lizardfolk_spearman_description=A lizardfolk spearman offers weapon training. Use might, persuasion, or skill to train.
+# --- HUMANOID II CHALLENGES ---
+mentor_adventurous_adolescent_name=Mentor Adventurous Adolescent
+mentor_adventurous_adolescent_description=A young adventurer seeks guidance. Use charm, mesmerism, or persuasion to mentor it.
+mentor_boisterous_youth_name=Mentor Boisterous Youth
+mentor_boisterous_youth_description=An energetic young person needs direction. Use charm, mesmerism, or persuasion to mentor it.
+learn_elf_bladedancer_name=Learn from Elf Bladedancer
+learn_elf_bladedancer_description=An elf offers to teach graceful combat. Use enchanting magic, logic, or skill to learn.
+study_elf_enchanter_name=Study with Elf Enchanter
+study_elf_enchanter_description=An elf offers to teach magical enchantment. Use charm, concentration, or sorcery to study.
+negotiate_elf_lord_name=Negotiate with Elf Lord
+negotiate_elf_lord_description=An elf lord offers diplomatic talks. Use charm, mesmerism, or persuasion to negotiate.
+compete_elf_sharpshooter_name=Compete with Elf Sharpshooter
+compete_elf_sharpshooter_description=An elf challenges you to an archery contest. Use logic, skill, or technique to compete.
+travel_elf_wayfarer_name=Travel with Elf Wayfarer
+travel_elf_wayfarer_description=An elf offers to guide you through dangerous lands. Use charm, cunning, or skill to travel.
+play_joyful_kid_name=Play with Joyful Kid
+play_joyful_kid_description=A happy child wants to play games. Use bewitching magic, charm, or mesmerism to play.
+learn_merfolk_aquamancer_name=Learn from Merfolk Aquamancer
+learn_merfolk_aquamancer_description=A merfolk offers to teach water magic. Use concentration, logic, or sorcery to learn.
+spar_merfolk_impaler_name=Spar with Merfolk Impaler
+spar_merfolk_impaler_description=A merfolk offers underwater combat training. Use charm, might, or skill to spar.
+compete_merfolk_javelineer_name=Compete with Merfolk Javelineer
+compete_merfolk_javelineer_description=A merfolk challenges you to a javelin contest. Use logic, skill, or technique to compete.
+study_merfolk_mystic_name=Study with Merfolk Mystic
+study_merfolk_mystic_description=A merfolk offers to teach mystical arts. Use charm, concentration, or sorcery to study.
+scout_merfolk_scout_name=Scout with Merfolk Scout
+scout_merfolk_scout_description=A merfolk offers underwater scouting lessons. Use cunning, logic, or skill to scout.
+help_overworked_villager_name=Help Overworked Villager
+help_overworked_villager_description=A villager is overwhelmed with work. Use charm, cunning, or logic to help it.
+play_playful_child_name=Play with Playful Child
+play_playful_child_description=A playful child wants to have fun. Use bewitching magic, charm, or mesmerism to play. 
+
+# Biomes
+
+desert_kingdom_name=Desert Kingdom
+desert_kingdom_description=A kingdom in the desert, surrounded by sand dunes and arid lands.
+mesa_kingdom_name=Mesa Kingdom
+mesa_kingdom_description=A kingdom atop mesas and rocky plateaus.

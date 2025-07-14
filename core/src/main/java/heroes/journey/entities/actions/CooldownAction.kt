@@ -12,8 +12,6 @@ import java.util.*
 
 open class CooldownAction(
     id: String,
-    name: String?,
-    description: String = "",
     isReturnsActionList: Boolean = false,
     requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionInput) -> Unit = {},
@@ -24,8 +22,6 @@ open class CooldownAction(
     private val factionCooldown: Boolean
 ) : Action(
     id,
-    name,
-    description,
     isReturnsActionList,
     requirementsMetFn,
     onHoverFn,

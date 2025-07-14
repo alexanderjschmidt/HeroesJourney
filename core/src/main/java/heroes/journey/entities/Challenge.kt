@@ -9,19 +9,15 @@ import heroes.journey.registries.Registries
 
 class Challenge(
     id: String,
-    nameInternal: String?,
-    val description: String,
     val render: String,
     val approaches: Array<Stat>,
-) : Registrable(id, nameInternal) {
+) : Registrable(id) {
     override fun register(): Challenge {
         return Registries.ChallengeManager.register(this)
     }
 }
 
 class ChallengeBuilder(private val id: String) {
-    var name: String? = null
-    var description: String = ""
     var render: String = ""
     private val approachTags = mutableListOf<Stat>()
     private var rewardAttributes = Attributes()
@@ -37,8 +33,6 @@ class ChallengeBuilder(private val id: String) {
     fun build(): Challenge {
         return Challenge(
             id = id,
-            nameInternal = name,
-            description = description,
             render = render,
             approaches = approachTags.toTypedArray(),
         )

@@ -8,11 +8,10 @@ import lombok.Getter
 @Getter
 class Buff(
     id: String,
-    name: String?,
     val turnsBuffLasts: Int,
     val attributes: Attributes
 ) :
-    Registrable(id, name) {
+    Registrable(id) {
     override fun register(): Buff {
         return Registries.BuffManager.register(this)
     }

@@ -8,12 +8,11 @@ import lombok.Getter
 @Getter
 open class Item(
     id: String,
-    name: String?,
     val subType: ItemSubType,
     val weight: Int,
     val attributes: Attributes = Attributes()
 ) :
-    Registrable(id, name) {
+    Registrable(id) {
 
     val type: ItemType
         get() = subType.parentType

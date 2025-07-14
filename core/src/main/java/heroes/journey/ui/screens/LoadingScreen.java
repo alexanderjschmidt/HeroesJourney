@@ -1,5 +1,8 @@
 package heroes.journey.ui.screens;
 
+import java.io.File;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.mods.GameMod;
@@ -15,9 +19,6 @@ import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.TileBatch;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.io.File;
-import java.util.List;
 
 public class LoadingScreen implements Screen {
 
@@ -42,6 +43,10 @@ public class LoadingScreen implements Screen {
     private BitmapFont font;
     private SpriteBatch batch;
     private List<GameMod> foundMods;
+    private boolean langLoadingStarted = false;
+    private boolean langLoaded = false;
+    private float langProgress = 0f;
+    private String currentLangMod = "";
 
     public LoadingScreen(final Application app) {
         this.app = app;
@@ -70,6 +75,7 @@ public class LoadingScreen implements Screen {
     private void update(float delta) {
         updateModFinding();
         updateModLoading();
+        updateLangLoading();
         updateAssetLoading();
         updateProgress();
     }
@@ -85,7 +91,7 @@ public class LoadingScreen implements Screen {
 
         if (!modsFound) {
             // Check background progress
-            scriptProgress = (float) ScriptModLoader.INSTANCE.getScriptsProcessed() /
+            scriptProgress = (float)ScriptModLoader.INSTANCE.getScriptsProcessed() /
                 Math.max(1, ScriptModLoader.INSTANCE.getModFindingProgress() * 100);
             currentScript = ScriptModLoader.INSTANCE.getCurrentProcessingScript();
 
@@ -96,8 +102,29 @@ public class LoadingScreen implements Screen {
         }
     }
 
+    private void updateLangLoading() {
+        if (!modsLoaded)
+            return; // Wait for mod loading to complete
+        if (!langLoadingStarted) {
+            // Start loading lang files asynchronously
+            langLoaded = false;
+            langProgress = 0f;
+            currentLangMod = "";
+            heroes.journey.utils.Lang.INSTANCE.startAsyncLoad("en", () -> {
+                langLoaded = true;
+                return null;
+            });
+            langLoadingStarted = true;
+        }
+        if (!langLoaded) {
+            langProgress = heroes.journey.utils.Lang.INSTANCE.getProgress();
+            currentLangMod = heroes.journey.utils.Lang.INSTANCE.getCurrentMod();
+        }
+    }
+
     private void updateModLoading() {
-        if (!modsFound) return; // Wait for mod finding to complete
+        if (!modsFound)
+            return; // Wait for mod finding to complete
 
         if (!modLoadingStarted) {
             // Start loading the found mods in background
@@ -115,7 +142,7 @@ public class LoadingScreen implements Screen {
             float overallProgress = 0f;
             if (totalMods > 0) {
                 // Add progress from completed mods
-                overallProgress += (float) processedMods / totalMods;
+                overallProgress += (float)processedMods / totalMods;
 
                 // Add progress from current mod if any
                 if (processedMods < totalMods && currentMod != null && !currentMod.isEmpty()) {
@@ -138,7 +165,8 @@ public class LoadingScreen implements Screen {
     }
 
     private void updateAssetLoading() {
-        if (!modsLoaded) return; // Wait for mod loading to complete
+        if (!modsLoaded)
+            return; // Wait for mod loading to complete
 
         if (!assetsLoadingStarted) {
             ResourceManager.get().startLoadingTextures();
@@ -164,9 +192,12 @@ public class LoadingScreen implements Screen {
         } else if (!modsLoaded) {
             // Loading mods: 10-40%
             combinedProgress = 0.1f + modLoadingProgress * 0.3f;
+        } else if (!langLoaded) {
+            // Loading lang files: 40-45%
+            combinedProgress = 0.4f + langProgress * 0.05f;
         } else if (!assetsLoaded) {
-            // Loading assets: 40-100%
-            combinedProgress = 0.4f + assetProgress * 0.6f;
+            // Loading assets: 45-100%
+            combinedProgress = 0.45f + assetProgress * 0.55f;
         } else {
             // All done: 100%
             combinedProgress = 1.0f;
@@ -198,7 +229,7 @@ public class LoadingScreen implements Screen {
         String label;
         if (!modsFound && currentScript != null && !currentScript.isEmpty()) {
             int scriptsProcessed = ScriptModLoader.INSTANCE.getScriptsProcessed();
-            int totalMods = (int) (ScriptModLoader.INSTANCE.getModFindingProgress() * 100);
+            int totalMods = (int)(ScriptModLoader.INSTANCE.getModFindingProgress() * 100);
             String modFolder = ScriptModLoader.INSTANCE.getCurrentModFolder();
             label = String.format("Finding mods: %s (%d/%d)", modFolder, scriptsProcessed, totalMods);
         } else if (!modsLoaded && currentMod != null && !currentMod.isEmpty()) {
@@ -215,21 +246,27 @@ public class LoadingScreen implements Screen {
                     int currentGroup = ScriptModLoader.INSTANCE.getCurrentModGroup(mod);
                     int totalGroups = ScriptModLoader.INSTANCE.getTotalModGroups(mod);
                     String groupName = ScriptModLoader.INSTANCE.getCurrentModGroupName(mod);
-                    
+
                     if (currentScript != null && !currentScript.isEmpty()) {
                         // Extract just the filename to hide file path structure
                         String scriptName = currentScript.substring(currentScript.lastIndexOf('/') + 1);
-                        scriptProgress = String.format(" - %s: %s (%d/%d)", 
-                            groupName, scriptName, scriptsLoaded, totalScripts);
+                        scriptProgress = String.format(" - %s: %s (%d/%d)", groupName, scriptName,
+                            scriptsLoaded, totalScripts);
                     } else {
-                        scriptProgress = String.format(" - %s (%d/%d scripts)", 
-                            groupName, scriptsLoaded, totalScripts);
+                        scriptProgress = String.format(" - %s (%d/%d scripts)", groupName, scriptsLoaded,
+                            totalScripts);
                     }
                     break;
                 }
             }
 
-            label = String.format("Loading mod: %s (%d/%d)%s", currentMod, modsProcessed, totalMods, scriptProgress);
+            label = String.format("Loading mod: %s (%d/%d)%s", currentMod, modsProcessed, totalMods,
+                scriptProgress);
+        } else if (!langLoaded && currentLangMod != null && !currentLangMod.isEmpty()) {
+            int modsProcessed = (int)(langProgress * foundMods.size());
+            int totalMods = foundMods.size();
+            label = String.format("Loading language files: %s (%d/%d)", currentLangMod, modsProcessed,
+                totalMods);
         } else if (!assetsLoaded) {
             label = ResourceManager.get().getLoadingStatus();
         } else {

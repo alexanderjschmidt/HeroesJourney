@@ -5,11 +5,10 @@ import heroes.journey.registries.Registries.BiomeManager
 
 class Biome(
     id: String,
-    name: String?,
     val baseTerrain: String,
     val featureGenerationData: List<FeatureGenerationData>
 ) :
-    Registrable(id, name) {
+    Registrable(id) {
 
     override fun register(): Biome {
         return BiomeManager.register(this)

@@ -5,7 +5,7 @@ import heroes.journey.registries.Registries.ItemSubTypeManager
 import lombok.Getter
 
 @Getter
-class ItemSubType(id: String, name: String?, val parentType: ItemType) : Registrable(id, name) {
+class ItemSubType(id: String, val parentType: ItemType) : Registrable(id) {
     override fun register(): ItemSubType {
         return ItemSubTypeManager.register(this)
     }
