@@ -108,7 +108,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
 | TileLayout       | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Renderable       | Yes      | [x]           | [x]                 | [x]                      |
-| TextureMap       | No       | [ ]           | [ ]                 | [ ]                      |
+| TextureMap       | Yes      | [x]           | [x]                 | [x]                      |
 
 ---
 
@@ -187,3 +187,32 @@ This section documents the concrete steps taken to migrate the Renderable Regist
 - Mods now use only the modlib DSL and interfaces for Renderable, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **Renderable has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: TextureMap Migration Example
+
+This section documents the concrete steps taken to migrate the TextureMap Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `TextureMap.kt` file in `modlib` (Kotlin) containing:
+    - `ITextureMap` interface (exposes `val id: String`, `val location: String`, `val width: Int`, `val height: Int`, and `fun register(): ITextureMap`)
+    - `TextureMapDSL` interface (exposes `fun textureMap(...)`)
+    - `TextureMapDSLProvider` singleton
+    - Top-level `fun textureMap(...)` DSL entrypoint
+- The DSL only exposes primitive types and IDs, not libGDX types or core classes.
+
+### 2. Implement the DSL in core
+- Implemented `TextureMapDSLImpl` in `core/mods` package, returning real `TextureMap` (which implements `ITextureMap`).
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `TextureMapDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `textureMap` from `modlib` (e.g., `import heroes.journey.modlib.textureMap`).
+- All usages now pass IDs and primitive types explicitly, not core objects.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for TextureMap, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **TextureMap has been fully migrated and tested.** 

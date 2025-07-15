@@ -2,12 +2,12 @@ import heroes.journey.modlib.Ids
 import heroes.journey.modlib.Ids.*
 import heroes.journey.modlib.stillRenderable
 import heroes.journey.modlib.animationRenderable
-import heroes.journey.utils.art.TextureMap
+import heroes.journey.modlib.textureMap
 
 // Textures - included by basegame mod
 
-val Sprites = TextureMap("sprites", "sprites.png", 16, 16).register()
-val OverworldTileset = TextureMap(OVERWORLD_TILESET, "Overworld_Tileset.png", 16, 16).register()
+val Sprites = textureMap("sprites", "sprites.png", 16, 16).register()
+val OverworldTileset = textureMap(OVERWORLD_TILESET, "Overworld_Tileset.png", 16, 16).register()
 
 stillRenderable(Ids.PLAYER_SPRITE, Sprites.id, 1, 1).register()
 stillRenderable(Ids.CAPITAL_SPRITE, OverworldTileset.id, 9, 14).register()
@@ -179,7 +179,7 @@ deepDiveAnimation(SWOOPING_BAT, "Vermin", "Swooping Bat")
 deepDiveAnimation(TAINTED_COCKROACH, "Vermin", "Tainted Cockroach")
 
 fun deepDiveAnimation(id: String, grouping: String, name: String) {
-    val texture = TextureMap(
+    val texture = textureMap(
         id,
         "deepdivegamingsprites/Basic " + grouping + " Animations/" + name + "/" + name.replace(
             " ",
