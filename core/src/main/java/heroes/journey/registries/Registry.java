@@ -17,7 +17,7 @@ public class Registry<T extends Registrable> extends HashMap<String,T> {
     public T get(Object id) {
         T item = super.get(id);
         if (item == null) {
-            System.out.println("Failed to get item with id " + id);
+            System.out.println("Failed to get item with id " + id.toString());
         }
         return item;
     }

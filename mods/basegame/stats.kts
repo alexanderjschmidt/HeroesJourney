@@ -1,6 +1,6 @@
-import heroes.journey.entities.tagging.group
 import heroes.journey.entities.tagging.stat
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.group
 import heroes.journey.registries.Registries
 
 // --- GROUPS ---

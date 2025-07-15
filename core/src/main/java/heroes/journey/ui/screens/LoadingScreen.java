@@ -1,5 +1,7 @@
 package heroes.journey.ui.screens;
 
+import static heroes.journey.mods.ModlibDSLSetupKt.setupModlibDSLs;
+
 import java.io.File;
 import java.util.List;
 
@@ -82,6 +84,8 @@ public class LoadingScreen implements Screen {
 
     private void updateModFinding() {
         if (!modFindingStarted) {
+            // Set up modlib DSLs before finding mods
+            setupModlibDSLs();
             // Start finding mods in background
             File modsFolder = new File("mods");
             ScriptModLoader.INSTANCE.startFindingModsFrom(modsFolder, DEBUG);

@@ -1,0 +1,158 @@
+# 🛠️ **modlib Migration Plan**
+
+*Goal: Decouple mods from core by exposing only interfaces and DSLs via modlib, so mods depend solely on modlib, not core. This will be achieved by introducing interfaces for all Registrable objects and their DSLs, and hiding implementation details from modders.*
+
+---
+
+## 📋 **Overview**
+
+Currently, mods can access both `modlib` and `core`, allowing them to depend on internal implementation details. To improve maintainability and mod safety, we will:
+- Expose only interfaces and DSLs for Registrable objects via `modlib`.
+- Move or wrap all mod-facing DSLs into `modlib`.
+- Hide all core implementation details from mods.
+- Ensure all mod content is defined against interfaces, not concrete classes.
+
+---
+
+## 🧮 **Registrable Complexity Scores**
+
+*Complexity is scored by the number of other objects in the tracking table that a Registrable references directly (as fields, constructor args, or in its DSL). Higher scores mean more dependencies and likely more migration effort.*
+
+| Registrable Type | References | Complexity Score | Notes |
+|------------------|------------|------------------|-------|
+| Renderable       | 0          | 0                | Only references TextureRegion (not tracked); very simple |
+| Buff             | 1 (Attributes) | 1           | Attributes is not a Registrable, so low complexity |
+| Group            | 0          | 0                | Standalone, only has ID |
+| Stat             | 1 (Group)  | 1                | References Group(s) in DSL and as field |
+| ItemSubType      | 1 (ItemType) | 1              | ItemType is not a Registrable, so low complexity |
+| Item             | 2 (ItemSubType, Attributes) | 2 | References ItemSubType and Attributes |
+| Quest            | 1 (Attributes) | 1           | Uses Attributes for cost/reward |
+| Challenge        | 1 (Stat)   | 1                | References Stat array for approaches |
+| Biome            | 1 (FeatureType) | 1           | References FeatureType in featureGenerationData |
+| FeatureType      | 0          | 0                | Standalone, only has ID and a generator function |
+| Terrain          | 0          | 0                | Standalone, only has ID and terrainCost |
+| TileBatch        | 2 (TileLayout, Terrain) | 2   | References TileLayout and Terrain |
+| TileLayout       | 0          | 0                | Standalone, only has ID, asset, and roles |
+| Action           | 0-2+ (ShowAction, ActionResult, GameState, etc.) | 3+ | High: references enums, result types, and sometimes GameState; often used with other Registrables |
+
+*Scoring: 0 = standalone, 1 = references 1 other, 2 = references 2, 3+ = references 3 or more or has complex dependencies.*
+
+---
+
+## 🏗️ **Step-by-Step Migration Plan**
+
+### 1. **Catalog All Registrable Types**
+- [ ] List all classes extending `Registrable` (e.g. Stat, Group, Item, Action, Buff, Quest, Challenge, Biome, FeatureType, Terrain, TileBatch, TileLayout, Renderable, etc.).
+- [ ] For each, note if a DSL exists and where it is defined.
+
+### 2. **Define Modlib Interfaces**
+- [ ] For each Registrable type, define a public interface in `modlib` (e.g. `IStat`, `IGroup`, `IItem`, etc.).
+- [ ] Interfaces should expose only what modders need (ID, registration, DSL properties, etc.).
+- [ ] Add JavaDocs/KDoc to clarify intended usage for modders.
+
+### 3. **Create/Move DSL Interfaces to Modlib**
+- [ ] For each Registrable with a DSL, move the DSL builder and entrypoint function to `modlib` as an interface or abstract builder.
+- [ ] If a DSL does not exist, create a minimal one in `core` and expose an interface in `modlib`.
+- [ ] Ensure all DSLs only use modlib interfaces/types.
+
+### 4. **Refactor Core to Implement Interfaces**
+- [ ] Update all core Registrable implementations to implement the new modlib interfaces.
+- [ ] Ensure all DSLs in core implement/extend the modlib DSL interfaces.
+
+### 5. **Update Registries to Use Interfaces**
+- [ ] Refactor all `Registries` and `Registry` types to use interface types for mod-facing APIs.
+- [ ] Ensure registration and lookup return interface types to mods.
+
+### 6. **Restrict Mod Access to Core**
+- [ ] Update build scripts so mods only depend on `modlib`, not `core`.
+- [ ] Move any remaining mod-facing helpers/utilities to `modlib`.
+
+### 7. **Migration and Testing**
+- [ ] Migrate a sample mod to use only `modlib` interfaces and DSLs.
+- [ ] Test for breakages, missing APIs, or usability issues.
+- [ ] Iterate and document any pain points for modders.
+
+### 8. **Create modlib README**
+- [ ] Write a comprehensive `modlib/README.md` for modders, covering:
+    - How to use modlib interfaces and DSLs
+    - Example mod definitions
+    - Best practices and gotchas
+    - Link to generated Javadocs
+
+---
+
+## 🧩 **Example: Stat Migration**
+
+1. Define `IStat` interface in `modlib` (ID, min/max, groups, formula, etc.).
+2. Move or wrap the `stat { ... }` DSL in `modlib` as an interface/abstract builder.
+3. Update `Stat` in core to implement `IStat`.
+4. Ensure all mod stat definitions use only the interface and DSL from `modlib`.
+
+---
+
+## 📚 **Tracking Table**
+
+| Registrable Type | Has DSL? | DSL in modlib? | Interface in modlib? | Core implements interface? |
+|------------------|----------|---------------|----------------------|---------------------------|
+| Stat             | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Group            | Yes      | [x]           | [x]                 | [x]                      |
+| Item             | Partial  | [ ]           | [ ]                 | [ ]                      |
+| Action           | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Buff             | No       | [ ]           | [ ]                 | [ ]                      |
+| Quest            | Partial  | [ ]           | [ ]                 | [ ]                      |
+| Challenge        | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
+| FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Terrain          | Yes      | [ ]           | [ ]                 | [ ]                      |
+| TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
+| TileLayout       | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Renderable       | No       | [ ]           | [ ]                 | [ ]                      |
+
+---
+
+## 🚦 **Next Steps**
+- **Start with the least used/least complex Registrable types** (e.g. Renderable, Buff, Biome, etc.).
+- For each, follow the checklist above.
+- Progress to more complex types (Stat, Group, Item, Action) only after simple ones are migrated.
+- Regularly update this plan and the tracking table as progress is made.
+
+---
+
+## 📝 **Notes**
+- All new interfaces and DSLs in `modlib` should be stable and well-documented.
+- modlib should be well laid out with clear packages and namespaces for ease of use and discoverability by modders.
+- Avoid exposing any implementation details or core-only APIs to mods.
+- Use semantic versioning for `modlib` to communicate breaking changes to modders.
+- The `modlib/README.md` should be kept up to date alongside Javadocs to provide a friendly entry point for modders. 
+
+---
+
+## 📝 **Reference: Group Migration Example**
+
+This section documents the concrete steps taken to migrate the Group Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `Group.kt` file in `modlib` (Kotlin) containing:
+    - `IGroup` interface (exposes `val id: String` and `fun register(): IGroup`)
+    - `GroupDSL` interface (exposes `fun group(id: String): IGroup`)
+    - `GroupDSLProvider` singleton
+    - Top-level `fun group(id: String): IGroup` DSL entrypoint
+- This keeps the modlib lightweight and idiomatic.
+
+### 2. Implement the DSL in core
+- Implemented `GroupDSLImpl` in `core/mods` package, returning a real `Group` (which implements `IGroup`).
+- Created a new `ModlibDSLSetup.kt` file in `core/mods` to hold the `setupModlibDSLs()` function, which registers all modlib DSL providers in one place for future extensibility.
+
+### 3. Wire up the provider before mod loading
+- In `LoadingScreen.java`, called `setupModlibDSLs()` before any mod finding/loading begins. This ensures the modlib DSL always delegates to the core implementation at runtime.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `group` from `modlib` (e.g., `import heroes.journey.modlib.group`).
+- Removed any direct references to core DSLs or implementations from mod scripts.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Group has been fully migrated and tested.**
+
+--- 
