@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import heroes.journey.registries.Registrable;
+import heroes.journey.registries.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
@@ -67,7 +68,7 @@ public class TileBatch extends Registrable {
         TileLayout layoutObj = TileLayoutManager.get(layoutId);
         if (layoutObj == null)
             throw new IllegalStateException("No TileLayout with id '" + layoutId + "'");
-        var textureMapObj = ResourceManager.TextureManager.get(textureMapId);
+        var textureMapObj = Registries.TextureManager.get(textureMapId);
         if (textureMapObj == null)
             throw new IllegalStateException("No TextureMap with id '" + textureMapId + "'");
         var tilesArr = ResourceManager.get(textureMapObj);

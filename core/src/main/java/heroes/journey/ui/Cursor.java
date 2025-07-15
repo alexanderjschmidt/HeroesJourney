@@ -2,7 +2,7 @@ package heroes.journey.ui;
 
 import static heroes.journey.modlib.Ids.CURSOR;
 import static heroes.journey.modlib.Ids.MAP_POINTER;
-import static heroes.journey.utils.art.ResourceManager.RenderableManager;
+import static heroes.journey.registries.Registries.RenderableManager;
 
 import java.util.UUID;
 

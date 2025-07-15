@@ -55,7 +55,7 @@ public class TileManager extends ArrayList<Tile> {
             Terrain terrainObj = Registries.TerrainManager.get(def.getTerrain());
             if (terrainObj == null)
                 throw new IllegalArgumentException("No Terrain with id '" + def.getTerrain() + "'");
-            var textureMapObj = ResourceManager.TextureManager.get(def.getTextureMap());
+            var textureMapObj = Registries.TextureManager.get(def.getTextureMap());
             if (textureMapObj == null)
                 throw new IllegalArgumentException("No TextureMap with id '" + def.getTextureMap() + "'");
             var tiles = ResourceManager.get(textureMapObj);

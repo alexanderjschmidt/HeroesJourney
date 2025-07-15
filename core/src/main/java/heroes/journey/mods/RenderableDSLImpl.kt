@@ -2,14 +2,14 @@ package heroes.journey.mods
 
 import heroes.journey.modlib.IRenderable
 import heroes.journey.modlib.RenderableDSL
+import heroes.journey.registries.Registries
+import heroes.journey.utils.art.AnimationRenderable
 import heroes.journey.utils.art.ResourceManager
 import heroes.journey.utils.art.StillRenderable
-import heroes.journey.utils.art.AnimationRenderable
-import heroes.journey.utils.art.TextureMap
 
 class RenderableDSLImpl : RenderableDSL {
     override fun stillRenderable(id: String, textureMapId: String, x: Int, y: Int): IRenderable {
-        val textureMap = ResourceManager.TextureManager.get(textureMapId)
+        val textureMap = Registries.TextureManager.get(textureMapId)
             ?: throw IllegalArgumentException("TextureMap with id '$textureMapId' not found")
         return StillRenderable(id, textureMap, x, y)
     }
@@ -22,10 +22,11 @@ class RenderableDSLImpl : RenderableDSL {
         rows: List<Triple<Int, Int, Int>>,
         cols: List<Triple<Int, Int, Int>>
     ): IRenderable {
-        val textureMap = ResourceManager.TextureManager.get(textureMapId)
+        val textureMap = Registries.TextureManager.get(textureMapId)
             ?: throw IllegalArgumentException("TextureMap with id '$textureMapId' not found")
         val builder = object {
             val frameCoords = mutableListOf<Pair<Int, Int>>()
+
             init {
                 frameCoords.addAll(frames)
                 rows.forEach { (startX, y, count) ->
@@ -49,4 +50,4 @@ class RenderableDSLImpl : RenderableDSL {
             }
         }
     }
-} 
+}

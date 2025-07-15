@@ -1,5 +1,7 @@
 package heroes.journey.utils.art;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -12,14 +14,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import heroes.journey.registries.Registry;
-
-import java.util.HashMap;
 
 public class ResourceManager extends AssetManager {
-
-    public static Registry<Renderable> RenderableManager = new Registry<>();
-    public static Registry<TextureMap> TextureManager = new Registry<>();
 
     public static TextureMap UI;
 
@@ -31,7 +27,7 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font72;
     public Skin skin;
 
-    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
     private int totalAssetsQueued = 1;

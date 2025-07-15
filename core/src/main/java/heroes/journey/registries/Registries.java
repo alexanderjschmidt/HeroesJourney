@@ -13,6 +13,8 @@ import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.TileBatch;
 import heroes.journey.tilemap.TileLayout;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.utils.art.Renderable;
+import heroes.journey.utils.art.TextureMap;
 
 public class Registries {
 
@@ -34,4 +36,7 @@ public class Registries {
 
     public static Registry<Stat> StatManager = new Registry<>();
     public static Registry<Group> GroupManager = new Registry<>();
+    
+    public static Registry<Renderable> RenderableManager = new Registry<>();
+    public static Registry<TextureMap> TextureManager = new Registry<>();
 }
