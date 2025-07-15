@@ -1,42 +1,29 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.Ids.*
-import heroes.journey.utils.art.ResourceManager
-import heroes.journey.utils.art.StillRenderable
+import heroes.journey.modlib.stillRenderable
+import heroes.journey.modlib.animationRenderable
 import heroes.journey.utils.art.TextureMap
-import heroes.journey.utils.art.animationRenderable
 
 // Textures - included by basegame mod
 
 val Sprites = TextureMap("sprites", "sprites.png", 16, 16).register()
 val OverworldTileset = TextureMap(OVERWORLD_TILESET, "Overworld_Tileset.png", 16, 16).register()
 
-StillRenderable(Ids.PLAYER_SPRITE, Sprites, 1, 1).register()
-StillRenderable(Ids.CAPITAL_SPRITE, OverworldTileset, 9, 14).register()
-StillRenderable(Ids.TOWN_SPRITE, OverworldTileset, 7, 12).register()
-StillRenderable(Ids.DUNGEON_SPRITE, OverworldTileset, 17, 4).register()
+stillRenderable(Ids.PLAYER_SPRITE, Sprites.id, 1, 1).register()
+stillRenderable(Ids.CAPITAL_SPRITE, OverworldTileset.id, 9, 14).register()
+stillRenderable(Ids.TOWN_SPRITE, OverworldTileset.id, 7, 12).register()
+stillRenderable(Ids.DUNGEON_SPRITE, OverworldTileset.id, 17, 4).register()
 
-StillRenderable(Ids.LIGHT_FOG, Sprites, 0, 1).register()
-StillRenderable(Ids.DENSE_FOG, Sprites, 0, 0).register()
+stillRenderable(Ids.LIGHT_FOG, Sprites.id, 0, 1).register()
+stillRenderable(Ids.DENSE_FOG, Sprites.id, 0, 0).register()
 
-StillRenderable(Ids.RED, ResourceManager.UI, 2, 0).register()
-StillRenderable(Ids.LIGHT_BLUE, ResourceManager.UI, 4, 1).register()
-StillRenderable(Ids.PURPLE, ResourceManager.UI, 4, 0).register()
-StillRenderable(Ids.YELLOW, ResourceManager.UI, 3, 1).register()
+stillRenderable(Ids.RED, "ui", 2, 0).register()
+stillRenderable(Ids.LIGHT_BLUE, "ui", 4, 1).register()
+stillRenderable(Ids.PURPLE, "ui", 4, 0).register()
+stillRenderable(Ids.YELLOW, "ui", 3, 1).register()
 
-animationRenderable(Ids.CURSOR, ResourceManager.UI) {
-    frameDuration = 0.5f
-    frame(0, 0)
-    frame(0, 0) // repeated intentionally
-    frame(0, 1)
-}.register()
-
-animationRenderable(Ids.MAP_POINTER, ResourceManager.UI) {
-    frameDuration = 0.5f
-    frame(3, 3)
-    frame(3, 3) // repeated
-    frame(3, 4)
-}.register()
-
+animationRenderable(Ids.CURSOR, "ui", 0.5f, frames = listOf(0 to 0, 0 to 0, 0 to 1)).register()
+animationRenderable(Ids.MAP_POINTER, "ui", 0.5f, frames = listOf(3 to 3, 3 to 3, 3 to 4)).register()
 
 // Demon Animations
 deepDiveAnimation(ANTLERED_RASCAL, "Demon", "Antlered Rascal")
@@ -201,7 +188,5 @@ fun deepDiveAnimation(id: String, grouping: String, name: String) {
         16, 16
     ).register()
 
-    animationRenderable(id, texture) {
-        frameDuration = 0.5f
-    }.register()
+    animationRenderable(id, texture.id, 0.5f).register()
 }

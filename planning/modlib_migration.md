@@ -31,6 +31,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Biome            | 1 (FeatureType) | 1           | References FeatureType in featureGenerationData |
 | FeatureType      | 0          | 0                | Standalone, only has ID and a generator function |
 | Terrain          | 0          | 0                | Standalone, only has ID and terrainCost |
+| TextureMap       | 0          | 0                | Standalone, only has ID and asset info |
 | TileBatch        | 2 (TileLayout, Terrain) | 2   | References TileLayout and Terrain |
 | TileLayout       | 0          | 0                | Standalone, only has ID, asset, and roles |
 | Action           | 0-2+ (ShowAction, ActionResult, GameState, etc.) | 3+ | High: references enums, result types, and sometimes GameState; often used with other Registrables |
@@ -106,7 +107,8 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Terrain          | Yes      | [ ]           | [ ]                 | [ ]                      |
 | TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
 | TileLayout       | Yes      | [ ]           | [ ]                 | [ ]                      |
-| Renderable       | No       | [ ]           | [ ]                 | [ ]                      |
+| Renderable       | Yes      | [x]           | [x]                 | [x]                      |
+| TextureMap       | No       | [ ]           | [ ]                 | [ ]                      |
 
 ---
 
@@ -154,5 +156,34 @@ This section documents the concrete steps taken to migrate the Group Registrable
 - Mods now use only the modlib DSL and interfaces, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **Group has been fully migrated and tested.**
+- **Renderable has been fully migrated and tested.**
 
 --- 
+
+## 📝 Reference: Renderable Migration Example
+
+This section documents the concrete steps taken to migrate the Renderable Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `Renderable.kt` file in `modlib` (Kotlin) containing:
+    - `IRenderable` interface (exposes `val id: String` and `fun register(): IRenderable`)
+    - `RenderableDSL` interface (exposes `fun stillRenderable(...)` and `fun animationRenderable(...)`)
+    - `RenderableDSLProvider` singleton
+    - Top-level `fun stillRenderable(...)` and `fun animationRenderable(...)` DSL entrypoints
+- The DSL only exposes IDs (e.g., `textureMapId: String`), not libGDX types or core classes.
+
+### 2. Implement the DSL in core
+- Implemented `RenderableDSLImpl` in `core/mods` package, returning real `StillRenderable` and `AnimationRenderable` (which implement `IRenderable`).
+- Always looks up `TextureMap` by ID, and sets animation play mode to `LOOP`.
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `RenderableDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `stillRenderable` and `animationRenderable` from `modlib` (e.g., `import heroes.journey.modlib.stillRenderable`).
+- All usages now pass IDs explicitly, not core objects.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for Renderable, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Renderable has been fully migrated and tested.** 

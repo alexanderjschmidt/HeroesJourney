@@ -1,6 +1,7 @@
 package heroes.journey.mods
 
 import heroes.journey.modlib.GroupDSLProvider
+import heroes.journey.modlib.RenderableDSLProvider
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
@@ -8,5 +9,6 @@ import heroes.journey.modlib.GroupDSLProvider
  */
 fun setupModlibDSLs() {
     GroupDSLProvider.instance = GroupDSLImpl()
+    RenderableDSLProvider.instance = RenderableDSLImpl()
     // Register other DSLs here as needed
 } 
