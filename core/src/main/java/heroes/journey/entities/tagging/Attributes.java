@@ -1,5 +1,7 @@
 package heroes.journey.entities.tagging;
 
+import static heroes.journey.registries.Registries.StatManager;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,12 +43,21 @@ public class Attributes extends HashMap<Stat,Integer> {
         return stat.get(this);
     }
 
+    public int get(String statId) {
+        return StatManager.get(statId).get(this);
+    }
+
     public int getDirect(Stat stat) {
         return super.get(stat);
     }
 
     public int getDirect(String stat) {
-        return super.get(Stat.getById(stat));
+        return super.get(StatManager.get(stat));
+    }
+
+    public Attributes put(String statId, Integer value) {
+        this.put(StatManager.get(statId), value);
+        return this;
     }
 
     public Attributes add(Stat stat, Integer value) {
@@ -54,7 +65,7 @@ public class Attributes extends HashMap<Stat,Integer> {
     }
 
     public Attributes add(String stat, Integer value) {
-        return put(Stat.getById(stat), value, Operation.ADD);
+        return put(StatManager.get(stat), value, Operation.ADD);
     }
 
     public Attributes put(Stat stat, Integer value, Operation operation) {

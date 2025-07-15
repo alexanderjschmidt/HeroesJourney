@@ -9,6 +9,7 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Operation;
 import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Ids;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {
@@ -30,7 +31,7 @@ public class FightUtils {
 
     public static void faint(GameWorld world, UUID e) {
         Attributes statsComponent = StatsComponent.get(world, e);
-        statsComponent.put(Stat.BODY, 1);
+        statsComponent.put(Ids.STAT_BODY, 1);
         // TODO remove most valuable item
     }
 

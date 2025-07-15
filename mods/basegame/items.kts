@@ -4,7 +4,7 @@ import heroes.journey.entities.items.Item
 import heroes.journey.entities.items.ItemSubType
 import heroes.journey.entities.items.ItemType
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.entities.tagging.Stat
+import heroes.journey.modlib.Ids
 import heroes.journey.utils.gamestate.Utils
 
 // Items - included by basegame mod
@@ -36,13 +36,13 @@ val ironIngot = Item(
 Item(
     "iron_sword",
     sword, 1,
-    Attributes().add(Stat.BODY, 3)
+    Attributes().add(Ids.STAT_BODY, 3)
 ).register()
 
 Item(
     "chest_plate",
     chest_armor, 5,
-    Attributes().add(Stat.BODY, 3)
+    Attributes().add(Ids.STAT_BODY, 3)
 ).register()
 
 ConsumableItem(

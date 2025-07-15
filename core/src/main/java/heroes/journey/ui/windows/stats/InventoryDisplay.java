@@ -15,6 +15,7 @@ import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Ids;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.art.ResourceManager;
@@ -66,7 +67,8 @@ public class InventoryDisplay extends Table {
             .toList());
         gold.setText(inventoryComponent.getGold());
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
-        weight.setText(inventoryComponent.getWeight() + "/" + Stat.CARRY_CAPACITY.get(statsComponent));
+        weight.setText(
+            inventoryComponent.getWeight() + "/" + Stat.get(Ids.STAT_CARRY_CAPACITY, statsComponent));
     }
 
     public void handleInput() {

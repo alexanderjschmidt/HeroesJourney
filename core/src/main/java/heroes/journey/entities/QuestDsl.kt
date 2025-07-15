@@ -1,17 +1,17 @@
 package heroes.journey.entities
 
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.entities.tagging.Stat
+import heroes.journey.registries.Registries.StatManager
 
 // Helper functions for quest creation
-fun questCost(vararg pairs: Pair<Stat, Int>): Attributes {
+fun questCost(vararg pairs: Pair<String, Int>): Attributes {
     return Attributes().apply {
-        pairs.forEach { (stat, amount) -> add(stat, amount) }
+        pairs.forEach { (statId, amount) -> add(StatManager[statId], amount) }
     }
 }
 
-fun questRewards(vararg pairs: Pair<Stat, Int>): Attributes {
+fun questRewards(vararg pairs: Pair<String, Int>): Attributes {
     return Attributes().apply {
-        pairs.forEach { (stat, amount) -> add(stat, amount) }
+        pairs.forEach { (statId, amount) -> add(StatManager[statId], amount) }
     }
-} 
+}

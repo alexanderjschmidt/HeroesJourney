@@ -1,5 +1,7 @@
 package heroes.journey.utils.serializers;
 
+import static heroes.journey.registries.Registries.StatManager;
+
 import java.util.Map;
 
 import com.badlogic.gdx.utils.Json;
@@ -10,7 +12,6 @@ import com.esotericsoftware.kryo.io.Output;
 
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
-
 
 public class AttributesSerializer extends CustomSerializer<Attributes> {
 
@@ -27,7 +28,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
     public Attributes read(Json json, JsonValue jsonValue, Class aClass) {
         Attributes attributes = new Attributes();
         for (JsonValue entry = jsonValue.child; entry != null; entry = entry.next) {
-            Stat tag = Stat.getById(entry.name());
+            Stat tag = StatManager.get(entry.name());
             int value = entry.asInt();
             attributes.put(tag, value);
         }
@@ -50,7 +51,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
         for (int i = 0; i < size; i++) {
             String tagString = input.readString();
             int value = input.readInt();
-            Stat tag = Stat.getById(tagString);
+            Stat tag = StatManager.get(tagString);
             attributes.put(tag, value);
         }
         return attributes;

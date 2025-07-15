@@ -19,7 +19,7 @@ import java.util.*
 action {
     id = "choose_approach"
     inputDisplayNameFn = { input ->
-        Stat.valueOf(input["target"]!!).name
+        input["target"]!!
     }
     onSelectFn = { input ->
         val regionId = Utils.getRegion(input)
@@ -27,7 +27,7 @@ action {
             input.gameState.world,
             regionId
         )
-        val approach: Stat = Stat.valueOf(input["target"]!!)
+        val approach: String = input["target"]!!
         val challengeEntityId = UUID.fromString(input["challenge"])
         if (regionComponent != null) {
             regionComponent.removeChallenge(challengeEntityId)
@@ -38,12 +38,12 @@ action {
 
             // Reward: 1 renown per base stat part in the chosen approach, limited by realm attention
             val baseToRenown = mapOf(
-                Stat.BODY to Stat.VALOR,
-                Stat.MIND to Stat.INSIGHT,
-                Stat.MAGIC to Stat.ARCANUM,
-                Stat.CHARISMA to Stat.INFLUENCE
+                Ids.STAT_BODY to Ids.STAT_VALOR,
+                Ids.STAT_MIND to Ids.STAT_INSIGHT,
+                Ids.STAT_MAGIC to Ids.STAT_ARCANUM,
+                Ids.STAT_CHARISMA to Ids.STAT_INFLUENCE
             )
-            val partCounts = mutableMapOf<Stat, Int>()
+            val partCounts = mutableMapOf<String, Int>()
             // TODO fix
             for ((baseStat, count) in partCounts) {
                 val renownStat = baseToRenown[baseStat] ?: continue

@@ -6,6 +6,7 @@ import heroes.journey.entities.tagging.Stat
 import heroes.journey.entities.tagging.attributes
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
+import heroes.journey.registries.Registries.StatManager
 
 class Challenge(
     id: String,
@@ -19,11 +20,11 @@ class Challenge(
 
 class ChallengeBuilder(private val id: String) {
     var render: String = ""
-    private val approachTags = mutableListOf<Stat>()
+    private val approachTagIds = mutableListOf<String>()
     private var rewardAttributes = Attributes()
 
-    fun approaches(vararg tags: Stat) {
-        approachTags.addAll(tags)
+    fun approaches(vararg tagIds: String) {
+        approachTagIds.addAll(tagIds)
     }
 
     fun reward(init: AttributesBuilder.() -> Unit) {
@@ -34,7 +35,7 @@ class ChallengeBuilder(private val id: String) {
         return Challenge(
             id = id,
             render = render,
-            approaches = approachTags.toTypedArray(),
+            approaches = approachTagIds.mapNotNull { StatManager.get(it) }.toTypedArray(),
         )
     }
 }

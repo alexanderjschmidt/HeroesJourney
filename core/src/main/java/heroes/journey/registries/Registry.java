@@ -13,6 +13,15 @@ public class Registry<T extends Registrable> extends HashMap<String,T> {
             .collect(Collectors.toList());
     }
 
+    @Override
+    public T get(Object id) {
+        T item = super.get(id);
+        if (item == null) {
+            System.out.println("Failed to get item with id " + id);
+        }
+        return item;
+    }
+
     public T register(T entry) {
         if (containsKey(entry.getId())) {
             throw new RuntimeException(this.getClass() + " cannot register with id " + entry.getId() +

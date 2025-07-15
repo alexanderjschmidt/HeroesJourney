@@ -49,6 +49,7 @@ import heroes.journey.systems.triggerable.EventSystem;
 import heroes.journey.systems.triggerable.RegionManagementSystem;
 import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.utils.serializers.Serializers;
+import heroes.journey.modlib.Ids;
 
 public class GameWorld extends World {
 
@@ -140,7 +141,7 @@ public class GameWorld extends World {
         return IntStream.range(0, subscription.getEntities().size())
             .mapToObj(i -> ids[i])
             .sorted(Comparator.comparing(
-                    (Integer e) -> Stat.SPEED.get(StatsComponent.get(this, IdComponent.get(this, e))))
+                    (Integer e) -> StatsComponent.get(this, IdComponent.get(this, e)).get(Ids.STAT_SPEED))
                 .thenComparing(Object::toString))
             .map(e -> IdComponent.get(this, e))
             .collect(Collectors.toList());

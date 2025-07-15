@@ -1,11 +1,13 @@
 package heroes.journey.components;
 
+import static heroes.journey.registries.Registries.StatManager;
+
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Ids;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 
@@ -18,11 +20,11 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     public StatsComponent() {
         // TODO how to auto load things with maxes
-        for (Stat stat : Stat.getByGroup(Group.BaseStats)) {
+        for (Stat stat : Stat.getByGroup(Ids.GROUP_BASESTATS)) {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, stat.getMin());
         }
-        for (Stat stat : Stat.getByGroup(Group.Renown)) {
+        for (Stat stat : Stat.getByGroup(Ids.GROUP_RENOWN)) {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, 3);
         }
@@ -50,11 +52,11 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         stats.fame += amount;
     }
 
-    public static void adjustStat(GameWorld world, UUID entityId, Stat stat, int count) {
+    public static void adjustStat(GameWorld world, UUID entityId, String statId, int count) {
         StatsComponent statsComponent = world.getEntity(StatsComponent.class, entityId);
         if (statsComponent == null)
             return;
-        statsComponent.getAttributes().add(stat, count);
+        statsComponent.getAttributes().add(StatManager.get(statId), count);
     }
 
     @Override

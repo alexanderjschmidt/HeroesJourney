@@ -6,6 +6,8 @@ import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemSubType;
+import heroes.journey.entities.tagging.Group;
+import heroes.journey.entities.tagging.Stat;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.TileBatch;
@@ -16,7 +18,7 @@ public class Registries {
 
     public static Registry<Item> ItemManager = new Registry<>();
     public static Registry<ItemSubType> ItemSubTypeManager = new Registry<>();
-    
+
     public static Registry<Action> ActionManager = new Registry<>();
     public static Registry<Buff> BuffManager = new Registry<>();
 
@@ -30,4 +32,6 @@ public class Registries {
     public static Registry<TileLayout> TileLayoutManager = new Registry<>();
     public static Registry<TileBatch> TileBatchManager = new Registry<>();
 
+    public static Registry<Stat> StatManager = new Registry<>();
+    public static Registry<Group> GroupManager = new Registry<>();
 }

@@ -2,9 +2,10 @@ import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.StatsComponent
-import heroes.journey.entities.actions.*
+import heroes.journey.entities.actions.cooldownAction
 import heroes.journey.entities.actions.results.StringResult
-import heroes.journey.entities.tagging.Stat
+import heroes.journey.modlib.Ids
+import heroes.journey.registries.Registries.StatManager
 import heroes.journey.utils.gamestate.FightUtils
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
@@ -26,7 +27,7 @@ cooldownAction {
         val e = input.entityId
         val dungeon = UUID.fromString(input["owner"])
         val log = StringBuilder()
-        if (FightUtils.struggle(gs, e, dungeon, Stat.BODY)) {
+        if (FightUtils.struggle(gs, e, dungeon, StatManager[Ids.STAT_BODY])) {
             log.append("You have completed the ")
                 .append(NamedComponent.get(gs.world, dungeon, "Dungeon"))
                 .append("!\nYour rewards are:\n")

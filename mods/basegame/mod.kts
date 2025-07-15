@@ -1,24 +1,26 @@
 import heroes.journey.mods.gameMod
 
 gameMod("Base Game", 0) {
-    includeScriptsFromDirectory("Actions", "actions")
+  includeScript("stats.kts")
 
-    includeScripts(
-        "Misc",
-        "textures.kts",
-        "items.kts",
-        "quests.kts"
-    )
+  includeScriptsFromDirectory("Actions", "actions")
 
-    includeScriptsFromDirectory(
-        "Challenges", "challenges"
-    )
+  includeScripts(
+    "Misc",
+    "textures.kts",
+    "items.kts",
+    "quests.kts"
+  )
 
-    includeScripts(
-        "World-Gen",
-        "worldgen/terrains.kts",
-        "worldgen/biomes.kts",
-        "worldgen/tiles.kts",
-        parallel = false
-    )
+  includeScriptsFromDirectory(
+    "Challenges", "challenges"
+  )
+
+  includeScripts(
+    "World-Gen",
+    "worldgen/terrains.kts",
+    "worldgen/biomes.kts",
+    "worldgen/tiles.kts",
+    parallel = false
+  )
 }

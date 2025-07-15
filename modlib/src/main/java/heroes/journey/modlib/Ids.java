@@ -131,4 +131,41 @@ public class Ids {
     public static final String BASE_TILE_PLAINS = "base_tile_plains";
     public static final String BASE_TILE_HILLS = "base_tile_hills";
     public static final String BASE_TILE_SAND = "base_tile_sand";
+
+    // Stat IDs
+    public static final String STAT_BODY = "body";
+    public static final String STAT_MIND = "mind";
+    public static final String STAT_MAGIC = "magic";
+    public static final String STAT_CHARISMA = "charisma";
+    public static final String STAT_VALOR = "valor";
+    public static final String STAT_INSIGHT = "insight";
+    public static final String STAT_ARCANUM = "arcanum";
+    public static final String STAT_INFLUENCE = "influence";
+    public static final String STAT_MIGHT = "might";
+    public static final String STAT_SKILL = "skill";
+    public static final String STAT_EMPOWERMENT = "empowerment";
+    public static final String STAT_CHIVALRY = "chivalry";
+    public static final String STAT_TECHNIQUE = "technique";
+    public static final String STAT_LOGIC = "logic";
+    public static final String STAT_CONCENTRATION = "concentration";
+    public static final String STAT_CUNNING = "cunning";
+    public static final String STAT_ENCHANTING = "enchanting";
+    public static final String STAT_ILLUSION = "illusion";
+    public static final String STAT_SORCERY = "sorcery";
+    public static final String STAT_BEWITCHING = "bewitching";
+    public static final String STAT_BRAVADO = "bravado";
+    public static final String STAT_PERSUASION = "persuasion";
+    public static final String STAT_MESMERISM = "mesmerism";
+    public static final String STAT_CHARM = "charm";
+    public static final String STAT_SPEED = "speed";
+    public static final String STAT_VISION = "vision";
+    public static final String STAT_CARRY_CAPACITY = "carry_capacity";
+
+    // Group IDs
+    public static final String GROUP_BODY = "body_group";
+    public static final String GROUP_MIND = "mind_group";
+    public static final String GROUP_MAGIC = "magic_group";
+    public static final String GROUP_CHARISMA = "charisma_group";
+    public static final String GROUP_BASESTATS = "basestats_group";
+    public static final String GROUP_RENOWN = "renown_group";
 }

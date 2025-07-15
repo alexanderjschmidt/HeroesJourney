@@ -15,6 +15,7 @@ import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
+import heroes.journey.modlib.Ids;
 
 public class FogUtils {
 
@@ -36,7 +37,7 @@ public class FogUtils {
         Attributes statsComponent = StatsComponent.get(gameState.getWorld(), entityId);
         if (statsComponent != null && positionComponent != null) {
             FogUtils.applyVision(fog, positionComponent.getX(), positionComponent.getY(),
-                Stat.VISION.get(statsComponent));
+                statsComponent.get(Ids.STAT_VISION));
         }
         return fog;
     }
@@ -68,7 +69,7 @@ public class FogUtils {
         Attributes statsComponent = StatsComponent.get(world, id);
         if (pos != null && mapComponent != null && statsComponent != null) {
             FogUtils.updateMap(world, gameState, mapComponent, pos.getX(), pos.getY(),
-                Stat.VISION.get(statsComponent));
+                statsComponent.get(Ids.STAT_VISION));
         }
     }
 

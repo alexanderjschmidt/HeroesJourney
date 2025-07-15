@@ -432,3 +432,79 @@ desert_kingdom_name=Desert Kingdom
 desert_kingdom_description=A kingdom in the desert, surrounded by sand dunes and arid lands.
 mesa_kingdom_name=Mesa Kingdom
 mesa_kingdom_description=A kingdom atop mesas and rocky plateaus.
+
+# --- GROUPS ---
+group.Body_name=Body
+group.Body_description=Physical attributes and prowess.
+group.Mind_name=Mind
+group.Mind_description=Mental acuity and intellect.
+group.Magic_name=Magic
+group.Magic_description=Arcane power and magical ability.
+group.Charisma_name=Charisma
+group.Charisma_description=Charm, presence, and social skill.
+group.BaseStats_name=Base Stats
+group.BaseStats_description=Primary attributes for all characters.
+group.Renown_name=Renown
+group.Renown_description=Fame and reputation earned through deeds.
+
+# --- BASE STATS ---
+stat.body_name=Body
+stat.body_description=Represents physical strength and endurance.
+stat.mind_name=Mind
+stat.mind_description=Represents intelligence and reasoning.
+stat.magic_name=Magic
+stat.magic_description=Represents magical aptitude and arcane power.
+stat.charisma_name=Charisma
+stat.charisma_description=Represents charm, leadership, and social ability.
+
+# --- RENOWN STATS ---
+stat.valor_name=Valor
+stat.valor_description=Bravery and heroism in the face of danger.
+stat.insight_name=Insight
+stat.insight_description=Perceptiveness and understanding of the world.
+stat.arcanum_name=Arcanum
+stat.arcanum_description=Knowledge and mastery of the arcane.
+stat.influence_name=Influence
+stat.influence_description=Ability to sway others and shape events.
+
+# --- CONFLUENCE STATS (COMPLEX) ---
+stat.might_name=Might
+stat.might_description=Raw physical power and force.
+stat.skill_name=Skill
+stat.skill_description=Dexterity and practiced technique.
+stat.empowerment_name=Empowerment
+stat.empowerment_description=Physical strength enhanced by magic.
+stat.chivalry_name=Chivalry
+stat.chivalry_description=Physical prowess guided by honor and charisma.
+stat.technique_name=Technique
+stat.technique_description=Intellectual approach to physical challenges.
+stat.logic_name=Logic
+stat.logic_description=Pure reasoning and analytical thought.
+stat.concentration_name=Concentration
+stat.concentration_description=Focused mind, often for magical tasks.
+stat.cunning_name=Cunning
+stat.cunning_description=Deceptive intelligence and cleverness.
+stat.enchanting_name=Enchanting
+stat.enchanting_description=Magical power applied to the physical world.
+stat.illusion_name=Illusion
+stat.illusion_description=Magical manipulation of perception and mind.
+stat.sorcery_name=Sorcery
+stat.sorcery_description=Raw, unrestrained magical force.
+stat.bewitching_name=Bewitching
+stat.bewitching_description=Magical charm and supernatural allure.
+stat.bravado_name=Bravado
+stat.bravado_description=Showy courage and physical confidence.
+stat.persuasion_name=Persuasion
+stat.persuasion_description=Intellectual argument and social influence.
+stat.mesmerism_name=Mesmerism
+stat.mesmerism_description=Magical or supernatural influence over others.
+stat.charm_name=Charm
+stat.charm_description=Pure social magnetism and likability.
+
+# --- CALCULATED STATS ---
+stat.speed_name=Speed
+stat.speed_description=How quickly a character can act.
+stat.vision_name=Vision
+stat.vision_description=How well a character can see or perceive.
+stat.carry_capacity_name=Carry Capacity
+stat.carry_capacity_description=How much a character can carry.

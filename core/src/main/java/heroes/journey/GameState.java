@@ -26,9 +26,9 @@ import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.models.MapData;
+import heroes.journey.modlib.Ids;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.tilemap.TileMap;
@@ -84,7 +84,7 @@ public class GameState implements Cloneable {
         history = new History();
         realmsAttention = new Attributes();
         realmsAttentionBase = new Attributes();
-        for (Stat renown : Stat.getByGroup(Group.Renown)) {
+        for (Stat renown : Stat.getByGroup(Ids.GROUP_RENOWN)) {
             realmsAttentionBase.put(renown, mapData.getRealmAttentionBase());
         }
 

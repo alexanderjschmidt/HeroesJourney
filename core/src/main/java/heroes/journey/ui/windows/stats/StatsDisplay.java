@@ -12,6 +12,7 @@ import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.modlib.Ids;
 
 import java.util.UUID;
 
@@ -46,10 +47,10 @@ public class StatsDisplay extends Table {
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
 
         assert statsComponent != null;
-        body.setText("Body: " + statsComponent.get(Stat.BODY));
-        mind.setText("Mind: " + statsComponent.get(Stat.MIND));
-        magic.setText("Magic: " + statsComponent.get(Stat.MAGIC));
-        charisma.setText("Charisma: " + statsComponent.get(Stat.CHARISMA));
+        body.setText("Body: " + statsComponent.get(Ids.STAT_BODY));
+        mind.setText("Mind: " + statsComponent.get(Ids.STAT_MIND));
+        magic.setText("Magic: " + statsComponent.get(Ids.STAT_MAGIC));
+        charisma.setText("Charisma: " + statsComponent.get(Ids.STAT_CHARISMA));
         fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
     }
 
