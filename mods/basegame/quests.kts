@@ -1,4 +1,5 @@
-import heroes.journey.entities.Buff
+import heroes.journey.modlib.buff
+import heroes.journey.modlib.attributes
 import heroes.journey.entities.Quest
 import heroes.journey.entities.questCost
 import heroes.journey.entities.questRewards
@@ -61,4 +62,5 @@ Quest(
     35
 ).register()
 
-Buff("rested", 1, Attributes()).register();
+// Example Buff usage
+buff("rested", 1).register()
