@@ -18,7 +18,7 @@ public class Registry<T extends Registrable> extends HashMap<String,T> {
         T item = super.get(id);
         if (item == null) {
             System.out.println("Failed to get item with id " + id + " in registry for " +
-                this.values().stream().findFirst().getClass());
+                this.values().stream().findFirst().get().getClass());
         }
         return item;
     }
@@ -26,8 +26,8 @@ public class Registry<T extends Registrable> extends HashMap<String,T> {
     public T register(T entry) {
         if (containsKey(entry.getId())) {
             throw new RuntimeException(
-                this.values().stream().findFirst().getClass() + " cannot register with id " + entry.getId() +
-                    " because that id is already registered");
+                this.values().stream().findFirst().get().getClass() + " cannot register with id " +
+                    entry.getId() + " because that id is already registered");
         }
         put(entry.getId(), entry);
         return entry;

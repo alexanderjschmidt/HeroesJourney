@@ -11,8 +11,10 @@ import heroes.journey.modlib.ItemSubTypeDSLProvider
 import heroes.journey.modlib.ItemDSLProvider
 import heroes.journey.modlib.AttributesDSLProvider
 import heroes.journey.modlib.BuffDSLProvider
+import heroes.journey.modlib.QuestDSLProvider
 import heroes.journey.mods.AttributesDSLImpl
 import heroes.journey.mods.BuffDSLImpl
+import heroes.journey.mods.QuestDSLImpl
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
@@ -30,5 +32,6 @@ fun setupModlibDSLs() {
     ItemDSLProvider.instance = ItemDSLImpl()
     AttributesDSLProvider.instance = AttributesDSLImpl()
     BuffDSLProvider.instance = BuffDSLImpl()
+    QuestDSLProvider.instance = QuestDSLImpl()
     // Register other DSLs here as needed
 }

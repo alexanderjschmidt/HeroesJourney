@@ -101,7 +101,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Item             | Yes      | [x]           | [x]                 | [x]                      |
 | Action           | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Buff             | Yes      | [x]           | [x]                 | [x]                      |
-| Quest            | Partial  | [ ]           | [ ]                 | [ ]                      |
+| Quest            | Yes      | [x]           | [x]                 | [x]                      |
 | Challenge        | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
 | FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
@@ -385,3 +385,26 @@ This section documents the concrete steps taken to migrate the Buff Registrable 
 - Mods now use only the modlib DSL and interface for Buff, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **Buff has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: Quest Migration Example
+
+This section documents the concrete steps taken to migrate the Quest Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interface and DSL in modlib (Kotlin)
+- Created `IQuest` interface in `modlib`, exposing only mod-facing properties and methods.
+- Created `QuestDSL` interface, singleton provider, and top-level DSL function (`quest`).
+- Used the existing `IAttributes` and `attributes` DSL for quest cost and rewards.
+
+### 2. Implement the DSL in core
+- Implemented `QuestDSLImpl` in `core/mods`, returning real core `Quest` objects and handling type conversions.
+- Registered the provider in `setupModlibDSLs`.
+
+### 3. Update mod scripts to use the new DSL
+- Updated all mod scripts to use `quest` from `modlib`, passing IDs and using the new attributes DSL.
+
+### 4. Result
+- Mods now use only the modlib DSL and interface for Quest, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Quest has been fully migrated and tested.** 

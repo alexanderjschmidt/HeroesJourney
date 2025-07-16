@@ -3,50 +3,25 @@ package heroes.journey.entities
 import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.IQuest
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
 import java.util.*
 
 class Quest(
     id: String,
-    private val cost: Attributes = Attributes(),
-    private val rewards: Attributes = Attributes(),
-    private val fameReward: Int = 0
-) : Registrable(id) {
-
-    fun onComplete(input: ActionInput): Boolean {
-        // Check if player can afford the cost
-        val playerStats = StatsComponent.get(input.gameState.getWorld(), input.entityId)
-        if (playerStats == null) return false
-
-        // Check if player has enough of each required attribute
-        for ((stat, requiredAmount) in cost) {
-            if (playerStats[stat]!! < requiredAmount) {
-                return false // Player can't afford this quest
-            }
-        }
-
-        // Deduct costs
-        for ((stat, amount) in cost) {
-            playerStats.put(stat, -amount, heroes.journey.entities.tagging.Operation.ADD)
-        }
-
-        // Add rewards
-        for ((stat, amount) in rewards) {
-            playerStats.put(stat, amount, heroes.journey.entities.tagging.Operation.ADD)
-        }
-
-        // Add fame reward
-        if (fameReward > 0) {
-            StatsComponent.addFame(input.gameState.getWorld(), input.entityId, fameReward)
-        }
-
-        return true
+    override val cost: Attributes = Attributes(),
+    override val rewards: Attributes = Attributes(),
+    override val fameReward: Int = 0
+) : Registrable(id), IQuest {
+    override fun register(): Quest {
+        return Registries.QuestManager.register(this)
     }
 
-    fun canAfford(input: ActionInput): Boolean {
-        val playerStats = StatsComponent.get(input.gameState.getWorld(), input.entityId) ?: return false
-
+    override fun canAfford(input: Any): Boolean {
+        val actionInput = input as? ActionInput ?: return false
+        val playerStats =
+            StatsComponent.get(actionInput.gameState.getWorld(), actionInput.entityId) ?: return false
         for ((stat, requiredAmount) in cost) {
             if (playerStats[stat]!! < requiredAmount) {
                 return false
@@ -55,12 +30,25 @@ class Quest(
         return true
     }
 
-    fun getCost(): Attributes = cost
-    fun getRewards(): Attributes = rewards
-    fun getFameReward(): Int = fameReward
-
-    override fun register(): Quest {
-        return Registries.QuestManager.register(this)
+    override fun onComplete(input: Any): Boolean {
+        val actionInput = input as? ActionInput ?: return false
+        val playerStats = StatsComponent.get(actionInput.gameState.getWorld(), actionInput.entityId)
+        if (playerStats == null) return false
+        for ((stat, requiredAmount) in cost) {
+            if (playerStats[stat]!! < requiredAmount) {
+                return false
+            }
+        }
+        for ((stat, amount) in cost) {
+            playerStats.put(stat, -amount, heroes.journey.entities.tagging.Operation.ADD)
+        }
+        for ((stat, amount) in rewards) {
+            playerStats.put(stat, amount, heroes.journey.entities.tagging.Operation.ADD)
+        }
+        if (fameReward > 0) {
+            StatsComponent.addFame(actionInput.gameState.getWorld(), actionInput.entityId, fameReward)
+        }
+        return true
     }
 
     override fun equals(o: Any?): Boolean {
