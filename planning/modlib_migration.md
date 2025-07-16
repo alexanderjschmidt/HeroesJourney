@@ -105,7 +105,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
 | FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Terrain          | Yes      | [x]           | [x]                 | [x]                      |
-| TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
+| TileBatch        | Yes      | [x]           | [x]                 | [x]                      |
 | TileLayout       | Yes      | [x]           | [x]                 | [x]                      |
 | Renderable       | Yes      | [x]           | [x]                 | [x]                      |
 | TextureMap       | Yes      | [x]           | [x]                 | [x]                      |
@@ -274,3 +274,32 @@ This section documents the concrete steps taken to migrate the TileLayout Regist
 - Mods now use only the modlib DSL and interfaces for TileLayout, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **TileLayout has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: TileBatch Migration Example
+
+This section documents the concrete steps taken to migrate the TileBatch Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `TileBatch.kt` file in `modlib` (Kotlin) containing:
+    - `ITileBatch` interface (exposes all properties needed for mod DSL and `fun register(): ITileBatch`)
+    - `TileBatchDSL` interface (exposes `fun tileBatch(...)` with all required parameters)
+    - `TileBatchDSLProvider` singleton
+    - Top-level `fun tileBatch(...)` DSL entrypoint
+- This keeps the modlib lightweight and idiomatic.
+
+### 2. Implement the DSL in core
+- Implemented `TileBatchDSLImpl` in `core/mods` package, returning a real `TileBatch` (which implements `ITileBatch`).
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `TileBatchDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `tileBatch` from `modlib` (e.g., `import heroes.journey.modlib.tileBatch`).
+- All usages now pass IDs, layout, textureMap, and terrains explicitly, not via builder blocks.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for TileBatch, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **TileBatch has been fully migrated and tested.** 

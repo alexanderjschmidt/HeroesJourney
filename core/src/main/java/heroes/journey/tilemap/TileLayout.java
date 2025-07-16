@@ -29,6 +29,14 @@ public class TileLayout extends Registrable implements ITileLayout {
     private final String path;
     private final List<String> terrainRoles;
 
+    /**
+     * The coloring of the layout should be 0,0,0 (black) for the first terrain passed in
+     * (which should also be the base/center tile), and then increasing in
+     * rgb (added together) values until 255,255,255 (white) the last terrain
+     * The center tile of a 3x3 area defines its weight multiplier.
+     *
+     * @param path
+     */
     public TileLayout(String id, String path, List<String> terrainRoles) {
         super(id);
         this.path = path;
@@ -124,6 +132,15 @@ public class TileLayout extends Registrable implements ITileLayout {
         return tileSet;
     }
 
+    /**
+     * @param tiles
+     * @param weight
+     * @param x
+     * @param y
+     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
+     * @param terrains
+     * @return a list of generated tiles
+     */
     public List<Tile> generateTiles(
         TextureRegion[][] tiles,
         int weight,
@@ -134,6 +151,15 @@ public class TileLayout extends Registrable implements ITileLayout {
         return generateTiles(tiles, weight, x, y, addToDefault, 0, 0, terrains);
     }
 
+    /**
+     * @param tiles
+     * @param weight
+     * @param x
+     * @param y
+     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
+     * @param terrains
+     * @return a list of generated tiles
+     */
     public List<Tile> generateAnimatedTiles(
         TextureRegion[][] tiles,
         int weight,

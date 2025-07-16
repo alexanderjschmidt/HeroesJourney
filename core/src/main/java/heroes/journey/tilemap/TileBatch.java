@@ -7,6 +7,7 @@ import static heroes.journey.registries.Registries.TileLayoutManager;
 import java.util.List;
 import java.util.Map;
 
+import heroes.journey.modlib.ITileBatch;
 import heroes.journey.registries.Registrable;
 import heroes.journey.registries.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
@@ -14,8 +15,7 @@ import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 
-public class TileBatch extends Registrable {
-    private final String id;
+public class TileBatch extends Registrable implements ITileBatch {
     private final String layoutId;
     private final String textureMapId;
     private final Map<String,String> terrainMapping;
@@ -42,7 +42,6 @@ public class TileBatch extends Registrable {
         int frameCount,
         int frameDist) {
         super(id);
-        this.id = id;
         this.layoutId = layoutId;
         this.textureMapId = textureMapId;
         this.terrainMapping = terrainMapping;
@@ -56,9 +55,55 @@ public class TileBatch extends Registrable {
         this.tiles = null;
     }
 
+    @Override
     public TileBatch register() {
         heroes.journey.registries.Registries.TileBatchManager.register(this);
         return this;
+    }
+
+    @Override
+    public String getLayout() {
+        return layoutId;
+    }
+
+    @Override
+    public String getTextureMap() {
+        return textureMapId;
+    }
+
+    @Override
+    public Map<String,String> getTerrains() {
+        return terrainMapping;
+    }
+
+    @Override
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public int getStartX() {
+        return startX;
+    }
+
+    @Override
+    public int getStartY() {
+        return startY;
+    }
+
+    @Override
+    public boolean getAddToDefault() {
+        return addToDefault;
+    }
+
+    @Override
+    public int getFrameCount() {
+        return frameCount;
+    }
+
+    @Override
+    public int getFrameDist() {
+        return frameDist;
     }
 
     public void generateTilesIfNeeded() {
@@ -128,32 +173,12 @@ public class TileBatch extends Registrable {
         return terrainMapping;
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
-    public int getStartX() {
-        return startX;
-    }
-
-    public int getStartY() {
-        return startY;
-    }
-
     public boolean isAddToDefault() {
         return addToDefault;
     }
 
     public boolean isAnimated() {
         return animated;
-    }
-
-    public int getFrameCount() {
-        return frameCount;
-    }
-
-    public int getFrameDist() {
-        return frameDist;
     }
 
     public List<Tile> getTiles() {
