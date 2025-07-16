@@ -103,7 +103,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Buff             | Yes      | [x]           | [x]                 | [x]                      |
 | Quest            | Yes      | [x]           | [x]                 | [x]                      |
 | Challenge        | Yes      | [x]           | [x]                 | [x]                      |
-| Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Biome            | Yes      | [x]           | [x]                 | [x]                      |
 | FeatureType      | Yes      | [x]           | [x]                 | [x]                      |
 | Terrain          | Yes      | [x]           | [x]                 | [x]                      |
 | TileBatch        | Yes      | [x]           | [x]                 | [x]                      |

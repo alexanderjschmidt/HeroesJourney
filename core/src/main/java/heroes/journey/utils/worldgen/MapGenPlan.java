@@ -2,6 +2,7 @@ package heroes.journey.utils.worldgen;
 
 import static heroes.journey.modlib.Ids.BASE_TILE_NULL;
 import static heroes.journey.modlib.Ids.BASE_TILE_PLAINS;
+import static heroes.journey.registries.Registries.FeatureTypeManager;
 import static heroes.journey.registries.Registries.ItemManager;
 import static heroes.journey.registries.Registries.TerrainManager;
 import static heroes.journey.registries.Registries.TileBatchManager;
@@ -24,10 +25,10 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Position;
+import heroes.journey.modlib.FeatureGenerationData;
 import heroes.journey.modlib.Ids;
 import heroes.journey.registries.TileManager;
 import heroes.journey.systems.EntityFactory;
-import heroes.journey.tilemap.FeatureGenerationData;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.worldgen.effects.BasicMapGenerationEffect;
@@ -89,10 +90,12 @@ public class MapGenPlan {
                         if (pos == null) {
                             throw new MapGenerationException(
                                 "Failed to generate minimum number (" + genData.getMinInRegion() + ") of " +
-                                    genData.getFeatureType().getId() + " features for " +
+                                    genData.getFeatureTypeId() + " features for " +
                                     region.getBiome().getId() + " biome.");
                         }
-                        region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
+                        region.getFeatures()
+                            .add(FeatureTypeManager.get(genData.getFeatureTypeId())
+                                .generateFeature(gameState, pos));
                         //TODO remove this at some point, seems aggressive
                         gameState.getWorld().basicProcess();
                     }
@@ -108,7 +111,9 @@ public class MapGenPlan {
                             regionCenter);
                         if (pos == null)
                             break;
-                        region.getFeatures().add(genData.getFeatureType().generateFeature(gameState, pos));
+                        region.getFeatures()
+                            .add(FeatureTypeManager.get(genData.getFeatureTypeId())
+                                .generateFeature(gameState, pos));
                     }
                 }
             }

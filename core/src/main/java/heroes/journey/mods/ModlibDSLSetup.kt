@@ -1,24 +1,7 @@
 package heroes.journey.mods
 
-import heroes.journey.modlib.GroupDSLProvider
-import heroes.journey.modlib.RenderableDSLProvider
-import heroes.journey.modlib.TerrainDSLProvider
-import heroes.journey.modlib.TextureMapDSLProvider
-import heroes.journey.modlib.TileLayoutDSLProvider
-import heroes.journey.modlib.TileBatchDSLProvider
-import heroes.journey.modlib.StatDSLProvider
-import heroes.journey.modlib.ItemSubTypeDSLProvider
-import heroes.journey.modlib.ItemDSLProvider
-import heroes.journey.modlib.AttributesDSLProvider
-import heroes.journey.modlib.BuffDSLProvider
-import heroes.journey.modlib.QuestDSLProvider
-import heroes.journey.modlib.ChallengeDSLProvider
-import heroes.journey.modlib.FeatureTypeDSLProvider
-import heroes.journey.mods.AttributesDSLImpl
-import heroes.journey.mods.BuffDSLImpl
-import heroes.journey.mods.QuestDSLImpl
-import heroes.journey.mods.ChallengeDSLImpl
-import heroes.journey.mods.FeatureTypeDSLImpl
+import heroes.journey.modlib.*
+import heroes.journey.tilemap.Biome
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
@@ -40,4 +23,29 @@ fun setupModlibDSLs() {
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
     // Register other DSLs here as needed
+    BiomeDSLProvider.instance = BiomeDSLImpl()
+    FeatureGenerationDataDSLProvider.instance = FeatureGenerationDataDSLImpl()
+}
+
+// --- DSL Implementations ---
+
+class BiomeDSLImpl : BiomeDSL {
+    override fun biome(
+        id: String,
+        baseTerrain: String,
+        featureGenerationData: List<FeatureGenerationData>
+    ): IBiome {
+        return Biome(id, baseTerrain, featureGenerationData)
+    }
+}
+
+class FeatureGenerationDataDSLImpl : FeatureGenerationDataDSL {
+    override fun featureGenerationData(
+        featureTypeId: String,
+        minDist: Int,
+        minInRegion: Int,
+        maxInRegion: Int
+    ): FeatureGenerationData {
+        return FeatureGenerationData(featureTypeId, minDist, minInRegion, maxInRegion)
+    }
 }

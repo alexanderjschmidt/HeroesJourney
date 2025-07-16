@@ -1,7 +1,6 @@
 package heroes.journey.utils.worldgen.utils;
 
 import static heroes.journey.registries.Registries.BiomeManager;
-import static heroes.journey.registries.Registries.FeatureTypeManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -215,8 +214,6 @@ public class VoronoiRegionGenerator {
             int count = region.getTiles().size();
             world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count).sync();
 
-            System.out.println(FeatureTypeManager);
-            System.out.println(BiomeManager);
             int randomBiome = Random.get().nextInt(BiomeManager.size());
             region.setBiome(BiomeManager.values().stream().toList().get(randomBiome));
         }
