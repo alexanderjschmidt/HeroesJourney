@@ -1,9 +1,6 @@
 package heroes.journey.tilemap
 
-import heroes.journey.GameState
-import heroes.journey.entities.Position
 import heroes.journey.registries.Registries.FeatureTypeManager
-import java.util.*
 
 class FeatureBuilder {
     var id: String = ""
@@ -29,27 +26,6 @@ class BiomeBuilder {
 
 fun biome(init: BiomeBuilder.() -> Unit): Biome {
     val builder = BiomeBuilder()
-    builder.init()
-    return builder.build()
-}
-
-class FeatureTypeBuilder {
-    var id: String = ""
-    var onGenerate: ((GameState, Position) -> UUID)? = null
-    fun build(): FeatureType {
-        val idCopy = id
-        val onGen = onGenerate
-        return object : FeatureType(idCopy) {
-            override fun generateFeatureInner(gs: GameState, pos: Position): UUID {
-                return onGen?.invoke(gs, pos)
-                    ?: throw IllegalStateException("No onGenerate lambda provided for FeatureType $idCopy")
-            }
-        }
-    }
-}
-
-fun featureType(init: FeatureTypeBuilder.() -> Unit): FeatureType {
-    val builder = FeatureTypeBuilder()
     builder.init()
     return builder.build()
 }

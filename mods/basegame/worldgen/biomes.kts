@@ -1,44 +1,10 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.featureType
 import heroes.journey.tilemap.biome
-import heroes.journey.tilemap.featureType
-import heroes.journey.utils.worldgen.namegen.SyllableTownNameGenerator
 
-featureType {
-    id = Ids.KINGDOM
-    onGenerate = { gs, pos ->
-        gs.world.entityFactory.generateBasicLocation(
-            SyllableTownNameGenerator.generateName(),
-            pos.x, pos.y, Ids.CAPITAL_SPRITE
-        )
-    }
-}.register()
-
-featureType {
-    id = Ids.TOWN
-    onGenerate = { gs, pos ->
-        gs.world.entityFactory.generateBasicLocation(
-            SyllableTownNameGenerator.generateName(),
-            pos.x, pos.y, Ids.TOWN_SPRITE
-        )
-    }
-}.register()
-
-featureType {
-    id = Ids.DUNGEON
-    onGenerate = { gs, pos ->
-        gs.world.entityFactory.generateDungeon(pos.x, pos.y)
-    }
-}.register()
-
-featureType {
-    id = Ids.MINE
-    onGenerate = { gs, pos ->
-        gs.world.entityFactory.generateBasicLocation(
-            "Mine",
-            pos.x, pos.y, Ids.DUNGEON_SPRITE
-        )
-    }
-}.register()
+featureType(Ids.KINGDOM, Ids.CAPITAL_SPRITE).register()
+featureType(Ids.TOWN, Ids.TOWN_SPRITE).register()
+featureType(Ids.MINE, Ids.DUNGEON_SPRITE).register()
 
 biome {
     id = "kingdom"
@@ -54,12 +20,6 @@ biome {
         minDist = 5
         minInRegion = 3
         maxInRegion = 5
-    }
-    feature {
-        id = Ids.DUNGEON
-        minDist = 5
-        minInRegion = 1
-        maxInRegion = 2
     }
     feature {
         id = Ids.MINE
@@ -85,12 +45,6 @@ biome {
         maxInRegion = 5
     }
     feature {
-        id = Ids.DUNGEON
-        minDist = 5
-        minInRegion = 1
-        maxInRegion = 2
-    }
-    feature {
         id = Ids.MINE
         minDist = 5
         minInRegion = 5
@@ -112,12 +66,6 @@ biome {
         minDist = 5
         minInRegion = 3
         maxInRegion = 5
-    }
-    feature {
-        id = Ids.DUNGEON
-        minDist = 5
-        minInRegion = 1
-        maxInRegion = 2
     }
     feature {
         id = Ids.MINE
