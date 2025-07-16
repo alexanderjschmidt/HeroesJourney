@@ -42,8 +42,8 @@ public class RoadPathing {
             if (terrain == TerrainManager.get(TERRAIN_PATH))
                 return baseHeuristic;
             if (terrain == TerrainManager.get(TERRAIN_PLAINS))
-                return baseHeuristic * terrain.terrainCost * 10;
-            return baseHeuristic * terrain.terrainCost * 50;
+                return baseHeuristic * terrain.getTerrainCost() * 10;
+            return baseHeuristic * terrain.getTerrainCost() * 50;
         }
     }
 }

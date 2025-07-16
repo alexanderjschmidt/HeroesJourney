@@ -14,12 +14,12 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.RenderBounds;
 import heroes.journey.utils.ai.pathfinding.TileNode;
+import heroes.journey.utils.gamestate.Utils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -98,8 +98,8 @@ public class TileMap implements IndexedGraph<TileNode> {
     }
 
     public int getTerrainCost(int x, int y, UUID selected) {
-        return (tileMap[x][y] == null ? 1 : tileMap[x][y].getTerrain().terrainCost) +
-            (environment[x][y] == null ? 0 : environment[x][y].getTerrain().terrainCost);
+        return (tileMap[x][y] == null ? 1 : tileMap[x][y].getTerrain().getTerrainCost()) +
+            (environment[x][y] == null ? 0 : environment[x][y].getTerrain().getTerrainCost());
     }
 
     private void updateGraph() {

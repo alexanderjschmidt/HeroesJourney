@@ -104,7 +104,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Challenge        | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
 | FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
-| Terrain          | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Terrain          | Yes      | [x]           | [x]                 | [x]                      |
 | TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
 | TileLayout       | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Renderable       | Yes      | [x]           | [x]                 | [x]                      |
@@ -216,3 +216,32 @@ This section documents the concrete steps taken to migrate the TextureMap Regist
 - Mods now use only the modlib DSL and interfaces for TextureMap, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **TextureMap has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: Terrain Migration Example
+
+This section documents the concrete steps taken to migrate the Terrain Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `Terrain.kt` file in `modlib` (Kotlin) containing:
+    - `ITerrain` interface (exposes `val id: String`, `val terrainCost: Int`, and `fun register(): ITerrain`)
+    - `TerrainDSL` interface (exposes `fun terrain(id: String, terrainCost: Int = 1): ITerrain`)
+    - `TerrainDSLProvider` singleton
+    - Top-level `fun terrain(id: String, terrainCost: Int = 1): ITerrain` DSL entrypoint
+- This keeps the modlib lightweight and idiomatic.
+
+### 2. Implement the DSL in core
+- Implemented `TerrainDSLImpl` in `core/mods` package, returning a real `Terrain` (which implements `ITerrain`).
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `TerrainDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `terrain` from `modlib` (e.g., `import heroes.journey.modlib.terrain`).
+- All usages now pass IDs via `Ids` constants, not raw strings.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for Terrain, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Terrain has been fully migrated and tested.** 
