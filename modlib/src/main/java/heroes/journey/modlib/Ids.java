@@ -30,6 +30,30 @@ public class Ids {
     // Humanoid II Animations
     public static final String ADVENTUROUS_ADOLESCENT = "adventurous_adolescent", BOISTEROUS_YOUTH = "boisterous_youth", ELF_BLADEDANCER = "elf_bladedancer", ELF_ENCHANTER = "elf_enchanter", ELF_LORD = "elf_lord", ELF_SHARPSHOOTER = "elf_sharpshooter", ELF_WAYFARER = "elf_wayfarer", JOYFUL_KID = "joyful_kid", MERFOLK_AQUAMANCER = "merfolk_aquamancer", MERFOLK_IMPALER = "merfolk_impaler", MERFOLK_JAVELINEER = "merfolk_javelineer", MERFOLK_MYSTIC = "merfolk_mystic", MERFOLK_SCOUT = "merfolk_scout", OVERWORKED_VILLAGER = "overworked_villager", PLAYFUL_CHILD = "playful_child";
 
+    // Magical Challenge Renders
+    public static final String ARCANE_PUZZLE = "arcane_puzzle";
+    public static final String ENCHANT_ITEM = "enchant_item";
+    public static final String TRICK_MAGICAL_GUARDIAN = "trick_magical_guardian";
+    public static final String EMPOWER_RELIC = "empower_relic";
+    public static final String BANISH_CURSED_SPIRIT = "banish_cursed_spirit";
+    public static final String BEWITCH_FAMILIAR = "bewitch_familiar";
+    public static final String CHARM_MAGICAL_BEAST = "charm_magical_beast";
+    public static final String OUTWIT_MAGICAL_TRAP = "outwit_magical_trap";
+    public static final String ENCHANT_WEAPON = "enchant_weapon";
+    public static final String SOLVE_RIDDLE = "solve_riddle";
+    public static final String DISARM_GOLEM = "disarm_golem";
+    public static final String BEWITCH_MAGICAL_FOE = "bewitch_magical_foe";
+    public static final String PERSUADE_ELEMENTAL = "persuade_elemental";
+    public static final String BEFRIEND_FAIRY = "befriend_fairy";
+    public static final String BANISH_DEMON = "banish_demon";
+
+    // Vermin Challenge Renders
+    public static final String OUTSMART_GIANT_ANT = "outsmart_giant_ant";
+    public static final String CRUSH_BEDBUG_SWARM = "crush_bedbug_swarm";
+    public static final String HUNT_TUNNELING_MOLE = "hunt_tunneling_mole";
+    public static final String BEFRIEND_DUNG_BEETLE = "befriend_dung_beetle";
+    public static final String OUTWIT_PLAGUE_BAT = "outwit_plague_bat";
+
     // Magical Animations
     public static final String ADEPT_NECROMANCER = "adept_necromancer", CORRUPTED_TREANT = "corrupted_treant", DEFT_SORCERESS = "deft_sorceress", EARTH_ELEMENTAL = "earth_elemental", EXPERT_DRUID = "expert_druid", FIRE_ELEMENTAL = "fire_elemental", FLUTTERING_PIXIE = "fluttering_pixie", GLOWING_WISP = "glowing_wisp", GRIZZLED_TREANT = "grizzled_treant", ICE_GOLEM = "ice_golem", IRON_GOLEM = "iron_golem", MAGICAL_FAIRY = "magical_fairy", NOVICE_PYROMANCER = "novice_pyromancer", VILE_WITCH = "vile_witch", WATER_ELEMENTAL = "water_elemental";
 
@@ -41,6 +65,141 @@ public class Ids {
 
     // Vermin Animations
     public static final String ACID_ANT = "acid_ant", BLOATED_BEDBUG = "bloated_bedbug", DUNG_BEETLE = "dung_beetle", ENGORGED_TICK = "engorged_tick", FAMISHED_TICK = "famished_tick", FORAGING_MAGGOT = "foraging_maggot", INFECTED_MOUSE = "infected_mouse", LAVA_ANT = "lava_ant", MAWING_BEAVER = "mawing_beaver", TUNNELING_MOLE = "tunneling_mole", PLAGUE_BAT = "plague_bat", RHINO_BEETLE = "rhino_beetle", SOLDIER_ANT = "soldier_ant", SWOOPING_BAT = "swooping_bat", TAINTED_COCKROACH = "tainted_cockroach";
+
+    // Challenge IDs
+    public static final String CHALLENGE_GUIDE_BLINDED_GRIMLOCK = "guide_blinded_grimlock";
+    public static final String CHALLENGE_DEFEAT_BLOODSHOT_EYE = "defeat_bloodshot_eye";
+    public static final String CHALLENGE_DEFEAT_BRAWNY_OGRE = "defeat_brawny_ogre";
+    public static final String CHALLENGE_OUTSMART_CRIMSON_SLAAD = "outsmart_crimson_slaad";
+    public static final String CHALLENGE_DEFEAT_CRUSHING_CYCLOPS = "defeat_crushing_cyclops";
+    public static final String CHALLENGE_PURIFY_DEATH_SLIME = "purify_death_slime";
+    public static final String CHALLENGE_BEFRIEND_FUNGAL_MYCONID = "befriend_fungal_myconid";
+    public static final String CHALLENGE_DEFEAT_HUMONGOUS_ETTIN = "defeat_humongous_ettin";
+    public static final String CHALLENGE_OUTSMART_MURKY_SLAAD = "outsmart_murky_slaad";
+    public static final String CHALLENGE_DEFEAT_OCHRE_JELLY = "defeat_ochre_jelly";
+    public static final String CHALLENGE_DEFEAT_OCULAR_WATCHER = "defeat_ocular_watcher";
+    public static final String CHALLENGE_OUTSMART_RED_CAP = "outsmart_red_cap";
+    public static final String CHALLENGE_DEFEAT_SHRIEKER_MUSHROOM = "defeat_shrieker_mushroom";
+    public static final String CHALLENGE_DEFEAT_STONE_TROLL = "defeat_stone_troll";
+    public static final String CHALLENGE_DEFEAT_SWAMP_TROLL = "defeat_swamp_troll";
+    // Demon
+    public static final String CHALLENGE_BANISH_ANTLERED_RASCAL = "banish_antlered_rascal";
+    public static final String CHALLENGE_SUBDUE_CLAWED_ABOMINATION = "subdue_clawed_abomination";
+    public static final String CHALLENGE_TRICK_CRIMSON_IMP = "trick_crimson_imp";
+    public static final String CHALLENGE_CAPTURE_DEPRAVED_BLACKGUARD = "capture_depraved_blackguard";
+    public static final String CHALLENGE_REDEEM_FLEDGLING_DEMON = "redeem_fledgling_demon";
+    public static final String CHALLENGE_DESTROY_FLOATING_EYE = "destroy_floating_eye";
+    public static final String CHALLENGE_STOP_FOUL_GOUGER = "stop_foul_gouger";
+    public static final String CHALLENGE_OUTWIT_GRINNING_GREMLIN = "outwit_grinning_gremlin";
+    public static final String CHALLENGE_CATCH_NEFARIOUS_SCAMP = "catch_nefarious_scamp";
+    public static final String CHALLENGE_DUEL_PIT_BALOR = "duel_pit_balor";
+    public static final String CHALLENGE_BANISH_POINTED_DEMONSPAWN = "banish_pointed_demonspawn";
+    public static final String CHALLENGE_DISCIPLINE_RASCALLY_DEMONLING = "discipline_rascally_demonling";
+    public static final String CHALLENGE_HUNT_SKEWERING_STALKER = "hunt_skewering_stalker";
+    public static final String CHALLENGE_REFORM_TAINTED_SCOUNDREL = "reform_tainted_scoundrel";
+    public static final String CHALLENGE_SHATTER_WARP_SKULL = "shatter_warp_skull";
+    // Dragon
+    public static final String CHALLENGE_BEFRIEND_AQUA_DRAKE = "befriend_aqua_drake";
+    public static final String CHALLENGE_RESCUE_BABY_BRASS_DRAGON = "rescue_baby_brass_dragon";
+    public static final String CHALLENGE_HEAL_BABY_COPPER_DRAGON = "heal_baby_copper_dragon";
+    public static final String CHALLENGE_GUIDE_BABY_GREEN_DRAGON = "guide_baby_green_dragon";
+    public static final String CHALLENGE_RESCUE_BABY_WHITE_DRAGON = "rescue_baby_white_dragon";
+    public static final String CHALLENGE_TRAIN_JUVENILE_BRONZE_DRAGON = "train_juvenile_bronze_dragon";
+    public static final String CHALLENGE_CHALLENGE_MATURE_BRONZE_DRAGON = "challenge_mature_bronze_dragon";
+    public static final String CHALLENGE_DEFEAT_MUD_WYVERN = "defeat_mud_wyvern";
+    public static final String CHALLENGE_OUTSMART_POISON_DRAKE = "outsmart_poison_drake";
+    public static final String CHALLENGE_BEFRIEND_PYGMY_WYVERN = "befriend_pygmy_wyvern";
+    public static final String CHALLENGE_GUIDE_VIRIDIAN_DRAKE = "guide_viridian_drake";
+    public static final String CHALLENGE_CHALLENGE_YOUNG_BRASS_DRAGON = "challenge_young_brass_dragon";
+    public static final String CHALLENGE_DEFEAT_YOUNG_RED_DRAGON = "defeat_young_red_dragon";
+    public static final String CHALLENGE_SURVIVE_ADULT_WHITE_DRAGON = "survive_adult_white_dragon";
+    public static final String CHALLENGE_NEGOTIATE_ADULT_GREEN_DRAGON = "negotiate_adult_green_dragon";
+    // Holy
+    public static final String CHALLENGE_AID_RESOLUTE_ANGEL = "aid_resolute_angel";
+    public static final String CHALLENGE_BLESS_BLESSED_GLADIATOR = "bless_blessed_gladiator";
+    public static final String CHALLENGE_TRAIN_BOLD_MAN_AT_ARMS = "train_bold_man_at_arms";
+    public static final String CHALLENGE_COMMUNE_WITH_DIVINE_PLANETAR = "commune_with_divine_planetar";
+    public static final String CHALLENGE_GUIDE_DEVOUT_ACOLYTE = "guide_devout_acolyte";
+    public static final String CHALLENGE_HEAL_FAVORED_CLERIC = "heal_favored_cleric";
+    public static final String CHALLENGE_BEFRIEND_FLOATING_CHERUB = "befriend_floating_cherub";
+    public static final String CHALLENGE_GUIDE_GENTLE_SHEPARD = "guide_gentle_shepard";
+    public static final String CHALLENGE_JOIN_HOLY_CRUSADER = "join_holy_crusader";
+    public static final String CHALLENGE_LEARN_FROM_JOVIAL_FRIAR = "learn_from_jovial_friar";
+    public static final String CHALLENGE_COMMUNE_WITH_RIGHTEOUS_DEVA = "commune_with_righteous_deva";
+    public static final String CHALLENGE_TRAIN_WITH_SWORD_ARCHON = "train_with_sword_archon";
+    public static final String CHALLENGE_HONOR_VETERAN_SWORDSMAN = "honor_veteran_swordsman";
+    public static final String CHALLENGE_GUIDE_ZEALOUS_PRIEST = "guide_zealous_priest";
+    public static final String CHALLENGE_INSPIRE_DETERMINED_SOLDIER = "inspire_determined_soldier";
+    // Humanoid
+    public static final String CHALLENGE_OUTMANEUVER_GOBLIN_ARCHER = "outmaneuver_goblin_archer";
+    public static final String CHALLENGE_CALM_GOBLIN_FANATIC = "calm_goblin_fanatic";
+    public static final String CHALLENGE_DEFEAT_GOBLIN_FIGHTER = "defeat_goblin_fighter";
+    public static final String CHALLENGE_EXPOSE_GOBLIN_OCCULTIST = "expose_goblin_occultist";
+    public static final String CHALLENGE_OUTRUN_GOBLIN_WOLF_RIDER = "outrun_goblin_wolf_rider";
+    public static final String CHALLENGE_CAPTURE_HALFLING_ASSASSIN = "capture_halfling_assassin";
+    public static final String CHALLENGE_PERFORM_WITH_HALFLING_BARD = "perform_with_halfling_bard";
+    public static final String CHALLENGE_TRACK_WITH_HALFLING_RANGER = "track_with_halfling_ranger";
+    public static final String CHALLENGE_OUTWIT_HALFLING_ROGUE = "outwit_halfling_rogue";
+    public static final String CHALLENGE_COMPETE_WITH_HALFLING_SLINGER = "compete_with_halfling_slinger";
+    public static final String CHALLENGE_SCOUT_WITH_LIZARDFOLK_SCOUT = "scout_with_lizardfolk_scout";
+    public static final String CHALLENGE_SPAR_LIZARDFOLK_GLADIATOR = "spar_lizardfolk_gladiator";
+    public static final String CHALLENGE_TRAIN_LIZARDFOLK_ARCHER = "train_lizardfolk_archer";
+    public static final String CHALLENGE_TAME_BESTIAL_LIZARDFOLK = "tame_bestial_lizardfolk";
+    public static final String CHALLENGE_TRAIN_LIZARDFOLK_SPEARMAN = "train_lizardfolk_spearman";
+    // Humanoid II
+    public static final String CHALLENGE_MENTOR_ADVENTUROUS_ADOLESCENT = "mentor_adventurous_adolescent";
+    public static final String CHALLENGE_MENTOR_BOISTEROUS_YOUTH = "mentor_boisterous_youth";
+    public static final String CHALLENGE_LEARN_ELF_BLADEDANCER = "learn_elf_bladedancer";
+    public static final String CHALLENGE_STUDY_ELF_ENCHANTER = "study_elf_enchanter";
+    public static final String CHALLENGE_NEGOTIATE_ELF_LORD = "negotiate_elf_lord";
+    public static final String CHALLENGE_COMPETE_ELF_SHARPSHOOTER = "compete_elf_sharpshooter";
+    public static final String CHALLENGE_TRAVEL_ELF_WAYFARER = "travel_elf_wayfarer";
+    public static final String CHALLENGE_PLAY_JOYFUL_KID = "play_joyful_kid";
+    public static final String CHALLENGE_LEARN_MERFOLK_AQUAMANCER = "learn_merfolk_aquamancer";
+    public static final String CHALLENGE_SPAR_MERFOLK_IMPALER = "spar_merfolk_impaler";
+    public static final String CHALLENGE_COMPETE_MERFOLK_JAVELINEER = "compete_merfolk_javelineer";
+    public static final String CHALLENGE_STUDY_MERFOLK_MYSTIC = "study_merfolk_mystic";
+    public static final String CHALLENGE_SCOUT_MERFOLK_SCOUT = "scout_merfolk_scout";
+    public static final String CHALLENGE_HELP_OVERWORKED_VILLAGER = "help_overworked_villager";
+    public static final String CHALLENGE_PLAY_PLAYFUL_CHILD = "play_playful_child";
+    // Magical
+    public static final String CHALLENGE_ARCANE_PUZZLE = "arcane_puzzle";
+    public static final String CHALLENGE_ENCHANT_ITEM = "enchant_item";
+    public static final String CHALLENGE_TRICK_MAGICAL_GUARDIAN = "trick_magical_guardian";
+    public static final String CHALLENGE_EMPOWER_RELIC = "empower_relic";
+    public static final String CHALLENGE_BANISH_CURSED_SPIRIT = "banish_cursed_spirit";
+    public static final String CHALLENGE_BEWITCH_FAMILIAR = "bewitch_familiar";
+    public static final String CHALLENGE_CHARM_MAGICAL_BEAST = "charm_magical_beast";
+    public static final String CHALLENGE_OUTWIT_MAGICAL_TRAP = "outwit_magical_trap";
+    public static final String CHALLENGE_ENCHANT_WEAPON = "enchant_weapon";
+    public static final String CHALLENGE_SOLVE_RIDDLE = "solve_riddle";
+    public static final String CHALLENGE_DISARM_GOLEM = "disarm_golem";
+    public static final String CHALLENGE_BEWITCH_MAGICAL_FOE = "bewitch_magical_foe";
+    public static final String CHALLENGE_PERSUADE_ELEMENTAL = "persuade_elemental";
+    public static final String CHALLENGE_BEFRIEND_FAIRY = "befriend_fairy";
+    public static final String CHALLENGE_BANISH_DEMON = "banish_demon";
+    // Undead
+    public static final String CHALLENGE_LAY_BOUND_CADAVER = "lay_bound_cadaver";
+    public static final String CHALLENGE_DEFEAT_BRITTLE_ARCHER = "defeat_brittle_archer";
+    public static final String CHALLENGE_DEFEAT_CARCASS_FEEDER = "defeat_carcass_feeder";
+    public static final String CHALLENGE_DESTROY_DECREPIT_BONES = "destroy_decrepit_bones";
+    public static final String CHALLENGE_DEFEAT_DISMEMBERED_CRAWLER = "defeat_dismembered_crawler";
+    public static final String CHALLENGE_DEFEAT_GHASTLY_EYE = "defeat_ghastly_eye";
+    public static final String CHALLENGE_DEFEAT_GRAVE_REVENANT = "defeat_grave_revenant";
+    public static final String CHALLENGE_DEFEAT_MUTILATED_STUMBLER = "defeat_mutilated_stumbler";
+    public static final String CHALLENGE_DEFEAT_SAND_GHOUL = "defeat_sand_ghoul";
+    public static final String CHALLENGE_DEFEAT_SKITTERING_HAND = "defeat_skittering_hand";
+    public static final String CHALLENGE_DEFEAT_UNRAVELING_CRAWLER = "defeat_unraveling_crawler";
+    public static final String CHALLENGE_DEFEAT_VAMPIRE_BAT = "defeat_vampire_bat";
+    public static final String CHALLENGE_DEFEAT_GIANT_ROYAL_SCARAB = "defeat_giant_royal_scarab";
+    public static final String CHALLENGE_DEFEAT_ROYAL_SCARAB = "defeat_royal_scarab";
+    public static final String CHALLENGE_DEFEAT_TOXIC_HOUND = "defeat_toxic_hound";
+    // Vermin
+    public static final String CHALLENGE_OUTSMART_GIANT_ANT = "outsmart_giant_ant";
+    public static final String CHALLENGE_CRUSH_BEDBUG_SWARM = "crush_bedbug_swarm";
+    public static final String CHALLENGE_HUNT_TUNNELING_MOLE = "hunt_tunneling_mole";
+    public static final String CHALLENGE_BEFRIEND_DUNG_BEETLE = "befriend_dung_beetle";
+    public static final String CHALLENGE_OUTWIT_PLAGUE_BAT = "outwit_plague_bat";
 
     // Action IDs - Core Actions
     public static final String OPEN_ACTION_MENU = "open_action_menu";

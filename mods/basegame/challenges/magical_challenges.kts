@@ -1,64 +1,95 @@
-import heroes.journey.entities.challenge
 import heroes.journey.modlib.Ids.*
+import heroes.journey.modlib.attributes
+import heroes.journey.modlib.challenge
 
 // Magical Challenges - included by basegame mod
-challenge("arcane_puzzle") {
-    approaches("concentration", "logic", "sorcery")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("enchant_item") {
-    approaches("charm", "empowerment", "enchanting")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("trick_magical_guardian") {
-    approaches("cunning", "illusion", "logic")
-    reward { attr("insight", 2) }
-}.register()
-challenge("empower_relic") {
-    approaches("enchanting", "might", "persuasion")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("banish_cursed_spirit") {
-    approaches("charm", "concentration", "sorcery")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("bewitch_familiar") {
-    approaches("bewitching", "empowerment", "logic")
-    reward { attr("influence", 2) }
-}.register()
-challenge("charm_magical_beast") {
-    approaches("bewitching", "charm", "mesmerism")
-    reward { attr("influence", 2) }
-}.register()
-challenge("outwit_magical_trap") {
-    approaches("cunning", "illusion", "logic")
-    reward { attr("insight", 2) }
-}.register()
-challenge("enchant_weapon") {
-    approaches("empowerment", "enchanting", "persuasion")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("solve_riddle") {
-    approaches("enchanting", "logic", "might")
-    reward { attr("insight", 2) }
-}.register()
-challenge("disarm_golem") {
-    approaches("cunning", "skill", "technique")
-    reward { attr("valor", 2) }
-}.register()
-challenge("bewitch_magical_foe") {
-    approaches("bewitching", "charm", "mesmerism")
-    reward { attr("influence", 2) }
-}.register()
-challenge("persuade_elemental") {
-    approaches("concentration", "persuasion", "sorcery")
-    reward { attr("influence", 2) }
-}.register()
-challenge("befriend_fairy") {
-    approaches("charm", "enchanting", "mesmerism")
-    reward { attr("influence", 2) }
-}.register()
-challenge("banish_demon") {
-    approaches("bewitching", "logic", "sorcery")
-    reward { attr("arcanum", 2) }
-}.register()
+challenge(
+    id = CHALLENGE_ARCANE_PUZZLE,
+    render = ARCANE_PUZZLE,
+    approaches = listOf(STAT_CONCENTRATION, STAT_LOGIC, STAT_SORCERY),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_ENCHANT_ITEM,
+    render = ENCHANT_ITEM,
+    approaches = listOf(STAT_CHARM, STAT_EMPOWERMENT, STAT_ENCHANTING),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_TRICK_MAGICAL_GUARDIAN,
+    render = TRICK_MAGICAL_GUARDIAN,
+    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_LOGIC),
+    reward = attributes("insight" to 2)
+).register()
+challenge(
+    id = CHALLENGE_EMPOWER_RELIC,
+    render = EMPOWER_RELIC,
+    approaches = listOf(STAT_ENCHANTING, STAT_MIGHT, STAT_PERSUASION),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_BANISH_CURSED_SPIRIT,
+    render = BANISH_CURSED_SPIRIT,
+    approaches = listOf(STAT_CHARM, STAT_CONCENTRATION, STAT_SORCERY),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_BEWITCH_FAMILIAR,
+    render = BEWITCH_FAMILIAR,
+    approaches = listOf(STAT_BEWITCHING, STAT_EMPOWERMENT, STAT_LOGIC),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_CHARM_MAGICAL_BEAST,
+    render = CHARM_MAGICAL_BEAST,
+    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_OUTWIT_MAGICAL_TRAP,
+    render = OUTWIT_MAGICAL_TRAP,
+    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_LOGIC),
+    reward = attributes("insight" to 2)
+).register()
+challenge(
+    id = CHALLENGE_ENCHANT_WEAPON,
+    render = ENCHANT_WEAPON,
+    approaches = listOf(STAT_EMPOWERMENT, STAT_ENCHANTING, STAT_PERSUASION),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_SOLVE_RIDDLE,
+    render = SOLVE_RIDDLE,
+    approaches = listOf(STAT_ENCHANTING, STAT_LOGIC, STAT_MIGHT),
+    reward = attributes("insight" to 2)
+).register()
+challenge(
+    id = CHALLENGE_DISARM_GOLEM,
+    render = DISARM_GOLEM,
+    approaches = listOf(STAT_CUNNING, STAT_SKILL, STAT_TECHNIQUE),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_BEWITCH_MAGICAL_FOE,
+    render = BEWITCH_MAGICAL_FOE,
+    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_PERSUADE_ELEMENTAL,
+    render = PERSUADE_ELEMENTAL,
+    approaches = listOf(STAT_CONCENTRATION, STAT_PERSUASION, STAT_SORCERY),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_BEFRIEND_FAIRY,
+    render = BEFRIEND_FAIRY,
+    approaches = listOf(STAT_CHARM, STAT_ENCHANTING, STAT_MESMERISM),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_BANISH_DEMON,
+    render = BANISH_DEMON,
+    approaches = listOf(STAT_BEWITCHING, STAT_LOGIC, STAT_SORCERY),
+    reward = attributes("arcanum" to 2)
+).register()

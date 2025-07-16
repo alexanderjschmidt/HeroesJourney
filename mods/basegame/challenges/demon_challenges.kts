@@ -1,80 +1,95 @@
-import heroes.journey.entities.challenge
 import heroes.journey.modlib.Ids.*
+import heroes.journey.modlib.attributes
+import heroes.journey.modlib.challenge
 
 // Demon Challenges - included by basegame mod
-
-challenge("banish_antlered_rascal") {
-    render = ANTLERED_RASCAL
-    approaches("illusion", "logic", "persuasion")
-    reward { attr("valor", 2) }
-}.register()
-challenge("subdue_clawed_abomination") {
-    render = CLAWED_ABOMINATION
-    approaches("charm", "concentration", "enchanting")
-    reward { attr("valor", 2) }
-}.register()
-challenge("trick_crimson_imp") {
-    render = CRIMSON_IMP
-    approaches("cunning", "illusion", "technique")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("capture_depraved_blackguard") {
-    render = DEPRAVED_BLACKGUARD
-    approaches("charm", "might", "skill")
-    reward { attr("valor", 2) }
-}.register()
-challenge("redeem_fledgling_demon") {
-    render = FLEDGLING_DEMON
-    approaches("bewitching", "logic", "mesmerism")
-    reward { attr("influence", 2) }
-}.register()
-challenge("destroy_floating_eye") {
-    render = FLOATING_EYE
-    approaches("concentration", "illusion", "sorcery")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("stop_foul_gouger") {
-    render = FOUL_GOUGER
-    approaches("charm", "empowerment", "persuasion")
-    reward { attr("valor", 2) }
-}.register()
-challenge("outwit_grinning_gremlin") {
-    render = GRINNING_GREMLIN
-    approaches("cunning", "logic", "technique")
-    reward { attr("insight", 2) }
-}.register()
-challenge("catch_nefarious_scamp") {
-    render = NEFARIOUS_SCAMP
-    approaches("cunning", "illusion", "technique")
-    reward { attr("insight", 2) }
-}.register()
-challenge("duel_pit_balor") {
-    render = PIT_BALOR
-    approaches("bravado", "charm", "might")
-    reward { attr("valor", 3) }
-}.register()
-challenge("banish_pointed_demonspawn") {
-    render = POINTED_DEMONSPAWN
-    approaches("enchanting", "persuasion", "sorcery")
-    reward { attr("arcanum", 2) }
-}.register()
-challenge("discipline_rascally_demonling") {
-    render = RASCALLY_DEMONLING
-    approaches("charm", "logic", "mesmerism")
-    reward { attr("influence", 2) }
-}.register()
-challenge("hunt_skewering_stalker") {
-    render = SKEWERING_STALKER
-    approaches("illusion", "skill", "technique")
-    reward { attr("valor", 2) }
-}.register()
-challenge("reform_tainted_scoundrel") {
-    render = TAINTED_SCOUNDREL
-    approaches("bravado", "cunning", "logic")
-    reward { attr("influence", 2) }
-}.register()
-challenge("shatter_warp_skull") {
-    render = WARP_SKULL
-    approaches("illusion", "sorcery", "bewitching")
-    reward { attr("arcanum", 2) }
-}.register()
+challenge(
+    id = CHALLENGE_BANISH_ANTLERED_RASCAL,
+    render = ANTLERED_RASCAL,
+    approaches = listOf(STAT_ILLUSION, STAT_LOGIC, STAT_PERSUASION),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_SUBDUE_CLAWED_ABOMINATION,
+    render = CLAWED_ABOMINATION,
+    approaches = listOf(STAT_CHARM, STAT_CONCENTRATION, STAT_ENCHANTING),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_TRICK_CRIMSON_IMP,
+    render = CRIMSON_IMP,
+    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_TECHNIQUE),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_CAPTURE_DEPRAVED_BLACKGUARD,
+    render = DEPRAVED_BLACKGUARD,
+    approaches = listOf(STAT_CHARM, STAT_MIGHT, STAT_SKILL),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_REDEEM_FLEDGLING_DEMON,
+    render = FLEDGLING_DEMON,
+    approaches = listOf(STAT_BEWITCHING, STAT_LOGIC, STAT_MESMERISM),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_DESTROY_FLOATING_EYE,
+    render = FLOATING_EYE,
+    approaches = listOf(STAT_CONCENTRATION, STAT_ILLUSION, STAT_SORCERY),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_STOP_FOUL_GOUGER,
+    render = FOUL_GOUGER,
+    approaches = listOf(STAT_CHARM, STAT_EMPOWERMENT, STAT_PERSUASION),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_OUTWIT_GRINNING_GREMLIN,
+    render = GRINNING_GREMLIN,
+    approaches = listOf(STAT_CUNNING, STAT_LOGIC, STAT_TECHNIQUE),
+    reward = attributes("insight" to 2)
+).register()
+challenge(
+    id = CHALLENGE_CATCH_NEFARIOUS_SCAMP,
+    render = NEFARIOUS_SCAMP,
+    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_TECHNIQUE),
+    reward = attributes("insight" to 2)
+).register()
+challenge(
+    id = CHALLENGE_DUEL_PIT_BALOR,
+    render = PIT_BALOR,
+    approaches = listOf(STAT_BRAVADO, STAT_CHARM, STAT_MIGHT),
+    reward = attributes("valor" to 3)
+).register()
+challenge(
+    id = CHALLENGE_BANISH_POINTED_DEMONSPAWN,
+    render = POINTED_DEMONSPAWN,
+    approaches = listOf(STAT_ENCHANTING, STAT_PERSUASION, STAT_SORCERY),
+    reward = attributes("arcanum" to 2)
+).register()
+challenge(
+    id = CHALLENGE_DISCIPLINE_RASCALLY_DEMONLING,
+    render = RASCALLY_DEMONLING,
+    approaches = listOf(STAT_CHARM, STAT_LOGIC, STAT_MESMERISM),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_HUNT_SKEWERING_STALKER,
+    render = SKEWERING_STALKER,
+    approaches = listOf(STAT_ILLUSION, STAT_SKILL, STAT_TECHNIQUE),
+    reward = attributes("valor" to 2)
+).register()
+challenge(
+    id = CHALLENGE_REFORM_TAINTED_SCOUNDREL,
+    render = TAINTED_SCOUNDREL,
+    approaches = listOf(STAT_BRAVADO, STAT_CUNNING, STAT_LOGIC),
+    reward = attributes("influence" to 2)
+).register()
+challenge(
+    id = CHALLENGE_SHATTER_WARP_SKULL,
+    render = WARP_SKULL,
+    approaches = listOf(STAT_ILLUSION, STAT_SORCERY, STAT_BEWITCHING),
+    reward = attributes("arcanum" to 2)
+).register()

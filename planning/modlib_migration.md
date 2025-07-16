@@ -102,7 +102,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | Action           | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Buff             | Yes      | [x]           | [x]                 | [x]                      |
 | Quest            | Yes      | [x]           | [x]                 | [x]                      |
-| Challenge        | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Challenge        | Yes      | [x]           | [x]                 | [x]                      |
 | Biome            | Yes      | [ ]           | [ ]                 | [ ]                      |
 | FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Terrain          | Yes      | [x]           | [x]                 | [x]                      |

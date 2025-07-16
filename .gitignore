@@ -1,3 +1,6 @@
+## Project specific
+/saves/
+
 ## Gradle:
 .gradle/
 gradle-app.setting

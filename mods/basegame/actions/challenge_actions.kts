@@ -71,7 +71,7 @@ targetAction<Stat> {
         val challengeComponent: ChallengeComponent =
             ChallengeComponent.get(input.gameState.world, challengeEntityId)
         val challenge: Challenge = challengeComponent.challenge()
-        challenge.approaches.toList()
+        challenge.approaches().toList()
     }
     targetAction = Ids.CHOOSE_APPROACH
 }.register()
