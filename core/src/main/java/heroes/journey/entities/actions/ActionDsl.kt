@@ -15,6 +15,8 @@ open class ActionBuilder {
     var onSelectFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
     var onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
     var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
+    var turnCooldown: Int = 0
+    var factionCooldown: Boolean = false
 
     open fun build(): Action = Action(
         id = id,
@@ -23,7 +25,9 @@ open class ActionBuilder {
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
         onSelectAIFn = onSelectAIFn,
-        inputDisplayNameFn = inputDisplayNameFn
+        inputDisplayNameFn = inputDisplayNameFn,
+        turnCooldown = turnCooldown,
+        factionCooldown = factionCooldown
     )
 }
 
@@ -39,24 +43,6 @@ class TargetActionBuilder<I> : ActionBuilder() {
         inputDisplayNameFn = inputDisplayNameFn,
         getTargets = getTargets,
         targetAction = targetAction,
-    )
-}
-
-// CooldownAction DSL
-open class CooldownActionBuilder : ActionBuilder() {
-    var turnCooldown: Int = 0
-    var factionCooldown: Boolean = false
-
-    override fun build(): CooldownAction = CooldownAction(
-        id = id,
-        isReturnsActionList = isReturnsActionList,
-        requirementsMetFn = requirementsMetFn,
-        onHoverFn = onHoverFn,
-        onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn,
-        inputDisplayNameFn = inputDisplayNameFn,
-        turnCooldown = turnCooldown,
-        factionCooldown = factionCooldown
     )
 }
 
@@ -108,10 +94,6 @@ fun action(init: ActionBuilder.() -> Unit): Action {
 
 fun <I> targetAction(init: TargetActionBuilder<I>.() -> Unit): TargetAction<I> {
     return TargetActionBuilder<I>().apply(init).build()
-}
-
-fun cooldownAction(init: CooldownActionBuilder.() -> Unit): CooldownAction {
-    return CooldownActionBuilder().apply(init).build()
 }
 
 fun optionAction(init: OptionActionBuilder.() -> Unit): OptionAction {

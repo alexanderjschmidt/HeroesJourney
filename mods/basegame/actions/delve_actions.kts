@@ -2,7 +2,7 @@ import heroes.journey.GameState
 import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.StatsComponent
-import heroes.journey.entities.actions.cooldownAction
+import heroes.journey.entities.actions.action
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.registries.Registries.StatManager
@@ -13,7 +13,7 @@ import java.util.*
 // Delve Actions - included by basegame mod
 
 // Delve Action
-cooldownAction {
+action {
     id = "delve"
     inputDisplayNameFn = { input ->
         val gs: GameState = GameState.global()
