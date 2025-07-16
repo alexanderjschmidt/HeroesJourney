@@ -95,7 +95,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 
 | Registrable Type | Has DSL? | DSL in modlib? | Interface in modlib? | Core implements interface? |
 |------------------|----------|---------------|----------------------|---------------------------|
-| Stat             | Yes      | [ ]           | [ ]                 | [ ]                      |
+| Stat             | Yes      | [x]           | [x]                 | [x]                      |
 | Group            | Yes      | [x]           | [x]                 | [x]                      |
 | Item             | Partial  | [ ]           | [ ]                 | [ ]                      |
 | Action           | Yes      | [ ]           | [ ]                 | [ ]                      |
@@ -303,3 +303,34 @@ This section documents the concrete steps taken to migrate the TileBatch Registr
 - Mods now use only the modlib DSL and interfaces for TileBatch, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **TileBatch has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: Stat Migration Example
+
+This section documents the concrete steps taken to migrate the Stat Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `Stat.kt` file in `modlib` (Kotlin) containing:
+    - `IStat` interface (exposes `val id: String`, `val min: Int`, `val max: Int`, `val groups: List<IGroup>`, `val formula: (IAttributes) -> Int`, and `fun register(): IStat`)
+    - `StatDSL` interface (exposes `fun stat(...)`)
+    - `StatDSLProvider` singleton
+    - Top-level `fun stat(...)` DSL entrypoint
+- Created a new `IAttributes.kt` file in `modlib` for the stat container interface, used in formulas and APIs.
+
+### 2. Implement the DSL in core
+- Implemented `StatDSLImpl` in `core/mods` package, returning a real `Stat` (which implements `IStat`).
+- Updated the core `Attributes` class to implement `IAttributes`.
+- Ensured all formula lambdas and APIs use only the interface types.
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `StatDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `stat` from `modlib` (e.g., `import heroes.journey.modlib.stat`).
+- All usages now pass IDs and interface types explicitly, not core objects.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for Stat, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Stat has been fully migrated and tested.** 

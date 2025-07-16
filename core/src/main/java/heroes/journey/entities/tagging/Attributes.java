@@ -10,7 +10,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Attributes extends HashMap<Stat,Integer> {
+import heroes.journey.modlib.IAttributes;
+import heroes.journey.modlib.IStat;
+
+public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     private Operation defaultOperation = Operation.ADD;
     // Standard order of operations: ADD, SUBTRACT, MULTIPLY, DIVIDE
     private static final List<Operation> DEFAULT_OPERATIONS_ORDER = Collections.unmodifiableList(
@@ -39,20 +42,34 @@ public class Attributes extends HashMap<Stat,Integer> {
         super(map);
     }
 
-    public int get(Stat stat) {
-        return stat.get(this);
-    }
-
+    @Override
     public int get(String statId) {
         return StatManager.get(statId).get(this);
     }
 
-    public int getDirect(Stat stat) {
-        return super.get(stat);
+    @Override
+    public int get(IStat stat) {
+        if (stat instanceof Stat) {
+            return ((Stat)stat).get(this);
+        } else {
+            // fallback: use stat id
+            return get(stat.getId());
+        }
     }
 
-    public int getDirect(String stat) {
-        return super.get(StatManager.get(stat));
+    @Override
+    public int getDirect(String statId) {
+        Integer val = super.get(StatManager.get(statId));
+        if (val == null) {
+            System.out.println(this);
+            throw new RuntimeException("Could not find stat for " + statId);
+        }
+        return val;
+    }
+
+    @Override
+    public int getDirect(IStat stat) {
+        return super.get(stat);
     }
 
     public Attributes put(String statId, Integer value) {
@@ -129,3 +146,4 @@ public class Attributes extends HashMap<Stat,Integer> {
         return this.values().stream().mapToInt(Integer::intValue).sum();
     }
 }
+

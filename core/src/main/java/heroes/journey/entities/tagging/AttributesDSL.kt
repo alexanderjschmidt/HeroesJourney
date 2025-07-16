@@ -1,5 +1,7 @@
 package heroes.journey.entities.tagging
 
+import heroes.journey.modlib.IAttributes
+import heroes.journey.modlib.IGroup
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.StatManager
 
@@ -40,8 +42,8 @@ fun group(id: String): Group {
 class StatBuilder(val id: String) {
     var min: Int = 1
     var max: Int = 10
-    var groups: MutableList<Group> = mutableListOf()
-    var formula: (Attributes) -> Int = { it.getDirect(id) }
+    var groups: MutableList<IGroup> = mutableListOf()
+    var formula: (IAttributes) -> Int = { it.getDirect(id) }
 
     fun group(groupId: String) {
         Registries.GroupManager.get(groupId)?.let { groups.add(it) }

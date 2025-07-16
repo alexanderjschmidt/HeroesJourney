@@ -13,49 +13,48 @@ class Quest(
     private val rewards: Attributes = Attributes(),
     private val fameReward: Int = 0
 ) : Registrable(id) {
-    
+
     fun onComplete(input: ActionInput): Boolean {
         // Check if player can afford the cost
         val playerStats = StatsComponent.get(input.gameState.getWorld(), input.entityId)
         if (playerStats == null) return false
-        
+
         // Check if player has enough of each required attribute
         for ((stat, requiredAmount) in cost) {
-            if (playerStats.get(stat) < requiredAmount) {
+            if (playerStats[stat]!! < requiredAmount) {
                 return false // Player can't afford this quest
             }
         }
-        
+
         // Deduct costs
         for ((stat, amount) in cost) {
             playerStats.put(stat, -amount, heroes.journey.entities.tagging.Operation.ADD)
         }
-        
+
         // Add rewards
         for ((stat, amount) in rewards) {
             playerStats.put(stat, amount, heroes.journey.entities.tagging.Operation.ADD)
         }
-        
+
         // Add fame reward
         if (fameReward > 0) {
             StatsComponent.addFame(input.gameState.getWorld(), input.entityId, fameReward)
         }
-        
+
         return true
     }
-    
+
     fun canAfford(input: ActionInput): Boolean {
-        val playerStats = StatsComponent.get(input.gameState.getWorld(), input.entityId)
-        if (playerStats == null) return false
-        
+        val playerStats = StatsComponent.get(input.gameState.getWorld(), input.entityId) ?: return false
+
         for ((stat, requiredAmount) in cost) {
-            if (playerStats.get(stat) < requiredAmount) {
+            if (playerStats[stat]!! < requiredAmount) {
                 return false
             }
         }
         return true
     }
-    
+
     fun getCost(): Attributes = cost
     fun getRewards(): Attributes = rewards
     fun getFameReward(): Int = fameReward
