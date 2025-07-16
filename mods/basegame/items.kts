@@ -1,52 +1,50 @@
-import heroes.journey.entities.actions.ActionInput
-import heroes.journey.entities.items.ConsumableItem
-import heroes.journey.entities.items.Item
-import heroes.journey.entities.items.ItemSubType
-import heroes.journey.entities.items.ItemType
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.Ids
-import heroes.journey.utils.gamestate.Utils
+import heroes.journey.modlib.ItemType
+import heroes.journey.modlib.item
+import heroes.journey.modlib.itemSubType
 
 // Items - included by basegame mod
 
 // Item Sub Types
-val raw_material = ItemSubType("raw_material", ItemType.Misc).register()
-val refined_material =
-    ItemSubType("refined_material", ItemType.Misc).register()
-val sword = ItemSubType("sword", ItemType.Weapon).register()
-val chest_armor = ItemSubType("chest_armor", ItemType.Armor).register()
-val potion = ItemSubType("potion", ItemType.Consumable).register()
+val raw_material = itemSubType(Ids.ITEMSUBTYPE_RAW_MATERIAL, ItemType.Misc).register()
+val refined_material = itemSubType(Ids.ITEMSUBTYPE_REFINED_MATERIAL, ItemType.Misc).register()
+val sword = itemSubType(Ids.ITEMSUBTYPE_SWORD, ItemType.Weapon).register()
+val chest_armor = itemSubType(Ids.ITEMSUBTYPE_CHEST_ARMOR, ItemType.Armor).register()
+val potion = itemSubType(Ids.ITEMSUBTYPE_POTION, ItemType.Consumable).register()
 
 // Items
-Item(
-    id = "wood",
+item(
+    id = Ids.ITEM_WOOD,
     subType = raw_material, weight = 1
 ).register()
 
-Item(
-    "iron_ore",
-    raw_material, 1
+item(
+    id = Ids.ITEM_IRON_ORE,
+    subType = raw_material, weight = 1
 ).register()
 
-val ironIngot = Item(
-    "iron_ingot",
-    refined_material, 1
+val ironIngot = item(
+    id = Ids.ITEM_IRON_INGOT,
+    subType = refined_material, weight = 1
 ).register()
 
-Item(
-    "iron_sword",
-    sword, 1,
-    Attributes().add(Ids.STAT_BODY, 3)
+item(
+    id = Ids.ITEM_IRON_SWORD,
+    subType = sword, weight = 1,
+    attributes = Attributes().add(Ids.STAT_BODY, 3)
 ).register()
 
-Item(
-    "chest_plate",
-    chest_armor, 5,
-    Attributes().add(Ids.STAT_BODY, 3)
+item(
+    id = Ids.ITEM_CHEST_PLATE,
+    subType = chest_armor, weight = 5,
+    attributes = Attributes().add(Ids.STAT_BODY, 3)
 ).register()
 
+/*
+TODO this probably needs its own DSL
 ConsumableItem(
-    "health_potion",
+    Ids.ITEM_HEALTH_POTION,
     potion, 1
 ) { input: ActionInput ->
     Utils.addItem(
@@ -55,3 +53,4 @@ ConsumableItem(
         1
     )
 }.register()
+*/

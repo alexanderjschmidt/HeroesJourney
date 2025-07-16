@@ -33,4 +33,29 @@ interface IAttributes {
      * @return the direct value for the stat
      */
     fun getDirect(stat: IStat): Int
-} 
+}
+
+/**
+ * Interface for the attributes DSL implementation.
+ */
+interface AttributesDSL {
+    /**
+     * Create an IAttributes object from a list of (statId, value) pairs.
+     * Example: attributes("body" to 3, "mind" to 2)
+     */
+    fun attributes(vararg pairs: Pair<String, Int>): IAttributes
+}
+
+/**
+ * Singleton provider for the AttributesDSL implementation.
+ * The core game must set this before any mods are loaded.
+ */
+object AttributesDSLProvider {
+    lateinit var instance: AttributesDSL
+}
+
+/**
+ * DSL entrypoint for mods. Always delegates to the core implementation.
+ */
+fun attributes(vararg pairs: Pair<String, Int>): IAttributes =
+    AttributesDSLProvider.instance.attributes(*pairs) 

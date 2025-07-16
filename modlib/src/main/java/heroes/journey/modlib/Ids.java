@@ -168,4 +168,30 @@ public class Ids {
     public static final String GROUP_CHARISMA = "charisma_group";
     public static final String GROUP_BASESTATS = "basestats_group";
     public static final String GROUP_RENOWN = "renown_group";
+
+    // Item SubType IDs
+    /** Raw Material item subtype ID */
+    public static final String ITEMSUBTYPE_RAW_MATERIAL = "raw_material";
+    /** Refined Material item subtype ID */
+    public static final String ITEMSUBTYPE_REFINED_MATERIAL = "refined_material";
+    /** Sword item subtype ID */
+    public static final String ITEMSUBTYPE_SWORD = "sword";
+    /** Chest Armor item subtype ID */
+    public static final String ITEMSUBTYPE_CHEST_ARMOR = "chest_armor";
+    /** Potion item subtype ID */
+    public static final String ITEMSUBTYPE_POTION = "potion";
+
+    // Item IDs
+    /** Wood item ID */
+    public static final String ITEM_WOOD = "wood";
+    /** Iron Ore item ID */
+    public static final String ITEM_IRON_ORE = "iron_ore";
+    /** Iron Ingot item ID */
+    public static final String ITEM_IRON_INGOT = "iron_ingot";
+    /** Iron Sword item ID */
+    public static final String ITEM_IRON_SWORD = "iron_sword";
+    /** Chest Plate item ID */
+    public static final String ITEM_CHEST_PLATE = "chest_plate";
+    /** Health Potion item ID */
+    public static final String ITEM_HEALTH_POTION = "health_potion";
 }

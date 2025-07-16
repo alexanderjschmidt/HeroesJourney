@@ -97,7 +97,8 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 |------------------|----------|---------------|----------------------|---------------------------|
 | Stat             | Yes      | [x]           | [x]                 | [x]                      |
 | Group            | Yes      | [x]           | [x]                 | [x]                      |
-| Item             | Partial  | [ ]           | [ ]                 | [ ]                      |
+| ItemSubType      | Yes      | [x]           | [x]                 | [x]                      |
+| Item             | Yes      | [x]           | [x]                 | [x]                      |
 | Action           | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Buff             | No       | [ ]           | [ ]                 | [ ]                      |
 | Quest            | Partial  | [ ]           | [ ]                 | [ ]                      |
@@ -334,3 +335,30 @@ This section documents the concrete steps taken to migrate the Stat Registrable 
 - Mods now use only the modlib DSL and interfaces for Stat, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **Stat has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: Item & ItemSubType Migration Example
+
+This section documents the concrete steps taken to migrate the Item and ItemSubType Registrables to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSLs in modlib (Kotlin)
+- Created `IItemSubType` and `IItem` interfaces in `modlib`, exposing only mod-facing properties and methods.
+- Created `ItemSubTypeDSL` and `ItemDSL` interfaces, singleton providers, and top-level DSL functions (`itemSubType`, `item`).
+- Moved `ItemType` enum to `modlib` for use in DSLs and interfaces.
+- Added `Ids` constants for all item and item subtype IDs.
+- Added `AttributesDSL` for concise attribute definitions.
+
+### 2. Implement the DSLs in core
+- Implemented `ItemSubTypeDSLImpl` and `ItemDSLImpl` in `core/mods`, returning real core objects and handling type conversions.
+- Registered providers in `setupModlibDSLs`.
+- Implemented `AttributesDSLImpl` for attribute creation.
+
+### 3. Update mod scripts to use the new DSLs
+- Updated all mod scripts to use `itemSubType` and `item` from `modlib`, passing IDs from `Ids` and using the new attributes DSL.
+- For core API calls, used registry lookups to convert from interface to concrete types as needed.
+
+### 4. Result
+- Mods now use only the modlib DSLs and interfaces for Item and ItemSubType, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **Item and ItemSubType have been fully migrated and tested.** 

@@ -7,6 +7,10 @@ import heroes.journey.modlib.TextureMapDSLProvider
 import heroes.journey.modlib.TileLayoutDSLProvider
 import heroes.journey.modlib.TileBatchDSLProvider
 import heroes.journey.modlib.StatDSLProvider
+import heroes.journey.modlib.ItemSubTypeDSLProvider
+import heroes.journey.modlib.ItemDSLProvider
+import heroes.journey.modlib.AttributesDSLProvider
+import heroes.journey.mods.AttributesDSLImpl
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
@@ -20,5 +24,8 @@ fun setupModlibDSLs() {
     TileLayoutDSLProvider.instance = TileLayoutDSLImpl()
     TileBatchDSLProvider.instance = TileBatchDSLImpl()
     StatDSLProvider.instance = StatDSLImpl()
+    ItemSubTypeDSLProvider.instance = ItemSubTypeDSLImpl()
+    ItemDSLProvider.instance = ItemDSLImpl()
+    AttributesDSLProvider.instance = AttributesDSLImpl()
     // Register other DSLs here as needed
 }

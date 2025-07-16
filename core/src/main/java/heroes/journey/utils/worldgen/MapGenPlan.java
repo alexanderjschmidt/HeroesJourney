@@ -186,9 +186,8 @@ public class MapGenPlan {
                     EntityEdit player = gameState.getWorld().edit(playerId);
                     player.create(PlayerComponent.class).playerId(PlayerInfo.get().getUuid());
                     InventoryComponent.get(gameState.getWorld(), playerId)
-                        .add(ItemManager.get("health_potion"), 3)
-                        .add(ItemManager.get("iron_ingot"), 5)
-                        .add(ItemManager.get("chest_plate"));
+                        .add(ItemManager.get(Ids.ITEM_IRON_INGOT), 5)
+                        .add(ItemManager.get(Ids.ITEM_CHEST_PLATE));
                     PlayerInfo.get().setPlayerId(playerId);
                 } else if (region.ringPos() % 2 == 0) {
                     UUID opponentId = factory.createEntity();
