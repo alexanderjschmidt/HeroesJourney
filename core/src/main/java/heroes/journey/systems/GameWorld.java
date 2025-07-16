@@ -34,7 +34,7 @@ import heroes.journey.components.LocationComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Ids;
 import heroes.journey.systems.constantsystems.AISystem;
 import heroes.journey.systems.constantsystems.AIWanderSystem;
 import heroes.journey.systems.constantsystems.ActionSystem;
@@ -49,7 +49,6 @@ import heroes.journey.systems.triggerable.EventSystem;
 import heroes.journey.systems.triggerable.RegionManagementSystem;
 import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.utils.serializers.Serializers;
-import heroes.journey.modlib.Ids;
 
 public class GameWorld extends World {
 
@@ -242,6 +241,9 @@ public class GameWorld extends World {
     }
 
     public <T extends Component> T getEntity(java.lang.Class<T> type, UUID entityId) {
+        if (entityId == null) {
+            return null;
+        }
         try {
             return super.getMapper(type).get(entityMap.get(entityId));
         } catch (Exception e) {

@@ -12,6 +12,7 @@ abstract class OptionAction(
     onHoverFn: (ActionInput) -> Unit = {},
     onSelectFn: (ActionInput) -> ActionResult,
     onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() },
+    open var value: Any
 ) : Action(
     id,
     false,
@@ -20,13 +21,8 @@ abstract class OptionAction(
     onSelectFn,
     onSelectAIFn
 ) {
-    private var display: String = ""
-
     override fun getName(): String {
-        return display
+        return super.getName() + ": " + value
     }
 
-    fun setDisplay(value: String) {
-        this.display = super.toString() + ": " + value
-    }
 }

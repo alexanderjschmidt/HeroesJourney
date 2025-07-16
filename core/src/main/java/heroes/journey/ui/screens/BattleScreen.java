@@ -8,6 +8,7 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.client.GameClient;
+import heroes.journey.entities.actions.options.BooleanOptionAction;
 import heroes.journey.models.MapData;
 import heroes.journey.modlib.Ids;
 import heroes.journey.registries.Registries;
@@ -48,8 +49,7 @@ public class BattleScreen implements Screen {
 
         MapGenerator.initMapGeneration(GameState.global(), mapData, ready);
 
-        if (((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
-            Ids.MUSIC)).isTrue())
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.MUSIC)).isTrue())
             MusicManager.play("Sounds/Music/Dragon_Of_The_Mist.mp3");
         ready = true;
     }

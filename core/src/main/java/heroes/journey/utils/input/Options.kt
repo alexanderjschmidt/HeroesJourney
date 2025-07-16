@@ -11,7 +11,6 @@ object Options {
     val optionsList: MutableList<ActionEntry> = ArrayList(2)
 
     fun addOption(option: OptionAction) {
-        option.setDisplay("")
         optionsList.add(ActionEntry(option.id, emptyMap()))
     }
 

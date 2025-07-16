@@ -31,24 +31,8 @@ open class ActionBuilder {
     )
 }
 
-// TargetAction DSL
-class TargetActionBuilder<I> : ActionBuilder() {
-    var getTargets: (ActionInput) -> List<I> = { emptyList() }
-    var targetAction: String = ""
-
-    override fun build(): TargetAction<I> = TargetAction(
-        id = id,
-        requirementsMetFn = requirementsMetFn,
-        onHoverFn = onHoverFn,
-        inputDisplayNameFn = inputDisplayNameFn,
-        getTargets = getTargets,
-        targetAction = targetAction,
-    )
-}
-
 // OptionAction DSL
 open class OptionActionBuilder : ActionBuilder() {
-    var display: String = ""
 
     // Override to make isReturnsActionList inaccessible
     override var isReturnsActionList: Boolean
@@ -60,12 +44,9 @@ open class OptionActionBuilder : ActionBuilder() {
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn
-    ) {
-        init {
-            setDisplay(display)
-        }
-    }
+        onSelectAIFn = onSelectAIFn,
+        1
+    ) {}
 }
 
 // BooleanOptionAction DSL
@@ -92,7 +73,45 @@ fun action(init: ActionBuilder.() -> Unit): Action {
     return ActionBuilder().apply(init).build()
 }
 
-fun <I> targetAction(init: TargetActionBuilder<I>.() -> Unit): TargetAction<I> {
+/**
+ * Builder for targetAction DSL, which creates a normal Action with TargetAction-like behavior.
+ */
+class TargetActionBuilder<I> {
+    var id: String = ""
+    var getTargets: (ActionInput) -> List<I> = { emptyList() }
+    var targetAction: String = ""
+    var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (ActionInput) -> Unit = {}
+    var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
+
+    fun build(): Action {
+        return Action(
+            id = id,
+            isReturnsActionList = true,
+            requirementsMetFn = { input ->
+                val targets = getTargets(input)
+                val targetShowAction = if (targets.isEmpty()) ShowAction.GRAYED else ShowAction.YES
+                requirementsMetFn(input).and(targetShowAction)
+            },
+            onHoverFn = onHoverFn,
+            onSelectFn = { input ->
+                val actionOptions = getTargets(input).map { option ->
+                    val copyInput = input.getHashMapCopy()
+                    copyInput["target"] = option.toString()
+                    heroes.journey.modlib.actions.ActionEntry(targetAction, copyInput)
+                }
+                heroes.journey.modlib.actions.results.ActionListResult(actionOptions)
+            },
+            onSelectAIFn = { heroes.journey.modlib.actions.results.AIOnSelectNotFound() },
+            inputDisplayNameFn = inputDisplayNameFn
+        )
+    }
+}
+
+/**
+ * DSL function for building a TargetAction-like Action using a builder pattern.
+ */
+fun <I> targetAction(init: TargetActionBuilder<I>.() -> Unit): Action {
     return TargetActionBuilder<I>().apply(init).build()
 }
 

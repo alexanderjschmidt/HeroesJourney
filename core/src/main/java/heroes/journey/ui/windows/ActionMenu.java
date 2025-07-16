@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import heroes.journey.GameState;
+import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.RegionComponent;
@@ -108,16 +109,12 @@ public class ActionMenu extends UI {
         public void select() {
             ActionEntry action = getSelected().entry();
             UUID selectedEntity = HUD.get().getCursor().getSelected();
-            System.out.println("Selected " + action + " " + selectedEntity + " " + action.getInput());
-            if (selectedEntity != null) {
-                GameState.global()
-                    .getWorld()
-                    .edit(selectedEntity)
-                    .create(ActionComponent.class)
-                    .action(action);
-            } else {
-                ActionManager.get(action.getActionId()).onSelect(new ActionInput(GameState.global()), false);
+            System.out.println(
+                "Selected " + action.getActionId() + " " + selectedEntity + " " + action.getInput());
+            if (selectedEntity == null) {
+                selectedEntity = PlayerInfo.get().getPlayersHero();
             }
+            GameState.global().getWorld().edit(selectedEntity).create(ActionComponent.class).action(action);
         }
 
         @Override

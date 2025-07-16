@@ -31,7 +31,7 @@ open class Action(
 
     open fun requirementsMet(input: ActionInput): ShowAction {
         val cooldownComponent = getCooldownComponent(input)
-        if (cooldownComponent.cooldowns.containsKey(id)) return ShowAction.GRAYED
+        if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(id)) return ShowAction.GRAYED
         return requirementsMetFn(input)
     }
 
@@ -42,14 +42,16 @@ open class Action(
 
     open fun onSelect(input: ActionInput, ai: Boolean = false): ActionResult? {
         val cooldownComponent = getCooldownComponent(input)
-        cooldownComponent.cooldowns[id] = turnCooldown
+        cooldownComponent?.cooldowns?.set(id, turnCooldown)
         if (ai) {
             val aiResult = onSelectAIFn(input)
             if (aiResult !is AIOnSelectNotFound) {
                 return aiResult
             }
         }
-        return onSelectFn(input)
+        val result: ActionResult = onSelectFn(input)
+        println(result.toString())
+        return result
     }
 
     override fun getTitle(input: Map<String, String>): String {
@@ -61,8 +63,8 @@ open class Action(
 
     override fun getDescription(input: Map<String, String>): String = getDescription()
 
-    private fun getCooldownComponent(input: ActionInput): PossibleActionsComponent {
-        val cooldownComponent: PossibleActionsComponent
+    private fun getCooldownComponent(input: ActionInput): PossibleActionsComponent? {
+        val cooldownComponent: PossibleActionsComponent?
         if (factionCooldown) {
             val faction = UUID.fromString(input["owner"])
             cooldownComponent = PossibleActionsComponent.get(input.gameState.world, faction)
@@ -86,7 +88,7 @@ open class Action(
         val cooldownComponent = getCooldownComponent(
             actionInput
         )
-        var cooldownVal = cooldownComponent.cooldowns[id]
+        var cooldownVal = cooldownComponent?.cooldowns?.get(id)
         cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
         cooldown!!.setText("$cooldownVal/$turnCooldown")
         table.add(cooldown).fill().row()

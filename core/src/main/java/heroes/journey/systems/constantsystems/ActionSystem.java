@@ -20,6 +20,7 @@ import heroes.journey.modlib.actions.results.ActionListResult;
 import heroes.journey.modlib.actions.results.ActionResult;
 import heroes.journey.modlib.actions.results.EndTurnResult;
 import heroes.journey.modlib.actions.results.MultiStepResult;
+import heroes.journey.modlib.actions.results.NullResult;
 import heroes.journey.modlib.actions.results.StringResult;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
@@ -57,6 +58,8 @@ public class ActionSystem extends IteratingSystem {
                         HUD.get().getPopupUI().getText().setText(str.toString());
                         HUD.get().setState(States.POP_UP);
                     }
+                }
+                case NullResult n -> {
                 }
                 case ActionListResult actions -> {
                     HUD.get().setState(new ActionSelectState(actions.list()));
