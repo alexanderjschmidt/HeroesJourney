@@ -38,7 +38,7 @@ public class ActionComponent extends PooledClonableComponent<ActionComponent> {
     }
 
     public ActionComponent action(ActionEntry actionEntry) {
-        this.action = actionEntry.getId();
+        this.action = actionEntry.getActionId();
         this.input = actionEntry.getInput();
         return this;
     }

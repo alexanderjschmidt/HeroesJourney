@@ -9,7 +9,7 @@ import heroes.journey.entities.actions.ActionEntry;
 public class History extends Stack<Record> implements Cloneable {
 
     public void add(ActionEntry action, UUID currentEntity) {
-        this.add(new ActionRecord(currentEntity, action.getId(), action.getInput()));
+        this.add(new ActionRecord(currentEntity, action.getActionId(), action.getInput()));
     }
 
     public void add(String actionId, Map<String,String> input, UUID currentEntity) {

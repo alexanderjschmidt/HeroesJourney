@@ -1,5 +1,7 @@
 package heroes.journey.ui.windows;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,14 +13,16 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.ActionComponent;
+import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
-import heroes.journey.utils.gamestate.Utils;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
+import heroes.journey.utils.Lang;
+import heroes.journey.utils.gamestate.Utils;
 
 public class ActionMenu extends UI {
 
@@ -96,6 +100,11 @@ public class ActionMenu extends UI {
         }
 
         @Override
+        public String getText(ActionEntry option) {
+            return Lang.INSTANCE.get(option.getActionId() + "_name");
+        }
+
+        @Override
         public void select() {
             ActionEntry action = getSelected().entry();
             UUID selectedEntity = HUD.get().getCursor().getSelected();
@@ -107,7 +116,7 @@ public class ActionMenu extends UI {
                     .create(ActionComponent.class)
                     .action(action);
             } else {
-                action.getAction().onSelect(new ActionInput(GameState.global()), false);
+                ActionManager.get(action.getActionId()).onSelect(new ActionInput(GameState.global()), false);
             }
         }
 
@@ -116,8 +125,9 @@ public class ActionMenu extends UI {
             ActionEntry actionEntry = actions.getSelected().entry();
             ActionInput input = new ActionInput(GameState.global(), HUD.get().getCursor().getSelected(),
                 actionEntry.getInput());
-            actionEntry.getAction().onHover(input);
-            infoUI.showInfo(actionEntry.getAction(), actionEntry.getInput());
+            Action action = ActionManager.get(actionEntry.getActionId());
+            action.onHover(input);
+            infoUI.showInfo(action, actionEntry.getInput());
         }
     }
 

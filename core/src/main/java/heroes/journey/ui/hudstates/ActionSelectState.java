@@ -1,5 +1,7 @@
 package heroes.journey.ui.hudstates;
 
+import static heroes.journey.registries.Registries.ActionManager;
+
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +29,7 @@ public class ActionSelectState extends HUDState {
     private List<ScrollPaneEntry<ActionEntry>> filter(List<ActionEntry> input, UUID entityId) {
         return input.stream()
             .map(action -> {
-                ShowAction result = action.getAction()
+                ShowAction result = ActionManager.get(action.getActionId())
                     .requirementsMet(new ActionInput(GameState.global(), entityId, action.getInput()));
                 return new AbstractMap.SimpleEntry<>(action, result);
             })

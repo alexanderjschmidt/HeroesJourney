@@ -10,11 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
-import heroes.journey.registries.Registrable;
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.input.KeyManager;
 
-public abstract class ScrollPane<T extends Registrable> extends Table {
+public abstract class ScrollPane<T> extends Table {
 
     private final List<Label> optionLabels = new ArrayList<>();
     private List<ScrollPaneEntry<T>> options;
@@ -73,9 +72,7 @@ public abstract class ScrollPane<T extends Registrable> extends Table {
         }
     }
 
-    public String getText(T option) {
-        return option.getName();
-    }
+    public abstract String getText(T option);
 
     public ScrollPaneEntry<T> getSelected() {
         return options.get(selected);

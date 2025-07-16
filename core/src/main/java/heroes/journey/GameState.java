@@ -1,5 +1,6 @@
 package heroes.journey;
 
+import static heroes.journey.registries.Registries.ActionManager;
 import static heroes.journey.utils.serializers.Serializers.jsonGameState;
 
 import java.io.FileReader;
@@ -125,7 +126,8 @@ public class GameState implements Cloneable {
         // Apply chosen Action
         ActionEntry actionEntry = queuedAction.getAction();
         history.add(actionEntry, e);
-        actionEntry.getAction().onSelect(new ActionInput(this, e, actionEntry.getInput()), true);
+        ActionManager.get(actionEntry.getActionId())
+            .onSelect(new ActionInput(this, e, actionEntry.getInput()), true);
         // If action adds movement
         // TODO remove this, onSelectAI should handle this
         MovementComponent movement = MovementComponent.get(world, e);

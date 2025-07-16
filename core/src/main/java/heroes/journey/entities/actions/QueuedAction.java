@@ -16,7 +16,7 @@ public class QueuedAction {
     }
 
     public String toString() {
-        return action.getId() + " " + entityId;
+        return action.getActionId() + " " + entityId;
     }
 
 }
