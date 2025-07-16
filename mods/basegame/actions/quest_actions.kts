@@ -2,12 +2,12 @@ import heroes.journey.GameState
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.QuestsComponent
 import heroes.journey.entities.Quest
-import heroes.journey.entities.actions.ShowAction
 import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.results.EndTurnResult
-import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.entities.actions.targetAction
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.results.EndTurnResult
+import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.QuestManager
 import java.util.*

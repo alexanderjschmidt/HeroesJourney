@@ -10,8 +10,8 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionInput;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.actions.results.StringResult;
 import heroes.journey.entities.items.Item;
+import heroes.journey.modlib.actions.results.StringResult;
 
 public class Utils {
 

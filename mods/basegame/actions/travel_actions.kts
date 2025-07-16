@@ -6,10 +6,10 @@ import heroes.journey.components.character.ActionComponent
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Position
 import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.results.MultiStepResult
-import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.entities.actions.targetAction
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.results.MultiStepResult
+import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.utils.Lang

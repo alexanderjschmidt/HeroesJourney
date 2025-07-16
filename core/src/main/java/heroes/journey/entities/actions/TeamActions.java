@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import heroes.journey.modlib.actions.ActionEntry;
+
 public class TeamActions extends ArrayList<ActionEntry> {
 
     private static final TeamActions actionManager = new TeamActions();

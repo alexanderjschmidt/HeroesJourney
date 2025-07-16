@@ -1,16 +1,17 @@
-package heroes.journey.entities.actions.results;
-
-import lombok.Getter;
+package heroes.journey.modlib.actions.results;
 
 import java.util.Queue;
 
-@Getter
 public class MultiStepResult implements ActionResult {
 
     private final Queue<Runnable> events;
 
     public MultiStepResult(Queue<Runnable> events) {
         this.events = events;
+    }
+
+    public Queue<Runnable> getEvents() {
+        return events;
     }
 
 }

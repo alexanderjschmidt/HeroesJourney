@@ -4,14 +4,15 @@ import heroes.journey.GameState
 import heroes.journey.entities.actions.ActionInput
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
+import heroes.journey.modlib.actions.ActionEntry
 import heroes.journey.registries.Registries
 
 object Options {
-    val optionsList: MutableList<OptionAction> = ArrayList(2)
+    val optionsList: MutableList<ActionEntry> = ArrayList(2)
 
     fun addOption(option: OptionAction) {
         option.setDisplay("")
-        optionsList.add(option)
+        optionsList.add(ActionEntry(option.id, emptyMap()))
     }
 
     fun isTrue(optionAction: String?): Boolean {

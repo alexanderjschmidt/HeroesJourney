@@ -5,11 +5,11 @@ import heroes.journey.components.RegionComponent
 import heroes.journey.components.StatsComponent
 import heroes.journey.entities.Challenge
 import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.results.EndTurnResult
 import heroes.journey.entities.actions.targetAction
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
 

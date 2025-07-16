@@ -1,4 +1,4 @@
-package heroes.journey.entities.actions
+package heroes.journey.modlib.actions
 
 class ActionEntry(val actionId: String, val input: Map<String, String>) {
 

@@ -1,8 +1,8 @@
-package heroes.journey.entities.actions.results;
+package heroes.journey.modlib.actions.results;
 
 import java.util.List;
 
-import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.modlib.actions.ActionEntry;
 
 public record ActionListResult(List<ActionEntry> list) implements ActionResult {
 

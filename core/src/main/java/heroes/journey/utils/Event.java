@@ -1,10 +1,10 @@
 package heroes.journey.utils;
 
-import heroes.journey.entities.actions.ActionInput;
-import heroes.journey.entities.actions.results.ActionResult;
-
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.modlib.actions.results.ActionResult;
 
 public class Event {
     protected final Function<ActionInput,ActionResult> trigger;

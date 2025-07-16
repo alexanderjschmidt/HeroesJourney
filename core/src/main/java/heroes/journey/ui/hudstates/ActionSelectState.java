@@ -9,9 +9,9 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.actions.ActionEntry;
 import heroes.journey.entities.actions.ActionInput;
-import heroes.journey.entities.actions.ShowAction;
+import heroes.journey.modlib.actions.ActionEntry;
+import heroes.journey.modlib.actions.ShowAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;

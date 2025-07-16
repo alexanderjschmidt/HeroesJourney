@@ -5,8 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
-import heroes.journey.entities.actions.results.AIOnSelectNotFound
-import heroes.journey.entities.actions.results.ActionResult
+import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.results.AIOnSelectNotFound
+import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.registries.Registries
 import java.util.*
 

@@ -1,4 +1,4 @@
-package heroes.journey.entities.actions.results;
+package heroes.journey.modlib.actions.results;
 
 public class NullResult implements ActionResult {
 

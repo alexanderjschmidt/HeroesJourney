@@ -2,6 +2,7 @@ package heroes.journey.entities.actions;
 
 import java.util.UUID;
 
+import heroes.journey.modlib.actions.ActionEntry;
 import lombok.Getter;
 
 @Getter

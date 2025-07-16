@@ -3,8 +3,8 @@ import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.cooldownAction
-import heroes.journey.entities.actions.results.StringResult
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.registries.Registries.StatManager
 import heroes.journey.utils.gamestate.FightUtils
 import heroes.journey.utils.gamestate.Utils

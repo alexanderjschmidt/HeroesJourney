@@ -1,9 +1,11 @@
 package heroes.journey.entities.actions
 
-import heroes.journey.entities.actions.results.AIOnSelectNotFound
-import heroes.journey.entities.actions.results.ActionListResult
-import heroes.journey.entities.actions.results.ActionResult
-import heroes.journey.entities.actions.results.NullResult
+import heroes.journey.modlib.actions.ActionEntry
+import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.results.AIOnSelectNotFound
+import heroes.journey.modlib.actions.results.ActionListResult
+import heroes.journey.modlib.actions.results.ActionResult
+import heroes.journey.modlib.actions.results.NullResult
 import heroes.journey.registries.Registries
 
 class TargetAction<I>(

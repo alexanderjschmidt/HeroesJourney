@@ -1,7 +1,7 @@
 import heroes.journey.entities.actions.TeamActions
 import heroes.journey.entities.actions.action
 import heroes.journey.entities.actions.booleanOptionAction
-import heroes.journey.entities.actions.results.ActionListNoInputResult
+import heroes.journey.modlib.actions.results.ActionListResult
 import heroes.journey.utils.input.Options
 
 // Options Actions - included by basegame mod
@@ -22,6 +22,6 @@ action {
     id = "options"
     isReturnsActionList = true
     onSelectFn = { input ->
-        ActionListNoInputResult(Options.optionsList as List<heroes.journey.entities.actions.Action>?)
+        ActionListResult(Options.optionsList)
     }
 }.register().also { TeamActions.addTeamAction(it) }

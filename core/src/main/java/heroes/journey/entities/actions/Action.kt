@@ -2,8 +2,9 @@ package heroes.journey.entities.actions
 
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import heroes.journey.entities.actions.results.AIOnSelectNotFound
-import heroes.journey.entities.actions.results.ActionResult
+import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.results.AIOnSelectNotFound
+import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD

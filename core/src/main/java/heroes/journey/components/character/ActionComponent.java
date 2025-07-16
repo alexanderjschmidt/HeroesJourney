@@ -10,7 +10,7 @@ import com.artemis.annotations.Transient;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 import lombok.Setter;

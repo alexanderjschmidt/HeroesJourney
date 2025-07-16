@@ -2,8 +2,9 @@ package heroes.journey.entities.actions
 
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
-import heroes.journey.entities.actions.results.AIOnSelectNotFound
-import heroes.journey.entities.actions.results.ActionResult
+import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.results.AIOnSelectNotFound
+import heroes.journey.modlib.actions.results.ActionResult
 
 // Base Action DSL
 open class ActionBuilder {

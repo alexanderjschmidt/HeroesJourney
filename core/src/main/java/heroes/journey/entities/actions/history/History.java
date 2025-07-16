@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.UUID;
 
-import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.modlib.actions.ActionEntry;
 
 public class History extends Stack<Record> implements Cloneable {
 

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionEntry;
+import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
