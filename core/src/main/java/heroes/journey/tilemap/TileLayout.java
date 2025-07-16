@@ -16,6 +16,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import heroes.journey.modlib.ITileLayout;
 import heroes.journey.registries.Registrable;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
@@ -24,26 +25,17 @@ import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
 
-public class TileLayout extends Registrable {
-    private final String id;
+public class TileLayout extends Registrable implements ITileLayout {
     private final String path;
     private final List<String> terrainRoles;
 
-    /**
-     * The coloring of the layout should be 0,0,0 (black) for the first terrain passed in
-     * (which should also be the base/center tile), and then increasing in
-     * rgb (added together) values until 255,255,255 (white) the last terrain
-     * The center tile of a 3x3 area defines its weight multiplier.
-     *
-     * @param path
-     */
     public TileLayout(String id, String path, List<String> terrainRoles) {
         super(id);
-        this.id = id;
         this.path = path;
         this.terrainRoles = terrainRoles;
     }
 
+    @Override
     public TileLayout register() {
         TileLayoutManager.register(this);
         return this;
@@ -53,13 +45,17 @@ public class TileLayout extends Registrable {
         return TileLayoutManager.get(id);
     }
 
+    @Override
     public String getPath() {
         return path;
     }
 
+    @Override
     public List<String> getTerrainRoles() {
         return terrainRoles;
     }
+
+    // --- All original private and utility methods below ---
 
     private List<Tile> generateTiles(
         TextureRegion[][] tiles,
@@ -107,7 +103,6 @@ public class TileLayout extends Registrable {
                 // Normalize R+G+B to a 0.0 - 1.0 scale
                 float rgbSum = (r + g + b) / (3f * 255f);
                 int adjustedWeight = Math.max(1, Math.round(weight * rgbSum));
-                //System.out.println(path + " " + i + " " + j + " " + adjustedWeight);
 
                 // Get 3x3 layout block for this tile from the layoutPixmap
                 Map<Direction,Terrain> terrainMap = terrainMapFrom(layoutPixmap, i * 3, j * 3, terrains);
@@ -129,15 +124,6 @@ public class TileLayout extends Registrable {
         return tileSet;
     }
 
-    /**
-     * @param tiles
-     * @param weight
-     * @param x
-     * @param y
-     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
-     * @param terrains
-     * @return a list of generated tiles
-     */
     public List<Tile> generateTiles(
         TextureRegion[][] tiles,
         int weight,
@@ -148,15 +134,6 @@ public class TileLayout extends Registrable {
         return generateTiles(tiles, weight, x, y, addToDefault, 0, 0, terrains);
     }
 
-    /**
-     * @param tiles
-     * @param weight
-     * @param x
-     * @param y
-     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
-     * @param terrains
-     * @return a list of generated tiles
-     */
     public List<Tile> generateAnimatedTiles(
         TextureRegion[][] tiles,
         int weight,
@@ -253,5 +230,4 @@ public class TileLayout extends Registrable {
         }
         return frames;
     }
-
 }

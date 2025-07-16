@@ -1,31 +1,15 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.tilemap.baseTile
 import heroes.journey.tilemap.tileBatch
-import heroes.journey.tilemap.tileLayout
+import heroes.journey.modlib.tileLayout
 
-tileLayout {
-  id = Ids.TILE_LAYOUT_WANG_CORNER
-  asset = "Textures/wangCorner.png"
-  terrainRoles = listOf("base", "adjacentTileOuter", "adjacentTileInner")
-}.register()
+tileLayout(Ids.TILE_LAYOUT_WANG_CORNER, "Textures/wangCorner.png", listOf("base", "adjacentTileOuter", "adjacentTileInner")).register()
 
-tileLayout {
-  id = Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER
-  asset = "Textures/cliffTransitionTapper.png"
-  terrainRoles = listOf("base", "adjacentTileOuter", "adjacentTileInner")
-}.register()
+tileLayout(Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER, "Textures/cliffTransitionTapper.png", listOf("base", "adjacentTileOuter", "adjacentTileInner")).register()
 
-tileLayout {
-  id = Ids.TILE_LAYOUT_CLIFF_TRANSITION
-  asset = "Textures/cliffTransition.png"
-  terrainRoles = listOf("cliff1", "cliff2", "adjacentTileOuter1", "adjacentTileOuter2", "adjacentTileInner")
-}.register()
+tileLayout(Ids.TILE_LAYOUT_CLIFF_TRANSITION, "Textures/cliffTransition.png", listOf("cliff1", "cliff2", "adjacentTileOuter1", "adjacentTileOuter2", "adjacentTileInner")).register()
 
-tileLayout {
-  id = Ids.TILE_LAYOUT_WANG_EDGE
-  asset = "Textures/wangEdge.png"
-  terrainRoles = listOf("terrain", "adjacentTerrain")
-}.register()
+tileLayout(Ids.TILE_LAYOUT_WANG_EDGE, "Textures/wangEdge.png", listOf("terrain", "adjacentTerrain")).register()
 
 // Tile Batches (migrated from Tiles.java)
 tileBatch {

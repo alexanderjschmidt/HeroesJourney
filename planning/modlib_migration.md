@@ -106,7 +106,7 @@ Currently, mods can access both `modlib` and `core`, allowing them to depend on 
 | FeatureType      | Yes      | [ ]           | [ ]                 | [ ]                      |
 | Terrain          | Yes      | [x]           | [x]                 | [x]                      |
 | TileBatch        | Yes      | [ ]           | [ ]                 | [ ]                      |
-| TileLayout       | Yes      | [ ]           | [ ]                 | [ ]                      |
+| TileLayout       | Yes      | [x]           | [x]                 | [x]                      |
 | Renderable       | Yes      | [x]           | [x]                 | [x]                      |
 | TextureMap       | Yes      | [x]           | [x]                 | [x]                      |
 
@@ -245,3 +245,32 @@ This section documents the concrete steps taken to migrate the Terrain Registrab
 - Mods now use only the modlib DSL and interfaces for Terrain, but always get the real core implementation at runtime.
 - The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
 - **Terrain has been fully migrated and tested.** 
+
+---
+
+## 📝 Reference: TileLayout Migration Example
+
+This section documents the concrete steps taken to migrate the TileLayout Registrable to the new modlib/core separation. Use this as a template for future Registrable migrations.
+
+### 1. Define Interfaces and DSL in modlib (Kotlin)
+- Created a single `TileLayout.kt` file in `modlib` (Kotlin) containing:
+    - `ITileLayout` interface (exposes `val id: String`, `val path: String`, `val terrainRoles: List<String>`, and `fun register(): ITileLayout`)
+    - `TileLayoutDSL` interface (exposes `fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout`)
+    - `TileLayoutDSLProvider` singleton
+    - Top-level `fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout` DSL entrypoint
+- This keeps the modlib lightweight and idiomatic.
+
+### 2. Implement the DSL in core
+- Implemented `TileLayoutDSLImpl` in `core/mods` package, returning a real `TileLayout` (which implements `ITileLayout`).
+
+### 3. Wire up the provider before mod loading
+- In `setupModlibDSLs()` (in `core/mods/ModlibDSLSetup.kt`), registered the `TileLayoutDSLProvider` with the core implementation, before any mod loading.
+
+### 4. Update mod scripts to use the modlib DSL
+- Updated all mod scripts to import and use `tileLayout` from `modlib` (e.g., `import heroes.journey.modlib.tileLayout`).
+- All usages now pass IDs and paths explicitly, not via builder blocks.
+
+### 5. Result
+- Mods now use only the modlib DSL and interfaces for TileLayout, but always get the real core implementation at runtime.
+- The architecture is clean, modular, and ready for future Registrable migrations using the same pattern.
+- **TileLayout has been fully migrated and tested.** 
