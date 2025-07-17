@@ -1,7 +1,11 @@
 package heroes.journey.mods
 
 import heroes.journey.modlib.*
-import heroes.journey.tilemap.Biome
+import heroes.journey.mods.art.RenderableDSLImpl
+import heroes.journey.mods.art.TextureMapDSLImpl
+import heroes.journey.mods.items.ItemDSLImpl
+import heroes.journey.mods.items.ItemSubTypeDSLImpl
+import heroes.journey.mods.worldgen.*
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
@@ -22,30 +26,6 @@ fun setupModlibDSLs() {
     QuestDSLProvider.instance = QuestDSLImpl()
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
-    // Register other DSLs here as needed
     BiomeDSLProvider.instance = BiomeDSLImpl()
     FeatureGenerationDataDSLProvider.instance = FeatureGenerationDataDSLImpl()
-}
-
-// --- DSL Implementations ---
-
-class BiomeDSLImpl : BiomeDSL {
-    override fun biome(
-        id: String,
-        baseTerrain: String,
-        featureGenerationData: List<FeatureGenerationData>
-    ): IBiome {
-        return Biome(id, baseTerrain, featureGenerationData)
-    }
-}
-
-class FeatureGenerationDataDSLImpl : FeatureGenerationDataDSL {
-    override fun featureGenerationData(
-        featureTypeId: String,
-        minDist: Int,
-        minInRegion: Int,
-        maxInRegion: Int
-    ): FeatureGenerationData {
-        return FeatureGenerationData(featureTypeId, minDist, minInRegion, maxInRegion)
-    }
 }

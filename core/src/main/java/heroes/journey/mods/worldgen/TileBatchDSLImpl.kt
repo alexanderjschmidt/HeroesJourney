@@ -1,4 +1,4 @@
-package heroes.journey.mods
+package heroes.journey.mods.worldgen
 
 import heroes.journey.modlib.ITileBatch
 import heroes.journey.modlib.TileBatchDSL
@@ -29,4 +29,4 @@ class TileBatchDSLImpl : TileBatchDSL {
         frameCount,
         frameDist
     )
-} 
+}

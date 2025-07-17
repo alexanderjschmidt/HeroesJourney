@@ -1,4 +1,4 @@
-package heroes.journey.mods
+package heroes.journey.mods.art
 
 import heroes.journey.modlib.IRenderable
 import heroes.journey.modlib.RenderableDSL

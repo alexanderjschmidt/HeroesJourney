@@ -1,4 +1,4 @@
-package heroes.journey.mods
+package heroes.journey.mods.art
 
 import heroes.journey.modlib.ITextureMap
 import heroes.journey.modlib.TextureMapDSL
@@ -8,4 +8,4 @@ class TextureMapDSLImpl : TextureMapDSL {
     override fun textureMap(id: String, location: String, width: Int, height: Int): ITextureMap {
         return TextureMap(id, location, width, height)
     }
-} 
+}

@@ -1,13 +1,12 @@
-package heroes.journey.mods
+package heroes.journey.mods.items
 
-import heroes.journey.modlib.IItem
-import heroes.journey.modlib.IItemSubType
-import heroes.journey.modlib.IAttributes
-import heroes.journey.modlib.ItemDSL
-import heroes.journey.modlib.attributes
 import heroes.journey.entities.items.Item
 import heroes.journey.entities.items.ItemSubType
 import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.IAttributes
+import heroes.journey.modlib.IItem
+import heroes.journey.modlib.IItemSubType
+import heroes.journey.modlib.ItemDSL
 
 class ItemDSLImpl : ItemDSL {
     override fun item(id: String, subType: IItemSubType, weight: Int, attributes: IAttributes): IItem {
@@ -15,4 +14,4 @@ class ItemDSLImpl : ItemDSL {
         val coreAttributes = attributes as? Attributes ?: Attributes()
         return Item(id, coreSubType, weight, coreAttributes)
     }
-} 
+}

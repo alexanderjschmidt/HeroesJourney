@@ -1,4 +1,4 @@
-package heroes.journey.mods
+package heroes.journey.mods.worldgen
 
 import heroes.journey.modlib.FeatureTypeDSL
 import heroes.journey.modlib.IFeatureType
