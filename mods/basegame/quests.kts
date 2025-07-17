@@ -1,11 +1,7 @@
-import heroes.journey.modlib.buff
-import heroes.journey.modlib.attributes
-import heroes.journey.modlib.quest
-import heroes.journey.entities.Quest
-import heroes.journey.entities.questCost
-import heroes.journey.entities.questRewards
-import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.attributes
+import heroes.journey.modlib.buff
+import heroes.journey.modlib.quest
 
 // Quests and Buffs - included by basegame mod
 

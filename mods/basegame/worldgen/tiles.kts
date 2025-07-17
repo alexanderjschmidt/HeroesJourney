@@ -1,15 +1,30 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.tilemap.baseTile
 import heroes.journey.modlib.tileBatch
 import heroes.journey.modlib.tileLayout
 
-tileLayout(Ids.TILE_LAYOUT_WANG_CORNER, "Textures/wangCorner.png", listOf("base", "adjacentTileOuter", "adjacentTileInner")).register()
+tileLayout(
+    Ids.TILE_LAYOUT_WANG_CORNER,
+    "Textures/wangCorner.png",
+    listOf("base", "adjacentTileOuter", "adjacentTileInner")
+).register()
 
-tileLayout(Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER, "Textures/cliffTransitionTapper.png", listOf("base", "adjacentTileOuter", "adjacentTileInner")).register()
+tileLayout(
+    Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER,
+    "Textures/cliffTransitionTapper.png",
+    listOf("base", "adjacentTileOuter", "adjacentTileInner")
+).register()
 
-tileLayout(Ids.TILE_LAYOUT_CLIFF_TRANSITION, "Textures/cliffTransition.png", listOf("cliff1", "cliff2", "adjacentTileOuter1", "adjacentTileOuter2", "adjacentTileInner")).register()
+tileLayout(
+    Ids.TILE_LAYOUT_CLIFF_TRANSITION,
+    "Textures/cliffTransition.png",
+    listOf("cliff1", "cliff2", "adjacentTileOuter1", "adjacentTileOuter2", "adjacentTileInner")
+).register()
 
-tileLayout(Ids.TILE_LAYOUT_WANG_EDGE, "Textures/wangEdge.png", listOf("terrain", "adjacentTerrain")).register()
+tileLayout(
+    Ids.TILE_LAYOUT_WANG_EDGE,
+    "Textures/wangEdge.png",
+    listOf("terrain", "adjacentTerrain")
+).register()
 
 // Tile Batches (migrated from Tiles.java)
 tileBatch(
@@ -245,54 +260,54 @@ tileBatch(
 
 // Base Tiles (migrated from Tiles.java)
 baseTile {
-  id = Ids.BASE_TILE_NULL
-  terrain = Ids.TERRAIN_NULL
-  textureMap = Ids.OVERWORLD_TILESET
-  x = 3
-  y = 0
-  weight = 100
-  addToBaseTiles = true
+    id = Ids.BASE_TILE_NULL
+    terrain = Ids.TERRAIN_NULL
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 3
+    y = 0
+    weight = 100
+    addToBaseTiles = true
 }
 
 baseTile {
-  id = Ids.BASE_TILE_WATER
-  terrain = Ids.TERRAIN_WATER
-  textureMap = Ids.OVERWORLD_TILESET
-  x = 21
-  y = 11
-  weight = 300
-  addToBaseTiles = true
-  frameCount = 4
-  frameDist = 5
-  frameRate = 0.2f
+    id = Ids.BASE_TILE_WATER
+    terrain = Ids.TERRAIN_WATER
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 21
+    y = 11
+    weight = 300
+    addToBaseTiles = true
+    frameCount = 4
+    frameDist = 5
+    frameRate = 0.2f
 }
 
 baseTile {
-  id = Ids.BASE_TILE_PLAINS
-  terrain = Ids.TERRAIN_PLAINS
-  textureMap = Ids.OVERWORLD_TILESET
-  x = 1
-  y = 5
-  weight = 1000
-  addToBaseTiles = true
+    id = Ids.BASE_TILE_PLAINS
+    terrain = Ids.TERRAIN_PLAINS
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 5
+    weight = 1000
+    addToBaseTiles = true
 }
 
 baseTile {
-  id = Ids.BASE_TILE_HILLS
-  terrain = Ids.TERRAIN_HILLS
-  textureMap = Ids.OVERWORLD_TILESET
-  x = 1
-  y = 11
-  weight = 500
-  addToBaseTiles = true
+    id = Ids.BASE_TILE_HILLS
+    terrain = Ids.TERRAIN_HILLS
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 11
+    weight = 500
+    addToBaseTiles = true
 }
 
 baseTile {
-  id = Ids.BASE_TILE_SAND
-  terrain = Ids.TERRAIN_SAND
-  textureMap = Ids.OVERWORLD_TILESET
-  x = 1
-  y = 17
-  weight = 200
-  addToBaseTiles = true
+    id = Ids.BASE_TILE_SAND
+    terrain = Ids.TERRAIN_SAND
+    textureMap = Ids.OVERWORLD_TILESET
+    x = 1
+    y = 17
+    weight = 200
+    addToBaseTiles = true
 }
