@@ -34,8 +34,8 @@ To decouple mods from core while maintaining full power in core, all registry an
 - **Current:** `import heroes.journey.entities.tagging.Attributes`
 - **Solution:** Use the `attributes` DSL from `modlib` for all attribute construction and manipulation. Ensure all usages are via the DSL and not the core class.
 - **Action:**
-  - [ ] Refactor all usages of `Attributes` in mod scripts to use the `attributes` DSL.
-  - [ ] Remove direct imports of `Attributes` from mods.
+  - [x] Refactor all usages of `Attributes` in mod scripts to use the `attributes` DSL.
+  - [x] Remove direct imports of `Attributes` from mods.
 
 ### 2. Stat (mods/basegame/actions/challenge_actions.kts)
 - **Current:** `import heroes.journey.entities.tagging.Stat`

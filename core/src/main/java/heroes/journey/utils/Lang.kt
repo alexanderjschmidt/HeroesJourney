@@ -1,5 +1,6 @@
 package heroes.journey.utils
 
+import heroes.journey.modlib.ILang
 import heroes.journey.mods.GameMod
 import heroes.journey.mods.ScriptModLoader
 import java.io.File
@@ -8,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 
-object Lang {
+object Lang : ILang {
     private var currentLanguage: String = "en"
     private val langMap: MutableMap<String, String> = mutableMapOf()
 
@@ -73,7 +74,7 @@ object Lang {
         }
     }
 
-    fun get(key: String): String {
+    override fun get(key: String): String {
         val value = langMap[key]
         if (value == null && (key.endsWith("_name") || key.endsWith("_description"))) {
             System.err.println("[Lang] Missing translation for key: '$key' in language '$currentLanguage'")

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import heroes.journey.modlib.ITileBatch;
-import heroes.journey.registries.Registrable;
+import heroes.journey.modlib.Registrable;
 import heroes.journey.registries.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;

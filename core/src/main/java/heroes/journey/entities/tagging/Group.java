@@ -3,7 +3,7 @@ package heroes.journey.entities.tagging;
 import java.util.Objects;
 
 import heroes.journey.modlib.IGroup;
-import heroes.journey.registries.Registrable;
+import heroes.journey.modlib.Registrable;
 import heroes.journey.registries.Registries;
 
 public class Group extends Registrable implements IGroup {

@@ -5,7 +5,7 @@ import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.IQuest
 import heroes.journey.modlib.Operation
-import heroes.journey.registries.Registrable
+import heroes.journey.modlib.Registrable
 import heroes.journey.registries.Registries
 import java.util.*
 

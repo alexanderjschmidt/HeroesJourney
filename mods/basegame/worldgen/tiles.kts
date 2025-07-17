@@ -1,6 +1,7 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.tileBatch
 import heroes.journey.modlib.tileLayout
+import heroes.journey.tilemap.baseTile
 
 tileLayout(
     Ids.TILE_LAYOUT_WANG_CORNER,

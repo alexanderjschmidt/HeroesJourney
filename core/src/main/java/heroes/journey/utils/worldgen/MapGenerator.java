@@ -7,7 +7,7 @@ import java.util.Map;
 
 import heroes.journey.GameState;
 import heroes.journey.models.MapData;
-import heroes.journey.registries.Registry;
+import heroes.journey.modlib.Registry;
 import heroes.journey.utils.worldgen.effects.NoOpMapGenerationEffect;
 import lombok.Getter;
 

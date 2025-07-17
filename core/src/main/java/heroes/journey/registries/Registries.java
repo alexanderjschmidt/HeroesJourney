@@ -8,6 +8,7 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.items.ItemSubType;
 import heroes.journey.entities.tagging.Group;
 import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Registry;
 import heroes.journey.tilemap.Biome;
 import heroes.journey.tilemap.FeatureType;
 import heroes.journey.tilemap.TileBatch;

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import heroes.journey.modlib.IAttributes;
 import heroes.journey.modlib.IGroup;
 import heroes.journey.modlib.IStat;
-import heroes.journey.registries.Registrable;
+import heroes.journey.modlib.Registrable;
 import kotlin.jvm.functions.Function1;
 
 public class Stat extends Registrable implements IStat {

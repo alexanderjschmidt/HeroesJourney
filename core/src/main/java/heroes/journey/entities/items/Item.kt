@@ -3,7 +3,7 @@ package heroes.journey.entities.items
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.IItem
 import heroes.journey.modlib.ItemType
-import heroes.journey.registries.Registrable
+import heroes.journey.modlib.Registrable
 import heroes.journey.registries.Registries.ItemManager
 import lombok.Getter
 

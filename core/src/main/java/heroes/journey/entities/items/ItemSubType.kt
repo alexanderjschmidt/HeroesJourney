@@ -2,7 +2,7 @@ package heroes.journey.entities.items
 
 import heroes.journey.modlib.IItemSubType
 import heroes.journey.modlib.ItemType
-import heroes.journey.registries.Registrable
+import heroes.journey.modlib.Registrable
 import heroes.journey.registries.Registries.ItemSubTypeManager
 import lombok.Getter
 

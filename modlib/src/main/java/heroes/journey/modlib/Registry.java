@@ -1,4 +1,4 @@
-package heroes.journey.registries;
+package heroes.journey.modlib;
 
 import java.util.HashMap;
 import java.util.List;

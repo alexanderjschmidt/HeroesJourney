@@ -2,7 +2,7 @@ package heroes.journey.tilemap
 
 import heroes.journey.modlib.FeatureGenerationData
 import heroes.journey.modlib.IBiome
-import heroes.journey.registries.Registrable
+import heroes.journey.modlib.Registrable
 import heroes.journey.registries.Registries.BiomeManager
 
 class Biome(

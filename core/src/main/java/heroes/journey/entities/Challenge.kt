@@ -3,7 +3,7 @@ package heroes.journey.entities
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.IChallenge
-import heroes.journey.registries.Registrable
+import heroes.journey.modlib.Registrable
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.StatManager
 

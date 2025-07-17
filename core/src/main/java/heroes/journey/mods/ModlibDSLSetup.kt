@@ -7,12 +7,15 @@ import heroes.journey.mods.art.TextureMapDSLImpl
 import heroes.journey.mods.items.ItemDSLImpl
 import heroes.journey.mods.items.ItemSubTypeDSLImpl
 import heroes.journey.mods.worldgen.*
+import heroes.journey.utils.Lang
 
 /**
  * Call this at game startup before loading mods to register all modlib DSL providers.
  * Add additional DSL registrations here as new DSLs are migrated.
  */
 fun setupModlibDSLs() {
+    Registrable.lang = Lang
+    
     GroupDSLProvider.instance = GroupDSLImpl()
     RenderableDSLProvider.instance = RenderableDSLImpl()
     TextureMapDSLProvider.instance = TextureMapDSLImpl()

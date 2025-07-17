@@ -17,7 +17,7 @@ import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.modlib.ITileLayout;
-import heroes.journey.registries.Registrable;
+import heroes.journey.modlib.Registrable;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
