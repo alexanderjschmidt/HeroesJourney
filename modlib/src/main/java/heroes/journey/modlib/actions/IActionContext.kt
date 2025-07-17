@@ -2,6 +2,7 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.IGameState
 import heroes.journey.modlib.Position
+import heroes.journey.modlib.Quest
 import java.util.*
 
 // You may need to import or define a Position class in modlib if not already present
@@ -40,4 +41,7 @@ abstract class IActionContext(
     abstract fun travelTo(entityId: UUID, target: Position)
     abstract fun getRegion(entityId: UUID): UUID
     abstract fun getNeighbors(regionId: UUID): List<UUID>
+    abstract fun getQuests(entityId: UUID): List<Quest>
+    abstract fun addQuest(entityId: UUID, questId: String)
+    abstract fun removeQuest(entityId: UUID, questId: String)
 }

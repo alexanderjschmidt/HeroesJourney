@@ -1,5 +1,3 @@
-import heroes.journey.GameState
-import heroes.journey.components.NamedComponent
 import heroes.journey.components.QuestsComponent
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.action
@@ -22,17 +20,9 @@ action {
     }
     onSelectFn = { input ->
         val town: UUID = UUID.fromString(input["owner"])
-        val factionsQuestsComponent = QuestsComponent.get(
-            input.gameState.world,
-            town
-        )
 
-        val quest: Quest = QuestManager.get(input["target"])!!
-        if (factionsQuestsComponent != null) {
-            factionsQuestsComponent.remove(quest)
-            QuestsComponent.get(input.gameState.world, input.entityId)
-                .addQuest(quest)
-        }
+        input.removeQuest(town, input["target"]!!)
+        input.addQuest(input.entityId!!, input["target"]!!)
         EndTurnResult()
     }
 }.register()
@@ -41,12 +31,12 @@ action {
 targetAction<Quest> {
     id = "quest_board"
     inputDisplayNameFn = { input ->
-        val gs: GameState = GameState.global()
-        "Quest Board for " + NamedComponent.get(gs.world, UUID.fromString(input["owner"]), "Unknown")
+        val locName: String = input.getName(UUID.fromString(input["owner"]))
+        "Quest Board for " + locName
     }
     getTargets = { input ->
         val town = UUID.fromString(input["owner"])
-        QuestsComponent.get(input.gameState.world, town).quests
+        input.getQuests(town)
     }
     targetAction = Ids.QUEST
 }.register()
@@ -55,8 +45,8 @@ targetAction<Quest> {
 targetAction<Quest> {
     id = "complete_quest"
     requirementsMetFn = { input ->
-        val quests = QuestsComponent.get(input.gameState.world, input.entityId)
-        if (quests != null && quests.quests.isNotEmpty()) {
+        val quests = input.getQuests(input.entityId!!)
+        if (quests.isNotEmpty()) {
             ShowAction.YES
         } else {
             ShowAction.NO
@@ -79,10 +69,8 @@ action {
     }
     requirementsMetFn = { input ->
         val questId = input["target"]
-        val quests = QuestsComponent.get(input.gameState.world, input.entityId)
-        println(questId)
-        println(quests?.quests)
-        val quest = quests?.quests?.find { it.id == questId }
+        val quests = input.getQuests(input.entityId!!)
+        val quest = quests.find { it.id == questId }
 
         if (quest != null && quest.canAfford(input)) {
             ShowAction.YES
@@ -94,13 +82,13 @@ action {
     }
     onSelectFn = { input ->
         val questId = input["target"]
-        val quests = QuestsComponent.get(input.gameState.world, input.entityId)
-        val quest = quests?.quests?.find { it.id == questId }
+        val quests = input.getQuests(input.entityId!!)
+        val quest = quests.find { it.id == questId }
 
         if (quest != null) {
             val success = quest.onComplete(input)
             if (success) {
-                quests.remove(quest)
+                input.removeQuest(input.entityId!!, questId!!)
                 StringResult("Completed quest: ${quest.getName()}", false)
             } else {
                 StringResult("Failed to complete quest: ${quest.getName()}", false)

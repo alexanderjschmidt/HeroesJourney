@@ -3,7 +3,8 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
-import heroes.journey.modlib.Position
+import heroes.journey.entities.Position
+import heroes.journey.entities.Quest
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.ItemManager
@@ -103,5 +104,26 @@ class ActionContext(
     override fun getNeighbors(regionId: UUID): List<UUID> {
         val region: RegionComponent = RegionComponent.get(gameState.getWorld(), regionId)
         return region.neighborRegionIds.stream().toList()
+    }
+
+    override fun getQuests(entityId: UUID): List<Quest> {
+        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        return questsComponent?.quests ?: emptyList()
+    }
+
+    override fun addQuest(entityId: UUID, questId: String) {
+        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        val quest = Registries.QuestManager[questId]
+        if (questsComponent != null && quest != null) {
+            questsComponent.addQuest(quest)
+        }
+    }
+
+    override fun removeQuest(entityId: UUID, questId: String) {
+        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        val quest = Registries.QuestManager[questId]
+        if (questsComponent != null && quest != null) {
+            questsComponent.remove(quest)
+        }
     }
 }
