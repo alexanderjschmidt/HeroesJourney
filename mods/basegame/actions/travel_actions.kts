@@ -2,15 +2,12 @@ import heroes.journey.GameState
 import heroes.journey.components.NamedComponent
 import heroes.journey.components.PositionComponent
 import heroes.journey.components.RegionComponent
-import heroes.journey.components.character.ActionComponent
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Position
 import heroes.journey.entities.actions.action
 import heroes.journey.entities.actions.targetAction
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.actions.results.MultiStepResult
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.utils.Lang
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
@@ -45,19 +42,10 @@ action {
             positionComponent.y, pos.x, pos.y, e
         )
 
-        val events: Queue<Runnable> = LinkedList()
-        events.add(Runnable {
-            gs.world.edit(e).create(
-                MovementComponent::class.java
-            ).path(path.reverse())
-        })
-        events.add(Runnable {
-            val inputs: HashMap<String, String> = HashMap()
-            inputs["message"] = "You have traveled to $input['target']"
-            gs.world.edit(e).create<ActionComponent>(ActionComponent::class.java)
-                .action(Registries.ActionManager.get(Ids.POPUP), inputs)
-        })
-        MultiStepResult(events)
+        gs.world.edit(e).create(
+            MovementComponent::class.java
+        ).path(path.reverse())
+        StringResult("You are traveling to $input['target']")
     }
     onSelectAIFn = { input ->
         val gs = input.gameState

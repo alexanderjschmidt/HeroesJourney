@@ -19,7 +19,6 @@ import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.modlib.actions.results.ActionListResult;
 import heroes.journey.modlib.actions.results.ActionResult;
 import heroes.journey.modlib.actions.results.EndTurnResult;
-import heroes.journey.modlib.actions.results.MultiStepResult;
 import heroes.journey.modlib.actions.results.NullResult;
 import heroes.journey.modlib.actions.results.StringResult;
 import heroes.journey.systems.GameWorld;
@@ -63,9 +62,6 @@ public class ActionSystem extends IteratingSystem {
                 }
                 case ActionListResult actions -> {
                     HUD.get().setState(new ActionSelectState(actions.list()));
-                }
-                case MultiStepResult multi -> {
-                    world.edit(entityId).create(EventQueueComponent.class).events(multi.getEvents());
                 }
                 case EndTurnResult nothing -> {
                     GameState.global().getHistory().add(action.getId(), input, id);
