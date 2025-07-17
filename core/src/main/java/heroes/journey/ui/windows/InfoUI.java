@@ -6,6 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 
+import heroes.journey.GameState;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
 
@@ -40,7 +42,7 @@ public class InfoUI extends UI {
 
     public void showInfo(InfoProvider provider, Map<String,String> input) {
         clearContent();
-        titleLabel.setText(provider.getTitle(input));
+        titleLabel.setText(provider.getTitle(new ActionContext(GameState.global(), null, false, input)));
         bodyLabel.setText(provider.getDescription(input));
         provider.fillCustomContent(contentTable, ResourceManager.get().skin, input);
         setVisible(true);

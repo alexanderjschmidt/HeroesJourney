@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;

@@ -1,9 +1,9 @@
 package heroes.journey.tilemap
 
 import heroes.journey.GameState
-import heroes.journey.entities.Position
 import heroes.journey.modlib.IFeatureType
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.Position
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries.FeatureTypeManager
 import heroes.journey.registries.TileManager

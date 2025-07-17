@@ -2,7 +2,7 @@ package heroes.journey.utils;
 
 import com.badlogic.gdx.math.Vector2;
 
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 
 public enum Direction {
     NODIRECTION("NA", -1, 0), EAST("E", 2, 180), WEST("W", 6, 0), NORTH("N", 0, 270), NORTHEAST("NE", 1,

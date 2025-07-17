@@ -3,8 +3,8 @@ package heroes.journey.entities.actions
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.results.AIOnSelectNotFound
 import heroes.journey.modlib.actions.results.ActionResult
+import heroes.journey.modlib.actions.results.NullResult
 
 // Base Action DSL
 open class ActionBuilder {
@@ -12,9 +12,8 @@ open class ActionBuilder {
     open var isReturnsActionList: Boolean = false
     var requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES }
     var onHoverFn: (ActionContext) -> Unit = {}
-    var onSelectFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() }
-    var onSelectAIFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() }
-    var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
+    var onSelectFn: (ActionContext) -> ActionResult = { NullResult() }
+    var inputDisplayNameFn: ((ActionContext) -> String)? = null
     var turnCooldown: Int = 0
     var factionCooldown: Boolean = false
 
@@ -79,7 +78,7 @@ class TargetActionBuilder<I> {
     var targetAction: String = ""
     var requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES }
     var onHoverFn: (ActionContext) -> Unit = {}
-    var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
+    var inputDisplayNameFn: ((ActionContext) -> String)? = null
 
     fun build(): Action {
         return Action(

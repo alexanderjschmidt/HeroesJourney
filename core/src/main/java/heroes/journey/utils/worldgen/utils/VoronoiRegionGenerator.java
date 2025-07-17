@@ -14,7 +14,7 @@ import java.util.UUID;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.RegionComponent;
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Random;
 

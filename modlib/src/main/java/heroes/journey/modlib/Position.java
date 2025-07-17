@@ -1,4 +1,4 @@
-package heroes.journey.entities;
+package heroes.journey.modlib;
 
 public class Position {
 

@@ -33,7 +33,7 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 import heroes.journey.registries.Registries;
 import heroes.journey.registries.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;

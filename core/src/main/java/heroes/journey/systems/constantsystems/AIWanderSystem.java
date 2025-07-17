@@ -16,12 +16,12 @@ import heroes.journey.components.character.AIWanderComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.utils.WanderType;
-import heroes.journey.entities.Position;
-import heroes.journey.utils.gamestate.Utils;
+import heroes.journey.modlib.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
 import heroes.journey.utils.ai.pathfinding.Cell;
+import heroes.journey.utils.gamestate.Utils;
 
 @All({AIWanderComponent.class, PositionComponent.class, IdComponent.class})
 public class AIWanderSystem extends IteratingSystem {

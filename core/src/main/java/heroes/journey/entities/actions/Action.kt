@@ -19,7 +19,7 @@ open class Action(
     private val requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES },
     private val onHoverFn: (ActionContext) -> Unit = {},
     private val onSelectFn: (ActionContext) -> ActionResult,
-    private val inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
+    private val inputDisplayNameFn: ((ActionContext) -> String)? = null,
     private val turnCooldown: Int = 0,
     private val factionCooldown: Boolean = false
 ) : Registrable(id), InfoProvider {
@@ -45,7 +45,7 @@ open class Action(
         return result
     }
 
-    override fun getTitle(input: Map<String, String>): String {
+    override fun getTitle(input: ActionContext): String {
         if (inputDisplayNameFn == null)
             return getName()
         val title: String = inputDisplayNameFn.invoke(input)

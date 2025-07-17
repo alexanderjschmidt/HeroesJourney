@@ -1,8 +1,5 @@
-import heroes.journey.GameState
-import heroes.journey.components.NamedComponent
 import heroes.journey.entities.actions.action
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
 // Delve Actions - included by basegame mod
@@ -10,11 +7,6 @@ import java.util.*
 // Delve Action
 action {
     id = "delve"
-    inputDisplayNameFn = { input ->
-        val gs: GameState = GameState.global()
-        val factionId: UUID = Utils.getLocation(GameState.global(), UUID.fromString(input["owner"]))
-        "Delve " + NamedComponent.get(gs.world, factionId, "Unknown")
-    }
     turnCooldown = 5
     factionCooldown = true
     onSelectFn = { input ->

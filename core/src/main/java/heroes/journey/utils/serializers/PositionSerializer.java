@@ -5,7 +5,8 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import heroes.journey.entities.Position;
+
+import heroes.journey.modlib.Position;
 
 public class PositionSerializer extends CustomSerializer<Position> {
     @Override

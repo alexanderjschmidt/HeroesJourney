@@ -1,13 +1,13 @@
 package heroes.journey.entities.actions
 
 import heroes.journey.GameState
-import heroes.journey.components.BuffsComponent
-import heroes.journey.components.InventoryComponent
-import heroes.journey.components.NamedComponent
-import heroes.journey.components.StatsComponent
+import heroes.journey.components.*
+import heroes.journey.components.character.MovementComponent
+import heroes.journey.modlib.Position
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.ItemManager
+import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
@@ -71,5 +71,37 @@ class ActionContext(
     override fun getInventory(entityId: UUID): Map<String, Int>? {
         val inventoryComponent = InventoryComponent.get((gameState as GameState).world, entityId)
         return inventoryComponent?.inventory?.mapKeys { it.key.id } ?: emptyMap()
+    }
+
+    override fun getPosition(entityId: UUID): Position {
+        val pos = PositionComponent.get((gameState as GameState).world, entityId)
+        return Position(pos.x, pos.y)
+    }
+
+    override fun travelTo(entityId: UUID, target: Position) {
+        val gs = gameState
+        val positionComponent = PositionComponent.get(gs.world, entityId)
+        val path = EntityCursorPathing().getPath(
+            gs.map, positionComponent.x,
+            positionComponent.y, target.x, target.y, entityId
+        )
+        if (isSimulation) {
+            val end = gs.entities.moveEntity(entityId, path)
+            positionComponent.setPos(end.x, end.y)
+            positionComponent.sync()
+        } else {
+            gs.world.edit(entityId).create(
+                MovementComponent::class.java
+            ).path(path.reverse())
+        }
+    }
+
+    override fun getRegion(entityId: UUID): UUID {
+        return Utils.getRegion(gameState, entityId)
+    }
+
+    override fun getNeighbors(regionId: UUID): List<UUID> {
+        val region: RegionComponent = RegionComponent.get(gameState.getWorld(), regionId)
+        return region.neighborRegionIds.stream().toList()
     }
 }

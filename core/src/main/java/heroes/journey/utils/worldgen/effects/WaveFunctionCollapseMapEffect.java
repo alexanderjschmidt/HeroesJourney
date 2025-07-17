@@ -3,7 +3,7 @@ package heroes.journey.utils.worldgen.effects;
 import java.util.function.BiFunction;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;

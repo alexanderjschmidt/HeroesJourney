@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.Position;
+import heroes.journey.modlib.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Biome;
 import lombok.Getter;
