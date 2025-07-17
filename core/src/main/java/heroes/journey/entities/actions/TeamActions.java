@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import heroes.journey.modlib.actions.ActionEntry;
+import heroes.journey.modlib.actions.IAction;
 
 public class TeamActions extends ArrayList<ActionEntry> {
 
@@ -17,7 +18,7 @@ public class TeamActions extends ArrayList<ActionEntry> {
         return actionManager;
     }
 
-    public static void addTeamAction(Action action) {
+    public static void addTeamAction(IAction action) {
         actionManager.addFirst(new ActionEntry(action.getId(), new HashMap<>(0)));
     }
 

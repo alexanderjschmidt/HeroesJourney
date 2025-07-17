@@ -1,8 +1,8 @@
-import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.targetAction
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.EndTurnResult
+import heroes.journey.modlib.actions.targetAction
 import heroes.journey.registries.Registries.StatManager
 import java.util.*
 

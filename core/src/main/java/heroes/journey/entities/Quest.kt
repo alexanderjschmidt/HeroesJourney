@@ -4,6 +4,7 @@ import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.IQuest
+import heroes.journey.modlib.Operation
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
 import java.util.*
@@ -40,10 +41,10 @@ class Quest(
             }
         }
         for ((stat, amount) in cost) {
-            playerStats.put(stat, -amount, heroes.journey.entities.tagging.Operation.ADD)
+            playerStats.put(stat, -amount, Operation.ADD)
         }
         for ((stat, amount) in rewards) {
-            playerStats.put(stat, amount, heroes.journey.entities.tagging.Operation.ADD)
+            playerStats.put(stat, amount, Operation.ADD)
         }
         if (fameReward > 0) {
             StatsComponent.addFame(actionContext.gameState.getWorld(), actionContext.entityId, fameReward)

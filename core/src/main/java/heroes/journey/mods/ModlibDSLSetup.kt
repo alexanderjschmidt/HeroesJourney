@@ -1,6 +1,7 @@
 package heroes.journey.mods
 
 import heroes.journey.modlib.*
+import heroes.journey.modlib.actions.ActionDSLProvider
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.art.TextureMapDSLImpl
 import heroes.journey.mods.items.ItemDSLImpl
@@ -28,4 +29,5 @@ fun setupModlibDSLs() {
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
     BiomeDSLProvider.instance = BiomeDSLImpl()
     FeatureGenerationDataDSLProvider.instance = FeatureGenerationDataDSLImpl()
+    ActionDSLProvider.instance = ActionDSLImpl()
 }

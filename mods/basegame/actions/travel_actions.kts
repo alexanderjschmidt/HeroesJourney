@@ -1,5 +1,5 @@
-import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.targetAction
+import heroes.journey.modlib.actions.action
+import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.ui.HUD

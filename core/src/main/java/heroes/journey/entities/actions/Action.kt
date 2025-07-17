@@ -5,6 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
+import heroes.journey.modlib.actions.IAction
+import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.registries.Registrable
@@ -15,41 +17,44 @@ import java.util.*
 
 open class Action(
     id: String,
-    val isReturnsActionList: Boolean = false,
-    private val requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES },
-    private val onHoverFn: (ActionContext) -> Unit = {},
-    private val onSelectFn: (ActionContext) -> ActionResult,
-    private val inputDisplayNameFn: ((ActionContext) -> String)? = null,
-    private val turnCooldown: Int = 0,
-    private val factionCooldown: Boolean = false
-) : Registrable(id), InfoProvider {
+    override val isReturnsActionList: Boolean = false,
+    override val requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES },
+    override val onHoverFn: (IActionContext) -> Unit = {},
+    override val onSelectFn: (IActionContext) -> ActionResult,
+    override val inputDisplayNameFn: ((IActionContext) -> String)? = null,
+    override val turnCooldown: Int = 0,
+    override val factionCooldown: Boolean = false
+) : Registrable(id), InfoProvider, IAction {
 
     val hasInput: Boolean
         get() = inputDisplayNameFn != null
 
-    open fun requirementsMet(input: ActionContext): ShowAction {
-        val cooldownComponent = getCooldownComponent(input)
+    fun requirementsMet(input: IActionContext): ShowAction {
+        val ctx = input as? ActionContext ?: error("Expected ActionContext")
+        val cooldownComponent = getCooldownComponent(ctx)
         if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(id)) return ShowAction.GRAYED
-        return requirementsMetFn(input)
+        return requirementsMetFn(ctx)
     }
 
-    fun onHover(input: ActionContext) {
+    fun onHover(input: IActionContext) {
+        val ctx = input as? ActionContext ?: error("Expected ActionContext")
         HUD.get().cursor.setMapPointerLoc(null)
-        onHoverFn(input)
+        onHoverFn(ctx)
     }
 
-    open fun onSelect(input: ActionContext): ActionResult? {
-        val cooldownComponent = getCooldownComponent(input)
+    open fun onSelect(input: IActionContext): ActionResult {
+        val ctx = input as? ActionContext ?: error("Expected ActionContext")
+        val cooldownComponent = getCooldownComponent(ctx)
         cooldownComponent?.cooldowns?.set(id, turnCooldown)
-        val result: ActionResult = onSelectFn(input)
+        val result: ActionResult = onSelectFn(ctx)
         return result
     }
 
     override fun getTitle(input: ActionContext): String {
         if (inputDisplayNameFn == null)
             return getName()
-        val title: String = inputDisplayNameFn.invoke(input)
-        return title
+        val title: String? = inputDisplayNameFn?.let { it(input) }
+        return title!!
     }
 
     override fun getDescription(input: Map<String, String>): String = getDescription()

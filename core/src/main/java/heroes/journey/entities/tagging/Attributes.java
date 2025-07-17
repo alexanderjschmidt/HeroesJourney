@@ -10,8 +10,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import heroes.journey.modlib.IAttributes;
 import heroes.journey.modlib.IStat;
+import heroes.journey.modlib.Operation;
 
 public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     private Operation defaultOperation = Operation.ADD;
@@ -77,11 +81,15 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
         return this;
     }
 
-    public Attributes add(Stat stat, Integer value) {
-        return put(stat, value, Operation.ADD);
+    @NotNull
+    @Override
+    public IAttributes add(@NotNull IStat stat, int value) {
+        return put((Stat)stat, value, Operation.ADD);
     }
 
-    public Attributes add(String stat, Integer value) {
+    @NotNull
+    @Override
+    public IAttributes add(@Nullable String stat, int value) {
         return put(StatManager.get(stat), value, Operation.ADD);
     }
 

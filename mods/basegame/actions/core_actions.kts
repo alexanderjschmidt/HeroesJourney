@@ -1,8 +1,8 @@
-import heroes.journey.entities.actions.Action
-import heroes.journey.entities.actions.action
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.ActionEntry
+import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.ActionListResult
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.results.StringResult
@@ -20,7 +20,7 @@ action {
 
 object TrainingOptions {
     val optionsList: MutableList<ActionEntry> = ArrayList(4)
-    fun addOption(option: Action) {
+    fun addOption(option: IAction) {
         optionsList.add(ActionEntry(option.id, hashMapOf()))
     }
 }

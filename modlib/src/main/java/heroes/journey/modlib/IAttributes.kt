@@ -33,6 +33,13 @@ interface IAttributes {
      * @return the direct value for the stat
      */
     fun getDirect(stat: IStat): Int
+
+    fun add(
+        stat: IStat,
+        value: Int
+    ): IAttributes
+
+    fun add(stat: String?, value: Int): IAttributes
 }
 
 /**
@@ -58,4 +65,4 @@ object AttributesDSLProvider {
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
 fun attributes(vararg pairs: Pair<String, Int>): IAttributes =
-    AttributesDSLProvider.instance.attributes(*pairs) 
+    AttributesDSLProvider.instance.attributes(*pairs)

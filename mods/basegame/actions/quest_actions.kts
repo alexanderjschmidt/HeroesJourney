@@ -1,10 +1,10 @@
-import heroes.journey.entities.Quest
-import heroes.journey.entities.actions.action
-import heroes.journey.entities.actions.targetAction
+import heroes.journey.modlib.IQuest
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.results.StringResult
+import heroes.journey.modlib.actions.targetAction
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.QuestManager
 import java.util.*
@@ -27,7 +27,7 @@ action {
 }.register()
 
 // Quest Board
-targetAction<Quest> {
+targetAction<IQuest> {
     id = "quest_board"
     inputDisplayNameFn = { input ->
         val locName: String = input.getName(UUID.fromString(input["owner"]))
@@ -41,7 +41,7 @@ targetAction<Quest> {
 }.register()
 
 // Complete Quest Action (shows list of available quests)
-targetAction<Quest> {
+targetAction<IQuest> {
     id = "complete_quest"
     requirementsMetFn = { input ->
         val quests = input.getQuests(input.entityId!!)
@@ -87,9 +87,10 @@ action {
             val success = quest.onComplete(input)
             if (success) {
                 input.removeQuest(input.entityId!!, questId!!)
-                StringResult("Completed quest: ${quest.getName()}", false)
+                // TODO make this use registrables getName()
+                StringResult("Completed quest: ${questId}", false)
             } else {
-                StringResult("Failed to complete quest: ${quest.getName()}", false)
+                StringResult("Failed to complete quest: ${questId}", false)
             }
         } else {
             StringResult("Quest not found", false)

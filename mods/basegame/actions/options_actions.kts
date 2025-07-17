@@ -1,4 +1,4 @@
-import heroes.journey.entities.actions.booleanOptionAction
+import heroes.journey.modlib.actions.booleanOptionAction
 import heroes.journey.utils.input.Options
 
 // Options Actions - included by basegame mod

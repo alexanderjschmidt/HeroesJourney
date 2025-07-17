@@ -17,8 +17,8 @@ class AttributesBuilder {
     fun build(): Attributes = attributes
 
     fun attr(tagName: String, value: Int) {
-        val tag = StatManager.get(tagName)
-        attributes.add(tag, value)
+        val tag = StatManager[tagName]
+        attributes.add(tag!!, value)
     }
 
     fun set(tag: Stat, value: Int) {

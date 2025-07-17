@@ -56,7 +56,6 @@ public class LoadingScreen implements Screen {
         this.shapeRenderer = new ShapeRenderer();
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();
-        createCoreActions();
     }
 
     @Override
@@ -88,6 +87,7 @@ public class LoadingScreen implements Screen {
         if (!modFindingStarted) {
             // Set up modlib DSLs before finding mods
             setupModlibDSLs();
+            createCoreActions();
             // Start finding mods in background
             File modsFolder = new File("mods");
             ScriptModLoader.INSTANCE.startFindingModsFrom(modsFolder, DEBUG);
