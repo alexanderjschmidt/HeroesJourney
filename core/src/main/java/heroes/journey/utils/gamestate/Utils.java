@@ -8,7 +8,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
 import heroes.journey.modlib.actions.results.StringResult;
@@ -24,7 +24,7 @@ public class Utils {
         return gameState.getEntities().getLocation(positionComponent.getX(), positionComponent.getY());
     }
 
-    public static UUID getRegion(ActionInput input) {
+    public static UUID getRegion(ActionContext input) {
         return getRegion(input.getGameState(), input.getEntityId());
     }
 
@@ -37,7 +37,7 @@ public class Utils {
         return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()];
     }
 
-    public static StringResult addItem(ActionInput input, Item item, int count) {
+    public static StringResult addItem(ActionContext input, Item item, int count) {
         return addItem(input.getGameState(), input.getEntityId(), item, count);
     }
 

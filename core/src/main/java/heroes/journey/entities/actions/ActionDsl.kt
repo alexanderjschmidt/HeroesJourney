@@ -10,10 +10,10 @@ import heroes.journey.modlib.actions.results.ActionResult
 open class ActionBuilder {
     var id: String = ""
     open var isReturnsActionList: Boolean = false
-    var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
-    var onHoverFn: (ActionInput) -> Unit = {}
-    var onSelectFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
-    var onSelectAIFn: (ActionInput) -> ActionResult = { AIOnSelectNotFound() }
+    var requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (ActionContext) -> Unit = {}
+    var onSelectFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() }
+    var onSelectAIFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() }
     var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
     var turnCooldown: Int = 0
     var factionCooldown: Boolean = false
@@ -78,10 +78,10 @@ fun action(init: ActionBuilder.() -> Unit): Action {
  */
 class TargetActionBuilder<I> {
     var id: String = ""
-    var getTargets: (ActionInput) -> List<I> = { emptyList() }
+    var getTargets: (ActionContext) -> List<I> = { emptyList() }
     var targetAction: String = ""
-    var requirementsMetFn: (ActionInput) -> ShowAction = { ShowAction.YES }
-    var onHoverFn: (ActionInput) -> Unit = {}
+    var requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (ActionContext) -> Unit = {}
     var inputDisplayNameFn: ((Map<String, String>) -> String)? = null
 
     fun build(): Action {

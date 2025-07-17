@@ -1,7 +1,7 @@
 package heroes.journey.entities
 
 import heroes.journey.components.StatsComponent
-import heroes.journey.entities.actions.ActionInput
+import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.IQuest
 import heroes.journey.registries.Registrable
@@ -19,9 +19,9 @@ class Quest(
     }
 
     override fun canAfford(input: Any): Boolean {
-        val actionInput = input as? ActionInput ?: return false
+        val actionContext = input as? ActionContext ?: return false
         val playerStats =
-            StatsComponent.get(actionInput.gameState.getWorld(), actionInput.entityId) ?: return false
+            StatsComponent.get(actionContext.gameState.getWorld(), actionContext.entityId) ?: return false
         for ((stat, requiredAmount) in cost) {
             if (playerStats[stat]!! < requiredAmount) {
                 return false
@@ -31,8 +31,8 @@ class Quest(
     }
 
     override fun onComplete(input: Any): Boolean {
-        val actionInput = input as? ActionInput ?: return false
-        val playerStats = StatsComponent.get(actionInput.gameState.getWorld(), actionInput.entityId)
+        val actionContext = input as? ActionContext ?: return false
+        val playerStats = StatsComponent.get(actionContext.gameState.getWorld(), actionContext.entityId)
         if (playerStats == null) return false
         for ((stat, requiredAmount) in cost) {
             if (playerStats[stat]!! < requiredAmount) {
@@ -46,7 +46,7 @@ class Quest(
             playerStats.put(stat, amount, heroes.journey.entities.tagging.Operation.ADD)
         }
         if (fameReward > 0) {
-            StatsComponent.addFame(actionInput.gameState.getWorld(), actionInput.entityId, fameReward)
+            StatsComponent.addFame(actionContext.gameState.getWorld(), actionContext.entityId, fameReward)
         }
         return true
     }

@@ -15,7 +15,7 @@ import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.modlib.actions.results.ActionListResult;
 import heroes.journey.modlib.actions.results.ActionResult;
 import heroes.journey.modlib.actions.results.EndTurnResult;
@@ -42,7 +42,7 @@ public class ActionSystem extends IteratingSystem {
         }
 
         ActionComponent actionComponent = ActionComponent.get(world, id);
-        ActionInput input = new ActionInput(world.getGameState(), id, actionComponent.input());
+        ActionContext input = new ActionContext(world.getGameState(), id, actionComponent.input());
         Action action = actionComponent.getAction();
         ActionResult result = action.onSelect(input, false);
         if (result != null) {

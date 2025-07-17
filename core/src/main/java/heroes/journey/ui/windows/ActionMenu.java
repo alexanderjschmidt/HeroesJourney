@@ -15,7 +15,7 @@ import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
@@ -120,7 +120,7 @@ public class ActionMenu extends UI {
         @Override
         public void onHover() {
             ActionEntry actionEntry = actions.getSelected().entry();
-            ActionInput input = new ActionInput(GameState.global(), HUD.get().getCursor().getSelected(),
+            ActionContext input = new ActionContext(GameState.global(), HUD.get().getCursor().getSelected(),
                 actionEntry.getInput());
             Action action = ActionManager.get(actionEntry.getActionId());
             action.onHover(input);

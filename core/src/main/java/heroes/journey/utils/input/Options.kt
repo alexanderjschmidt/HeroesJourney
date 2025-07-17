@@ -1,7 +1,7 @@
 package heroes.journey.utils.input
 
 import heroes.journey.GameState
-import heroes.journey.entities.actions.ActionInput
+import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.ActionEntry
@@ -26,7 +26,7 @@ object Options {
         val action = Registries.ActionManager[optionAction]
         if (action is BooleanOptionAction) {
             action.onSelect(
-                ActionInput(
+                ActionContext(
                     GameState.global()
                 ), false
             )

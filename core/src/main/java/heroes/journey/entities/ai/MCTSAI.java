@@ -10,7 +10,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.actions.ShowAction;
@@ -38,7 +38,7 @@ public class MCTSAI implements AI, Scorer {
         UUID playingEntity = gameState.getCurrentEntity();
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
-        ActionInput input = new ActionInput(gameState, playingEntity);
+        ActionContext input = new ActionContext(gameState, playingEntity);
         addUsableActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), input,
             position);
         return possibleActions;
@@ -52,10 +52,10 @@ public class MCTSAI implements AI, Scorer {
     private void addUsableActions(
         List<QueuedAction> possibleActions,
         List<ActionEntry> actions,
-        ActionInput inputBase,
+        ActionContext inputBase,
         PositionComponent position) {
         for (ActionEntry action : actions) {
-            ActionInput input = new ActionInput(inputBase.getGameState(), inputBase.getEntityId(),
+            ActionContext input = new ActionContext(inputBase.getGameState(), inputBase.getEntityId(),
                 action.getInput());
             Action act = ActionManager.get(action.getActionId());
             if (act.isReturnsActionList()) {

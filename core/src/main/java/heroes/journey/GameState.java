@@ -21,13 +21,14 @@ import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.entities.EntityManager;
 import heroes.journey.entities.Position;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.models.MapData;
+import heroes.journey.modlib.IGameState;
 import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
@@ -45,7 +46,7 @@ import heroes.journey.utils.serializers.PositionSerializer;
 import heroes.journey.utils.serializers.TileMapSaveDataSerializer;
 import heroes.journey.utils.serializers.UUIDSerializer;
 
-public class GameState implements Cloneable {
+public class GameState implements Cloneable, IGameState {
 
     private static GameState gameState;
     private int width, height;
@@ -127,7 +128,7 @@ public class GameState implements Cloneable {
         ActionEntry actionEntry = queuedAction.getAction();
         history.add(actionEntry, e);
         ActionManager.get(actionEntry.getActionId())
-            .onSelect(new ActionInput(this, e, actionEntry.getInput()), true);
+            .onSelect(new ActionContext(this, e, actionEntry.getInput()), true);
         // If action adds movement
         // TODO remove this, onSelectAI should handle this
         MovementComponent movement = MovementComponent.get(world, e);

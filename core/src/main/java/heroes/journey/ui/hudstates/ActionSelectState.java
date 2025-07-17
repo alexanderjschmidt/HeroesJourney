@@ -9,7 +9,7 @@ import java.util.UUID;
 import com.badlogic.gdx.Gdx;
 
 import heroes.journey.GameState;
-import heroes.journey.entities.actions.ActionInput;
+import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.actions.ShowAction;
 import heroes.journey.ui.HUD;
@@ -30,7 +30,7 @@ public class ActionSelectState extends HUDState {
         return input.stream()
             .map(action -> {
                 ShowAction result = ActionManager.get(action.getActionId())
-                    .requirementsMet(new ActionInput(GameState.global(), entityId, action.getInput()));
+                    .requirementsMet(new ActionContext(GameState.global(), entityId, action.getInput()));
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)
