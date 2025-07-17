@@ -11,6 +11,7 @@ import heroes.journey.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
+import heroes.journey.utils.input.Options
 
 fun createCoreActions() {
     // Open Action Menu
@@ -74,4 +75,12 @@ fun createCoreActions() {
             StringResult(input["message"])
         }
     }.register()
+
+    action {
+        id = "options"
+        isReturnsActionList = true
+        onSelectFn = { input ->
+            ActionListResult(Options.optionsList)
+        }
+    }.register().also { TeamActions.addTeamAction(it) }
 }

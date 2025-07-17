@@ -1,12 +1,7 @@
 import heroes.journey.GameState
-import heroes.journey.components.InventoryComponent
 import heroes.journey.components.NamedComponent
-import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.action
-import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.registries.Registries.StatManager
-import heroes.journey.utils.gamestate.FightUtils
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
@@ -23,38 +18,25 @@ action {
     turnCooldown = 5
     factionCooldown = true
     onSelectFn = { input ->
-        val gs = input.gameState
         val e = input.entityId
         val dungeon = UUID.fromString(input["owner"])
         val log = StringBuilder()
-        if (FightUtils.struggle(gs, e, dungeon, StatManager[Ids.STAT_BODY])) {
-            log.append("You have completed the ")
-                .append(NamedComponent.get(gs.world, dungeon, "Dungeon"))
-                .append("!\nYour rewards are:\n")
+        log.append("You have completed the ")
+            .append(input.getName(dungeon))
+            .append("!\nYour rewards are:\n")
 
-            val inventoryComponent = InventoryComponent.get(gs.world, dungeon)
-            if (inventoryComponent != null) {
-                for (item in inventoryComponent.inventory.keys) {
-                    Utils.addItem(
-                        input, item,
-                        inventoryComponent.inventory[item]!!
-                    )
-                    log.append(inventoryComponent.inventory[item])
-                        .append("x ")
-                        .append(item.id)
-                        .append("\n")
-                }
+        val inventory = input.getInventory(dungeon)
+        if (inventory != null) {
+            for (item in inventory.keys) {
+                input.addItem(e!!, item, inventory[item]!!)
+                log.append(inventory[item])
+                    .append("x ")
+                    .append(item)
+                    .append("\n")
             }
-            StatsComponent.addFame(
-                gs.getWorld(),
-                e,
-                5
-            )
-            log.append("You have gained ").append(5).append(" fame")
-        } else {
-            log.append("You have lost too much health and fainted")
-            FightUtils.faint(gs.world, e)
         }
+        input.addFame(e!!, 5)
+        log.append("You have gained ").append(5).append(" fame")
 
         StringResult(log.toString())
     }

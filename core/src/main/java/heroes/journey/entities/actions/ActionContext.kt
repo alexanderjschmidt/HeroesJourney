@@ -2,9 +2,13 @@ package heroes.journey.entities.actions
 
 import heroes.journey.GameState
 import heroes.journey.components.BuffsComponent
+import heroes.journey.components.InventoryComponent
+import heroes.journey.components.NamedComponent
 import heroes.journey.components.StatsComponent
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.registries.Registries
+import heroes.journey.registries.Registries.ItemManager
+import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
 class ActionContext(
@@ -38,5 +42,22 @@ class ActionContext(
         val buffsComponent = BuffsComponent.get((gameState as GameState).world, entityId)
         val buff = Registries.BuffManager.get(buffId)
         buffsComponent.add(buff)
+    }
+
+    override fun addItem(entityId: UUID, itemId: String, amount: Int) {
+        Utils.addItem(this, ItemManager[itemId], amount)
+    }
+
+    override fun addFame(entityId: UUID, amount: Int) {
+        StatsComponent.addFame((gameState as GameState).world, entityId, amount)
+    }
+
+    override fun getName(entityId: UUID): String {
+        return NamedComponent.get((gameState as GameState).world, entityId, "Unknown")
+    }
+
+    override fun getInventory(entityId: UUID): Map<String, Int>? {
+        val inventoryComponent = InventoryComponent.get((gameState as GameState).world, entityId)
+        return inventoryComponent?.inventory?.mapKeys { it.key.id } ?: emptyMap()
     }
 }

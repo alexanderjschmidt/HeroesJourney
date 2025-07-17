@@ -28,4 +28,8 @@ abstract class IActionContext(
     abstract fun addStat(entityId: UUID, statId: String, delta: Int)
     abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)
     abstract fun addBuff(entityId: UUID, buffId: String)
+    abstract fun addItem(entityId: UUID, itemId: String, amount: Int)
+    abstract fun addFame(entityId: UUID, amount: Int)
+    abstract fun getName(entityId: UUID): String
+    abstract fun getInventory(entityId: UUID): Map<String, Int>?
 }
