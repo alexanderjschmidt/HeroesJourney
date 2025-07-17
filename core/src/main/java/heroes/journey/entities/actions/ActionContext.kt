@@ -3,8 +3,9 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
-import heroes.journey.entities.Position
 import heroes.journey.entities.Quest
+import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.Position
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.ItemManager
@@ -125,5 +126,28 @@ class ActionContext(
         if (questsComponent != null && quest != null) {
             questsComponent.remove(quest)
         }
+    }
+
+    override fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID) {
+        val regionComponent = RegionComponent.get((gameState as GameState).world, regionId)
+        regionComponent?.removeChallenge(challengeId)
+        (gameState as GameState).world.delete(entityId)
+    }
+
+    override fun getStats(entityId: UUID): Attributes {
+        return StatsComponent.get((gameState as GameState).world, entityId)
+    }
+
+    override fun getRealmAttention(statId: String, requested: Int): Int {
+        val attention = (gameState as GameState).getRealmsAttention()
+        val available = attention.get(statId)
+        val actual = minOf(requested, available)
+        attention.put(statId, attention.get(statId) - actual)
+        return actual
+    }
+
+    override fun getChallenges(regionId: UUID): List<UUID> {
+        val regionComponent = RegionComponent.get(gameState.world, regionId)
+        return regionComponent.challenges
     }
 }

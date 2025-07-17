@@ -1,4 +1,3 @@
-import heroes.journey.components.QuestsComponent
 import heroes.journey.entities.Quest
 import heroes.journey.entities.actions.action
 import heroes.journey.entities.actions.targetAction
@@ -53,8 +52,7 @@ targetAction<Quest> {
         }
     }
     getTargets = { input ->
-        val quests = QuestsComponent.get(input.gameState.world, input.entityId)
-        quests?.quests!!
+        input.getQuests(input.entityId!!)
     }
     targetAction = "complete_specific_quest"
 }.register()

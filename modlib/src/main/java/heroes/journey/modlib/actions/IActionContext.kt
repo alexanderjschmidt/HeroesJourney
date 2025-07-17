@@ -1,11 +1,10 @@
 package heroes.journey.modlib.actions
 
+import heroes.journey.modlib.IAttributes
 import heroes.journey.modlib.IGameState
+import heroes.journey.modlib.IQuest
 import heroes.journey.modlib.Position
-import heroes.journey.modlib.Quest
 import java.util.*
-
-// You may need to import or define a Position class in modlib if not already present
 
 abstract class IActionContext(
     open val gameState: IGameState,
@@ -41,7 +40,11 @@ abstract class IActionContext(
     abstract fun travelTo(entityId: UUID, target: Position)
     abstract fun getRegion(entityId: UUID): UUID
     abstract fun getNeighbors(regionId: UUID): List<UUID>
-    abstract fun getQuests(entityId: UUID): List<Quest>
+    abstract fun getQuests(entityId: UUID): List<IQuest>
     abstract fun addQuest(entityId: UUID, questId: String)
     abstract fun removeQuest(entityId: UUID, questId: String)
+    abstract fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID)
+    abstract fun getStats(entityId: UUID): IAttributes
+    abstract fun getRealmAttention(statId: String, requested: Int): Int
+    abstract fun getChallenges(regionId: UUID): List<UUID>
 }
