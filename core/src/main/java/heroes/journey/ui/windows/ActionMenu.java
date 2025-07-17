@@ -121,7 +121,7 @@ public class ActionMenu extends UI {
         public void onHover() {
             ActionEntry actionEntry = actions.getSelected().entry();
             ActionContext input = new ActionContext(GameState.global(), HUD.get().getCursor().getSelected(),
-                actionEntry.getInput());
+                false, actionEntry.getInput());
             Action action = ActionManager.get(actionEntry.getActionId());
             action.onHover(input);
             infoUI.showInfo(action, actionEntry.getInput());

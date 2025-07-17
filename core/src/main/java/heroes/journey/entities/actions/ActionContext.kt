@@ -14,12 +14,24 @@ import java.util.*
 class ActionContext(
     private val innerGameState: GameState,
     entityId: UUID? = null,
+    isSimulation: Boolean = false,
     input: Map<String, String>
 ) :
-    IActionContext(innerGameState, entityId, input) {
+    IActionContext(innerGameState, entityId, isSimulation, input) {
 
-    constructor(innerGameState: GameState) : this(innerGameState, null, hashMapOf())
-    constructor(innerGameState: GameState, entityId: UUID) : this(innerGameState, entityId, hashMapOf())
+    constructor(innerGameState: GameState, isSimulation: Boolean) : this(
+        innerGameState,
+        null,
+        isSimulation,
+        hashMapOf()
+    )
+
+    constructor(innerGameState: GameState, entityId: UUID, isSimulation: Boolean) : this(
+        innerGameState,
+        entityId,
+        isSimulation,
+        hashMapOf()
+    )
 
     override val gameState: GameState
         get() = innerGameState

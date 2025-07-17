@@ -70,7 +70,7 @@ public class QuestsDisplay extends Table {
         }
 
         // Show affordability status
-        ActionContext input = new ActionContext(GameState.global(), entityId);
+        ActionContext input = new ActionContext(GameState.global(), entityId, false);
         if (quest.canAfford(input)) {
             sb.append("  [CAN AFFORD]");
         } else {

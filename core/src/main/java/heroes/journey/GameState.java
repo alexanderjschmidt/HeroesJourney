@@ -128,9 +128,9 @@ public class GameState implements Cloneable, IGameState {
         ActionEntry actionEntry = queuedAction.getAction();
         history.add(actionEntry, e);
         ActionManager.get(actionEntry.getActionId())
-            .onSelect(new ActionContext(this, e, actionEntry.getInput()), true);
+            .onSelect(new ActionContext(this, e, true, actionEntry.getInput()));
         // If action adds movement
-        // TODO remove this, onSelectAI should handle this
+        // TODO remove this, onSelect should handle this
         MovementComponent movement = MovementComponent.get(world, e);
         if (movement != null) {
             PositionComponent positionComponent = PositionComponent.get(world, e);

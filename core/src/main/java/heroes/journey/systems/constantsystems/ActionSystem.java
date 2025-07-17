@@ -41,9 +41,9 @@ public class ActionSystem extends IteratingSystem {
         }
 
         ActionComponent actionComponent = ActionComponent.get(world, id);
-        ActionContext input = new ActionContext(world.getGameState(), id, actionComponent.input());
+        ActionContext input = new ActionContext(world.getGameState(), id, false, actionComponent.input());
         Action action = actionComponent.getAction();
-        ActionResult result = action.onSelect(input, false);
+        ActionResult result = action.onSelect(input);
         if (result != null) {
             switch (result) {
                 case StringResult str -> {

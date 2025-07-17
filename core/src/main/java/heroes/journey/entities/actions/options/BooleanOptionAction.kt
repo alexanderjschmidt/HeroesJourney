@@ -2,7 +2,6 @@ package heroes.journey.entities.actions.options
 
 import heroes.journey.entities.actions.ActionContext
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.results.AIOnSelectNotFound
 import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.modlib.actions.results.NullResult
 import heroes.journey.registries.Registries
@@ -12,17 +11,15 @@ class BooleanOptionAction(
     requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES },
     onHoverFn: (ActionContext) -> Unit = {},
     onSelectFn: (ActionContext) -> ActionResult,
-    onSelectAIFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() },
     var isTrue: Boolean = true
 ) : OptionAction(
     id,
     requirementsMetFn,
     onHoverFn,
     onSelectFn,
-    onSelectAIFn,
     isTrue
 ) {
-    override fun onSelect(input: ActionContext, ai: Boolean): ActionResult {
+    override fun onSelect(input: ActionContext): ActionResult {
         isTrue = !isTrue
         value = isTrue
         return NullResult()

@@ -27,8 +27,8 @@ object Options {
         if (action is BooleanOptionAction) {
             action.onSelect(
                 ActionContext(
-                    GameState.global()
-                ), false
+                    GameState.global(), false
+                )
             )
         }
     }

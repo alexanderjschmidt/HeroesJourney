@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.results.AIOnSelectNotFound
 import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.registries.Registrable
 import heroes.journey.registries.Registries
@@ -20,7 +19,6 @@ open class Action(
     private val requirementsMetFn: (ActionContext) -> ShowAction = { ShowAction.YES },
     private val onHoverFn: (ActionContext) -> Unit = {},
     private val onSelectFn: (ActionContext) -> ActionResult,
-    private val onSelectAIFn: (ActionContext) -> ActionResult = { AIOnSelectNotFound() },
     private val inputDisplayNameFn: ((Map<String, String>) -> String)? = null,
     private val turnCooldown: Int = 0,
     private val factionCooldown: Boolean = false
@@ -40,17 +38,10 @@ open class Action(
         onHoverFn(input)
     }
 
-    open fun onSelect(input: ActionContext, ai: Boolean = false): ActionResult? {
+    open fun onSelect(input: ActionContext): ActionResult? {
         val cooldownComponent = getCooldownComponent(input)
         cooldownComponent?.cooldowns?.set(id, turnCooldown)
-        if (ai) {
-            val aiResult = onSelectAIFn(input)
-            if (aiResult !is AIOnSelectNotFound) {
-                return aiResult
-            }
-        }
         val result: ActionResult = onSelectFn(input)
-        println(result.toString())
         return result
     }
 
@@ -83,7 +74,8 @@ open class Action(
         if (cooldown == null) {
             cooldown = Label("", skin)
         }
-        val actionContext: ActionContext = ActionContext(GameState.global(), GameState.global().currentEntity)
+        val actionContext: ActionContext =
+            ActionContext(GameState.global(), GameState.global().currentEntity, false)
         actionContext.putAll(input)
         val cooldownComponent = getCooldownComponent(
             actionContext

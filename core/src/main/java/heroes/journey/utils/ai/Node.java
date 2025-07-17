@@ -88,8 +88,12 @@ public class Node {
         int depth = 0;
         while (scorer.getScore(gameState, playingEntity) > 0 && depth < DEPTH_TO_SIMULATE) {
             long start = System.nanoTime();
-            List<QueuedAction> QueuedActions = scorer.getPossibleQueuedActions(gameState);
-            QueuedAction randomQueuedAction = QueuedActions.get(Random.get().nextInt(QueuedActions.size()));
+            List<QueuedAction> queuedActions = scorer.getPossibleQueuedActions(gameState);
+            // TODO this feels like it shouldnt ever happen, they always have access to rest
+            if (queuedActions.isEmpty()) {
+                break;
+            }
+            QueuedAction randomQueuedAction = queuedActions.get(Random.get().nextInt(queuedActions.size()));
             gameState = gameState.applyAction(randomQueuedAction);
             depth++;
         }

@@ -30,7 +30,8 @@ public class ActionSelectState extends HUDState {
         return input.stream()
             .map(action -> {
                 ShowAction result = ActionManager.get(action.getActionId())
-                    .requirementsMet(new ActionContext(GameState.global(), entityId, action.getInput()));
+                    .requirementsMet(
+                        new ActionContext(GameState.global(), entityId, false, action.getInput()));
                 return new AbstractMap.SimpleEntry<>(action, result);
             })
             .filter(entry -> entry.getValue() != ShowAction.NO)

@@ -6,6 +6,7 @@ import java.util.*
 abstract class IActionContext(
     open val gameState: IGameState,
     val entityId: UUID? = null,
+    val isSimulation: Boolean = false,
     input: Map<String, String>
 ) :
     HashMap<String, String>() {

@@ -38,7 +38,7 @@ public class MCTSAI implements AI, Scorer {
         UUID playingEntity = gameState.getCurrentEntity();
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
-        ActionContext input = new ActionContext(gameState, playingEntity);
+        ActionContext input = new ActionContext(gameState, playingEntity, true);
         addUsableActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), input,
             position);
         return possibleActions;
@@ -55,11 +55,11 @@ public class MCTSAI implements AI, Scorer {
         ActionContext inputBase,
         PositionComponent position) {
         for (ActionEntry action : actions) {
-            ActionContext input = new ActionContext(inputBase.getGameState(), inputBase.getEntityId(),
+            ActionContext input = new ActionContext(inputBase.getGameState(), inputBase.getEntityId(), true,
                 action.getInput());
             Action act = ActionManager.get(action.getActionId());
             if (act.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult)act.onSelect(input, false);
+                ActionListResult result = (ActionListResult)act.onSelect(input);
                 assert result != null;
                 addUsableActions(possibleActions, result.list(), input, position);
             } else {

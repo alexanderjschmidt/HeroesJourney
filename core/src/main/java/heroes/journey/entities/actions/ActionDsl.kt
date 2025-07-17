@@ -24,7 +24,6 @@ open class ActionBuilder {
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn,
         inputDisplayNameFn = inputDisplayNameFn,
         turnCooldown = turnCooldown,
         factionCooldown = factionCooldown
@@ -44,7 +43,6 @@ open class OptionActionBuilder : ActionBuilder() {
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn,
         1
     ) {}
 }
@@ -63,7 +61,6 @@ class BooleanOptionActionBuilder : OptionActionBuilder() {
         requirementsMetFn = requirementsMetFn,
         onHoverFn = onHoverFn,
         onSelectFn = onSelectFn,
-        onSelectAIFn = onSelectAIFn,
         isTrue = isTrue
     )
 }
@@ -102,7 +99,6 @@ class TargetActionBuilder<I> {
                 }
                 heroes.journey.modlib.actions.results.ActionListResult(actionOptions)
             },
-            onSelectAIFn = { heroes.journey.modlib.actions.results.AIOnSelectNotFound() },
             inputDisplayNameFn = inputDisplayNameFn
         )
     }

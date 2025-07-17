@@ -91,7 +91,7 @@ public class InventoryDisplay extends Table {
                 case Consumable:
                     removeItem((Item)selectedItem);
                     ConsumableItem c = (ConsumableItem)selectedItem;
-                    c.consume(new ActionContext(GameState.global(), entityId));
+                    c.consume(new ActionContext(GameState.global(), entityId, false));
                     break;
             }
             equipmentDisplay.refreshEntity();
