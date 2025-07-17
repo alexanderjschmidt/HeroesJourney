@@ -1,6 +1,7 @@
 package heroes.journey.entities.actions
 
 import heroes.journey.GameState
+import heroes.journey.components.StatsComponent
 import heroes.journey.modlib.actions.IActionContext
 import java.util.*
 
@@ -16,4 +17,18 @@ class ActionContext(
 
     override val gameState: GameState
         get() = innerGameState
+
+    override fun getStat(entityId: UUID, statId: String): Int {
+        val stats = StatsComponent.get((gameState as GameState).world, entityId)
+        return stats?.get(statId) ?: 0
+    }
+
+    override fun addStat(entityId: UUID, statId: String, delta: Int) {
+        val stats = StatsComponent.get((gameState as GameState).world, entityId)
+        stats?.add(statId, delta)
+    }
+
+    override fun adjustStat(entityId: UUID, statId: String, delta: Int) {
+        StatsComponent.adjustStat((gameState as GameState).world, entityId, statId, delta)
+    }
 }

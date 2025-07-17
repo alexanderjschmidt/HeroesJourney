@@ -7,7 +7,8 @@ abstract class IActionContext(
     open val gameState: IGameState,
     val entityId: UUID? = null,
     input: Map<String, String>
-) : HashMap<String, String>() {
+) :
+    HashMap<String, String>() {
 
     init {
         for ((key, value) in input) {
@@ -22,4 +23,8 @@ abstract class IActionContext(
         }
         return copy
     }
+
+    abstract fun getStat(entityId: UUID, statId: String): Int
+    abstract fun addStat(entityId: UUID, statId: String, delta: Int)
+    abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)
 }

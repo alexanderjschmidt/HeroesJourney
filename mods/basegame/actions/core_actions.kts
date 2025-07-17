@@ -1,10 +1,11 @@
 import heroes.journey.Application
 import heroes.journey.components.BuffsComponent
-import heroes.journey.components.StatsComponent
 import heroes.journey.components.character.ActionComponent
+import heroes.journey.entities.actions.Action
 import heroes.journey.entities.actions.TeamActions
 import heroes.journey.entities.actions.action
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.ActionEntry
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionListResult
 import heroes.journey.modlib.actions.results.EndTurnResult
@@ -85,9 +86,9 @@ action {
 }.register()
 
 object TrainingOptions {
-    val optionsList: MutableList<heroes.journey.entities.actions.Action> = ArrayList(4)
-    fun addOption(option: heroes.journey.entities.actions.Action) {
-        optionsList.add(option)
+    val optionsList: MutableList<ActionEntry> = ArrayList(4)
+    fun addOption(option: Action) {
+        optionsList.add(ActionEntry(option.id, hashMapOf()))
     }
 }
 
@@ -95,17 +96,15 @@ object TrainingOptions {
 action {
     id = "workout_training"
     requirementsMetFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        if (stats.get(Ids.STAT_VALOR) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_VALOR) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        stats.add(Ids.STAT_VALOR, -5)
-        StatsComponent.adjustStat(input.gameState.world, input.entityId, Ids.STAT_BODY, 1)
+        input.addStat(input.entityId!!, Ids.STAT_VALOR, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_BODY, 1)
         StringResult("You completed an intense workout! BODY +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -114,17 +113,15 @@ action {
 action {
     id = "study_training"
     requirementsMetFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        if (stats.get(Ids.STAT_INSIGHT) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_INSIGHT) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        stats.add(Ids.STAT_INSIGHT, -5)
-        StatsComponent.adjustStat(input.gameState.world, input.entityId, Ids.STAT_MIND, 1)
+        input.addStat(input.entityId!!, Ids.STAT_INSIGHT, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_MIND, 1)
         StringResult("You completed intensive study! MIND +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -133,17 +130,15 @@ action {
 action {
     id = "practice_training"
     requirementsMetFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        if (stats.get(Ids.STAT_ARCANUM) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_ARCANUM) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        stats.add(Ids.STAT_ARCANUM, -5)
-        StatsComponent.adjustStat(input.gameState.world, input.entityId, Ids.STAT_MAGIC, 1)
+        input.addStat(input.entityId!!, Ids.STAT_ARCANUM, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_MAGIC, 1)
         StringResult("You completed magical practice! MAGIC +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -152,17 +147,15 @@ action {
 action {
     id = "socialize_training"
     requirementsMetFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        if (stats.get(Ids.STAT_INFLUENCE) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_INFLUENCE) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        val stats = StatsComponent.get(input.gameState.world, input.entityId)
-        stats.add(Ids.STAT_INFLUENCE, -5)
-        StatsComponent.adjustStat(input.gameState.world, input.entityId, Ids.STAT_CHARISMA, 1)
+        input.addStat(input.entityId!!, Ids.STAT_INFLUENCE, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_CHARISMA, 1)
         StringResult("You completed social training! CHARISMA +1")
     }
 }.register().also { TrainingOptions.addOption(it) }
@@ -171,6 +164,6 @@ action {
 action {
     id = "training"
     onSelectFn = { input ->
-        StringResult("Training complete!")
+        ActionListResult(TrainingOptions.optionsList)
     }
 }.register()
