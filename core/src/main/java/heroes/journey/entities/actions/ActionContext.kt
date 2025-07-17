@@ -1,8 +1,10 @@
 package heroes.journey.entities.actions
 
 import heroes.journey.GameState
+import heroes.journey.components.BuffsComponent
 import heroes.journey.components.StatsComponent
 import heroes.journey.modlib.actions.IActionContext
+import heroes.journey.registries.Registries
 import java.util.*
 
 class ActionContext(
@@ -30,5 +32,11 @@ class ActionContext(
 
     override fun adjustStat(entityId: UUID, statId: String, delta: Int) {
         StatsComponent.adjustStat((gameState as GameState).world, entityId, statId, delta)
+    }
+
+    override fun addBuff(entityId: UUID, buffId: String) {
+        val buffsComponent = BuffsComponent.get((gameState as GameState).world, entityId)
+        val buff = Registries.BuffManager.get(buffId)
+        buffsComponent.add(buff)
     }
 }

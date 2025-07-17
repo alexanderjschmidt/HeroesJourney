@@ -27,4 +27,5 @@ abstract class IActionContext(
     abstract fun getStat(entityId: UUID, statId: String): Int
     abstract fun addStat(entityId: UUID, statId: String, delta: Int)
     abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)
+    abstract fun addBuff(entityId: UUID, buffId: String)
 }

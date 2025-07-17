@@ -36,7 +36,8 @@ public class Registries {
 
     public static Registry<Stat> StatManager = new Registry<>();
     public static Registry<Group> GroupManager = new Registry<>();
-    
+
     public static Registry<Renderable> RenderableManager = new Registry<>();
     public static Registry<TextureMap> TextureManager = new Registry<>();
+
 }

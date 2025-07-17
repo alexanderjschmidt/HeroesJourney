@@ -1,86 +1,19 @@
-import heroes.journey.Application
-import heroes.journey.components.BuffsComponent
-import heroes.journey.components.character.ActionComponent
 import heroes.journey.entities.actions.Action
-import heroes.journey.entities.actions.TeamActions
 import heroes.journey.entities.actions.action
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.ActionEntry
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionListResult
 import heroes.journey.modlib.actions.results.EndTurnResult
-import heroes.journey.modlib.actions.results.NullResult
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.registries.Registries
-import heroes.journey.ui.HUD
-import heroes.journey.ui.screens.MainMenuScreen
-import heroes.journey.ui.windows.ActionMenu
 
 // Core Actions - included by basegame mod
-
-// Open Action Menu
-action {
-    id = "open_action_menu"
-    isReturnsActionList = true
-    requirementsMetFn = { ShowAction.NO }
-    onSelectFn = { input ->
-        ActionListResult(ActionMenu.getActionsFor(input.gameState, input.entityId))
-    }
-}.register()
-
-// Exit Game
-action {
-    id = "exit_game"
-    onSelectFn = { input ->
-        Application.get().screen = MainMenuScreen(Application.get())
-        NullResult()
-    }
-}.register().also { TeamActions.addTeamAction(it) }
-
-// End Turn
-action {
-    id = "end_turn"
-    onSelectFn = { input ->
-        val entityId = input.gameState.currentEntity
-        input.gameState
-            .world
-            .edit(entityId)
-            .create(ActionComponent::class.java)
-            .action(Registries.ActionManager.get(Ids.REST))
-        HUD.get().revertToInitialState()
-        NullResult()
-    }
-}.register().also { TeamActions.addTeamAction(it) }
-
-// Save Game
-action {
-    id = "save"
-    onSelectFn = { input ->
-        input.gameState.save("save", true)
-        StringResult("Your Game has been Saved!")
-    }
-}.register().also { TeamActions.addTeamAction(it) }
-
-// Popup
-action {
-    id = "popup"
-    inputDisplayNameFn = { input ->
-        input["message"]!!
-    }
-    onSelectFn = { input ->
-        StringResult(input["message"])
-    }
-}.register()
 
 // Rest (Used in End Turn)
 action {
     id = "rest"
     onSelectFn = { input ->
-        val buffsComponent = BuffsComponent.get(
-            input.gameState.world,
-            input.entityId
-        )
-        buffsComponent.add(Registries.BuffManager.get("rested"))
+        input.addBuff(input.entityId!!, "rested")
         EndTurnResult()
     }
 }.register()

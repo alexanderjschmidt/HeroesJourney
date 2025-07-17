@@ -1,5 +1,6 @@
 package heroes.journey.ui.screens;
 
+import static heroes.journey.entities.actions.CoreActionsKt.createCoreActions;
 import static heroes.journey.mods.ModlibDSLSetupKt.setupModlibDSLs;
 
 import java.io.File;
@@ -55,6 +56,7 @@ public class LoadingScreen implements Screen {
         this.shapeRenderer = new ShapeRenderer();
         this.font = new BitmapFont();
         this.batch = new SpriteBatch();
+        createCoreActions();
     }
 
     @Override
