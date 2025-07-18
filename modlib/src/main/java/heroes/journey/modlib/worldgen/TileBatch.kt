@@ -62,3 +62,22 @@ fun tileBatch(
 ): ITileBatch = TileBatchDSLProvider.instance.tileBatch(
     id, layout, textureMap, terrains, weight, startX, startY, addToDefault, frameCount, frameDist
 )
+
+class TileBatchBuilder {
+    var id: String = ""
+    var layout: String = ""
+    var textureMap: String = ""
+    var terrains: Map<String, String> = emptyMap()
+    var weight: Int = 1
+    var startX: Int = 0
+    var startY: Int = 0
+    var addToDefault: Boolean = true
+    var frameCount: Int = 0
+    var frameDist: Int = 0
+    fun build(): ITileBatch = tileBatch(id, layout, textureMap, terrains, weight, startX, startY, addToDefault, frameCount, frameDist)
+}
+
+fun tileBatch(builder: TileBatchBuilder.() -> Unit): ITileBatch {
+    val b = TileBatchBuilder().apply(builder)
+    return b.build()
+}

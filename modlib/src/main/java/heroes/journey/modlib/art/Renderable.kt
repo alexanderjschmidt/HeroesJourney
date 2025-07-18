@@ -62,3 +62,31 @@ fun animationRenderable(
 ): IRenderable = RenderableDSLProvider.instance.animationRenderable(
     id, textureMapId, frameDuration, frames, rows, cols
 )
+
+class StillRenderableBuilder {
+    var id: String = ""
+    var textureMapId: String = ""
+    var x: Int = 0
+    var y: Int = 0
+    fun build(): IRenderable = stillRenderable(id, textureMapId, x, y)
+}
+
+fun stillRenderable(builder: StillRenderableBuilder.() -> Unit): IRenderable {
+    val b = StillRenderableBuilder().apply(builder)
+    return b.build()
+}
+
+class AnimationRenderableBuilder {
+    var id: String = ""
+    var textureMapId: String = ""
+    var frameDuration: Float = 0.5f
+    var frames: List<Pair<Int, Int>> = emptyList()
+    var rows: List<Triple<Int, Int, Int>> = emptyList()
+    var cols: List<Triple<Int, Int, Int>> = emptyList()
+    fun build(): IRenderable = animationRenderable(id, textureMapId, frameDuration, frames, rows, cols)
+}
+
+fun animationRenderable(builder: AnimationRenderableBuilder.() -> Unit): IRenderable {
+    val b = AnimationRenderableBuilder().apply(builder)
+    return b.build()
+}

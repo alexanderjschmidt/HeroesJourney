@@ -94,3 +94,31 @@ fun featureGenerationData(
         minInRegion,
         maxInRegion
     )
+
+class FeatureGenerationDataBuilder {
+    var featureTypeId: String = ""
+    var minDist: Int = 2
+    var minInRegion: Int = 0
+    var maxInRegion: Int = 1
+    fun build(): FeatureGenerationData = featureGenerationData(featureTypeId, minDist, minInRegion, maxInRegion)
+}
+
+fun featureGenerationData(builder: FeatureGenerationDataBuilder.() -> Unit): FeatureGenerationData {
+    val b = FeatureGenerationDataBuilder().apply(builder)
+    return b.build()
+}
+
+class BiomeBuilder {
+    var id: String = ""
+    var baseTerrain: String = ""
+    private val _features = mutableListOf<FeatureGenerationData>()
+    fun feature(builder: FeatureGenerationDataBuilder.() -> Unit) {
+        _features.add(FeatureGenerationDataBuilder().apply(builder).build())
+    }
+    fun build(): IBiome = biome(id, baseTerrain, _features)
+}
+
+fun biome(builder: BiomeBuilder.() -> Unit): IBiome {
+    val b = BiomeBuilder().apply(builder)
+    return b.build()
+}

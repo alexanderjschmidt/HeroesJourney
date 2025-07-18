@@ -36,3 +36,15 @@ object TileLayoutDSLProvider {
  */
 fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout =
     TileLayoutDSLProvider.instance.tileLayout(id, path, terrainRoles)
+
+class TileLayoutBuilder {
+    var id: String = ""
+    var path: String = ""
+    var terrainRoles: List<String> = emptyList()
+    fun build(): ITileLayout = tileLayout(id, path, terrainRoles)
+}
+
+fun tileLayout(builder: TileLayoutBuilder.() -> Unit): ITileLayout {
+    val b = TileLayoutBuilder().apply(builder)
+    return b.build()
+}

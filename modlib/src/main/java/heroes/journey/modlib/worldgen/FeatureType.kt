@@ -35,3 +35,14 @@ object FeatureTypeDSLProvider {
  */
 fun featureType(id: String, renderId: String): IFeatureType =
     FeatureTypeDSLProvider.instance.featureType(id, renderId)
+
+class FeatureTypeBuilder {
+    var id: String = ""
+    var renderId: String = ""
+    fun build(): IFeatureType = featureType(id, renderId)
+}
+
+fun featureType(builder: FeatureTypeBuilder.() -> Unit): IFeatureType {
+    val b = FeatureTypeBuilder().apply(builder)
+    return b.build()
+}
