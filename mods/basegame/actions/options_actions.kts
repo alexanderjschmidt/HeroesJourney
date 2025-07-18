@@ -1,5 +1,4 @@
 import heroes.journey.modlib.actions.booleanOptionAction
-import heroes.journey.utils.input.Options
 
 // Options Actions - included by basegame mod
 
@@ -7,10 +6,10 @@ import heroes.journey.utils.input.Options
 booleanOptionAction {
     id = "debug"
     isTrue = false
-}.register().also { Options.addOption(it) }
+}.register()
 
 // Background Music Option
 booleanOptionAction {
     id = "music"
     isTrue = false
-}.register().also { Options.addOption(it) }
+}.register()

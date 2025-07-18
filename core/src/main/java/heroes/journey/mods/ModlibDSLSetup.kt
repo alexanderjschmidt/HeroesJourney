@@ -16,7 +16,7 @@ import heroes.journey.utils.Lang
  * Add additional DSL registrations here as new DSLs are migrated.
  */
 fun setupModlibDSLs() {
-    Registrable.lang = Lang
+    heroes.journey.modlib.Lang.instance = Lang
 
     // Wire up modlib registries to core implementations
     heroes.journey.modlib.Registries.QuestManager = Registries.QuestManager as Registry<IQuest>

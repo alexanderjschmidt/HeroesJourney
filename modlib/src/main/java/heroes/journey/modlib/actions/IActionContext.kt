@@ -47,4 +47,5 @@ abstract class IActionContext(
     abstract fun getStats(entityId: UUID): IAttributes
     abstract fun getRealmAttention(statId: String, requested: Int): Int
     abstract fun getChallenges(regionId: UUID): List<UUID>
+    abstract fun setMapPointer(pos: Position)
 }

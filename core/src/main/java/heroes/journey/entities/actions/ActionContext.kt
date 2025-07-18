@@ -9,6 +9,7 @@ import heroes.journey.modlib.Position
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.registries.Registries
 import heroes.journey.registries.Registries.ItemManager
+import heroes.journey.ui.HUD
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import heroes.journey.utils.gamestate.Utils
 import java.util.*
@@ -149,5 +150,11 @@ class ActionContext(
     override fun getChallenges(regionId: UUID): List<UUID> {
         val regionComponent = RegionComponent.get(gameState.world, regionId)
         return regionComponent.challenges
+    }
+
+    override fun setMapPointer(pos: Position) {
+        HUD.get()
+            .cursor
+            .setMapPointerLoc(pos)
     }
 }

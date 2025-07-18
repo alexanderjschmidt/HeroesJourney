@@ -41,16 +41,16 @@ To decouple mods from core while maintaining full power in core, all registry an
 - **Current:** `import heroes.journey.entities.tagging.Stat`
 - **Solution:** Provide an `IStat` interface and a stat DSL in `modlib` if not already present. Ensure all stat references in mods use the interface/DSL. Use the registry pattern below for stat lookup.
 - **Action:**
-  - [ ] Create or verify `IStat` and stat DSL in `modlib`.
-  - [ ] Refactor mod usages to use only the interface/DSL.
+  - [x] Create or verify `IStat` and stat DSL in `modlib`.
+  - [x] Refactor mod usages to use only the interface/DSL.
 
 ### 3. StatManager (mods/basegame/actions/challenge_actions.kts)
 - **Current:** `import heroes.journey.registries.Registries.StatManager`
 - **Solution:** Move the stat registry to `modlib` using the Registry/Registrable migration plan above. Core registry stores core Stat, mods use IStat.
 - **Action:**
-  - [ ] Move stat registry to `modlib` as interface-driven.
-  - [ ] Wire up core registry at startup.
-  - [ ] Refactor mod usages.
+  - [x] Move stat registry to `modlib` as interface-driven.
+  - [x] Wire up core registry at startup.
+  - [x] Refactor mod usages.
 
 ### 4. HUD and Lang (mods/basegame/actions/travel_actions.kts)
 - **Current:** `import heroes.journey.ui.HUD`, `import heroes.journey.utils.Lang`
@@ -63,16 +63,16 @@ To decouple mods from core while maintaining full power in core, all registry an
 - **Current:** `import heroes.journey.registries.Registries`, `import heroes.journey.registries.Registries.QuestManager`
 - **Solution:** Move the quest registry to `modlib` using the Registry/Registrable migration plan above. Core registry stores core Quest, mods use IQuest.
 - **Action:**
-  - [ ] Move quest registry to `modlib` as interface-driven.
-  - [ ] Wire up core registry at startup.
-  - [ ] Refactor mod usages.
+  - [x] Move quest registry to `modlib` as interface-driven.
+  - [x] Wire up core registry at startup.
+  - [x] Refactor mod usages.
 
 ### 6. Options (mods/basegame/actions/options_actions.kts)
 - **Current:** `import heroes.journey.utils.input.Options`
 - **Solution:** Move or abstract the options system into `modlib`.
 - **Action:**
-  - [ ] Add options system to `modlib`.
-  - [ ] Refactor mod usages.
+  - [x] Add options system to `modlib`.
+  - [x] Refactor mod usages.
 
 ### 7. gameMod (mods/basegame/mod.kts)
 - **Current:** `import heroes.journey.mods.gameMod`

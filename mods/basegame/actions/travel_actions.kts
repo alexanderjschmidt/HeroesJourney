@@ -1,9 +1,8 @@
-import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.Lang
+import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.ui.HUD
-import heroes.journey.utils.Lang
+import heroes.journey.modlib.actions.targetAction
 import java.util.*
 
 // Travel Actions - included by basegame mod
@@ -13,14 +12,12 @@ action {
     id = "travel_to"
     inputDisplayNameFn = { input ->
         val name = input.getName(UUID.fromString(input["target"]))
-        Lang.get("travel_to_description") + name
+        Lang.instance.get("travel_to_description") + name
     }
     onHoverFn = { input ->
         val locationId = UUID.fromString(input["target"])
         val targetPos = input.getPosition(locationId)
-        HUD.get()
-            .cursor
-            .setMapPointerLoc(targetPos)
+        input.setMapPointer(targetPos)
     }
     onSelectFn = { input ->
         val e = input.entityId!!

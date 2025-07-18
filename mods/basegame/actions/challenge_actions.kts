@@ -1,9 +1,9 @@
-import heroes.journey.entities.tagging.Stat
+import heroes.journey.modlib.IStat
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.Registries
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.targetAction
-import heroes.journey.registries.Registries.StatManager
 import java.util.*
 
 // Challenge Actions - included by basegame mod
@@ -31,7 +31,7 @@ action {
 }.register()
 
 // Face Challenge
-targetAction<Stat> {
+targetAction<IStat> {
     id = "face_challenge"
     inputDisplayNameFn = { input ->
         input.getName(UUID.fromString(input["target"]))
@@ -39,7 +39,7 @@ targetAction<Stat> {
     getTargets = { input ->
         input["challenge"] = input["target"]!!
         val challengeEntityId = UUID.fromString(input["target"])
-        listOf(StatManager[Ids.STAT_BODY]!!, StatManager[Ids.STAT_MIND]!!)
+        listOf(Registries.StatManager[Ids.STAT_BODY]!!, Registries.StatManager[Ids.STAT_MIND]!!)
     }
     targetAction = heroes.journey.modlib.Ids.CHOOSE_APPROACH
 }.register()

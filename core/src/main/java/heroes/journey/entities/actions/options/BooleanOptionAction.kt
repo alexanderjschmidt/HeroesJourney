@@ -6,6 +6,7 @@ import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.modlib.actions.results.NullResult
 import heroes.journey.registries.Registries
+import heroes.journey.utils.input.Options
 
 class BooleanOptionAction(
     id: String,
@@ -20,7 +21,7 @@ class BooleanOptionAction(
     onSelectFn,
     isTrue
 ), IBooleanOptionAction {
-    
+
     override fun onSelect(input: IActionContext): ActionResult {
         isTrue = !isTrue
         value = isTrue
@@ -28,6 +29,7 @@ class BooleanOptionAction(
     }
 
     override fun register(): BooleanOptionAction {
+        Options.addOption(this)
         return Registries.ActionManager.register(this) as BooleanOptionAction
     }
 }
