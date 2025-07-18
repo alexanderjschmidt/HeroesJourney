@@ -14,10 +14,21 @@ interface IItemSubType : IRegistrable {
 }
 
 /**
+ * Builder for defining an item subtype in a natural DSL style.
+ *
+ * Use type to specify the ItemType directly (not by ID).
+ */
+interface ItemSubTypeBuilder {
+    var id: String
+    var type: ItemType?
+}
+
+/**
  * Interface for the item subtype DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface ItemSubTypeDSL {
-    fun itemSubType(id: String, parentType: ItemType): IItemSubType
+    fun itemSubType(init: ItemSubTypeBuilder.() -> Unit): IItemSubType
 }
 
 /**
@@ -29,7 +40,16 @@ object ItemSubTypeDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a new item subtype using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * itemSubType {
+ *     id = Ids.ITEMSUBTYPE_SWORD
+ *     typeId = Ids.ITEMTYPE_WEAPON
+ * }
+ * ```
  */
-fun itemSubType(id: String, parentType: ItemType): IItemSubType =
-    ItemSubTypeDSLProvider.instance.itemSubType(id, parentType)
+fun itemSubType(init: ItemSubTypeBuilder.() -> Unit): IItemSubType =
+    ItemSubTypeDSLProvider.instance.itemSubType(init)
+
