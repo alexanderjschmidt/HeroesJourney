@@ -1,12 +1,11 @@
 package heroes.journey.tilemap
 
 import heroes.journey.GameState
-import heroes.journey.modlib.IFeatureType
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.Position
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries.FeatureTypeManager
-import heroes.journey.registries.TileManager
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.utils.Position
+import heroes.journey.modlib.worldgen.IFeatureType
+import heroes.journey.mods.Registries.FeatureTypeManager
 import lombok.Getter
 import java.util.*
 

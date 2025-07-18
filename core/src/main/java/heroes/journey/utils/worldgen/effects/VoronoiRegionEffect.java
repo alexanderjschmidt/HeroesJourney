@@ -1,6 +1,6 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.mods.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.buildRegionsFromMap;
 import static heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator.generateInwardRegionRings;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import heroes.journey.GameState;
 import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.utils.worldgen.MapGenerationEffect;
 import heroes.journey.utils.worldgen.MapGenerationException;
 import heroes.journey.utils.worldgen.utils.VoronoiRegionGenerator;

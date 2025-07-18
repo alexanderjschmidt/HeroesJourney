@@ -1,9 +1,9 @@
 package heroes.journey.entities.tagging
 
-import heroes.journey.modlib.IAttributes
-import heroes.journey.modlib.IGroup
-import heroes.journey.registries.Registries
-import heroes.journey.registries.Registries.StatManager
+import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.IGroup
+import heroes.journey.mods.Registries
+import heroes.journey.mods.Registries.StatManager
 
 fun attributes(init: AttributesBuilder.() -> Unit): Attributes {
     val builder = AttributesBuilder()

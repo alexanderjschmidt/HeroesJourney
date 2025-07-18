@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.BiomeManager;
+import static heroes.journey.mods.Registries.BiomeManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Biome;
 import lombok.Getter;

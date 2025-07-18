@@ -1,6 +1,6 @@
 package heroes.journey.utils.worldgen.effects;
 
-import static heroes.journey.registries.TileManager.BASE_TILES;
+import static heroes.journey.tilemap.TileManager.BASE_TILES;
 import static heroes.journey.utils.worldgen.CellularAutomata.convertToTileMap;
 import static heroes.journey.utils.worldgen.CellularAutomata.smooth;
 

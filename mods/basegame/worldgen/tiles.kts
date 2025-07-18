@@ -1,6 +1,6 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.tileBatch
-import heroes.journey.modlib.tileLayout
+import heroes.journey.modlib.worldgen.tileBatch
+import heroes.journey.modlib.worldgen.tileLayout
 import heroes.journey.tilemap.baseTile
 
 tileLayout(

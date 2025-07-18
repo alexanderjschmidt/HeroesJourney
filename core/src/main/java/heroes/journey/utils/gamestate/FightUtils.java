@@ -9,7 +9,7 @@ import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.Operation;
+import heroes.journey.modlib.attributes.Operation;
 import heroes.journey.systems.GameWorld;
 
 public class FightUtils {

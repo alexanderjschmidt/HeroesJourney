@@ -1,6 +1,6 @@
 package heroes.journey.entities.actions.history;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ActionManager;
 
 import java.util.Map;
 import java.util.UUID;

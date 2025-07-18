@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.ChallengeManager;
+import static heroes.journey.mods.Registries.ChallengeManager;
 
 import java.util.UUID;
 

@@ -2,7 +2,7 @@ package heroes.journey.ui;
 
 import static heroes.journey.modlib.Ids.CURSOR;
 import static heroes.journey.modlib.Ids.MAP_POINTER;
-import static heroes.journey.registries.Registries.RenderableManager;
+import static heroes.journey.mods.Registries.RenderableManager;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.ui.hudstates.States;
 import heroes.journey.utils.ai.pathfinding.Cell;
 import heroes.journey.utils.art.ResourceManager;

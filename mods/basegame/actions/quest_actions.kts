@@ -1,11 +1,11 @@
-import heroes.journey.modlib.IQuest
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.Registries
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.modlib.actions.targetAction
+import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.registries.Registries
 import java.util.*
 
 // Quest Actions - included by basegame mod

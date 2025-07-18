@@ -2,7 +2,7 @@ package heroes.journey.utils.ai.pathfinding;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 
 public class Cell {
 

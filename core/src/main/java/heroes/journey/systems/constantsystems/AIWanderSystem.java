@@ -16,7 +16,7 @@ import heroes.journey.components.character.AIWanderComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.components.utils.WanderType;
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;

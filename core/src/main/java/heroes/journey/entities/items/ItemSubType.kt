@@ -1,9 +1,9 @@
 package heroes.journey.entities.items
 
-import heroes.journey.modlib.IItemSubType
-import heroes.journey.modlib.ItemType
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries.ItemSubTypeManager
+import heroes.journey.modlib.items.IItemSubType
+import heroes.journey.modlib.items.ItemType
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries.ItemSubTypeManager
 import lombok.Getter
 
 @Getter

@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.StatManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.UUID;
 

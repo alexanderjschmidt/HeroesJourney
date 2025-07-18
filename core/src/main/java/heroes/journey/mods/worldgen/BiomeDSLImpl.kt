@@ -1,9 +1,9 @@
 package heroes.journey.mods.worldgen
 
-import heroes.journey.modlib.BiomeDSL
-import heroes.journey.modlib.FeatureGenerationData
-import heroes.journey.modlib.FeatureGenerationDataDSL
-import heroes.journey.modlib.IBiome
+import heroes.journey.modlib.worldgen.BiomeDSL
+import heroes.journey.modlib.worldgen.FeatureGenerationData
+import heroes.journey.modlib.worldgen.FeatureGenerationDataDSL
+import heroes.journey.modlib.worldgen.IBiome
 import heroes.journey.tilemap.Biome
 
 class BiomeDSLImpl : BiomeDSL {

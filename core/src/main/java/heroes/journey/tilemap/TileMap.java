@@ -1,6 +1,6 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.mods.Registries.TerrainManager;
 import static heroes.journey.utils.worldgen.utils.MapGenUtils.inBounds;
 
 import java.util.Arrays;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.registries.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.RenderBounds;

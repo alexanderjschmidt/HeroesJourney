@@ -1,4 +1,4 @@
-import heroes.journey.modlib.terrain
+import heroes.journey.modlib.worldgen.terrain
 import heroes.journey.modlib.Ids
 
 terrain(Ids.TERRAIN_NULL).register()

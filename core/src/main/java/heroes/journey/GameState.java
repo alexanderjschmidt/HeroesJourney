@@ -1,6 +1,6 @@
 package heroes.journey;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ActionManager;
 import static heroes.journey.utils.serializers.Serializers.jsonGameState;
 
 import java.io.FileReader;
@@ -27,10 +27,10 @@ import heroes.journey.entities.actions.history.History;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.models.MapData;
-import heroes.journey.modlib.IGameState;
 import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.Position;
 import heroes.journey.modlib.actions.ActionEntry;
+import heroes.journey.modlib.utils.IGameState;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.tilemap.TileMap;

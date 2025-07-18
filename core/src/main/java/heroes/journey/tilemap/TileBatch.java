@@ -1,15 +1,15 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.registries.Registries.TerrainManager;
-import static heroes.journey.registries.Registries.TileBatchManager;
-import static heroes.journey.registries.Registries.TileLayoutManager;
+import static heroes.journey.mods.Registries.TerrainManager;
+import static heroes.journey.mods.Registries.TileBatchManager;
+import static heroes.journey.mods.Registries.TileLayoutManager;
 
 import java.util.List;
 import java.util.Map;
 
-import heroes.journey.modlib.ITileBatch;
-import heroes.journey.modlib.Registrable;
-import heroes.journey.registries.Registries;
+import heroes.journey.modlib.registries.Registrable;
+import heroes.journey.modlib.worldgen.ITileBatch;
+import heroes.journey.mods.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
@@ -57,7 +57,7 @@ public class TileBatch extends Registrable implements ITileBatch {
 
     @Override
     public TileBatch register() {
-        heroes.journey.registries.Registries.TileBatchManager.register(this);
+        Registries.TileBatchManager.register(this);
         return this;
     }
 

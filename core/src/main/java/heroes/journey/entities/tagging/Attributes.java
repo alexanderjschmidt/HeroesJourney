@@ -1,6 +1,6 @@
 package heroes.journey.entities.tagging;
 
-import static heroes.journey.registries.Registries.StatManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import heroes.journey.modlib.IAttributes;
-import heroes.journey.modlib.IStat;
-import heroes.journey.modlib.Operation;
+import heroes.journey.modlib.attributes.IAttributes;
+import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.attributes.Operation;
 
 public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     private Operation defaultOperation = Operation.ADD;

@@ -1,9 +1,9 @@
-import heroes.journey.modlib.IStat
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.Registries
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.targetAction
+import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.registries.Registries
 import java.util.*
 
 // Challenge Actions - included by basegame mod

@@ -1,9 +1,9 @@
 package heroes.journey.entities
 
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.modlib.IBuff
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries
+import heroes.journey.modlib.misc.IBuff
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries
 import lombok.Getter
 
 @Getter

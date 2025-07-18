@@ -1,6 +1,6 @@
 package heroes.journey.tilemap.wavefunctiontiles;
 
-import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.mods.Registries.TerrainManager;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

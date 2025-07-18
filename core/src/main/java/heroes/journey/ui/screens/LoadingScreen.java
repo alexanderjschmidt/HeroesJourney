@@ -19,7 +19,7 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.mods.GameMod;
 import heroes.journey.mods.ScriptModLoader;
-import heroes.journey.registries.TileManager;
+import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.TileBatch;
 import heroes.journey.utils.art.ResourceManager;
 

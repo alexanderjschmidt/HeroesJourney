@@ -5,12 +5,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
-import heroes.journey.modlib.Registrable
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionResult
-import heroes.journey.registries.Registries
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.windows.InfoProvider
 import java.util.*

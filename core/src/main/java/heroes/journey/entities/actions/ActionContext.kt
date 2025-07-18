@@ -5,10 +5,10 @@ import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Quest
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.modlib.Position
 import heroes.journey.modlib.actions.IActionContext
-import heroes.journey.registries.Registries
-import heroes.journey.registries.Registries.ItemManager
+import heroes.journey.modlib.utils.Position
+import heroes.journey.mods.Registries
+import heroes.journey.mods.Registries.ItemManager
 import heroes.journey.ui.HUD
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import heroes.journey.utils.gamestate.Utils

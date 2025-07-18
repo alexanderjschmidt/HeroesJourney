@@ -1,9 +1,9 @@
 package heroes.journey.tilemap
 
-import heroes.journey.modlib.FeatureGenerationData
-import heroes.journey.modlib.IBiome
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries.BiomeManager
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.worldgen.FeatureGenerationData
+import heroes.journey.modlib.worldgen.IBiome
+import heroes.journey.mods.Registries.BiomeManager
 
 class Biome(
     id: String,

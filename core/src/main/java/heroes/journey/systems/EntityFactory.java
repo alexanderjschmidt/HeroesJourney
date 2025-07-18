@@ -8,7 +8,7 @@ import static heroes.journey.modlib.Ids.QUEST_BOARD;
 import static heroes.journey.modlib.Ids.REST;
 import static heroes.journey.modlib.Ids.TRAINING;
 import static heroes.journey.modlib.Ids.TRAVEL;
-import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.mods.Registries.ItemManager;
 
 import java.util.UUID;
 
@@ -33,9 +33,9 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
-import heroes.journey.modlib.Position;
-import heroes.journey.registries.Registries;
-import heroes.journey.registries.TileManager;
+import heroes.journey.modlib.utils.Position;
+import heroes.journey.mods.Registries;
+import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 

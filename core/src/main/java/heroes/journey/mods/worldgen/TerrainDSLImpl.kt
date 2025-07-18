@@ -1,7 +1,7 @@
 package heroes.journey.mods.worldgen
 
-import heroes.journey.modlib.ITerrain
-import heroes.journey.modlib.TerrainDSL
+import heroes.journey.modlib.worldgen.ITerrain
+import heroes.journey.modlib.worldgen.TerrainDSL
 import heroes.journey.tilemap.wavefunctiontiles.Terrain
 
 class TerrainDSLImpl : TerrainDSL {

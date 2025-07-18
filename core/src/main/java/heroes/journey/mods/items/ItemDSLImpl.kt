@@ -3,10 +3,10 @@ package heroes.journey.mods.items
 import heroes.journey.entities.items.Item
 import heroes.journey.entities.items.ItemSubType
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.modlib.IAttributes
-import heroes.journey.modlib.IItem
-import heroes.journey.modlib.IItemSubType
-import heroes.journey.modlib.ItemDSL
+import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.items.IItem
+import heroes.journey.modlib.items.IItemSubType
+import heroes.journey.modlib.items.ItemDSL
 
 class ItemDSLImpl : ItemDSL {
     override fun item(id: String, subType: IItemSubType, weight: Int, attributes: IAttributes): IItem {

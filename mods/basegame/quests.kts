@@ -1,7 +1,7 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.attributes
-import heroes.journey.modlib.buff
-import heroes.journey.modlib.quest
+import heroes.journey.modlib.attributes.attributes
+import heroes.journey.modlib.misc.buff
+import heroes.journey.modlib.misc.quest
 
 // Quests and Buffs - included by basegame mod
 

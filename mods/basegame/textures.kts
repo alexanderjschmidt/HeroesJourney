@@ -1,29 +1,28 @@
-import heroes.journey.modlib.Ids
 import heroes.journey.modlib.Ids.*
-import heroes.journey.modlib.stillRenderable
-import heroes.journey.modlib.animationRenderable
-import heroes.journey.modlib.textureMap
+import heroes.journey.modlib.art.animationRenderable
+import heroes.journey.modlib.art.stillRenderable
+import heroes.journey.modlib.art.textureMap
 
 // Textures - included by basegame mod
 
 val Sprites = textureMap("sprites", "sprites.png", 16, 16).register()
 val OverworldTileset = textureMap(OVERWORLD_TILESET, "Overworld_Tileset.png", 16, 16).register()
 
-stillRenderable(Ids.PLAYER_SPRITE, Sprites.id, 1, 1).register()
-stillRenderable(Ids.CAPITAL_SPRITE, OverworldTileset.id, 9, 14).register()
-stillRenderable(Ids.TOWN_SPRITE, OverworldTileset.id, 7, 12).register()
-stillRenderable(Ids.DUNGEON_SPRITE, OverworldTileset.id, 17, 4).register()
+stillRenderable(PLAYER_SPRITE, Sprites.id, 1, 1).register()
+stillRenderable(CAPITAL_SPRITE, OverworldTileset.id, 9, 14).register()
+stillRenderable(TOWN_SPRITE, OverworldTileset.id, 7, 12).register()
+stillRenderable(DUNGEON_SPRITE, OverworldTileset.id, 17, 4).register()
 
-stillRenderable(Ids.LIGHT_FOG, Sprites.id, 0, 1).register()
-stillRenderable(Ids.DENSE_FOG, Sprites.id, 0, 0).register()
+stillRenderable(LIGHT_FOG, Sprites.id, 0, 1).register()
+stillRenderable(DENSE_FOG, Sprites.id, 0, 0).register()
 
-stillRenderable(Ids.RED, "ui", 2, 0).register()
-stillRenderable(Ids.LIGHT_BLUE, "ui", 4, 1).register()
-stillRenderable(Ids.PURPLE, "ui", 4, 0).register()
-stillRenderable(Ids.YELLOW, "ui", 3, 1).register()
+stillRenderable(RED, "ui", 2, 0).register()
+stillRenderable(LIGHT_BLUE, "ui", 4, 1).register()
+stillRenderable(PURPLE, "ui", 4, 0).register()
+stillRenderable(YELLOW, "ui", 3, 1).register()
 
-animationRenderable(Ids.CURSOR, "ui", 0.5f, frames = listOf(0 to 0, 0 to 0, 0 to 1)).register()
-animationRenderable(Ids.MAP_POINTER, "ui", 0.5f, frames = listOf(3 to 3, 3 to 3, 3 to 4)).register()
+animationRenderable(CURSOR, "ui", 0.5f, frames = listOf(0 to 0, 0 to 0, 0 to 1)).register()
+animationRenderable(MAP_POINTER, "ui", 0.5f, frames = listOf(3 to 3, 3 to 3, 3 to 4)).register()
 
 // Demon Animations
 deepDiveAnimation(ANTLERED_RASCAL, "Demon", "Antlered Rascal")

@@ -1,7 +1,7 @@
 package heroes.journey.modlib.actions
 
-import heroes.journey.modlib.IRegistrable
 import heroes.journey.modlib.actions.results.ActionResult
+import heroes.journey.modlib.registries.IRegistrable
 
 interface IAction : IRegistrable {
     val isReturnsActionList: Boolean

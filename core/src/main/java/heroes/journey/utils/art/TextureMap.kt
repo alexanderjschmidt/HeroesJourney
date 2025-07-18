@@ -1,8 +1,8 @@
 package heroes.journey.utils.art
 
-import heroes.journey.modlib.ITextureMap
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries
+import heroes.journey.modlib.art.ITextureMap
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries
 
 class TextureMap(id: String, location: String, override val width: Int, override val height: Int) :
     Registrable(id), ITextureMap {

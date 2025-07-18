@@ -10,7 +10,7 @@ import heroes.journey.components.character.AITurnComponent;
 import heroes.journey.components.character.ActionComponent;
 import heroes.journey.entities.actions.TeamActions;
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.mods.Registries;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
 

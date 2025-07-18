@@ -9,7 +9,7 @@ import heroes.journey.modlib.actions.results.ActionListResult
 import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.results.NullResult
 import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.registries.Registries
+import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu

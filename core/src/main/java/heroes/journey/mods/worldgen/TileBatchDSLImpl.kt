@@ -1,7 +1,7 @@
 package heroes.journey.mods.worldgen
 
-import heroes.journey.modlib.ITileBatch
-import heroes.journey.modlib.TileBatchDSL
+import heroes.journey.modlib.worldgen.ITileBatch
+import heroes.journey.modlib.worldgen.TileBatchDSL
 import heroes.journey.tilemap.TileBatch
 
 class TileBatchDSLImpl : TileBatchDSL {

@@ -1,9 +1,9 @@
 package heroes.journey.mods.items
 
 import heroes.journey.entities.items.ItemSubType
-import heroes.journey.modlib.IItemSubType
-import heroes.journey.modlib.ItemSubTypeDSL
-import heroes.journey.modlib.ItemType
+import heroes.journey.modlib.items.IItemSubType
+import heroes.journey.modlib.items.ItemSubTypeDSL
+import heroes.journey.modlib.items.ItemType
 
 class ItemSubTypeDSLImpl : ItemSubTypeDSL {
     override fun itemSubType(id: String, parentType: ItemType): IItemSubType {

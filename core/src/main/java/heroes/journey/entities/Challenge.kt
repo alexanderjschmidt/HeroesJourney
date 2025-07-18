@@ -2,10 +2,10 @@ package heroes.journey.entities
 
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.modlib.IChallenge
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries
-import heroes.journey.registries.Registries.StatManager
+import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries
+import heroes.journey.mods.Registries.StatManager
 
 class Challenge(
     id: String,

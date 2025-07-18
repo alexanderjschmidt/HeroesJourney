@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.QuestManager;
+import static heroes.journey.mods.Registries.QuestManager;
 
 import java.util.ArrayList;
 import java.util.List;

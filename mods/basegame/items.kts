@@ -1,8 +1,8 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.ItemType
-import heroes.journey.modlib.item
-import heroes.journey.modlib.itemSubType
-import heroes.journey.modlib.attributes
+import heroes.journey.modlib.attributes.attributes
+import heroes.journey.modlib.items.ItemType
+import heroes.journey.modlib.items.item
+import heroes.journey.modlib.items.itemSubType
 
 // Items - included by basegame mod
 

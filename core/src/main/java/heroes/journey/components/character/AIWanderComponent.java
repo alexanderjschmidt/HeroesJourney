@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.components.utils.WanderType;
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Random;
 

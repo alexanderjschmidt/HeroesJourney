@@ -45,7 +45,7 @@ To decouple mods from core while maintaining full power in core, all registry an
   - [x] Refactor mod usages to use only the interface/DSL.
 
 ### 3. StatManager (mods/basegame/actions/challenge_actions.kts)
-- **Current:** `import heroes.journey.registries.Registries.StatManager`
+- **Current:** `import heroes.journey.mods.Registries.StatManager`
 - **Solution:** Move the stat registry to `modlib` using the Registry/Registrable migration plan above. Core registry stores core Stat, mods use IStat.
 - **Action:**
   - [x] Move stat registry to `modlib` as interface-driven.
@@ -60,7 +60,7 @@ To decouple mods from core while maintaining full power in core, all registry an
   - [ ] Refactor mod usages.
 
 ### 5. Registries/QuestManager (mods/basegame/actions/quest_actions.kts)
-- **Current:** `import heroes.journey.registries.Registries`, `import heroes.journey.registries.Registries.QuestManager`
+- **Current:** `import heroes.journey.mods.Registries`, `import heroes.journey.mods.Registries.QuestManager`
 - **Solution:** Move the quest registry to `modlib` using the Registry/Registrable migration plan above. Core registry stores core Quest, mods use IQuest.
 - **Action:**
   - [x] Move quest registry to `modlib` as interface-driven.

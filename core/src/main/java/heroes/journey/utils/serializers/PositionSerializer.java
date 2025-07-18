@@ -6,7 +6,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import heroes.journey.modlib.Position;
+import heroes.journey.modlib.utils.Position;
 
 public class PositionSerializer extends CustomSerializer<Position> {
     @Override

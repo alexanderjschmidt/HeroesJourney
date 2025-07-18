@@ -1,9 +1,9 @@
 package heroes.journey.modlib.actions
 
-import heroes.journey.modlib.IAttributes
-import heroes.journey.modlib.IGameState
-import heroes.journey.modlib.IQuest
-import heroes.journey.modlib.Position
+import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.utils.IGameState
+import heroes.journey.modlib.utils.Position
 import java.util.*
 
 abstract class IActionContext(

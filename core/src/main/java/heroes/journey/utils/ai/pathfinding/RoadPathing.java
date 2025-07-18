@@ -2,7 +2,7 @@ package heroes.journey.utils.ai.pathfinding;
 
 import static heroes.journey.modlib.Ids.TERRAIN_PATH;
 import static heroes.journey.modlib.Ids.TERRAIN_PLAINS;
-import static heroes.journey.registries.Registries.TerrainManager;
+import static heroes.journey.mods.Registries.TerrainManager;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;

@@ -1,6 +1,6 @@
 package heroes.journey.ui.hudstates;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ActionManager;
 
 import java.util.AbstractMap;
 import java.util.List;

@@ -1,14 +1,32 @@
 package heroes.journey.mods
 
-import heroes.journey.modlib.*
+import heroes.journey.modlib.GameModProvider
 import heroes.journey.modlib.actions.ActionDSLProvider
 import heroes.journey.modlib.actions.IAction
+import heroes.journey.modlib.art.IRenderable
+import heroes.journey.modlib.art.ITextureMap
+import heroes.journey.modlib.art.RenderableDSLProvider
+import heroes.journey.modlib.art.TextureMapDSLProvider
+import heroes.journey.modlib.attributes.*
+import heroes.journey.modlib.items.IItem
+import heroes.journey.modlib.items.IItemSubType
+import heroes.journey.modlib.items.ItemDSLProvider
+import heroes.journey.modlib.items.ItemSubTypeDSLProvider
+import heroes.journey.modlib.misc.*
+import heroes.journey.modlib.registries.Registry
+import heroes.journey.modlib.worldgen.*
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.art.TextureMapDSLImpl
+import heroes.journey.mods.attributes.AttributesDSLImpl
+import heroes.journey.mods.attributes.GroupDSLImpl
+import heroes.journey.mods.attributes.StatDSLImpl
 import heroes.journey.mods.items.ItemDSLImpl
 import heroes.journey.mods.items.ItemSubTypeDSLImpl
+import heroes.journey.mods.misc.ActionDSLImpl
+import heroes.journey.mods.misc.BuffDSLImpl
+import heroes.journey.mods.misc.ChallengeDSLImpl
+import heroes.journey.mods.misc.QuestDSLImpl
 import heroes.journey.mods.worldgen.*
-import heroes.journey.registries.Registries
 import heroes.journey.utils.Lang
 
 /**
@@ -19,23 +37,29 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.Lang.instance = Lang
 
     // Wire up modlib registries to core implementations
-    heroes.journey.modlib.Registries.QuestManager = Registries.QuestManager as Registry<IQuest>
-    heroes.journey.modlib.Registries.StatManager = Registries.StatManager as Registry<IStat>
-    heroes.journey.modlib.Registries.BuffManager = Registries.BuffManager as Registry<IBuff>
-    heroes.journey.modlib.Registries.ChallengeManager = Registries.ChallengeManager as Registry<IChallenge>
-    heroes.journey.modlib.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
-    heroes.journey.modlib.Registries.ItemManager = Registries.ItemManager as Registry<IItem>
-    heroes.journey.modlib.Registries.ItemSubTypeManager =
+    heroes.journey.modlib.registries.Registries.QuestManager = Registries.QuestManager as Registry<IQuest>
+    heroes.journey.modlib.registries.Registries.StatManager = Registries.StatManager as Registry<IStat>
+    heroes.journey.modlib.registries.Registries.BuffManager = Registries.BuffManager as Registry<IBuff>
+    heroes.journey.modlib.registries.Registries.ChallengeManager =
+        Registries.ChallengeManager as Registry<IChallenge>
+    heroes.journey.modlib.registries.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
+    heroes.journey.modlib.registries.Registries.ItemManager = Registries.ItemManager as Registry<IItem>
+    heroes.journey.modlib.registries.Registries.ItemSubTypeManager =
         Registries.ItemSubTypeManager as Registry<IItemSubType>
-    heroes.journey.modlib.Registries.BiomeManager = Registries.BiomeManager as Registry<IBiome>
-    heroes.journey.modlib.Registries.FeatureTypeManager =
+    heroes.journey.modlib.registries.Registries.BiomeManager = Registries.BiomeManager as Registry<IBiome>
+    heroes.journey.modlib.registries.Registries.FeatureTypeManager =
         Registries.FeatureTypeManager as Registry<IFeatureType>
-    heroes.journey.modlib.Registries.TerrainManager = Registries.TerrainManager as Registry<ITerrain>
-    heroes.journey.modlib.Registries.TileLayoutManager = Registries.TileLayoutManager as Registry<ITileLayout>
-    heroes.journey.modlib.Registries.TileBatchManager = Registries.TileBatchManager as Registry<ITileBatch>
-    heroes.journey.modlib.Registries.GroupManager = Registries.GroupManager as Registry<IGroup>
-    heroes.journey.modlib.Registries.RenderableManager = Registries.RenderableManager as Registry<IRenderable>
-    heroes.journey.modlib.Registries.TextureManager = Registries.TextureManager as Registry<ITextureMap>
+    heroes.journey.modlib.registries.Registries.TerrainManager =
+        Registries.TerrainManager as Registry<ITerrain>
+    heroes.journey.modlib.registries.Registries.TileLayoutManager =
+        Registries.TileLayoutManager as Registry<ITileLayout>
+    heroes.journey.modlib.registries.Registries.TileBatchManager =
+        Registries.TileBatchManager as Registry<ITileBatch>
+    heroes.journey.modlib.registries.Registries.GroupManager = Registries.GroupManager as Registry<IGroup>
+    heroes.journey.modlib.registries.Registries.RenderableManager =
+        Registries.RenderableManager as Registry<IRenderable>
+    heroes.journey.modlib.registries.Registries.TextureManager =
+        Registries.TextureManager as Registry<ITextureMap>
 
     GameModProvider.instance = GameModDSLImpl()
 

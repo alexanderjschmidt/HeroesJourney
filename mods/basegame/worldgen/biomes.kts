@@ -1,7 +1,7 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.featureType
-import heroes.journey.modlib.biome
-import heroes.journey.modlib.featureGenerationData
+import heroes.journey.modlib.worldgen.featureType
+import heroes.journey.modlib.worldgen.biome
+import heroes.journey.modlib.worldgen.featureGenerationData
 
 featureType(Ids.KINGDOM, Ids.CAPITAL_SPRITE).register()
 featureType(Ids.TOWN, Ids.TOWN_SPRITE).register()

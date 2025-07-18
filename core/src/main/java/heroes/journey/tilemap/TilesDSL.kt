@@ -1,6 +1,5 @@
 package heroes.journey.tilemap
 
-import heroes.journey.registries.TileManager
 import heroes.journey.tilemap.wavefunctiontiles.Terrain
 
 class TerrainBuilder {

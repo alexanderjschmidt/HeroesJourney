@@ -1,10 +1,10 @@
 package heroes.journey.entities.items
 
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.modlib.IItem
-import heroes.journey.modlib.ItemType
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries.ItemManager
+import heroes.journey.modlib.items.IItem
+import heroes.journey.modlib.items.ItemType
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries.ItemManager
 import lombok.Getter
 
 @Getter

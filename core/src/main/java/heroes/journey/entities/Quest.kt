@@ -3,10 +3,10 @@ package heroes.journey.entities
 import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.modlib.IQuest
-import heroes.journey.modlib.Operation
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries
+import heroes.journey.modlib.attributes.Operation
+import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries
 import java.util.*
 
 class Quest(

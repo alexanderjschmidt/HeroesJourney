@@ -1,6 +1,6 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.group
-import heroes.journey.modlib.stat
+import heroes.journey.modlib.attributes.group
+import heroes.journey.modlib.attributes.stat
 
 // --- GROUPS ---
 group(Ids.GROUP_BODY).register()

@@ -1,8 +1,8 @@
 package heroes.journey.mods.art
 
-import heroes.journey.modlib.IRenderable
-import heroes.journey.modlib.RenderableDSL
-import heroes.journey.registries.Registries
+import heroes.journey.modlib.art.IRenderable
+import heroes.journey.modlib.art.RenderableDSL
+import heroes.journey.mods.Registries
 import heroes.journey.utils.art.AnimationRenderable
 import heroes.journey.utils.art.ResourceManager
 import heroes.journey.utils.art.StillRenderable

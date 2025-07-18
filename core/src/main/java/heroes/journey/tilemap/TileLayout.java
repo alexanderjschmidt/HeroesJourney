@@ -1,6 +1,6 @@
 package heroes.journey.tilemap;
 
-import static heroes.journey.registries.Registries.TileLayoutManager;
+import static heroes.journey.mods.Registries.TileLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -16,8 +16,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import heroes.journey.modlib.ITileLayout;
-import heroes.journey.modlib.Registrable;
+import heroes.journey.modlib.registries.Registrable;
+import heroes.journey.modlib.worldgen.ITileLayout;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;

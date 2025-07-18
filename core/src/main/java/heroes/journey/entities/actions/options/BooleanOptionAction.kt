@@ -5,7 +5,7 @@ import heroes.journey.modlib.actions.IBooleanOptionAction
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.modlib.actions.results.NullResult
-import heroes.journey.registries.Registries
+import heroes.journey.mods.Registries
 import heroes.journey.utils.input.Options
 
 class BooleanOptionAction(

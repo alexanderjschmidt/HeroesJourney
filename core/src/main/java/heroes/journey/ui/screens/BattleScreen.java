@@ -11,7 +11,7 @@ import heroes.journey.client.GameClient;
 import heroes.journey.entities.actions.options.BooleanOptionAction;
 import heroes.journey.models.MapData;
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.mods.Registries;
 import heroes.journey.ui.DebugRenderer;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.HUDEffectManager;

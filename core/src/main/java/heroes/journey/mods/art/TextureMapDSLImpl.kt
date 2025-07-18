@@ -1,7 +1,7 @@
 package heroes.journey.mods.art
 
-import heroes.journey.modlib.ITextureMap
-import heroes.journey.modlib.TextureMapDSL
+import heroes.journey.modlib.art.ITextureMap
+import heroes.journey.modlib.art.TextureMapDSL
 import heroes.journey.utils.art.TextureMap
 
 class TextureMapDSLImpl : TextureMapDSL {

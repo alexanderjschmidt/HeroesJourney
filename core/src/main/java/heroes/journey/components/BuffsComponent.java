@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.BuffManager;
+import static heroes.journey.mods.Registries.BuffManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;

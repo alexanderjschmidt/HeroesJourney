@@ -1,7 +1,7 @@
 package heroes.journey.mods.worldgen
 
-import heroes.journey.modlib.FeatureTypeDSL
-import heroes.journey.modlib.IFeatureType
+import heroes.journey.modlib.worldgen.FeatureTypeDSL
+import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.tilemap.FeatureType
 
 class FeatureTypeDSLImpl : FeatureTypeDSL {

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.TileManager;
+import heroes.journey.tilemap.TileManager;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 
 public class CellularAutomata {

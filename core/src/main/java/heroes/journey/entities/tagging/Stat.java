@@ -1,7 +1,7 @@
 package heroes.journey.entities.tagging;
 
-import static heroes.journey.registries.Registries.GroupManager;
-import static heroes.journey.registries.Registries.StatManager;
+import static heroes.journey.mods.Registries.GroupManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.List;
 import java.util.Set;
@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
-import heroes.journey.modlib.IAttributes;
-import heroes.journey.modlib.IGroup;
-import heroes.journey.modlib.IStat;
-import heroes.journey.modlib.Registrable;
+import heroes.journey.modlib.attributes.IAttributes;
+import heroes.journey.modlib.attributes.IGroup;
+import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.registries.Registrable;
 import kotlin.jvm.functions.Function1;
 
 public class Stat extends Registrable implements IStat {

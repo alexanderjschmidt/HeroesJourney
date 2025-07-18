@@ -5,7 +5,7 @@ import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.modlib.actions.ActionEntry
 import heroes.journey.modlib.actions.IAction
-import heroes.journey.registries.Registries
+import heroes.journey.mods.Registries
 
 object Options {
     val optionsList: MutableList<ActionEntry> = ArrayList(2)

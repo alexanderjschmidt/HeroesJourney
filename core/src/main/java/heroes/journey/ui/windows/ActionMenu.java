@@ -1,6 +1,6 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ActionManager;
 
 import java.util.HashSet;
 import java.util.List;

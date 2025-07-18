@@ -1,6 +1,6 @@
 package heroes.journey.components.character;
 
-import static heroes.journey.registries.Registries.RenderableManager;
+import static heroes.journey.mods.Registries.RenderableManager;
 
 import java.util.UUID;
 

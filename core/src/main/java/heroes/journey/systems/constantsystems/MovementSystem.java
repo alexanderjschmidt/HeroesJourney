@@ -13,7 +13,7 @@ import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.mods.Registries;
 import heroes.journey.systems.GameWorld;
 
 @All({PositionComponent.class, ActorComponent.class, MovementComponent.class, IdComponent.class})

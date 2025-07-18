@@ -1,7 +1,7 @@
 package heroes.journey.ui;
 
-import static heroes.journey.registries.Registries.RenderableManager;
-import static heroes.journey.registries.Registries.StatManager;
+import static heroes.journey.mods.Registries.RenderableManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

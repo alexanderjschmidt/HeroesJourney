@@ -1,6 +1,6 @@
 package heroes.journey.utils.gamestate;
 
-import static heroes.journey.registries.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ActionManager;
 
 import java.util.UUID;
 

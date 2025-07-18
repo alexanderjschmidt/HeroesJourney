@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import heroes.journey.entities.actions.options.BooleanOptionAction;
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.mods.Registries;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.PopupUIState;
 import heroes.journey.ui.hudstates.States;

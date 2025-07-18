@@ -1,6 +1,6 @@
 import heroes.journey.modlib.Ids.*
-import heroes.journey.modlib.attributes
-import heroes.journey.modlib.challenge
+import heroes.journey.modlib.attributes.attributes
+import heroes.journey.modlib.misc.challenge
 
 // Monster Challenges - included by basegame mod
 challenge(

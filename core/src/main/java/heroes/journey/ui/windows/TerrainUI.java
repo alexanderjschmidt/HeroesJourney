@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.modlib.Ids;
-import heroes.journey.registries.Registries;
+import heroes.journey.mods.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;

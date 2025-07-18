@@ -2,9 +2,9 @@ package heroes.journey.entities.tagging;
 
 import java.util.Objects;
 
-import heroes.journey.modlib.IGroup;
-import heroes.journey.modlib.Registrable;
-import heroes.journey.registries.Registries;
+import heroes.journey.modlib.attributes.IGroup;
+import heroes.journey.modlib.registries.Registrable;
+import heroes.journey.mods.Registries;
 
 public class Group extends Registrable implements IGroup {
 

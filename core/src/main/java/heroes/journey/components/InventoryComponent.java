@@ -1,6 +1,6 @@
 package heroes.journey.components;
 
-import static heroes.journey.registries.Registries.ItemManager;
+import static heroes.journey.mods.Registries.ItemManager;
 
 import java.util.List;
 import java.util.Map;

@@ -1,9 +1,9 @@
 package heroes.journey.utils.art
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import heroes.journey.modlib.IRenderable
-import heroes.journey.modlib.Registrable
-import heroes.journey.registries.Registries.RenderableManager
+import heroes.journey.modlib.art.IRenderable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.mods.Registries.RenderableManager
 
 abstract class Renderable(id: String) : Registrable(id), IRenderable {
 
