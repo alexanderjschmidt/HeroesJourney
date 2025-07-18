@@ -27,15 +27,21 @@ interface IQuest : IRegistrable {
 }
 
 /**
+ * Builder for defining a quest in a natural DSL style.
+ */
+interface QuestBuilder {
+    var id: String
+    var fameReward: Int
+    fun cost(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+    fun rewards(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+}
+
+/**
  * Interface for the quest DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface QuestDSL {
-    fun quest(
-        id: String,
-        cost: IAttributes = attributes(),
-        rewards: IAttributes = attributes(),
-        fameReward: Int = 0
-    ): IQuest
+    fun quest(init: QuestBuilder.() -> Unit): IQuest
 }
 
 /**
@@ -47,12 +53,20 @@ object QuestDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a quest using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * quest {
+ *     id = Ids.MY_QUEST
+ *     fameReward = 10
+ *     cost {
+ *         stat(Ids.STAT_VALOR, 2)
+ *     }
+ *     rewards {
+ *         stat(Ids.STAT_INSIGHT, 1)
+ *     }
+ * }
+ * ```
  */
-fun quest(
-    id: String,
-    cost: IAttributes = attributes(),
-    rewards: IAttributes = attributes(),
-    fameReward: Int = 0
-): IQuest =
-    QuestDSLProvider.instance.quest(id, cost, rewards, fameReward)
+fun quest(init: QuestBuilder.() -> Unit): IQuest = QuestDSLProvider.instance.quest(init)

@@ -11,10 +11,18 @@ interface IGroup : IRegistrable {
 }
 
 /**
+ * Builder for defining a group in a natural DSL style.
+ */
+interface GroupBuilder {
+    var id: String
+}
+
+/**
  * Interface for the group DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface GroupDSL {
-    fun group(id: String): IGroup
+    fun group(init: GroupBuilder.() -> Unit): IGroup
 }
 
 /**
@@ -26,6 +34,13 @@ object GroupDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a group using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * group {
+ *     id = Ids.GROUP_BODY
+ * }
+ * ```
  */
-fun group(id: String): IGroup = GroupDSLProvider.instance.group(id)
+fun group(init: GroupBuilder.() -> Unit): IGroup = GroupDSLProvider.instance.group(init)

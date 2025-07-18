@@ -3,10 +3,9 @@ package heroes.journey.mods.attributes
 import heroes.journey.entities.tagging.Group
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IGroup
 import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.attributes.StatDSL
 import heroes.journey.modlib.attributes.StatBuilder
+import heroes.journey.modlib.attributes.StatDSL
 import heroes.journey.mods.Registries
 
 class StatBuilderImpl : StatBuilder {
@@ -18,6 +17,7 @@ class StatBuilderImpl : StatBuilder {
     override fun group(id: String) {
         groupIds.add(id)
     }
+
     fun build(): Triple<String, Triple<Int, Int, ((IAttributes) -> Int)?>, List<String>> {
         return Triple(id, Triple(min, max, formula), groupIds)
     }
@@ -31,6 +31,7 @@ class StatDSLImpl : StatDSL {
         val (min, max, formula) = triple
         val coreGroups = groupIds.map { Registries.GroupManager[it] as Group }
         val coreFormula: (IAttributes) -> Int = formula ?: { attrs -> attrs.getDirect(id) }
+        // Stat does not support attributes in its constructor, so ignore builtAttributes for now
         return Stat(id, min, max, coreFormula, coreGroups)
     }
 }

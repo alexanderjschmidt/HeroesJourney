@@ -15,12 +15,16 @@ class ItemBuilderImpl : ItemBuilder {
     override var subTypeId: String? = null
     override var weight: Int = 1
     private val attrMap = mutableMapOf<String, Int>()
+    private var _attributes: IAttributes? = null
     override var attributes: IAttributes
-        get() = attributes(*attrMap.toList().toTypedArray())
-        set(_) { /* ignore direct set, use attribute() */ }
+        get() = _attributes ?: heroes.journey.entities.tagging.Attributes()
+        set(value) { _attributes = value }
 
     override fun attribute(statId: String, value: Int) {
         attrMap[statId] = value
+        _attributes = heroes.journey.entities.tagging.Attributes().apply {
+            for ((k, v) in attrMap) put(k, v)
+        }
     }
 }
 

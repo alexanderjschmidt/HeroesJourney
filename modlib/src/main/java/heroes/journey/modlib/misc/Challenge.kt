@@ -21,10 +21,21 @@ interface IChallenge : IRegistrable {
 }
 
 /**
+ * Builder for defining a challenge in a natural DSL style.
+ */
+interface ChallengeBuilder {
+    var id: String
+    var render: String
+    fun approach(id: String)
+    fun reward(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+}
+
+/**
  * Interface for the challenge DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface ChallengeDSL {
-    fun challenge(id: String, render: String, approaches: List<String>, reward: IAttributes): IChallenge
+    fun challenge(init: ChallengeBuilder.() -> Unit): IChallenge
 }
 
 /**
@@ -36,7 +47,20 @@ object ChallengeDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a challenge using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * challenge {
+ *     id = Ids.MY_CHALLENGE
+ *     render = Ids.PLAYER_SPRITE
+ *     approach(Ids.STAT_MIGHT)
+ *     approach(Ids.STAT_LOGIC)
+ *     approach(Ids.STAT_CHARM)
+ *     reward {
+ *         stat("valor", 2)
+ *     }
+ * }
+ * ```
  */
-fun challenge(id: String, render: String, approaches: List<String>, reward: IAttributes): IChallenge =
-    ChallengeDSLProvider.instance.challenge(id, render, approaches, reward)
+fun challenge(init: ChallengeBuilder.() -> Unit): IChallenge = ChallengeDSLProvider.instance.challenge(init)

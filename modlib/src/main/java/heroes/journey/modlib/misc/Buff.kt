@@ -19,10 +19,20 @@ interface IBuff : IRegistrable {
 }
 
 /**
+ * Builder for defining a buff in a natural DSL style.
+ */
+interface BuffBuilder {
+    var id: String
+    var turnsBuffLasts: Int
+    fun attributes(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+}
+
+/**
  * Interface for the buff DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface BuffDSL {
-    fun buff(id: String, turnsBuffLasts: Int, attributes: IAttributes = attributes()): IBuff
+    fun buff(init: BuffBuilder.() -> Unit): IBuff
 }
 
 /**
@@ -34,7 +44,17 @@ object BuffDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a buff using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * buff {
+ *     id = "rested"
+ *     turnsBuffLasts = 3
+ *     attributes {
+ *         stat(Ids.STAT_BODY, 2)
+ *     }
+ * }
+ * ```
  */
-fun buff(id: String, turnsBuffLasts: Int, attributes: IAttributes = attributes()): IBuff =
-    BuffDSLProvider.instance.buff(id, turnsBuffLasts, attributes)
+fun buff(init: BuffBuilder.() -> Unit): IBuff = BuffDSLProvider.instance.buff(init)

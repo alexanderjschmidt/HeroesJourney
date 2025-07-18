@@ -1,5 +1,4 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.items.ItemType
 import heroes.journey.modlib.items.item
 import heroes.journey.modlib.items.itemSubType
@@ -7,23 +6,23 @@ import heroes.journey.modlib.items.itemSubType
 // Items - included by basegame mod
 
 // Item Sub Types
-val raw_material = itemSubType {
+itemSubType {
     id = Ids.ITEMSUBTYPE_RAW_MATERIAL
     type = ItemType.Misc
 }.register()
-val refined_material = itemSubType {
+itemSubType {
     id = Ids.ITEMSUBTYPE_REFINED_MATERIAL
     type = ItemType.Misc
 }.register()
-val sword = itemSubType {
+itemSubType {
     id = Ids.ITEMSUBTYPE_SWORD
     type = ItemType.Weapon
 }.register()
-val chest_armor = itemSubType {
+itemSubType {
     id = Ids.ITEMSUBTYPE_CHEST_ARMOR
     type = ItemType.Armor
 }.register()
-val potion = itemSubType {
+itemSubType {
     id = Ids.ITEMSUBTYPE_POTION
     type = ItemType.Consumable
 }.register()

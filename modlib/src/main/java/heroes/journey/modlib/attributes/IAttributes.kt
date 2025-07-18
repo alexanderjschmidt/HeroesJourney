@@ -43,14 +43,18 @@ interface IAttributes {
 }
 
 /**
+ * Builder for defining attributes in a natural DSL style.
+ */
+interface AttributesBuilder {
+    fun stat(id: String, value: Int)
+}
+
+/**
  * Interface for the attributes DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface AttributesDSL {
-    /**
-     * Create an IAttributes object from a list of (statId, value) pairs.
-     * Example: attributes("body" to 3, "mind" to 2)
-     */
-    fun attributes(vararg pairs: Pair<String, Int>): IAttributes
+    fun attributes(init: AttributesBuilder.() -> Unit): IAttributes
 }
 
 /**
@@ -62,7 +66,14 @@ object AttributesDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining attributes using a builder lambda.
+ *
+ * Example usage:
+ * ```kotlin
+ * attributes {
+ *     stat(Ids.STAT_BODY, 3)
+ *     stat(Ids.STAT_MIND, 2)
+ * }
+ * ```
  */
-fun attributes(vararg pairs: Pair<String, Int>): IAttributes =
-    AttributesDSLProvider.instance.attributes(*pairs)
+fun attributes(init: AttributesBuilder.() -> Unit): IAttributes = AttributesDSLProvider.instance.attributes(init)

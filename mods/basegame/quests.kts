@@ -7,57 +7,72 @@ import heroes.journey.modlib.misc.quest
 
 // Example quest: Delve a dungeon
 // Cost: 2 VALOR, Reward: 1 INSIGHT
-quest(
-    id = Ids.DELVE_DUNGEON,
-    cost = attributes(Ids.STAT_VALOR to 2),
-    rewards = attributes(Ids.STAT_INSIGHT to 1),
+quest {
+    id = Ids.DELVE_DUNGEON
+    cost { stat(Ids.STAT_VALOR, 2) }
+    rewards { stat(Ids.STAT_INSIGHT, 1) }
     fameReward = 10
-).register()
+}.register()
 
 // Example quest: Gain physical fitness
 // Cost: 1 VALOR, Reward: 2 VALOR + 1 BODY stat
-quest(
-    id = Ids.GAIN_FITNESS,
-    cost = attributes(Ids.STAT_VALOR to 1),
-    rewards = attributes(Ids.STAT_VALOR to 2, Ids.STAT_BODY to 1),
+quest {
+    id = Ids.GAIN_FITNESS
+    cost { stat(Ids.STAT_VALOR, 1) }
+    rewards {
+        stat(Ids.STAT_VALOR, 2)
+        stat(Ids.STAT_BODY, 1)
+    }
     fameReward = 15
-).register()
+}.register()
 
 // Example quest: Find lost ruin
 // Cost: 1 INSIGHT, Reward: 2 ARCANUM
-quest(
-    id = Ids.FIND_LOST_RUIN,
-    cost = attributes(Ids.STAT_INSIGHT to 1),
-    rewards = attributes(Ids.STAT_ARCANUM to 2),
+quest {
+    id = Ids.FIND_LOST_RUIN
+    cost { stat(Ids.STAT_INSIGHT, 1) }
+    rewards { stat(Ids.STAT_ARCANUM, 2) }
     fameReward = 25
-).register()
+}.register()
 
 // Example quest: Study ancient texts
 // Cost: 1 INSIGHT, Reward: 2 MIND + 1 INSIGHT
-quest(
-    id = Ids.STUDY_TEXTS,
-    cost = attributes(Ids.STAT_INSIGHT to 1),
-    rewards = attributes(Ids.STAT_MIND to 2, Ids.STAT_INSIGHT to 1),
+quest {
+    id = Ids.STUDY_TEXTS
+    cost { stat(Ids.STAT_INSIGHT, 1) }
+    rewards {
+        stat(Ids.STAT_MIND, 2)
+        stat(Ids.STAT_INSIGHT, 1)
+    }
     fameReward = 20
-).register()
+}.register()
 
 // Example quest: Perform a noble deed
 // Cost: 2 INFLUENCE, Reward: 3 INFLUENCE + 1 CHARISMA
-quest(
-    id = Ids.NOBLE_DEED,
-    cost = attributes(Ids.STAT_INFLUENCE to 2),
-    rewards = attributes(Ids.STAT_INFLUENCE to 3, Ids.STAT_CHARISMA to 1),
+quest {
+    id = Ids.NOBLE_DEED
+    cost { stat(Ids.STAT_INFLUENCE, 2) }
+    rewards {
+        stat(Ids.STAT_INFLUENCE, 3)
+        stat(Ids.STAT_CHARISMA, 1)
+    }
     fameReward = 30
-).register()
+}.register()
 
 // Example quest: Master the arcane
 // Cost: 2 ARCANUM, Reward: 3 ARCANUM + 1 MAGIC
-quest(
-    id = Ids.MASTER_ARCANE,
-    cost = attributes(Ids.STAT_ARCANUM to 2),
-    rewards = attributes(Ids.STAT_ARCANUM to 3, Ids.STAT_MAGIC to 1),
+quest {
+    id = Ids.MASTER_ARCANE
+    cost { stat(Ids.STAT_ARCANUM, 2) }
+    rewards {
+        stat(Ids.STAT_ARCANUM, 3)
+        stat(Ids.STAT_MAGIC, 1)
+    }
     fameReward = 35
-).register()
+}.register()
 
 // Example Buff usage
-buff("rested", 1).register()
+buff {
+    id = "rested"
+    turnsBuffLasts = 1
+}.register()

@@ -1,14 +1,15 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.group
 import heroes.journey.modlib.attributes.stat
+import heroes.journey.modlib.attributes.attributes
 
 // --- GROUPS ---
-group(Ids.GROUP_BODY).register()
-group(Ids.GROUP_MIND).register()
-group(Ids.GROUP_MAGIC).register()
-group(Ids.GROUP_CHARISMA).register()
-group(Ids.GROUP_BASESTATS).register()
-group(Ids.GROUP_RENOWN).register()
+group { id = Ids.GROUP_BODY }.register()
+group { id = Ids.GROUP_MIND }.register()
+group { id = Ids.GROUP_MAGIC }.register()
+group { id = Ids.GROUP_CHARISMA }.register()
+group { id = Ids.GROUP_BASESTATS }.register()
+group { id = Ids.GROUP_RENOWN }.register()
 
 // --- BASE STATS ---
 stat {
