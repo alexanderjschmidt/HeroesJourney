@@ -20,16 +20,22 @@ interface IStat : IRegistrable {
 }
 
 /**
+ * Builder for defining a stat in a natural DSL style.
+ */
+interface StatBuilder {
+    var id: String
+    var min: Int
+    var max: Int
+    var formula: ((IAttributes) -> Int)?
+    fun group(id: String)
+}
+
+/**
  * Interface for the stat DSL implementation.
+ * Now uses a builder lambda for a more natural DSL.
  */
 interface StatDSL {
-    fun stat(
-        id: String,
-        min: Int = 1,
-        max: Int = 10,
-        groups: List<IGroup> = emptyList(),
-        formula: ((IAttributes) -> Int)? = null
-    ): IStat
+    fun stat(init: StatBuilder.() -> Unit): IStat
 }
 
 /**
@@ -41,23 +47,27 @@ object StatDSLProvider {
 }
 
 /**
- * DSL entrypoint for defining a new stat.
- * @param id The unique stat ID.
- * @param min The minimum value (default: 1).
- * @param max The maximum value (default: 10).
- * @param groups The stat groups (optional).
- * @param formula Optional formula for derived stats.
- * @return The created [IStat] instance.
+ * DSL entrypoint for defining a new stat using a builder lambda.
  *
  * Example usage:
  * ```kotlin
- * stat(id = Ids.MY_STAT, min = 0, max = 10, groups = listOf(group(Ids.MY_GROUP))).register()
+ * stat {
+ *     id = Ids.STAT_BODY
+ *     min = 1
+ *     max = 10
+ *     group(Ids.GROUP_BASESTATS)
+ *     group(Ids.GROUP_BODY)
+ * }
  * ```
  */
-fun stat(
-    id: String,
-    min: Int = 1,
-    max: Int = 10,
-    groups: List<IGroup> = emptyList(),
-    formula: ((IAttributes) -> Int)? = null
-): IStat = StatDSLProvider.instance.stat(id, min, max, groups, formula)
+fun stat(init: StatBuilder.() -> Unit): IStat = StatDSLProvider.instance.stat(init)
+
+/**
+ * DSL utility for creating a list in a more idiomatic way for mods.
+ */
+fun <T> dslListOf(vararg elements: T): List<T> = elements.toList()
+
+/**
+ * DSL utility for creating a map in a more idiomatic way for mods.
+ */
+fun <K, V> dslMapOf(vararg pairs: Pair<K, V>): Map<K, V> = mapOf(*pairs)
