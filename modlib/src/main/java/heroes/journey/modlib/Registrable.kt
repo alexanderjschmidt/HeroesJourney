@@ -1,6 +1,6 @@
 package heroes.journey.modlib
 
-abstract class Registrable(val id: String) {
+abstract class Registrable(override val id: String) : IRegistrable {
     companion object {
         lateinit var lang: ILang
     }
@@ -9,17 +9,22 @@ abstract class Registrable(val id: String) {
         require(id.isNotBlank()) { "Renderable id must not be blank or empty" }
     }
 
-    open fun getName(): String {
+    override fun getName(): String {
         return lang.get("${id}_name")
     }
 
-    open fun getDescription(): String {
+    override fun getDescription(): String {
         return lang.get("${id}_description")
     }
 
     override fun toString(): String {
         return id
     }
+}
 
-    abstract fun register(): Registrable
+interface IRegistrable {
+    val id: String
+    fun getName(): String
+    fun getDescription(): String
+    fun register(): IRegistrable
 }

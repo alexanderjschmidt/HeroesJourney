@@ -1,9 +1,9 @@
 package heroes.journey.modlib.actions
 
+import heroes.journey.modlib.IRegistrable
 import heroes.journey.modlib.actions.results.ActionResult
 
-interface IAction {
-    val id: String
+interface IAction : IRegistrable {
     val isReturnsActionList: Boolean
     val requirementsMetFn: (IActionContext) -> ShowAction
     val onHoverFn: (IActionContext) -> Unit
@@ -11,7 +11,7 @@ interface IAction {
     val inputDisplayNameFn: ((IActionContext) -> String)?
     val turnCooldown: Int
     val factionCooldown: Boolean
-    fun register(): IAction
+    override fun register(): IAction
 }
 
 interface IOptionAction : IAction {

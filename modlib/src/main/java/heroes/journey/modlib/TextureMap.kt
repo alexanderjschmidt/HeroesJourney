@@ -4,20 +4,16 @@ package heroes.journey.modlib
  * Public interface for a TextureMap, used for sprite sheets and tilemaps.
  * Mods should only use this interface, not implementation classes.
  */
-interface ITextureMap {
-    /** The unique ID of the texture map. */
-    val id: String
+interface ITextureMap : IRegistrable {
     /** The asset path for the texture map. */
     val location: String
+
     /** The width of each tile/sprite in pixels. */
     val width: Int
+
     /** The height of each tile/sprite in pixels. */
     val height: Int
-    /**
-     * Register this texture map with the game.
-     * @return the registered texture map
-     */
-    fun register(): ITextureMap
+    override fun register(): ITextureMap
 }
 
 /**
@@ -43,4 +39,4 @@ object TextureMapDSLProvider {
  * @param height height of each tile/sprite in pixels
  */
 fun textureMap(id: String, location: String, width: Int, height: Int): ITextureMap =
-    TextureMapDSLProvider.instance.textureMap(id, location, width, height) 
+    TextureMapDSLProvider.instance.textureMap(id, location, width, height)

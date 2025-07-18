@@ -4,17 +4,8 @@ package heroes.journey.modlib
  * Public interface for a Renderable, used for sprites and animations.
  * Mods should only use this interface, not implementation classes.
  */
-interface IRenderable {
-    /**
-     * The unique ID of the renderable.
-     */
-    val id: String
-
-    /**
-     * Register this renderable with the game.
-     * @return the registered renderable
-     */
-    fun register(): IRenderable
+interface IRenderable : IRegistrable {
+    override fun register(): IRenderable
 }
 
 /**

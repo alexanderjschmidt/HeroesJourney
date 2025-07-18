@@ -4,17 +4,17 @@ package heroes.journey.modlib
  * Public interface for a Challenge, used for challenge definitions and logic.
  * Mods should only use this interface, not implementation classes.
  */
-interface IChallenge {
-    /** The unique ID of the challenge. */
-    val id: String
+interface IChallenge : IRegistrable {
+
     /** The animation/render ID for the challenge. */
     val render: String
+
     /** The list of approach stat IDs for the challenge. */
     val approaches: List<String>
+
     /** The reward attributes granted by the challenge. */
     val reward: IAttributes
-    /** Register this challenge with the game. */
-    fun register(): IChallenge
+    override fun register(): IChallenge
 }
 
 /**
@@ -36,4 +36,4 @@ object ChallengeDSLProvider {
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
 fun challenge(id: String, render: String, approaches: List<String>, reward: IAttributes): IChallenge =
-    ChallengeDSLProvider.instance.challenge(id, render, approaches, reward) 
+    ChallengeDSLProvider.instance.challenge(id, render, approaches, reward)

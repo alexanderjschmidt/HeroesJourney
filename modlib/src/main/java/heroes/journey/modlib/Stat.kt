@@ -4,13 +4,12 @@ package heroes.journey.modlib
  * Public interface for a Stat, used for character and challenge stats.
  * Mods should only use this interface, not implementation classes.
  */
-interface IStat {
-    val id: String
+interface IStat : IRegistrable {
     val min: Int
     val max: Int
     val groups: List<IGroup>
     val formula: (IAttributes) -> Int
-    fun register(): IStat
+    override fun register(): IStat
 }
 
 /**

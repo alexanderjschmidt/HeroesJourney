@@ -4,18 +4,14 @@ package heroes.journey.modlib
  * Public interface for a Biome, used for world generation.
  * Mods should only use this interface, not implementation classes.
  */
-interface IBiome {
-    /** The unique ID of the biome. */
-    val id: String
+interface IBiome : IRegistrable {
 
     /** The base terrain ID for this biome. */
     val baseTerrain: String
 
     /** The list of feature generation data for this biome. */
     val featureGenerationData: List<FeatureGenerationData>
-
-    /** Register this biome with the game. */
-    fun register(): IBiome
+    override fun register(): IBiome
 }
 
 /**

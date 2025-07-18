@@ -4,17 +4,17 @@ package heroes.journey.modlib
  * Public interface for an Item, used for inventory and world objects.
  * Mods should only use this interface, not implementation classes.
  */
-interface IItem {
-    /** The unique ID of the item. */
-    val id: String
+interface IItem : IRegistrable {
+
     /** The item subtype (category). */
     val subType: IItemSubType
+
     /** The weight of the item. */
     val weight: Int
+
     /** The attributes of the item. */
     val attributes: IAttributes
-    /** Register this item with the game. */
-    fun register(): IItem
+    override fun register(): IItem
 }
 
 /**

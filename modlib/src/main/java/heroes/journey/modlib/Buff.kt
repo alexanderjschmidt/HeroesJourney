@@ -4,15 +4,14 @@ package heroes.journey.modlib
  * Public interface for a Buff, used for temporary stat modifications.
  * Mods should only use this interface, not implementation classes.
  */
-interface IBuff {
-    /** The unique ID of the buff. */
-    val id: String
+interface IBuff : IRegistrable {
+
     /** The number of turns the buff lasts. */
     val turnsBuffLasts: Int
+
     /** The attributes this buff grants. */
     val attributes: IAttributes
-    /** Register this buff with the game. */
-    fun register(): IBuff
+    override fun register(): IBuff
 }
 
 /**
@@ -34,4 +33,4 @@ object BuffDSLProvider {
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
 fun buff(id: String, turnsBuffLasts: Int, attributes: IAttributes = attributes()): IBuff =
-    BuffDSLProvider.instance.buff(id, turnsBuffLasts, attributes) 
+    BuffDSLProvider.instance.buff(id, turnsBuffLasts, attributes)

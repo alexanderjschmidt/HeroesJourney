@@ -4,13 +4,11 @@ package heroes.journey.modlib
  * Public interface for an ItemSubType, used for item categorization.
  * Mods should only use this interface, not implementation classes.
  */
-interface IItemSubType {
-    /** The unique ID of the item subtype. */
-    val id: String
+interface IItemSubType : IRegistrable {
+
     /** The parent item type (e.g., Weapon, Armor, Misc, Consumable). */
     val parentType: ItemType
-    /** Register this item subtype with the game. */
-    fun register(): IItemSubType
+    override fun register(): IItemSubType
 }
 
 /**

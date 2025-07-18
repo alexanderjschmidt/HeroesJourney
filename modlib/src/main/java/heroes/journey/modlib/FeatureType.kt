@@ -4,13 +4,11 @@ package heroes.journey.modlib
  * Public interface for a FeatureType, used for world features like towns, dungeons, etc.
  * Mods should only use this interface, not implementation classes.
  */
-interface IFeatureType {
-    /** The unique ID of the feature type. */
-    val id: String
+interface IFeatureType : IRegistrable {
+
     /** The renderable ID for this feature type. */
     val renderId: String
-    /** Register this feature type with the game. */
-    fun register(): IFeatureType
+    override fun register(): IFeatureType
 }
 
 /**
@@ -34,4 +32,4 @@ object FeatureTypeDSLProvider {
  * @param renderId the ID of the renderable for this feature type
  */
 fun featureType(id: String, renderId: String): IFeatureType =
-    FeatureTypeDSLProvider.instance.featureType(id, renderId) 
+    FeatureTypeDSLProvider.instance.featureType(id, renderId)

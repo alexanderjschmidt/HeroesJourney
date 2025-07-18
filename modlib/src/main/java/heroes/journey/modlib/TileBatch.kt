@@ -4,8 +4,7 @@ package heroes.journey.modlib
  * Public interface for a TileBatch, used for tile batch definitions in worldgen.
  * Mods should only use this interface, not implementation classes.
  */
-interface ITileBatch {
-    val id: String
+interface ITileBatch : IRegistrable {
     val layout: String
     val textureMap: String
     val terrains: Map<String, String>
@@ -15,7 +14,7 @@ interface ITileBatch {
     val addToDefault: Boolean
     val frameCount: Int
     val frameDist: Int
-    fun register(): ITileBatch
+    override fun register(): ITileBatch
 }
 
 /**
@@ -60,4 +59,4 @@ fun tileBatch(
     frameDist: Int = 0
 ): ITileBatch = TileBatchDSLProvider.instance.tileBatch(
     id, layout, textureMap, terrains, weight, startX, startY, addToDefault, frameCount, frameDist
-) 
+)

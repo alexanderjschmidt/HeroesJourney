@@ -4,15 +4,14 @@ package heroes.journey.modlib
  * Public interface for a TileLayout, used for tile arrangement and terrain roles.
  * Mods should only use this interface, not implementation classes.
  */
-interface ITileLayout {
-    /** The unique ID of the tile layout. */
-    val id: String
+interface ITileLayout : IRegistrable {
+
     /** The path for the tile layout. */
     val path: String
+
     /** The terrain roles for this layout. */
     val terrainRoles: List<String>
-    /** Register this tile layout with the game. */
-    fun register(): ITileLayout
+    override fun register(): ITileLayout
 }
 
 /**
@@ -34,4 +33,4 @@ object TileLayoutDSLProvider {
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
 fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout =
-    TileLayoutDSLProvider.instance.tileLayout(id, path, terrainRoles) 
+    TileLayoutDSLProvider.instance.tileLayout(id, path, terrainRoles)
