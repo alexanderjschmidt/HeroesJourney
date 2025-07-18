@@ -52,6 +52,7 @@ class Quest(
         return true
     }
 
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun equals(o: Any?): Boolean {
         if (this === o) return true
         if (o !is Quest) return false
