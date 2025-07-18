@@ -7,6 +7,11 @@ import heroes.journey.modlib.registries.IRegistrable
 /**
  * Public interface for an Item, used for inventory and world objects.
  * Mods should only use this interface, not implementation classes.
+ *
+ * Example usage:
+ * ```kotlin
+ * item(id = Ids.MY_ITEM, subType = ItemType.Misc, weight = 1).register()
+ * ```
  */
 interface IItem : IRegistrable {
 
@@ -37,7 +42,17 @@ object ItemDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a new item.
+ * @param id The unique item ID.
+ * @param subType The item subtype/category.
+ * @param weight The item weight.
+ * @param attributes The item's attributes (optional).
+ * @return The created [IItem] instance.
+ *
+ * Example usage:
+ * ```kotlin
+ * item(id = Ids.MY_ITEM, subType = ItemType.Misc, weight = 1).register()
+ * ```
  */
 fun item(id: String, subType: IItemSubType, weight: Int, attributes: IAttributes = attributes()): IItem =
     ItemDSLProvider.instance.item(id, subType, weight, attributes)

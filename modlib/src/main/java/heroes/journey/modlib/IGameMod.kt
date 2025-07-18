@@ -3,6 +3,14 @@ package heroes.journey.modlib
 /**
  * Public interface for a GameMod, used for mod registration and script loading.
  * Mods should only use this interface, not implementation classes.
+ *
+ * Example usage:
+ * ```kotlin
+ * gameMod("My Mod") {
+ *     includeScript("actions.kts")
+ *     includeScriptsFromDirectory("challenges", "challenges")
+ * }
+ * ```
  */
 interface IGameMod {
     /**
@@ -33,6 +41,7 @@ interface IGameMod {
 
 /**
  * Interface for the GameMod DSL implementation.
+ * Used internally by modlib; modders should use the [gameMod] DSL entrypoint.
  */
 interface GameModDSL {
     fun gameMod(
@@ -57,6 +66,14 @@ object GameModProvider {
  * @param priority The loading priority of the mod (higher numbers load first).
  * @param debug Whether to enable debug mode for the mod.
  * @param onInit The initialization block for the mod.
+ * @return The created [IGameMod] instance.
+ *
+ * Example usage:
+ * ```kotlin
+ * gameMod("My Mod") {
+ *     includeScript("actions.kts")
+ * }
+ * ```
  */
 fun gameMod(
     name: String,

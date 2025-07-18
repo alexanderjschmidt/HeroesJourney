@@ -2,6 +2,23 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.registries.IRegistrable
 
+/**
+ * Public interface for an Action, used for player actions and abilities.
+ * Mods should only use this interface, not implementation classes.
+ *
+ * Example usage:
+ * ```kotlin
+ * action {
+ *     id = Ids.MY_ACTION
+ *     requirementsMetFn = { ShowAction.YES }
+ *     onHoverFn = { }
+ *     onSelectFn = { input -> StringResult("You did the thing!") }
+ *     inputDisplayNameFn = { "Do the Thing" }
+ *     turnCooldown = 0
+ *     factionCooldown = false
+ * }.register()
+ * ```
+ */
 interface IAction : IRegistrable {
     val isReturnsActionList: Boolean
     val requirementsMetFn: (IActionContext) -> ShowAction
@@ -66,6 +83,19 @@ object ActionDSLProvider : ActionDSL {
     override fun <I> targetAction(init: ITargetActionBuilder<I>.() -> Unit) = instance.targetAction(init)
 }
 
+/**
+ * DSL entrypoint for defining a new action.
+ * @param init The initialization block for the action builder.
+ * @return The created [IAction] instance.
+ *
+ * Example usage:
+ * ```kotlin
+ * action {
+ *     id = Ids.MY_ACTION
+ *     ...
+ * }.register()
+ * ```
+ */
 fun action(init: IActionBuilder.() -> Unit) = ActionDSLProvider.action(init)
 fun optionAction(init: IOptionActionBuilder.() -> Unit) = ActionDSLProvider.optionAction(init)
 fun booleanOptionAction(init: IBooleanOptionActionBuilder.() -> Unit) =

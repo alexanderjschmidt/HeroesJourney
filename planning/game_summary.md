@@ -289,6 +289,34 @@ The core mod containing all essential game content, structured as a unified mod 
 
 ---
 
+## 🧩 **How Mods and Modlib Work Together**
+
+Heroes Journey uses a robust modding architecture that cleanly separates game content (mods) from the underlying game engine and logic (core). This is achieved through the `modlib` module, which acts as a stable, safe API layer for all mod content. Here’s how the system works:
+
+- **modlib as the API Layer:**
+  - All interfaces, DSLs (domain-specific languages), and registries that mods need are exposed via `modlib`.
+  - Mods never access core implementation details directly; they interact only with the interfaces and builders provided by `modlib`.
+  - The `gameMod` entrypoint, all content DSLs (for actions, items, quests, etc.), and helpers (like localization and UI context) are provided by `modlib`.
+
+- **Mods as Content Packages:**
+  - Mods are written as Kotlin scripts (`.kts`) that use only `modlib` imports.
+  - Content such as actions, challenges, items, and quests are defined using the DSLs and interfaces from `modlib`.
+  - Mods are loaded at runtime, registered, and validated through the modlib system, ensuring safety and stability.
+
+- **Core as the Implementation:**
+  - The core game engine implements all the interfaces defined in `modlib` and wires up the actual logic and data structures.
+  - At startup, the core registers its implementations with `modlib`, so all mod content is executed using the real game logic, but only through the safe API.
+
+- **Benefits:**
+  - **Safety:** Mods cannot break or corrupt the game engine, as they have no access to internals.
+  - **Flexibility:** New content and features can be added or hot-reloaded without changing the core codebase.
+  - **Extensibility:** Third-party modders can create new content using only the documented, stable APIs in `modlib`.
+  - **Maintainability:** The separation ensures that engine changes do not break mods, as long as the `modlib` API remains stable.
+
+This architecture enables a powerful, community-friendly modding ecosystem while keeping the core game logic secure and maintainable.
+
+---
+
 ## 📊 **Current Implementation Status**
 
 ### **✅ Completed Systems**

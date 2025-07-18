@@ -1,3 +1,15 @@
+/**
+ * Centralized collection of string IDs for all built-in content in Heroes Journey.
+ *
+ * Modders should use these IDs when referencing built-in content (e.g., stats, items, renderables, etc.),
+ * and may define their own unique string IDs for custom content.
+ *
+ * Example usage:
+ * ```kotlin
+ * stat(id = Ids.STAT_BODY, ...)
+ * item(id = Ids.ITEM_WOOD, ...)
+ * ```
+ */
 package heroes.journey.modlib
 
 object Ids {

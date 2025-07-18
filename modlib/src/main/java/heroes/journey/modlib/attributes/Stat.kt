@@ -5,6 +5,11 @@ import heroes.journey.modlib.registries.IRegistrable
 /**
  * Public interface for a Stat, used for character and challenge stats.
  * Mods should only use this interface, not implementation classes.
+ *
+ * Example usage:
+ * ```kotlin
+ * stat(id = Ids.MY_STAT, min = 0, max = 10, groups = listOf(group(Ids.MY_GROUP))).register()
+ * ```
  */
 interface IStat : IRegistrable {
     val min: Int
@@ -36,7 +41,18 @@ object StatDSLProvider {
 }
 
 /**
- * DSL entrypoint for mods. Always delegates to the core implementation.
+ * DSL entrypoint for defining a new stat.
+ * @param id The unique stat ID.
+ * @param min The minimum value (default: 1).
+ * @param max The maximum value (default: 10).
+ * @param groups The stat groups (optional).
+ * @param formula Optional formula for derived stats.
+ * @return The created [IStat] instance.
+ *
+ * Example usage:
+ * ```kotlin
+ * stat(id = Ids.MY_STAT, min = 0, max = 10, groups = listOf(group(Ids.MY_GROUP))).register()
+ * ```
  */
 fun stat(
     id: String,
