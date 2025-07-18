@@ -23,7 +23,7 @@ interface ITerrain : IRegistrable {
  * Interface for the terrain DSL implementation.
  */
 interface TerrainDSL {
-    fun terrain(id: String, terrainCost: Int = 1): ITerrain
+    fun terrain(init: TerrainBuilder.() -> Unit): ITerrain
 }
 
 /**
@@ -37,15 +37,9 @@ object TerrainDSLProvider {
 /**
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
-fun terrain(id: String, terrainCost: Int = 1): ITerrain = TerrainDSLProvider.instance.terrain(id, terrainCost)
+fun terrain(init: TerrainBuilder.() -> Unit): ITerrain = TerrainDSLProvider.instance.terrain(init)
 
 class TerrainBuilder {
     var id: String = ""
     var terrainCost: Int = 1
-    fun build(): ITerrain = terrain(id, terrainCost)
-}
-
-fun terrain(builder: TerrainBuilder.() -> Unit): ITerrain {
-    val b = TerrainBuilder().apply(builder)
-    return b.build()
 }

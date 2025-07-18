@@ -23,18 +23,7 @@ interface ITileBatch : IRegistrable {
  * Interface for the tile batch DSL implementation.
  */
 interface TileBatchDSL {
-    fun tileBatch(
-        id: String,
-        layout: String,
-        textureMap: String,
-        terrains: Map<String, String>,
-        weight: Int = 1,
-        startX: Int = 0,
-        startY: Int = 0,
-        addToDefault: Boolean = true,
-        frameCount: Int = 0,
-        frameDist: Int = 0
-    ): ITileBatch
+    fun tileBatch(init: TileBatchBuilder.() -> Unit): ITileBatch
 }
 
 /**
@@ -48,36 +37,33 @@ object TileBatchDSLProvider {
 /**
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
-fun tileBatch(
-    id: String,
-    layout: String,
-    textureMap: String,
-    terrains: Map<String, String>,
-    weight: Int = 1,
-    startX: Int = 0,
-    startY: Int = 0,
-    addToDefault: Boolean = true,
-    frameCount: Int = 0,
-    frameDist: Int = 0
-): ITileBatch = TileBatchDSLProvider.instance.tileBatch(
-    id, layout, textureMap, terrains, weight, startX, startY, addToDefault, frameCount, frameDist
-)
+fun tileBatch(init: TileBatchBuilder.() -> Unit): ITileBatch = TileBatchDSLProvider.instance.tileBatch(init)
 
 class TileBatchBuilder {
     var id: String = ""
     var layout: String = ""
     var textureMap: String = ""
-    var terrains: Map<String, String> = emptyMap()
+    private val _terrains: MutableMap<String, String> = mutableMapOf()
+    val terrains: Map<String, String> get() = _terrains
     var weight: Int = 1
     var startX: Int = 0
     var startY: Int = 0
     var addToDefault: Boolean = true
     var frameCount: Int = 0
     var frameDist: Int = 0
-    fun build(): ITileBatch = tileBatch(id, layout, textureMap, terrains, weight, startX, startY, addToDefault, frameCount, frameDist)
-}
-
-fun tileBatch(builder: TileBatchBuilder.() -> Unit): ITileBatch {
-    val b = TileBatchBuilder().apply(builder)
-    return b.build()
+    fun layoutTerrain(key: String, terrainId: String) {
+        _terrains[key] = terrainId
+    }
+    fun build(): ITileBatch = TileBatchDSLProvider.instance.tileBatch {
+        id = this@TileBatchBuilder.id
+        layout = this@TileBatchBuilder.layout
+        textureMap = this@TileBatchBuilder.textureMap
+        _terrains.forEach { (k, v) -> layoutTerrain(k, v) }
+        weight = this@TileBatchBuilder.weight
+        startX = this@TileBatchBuilder.startX
+        startY = this@TileBatchBuilder.startY
+        addToDefault = this@TileBatchBuilder.addToDefault
+        frameCount = this@TileBatchBuilder.frameCount
+        frameDist = this@TileBatchBuilder.frameDist
+    }
 }

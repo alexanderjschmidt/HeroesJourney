@@ -1,4 +1,5 @@
 @file:Suppress("UNCHECKED_CAST")
+
 package heroes.journey.mods
 
 import heroes.journey.modlib.GameModProvider
@@ -71,6 +72,7 @@ fun setupModlibDSLs() {
     TerrainDSLProvider.instance = TerrainDSLImpl()
     TileLayoutDSLProvider.instance = TileLayoutDSLImpl()
     TileBatchDSLProvider.instance = TileBatchDSLImpl()
+    BaseTileDSLProvider.instance = BaseTileDSLImpl()
     StatDSLProvider.instance = StatDSLImpl()
     ItemSubTypeDSLProvider.instance = ItemSubTypeDSLImpl()
     ItemDSLProvider.instance = ItemDSLImpl()

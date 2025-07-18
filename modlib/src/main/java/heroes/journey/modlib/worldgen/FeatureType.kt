@@ -17,7 +17,7 @@ interface IFeatureType : IRegistrable {
  * Interface for the FeatureType DSL implementation.
  */
 interface FeatureTypeDSL {
-    fun featureType(id: String, renderId: String): IFeatureType
+    fun featureType(init: FeatureTypeBuilder.() -> Unit): IFeatureType
 }
 
 /**
@@ -28,21 +28,9 @@ object FeatureTypeDSLProvider {
     lateinit var instance: FeatureTypeDSL
 }
 
-/**
- * DSL entrypoint for creating a feature type.
- * @param id unique feature type ID
- * @param renderId the ID of the renderable for this feature type
- */
-fun featureType(id: String, renderId: String): IFeatureType =
-    FeatureTypeDSLProvider.instance.featureType(id, renderId)
-
 class FeatureTypeBuilder {
     var id: String = ""
     var renderId: String = ""
-    fun build(): IFeatureType = featureType(id, renderId)
 }
 
-fun featureType(builder: FeatureTypeBuilder.() -> Unit): IFeatureType {
-    val b = FeatureTypeBuilder().apply(builder)
-    return b.build()
-}
+fun featureType(init: FeatureTypeBuilder.() -> Unit): IFeatureType = FeatureTypeDSLProvider.instance.featureType(init)

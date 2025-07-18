@@ -22,7 +22,7 @@ interface ITextureMap : IRegistrable {
  * Interface for the TextureMap DSL implementation.
  */
 interface TextureMapDSL {
-    fun textureMap(id: String, location: String, width: Int, height: Int): ITextureMap
+    fun textureMap(init: TextureMapBuilder.() -> Unit): ITextureMap
 }
 
 /**
@@ -40,18 +40,11 @@ object TextureMapDSLProvider {
  * @param width width of each tile/sprite in pixels
  * @param height height of each tile/sprite in pixels
  */
-fun textureMap(id: String, location: String, width: Int, height: Int): ITextureMap =
-    TextureMapDSLProvider.instance.textureMap(id, location, width, height)
+fun textureMap(init: TextureMapBuilder.() -> Unit): ITextureMap = TextureMapDSLProvider.instance.textureMap(init)
 
 class TextureMapBuilder {
     var id: String = ""
     var location: String = ""
     var width: Int = 0
     var height: Int = 0
-    fun build(): ITextureMap = textureMap(id, location, width, height)
-}
-
-fun textureMap(builder: TextureMapBuilder.() -> Unit): ITextureMap {
-    val b = TextureMapBuilder().apply(builder)
-    return b.build()
 }

@@ -2,31 +2,24 @@ package heroes.journey.mods.worldgen
 
 import heroes.journey.modlib.worldgen.ITileBatch
 import heroes.journey.modlib.worldgen.TileBatchDSL
+import heroes.journey.modlib.worldgen.TileBatchBuilder
 import heroes.journey.tilemap.TileBatch
 
 class TileBatchDSLImpl : TileBatchDSL {
-    override fun tileBatch(
-        id: String,
-        layout: String,
-        textureMap: String,
-        terrains: Map<String, String>,
-        weight: Int,
-        startX: Int,
-        startY: Int,
-        addToDefault: Boolean,
-        frameCount: Int,
-        frameDist: Int
-    ): ITileBatch = TileBatch(
-        id,
-        layout,
-        textureMap,
-        terrains,
-        weight,
-        startX,
-        startY,
-        addToDefault,
-        frameCount > 0,
-        frameCount,
-        frameDist
-    )
+    override fun tileBatch(init: TileBatchBuilder.() -> Unit): ITileBatch {
+        val builder = TileBatchBuilder().apply(init)
+        return TileBatch(
+            builder.id,
+            builder.layout,
+            builder.textureMap,
+            builder.terrains,
+            builder.weight,
+            builder.startX,
+            builder.startY,
+            builder.addToDefault,
+            builder.frameCount > 0,
+            builder.frameCount,
+            builder.frameDist
+        )
+    }
 }

@@ -20,7 +20,7 @@ interface ITileLayout : IRegistrable {
  * Interface for the tile layout DSL implementation.
  */
 interface TileLayoutDSL {
-    fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout
+    fun tileLayout(init: TileLayoutBuilder.() -> Unit): ITileLayout
 }
 
 /**
@@ -34,17 +34,10 @@ object TileLayoutDSLProvider {
 /**
  * DSL entrypoint for mods. Always delegates to the core implementation.
  */
-fun tileLayout(id: String, path: String, terrainRoles: List<String>): ITileLayout =
-    TileLayoutDSLProvider.instance.tileLayout(id, path, terrainRoles)
+fun tileLayout(init: TileLayoutBuilder.() -> Unit): ITileLayout = TileLayoutDSLProvider.instance.tileLayout(init)
 
 class TileLayoutBuilder {
     var id: String = ""
     var path: String = ""
     var terrainRoles: List<String> = emptyList()
-    fun build(): ITileLayout = tileLayout(id, path, terrainRoles)
-}
-
-fun tileLayout(builder: TileLayoutBuilder.() -> Unit): ITileLayout {
-    val b = TileLayoutBuilder().apply(builder)
-    return b.build()
 }
