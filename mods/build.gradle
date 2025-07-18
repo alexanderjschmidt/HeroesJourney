@@ -5,7 +5,6 @@ eclipse.project.name = appName + '-mods'
 
 dependencies {
   implementation project(":modlib")
-  implementation project(":core")
 }
 
 sourceSets {

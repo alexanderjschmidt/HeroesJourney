@@ -37,6 +37,8 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.Registries.RenderableManager = Registries.RenderableManager as Registry<IRenderable>
     heroes.journey.modlib.Registries.TextureManager = Registries.TextureManager as Registry<ITextureMap>
 
+    GameModProvider.instance = GameModDSLImpl()
+
     // Wire up modlib DSLs
     GroupDSLProvider.instance = GroupDSLImpl()
     RenderableDSLProvider.instance = RenderableDSLImpl()

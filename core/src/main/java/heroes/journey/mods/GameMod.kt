@@ -1,5 +1,7 @@
 package heroes.journey.mods
 
+import heroes.journey.modlib.GameModDSL
+import heroes.journey.modlib.IGameMod
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -8,6 +10,23 @@ data class ScriptTask(val path: String, val parallel: Boolean)
 
 data class ScriptGroup(val name: String, val tasks: MutableList<ScriptTask>)
 
+/**
+ * Core implementation of the GameModDSL interface.
+ * Delegates to the core GameMod class for actual functionality.
+ */
+class GameModDSLImpl : GameModDSL {
+    override fun gameMod(
+        name: String,
+        priority: Int,
+        debug: Boolean,
+        onInit: IGameMod.() -> Unit
+    ): IGameMod {
+        val modFolder = ScriptModLoader.getCurrentModFolder()
+        val coreGameMod = GameMod(name, onInit as GameMod.() -> Unit, priority, debug, modFolder)
+        return coreGameMod
+    }
+}
+
 class GameMod(
     val name: String,
     private val onInitBlock: GameMod.() -> Unit,
@@ -15,7 +34,7 @@ class GameMod(
     private val debug: Boolean = false,
     private val modFolder: String = ""
 ) :
-    Comparable<GameMod> {
+    Comparable<GameMod>, IGameMod {
 
     private val scriptGroups = mutableListOf<ScriptGroup>()
     private var totalScripts = 0
@@ -117,14 +136,15 @@ class GameMod(
         println("[MOD: $name] $message")
     }
 
-    fun includeScript(scriptPath: String) {
+    override fun includeScript(scriptPath: String) {
         // Create a new group for this sequential script
-        val newGroup = ScriptGroup("Script: ${File(scriptPath).name}", mutableListOf(ScriptTask(scriptPath, false)))
+        val newGroup =
+            ScriptGroup("Script: ${File(scriptPath).name}", mutableListOf(ScriptTask(scriptPath, false)))
         scriptGroups.add(newGroup)
         totalScripts++
     }
 
-    fun includeScripts(groupName: String, vararg scriptPaths: String, parallel: Boolean = true) {
+    override fun includeScripts(groupName: String, vararg scriptPaths: String, parallel: Boolean) {
         // Create a new group for these scripts
         val newGroup = ScriptGroup(groupName, mutableListOf())
         scriptPaths.forEach { path ->
@@ -134,7 +154,11 @@ class GameMod(
         scriptGroups.add(newGroup)
     }
 
-    fun includeScriptsFromDirectory(groupName: String, directoryPath: String, parallel: Boolean = true) {
+    override fun includeScriptsFromDirectory(
+        groupName: String,
+        directoryPath: String,
+        parallel: Boolean
+    ) {
         // Use the mod's own folder instead of getting it from ScriptModLoader
         val modDirectory = File("mods/$modFolder")
         val directory = File(modDirectory, directoryPath)
@@ -171,6 +195,7 @@ class GameMod(
     }
 }
 
+// Legacy function for backward compatibility
 fun gameMod(
     name: String,
     priority: Int = 0,
