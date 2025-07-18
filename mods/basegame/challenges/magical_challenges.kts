@@ -1,95 +1,95 @@
-import heroes.journey.modlib.Ids.*
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Magical Challenges - included by basegame mod
 challenge(
-    id = CHALLENGE_ARCANE_PUZZLE,
-    render = ARCANE_PUZZLE,
-    approaches = listOf(STAT_CONCENTRATION, STAT_LOGIC, STAT_SORCERY),
+    id = Ids.CHALLENGE_ARCANE_PUZZLE,
+    render = Ids.ARCANE_PUZZLE,
+    approaches = listOf(Ids.STAT_CONCENTRATION, Ids.STAT_LOGIC, Ids.STAT_SORCERY),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_ENCHANT_ITEM,
-    render = ENCHANT_ITEM,
-    approaches = listOf(STAT_CHARM, STAT_EMPOWERMENT, STAT_ENCHANTING),
+    id = Ids.CHALLENGE_ENCHANT_ITEM,
+    render = Ids.ENCHANT_ITEM,
+    approaches = listOf(Ids.STAT_CHARM, Ids.STAT_EMPOWERMENT, Ids.STAT_ENCHANTING),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_TRICK_MAGICAL_GUARDIAN,
-    render = TRICK_MAGICAL_GUARDIAN,
-    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_LOGIC),
+    id = Ids.CHALLENGE_TRICK_MAGICAL_GUARDIAN,
+    render = Ids.TRICK_MAGICAL_GUARDIAN,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_ILLUSION, Ids.STAT_LOGIC),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_EMPOWER_RELIC,
-    render = EMPOWER_RELIC,
-    approaches = listOf(STAT_ENCHANTING, STAT_MIGHT, STAT_PERSUASION),
+    id = Ids.CHALLENGE_EMPOWER_RELIC,
+    render = Ids.EMPOWER_RELIC,
+    approaches = listOf(Ids.STAT_ENCHANTING, Ids.STAT_MIGHT, Ids.STAT_PERSUASION),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_BANISH_CURSED_SPIRIT,
-    render = BANISH_CURSED_SPIRIT,
-    approaches = listOf(STAT_CHARM, STAT_CONCENTRATION, STAT_SORCERY),
+    id = Ids.CHALLENGE_BANISH_CURSED_SPIRIT,
+    render = Ids.BANISH_CURSED_SPIRIT,
+    approaches = listOf(Ids.STAT_CHARM, Ids.STAT_CONCENTRATION, Ids.STAT_SORCERY),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_BEWITCH_FAMILIAR,
-    render = BEWITCH_FAMILIAR,
-    approaches = listOf(STAT_BEWITCHING, STAT_EMPOWERMENT, STAT_LOGIC),
+    id = Ids.CHALLENGE_BEWITCH_FAMILIAR,
+    render = Ids.BEWITCH_FAMILIAR,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_EMPOWERMENT, Ids.STAT_LOGIC),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_CHARM_MAGICAL_BEAST,
-    render = CHARM_MAGICAL_BEAST,
-    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    id = Ids.CHALLENGE_CHARM_MAGICAL_BEAST,
+    render = Ids.CHARM_MAGICAL_BEAST,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_CHARM, Ids.STAT_MESMERISM),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_OUTWIT_MAGICAL_TRAP,
-    render = OUTWIT_MAGICAL_TRAP,
-    approaches = listOf(STAT_CUNNING, STAT_ILLUSION, STAT_LOGIC),
+    id = Ids.CHALLENGE_OUTWIT_MAGICAL_TRAP,
+    render = Ids.OUTWIT_MAGICAL_TRAP,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_ILLUSION, Ids.STAT_LOGIC),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_ENCHANT_WEAPON,
-    render = ENCHANT_WEAPON,
-    approaches = listOf(STAT_EMPOWERMENT, STAT_ENCHANTING, STAT_PERSUASION),
+    id = Ids.CHALLENGE_ENCHANT_WEAPON,
+    render = Ids.ENCHANT_WEAPON,
+    approaches = listOf(Ids.STAT_EMPOWERMENT, Ids.STAT_ENCHANTING, Ids.STAT_PERSUASION),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_SOLVE_RIDDLE,
-    render = SOLVE_RIDDLE,
-    approaches = listOf(STAT_ENCHANTING, STAT_LOGIC, STAT_MIGHT),
+    id = Ids.CHALLENGE_SOLVE_RIDDLE,
+    render = Ids.SOLVE_RIDDLE,
+    approaches = listOf(Ids.STAT_ENCHANTING, Ids.STAT_LOGIC, Ids.STAT_MIGHT),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_DISARM_GOLEM,
-    render = DISARM_GOLEM,
-    approaches = listOf(STAT_CUNNING, STAT_SKILL, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_DISARM_GOLEM,
+    render = Ids.DISARM_GOLEM,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_SKILL, Ids.STAT_TECHNIQUE),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_BEWITCH_MAGICAL_FOE,
-    render = BEWITCH_MAGICAL_FOE,
-    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    id = Ids.CHALLENGE_BEWITCH_MAGICAL_FOE,
+    render = Ids.BEWITCH_MAGICAL_FOE,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_CHARM, Ids.STAT_MESMERISM),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_PERSUADE_ELEMENTAL,
-    render = PERSUADE_ELEMENTAL,
-    approaches = listOf(STAT_CONCENTRATION, STAT_PERSUASION, STAT_SORCERY),
+    id = Ids.CHALLENGE_PERSUADE_ELEMENTAL,
+    render = Ids.PERSUADE_ELEMENTAL,
+    approaches = listOf(Ids.STAT_CONCENTRATION, Ids.STAT_PERSUASION, Ids.STAT_SORCERY),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_BEFRIEND_FAIRY,
-    render = BEFRIEND_FAIRY,
-    approaches = listOf(STAT_CHARM, STAT_ENCHANTING, STAT_MESMERISM),
+    id = Ids.CHALLENGE_BEFRIEND_FAIRY,
+    render = Ids.BEFRIEND_FAIRY,
+    approaches = listOf(Ids.STAT_CHARM, Ids.STAT_ENCHANTING, Ids.STAT_MESMERISM),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_BANISH_DEMON,
-    render = BANISH_DEMON,
-    approaches = listOf(STAT_BEWITCHING, STAT_LOGIC, STAT_SORCERY),
+    id = Ids.CHALLENGE_BANISH_DEMON,
+    render = Ids.BANISH_DEMON,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_LOGIC, Ids.STAT_SORCERY),
     reward = attributes("arcanum" to 2)
 ).register()

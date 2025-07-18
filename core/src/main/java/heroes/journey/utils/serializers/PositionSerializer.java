@@ -12,8 +12,8 @@ public class PositionSerializer extends CustomSerializer<Position> {
     @Override
     public void write(Json json, Position position, Class aClass) {
         json.writeObjectStart();
-        json.writeValue("x", position.getX());
-        json.writeValue("y", position.getY());
+        json.writeValue("x", position.x);
+        json.writeValue("y", position.y);
         json.writeObjectEnd();
     }
 
@@ -26,8 +26,8 @@ public class PositionSerializer extends CustomSerializer<Position> {
 
     @Override
     public void write(Kryo kryo, Output output, Position position) {
-        output.writeInt(position.getX());
-        output.writeInt(position.getY());
+        output.writeInt(position.x);
+        output.writeInt(position.y);
     }
 
     @Override

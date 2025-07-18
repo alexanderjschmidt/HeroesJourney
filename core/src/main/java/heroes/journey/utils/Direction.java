@@ -107,8 +107,8 @@ public enum Direction {
     }
 
     public static Direction approximateDirection(Position from, Position to) {
-        int dx = to.getX() - from.getX();
-        int dy = to.getY() - from.getY();
+        int dx = to.x - from.x;
+        int dy = to.y - from.y;
 
         double angle = Math.atan2(dy, dx); // Note: Y axis is flipped (top-down map)
         double degrees = Math.toDegrees(angle);

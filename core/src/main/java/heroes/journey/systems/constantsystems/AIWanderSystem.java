@@ -72,7 +72,7 @@ public class AIWanderSystem extends IteratingSystem {
             RegionComponent regionComponent = RegionComponent.get(world, region);
             boolean inRegion = false;
             for (Position tile : regionComponent.getTiles()) {
-                if (tile.getX() == nx && tile.getY() == ny) {
+                if (tile.x == nx && tile.y == ny) {
                     inRegion = true;
                     break;
                 }

@@ -1,10 +1,10 @@
 package heroes.journey.entities.actions.options
 
 import heroes.journey.entities.actions.Action
+import heroes.journey.modlib.actions.ActionResult
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.IOptionAction
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.results.ActionResult
 
 abstract class OptionAction(
     id: String,

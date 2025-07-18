@@ -61,11 +61,11 @@ public class RegionManagementSystem extends TriggerableSystem {
             Position randomPosition = tilesArray[Random.get().nextInt(tilesArray.length)];
 
             UUID challengeEntityId = world.getEntityFactory()
-                .createChallenge(randomChallenge, randomPosition.getX(), randomPosition.getY());
+                .createChallenge(randomChallenge, randomPosition.x, randomPosition.y);
             regionComponent.addChallenge(challengeEntityId);
             System.out.println(
                 "Added random challenge '" + randomChallenge.getName() + "' to region " + regionId +
-                    " at position (" + randomPosition.getX() + ", " + randomPosition.getY() + ")");
+                    " at position (" + randomPosition.x + ", " + randomPosition.y + ")");
             // Refresh the challenges list after adding a new challenge
             challenges = regionComponent.getChallenges();
         }

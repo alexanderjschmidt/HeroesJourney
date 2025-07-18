@@ -1,12 +1,13 @@
+import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.StringResult
 import java.util.*
+import heroes.journey.modlib.Ids
 
 // Delve Actions - included by basegame mod
 
 // Delve Action
 action {
-    id = "delve"
+    id = Ids.DELVE
     turnCooldown = 5
     factionCooldown = true
     onSelectFn = { input ->

@@ -1,17 +1,11 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.actions.ActionEntry
-import heroes.journey.modlib.actions.IAction
-import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.ActionListResult
-import heroes.journey.modlib.actions.results.EndTurnResult
-import heroes.journey.modlib.actions.results.StringResult
+import heroes.journey.modlib.actions.*
 
 // Core Actions - included by basegame mod
 
 // Rest (Used in End Turn)
 action {
-    id = "rest"
+    id = Ids.REST
     onSelectFn = { input ->
         input.addBuff(input.entityId!!, "rested")
         EndTurnResult()
@@ -27,7 +21,7 @@ object TrainingOptions {
 
 // Workout Training Option
 action {
-    id = "workout_training"
+    id = Ids.WORKOUT_TRAINING
     requirementsMetFn = { input ->
         if (input.getStat(input.entityId!!, Ids.STAT_VALOR) >= 5) {
             ShowAction.YES
@@ -44,7 +38,7 @@ action {
 
 // Study Training Option
 action {
-    id = "study_training"
+    id = Ids.STUDY_TRAINING
     requirementsMetFn = { input ->
         if (input.getStat(input.entityId!!, Ids.STAT_INSIGHT) >= 5) {
             ShowAction.YES
@@ -61,7 +55,7 @@ action {
 
 // Practice Training Option
 action {
-    id = "practice_training"
+    id = Ids.PRACTICE_TRAINING
     requirementsMetFn = { input ->
         if (input.getStat(input.entityId!!, Ids.STAT_ARCANUM) >= 5) {
             ShowAction.YES
@@ -78,7 +72,7 @@ action {
 
 // Socialize Training Option
 action {
-    id = "socialize_training"
+    id = Ids.SOCIALIZE_TRAINING
     requirementsMetFn = { input ->
         if (input.getStat(input.entityId!!, Ids.STAT_INFLUENCE) >= 5) {
             ShowAction.YES
@@ -95,7 +89,7 @@ action {
 
 // Main Training Action
 action {
-    id = "training"
+    id = Ids.TRAINING
     onSelectFn = { input ->
         ActionListResult(TrainingOptions.optionsList)
     }

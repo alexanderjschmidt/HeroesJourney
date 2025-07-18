@@ -3,12 +3,7 @@ package heroes.journey.entities.actions
 import heroes.journey.Application
 import heroes.journey.GameState
 import heroes.journey.components.character.ActionComponent
-import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.ActionListResult
-import heroes.journey.modlib.actions.results.EndTurnResult
-import heroes.journey.modlib.actions.results.NullResult
-import heroes.journey.modlib.actions.results.StringResult
+import heroes.journey.modlib.actions.*
 import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
@@ -74,7 +69,7 @@ fun createCoreActions() {
             input["message"]!!
         }
         onSelectFn = { input ->
-            StringResult(input["message"])
+            StringResult(input["message"]!!)
         }
     }.register()
 

@@ -1,6 +1,6 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.EndTurnResult
 import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.EndTurnResult
 import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.registries.Registries
@@ -10,7 +10,7 @@ import java.util.*
 
 // Choose Approach
 action {
-    id = "choose_approach"
+    id = Ids.CHOOSE_APPROACH
     inputDisplayNameFn = { input ->
         input["target"]!!
     }
@@ -32,7 +32,7 @@ action {
 
 // Face Challenge
 targetAction<IStat> {
-    id = "face_challenge"
+    id = Ids.FACE_CHALLENGE
     inputDisplayNameFn = { input ->
         input.getName(UUID.fromString(input["target"]))
     }
@@ -46,7 +46,7 @@ targetAction<IStat> {
 
 // Face Challenges
 targetAction<UUID> {
-    id = "face_challenges"
+    id = Ids.FACE_CHALLENGES
     getTargets = { input ->
         val regionId = input.getRegion(input.entityId!!)
         input.getChallenges(regionId)

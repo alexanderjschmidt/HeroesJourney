@@ -1,6 +1,5 @@
 package heroes.journey.modlib.actions
 
-import heroes.journey.modlib.actions.results.ActionResult
 import heroes.journey.modlib.registries.IRegistrable
 
 interface IAction : IRegistrable {
@@ -29,7 +28,7 @@ interface IActionBuilder {
     var factionCooldown: Boolean
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
-    var onSelectFn: (IActionContext) -> heroes.journey.modlib.actions.results.ActionResult
+    var onSelectFn: (IActionContext) -> ActionResult
     var inputDisplayNameFn: ((IActionContext) -> String)?
 }
 

@@ -4,7 +4,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import heroes.journey.entities.actions.ActionContext;
-import heroes.journey.modlib.actions.results.ActionResult;
+import heroes.journey.modlib.actions.ActionResult;
 
 public class Event {
     protected final Function<ActionContext,ActionResult> trigger;

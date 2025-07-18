@@ -50,8 +50,8 @@ public class VoronoiRegionGenerator {
             for (int i = 0; i < regionsInRing; i++) {
                 float angle = (float)((i * Math.PI * 2 / regionsInRing) + angleOffset);
 
-                float x = center.getX() + (float)Math.cos(angle) * radius;
-                float y = center.getY() + (float)Math.sin(angle) * radius;
+                float x = center.x + (float)Math.cos(angle) * radius;
+                float y = center.y + (float)Math.sin(angle) * radius;
 
                 // Add jitter
                 x += (float)((Math.random() - 0.5f) * baseRadius * jitterFactor);
@@ -84,14 +84,14 @@ public class VoronoiRegionGenerator {
         if (regionSeeds.size() < desiredRegionCount) {
             Set<String> existing = new HashSet<>();
             for (Position p : regionSeeds)
-                existing.add(p.getX() + "," + p.getY());
+                existing.add(p.x + "," + p.y);
 
             List<Position> poissonSeeds = generatePoissonDiskLandPositions(isLand, desiredRegionCount * 3,
                 adaptiveRadius);
             for (Position p : poissonSeeds) {
                 if (regionSeeds.size() >= desiredRegionCount)
                     break;
-                String key = p.getX() + "," + p.getY();
+                String key = p.x + "," + p.y;
                 if (!existing.contains(key)) {
                     regionSeeds.add(p);
                     existing.add(key);
@@ -127,7 +127,7 @@ public class VoronoiRegionGenerator {
                 int closestSeedIndex = -1;
                 for (int i = 0; i < seeds.size(); i++) {
                     Position s = seeds.get(i);
-                    double d = distSq(x, y, s.getX(), s.getY());
+                    double d = distSq(x, y, s.x, s.y);
                     if (d < closestDist) {
                         closestDist = d;
                         closestSeedIndex = i;
@@ -157,7 +157,7 @@ public class VoronoiRegionGenerator {
 
             boolean farEnough = true;
             for (Position p : accepted) {
-                if (distSq(x, y, p.getX(), p.getY()) < radius * radius) {
+                if (distSq(x, y, p.x, p.y) < radius * radius) {
                     farEnough = false;
                     break;
                 }
@@ -208,8 +208,8 @@ public class VoronoiRegionGenerator {
             RegionComponent region = RegionComponent.get(world, id);
             int sumX = 0, sumY = 0;
             for (Position p : region.getTiles()) {
-                sumX += p.getX();
-                sumY += p.getY();
+                sumX += p.x;
+                sumY += p.y;
             }
             int count = region.getTiles().size();
             world.edit(id).create(PositionComponent.class).setPos(sumX / count, sumY / count).sync();

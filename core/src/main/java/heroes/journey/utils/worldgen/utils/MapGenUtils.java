@@ -63,8 +63,8 @@ public class MapGenUtils {
         Tile connector,
         Position location1,
         Position location2) {
-        Cell path = new RoadPathing().getPath(gameState.getMap(), location1.getX(), location1.getY(),
-            location2.getX(), location2.getY());
+        Cell path = new RoadPathing().getPath(gameState.getMap(), location1.x, location1.y, location2.x,
+            location2.y);
         while (path != null) {
             gameState.getMap().setTile(path.x, path.y, connector);
             path = path.parent;
@@ -90,16 +90,16 @@ public class MapGenUtils {
     }
 
     public static Predicate<Position> isLandSurrounded(Tile[][] map) {
-        return pos -> inBounds(pos.getX(), pos.getY()) && isLandTile(map[pos.getX()][pos.getY()]) &&
-            surroundedBySame(map, pos.getX(), pos.getY());
+        return pos -> inBounds(pos.x, pos.y) && isLandTile(map[pos.x][pos.y]) &&
+            surroundedBySame(map, pos.x, pos.y);
     }
 
     public static Predicate<Position> isFarFromFeatures(GameState gameState, int minDistance) {
         return pos -> {
             for (int dx = -minDistance; dx <= minDistance; dx++) {
                 for (int dy = -minDistance; dy <= minDistance; dy++) {
-                    int x = pos.getX() + dx;
-                    int y = pos.getY() + dy;
+                    int x = pos.x + dx;
+                    int y = pos.y + dy;
                     if (!inBounds(x, y))
                         continue;
 
@@ -135,7 +135,7 @@ public class MapGenUtils {
                     for (int dy = -r; dy <= r; dy++) {
                         if (Math.abs(dx) != r && Math.abs(dy) != r)
                             continue; // only outer ring
-                        ring.add(new Position(center.getX() + dx, center.getY() + dy));
+                        ring.add(new Position(center.x + dx, center.y + dy));
                     }
                 }
                 Collections.shuffle(ring, Random.get()); // randomize order of checking
@@ -151,7 +151,7 @@ public class MapGenUtils {
                 if (Math.abs(dx) + Math.abs(dy) < minDist)
                     continue;
 
-                Position pos = new Position(center.getX() + dx, center.getY() + dy);
+                Position pos = new Position(center.x + dx, center.y + dy);
                 if (isValid.test(pos))
                     return pos;
             }
@@ -185,7 +185,7 @@ public class MapGenUtils {
         // Compute max possible radius (Manhattan distance from center to farthest tile)
         int maxRadius = 0;
         for (Position p : regionTiles) {
-            int dist = Math.abs(regionPos.getX() - p.getX()) + Math.abs(regionPos.getY() - p.getY());
+            int dist = Math.abs(regionPos.getX() - p.x) + Math.abs(regionPos.getY() - p.y);
             if (dist > maxRadius)
                 maxRadius = dist;
         }
@@ -193,7 +193,7 @@ public class MapGenUtils {
         for (int r = 0; r <= maxRadius; r++) {
             List<Position> ring = new ArrayList<>();
             for (Position p : regionTiles) {
-                int dist = Math.abs(regionPos.getX() - p.getX()) + Math.abs(regionPos.getY() - p.getY());
+                int dist = Math.abs(regionPos.getX() - p.x) + Math.abs(regionPos.getY() - p.y);
                 if (dist == r) {
                     ring.add(p);
                 }

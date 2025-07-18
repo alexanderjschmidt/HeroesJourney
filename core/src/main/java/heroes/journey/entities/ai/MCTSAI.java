@@ -13,8 +13,8 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.modlib.actions.ActionEntry;
+import heroes.journey.modlib.actions.ActionListResult;
 import heroes.journey.modlib.actions.ShowAction;
-import heroes.journey.modlib.actions.results.ActionListResult;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
@@ -61,7 +61,7 @@ public class MCTSAI implements AI, Scorer {
             if (act.isReturnsActionList()) {
                 ActionListResult result = (ActionListResult)act.onSelect(input);
                 assert result != null;
-                addUsableActions(possibleActions, result.list(), input, position);
+                addUsableActions(possibleActions, result.getList(), input, position);
             } else {
                 if (act.requirementsMet(input) == ShowAction.YES) {
                     possibleActions.add(new QueuedAction(action, input.getEntityId()));

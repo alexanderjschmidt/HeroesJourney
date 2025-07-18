@@ -5,8 +5,6 @@ import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.*
-import heroes.journey.modlib.actions.results.ActionResult
-import heroes.journey.modlib.actions.results.NullResult
 
 // --- Builder Classes ---
 open class ActionBuilder : IActionBuilder {
@@ -85,7 +83,7 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                     copyInput["target"] = option.toString()
                     heroes.journey.modlib.actions.ActionEntry(targetAction, copyInput)
                 }
-                heroes.journey.modlib.actions.results.ActionListResult(actionOptions)
+                ActionListResult(actionOptions)
             },
             inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } }
         )

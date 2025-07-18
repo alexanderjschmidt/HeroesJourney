@@ -1,95 +1,95 @@
-import heroes.journey.modlib.Ids.*
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Humanoid Challenges - included by basegame mod
 challenge(
-    id = CHALLENGE_OUTMANEUVER_GOBLIN_ARCHER,
-    render = GOBLIN_ARCHER,
-    approaches = listOf(STAT_CUNNING, STAT_LOGIC, STAT_SKILL),
+    id = Ids.CHALLENGE_OUTMANEUVER_GOBLIN_ARCHER,
+    render = Ids.GOBLIN_ARCHER,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_LOGIC, Ids.STAT_SKILL),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_CALM_GOBLIN_FANATIC,
-    render = GOBLIN_FANATIC,
-    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    id = Ids.CHALLENGE_CALM_GOBLIN_FANATIC,
+    render = Ids.GOBLIN_FANATIC,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_CHARM, Ids.STAT_MESMERISM),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_DEFEAT_GOBLIN_FIGHTER,
-    render = GOBLIN_FIGHTER,
-    approaches = listOf(STAT_CHIVALRY, STAT_MIGHT, STAT_SKILL),
+    id = Ids.CHALLENGE_DEFEAT_GOBLIN_FIGHTER,
+    render = Ids.GOBLIN_FIGHTER,
+    approaches = listOf(Ids.STAT_CHIVALRY, Ids.STAT_MIGHT, Ids.STAT_SKILL),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_EXPOSE_GOBLIN_OCCULTIST,
-    render = GOBLIN_OCCULTIST,
-    approaches = listOf(STAT_CONCENTRATION, STAT_LOGIC, STAT_SORCERY),
+    id = Ids.CHALLENGE_EXPOSE_GOBLIN_OCCULTIST,
+    render = Ids.GOBLIN_OCCULTIST,
+    approaches = listOf(Ids.STAT_CONCENTRATION, Ids.STAT_LOGIC, Ids.STAT_SORCERY),
     reward = attributes("arcanum" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_OUTRUN_GOBLIN_WOLF_RIDER,
-    render = GOBLIN_WOLF_RIDER,
-    approaches = listOf(STAT_CUNNING, STAT_SKILL, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_OUTRUN_GOBLIN_WOLF_RIDER,
+    render = Ids.GOBLIN_WOLF_RIDER,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_SKILL, Ids.STAT_TECHNIQUE),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_CAPTURE_HALFLING_ASSASSIN,
-    render = HALFLING_ASSASSIN,
-    approaches = listOf(STAT_CUNNING, STAT_LOGIC, STAT_SKILL),
+    id = Ids.CHALLENGE_CAPTURE_HALFLING_ASSASSIN,
+    render = Ids.HALFLING_ASSASSIN,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_LOGIC, Ids.STAT_SKILL),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_PERFORM_WITH_HALFLING_BARD,
-    render = HALFLING_BARD,
-    approaches = listOf(STAT_BEWITCHING, STAT_CHARM, STAT_MESMERISM),
+    id = Ids.CHALLENGE_PERFORM_WITH_HALFLING_BARD,
+    render = Ids.HALFLING_BARD,
+    approaches = listOf(Ids.STAT_BEWITCHING, Ids.STAT_CHARM, Ids.STAT_MESMERISM),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_TRACK_WITH_HALFLING_RANGER,
-    render = HALFLING_RANGER,
-    approaches = listOf(STAT_LOGIC, STAT_SKILL, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_TRACK_WITH_HALFLING_RANGER,
+    render = Ids.HALFLING_RANGER,
+    approaches = listOf(Ids.STAT_LOGIC, Ids.STAT_SKILL, Ids.STAT_TECHNIQUE),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_OUTWIT_HALFLING_ROGUE,
-    render = HALFLING_ROGUE,
-    approaches = listOf(STAT_CUNNING, STAT_LOGIC, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_OUTWIT_HALFLING_ROGUE,
+    render = Ids.HALFLING_ROGUE,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_LOGIC, Ids.STAT_TECHNIQUE),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_COMPETE_WITH_HALFLING_SLINGER,
-    render = HALFLING_SLINGER,
-    approaches = listOf(STAT_CHARM, STAT_SKILL, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_COMPETE_WITH_HALFLING_SLINGER,
+    render = Ids.HALFLING_SLINGER,
+    approaches = listOf(Ids.STAT_CHARM, Ids.STAT_SKILL, Ids.STAT_TECHNIQUE),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_SCOUT_WITH_LIZARDFOLK_SCOUT,
-    render = LIZARDFOLK_SCOUT,
-    approaches = listOf(STAT_CUNNING, STAT_LOGIC, STAT_SKILL),
+    id = Ids.CHALLENGE_SCOUT_WITH_LIZARDFOLK_SCOUT,
+    render = Ids.LIZARDFOLK_SCOUT,
+    approaches = listOf(Ids.STAT_CUNNING, Ids.STAT_LOGIC, Ids.STAT_SKILL),
     reward = attributes("insight" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_SPAR_LIZARDFOLK_GLADIATOR,
-    render = LIZARDFOLK_GLADIATOR,
-    approaches = listOf(STAT_CHARM, STAT_CHIVALRY, STAT_MIGHT),
+    id = Ids.CHALLENGE_SPAR_LIZARDFOLK_GLADIATOR,
+    render = Ids.LIZARDFOLK_GLADIATOR,
+    approaches = listOf(Ids.STAT_CHARM, Ids.STAT_CHIVALRY, Ids.STAT_MIGHT),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_TRAIN_LIZARDFOLK_ARCHER,
-    render = LIZARDFOLK_ARCHER,
-    approaches = listOf(STAT_PERSUASION, STAT_SKILL, STAT_TECHNIQUE),
+    id = Ids.CHALLENGE_TRAIN_LIZARDFOLK_ARCHER,
+    render = Ids.LIZARDFOLK_ARCHER,
+    approaches = listOf(Ids.STAT_PERSUASION, Ids.STAT_SKILL, Ids.STAT_TECHNIQUE),
     reward = attributes("valor" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_TAME_BESTIAL_LIZARDFOLK,
-    render = BESTIAL_LIZARDFOLK,
-    approaches = listOf(STAT_BRAVADO, STAT_MESMERISM, STAT_PERSUASION),
+    id = Ids.CHALLENGE_TAME_BESTIAL_LIZARDFOLK,
+    render = Ids.BESTIAL_LIZARDFOLK,
+    approaches = listOf(Ids.STAT_BRAVADO, Ids.STAT_MESMERISM, Ids.STAT_PERSUASION),
     reward = attributes("influence" to 2)
 ).register()
 challenge(
-    id = CHALLENGE_TRAIN_LIZARDFOLK_SPEARMAN,
-    render = LIZARDFOLK_SPEARMAN,
-    approaches = listOf(STAT_MIGHT, STAT_PERSUASION, STAT_SKILL),
+    id = Ids.CHALLENGE_TRAIN_LIZARDFOLK_SPEARMAN,
+    render = Ids.LIZARDFOLK_SPEARMAN,
+    approaches = listOf(Ids.STAT_MIGHT, Ids.STAT_PERSUASION, Ids.STAT_SKILL),
     reward = attributes("valor" to 2)
 ).register()

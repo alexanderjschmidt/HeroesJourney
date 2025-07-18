@@ -11,7 +11,6 @@ import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.items.Item;
-import heroes.journey.modlib.actions.results.StringResult;
 
 public class Utils {
 
@@ -37,16 +36,15 @@ public class Utils {
         return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()];
     }
 
-    public static StringResult addItem(ActionContext input, Item item, int count) {
-        return addItem(input.getGameState(), input.getEntityId(), item, count);
+    public static void addItem(ActionContext input, Item item, int count) {
+        addItem(input.getGameState(), input.getEntityId(), item, count);
     }
 
-    public static StringResult addItem(GameState gameState, UUID entityId, Item item, int count) {
+    public static void addItem(GameState gameState, UUID entityId, Item item, int count) {
         InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), entityId);
         if (inventoryComponent != null) {
             inventoryComponent.add(item, count);
         }
-        return new StringResult("Gained " + count + " " + item);
     }
 
     public static boolean justCompletedAction(GameState gameState, UUID owner, String actionId) {

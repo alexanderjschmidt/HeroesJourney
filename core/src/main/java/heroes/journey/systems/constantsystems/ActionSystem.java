@@ -16,11 +16,11 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
-import heroes.journey.modlib.actions.results.ActionListResult;
-import heroes.journey.modlib.actions.results.ActionResult;
-import heroes.journey.modlib.actions.results.EndTurnResult;
-import heroes.journey.modlib.actions.results.NullResult;
-import heroes.journey.modlib.actions.results.StringResult;
+import heroes.journey.modlib.actions.ActionListResult;
+import heroes.journey.modlib.actions.ActionResult;
+import heroes.journey.modlib.actions.EndTurnResult;
+import heroes.journey.modlib.actions.NullResult;
+import heroes.journey.modlib.actions.StringResult;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
@@ -61,7 +61,7 @@ public class ActionSystem extends IteratingSystem {
                 case NullResult n -> {
                 }
                 case ActionListResult actions -> {
-                    HUD.get().setState(new ActionSelectState(actions.list()));
+                    HUD.get().setState(new ActionSelectState(actions.getList()));
                 }
                 case EndTurnResult nothing -> {
                     GameState.global().getHistory().add(action.getId(), input, id);

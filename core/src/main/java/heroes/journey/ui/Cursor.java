@@ -60,9 +60,8 @@ public class Cursor {
             y * GameCamera.get().getSize(), GameCamera.get().getSize(), GameCamera.get().getSize());
         if (mapPointerLoc != null) {
             batch.draw(RenderableManager.get(MAP_POINTER).getRender(deltaTime),
-                mapPointerLoc.getX() * GameCamera.get().getSize(),
-                mapPointerLoc.getY() * GameCamera.get().getSize(), GameCamera.get().getSize(),
-                GameCamera.get().getSize());
+                mapPointerLoc.x * GameCamera.get().getSize(), mapPointerLoc.y * GameCamera.get().getSize(),
+                GameCamera.get().getSize(), GameCamera.get().getSize());
         }
         batch.setColor(Color.WHITE);
     }

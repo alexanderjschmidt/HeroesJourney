@@ -1,9 +1,5 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.EndTurnResult
-import heroes.journey.modlib.actions.results.StringResult
-import heroes.journey.modlib.actions.targetAction
+import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.registries.Registries
 import java.util.*
@@ -12,7 +8,7 @@ import java.util.*
 
 // Quest Action
 action {
-    id = "quest"
+    id = Ids.QUEST
     inputDisplayNameFn = { input ->
         Registries.QuestManager[input["target"]]!!.getName()
     }
@@ -27,7 +23,7 @@ action {
 
 // Quest Board
 targetAction<IQuest> {
-    id = "quest_board"
+    id = Ids.QUEST_BOARD
     inputDisplayNameFn = { input ->
         val locName: String = input.getName(UUID.fromString(input["owner"]))
         "Quest Board for " + locName
@@ -41,7 +37,7 @@ targetAction<IQuest> {
 
 // Complete Quest Action (shows list of available quests)
 targetAction<IQuest> {
-    id = "complete_quest"
+    id = Ids.COMPLETE_QUEST
     requirementsMetFn = { input ->
         val quests = input.getQuests(input.entityId!!)
         if (quests.isNotEmpty()) {
@@ -53,12 +49,12 @@ targetAction<IQuest> {
     getTargets = { input ->
         input.getQuests(input.entityId!!)
     }
-    targetAction = "complete_specific_quest"
+    targetAction = Ids.COMPLETE_SPECIFIC_QUEST
 }.register()
 
 // Complete Specific Quest Action
 action {
-    id = "complete_specific_quest"
+    id = Ids.COMPLETE_SPECIFIC_QUEST
     inputDisplayNameFn = { input ->
         val questId = input["target"]
         val quest = Registries.QuestManager[questId]

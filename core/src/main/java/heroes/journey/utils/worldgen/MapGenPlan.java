@@ -80,7 +80,7 @@ public class MapGenPlan {
                 RegionComponent region = RegionComponent.get(GameState.global().getWorld(), id);
                 PositionComponent regionCenter = PositionComponent.get(GameState.global().getWorld(), id);
                 for (Position pos : region.getTiles()) {
-                    map[pos.getX()][pos.getY()] = TileManager.get()
+                    map[pos.x][pos.y] = TileManager.get()
                         .getBaseTile(TerrainManager.get(region.getBiome().getBaseTerrain()));
                 }
                 for (FeatureGenerationData genData : region.getBiome().getFeatureGenerationData()) {
@@ -133,14 +133,14 @@ public class MapGenPlan {
         // Wave Function collapse keeping houses and path placements
         MapGenerationEffect wfc = new WaveFunctionCollapseMapEffect("waveFunctionCollapse", (gs, pos) -> {
             WeightedRandomPicker<Tile> possibleTilesPicker = new WeightedRandomPicker<>();
-            if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] == pathDot) {
+            if (gs.getMap().getTileMap()[pos.x][pos.y] == pathDot) {
                 for (Tile t : TileBatchManager.get(Ids.TILE_BATCH_PATH_EDGE).getTiles()) {
                     possibleTilesPicker.addItem(t, t.getWeight());
                 }
                 possibleTilesPicker.remove(pathDot);
-            } else if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null ||
-                surroundedBySame(gs.getMap().getTileMap(), pos.getX(), pos.getY(), 1)) {
-                possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.getX()][pos.getY()], 1);
+            } else if (gs.getMap().getEnvironment()[pos.x][pos.y] != null ||
+                surroundedBySame(gs.getMap().getTileMap(), pos.x, pos.y, 1)) {
+                possibleTilesPicker.addItem(gs.getMap().getTileMap()[pos.x][pos.y], 1);
             } else {
                 for (Tile t : possibleTiles) {
                     possibleTilesPicker.addItem(t, t.getWeight());
@@ -152,9 +152,9 @@ public class MapGenPlan {
         // Create Trees
         new WaveFunctionCollapseMapEffect("trees", true, (gs, pos) -> {
             WeightedRandomPicker<Tile> possibleTiles = new WeightedRandomPicker<>();
-            if (gs.getMap().getEnvironment()[pos.getX()][pos.getY()] != null) {
-                possibleTiles.addItem(gs.getMap().getEnvironment()[pos.getX()][pos.getY()], 1);
-            } else if (gs.getMap().getTileMap()[pos.getX()][pos.getY()] ==
+            if (gs.getMap().getEnvironment()[pos.x][pos.y] != null) {
+                possibleTiles.addItem(gs.getMap().getEnvironment()[pos.x][pos.y], 1);
+            } else if (gs.getMap().getTileMap()[pos.x][pos.y] ==
                 TileManager.BASE_TILES.get(BASE_TILE_PLAINS)) {
                 for (Tile t : TileBatchManager.get(Ids.TILE_BATCH_TREES_CORNER).getTiles()) {
                     possibleTiles.addItem(t, t.getWeight());

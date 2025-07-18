@@ -1,7 +1,7 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.Lang
+import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
-import heroes.journey.modlib.actions.results.StringResult
 import heroes.journey.modlib.actions.targetAction
 import java.util.*
 
@@ -9,7 +9,7 @@ import java.util.*
 
 // Go Action
 action {
-    id = "travel_to"
+    id = Ids.TRAVEL_TO
     inputDisplayNameFn = { input ->
         val name = input.getName(UUID.fromString(input["target"]))
         Lang.instance.get("travel_to_description") + name
@@ -31,7 +31,7 @@ action {
 
 // Travel Action
 targetAction<UUID> {
-    id = "travel"
+    id = Ids.TRAVEL
     getTargets = { input ->
         val regionId = input.getRegion(input.entityId!!)
         val neighbors = input.getNeighbors(regionId)
