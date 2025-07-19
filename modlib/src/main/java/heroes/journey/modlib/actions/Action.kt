@@ -25,6 +25,7 @@ interface IAction : IRegistrable {
     val onHoverFn: (IActionContext) -> Unit
     val onSelectFn: (IActionContext) -> ActionResult
     val inputDisplayNameFn: ((IActionContext) -> String)?
+    val inputDescriptionFn: ((IActionContext) -> String)?
     val turnCooldown: Int
     val factionCooldown: Boolean
     override fun register(): IAction
@@ -47,6 +48,7 @@ interface IActionBuilder {
     var onHoverFn: (IActionContext) -> Unit
     var onSelectFn: (IActionContext) -> ActionResult
     var inputDisplayNameFn: ((IActionContext) -> String)?
+    var inputDescriptionFn: ((IActionContext) -> String)?
 }
 
 interface IOptionActionBuilder : IActionBuilder {
@@ -64,6 +66,7 @@ interface ITargetActionBuilder<I> {
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
     var inputDisplayNameFn: ((IActionContext) -> String)?
+    var inputDescriptionFn: ((IActionContext) -> String)?
 }
 
 interface ActionDSL {

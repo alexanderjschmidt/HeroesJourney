@@ -1,7 +1,5 @@
 package heroes.journey.utils.art;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -15,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import java.util.HashMap;
+
 public class ResourceManager extends AssetManager {
 
     public static TextureMap UI;
@@ -25,9 +25,10 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font24;
     public BitmapFont font36;
     public BitmapFont font72;
+    public BitmapFont font18bold;
     public Skin skin;
 
-    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
     private int totalAssetsQueued = 1;
@@ -158,6 +159,7 @@ public class ResourceManager extends AssetManager {
         font24.dispose();
         font36.dispose();
         font72.dispose();
+        font18bold.dispose();
     }
 
     public static TextureRegion[][] get(TextureMap textureMap) {
@@ -228,6 +230,7 @@ public class ResourceManager extends AssetManager {
         skin.addRegions(get("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class));
         skin.add("default-font", font18);
         skin.add("title", font72);
+        skin.add("bold18", font18bold);
         skin.load(Gdx.files.internal("skin/" + skinName + "/" + skinName + ".json"));
     }
 
@@ -239,6 +242,12 @@ public class ResourceManager extends AssetManager {
 
         parameter.size = 18;
         font18 = generator.generateFont(parameter);
+        // Create bold version
+        parameter.size = 18;
+        parameter.borderColor = Color.WHITE;
+        parameter.borderWidth = 0.5f; // Simulate thickness
+        font18bold = generator.generateFont(parameter);
+        parameter.borderWidth = 0f; // Simulate thickness
         parameter.size = 24;
         font24 = generator.generateFont(parameter);
         parameter.size = 36;

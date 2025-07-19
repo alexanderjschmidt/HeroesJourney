@@ -1,17 +1,14 @@
 package heroes.journey.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import heroes.journey.utils.art.ResourceManager;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class ScrollPane<T> extends Table {
 
@@ -22,7 +19,7 @@ public abstract class ScrollPane<T> extends Table {
 
     public ScrollPane() {
         super();
-        defaults().left().pad(2.5f).fill();
+        defaults().left().pad(2.5f).fillX();
 
         options = new ArrayList<>();
     }
@@ -50,15 +47,15 @@ public abstract class ScrollPane<T> extends Table {
             row();
 
             Label text = new Label(getText(options.get(i).entry()), ResourceManager.get().skin);
+            text.setWrap(true);
             text.setColor(options.get(i).isSelectable() ? Color.WHITE : Color.DARK_GRAY);
-            add(text).expandX().left().pad(2.5f);
+            add(text).expandX().fillX().left().pad(2.5f);
 
             optionLabels.add(text);
         }
-
-        pack();
         moveSelectorToRow();
         onHover();
+        this.pack();
     }
 
     public void handleInput() {
@@ -99,14 +96,17 @@ public abstract class ScrollPane<T> extends Table {
     }
 
     private void moveSelectorToRow() {
-        for (Label label : optionLabels) {
+        for (int i = 0; i < optionLabels.size(); i++) {
+            Label label = optionLabels.get(i);
             label.clearActions();
-            label.addAction(Actions.moveTo(0, label.getY(), 0.15f, Interpolation.fade));
+            if (i == selected) {
+                label.setStyle(ResourceManager.get().skin.get("bold18", Label.LabelStyle.class));
+                label.setColor(options.get(i).isSelectable() ? Color.YELLOW : Color.TAN); // Optional: highlight color
+            } else {
+                label.setStyle(ResourceManager.get().skin.get("default", Label.LabelStyle.class));
+                label.setColor(options.get(i).isSelectable() ? Color.WHITE : Color.DARK_GRAY);
+            }
         }
-
-        Label selectedLabel = optionLabels.get(selected);
-        selectedLabel.clearActions();
-        selectedLabel.addAction(Actions.moveTo(10f, selectedLabel.getY(), 0.15f, Interpolation.fade));
     }
 
 }

@@ -2,6 +2,7 @@ import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
+import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.misc.IChallengeType
@@ -15,6 +16,12 @@ action {
     id = Ids.CHOOSE_APPROACH
     inputDisplayNameFn = { input ->
         input["target"]!!
+    }
+    inputDescriptionFn = { input ->
+        val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
+        val challengeEntityId = UUID.fromString(input["challenge"])
+        val challenge: IChallenge = input.getChallenge(challengeEntityId)
+        "Use " + approach.getName() + " to " + challenge.getName()
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
@@ -59,6 +66,11 @@ targetAction<IApproach> {
     inputDisplayNameFn = { input ->
         input.getName(UUID.fromString(input["target"]))
     }
+    inputDescriptionFn = { input ->
+        val challengeEntityId = UUID.fromString(input["target"])
+        val challenge: IChallenge = input.getChallenge(challengeEntityId)
+        challenge.getDescription()
+    }
     getTargets = { input ->
         input["challenge"] = input["target"]!!
         val challengeEntityId = UUID.fromString(input["target"])
@@ -68,7 +80,20 @@ targetAction<IApproach> {
         val challengeType: IChallengeType = challenge.getChallengeType()
 
         // Get available approaches for this challenge type
-        val availableApproaches: List<IApproach> = challengeType.getApproaches()
+        val allApproaches: List<IApproach> = challengeType.getApproaches()
+        val availableApproaches: MutableList<IApproach> = mutableListOf()
+
+        val stats: IAttributes = input.getStats(input.entityId!!)
+
+        for (approach: IApproach in allApproaches) {
+            if (approach.secondaryStatId != null) {
+                if (stats.get(approach.secondaryStatId!!) >= 3) {
+                    availableApproaches.add(approach)
+                }
+            } else {
+                availableApproaches.add(approach)
+            }
+        }
 
         availableApproaches
     }

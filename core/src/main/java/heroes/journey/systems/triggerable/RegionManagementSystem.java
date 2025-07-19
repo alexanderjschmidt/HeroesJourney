@@ -1,11 +1,6 @@
 package heroes.journey.systems.triggerable;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import com.artemis.annotations.All;
-
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
@@ -17,12 +12,16 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.utils.Random;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 @All({RegionComponent.class, IdComponent.class})
 public class RegionManagementSystem extends TriggerableSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
         UUID regionId = IdComponent.get(world, entityId);
         RegionComponent regionComponent = RegionComponent.get(world, regionId);
 
@@ -52,6 +51,8 @@ public class RegionManagementSystem extends TriggerableSystem {
                 throw e;
             }
             String randomChallengeId = keySet[Random.get().nextInt(Registries.ChallengeManager.size())];
+            if (randomChallengeId == null)
+                continue;
             Challenge randomChallenge = Registries.ChallengeManager.get(randomChallengeId);
             Set<Position> regionTiles = regionComponent.getTiles();
 

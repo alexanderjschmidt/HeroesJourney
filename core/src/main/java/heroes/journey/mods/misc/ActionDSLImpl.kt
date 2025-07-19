@@ -14,6 +14,7 @@ open class ActionBuilder : IActionBuilder {
     override var onHoverFn: (IActionContext) -> Unit = {}
     override var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
     override var inputDisplayNameFn: ((IActionContext) -> String)? = null
+    override var inputDescriptionFn: ((IActionContext) -> String)? = null
     override var turnCooldown: Int = 0
     override var factionCooldown: Boolean = false
 
@@ -24,6 +25,7 @@ open class ActionBuilder : IActionBuilder {
         onHoverFn = { ctx -> onHoverFn(ctx) },
         onSelectFn = { ctx -> onSelectFn(ctx) },
         inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
+        inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } },
         turnCooldown = turnCooldown,
         factionCooldown = factionCooldown
     )
@@ -66,6 +68,7 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
     override var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
     override var onHoverFn: (IActionContext) -> Unit = {}
     override var inputDisplayNameFn: ((IActionContext) -> String)? = null
+    override var inputDescriptionFn: ((IActionContext) -> String)? = null
 
     fun build(): Action {
         return Action(
@@ -85,7 +88,8 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                 }
                 ActionListResult(actionOptions)
             },
-            inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } }
+            inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
+            inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } }
         )
     }
 }

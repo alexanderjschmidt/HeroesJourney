@@ -1,13 +1,5 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.mods.Registries.ActionManager;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Stream;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
@@ -24,6 +16,14 @@ import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.gamestate.Utils;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
+
+import static heroes.journey.mods.Registries.ActionManager;
+
 public class ActionMenu extends UI {
 
     private final ScrollPane<ActionEntry> actions;
@@ -33,7 +33,7 @@ public class ActionMenu extends UI {
         super();
         this.setVisible(false);
         actions = new ActionScrollPane();
-        mainTable.add(actions).row();
+        mainTable.add(actions).expandX().fillX().row();
         mainTable.add().expandY().row();
         this.infoUI = infoUI;
 

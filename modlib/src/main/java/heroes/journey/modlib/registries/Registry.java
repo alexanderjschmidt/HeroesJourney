@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class Registry<T extends IRegistrable> extends HashMap<String,T> {
+public class Registry<T extends IRegistrable> extends HashMap<String, T> {
 
     public List<T> get(List<String> entryStrings) {
         return entryStrings.stream().map(this::get) // get the Action for each string
@@ -24,8 +24,11 @@ public class Registry<T extends IRegistrable> extends HashMap<String,T> {
     }
 
     public T register(T entry) {
+        if (entry == null || entry.getId() == null) {
+            throw new IllegalArgumentException("Entry cannot be null or have a null Id");
+        }
         if (containsKey(entry.getId())) {
-            throw new RuntimeException(
+            throw new IllegalArgumentException(
                 this.values().stream().findFirst().get().getClass() + " cannot register with id " +
                     entry.getId() + " because that id is already registered");
         }

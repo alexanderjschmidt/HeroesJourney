@@ -22,6 +22,7 @@ open class Action(
     override val onHoverFn: (IActionContext) -> Unit = {},
     override val onSelectFn: (IActionContext) -> ActionResult,
     override val inputDisplayNameFn: ((IActionContext) -> String)? = null,
+    override val inputDescriptionFn: ((IActionContext) -> String)? = null,
     override val turnCooldown: Int = 0,
     override val factionCooldown: Boolean = false
 ) : Registrable(id), InfoProvider, IAction {
@@ -51,13 +52,19 @@ open class Action(
     }
 
     override fun getTitle(input: ActionContext): String {
-        if (inputDisplayNameFn == null)
-            return getName()
-        val title: String? = inputDisplayNameFn?.let { it(input) }
-        return title!!
+        if (inputDisplayNameFn != null) {
+            return inputDisplayNameFn!!.invoke(input)
+        }
+        return getName()
     }
 
-    override fun getDescription(input: Map<String, String>): String = getDescription()
+    override fun getDescription(input: Map<String, String>): String {
+        if (inputDescriptionFn != null) {
+            val ctx = ActionContext(GameState.global(), null, false, input)
+            return inputDescriptionFn!!.invoke(ctx)
+        }
+        return getDescription()
+    }
 
     private fun getCooldownComponent(input: ActionContext): PossibleActionsComponent? {
         val cooldownComponent: PossibleActionsComponent?
@@ -76,19 +83,21 @@ open class Action(
     private var cooldown: Label? = null
 
     override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
-        if (cooldown == null) {
-            cooldown = Label("", skin)
+        if (turnCooldown != 0) {
+            if (cooldown == null) {
+                cooldown = Label("", skin)
+            }
+            val actionContext: ActionContext =
+                ActionContext(GameState.global(), GameState.global().currentEntity, false)
+            actionContext.putAll(input)
+            val cooldownComponent = getCooldownComponent(
+                actionContext
+            )
+            var cooldownVal = cooldownComponent?.cooldowns?.get(id)
+            cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
+            cooldown!!.setText("Cooldown: $cooldownVal/$turnCooldown")
+            table.add(cooldown).fill().row()
         }
-        val actionContext: ActionContext =
-            ActionContext(GameState.global(), GameState.global().currentEntity, false)
-        actionContext.putAll(input)
-        val cooldownComponent = getCooldownComponent(
-            actionContext
-        )
-        var cooldownVal = cooldownComponent?.cooldowns?.get(id)
-        cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
-        cooldown!!.setText("$cooldownVal/$turnCooldown")
-        table.add(cooldown).fill().row()
     }
 
     override fun register(): Action {
