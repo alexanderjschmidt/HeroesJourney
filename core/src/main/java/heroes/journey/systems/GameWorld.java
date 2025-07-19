@@ -247,7 +247,6 @@ public class GameWorld extends World {
         try {
             return super.getMapper(type).get(entityMap.get(entityId));
         } catch (Exception e) {
-            System.out.println(this);
             System.out.println(entityId + " " + type);
             System.out.println(entityMap);
             throw e;

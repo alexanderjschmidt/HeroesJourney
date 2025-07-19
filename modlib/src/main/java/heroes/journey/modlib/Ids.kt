@@ -526,4 +526,29 @@ object Ids {
 
   /** Health Potion item ID  */
   const val ITEM_HEALTH_POTION: String = "health_potion"
+
+  // Challenge Type IDs
+  const val CHALLENGE_TYPE_BODY: String = "challenge_type_body"
+  const val CHALLENGE_TYPE_MIND: String = "challenge_type_mind"
+  const val CHALLENGE_TYPE_MAGIC: String = "challenge_type_magic"
+  const val CHALLENGE_TYPE_CHARISMA: String = "challenge_type_charisma"
+
+  // Approach IDs
+  const val APPROACH_MIGHT: String = "approach_might"
+  const val APPROACH_SKILL: String = "approach_skill"
+  const val APPROACH_EMPOWERMENT: String = "approach_empowerment"
+  const val APPROACH_CHIVALRY: String = "approach_chivalry"
+  const val APPROACH_TECHNIQUE: String = "approach_technique"
+  const val APPROACH_LOGIC: String = "approach_logic"
+  const val APPROACH_CONCENTRATION: String = "approach_concentration"
+  const val APPROACH_CUNNING: String = "approach_cunning"
+  const val APPROACH_ENCHANTING: String = "approach_enchanting"
+  const val APPROACH_ILLUSION: String = "approach_illusion"
+  const val APPROACH_SORCERY: String = "approach_sorcery"
+  const val APPROACH_BEWITCHING: String = "approach_bewitching"
+  const val APPROACH_BRAVADO: String = "approach_bravado"
+  const val APPROACH_PERSUASION: String = "approach_persuasion"
+  const val APPROACH_MESMERISM: String = "approach_mesmerism"
+  const val APPROACH_CHARM: String = "approach_charm"
+  const val APPROACH_PURE_BODY: String = "approach_pure_body"
 }

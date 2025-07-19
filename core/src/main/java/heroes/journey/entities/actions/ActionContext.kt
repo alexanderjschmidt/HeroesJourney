@@ -5,7 +5,9 @@ import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Quest
 import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.IActionContext
+import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
 import heroes.journey.mods.Registries.ItemManager
@@ -132,7 +134,7 @@ class ActionContext(
     override fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID) {
         val regionComponent = RegionComponent.get((gameState as GameState).world, regionId)
         regionComponent?.removeChallenge(challengeId)
-        (gameState as GameState).world.delete(entityId)
+        (gameState as GameState).world.delete(challengeId)
     }
 
     override fun getStats(entityId: UUID): Attributes {
@@ -156,5 +158,21 @@ class ActionContext(
         HUD.get()
             .cursor
             .setMapPointerLoc(pos)
+    }
+
+    override fun getRenownStatFromBase(baseStatId: String): String {
+        return when (baseStatId) {
+            Ids.STAT_BODY -> Ids.STAT_VALOR
+            Ids.STAT_MIND -> Ids.STAT_INSIGHT
+            Ids.STAT_MAGIC -> Ids.STAT_ARCANUM
+            Ids.STAT_CHARISMA -> Ids.STAT_INFLUENCE
+            else -> throw IllegalArgumentException("No mapping for given base state $baseStatId")
+        }
+    }
+
+    override fun getChallenge(challengeEntityId: UUID): IChallenge {
+        val challengeComponent = ChallengeComponent.get(gameState.world, challengeEntityId)
+        return challengeComponent?.challenge()
+            ?: throw IllegalArgumentException("No challenge found for entity $challengeEntityId")
     }
 }

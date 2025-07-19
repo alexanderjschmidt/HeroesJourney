@@ -9,6 +9,8 @@ import heroes.journey.modlib.items.IItem
 import heroes.journey.modlib.items.IItemSubType
 import heroes.journey.modlib.misc.IBuff
 import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.misc.IChallengeType
+import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.worldgen.*
 
@@ -17,6 +19,8 @@ object Registries {
     lateinit var StatManager: Registry<IStat>
     lateinit var BuffManager: Registry<IBuff>
     lateinit var ChallengeManager: Registry<IChallenge>
+    lateinit var ChallengeTypeManager: Registry<IChallengeType>
+    lateinit var ApproachManager: Registry<IApproach>
     lateinit var ActionManager: Registry<IAction>
     lateinit var ItemManager: Registry<IItem>
     lateinit var ItemSubTypeManager: Registry<IItemSubType>

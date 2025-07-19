@@ -25,8 +25,10 @@ import heroes.journey.mods.attributes.StatDSLImpl
 import heroes.journey.mods.items.ItemDSLImpl
 import heroes.journey.mods.items.ItemSubTypeDSLImpl
 import heroes.journey.mods.misc.ActionDSLImpl
+import heroes.journey.mods.misc.ApproachDSLImpl
 import heroes.journey.mods.misc.BuffDSLImpl
 import heroes.journey.mods.misc.ChallengeDSLImpl
+import heroes.journey.mods.misc.ChallengeTypeDSLImpl
 import heroes.journey.mods.misc.QuestDSLImpl
 import heroes.journey.mods.worldgen.*
 import heroes.journey.utils.Lang
@@ -44,6 +46,10 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.registries.Registries.BuffManager = Registries.BuffManager as Registry<IBuff>
     heroes.journey.modlib.registries.Registries.ChallengeManager =
         Registries.ChallengeManager as Registry<IChallenge>
+    heroes.journey.modlib.registries.Registries.ChallengeTypeManager =
+        Registries.ChallengeTypeManager as Registry<IChallengeType>
+    heroes.journey.modlib.registries.Registries.ApproachManager =
+        Registries.ApproachManager as Registry<IApproach>
     heroes.journey.modlib.registries.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
     heroes.journey.modlib.registries.Registries.ItemManager = Registries.ItemManager as Registry<IItem>
     heroes.journey.modlib.registries.Registries.ItemSubTypeManager =
@@ -80,6 +86,8 @@ fun setupModlibDSLs() {
     BuffDSLProvider.instance = BuffDSLImpl()
     QuestDSLProvider.instance = QuestDSLImpl()
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
+    ChallengeTypeDSLProvider.instance = ChallengeTypeDSLImpl()
+    ApproachDSLProvider.instance = ApproachDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
     BiomeDSLProvider.instance = BiomeDSLImpl()
     FeatureGenerationDataDSLProvider.instance = FeatureGenerationDataDSLImpl()

@@ -9,7 +9,9 @@ gameMod("Base Game", 0) {
         "Misc",
         "textures.kts",
         "items.kts",
-        "quests.kts"
+        "quests.kts",
+        "approaches.kts",
+        "challenge_types.kts"
     )
 
     includeScriptsFromDirectory(

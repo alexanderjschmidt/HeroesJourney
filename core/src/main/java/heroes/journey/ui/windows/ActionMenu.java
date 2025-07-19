@@ -22,7 +22,6 @@ import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
-import heroes.journey.utils.Lang;
 import heroes.journey.utils.gamestate.Utils;
 
 public class ActionMenu extends UI {
@@ -102,7 +101,9 @@ public class ActionMenu extends UI {
 
         @Override
         public String getText(ActionEntry option) {
-            return Lang.INSTANCE.get(option.getActionId() + "_name");
+            return ActionManager.get(option.getActionId())
+                .getTitle(new ActionContext(GameState.global(), GameState.global().getCurrentEntity(), false,
+                    option.getInput()));
         }
 
         @Override

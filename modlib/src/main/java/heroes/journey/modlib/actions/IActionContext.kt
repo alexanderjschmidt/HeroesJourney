@@ -1,6 +1,7 @@
 package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.utils.IGameState
 import heroes.journey.modlib.utils.Position
@@ -48,4 +49,15 @@ abstract class IActionContext(
     abstract fun getRealmAttention(statId: String, requested: Int): Int
     abstract fun getChallenges(regionId: UUID): List<UUID>
     abstract fun setMapPointer(pos: Position)
+    
+    /**
+     * Get the renown stat ID from a base stat ID.
+     * Maps base stats to their corresponding renown stats.
+     */
+    abstract fun getRenownStatFromBase(baseStatId: String): String
+    
+    /**
+     * Get the challenge object by its entity ID.
+     */
+    abstract fun getChallenge(challengeEntityId: UUID): IChallenge
 }

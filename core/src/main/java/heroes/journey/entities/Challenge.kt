@@ -1,23 +1,22 @@
 package heroes.journey.entities
 
-import heroes.journey.entities.tagging.Attributes
-import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.misc.IChallengeType
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.mods.Registries
-import heroes.journey.mods.Registries.StatManager
 
 class Challenge(
     id: String,
     override val render: String,
-    override val approaches: List<String>,
-    override val reward: Attributes, // Add reward property
+    override val challengeType: String,
 ) : Registrable(id), IChallenge {
+    
+    override fun getChallengeType(): IChallengeType {
+        return Registries.ChallengeTypeManager[challengeType] 
+            ?: throw IllegalArgumentException("No challenge type found for $challengeType")
+    }
+    
     override fun register(): Challenge {
         return Registries.ChallengeManager.register(this)
-    }
-
-    fun approaches(): List<Stat> {
-        return StatManager.get(approaches)
     }
 }
