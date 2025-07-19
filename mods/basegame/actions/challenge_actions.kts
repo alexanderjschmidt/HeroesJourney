@@ -46,7 +46,7 @@ action {
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
         summary.append("Your ${approach.baseStatId} skill (${stats.get(approach.baseStatId)}) provides ${primaryAward} ${primaryRenownStat}.\n")
         if (approach.secondaryStatId != null) {
-            summary.append("Your ${approach.secondaryStatId} skill (${stats.get(approach.secondaryStatId!!)}) provides ${secondaryAward} ${secondaryRenownStat}.\n")
+            summary.append("Your ${approach.secondaryStatId} skill (${stats.get(approach.secondaryStatId!!)}) provides ${secondaryAward} ${secondaryRenownStat}.")
         }
 
         StringResult(summary.toString())

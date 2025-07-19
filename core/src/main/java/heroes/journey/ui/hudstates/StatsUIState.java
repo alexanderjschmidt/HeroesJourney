@@ -18,8 +18,8 @@ public class StatsUIState extends HUDState {
     public void enter(HUD hud) {
         justOpened = true;
         hud.updateCenterPanel();
-        hud.getStatsUI().setVisible(true);
         hud.getStatsUI().setEntity(PlayerInfo.get().getPlayersHero());
+        hud.getStatsUI().setVisible(true);
     }
 
     @Override

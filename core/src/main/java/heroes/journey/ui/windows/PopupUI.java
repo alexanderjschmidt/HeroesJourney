@@ -15,6 +15,7 @@ public class PopupUI extends UI {
         this.text = new Label("", ResourceManager.get().skin);
         this.text.setWrap(true);
         this.mainTable.add(text).expand();
+        mainTable.defaults().expand().center();
     }
 
 }
