@@ -1,3 +1,5 @@
+package challenges
+
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.misc.approach
 
