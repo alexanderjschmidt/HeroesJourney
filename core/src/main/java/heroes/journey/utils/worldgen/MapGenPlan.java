@@ -1,21 +1,7 @@
 package heroes.journey.utils.worldgen;
 
-import static heroes.journey.modlib.Ids.BASE_TILE_NULL;
-import static heroes.journey.modlib.Ids.BASE_TILE_PLAINS;
-import static heroes.journey.mods.Registries.FeatureTypeManager;
-import static heroes.journey.mods.Registries.ItemManager;
-import static heroes.journey.mods.Registries.TerrainManager;
-import static heroes.journey.mods.Registries.TileBatchManager;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
-import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
-import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
-
-import java.util.List;
-import java.util.UUID;
-
 import com.artemis.EntityEdit;
 import com.artemis.utils.IntBag;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.InventoryComponent;
@@ -36,6 +22,16 @@ import heroes.journey.utils.worldgen.effects.NoiseMapEffect;
 import heroes.journey.utils.worldgen.effects.VoronoiRegionEffect;
 import heroes.journey.utils.worldgen.effects.WaveFunctionCollapseMapEffect;
 import heroes.journey.utils.worldgen.utils.WeightedRandomPicker;
+
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.modlib.Ids.BASE_TILE_NULL;
+import static heroes.journey.modlib.Ids.BASE_TILE_PLAINS;
+import static heroes.journey.mods.Registries.*;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.poisonDiskSample;
+import static heroes.journey.utils.worldgen.utils.MapGenUtils.surroundedBySame;
+import static heroes.journey.utils.worldgen.utils.WaveFunctionCollapse.possibleTiles;
 
 public class MapGenPlan {
 
@@ -65,8 +61,8 @@ public class MapGenPlan {
 
         // Capitals
         MapGenerationEffect voronoiRegion = new VoronoiRegionEffect("voronoiRegions",
-            List.of(new Integer[] {NUM_PLAYERS * 2, NUM_PLAYERS, 1}),
-            List.of(new Boolean[] {false, true, false})).register(MapGenerator.worldGenPhase);
+            List.of(new Integer[]{NUM_PLAYERS * 2, NUM_PLAYERS, 1}),
+            List.of(new Boolean[]{false, true, false})).register(MapGenerator.worldGenPhase);
 
         MapGenerationEffect biomeGen = new BasicMapGenerationEffect("biomeGen", gameState -> {
             Tile[][] map = gameState.getMap().getTileMap();

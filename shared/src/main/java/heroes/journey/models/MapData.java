@@ -26,7 +26,7 @@ public class MapData {
     }
 
     public int getRealmAttentionBase() {
-        return teamCount + 1;
+        return teamCount + 2;
     }
 
     public boolean isFogOfWar() {

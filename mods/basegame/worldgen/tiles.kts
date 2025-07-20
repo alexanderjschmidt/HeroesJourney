@@ -4,19 +4,20 @@ import heroes.journey.modlib.worldgen.tileBatch
 import heroes.journey.modlib.worldgen.tileLayout
 
 tileLayout {
-    id = Ids.TILE_LAYOUT_WANG_CORNER; path = "Textures/wangCorner.png"; terrainRoles =
+    id = Ids.TILE_LAYOUT_WANG_CORNER; path = "Textures/tile_layouts/wangCorner.png"; terrainRoles =
     listOf("base", "adjacentTileOuter", "adjacentTileInner")
 }.register()
 tileLayout {
-    id = Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER; path = "Textures/cliffTransitionTapper.png"; terrainRoles =
+    id = Ids.TILE_LAYOUT_CLIFF_TRANSITION_TAPPER; path =
+    "Textures/tile_layouts/cliffTransitionTapper.png"; terrainRoles =
     listOf("base", "adjacentTileOuter", "adjacentTileInner")
 }.register()
 tileLayout {
-    id = Ids.TILE_LAYOUT_CLIFF_TRANSITION; path = "Textures/cliffTransition.png"; terrainRoles =
+    id = Ids.TILE_LAYOUT_CLIFF_TRANSITION; path = "Textures/tile_layouts/cliffTransition.png"; terrainRoles =
     listOf("cliff1", "cliff2", "adjacentTileOuter1", "adjacentTileOuter2", "adjacentTileInner")
 }.register()
 tileLayout {
-    id = Ids.TILE_LAYOUT_WANG_EDGE; path = "Textures/wangEdge.png"; terrainRoles =
+    id = Ids.TILE_LAYOUT_WANG_EDGE; path = "Textures/tile_layouts/wangEdge.png"; terrainRoles =
     listOf("terrain", "adjacentTerrain")
 }.register()
 

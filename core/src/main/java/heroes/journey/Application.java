@@ -1,8 +1,5 @@
 package heroes.journey;
 
-import java.io.File;
-import java.util.List;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,9 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import heroes.journey.mods.GameMod;
-import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.MusicManager;
@@ -22,12 +16,6 @@ import lombok.Getter;
 
 /*
  * TODO Features
- * Update MapGenPlan Generation to:
-        Add Kingdom to center of region
-        Add towns in region off of capital
-        Add other features to regions
-   Update Travel for regions
- *
  * Add Events
  *  Demon kings arrival
  *  Global Quests
@@ -36,13 +24,11 @@ import lombok.Getter;
  * 	Action Sounds
  * Multiplayer
  *  setup player, host, and lobby for server
- * Knowledge System
  */
 /* TODO Improvements
  *
  * MapGenPlan Generation
  *  Add variation plain tiles
- * 	Guarantee path to all dungeons
  *      Make paths allowed to go through hills to make the \_/?
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  * 	Improve road generation roads are too straight
@@ -58,20 +44,6 @@ import lombok.Getter;
  * 		Scrolling
  *  Show Controls on UIs?
  * Make HUD Locked when players character is moving, and have the camera follow player movement
- */
-/*
- * Knowledge System
- *  Towns: Inn: Rumors
- *  Knowledge Menu
- *      Terrains
- *      Players
- *      Enemy Types
- *      Skills?
- *          Sword arts? Helps you train skills faster
- *          Heavy Armor
- *  Knowledge Vs Experience
- *      You can gain knowledge easier and it will speed up your experience gain
- *      for that experience/skill
  */
 @Getter
 public class Application extends Game {
