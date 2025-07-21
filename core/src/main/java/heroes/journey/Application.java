@@ -16,34 +16,47 @@ import lombok.Getter;
 
 /*
  * TODO Features
+ * Convert Renown to resource pools
+ *  stamina 50%, focus 20%, mana 10%, moxie 10%
+ *  remove realms attention (scarcity will be based on quests/challenges) (eventually there will be a limited number of 'good' challenges)
+ * Remove Feats, you will just earn actions (active), or buffs (passive
+ * Allow buffs to be permanent
+ * Display buffs
+ * Make actions have a resource cost (again)
+ *  update basemod with costs
+ *  Should costs be based fully on attributes? ie action_id_stamina_cost so they are easily modified?
+ * Have actions with limited uses (this can be refilled) (potions, scrolls)
+ * Add Perks (actions or buffs earn from having X of a stat)
+ * Update AI so that any non order specific actions dont matter for better efficiency?
+ * Update region controls so the farther from the capital the less quests/challenges
+ * Make challenges/quests have a value attribute that will control which regions they will appear in.
+ * make some challenges biome specific
+ * Add biome buffs
+ * Remove inventory and items (anything like that will be controlled by an action or buff)
  * Add Events
  *  Demon kings arrival
  *  Global Quests
  *  new quests appearances
- * Sounds
- * 	Action Sounds
- * Multiplayer
- *  setup player, host, and lobby for server
  */
-/* TODO Improvements
+/* TODO General Improvements
  *
  * MapGenPlan Generation
  *  Add variation plain tiles
  *      Make paths allowed to go through hills to make the \_/?
  *      Blacklist certain tiles in certain directions ie when a hill joins plains make it \_/ instead of \/ with no gap
  * 	Improve road generation roads are too straight
+ *  make biome edges more natural
  * AI
  *  Add understanding of fog of war (Probably need more knowledge information)
- *  Make AI use/equipped gear
- * Menus
- * 	Inventory
- *      Icons its own column
- *      make count its own column
- * 		make you move less the more encumbered you are
- *      Trash Item to reduce weight if movement is 0
- * 		Scrolling
- *  Show Controls on UIs?
+ * better score function
  * Make HUD Locked when players character is moving, and have the camera follow player movement
+ */
+/*
+ * TODO long term
+ * Sounds
+ * 	Action Sounds
+ * Multiplayer
+ *  setup player, host, and lobby for server
  */
 @Getter
 public class Application extends Game {
