@@ -4,6 +4,7 @@ import heroes.journey.entities.Buff;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.ChallengeType;
 import heroes.journey.entities.Approach;
+import heroes.journey.entities.Feat;
 import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.items.Item;
@@ -31,6 +32,7 @@ public class Registries {
     public static Registry<Challenge> ChallengeManager = new Registry<>();
     public static Registry<ChallengeType> ChallengeTypeManager = new Registry<>();
     public static Registry<Approach> ApproachManager = new Registry<>();
+    public static Registry<Feat> FeatManager = new Registry<>();
 
     public static Registry<Biome> BiomeManager = new Registry<>();
     public static Registry<FeatureType> FeatureTypeManager = new Registry<>();
