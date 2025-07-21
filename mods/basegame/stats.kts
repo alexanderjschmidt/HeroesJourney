@@ -37,37 +37,38 @@ stat {
     id = Ids.STAT_VALOR
     min = 0
     group(Ids.GROUP_RENOWN)
+    group(Ids.GROUP_BODY)
 }.register()
 stat {
     id = Ids.STAT_INSIGHT
     min = 0
     group(Ids.GROUP_RENOWN)
+    group(Ids.GROUP_MIND)
 }.register()
 stat {
     id = Ids.STAT_ARCANUM
     min = 0
     group(Ids.GROUP_RENOWN)
+    group(Ids.GROUP_MAGIC)
 }.register()
 stat {
     id = Ids.STAT_INFLUENCE
     min = 0
     group(Ids.GROUP_RENOWN)
+    group(Ids.GROUP_CHARISMA)
 }.register()
 
 // --- CALCULATED STATS ---
 stat {
     id = Ids.STAT_SPEED
-    group(Ids.GROUP_BODY)
     formula = { it.getDirect(Ids.STAT_BODY) }
 }.register()
 stat {
     id = Ids.STAT_VISION
-    group(Ids.GROUP_BODY)
     formula = { it.getDirect(Ids.STAT_BODY) + 3 }
 }.register()
 stat {
     id = Ids.STAT_CARRY_CAPACITY
     max = 100
-    group(Ids.GROUP_BODY)
     formula = { it.getDirect(Ids.STAT_BODY) * 10 }
 }.register()

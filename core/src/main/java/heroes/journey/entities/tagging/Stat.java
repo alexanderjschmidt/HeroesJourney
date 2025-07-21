@@ -56,6 +56,11 @@ public class Stat extends Registrable implements IStat {
 
     @Override
     public Stat register() {
+        Stat sameGroupsStat = getByGroups(groups);
+        if (!groups.isEmpty() && sameGroupsStat != null)
+            throw new IllegalArgumentException(
+                "You cannot have a stat that registers to the same group combinations. " + sameGroupsStat +
+                    " already has the combination of groups: " + sameGroupsStat.groups);
         return StatManager.register(this);
     }
 
@@ -71,6 +76,26 @@ public class Stat extends Registrable implements IStat {
     public static Set<Stat> getByGroup(String groupId) {
         IGroup group = GroupManager.get(groupId);
         return getByGroup(group);
+    }
+
+    public static Stat getByGroups(List<IGroup> groups) {
+        if (groups == null || groups.isEmpty())
+            return null;
+        return StatManager.values()
+            .stream()
+            .filter(stat -> stat.getGroups().containsAll(groups))
+            .findFirst()
+            .orElse(null);
+    }
+
+    public static Stat getByGroupIds(List<String> groupIds) {
+        if (groupIds == null || groupIds.isEmpty())
+            return null;
+        List<IGroup> groups = groupIds.stream()
+            .map(GroupManager::get)
+            .filter(java.util.Objects::nonNull)
+            .collect(Collectors.toList());
+        return getByGroups(groups);
     }
 
     public int get(Attributes attributes) {
