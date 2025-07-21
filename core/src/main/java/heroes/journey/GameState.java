@@ -24,10 +24,7 @@ import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.entities.actions.history.ActionRecord;
 import heroes.journey.entities.actions.history.History;
-import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Stat;
 import heroes.journey.models.MapData;
-import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.utils.IGameState;
 import heroes.journey.modlib.utils.Position;
@@ -58,7 +55,6 @@ public class GameState implements Cloneable, IGameState {
     private UUID currentEntity;
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
-    private Attributes realmsAttention, realmsAttentionBase;
     private MapData mapData;
 
     private GameState() {
@@ -84,11 +80,6 @@ public class GameState implements Cloneable, IGameState {
         map = new TileMap(width);
         entities = new EntityManager(width, height);
         history = new History();
-        realmsAttention = new Attributes();
-        realmsAttentionBase = new Attributes();
-        for (Stat renown : Stat.getByGroup(Ids.GROUP_RENOWN)) {
-            realmsAttentionBase.put(renown, mapData.getRealmAttentionBase());
-        }
 
         HUDEffectManager.get();
         WorldEffectManager.get();
@@ -113,8 +104,6 @@ public class GameState implements Cloneable, IGameState {
         clone.turn = turn;
         clone.currentEntity = currentEntity;
         clone.mapData = mapData;
-        clone.realmsAttention = new Attributes(realmsAttention);
-        clone.realmsAttentionBase = new Attributes(realmsAttentionBase);
         return clone;
     }
 
@@ -161,8 +150,6 @@ public class GameState implements Cloneable, IGameState {
                 IdComponent.class);
             turn++;
             world.enableTriggerableSystems(TriggerableSystem.EventTrigger.TURN);
-            realmsAttention.clear();
-            realmsAttention.putAll(realmsAttentionBase);
         }
         return entitiesInActionOrder.removeFirst();
     }
@@ -295,10 +282,6 @@ public class GameState implements Cloneable, IGameState {
 
     public UUID getCurrentEntity() {
         return this.currentEntity;
-    }
-
-    public Attributes getRealmsAttention() {
-        return this.realmsAttention;
     }
 
     public MapData getMapData() {

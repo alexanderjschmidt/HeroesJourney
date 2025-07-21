@@ -3,6 +3,7 @@ import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.misc.IChallengeType
@@ -32,20 +33,20 @@ action {
         input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         val stats = input.getStats(input.entityId!!)
-        var primaryRenownCount = stats.get(approach.baseStatId)
-        val primaryRenownStat: String = input.getRenownStatFromBase(approach.baseStatId)
+        var primaryAward = stats.get(approach.baseStatId)
+        val primaryStat: IStat = Registries.StatManager[approach.baseStatId]!!
+        val primaryRenownStat: IStat = input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RENOWN))
 
-        var secondaryRenownStat = ""
+        var secondaryRenownStat: IStat? = null
         var secondaryAward = 0
 
         if (approach.secondaryStatId != null) {
-            primaryRenownCount = maxOf(0, primaryRenownCount - 1)
-            val secondaryRenownCount = if (stats.get(approach.secondaryStatId!!) < 5) 1 else 2
-            secondaryRenownStat = input.getRenownStatFromBase(approach.secondaryStatId!!)
-            secondaryAward = input.getRealmAttention(secondaryRenownStat, secondaryRenownCount)
+            primaryAward = maxOf(0, primaryAward - 1)
+            secondaryAward = if (stats.get(approach.secondaryStatId!!) < 5) 1 else 2
+            val secondaryStat: IStat = Registries.StatManager[approach.secondaryStatId]!!
+            secondaryRenownStat = input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RENOWN))
             stats.add(secondaryRenownStat, secondaryAward)
         }
-        val primaryAward = input.getRealmAttention(primaryRenownStat, primaryRenownCount)
         stats.add(primaryRenownStat, primaryAward)
 
         // Build summary string

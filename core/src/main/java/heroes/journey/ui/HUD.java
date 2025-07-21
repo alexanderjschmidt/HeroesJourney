@@ -8,13 +8,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
 import heroes.journey.entities.actions.options.BooleanOptionAction;
 import heroes.journey.modlib.Ids;
 import heroes.journey.mods.Registries;
 import heroes.journey.ui.hudstates.HUDState;
 import heroes.journey.ui.hudstates.PopupUIState;
 import heroes.journey.ui.hudstates.States;
-import heroes.journey.ui.windows.*;
+import heroes.journey.ui.windows.ActionMenu;
+import heroes.journey.ui.windows.EntityUI;
+import heroes.journey.ui.windows.InfoUI;
+import heroes.journey.ui.windows.PopupUI;
+import heroes.journey.ui.windows.StatsUI;
+import heroes.journey.ui.windows.TerrainUI;
+import heroes.journey.ui.windows.TurnUI;
 
 public class HUD extends Stage {
 
@@ -34,7 +41,6 @@ public class HUD extends Stage {
     private final TerrainUI terrainUI;
     private final EntityUI entityUI;
     private final TurnUI turnUI;
-    private final RealmAttentionUI realmAttentionUI;
 
     // TODO move this into its own center screen class
     private final Cell<?> centerWindow;
@@ -42,7 +48,7 @@ public class HUD extends Stage {
     private final PopupUI popupUI;
 
     private static HUD hud;
-    private final StateMachine<HUD, HUDState> stateMachine;
+    private final StateMachine<HUD,HUDState> stateMachine;
     private float delta;
 
     public static HUD get() {
@@ -54,7 +60,7 @@ public class HUD extends Stage {
     private HUD() {
         super(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
 
-        stateMachine = new StackStateMachine<HUD, HUDState>(this, States.CURSOR_MOVE);
+        stateMachine = new StackStateMachine<HUD,HUDState>(this, States.CURSOR_MOVE);
         stateMachine.setGlobalState(States.GLOBAL);
 
         cursor = new Cursor(this);
@@ -64,7 +70,6 @@ public class HUD extends Stage {
         terrainUI = new TerrainUI();
         entityUI = new EntityUI();
         turnUI = new TurnUI();
-        realmAttentionUI = new RealmAttentionUI();
         statsUI = new StatsUI();
         popupUI = new PopupUI();
 
@@ -100,8 +105,6 @@ public class HUD extends Stage {
         leftCol.defaults().expandX().fill();
         leftCol.add(turnUI).height(Value.percentHeight(.075f, leftCol)).padBottom(2.5f).top();
         leftCol.row();
-        leftCol.add(realmAttentionUI).height(Value.percentHeight(.175f, leftCol)).padBottom(2.5f).top();
-        leftCol.row();
         leftCol.add().expandY();
         leftCol.row();
         leftCol.add(entityUI)
@@ -117,7 +120,7 @@ public class HUD extends Stage {
         this.delta = delta;
         stateMachine.update();
         act();
-        this.setDebugAll(((BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue());
+        this.setDebugAll(((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue());
 
         draw();
     }
@@ -137,8 +140,11 @@ public class HUD extends Stage {
         } else if (stateMachine.getCurrentState() == States.POP_UP) {
             Table popupTable = new Table();
             popupTable.add(popupUI).width(Value.percentWidth(.75f, popupTable)).pad(10);
-            centerWindow.setActor(popupTable).expand().fill()
-                .height(Value.percentHeight(0.75f, layout)).center();
+            centerWindow.setActor(popupTable)
+                .expand()
+                .fill()
+                .height(Value.percentHeight(0.75f, layout))
+                .center();
         }
         layout.invalidate();
         layout.pack();
@@ -150,7 +156,7 @@ public class HUD extends Stage {
 
     public void setState(HUDState newState) {
         stateMachine.changeState(newState);
-        if (((BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("set to " + stateMachine.getCurrentState() + " previous state " +
                 stateMachine.getPreviousState());
         }
@@ -170,14 +176,14 @@ public class HUD extends Stage {
         while (stateMachine.revertToPreviousState()) {
         }
         isReverting = false;
-        if (((BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("reset to " + stateMachine.getCurrentState());
         }
     }
 
     public void revertToPreviousState() {
         stateMachine.revertToPreviousState();
-        if (((BooleanOptionAction) Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
+        if (((BooleanOptionAction)Registries.ActionManager.get(Ids.DEBUG)).isTrue()) {
             System.out.println("revert to " + stateMachine.getCurrentState() + " previous state " +
                 stateMachine.getPreviousState());
         }

@@ -7,28 +7,23 @@ group { id = Ids.GROUP_BODY }.register()
 group { id = Ids.GROUP_MIND }.register()
 group { id = Ids.GROUP_MAGIC }.register()
 group { id = Ids.GROUP_CHARISMA }.register()
-group { id = Ids.GROUP_BASESTATS }.register()
 group { id = Ids.GROUP_RENOWN }.register()
 
 // --- BASE STATS ---
 stat {
     id = Ids.STAT_BODY
-    group(Ids.GROUP_BASESTATS)
     group(Ids.GROUP_BODY)
 }.register()
 stat {
     id = Ids.STAT_MIND
-    group(Ids.GROUP_BASESTATS)
     group(Ids.GROUP_MIND)
 }.register()
 stat {
     id = Ids.STAT_MAGIC
-    group(Ids.GROUP_BASESTATS)
     group(Ids.GROUP_MAGIC)
 }.register()
 stat {
     id = Ids.STAT_CHARISMA
-    group(Ids.GROUP_BASESTATS)
     group(Ids.GROUP_CHARISMA)
 }.register()
 
