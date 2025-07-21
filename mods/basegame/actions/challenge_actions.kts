@@ -35,26 +35,26 @@ action {
         val stats = input.getStats(input.entityId!!)
         var primaryAward = stats.get(approach.baseStatId)
         val primaryStat: IStat = Registries.StatManager[approach.baseStatId]!!
-        val primaryRenownStat: IStat = input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RENOWN))
+        val primaryResourceStat: IStat = input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RESOURCES))
 
-        var secondaryRenownStat: IStat? = null
+        var secondaryResourceStat: IStat? = null
         var secondaryAward = 0
 
         if (approach.secondaryStatId != null) {
             primaryAward = maxOf(0, primaryAward - 1)
             secondaryAward = if (stats.get(approach.secondaryStatId!!) < 5) 1 else 2
             val secondaryStat: IStat = Registries.StatManager[approach.secondaryStatId]!!
-            secondaryRenownStat = input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RENOWN))
-            stats.add(secondaryRenownStat, secondaryAward)
+            secondaryResourceStat = input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RESOURCES))
+            stats.add(secondaryResourceStat, secondaryAward)
         }
-        stats.add(primaryRenownStat, primaryAward)
+        stats.add(primaryResourceStat, primaryAward)
 
         // Build summary string
         val summary = StringBuilder()
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
-        summary.append("Your ${approach.baseStatId} skill (${stats.get(approach.baseStatId)}) provides ${primaryAward} ${primaryRenownStat}.\n")
+        summary.append("Your ${approach.baseStatId} skill (${stats.get(approach.baseStatId)}) provides ${primaryAward} ${primaryResourceStat}.\n")
         if (approach.secondaryStatId != null) {
-            summary.append("Your ${approach.secondaryStatId} skill (${stats.get(approach.secondaryStatId!!)}) provides ${secondaryAward} ${secondaryRenownStat}.")
+            summary.append("Your ${approach.secondaryStatId} skill (${stats.get(approach.secondaryStatId!!)}) provides ${secondaryAward} ${secondaryResourceStat}.")
         }
 
         StringResult(summary.toString())

@@ -24,7 +24,7 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, stat.getMin());
         }
-        for (Stat stat : Stat.getByGroup(Ids.GROUP_RENOWN)) {
+        for (Stat stat : Stat.getByGroup(Ids.GROUP_RESOURCES)) {
             if (!attributes.containsKey(stat))
                 attributes.put(stat, 3);
         }

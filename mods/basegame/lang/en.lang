@@ -94,13 +94,13 @@ popup_description=Popup
 rest_name=Rest
 rest_description=Do nothing, resting your body and mind.
 workout_training_name=Workout
-workout_training_description=Intensive physical training to increase BODY (Cost: 5 VALOR)
+workout_training_description=Intensive physical training to increase BODY (Cost: 5 STAMINA)
 study_training_name=Study
-study_training_description=Intensive mental training to increase MIND (Cost: 5 INSIGHT)
+study_training_description=Intensive mental training to increase MIND (Cost: 5 FOCUS)
 practice_training_name=Practice
-practice_training_description=Intensive magical training to increase MAGIC (Cost: 5 ARCANUM)
+practice_training_description=Intensive magical training to increase MAGIC (Cost: 5 MANA)
 socialize_training_name=Socialize
-socialize_training_description=Intensive social training to increase CHARISMA (Cost: 5 INFLUENCE)
+socialize_training_description=Intensive social training to increase CHARISMA (Cost: 5 MOXIE)
 training_name=Training
 training_description=Intensive training to improve your base stats
 choose_approach_name=Choose Approach
@@ -446,6 +446,8 @@ group.BaseStats_name=Base Stats
 group.BaseStats_description=Primary attributes for all characters.
 group.Renown_name=Renown
 group.Renown_description=Fame and reputation earned through deeds.
+group.Resources_name=Resources
+group.Resources_description=Core pools used for actions and abilities.
 
 # --- BASE STATS ---
 stat.body_name=Body
@@ -457,49 +459,15 @@ stat.magic_description=Represents magical aptitude and arcane power.
 stat.charisma_name=Charisma
 stat.charisma_description=Represents charm, leadership, and social ability.
 
-# --- RENOWN STATS ---
-stat.valor_name=Valor
-stat.valor_description=Bravery and heroism in the face of danger.
-stat.insight_name=Insight
-stat.insight_description=Perceptiveness and understanding of the world.
-stat.arcanum_name=Arcanum
-stat.arcanum_description=Knowledge and mastery of the arcane.
-stat.influence_name=Influence
-stat.influence_description=Ability to sway others and shape events.
-
-# --- CONFLUENCE STATS (COMPLEX) ---
-stat.might_name=Might
-stat.might_description=Raw physical power and force.
-stat.skill_name=Skill
-stat.skill_description=Dexterity and practiced technique.
-stat.empowerment_name=Empowerment
-stat.empowerment_description=Physical strength enhanced by magic.
-stat.chivalry_name=Chivalry
-stat.chivalry_description=Physical prowess guided by honor and charisma.
-stat.technique_name=Technique
-stat.technique_description=Intellectual approach to physical challenges.
-stat.logic_name=Logic
-stat.logic_description=Pure reasoning and analytical thought.
-stat.concentration_name=Concentration
-stat.concentration_description=Focused mind, often for magical tasks.
-stat.cunning_name=Cunning
-stat.cunning_description=Deceptive intelligence and cleverness.
-stat.enchanting_name=Enchanting
-stat.enchanting_description=Magical power applied to the physical world.
-stat.illusion_name=Illusion
-stat.illusion_description=Magical manipulation of perception and mind.
-stat.sorcery_name=Sorcery
-stat.sorcery_description=Raw, unrestrained magical force.
-stat.bewitching_name=Bewitching
-stat.bewitching_description=Magical charm and supernatural allure.
-stat.bravado_name=Bravado
-stat.bravado_description=Showy courage and physical confidence.
-stat.persuasion_name=Persuasion
-stat.persuasion_description=Intellectual argument and social influence.
-stat.mesmerism_name=Mesmerism
-stat.mesmerism_description=Magical or supernatural influence over others.
-stat.charm_name=Charm
-stat.charm_description=Pure social magnetism and likability.
+# --- RESOURCES STATS ---
+stat.stamina_name=Stamina
+stat.stamina_description=Physical energy and endurance for actions.
+stat.focus_name=Focus
+stat.focus_description=Mental clarity and concentration for tasks.
+stat.mana_name=Mana
+stat.mana_description=Magical power used to cast spells.
+stat.moxie_name=Moxie
+stat.moxie_description=Charisma, nerve, and social boldness.
 
 # --- CALCULATED STATS ---
 stat.speed_name=Speed

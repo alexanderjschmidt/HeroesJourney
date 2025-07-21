@@ -23,14 +23,14 @@ object TrainingOptions {
 action {
     id = Ids.WORKOUT_TRAINING
     requirementsMetFn = { input ->
-        if (input.getStat(input.entityId!!, Ids.STAT_VALOR) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_STAMINA) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_VALOR, -5)
+        input.addStat(input.entityId!!, Ids.STAT_STAMINA, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_BODY, 1)
         StringResult("You completed an intense workout! BODY +1")
     }
@@ -40,14 +40,14 @@ action {
 action {
     id = Ids.STUDY_TRAINING
     requirementsMetFn = { input ->
-        if (input.getStat(input.entityId!!, Ids.STAT_INSIGHT) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_FOCUS) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_INSIGHT, -5)
+        input.addStat(input.entityId!!, Ids.STAT_FOCUS, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_MIND, 1)
         StringResult("You completed intensive study! MIND +1")
     }
@@ -57,14 +57,14 @@ action {
 action {
     id = Ids.PRACTICE_TRAINING
     requirementsMetFn = { input ->
-        if (input.getStat(input.entityId!!, Ids.STAT_ARCANUM) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_MANA) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_ARCANUM, -5)
+        input.addStat(input.entityId!!, Ids.STAT_MANA, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_MAGIC, 1)
         StringResult("You completed magical practice! MAGIC +1")
     }
@@ -74,14 +74,14 @@ action {
 action {
     id = Ids.SOCIALIZE_TRAINING
     requirementsMetFn = { input ->
-        if (input.getStat(input.entityId!!, Ids.STAT_INFLUENCE) >= 5) {
+        if (input.getStat(input.entityId!!, Ids.STAT_MOXIE) >= 5) {
             ShowAction.YES
         } else {
             ShowAction.GRAYED
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_INFLUENCE, -5)
+        input.addStat(input.entityId!!, Ids.STAT_MOXIE, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_CHARISMA, 1)
         StringResult("You completed social training! CHARISMA +1")
     }
