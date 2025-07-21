@@ -18,8 +18,10 @@ class StatBuilderImpl : StatBuilder {
         groupIds.add(id)
     }
 
-    fun build(): Triple<String, Triple<Int, Int, ((IAttributes) -> Int)?>, List<String>> {
-        return Triple(id, Triple(min, max, formula), groupIds)
+    fun build(): Stat {
+        val coreGroups = groupIds.map { Registries.GroupManager[it] as Group }
+        val coreFormula: (IAttributes) -> Int = formula ?: { attrs -> attrs.getDirect(id) }
+        return Stat(id, min, max, coreFormula, coreGroups)
     }
 }
 
@@ -27,11 +29,6 @@ class StatDSLImpl : StatDSL {
     override fun stat(init: StatBuilder.() -> Unit): IStat {
         val builder = StatBuilderImpl()
         builder.init()
-        val (id, triple, groupIds) = builder.build()
-        val (min, max, formula) = triple
-        val coreGroups = groupIds.map { Registries.GroupManager[it] as Group }
-        val coreFormula: (IAttributes) -> Int = formula ?: { attrs -> attrs.getDirect(id) }
-        // Stat does not support attributes in its constructor, so ignore builtAttributes for now
-        return Stat(id, min, max, coreFormula, coreGroups)
+        return builder.build()
     }
 }

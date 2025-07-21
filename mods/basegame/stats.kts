@@ -8,6 +8,8 @@ group { id = Ids.GROUP_MIND }.register()
 group { id = Ids.GROUP_MAGIC }.register()
 group { id = Ids.GROUP_CHARISMA }.register()
 group { id = Ids.GROUP_RENOWN }.register()
+group { id = Ids.GROUP_MAX }.register()
+group { id = Ids.GROUP_MIN }.register()
 
 // --- BASE STATS ---
 stat {

@@ -491,6 +491,8 @@ object Ids {
   const val GROUP_CHARISMA: String = "charisma_group"
   const val GROUP_BASESTATS: String = "basestats_group"
   const val GROUP_RENOWN: String = "renown_group"
+  const val GROUP_MAX: String = "max_group"
+  const val GROUP_MIN: String = "min_group"
 
   // Item SubType IDs
   /** Raw Material item subtype ID  */

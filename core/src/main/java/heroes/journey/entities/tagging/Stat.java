@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 
+import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IGroup;
 import heroes.journey.modlib.attributes.IStat;
@@ -17,31 +18,49 @@ import kotlin.jvm.functions.Function1;
 
 public class Stat extends Registrable implements IStat {
 
-    private final int min, max;
+    private final Integer minValue, maxValue;
     private final List<IGroup> groups;
     private final Function1<IAttributes,Integer> calc;
 
     public Stat(
         @NotNull String id,
-        int min,
-        int max,
+        Integer minValue,
+        Integer maxValue,
         Function1<IAttributes,Integer> calc,
         List<IGroup> groups) {
         super(id);
-        this.min = min;
-        this.max = max;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
         this.groups = groups;
         this.calc = calc;
     }
 
     @Override
     public int getMin() {
-        return min;
+        // Try to find a stat with the same groups + GROUP_MIN
+        List<IGroup> minGroups = new java.util.ArrayList<>(groups);
+        IGroup groupMin = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MIN);
+        if (groupMin != null && !minGroups.contains(groupMin))
+            minGroups.add(groupMin);
+        Stat minStat = Stat.getByGroups(minGroups);
+        if (minStat != null && minStat != this) {
+            return minStat.getFormula().invoke(null); // null for IAttributes, or pass as needed
+        }
+        return minValue != null ? minValue : Integer.MIN_VALUE;
     }
 
     @Override
     public int getMax() {
-        return max;
+        // Try to find a stat with the same groups + GROUP_MAX
+        List<IGroup> maxGroups = new java.util.ArrayList<>(groups);
+        IGroup groupMax = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MAX);
+        if (groupMax != null && !maxGroups.contains(groupMax))
+            maxGroups.add(groupMax);
+        Stat maxStat = Stat.getByGroups(maxGroups);
+        if (maxStat != null && maxStat != this) {
+            return maxStat.getFormula().invoke(null); // null for IAttributes, or pass as needed
+        }
+        return maxValue != null ? maxValue : Integer.MAX_VALUE;
     }
 
     @Override
@@ -83,7 +102,9 @@ public class Stat extends Registrable implements IStat {
             return null;
         return StatManager.values()
             .stream()
-            .filter(stat -> stat.getGroups().containsAll(groups))
+            .filter(
+                stat -> stat.getGroups().size() == groups.size() && stat.getGroups().containsAll(groups) &&
+                    groups.containsAll(stat.getGroups()))
             .findFirst()
             .orElse(null);
     }

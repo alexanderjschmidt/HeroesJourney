@@ -24,8 +24,8 @@ interface IStat : IRegistrable {
  */
 interface StatBuilder {
     var id: String
-    var min: Int
-    var max: Int
+    var min: Int // Direct minimum value if no group-based min stat exists
+    var max: Int // Direct maximum value if no group-based max stat exists
     var formula: ((IAttributes) -> Int)?
     fun group(id: String)
 }
