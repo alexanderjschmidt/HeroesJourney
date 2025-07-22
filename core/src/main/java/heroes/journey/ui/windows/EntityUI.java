@@ -13,6 +13,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.Ids;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ResourceBar;
 import heroes.journey.ui.UI;
@@ -21,7 +22,7 @@ import heroes.journey.utils.art.ResourceManager;
 public class EntityUI extends UI {
 
     private final Label entity;
-    private final ResourceBar valor, insight, arcanum, influence;
+    private final ResourceBar stamina, focus, mana, moxie;
 
     public EntityUI() {
         super();
@@ -29,15 +30,15 @@ public class EntityUI extends UI {
         this.entity.setWrap(true);
         this.mainTable.add(entity).expandX().row();
 
-        this.valor = new ResourceBar(RED, null);
-        this.insight = new ResourceBar(LIGHT_BLUE, null);
-        this.arcanum = new ResourceBar(PURPLE, null);
-        this.influence = new ResourceBar(YELLOW, null);
+        this.stamina = new ResourceBar(RED, null);
+        this.focus = new ResourceBar(LIGHT_BLUE, null);
+        this.mana = new ResourceBar(PURPLE, null);
+        this.moxie = new ResourceBar(YELLOW, null);
 
-        this.mainTable.add(valor).expandX().row();
-        this.mainTable.add(insight).expandX().row();
-        this.mainTable.add(arcanum).expandX().row();
-        this.mainTable.add(influence).expandX().row();
+        this.mainTable.add(stamina).expandX().row();
+        this.mainTable.add(focus).expandX().row();
+        this.mainTable.add(mana).expandX().row();
+        this.mainTable.add(moxie).expandX().row();
 
         pack();
     }
@@ -53,10 +54,10 @@ public class EntityUI extends UI {
         entity.setText(name);
 
         if (statsComponent != null) {
-            valor.update(statsComponent, "valor");
-            insight.update(statsComponent, "insight");
-            arcanum.update(statsComponent, "arcanum");
-            influence.update(statsComponent, "influence");
+            stamina.update(statsComponent, Ids.STAT_STAMINA);
+            focus.update(statsComponent, Ids.STAT_FOCUS);
+            mana.update(statsComponent, Ids.STAT_MANA);
+            moxie.update(statsComponent, Ids.STAT_MOXIE);
         }
     }
 }

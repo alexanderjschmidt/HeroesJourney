@@ -33,18 +33,20 @@ action {
         input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         val stats = input.getStats(input.entityId!!)
-        var primaryAward = stats.get(approach.baseStatId)
+        var primaryAward: Int = stats.get(approach.baseStatId)!!
         val primaryStat: IStat = Registries.StatManager[approach.baseStatId]!!
-        val primaryResourceStat: IStat = input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RESOURCES))
+        val primaryResourceStat: IStat =
+            input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RESOURCES))
 
         var secondaryResourceStat: IStat? = null
         var secondaryAward = 0
 
         if (approach.secondaryStatId != null) {
             primaryAward = maxOf(0, primaryAward - 1)
-            secondaryAward = if (stats.get(approach.secondaryStatId!!) < 5) 1 else 2
+            secondaryAward = if (stats.get(approach.secondaryStatId!!)!! < 5) 1 else 2
             val secondaryStat: IStat = Registries.StatManager[approach.secondaryStatId]!!
-            secondaryResourceStat = input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RESOURCES))
+            secondaryResourceStat =
+                input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RESOURCES))
             stats.add(secondaryResourceStat, secondaryAward)
         }
         stats.add(primaryResourceStat, primaryAward)
@@ -88,7 +90,7 @@ targetAction<IApproach> {
 
         for (approach: IApproach in allApproaches) {
             if (approach.secondaryStatId != null) {
-                if (stats.get(approach.secondaryStatId!!) >= 3) {
+                if (stats.get(approach.secondaryStatId!!)!! >= 3) {
                     availableApproaches.add(approach)
                 }
             } else {

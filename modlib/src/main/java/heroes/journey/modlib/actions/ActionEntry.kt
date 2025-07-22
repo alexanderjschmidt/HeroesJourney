@@ -22,4 +22,8 @@ class ActionEntry(val actionId: String, val input: Map<String, String>) {
         return result
     }
 
+    override fun toString(): String {
+        return actionId
+    }
+
 }

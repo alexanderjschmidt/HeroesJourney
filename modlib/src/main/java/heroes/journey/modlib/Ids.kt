@@ -477,6 +477,11 @@ object Ids {
   const val GROUP_RESOURCES: String = "resources_group"
   const val GROUP_MAX: String = "max_group"
   const val GROUP_MIN: String = "min_group"
+  const val GROUP_REGEN: String = "regen_group"
+  const val STAT_STAMINA_REGEN: String = "stamina_regen"
+  const val STAT_FOCUS_REGEN: String = "focus_regen"
+  const val STAT_MANA_REGEN: String = "mana_regen"
+  const val STAT_MOXIE_REGEN: String = "moxie_regen"
 
   // Item SubType IDs
   /** Raw Material item subtype ID  */

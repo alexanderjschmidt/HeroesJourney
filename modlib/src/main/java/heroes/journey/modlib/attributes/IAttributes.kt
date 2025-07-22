@@ -11,28 +11,28 @@ interface IAttributes {
      * @param statId the stat ID (see [Ids])
      * @return the calculated value for the stat
      */
-    fun get(statId: String): Int
+    fun get(statId: String): Int?
 
     /**
      * Get the value of a stat by its IStat, applying all formulas and modifiers.
      * @param stat the stat
      * @return the calculated value for the stat
      */
-    fun get(stat: IStat): Int
+    fun get(stat: IStat): Int?
 
     /**
      * Get the direct (raw) value of a stat by its string ID, ignoring formulas.
      * @param statId the stat ID (see [Ids])
      * @return the direct value for the stat
      */
-    fun getDirect(statId: String): Int
+    fun getDirect(statId: String): Int?
 
     /**
      * Get the direct (raw) value of a stat by its IStat, ignoring formulas.
      * @param stat the stat
      * @return the direct value for the stat
      */
-    fun getDirect(stat: IStat): Int
+    fun getDirect(stat: IStat): Int?
 
     fun add(
         stat: IStat,
@@ -76,4 +76,5 @@ object AttributesDSLProvider {
  * }
  * ```
  */
-fun attributes(init: AttributesBuilder.() -> Unit): IAttributes = AttributesDSLProvider.instance.attributes(init)
+fun attributes(init: AttributesBuilder.() -> Unit): IAttributes =
+    AttributesDSLProvider.instance.attributes(init)

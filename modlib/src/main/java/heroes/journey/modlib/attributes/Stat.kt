@@ -15,7 +15,10 @@ interface IStat : IRegistrable {
     val min: Int
     val max: Int
     val groups: List<IGroup>
-    val formula: (IAttributes) -> Int
+    val formula: (IAttributes) -> Int?
+    val defaultValue: Int?
+    fun getMin(attributes: IAttributes): Int
+    fun getMax(attributes: IAttributes): Int
     override fun register(): IStat
 }
 
@@ -26,7 +29,8 @@ interface StatBuilder {
     var id: String
     var min: Int // Direct minimum value if no group-based min stat exists
     var max: Int // Direct maximum value if no group-based max stat exists
-    var formula: ((IAttributes) -> Int)?
+    var formula: ((IAttributes) -> Int?)?
+    var defaultValue: Int?
     fun group(id: String)
 }
 
@@ -61,13 +65,3 @@ object StatDSLProvider {
  * ```
  */
 fun stat(init: StatBuilder.() -> Unit): IStat = StatDSLProvider.instance.stat(init)
-
-/**
- * DSL utility for creating a list in a more idiomatic way for mods.
- */
-fun <T> dslListOf(vararg elements: T): List<T> = elements.toList()
-
-/**
- * DSL utility for creating a map in a more idiomatic way for mods.
- */
-fun <K, V> dslMapOf(vararg pairs: Pair<K, V>): Map<K, V> = mapOf(*pairs)

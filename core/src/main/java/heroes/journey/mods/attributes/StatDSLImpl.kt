@@ -12,7 +12,8 @@ class StatBuilderImpl : StatBuilder {
     override var id: String = ""
     override var min: Int = 1
     override var max: Int = 10
-    override var formula: ((IAttributes) -> Int)? = null
+    override var formula: ((IAttributes) -> Int?)? = null
+    override var defaultValue: Int? = null
     private val groupIds = mutableListOf<String>()
     override fun group(id: String) {
         groupIds.add(id)
@@ -20,8 +21,8 @@ class StatBuilderImpl : StatBuilder {
 
     fun build(): Stat {
         val coreGroups = groupIds.map { Registries.GroupManager[it] as Group }
-        val coreFormula: (IAttributes) -> Int = formula ?: { attrs -> attrs.getDirect(id) }
-        return Stat(id, min, max, coreFormula, coreGroups)
+        val coreFormula: (IAttributes) -> Int? = formula ?: { attrs -> try { attrs.getDirect(id) } catch (_: Exception) { null } }
+        return Stat(id, min, max, coreFormula, coreGroups, defaultValue)
     }
 }
 

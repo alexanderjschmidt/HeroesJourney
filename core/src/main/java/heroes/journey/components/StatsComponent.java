@@ -7,7 +7,6 @@ import java.util.UUID;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
-import heroes.journey.modlib.Ids;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 
@@ -19,14 +18,11 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
     private int fame = 0;
 
     public StatsComponent() {
-        // TODO how to auto load things with maxes
-        for (Stat stat : Stat.getByGroup(Ids.GROUP_BASESTATS)) {
-            if (!attributes.containsKey(stat))
-                attributes.put(stat, stat.getMin());
-        }
-        for (Stat stat : Stat.getByGroup(Ids.GROUP_RESOURCES)) {
-            if (!attributes.containsKey(stat))
-                attributes.put(stat, 3);
+        for (Stat stat : StatManager.values()) {
+            Integer def = stat.getDefaultValue();
+            if (def != null) {
+                attributes.put(stat, def);
+            }
         }
     }
 

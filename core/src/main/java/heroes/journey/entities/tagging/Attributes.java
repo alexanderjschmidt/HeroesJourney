@@ -47,22 +47,17 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     }
 
     @Override
-    public int get(String statId) {
+    public Integer get(String statId) {
         return StatManager.get(statId).get(this);
     }
 
     @Override
-    public int get(IStat stat) {
-        if (stat instanceof Stat) {
-            return ((Stat)stat).get(this);
-        } else {
-            // fallback: use stat id
-            return get(stat.getId());
-        }
+    public Integer get(IStat stat) {
+        return get(stat.getId());
     }
 
     @Override
-    public int getDirect(String statId) {
+    public Integer getDirect(String statId) {
         Integer val = super.get(StatManager.get(statId));
         if (val == null) {
             System.out.println(this);
@@ -72,7 +67,7 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     }
 
     @Override
-    public int getDirect(IStat stat) {
+    public Integer getDirect(IStat stat) {
         return super.get(stat);
     }
 
@@ -96,8 +91,8 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     public Attributes put(Stat stat, Integer value, Operation operation) {
         if (this.containsKey(stat)) {
             this.compute(stat,
-                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(),
-                    stat.getMax()));
+                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(this),
+                    stat.getMax(this)));
         } else {
             put(stat, value);
         }

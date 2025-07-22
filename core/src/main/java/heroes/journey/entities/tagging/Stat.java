@@ -3,6 +3,7 @@ package heroes.journey.entities.tagging;
 import static heroes.journey.mods.Registries.GroupManager;
 import static heroes.journey.mods.Registries.StatManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,48 +19,74 @@ import kotlin.jvm.functions.Function1;
 
 public class Stat extends Registrable implements IStat {
 
+    public static final List<Stat> BASE_STATS = new ArrayList<>(4);
     private final Integer minValue, maxValue;
     private final List<IGroup> groups;
     private final Function1<IAttributes,Integer> calc;
+    private final Integer defaultValue;
 
     public Stat(
         @NotNull String id,
         Integer minValue,
         Integer maxValue,
         Function1<IAttributes,Integer> calc,
-        List<IGroup> groups) {
+        List<IGroup> groups,
+        Integer defaultValue) {
         super(id);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.groups = groups;
         this.calc = calc;
+        this.defaultValue = defaultValue;
+    }
+
+    public Integer getDefaultValue() {
+        return defaultValue;
     }
 
     @Override
-    public int getMin() {
+    public int getMin(IAttributes attributes) {
         // Try to find a stat with the same groups + GROUP_MIN
-        List<IGroup> minGroups = new java.util.ArrayList<>(groups);
-        IGroup groupMin = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MIN);
-        if (groupMin != null && !minGroups.contains(groupMin))
-            minGroups.add(groupMin);
-        Stat minStat = Stat.getByGroups(minGroups);
-        if (minStat != null && minStat != this) {
-            return minStat.getFormula().invoke(null); // null for IAttributes, or pass as needed
+        if (attributes != null) {
+            List<IGroup> minGroups = new java.util.ArrayList<>(groups);
+            IGroup groupMin = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MIN);
+            if (groupMin != null && !minGroups.contains(groupMin))
+                minGroups.add(groupMin);
+            Stat minStat = Stat.getByGroups(minGroups);
+            if (minStat != null && minStat != this) {
+                Integer val = minStat.getFormula().invoke(attributes);
+                if (val != null)
+                    return val;
+            }
         }
         return minValue != null ? minValue : Integer.MIN_VALUE;
     }
 
     @Override
-    public int getMax() {
+    public int getMax(IAttributes attributes) {
         // Try to find a stat with the same groups + GROUP_MAX
-        List<IGroup> maxGroups = new java.util.ArrayList<>(groups);
-        IGroup groupMax = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MAX);
-        if (groupMax != null && !maxGroups.contains(groupMax))
-            maxGroups.add(groupMax);
-        Stat maxStat = Stat.getByGroups(maxGroups);
-        if (maxStat != null && maxStat != this) {
-            return maxStat.getFormula().invoke(null); // null for IAttributes, or pass as needed
+        if (attributes != null) {
+            List<IGroup> maxGroups = new java.util.ArrayList<>(groups);
+            IGroup groupMax = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MAX);
+            if (groupMax != null && !maxGroups.contains(groupMax))
+                maxGroups.add(groupMax);
+            Stat maxStat = Stat.getByGroups(maxGroups);
+            if (maxStat != null && maxStat != this) {
+                Integer val = maxStat.getFormula().invoke(attributes);
+                if (val != null)
+                    return val;
+            }
         }
+        return maxValue != null ? maxValue : Integer.MAX_VALUE;
+    }
+
+    @Override
+    public int getMin() {
+        return minValue != null ? minValue : Integer.MIN_VALUE;
+    }
+
+    @Override
+    public int getMax() {
         return maxValue != null ? maxValue : Integer.MAX_VALUE;
     }
 
@@ -80,6 +107,8 @@ public class Stat extends Registrable implements IStat {
             throw new IllegalArgumentException(
                 "You cannot have a stat that registers to the same group combinations. " + sameGroupsStat +
                     " already has the combination of groups: " + sameGroupsStat.groups);
+        if (groups.size() == 1)
+            BASE_STATS.add(this);
         return StatManager.register(this);
     }
 
@@ -119,7 +148,7 @@ public class Stat extends Registrable implements IStat {
         return getByGroups(groups);
     }
 
-    public int get(Attributes attributes) {
+    public Integer get(Attributes attributes) {
         return calc.invoke(attributes);
     }
 

@@ -43,13 +43,14 @@ class StatBuilder(val id: String) {
     var min: Int = 1
     var max: Int = 10
     var groups: MutableList<IGroup> = mutableListOf()
-    var formula: (IAttributes) -> Int = { it.getDirect(id) }
+    var formula: (IAttributes) -> Int? = { it.getDirect(id) }
+    var defaultValue: Int? = null
 
     fun group(groupId: String) {
         Registries.GroupManager.get(groupId)?.let { groups.add(it) }
     }
 
-    fun build(): Stat = Stat(id, min, max, formula, groups)
+    fun build(): Stat = Stat(id, min, max, formula, groups, defaultValue)
 }
 
 fun stat(id: String, init: StatBuilder.() -> Unit): Stat {
