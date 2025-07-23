@@ -16,9 +16,6 @@ import lombok.Getter;
 
 /*
  * TODO Features
- * Convert Renown to resource pools
- *  stamina 50%, focus 20%, mana 10%, moxie 10%
- *  remove realms attention (scarcity will be based on quests/challenges) (eventually there will be a limited number of 'good' challenges)
  * Remove Feats, you will just earn actions (active), or buffs (passive
  * Allow buffs to be permanent
  * Display buffs

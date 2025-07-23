@@ -5,19 +5,22 @@ import heroes.journey.modlib.actions.ActionResult
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.IOptionAction
 import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.attributes.IAttributes
 
 abstract class OptionAction(
     id: String,
     requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES },
     onHoverFn: (IActionContext) -> Unit = {},
     onSelectFn: (IActionContext) -> ActionResult,
-    override var value: Any
+    override var value: Any,
+    cost: IAttributes? = null
 ) : Action(
     id,
     false,
     requirementsMetFn,
     onHoverFn,
-    onSelectFn
+    onSelectFn,
+    cost = cost
 ), IOptionAction {
     override fun getName(): String {
         return super.getName() + ": " + value

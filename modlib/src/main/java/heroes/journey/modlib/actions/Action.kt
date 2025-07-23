@@ -1,5 +1,6 @@
 package heroes.journey.modlib.actions
 
+import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.registries.IRegistrable
 
 /**
@@ -16,6 +17,10 @@ import heroes.journey.modlib.registries.IRegistrable
  *     inputDisplayNameFn = { "Do the Thing" }
  *     turnCooldown = 0
  *     factionCooldown = false
+ *     cost = attributes {
+ *         stat(Ids.STAT_VALOR, 2)
+ *         stat(Ids.STAT_INSIGHT, 1)
+ *     }
  * }.register()
  * ```
  */
@@ -28,6 +33,7 @@ interface IAction : IRegistrable {
     val inputDescriptionFn: ((IActionContext) -> String)?
     val turnCooldown: Int
     val factionCooldown: Boolean
+    val cost: IAttributes?
     override fun register(): IAction
 }
 
@@ -49,6 +55,7 @@ interface IActionBuilder {
     var onSelectFn: (IActionContext) -> ActionResult
     var inputDisplayNameFn: ((IActionContext) -> String)?
     var inputDescriptionFn: ((IActionContext) -> String)?
+    var cost: IAttributes?
 }
 
 interface IOptionActionBuilder : IActionBuilder {
@@ -67,6 +74,7 @@ interface ITargetActionBuilder<I> {
     var onHoverFn: (IActionContext) -> Unit
     var inputDisplayNameFn: ((IActionContext) -> String)?
     var inputDescriptionFn: ((IActionContext) -> String)?
+    var cost: IAttributes?
 }
 
 interface ActionDSL {
@@ -95,6 +103,9 @@ object ActionDSLProvider : ActionDSL {
  * ```kotlin
  * action {
  *     id = Ids.MY_ACTION
+ *     cost = attributes {
+ *         stat(Ids.STAT_VALOR, 2)
+ *     }
  *     ...
  * }.register()
  * ```

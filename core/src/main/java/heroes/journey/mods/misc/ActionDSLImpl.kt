@@ -5,6 +5,7 @@ import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.*
+import heroes.journey.modlib.attributes.IAttributes
 
 // --- Builder Classes ---
 open class ActionBuilder : IActionBuilder {
@@ -17,6 +18,7 @@ open class ActionBuilder : IActionBuilder {
     override var inputDescriptionFn: ((IActionContext) -> String)? = null
     override var turnCooldown: Int = 0
     override var factionCooldown: Boolean = false
+    override var cost: IAttributes? = null
 
     open fun build(): Action = Action(
         id = id,
@@ -27,7 +29,8 @@ open class ActionBuilder : IActionBuilder {
         inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
         inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } },
         turnCooldown = turnCooldown,
-        factionCooldown = factionCooldown
+        factionCooldown = factionCooldown,
+        cost = cost
     )
 }
 
@@ -36,13 +39,18 @@ open class OptionActionBuilder : ActionBuilder(), IOptionActionBuilder {
     override var isReturnsActionList: Boolean
         get() = false
         set(_) {} // Ignore any attempts to set the value
+    
+    override var cost: IAttributes?
+        get() = null
+        set(_) {} // Ignore any attempts to set the value
 
     override fun build(): OptionAction = object : OptionAction(
         id = id,
         requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
         onHoverFn = { ctx -> onHoverFn(ctx) },
         onSelectFn = { ctx -> onSelectFn(ctx) },
-        1
+        1,
+        cost = null
     ) {}
 }
 
@@ -51,13 +59,18 @@ class BooleanOptionActionBuilder : OptionActionBuilder(), IBooleanOptionActionBu
     override var isReturnsActionList: Boolean
         get() = false
         set(_) {} // Ignore any attempts to set the value
+    
+    override var cost: IAttributes?
+        get() = null
+        set(_) {} // Ignore any attempts to set the value
 
     override fun build(): BooleanOptionAction = BooleanOptionAction(
         id = id,
         requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
         onHoverFn = { ctx -> onHoverFn(ctx) },
         onSelectFn = { ctx -> onSelectFn(ctx) },
-        isTrue = isTrue
+        isTrue = isTrue,
+        cost = null
     )
 }
 
@@ -69,6 +82,7 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
     override var onHoverFn: (IActionContext) -> Unit = {}
     override var inputDisplayNameFn: ((IActionContext) -> String)? = null
     override var inputDescriptionFn: ((IActionContext) -> String)? = null
+    override var cost: IAttributes? = null
 
     fun build(): Action {
         return Action(
@@ -89,7 +103,8 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                 ActionListResult(actionOptions)
             },
             inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
-            inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } }
+            inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } },
+            cost = cost
         )
     }
 }

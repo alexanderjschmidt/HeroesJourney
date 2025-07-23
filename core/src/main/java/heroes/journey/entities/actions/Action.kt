@@ -5,10 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
+import heroes.journey.components.StatsComponent
+import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.ActionResult
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.ShowAction
+import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Operation
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
@@ -24,7 +28,8 @@ open class Action(
     override val inputDisplayNameFn: ((IActionContext) -> String)? = null,
     override val inputDescriptionFn: ((IActionContext) -> String)? = null,
     override val turnCooldown: Int = 0,
-    override val factionCooldown: Boolean = false
+    override val factionCooldown: Boolean = false,
+    override val cost: IAttributes? = null
 ) : Registrable(id), InfoProvider, IAction {
 
     val hasInput: Boolean
@@ -34,6 +39,21 @@ open class Action(
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
         val cooldownComponent = getCooldownComponent(ctx)
         if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(id)) return ShowAction.GRAYED
+
+        // Check if entity can afford the cost
+        if (cost != null && ctx.entityId != null) {
+            val entityStats: Attributes = StatsComponent.get(input.gameState.world, input.entityId)
+            val costAttributes = cost as? Attributes
+            if (costAttributes != null) {
+                for ((stat, requiredAmount) in costAttributes) {
+                    val availableAmount: Int? = entityStats[stat]
+                    if (availableAmount == null || availableAmount < requiredAmount) {
+                        return ShowAction.GRAYED
+                    }
+                }
+            }
+        }
+
         return requirementsMetFn(ctx)
     }
 
@@ -47,6 +67,18 @@ open class Action(
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
         val cooldownComponent = getCooldownComponent(ctx)
         cooldownComponent?.cooldowns?.set(id, turnCooldown)
+
+        // Deduct the cost from the entity's stats
+        if (cost != null && ctx.entityId != null) {
+            val entityStats: Attributes = StatsComponent.get(input.gameState.world, input.entityId)
+            val costAttributes = cost as? Attributes
+            if (costAttributes != null) {
+                for ((stat, amount) in costAttributes) {
+                    entityStats.put(stat, amount, Operation.SUBTRACT)
+                }
+            }
+        }
+
         val result: ActionResult = onSelectFn(ctx)
         return result
     }
