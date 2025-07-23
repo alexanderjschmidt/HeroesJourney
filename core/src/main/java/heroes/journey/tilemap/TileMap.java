@@ -17,8 +17,8 @@ import com.badlogic.gdx.utils.Array;
 import heroes.journey.tilemap.wavefunctiontiles.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.RenderBounds;
+import heroes.journey.utils.Utils;
 import heroes.journey.utils.ai.pathfinding.TileNode;
-import heroes.journey.utils.gamestate.Utils;
 import lombok.Getter;
 import lombok.Setter;
 

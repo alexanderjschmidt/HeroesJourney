@@ -1,4 +1,4 @@
-package heroes.journey.utils.gamestate;
+package heroes.journey.utils;
 
 import static heroes.journey.mods.Registries.ActionManager;
 

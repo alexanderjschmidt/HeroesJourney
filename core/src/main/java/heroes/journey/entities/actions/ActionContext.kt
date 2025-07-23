@@ -13,8 +13,8 @@ import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
 import heroes.journey.mods.Registries.ItemManager
 import heroes.journey.ui.HUD
+import heroes.journey.utils.Utils
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
-import heroes.journey.utils.gamestate.Utils
 import java.util.*
 
 class ActionContext(

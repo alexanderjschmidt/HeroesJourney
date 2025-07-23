@@ -1,59 +1,167 @@
-# Resource Scarcity & Player Interaction - Design Summary
+# 🧠 Stat Roles & Economies Overview
 
-## Resource Pool Options
-
-### 1. Four Resource Pools (Stamina, Focus, Mana, Moxie) + Four Renown Types
-- **Pros:** Deep, thematic, allows for specialization and tactical play.
-- **Cons:** High complexity, many resources to track, risk of overwhelming players and cluttering UI.
-
-### 2. Fame + Resource Pools (No Renown Types)
-- **Pros:** Simpler, easier to track, cleaner UI, still allows for strategic play via resource management and realm's attention.
-- **Cons:** Less thematic differentiation, less specialization, potential for homogenized playstyles.
-
-### 3. Hybrid/Action Point System
-- **Pros:** Allows for bonus actions or powered-up moves using resource pools, keeps main action economy simple.
-- **Cons:** Medium complexity, may require careful balancing.
-
-## Realm's Attention (Global Scarcity Mechanic)
-- Each turn, only a limited pool of fame (or renown) is available to be earned by all players.
-- When depleted, no more can be earned that turn.
-- Creates competition for resources even if players are far apart.
-- Resting allows players to act earlier next turn, giving priority access to the fame pool.
-
-## Design Options for Increasing Scarcity & Player Interaction
-
-1. **Global Scarcity (Realm's Attention):**
-   - Shared fame pool per turn. Players compete for the same fame, regardless of location.
-
-2. **Shared Objectives / Global Events:**
-   - Timed world quests or events that all players can attempt, but only one can claim the big reward.
-
-3. **Limited Unique Rewards:**
-   - Some quests, feats, or items can only be claimed by one player. Once taken, they're gone.
-
-4. **Dynamic Map Pressure:**
-   - Shrinking safe zones or wandering threats force players to move and converge.
-
-5. **Player-Driven Scarcity:**
-   - Players can block, steal, or sabotage resources, affecting others even at a distance.
-
-6. **Market or Auction Systems:**
-   - Players bid for fame or actions, creating economic competition.
-
-7. **Endgame Triggers:**
-   - A final event or boss draws all players to a single location for a climactic finish.
-
-8. **Information Scarcity:**
-   - Limited clues or rumors about high-value objectives create indirect competition.
-
-9. **Region-Based Scarcity (Rotating Hotspots):**
-   - Certain regions become more valuable each turn, encouraging players to move and interact.
-
-## Recommendations
-- Use a mix of global scarcity (realm's attention) and periodic shared objectives or map pressure to ensure player interaction.
-- Consider simplifying to fame + resource pools for clarity, but reinforce playstyle identity through feats, achievements, or narrative.
-- Playtest with hybrid or simplified systems before adding more complexity.
+Your game features four core stats, each tied to a different *action style* and *resource system*. They are
+asymmetrical by design to create varied play patterns and hero builds.
 
 ---
 
-*Review this summary when refining your resource and interaction mechanics.* 
+## 💪 Body — The Physical Stat
+
+**Used For:**
+
+- Physical attacks (e.g., melee, brute force, dodging)
+- Most common challenge interaction type
+
+**Resource Spent:**
+
+- **Stamina**
+
+**Regen:**
+
+- **50% of max Stamina regenerates automatically at start of turn**
+
+**Unique Economy:**
+
+- High baseline regen → supports consistent action spam
+- Strong early-game presence
+- Vital for survivability and flexible tactics
+
+**Strengths:**
+
+- Reliable, repeatable
+- Always available
+- Most straightforward to scale (gear, buffs)
+
+**Example Tags:**  
+`melee`, `brute`, `dodge`, `block`, `climb`, `wrestle`
+
+---
+
+## 🔮 Arcana — The Magic Stat
+
+**Used For:**
+
+- Offensive and utility **spells**
+- Fire, ice, teleportation, summons, buffs
+
+**Resource Spent:**
+
+- **Mana**
+
+**Regen:**
+
+- **10% of max Mana regenerates passively**
+
+**Unique Economy:**
+
+- **Low regen**, but powerful and flexible effects
+- Encourages long-term resource planning
+- Can access effects no other stat can (area damage, teleport, control)
+
+**Strengths:**
+
+- Access to unique actions (burning, freezing, reshaping terrain, etc.)
+- Can bypass traditional resistances
+- Combo-friendly (spells can empower others)
+
+**Example Tags:**  
+`fire`, `ice`, `arcane`, `summon`, `enchant`, `teleport`
+
+---
+
+## 🧠 Mind — The Mental / Skill Stat
+
+**Used For:**
+
+- Tactical precision, aiming, stealth, puzzles
+- Enhancing other actions via **Concentration**
+
+**Resource Spent:**
+
+- **Focus**
+
+**Regen:**
+
+- **20% of max Focus regenerates per turn**
+
+**Unique Economy:**
+
+- Moderate regen
+- Can be used to **power up other actions**  
+  (e.g., Spend 2 Focus to double the power of your next Body or Mana action)
+
+**Strengths:**
+
+- Makes other stats better (support / multiplier role)
+- Used in outsmarting or finesse-based challenges
+- Great for hybrid builds and combo turns
+
+**Example Tags:**  
+`stealth`, `aimed`, `tactical`, `concentrate`, `analyze`, `lure`
+
+---
+
+## 🗣️ Charisma — The Social Stat
+
+**Used For:**
+
+- Negotiation, leadership, deception, charm
+- Interacting with people, towns, NPC factions
+
+**Resource Spent:**
+
+- **Influence**
+
+**Regen:**
+
+- **Does NOT regenerate passively**
+
+**Unique Economy:**
+
+- Influence is earned through:
+    - **Social actions**
+    - **Winning contests** (first to arrive, best performance)
+    - **Public deeds** (killing monsters in town, completing flashy quests)
+- **Limited pool** — shared between players
+- **Competitive** and zero-sum
+
+**Strengths:**
+
+- **Best source of Fame**
+- Enables **soft power** (alliances, bribes, favors)
+- Adds social dominance minigame to each session
+
+**Example Tags:**  
+`charm`, `threaten`, `rally`, `debate`, `inspire`, `boast`
+
+---
+
+## 🧾 Summary Table
+
+| Stat         | Used For           | Resource  | Regen         | Unique Role                            |
+|--------------|--------------------|-----------|---------------|----------------------------------------|
+| 💪 Body      | Physical actions   | Stamina   | 50%           | High-frequency core actions            |
+| 🔮 Arcana    | Magic & spells     | Mana      | 10%           | Utility & powerful burst abilities     |
+| 🧠 Mind      | Precision & boosts | Focus     | 20%           | Enhances other actions, puzzle solving |
+| 🗣️ Charisma | Social actions     | Influence | None (earned) | Competitive Fame source, soft power    |
+
+---
+
+## 🎮 Design Implications
+
+- **Body** = constant pressure engine
+- **Arcana** = burst / timing window engine
+- **Mind** = setup / support engine
+- **Charisma** = meta-engine (influences economy, story, fame)
+
+Each stat supports a different play *tempo* and *style*, encouraging replayability and creative synergy.
+
+---
+
+## 💡 Optional Ideas to Support This
+
+- **Concentration Buff**: Spend Focus to **delay an action** and have it resolve with +50% power next turn.
+- **Spellcrafting**: Arcana actions can be combined with Focus for **custom spell combos**.
+- **Influence Events**: At end of each round, host a “Public Opinion” check. Most Influence spent = bonus
+  Fame.
+- **Body Resilience**: If you spend only Body actions in a turn, regenerate +1 extra Stamina next turn.

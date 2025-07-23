@@ -1,5 +1,7 @@
 package heroes.journey.ui.windows.stats;
 
+import static heroes.journey.mods.Registries.StatManager;
+
 import java.util.UUID;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,7 +16,6 @@ import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.items.ConsumableItem;
 import heroes.journey.entities.items.Item;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Stat;
 import heroes.journey.modlib.Ids;
 import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
@@ -67,8 +68,8 @@ public class InventoryDisplay extends Table {
             .toList());
         gold.setText(inventoryComponent.getGold());
         Attributes statsComponent = StatsComponent.get(GameState.global().getWorld(), entityId);
-        weight.setText(
-            inventoryComponent.getWeight() + "/" + Stat.get(Ids.STAT_CARRY_CAPACITY, statsComponent));
+        weight.setText(inventoryComponent.getWeight() + "/" +
+            StatManager.get(Ids.STAT_CARRY_CAPACITY).get(statsComponent));
     }
 
     public void handleInput() {

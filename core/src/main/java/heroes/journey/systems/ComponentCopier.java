@@ -3,10 +3,23 @@ package heroes.journey.systems;
 import com.artemis.EntityEdit;
 import com.artemis.World;
 
-import heroes.journey.components.*;
-import heroes.journey.components.character.*;
+import heroes.journey.components.BuffsComponent;
+import heroes.journey.components.EquipmentComponent;
+import heroes.journey.components.InventoryComponent;
+import heroes.journey.components.LocationComponent;
+import heroes.journey.components.NamedComponent;
+import heroes.journey.components.PositionComponent;
+import heroes.journey.components.PossibleActionsComponent;
+import heroes.journey.components.QuestsComponent;
+import heroes.journey.components.RegionComponent;
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.AITurnComponent;
+import heroes.journey.components.character.AIWanderComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.components.character.MapComponent;
+import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.utils.gamestate.Utils;
+import heroes.journey.utils.Utils;
 
 public class ComponentCopier {
 

@@ -149,11 +149,16 @@ public class Stat extends Registrable implements IStat {
     }
 
     public Integer get(Attributes attributes) {
-        return calc.invoke(attributes);
-    }
+        int val = calc.invoke(attributes);
 
-    public static int get(String statId, Attributes attributes) {
-        Stat stat = StatManager.get(statId);
-        return stat.calc.invoke(attributes);
+        List<IGroup> multGroups = new ArrayList<>(getGroups());
+        multGroups.add(GroupManager.get(Ids.GROUP_MULT));
+        IStat multStat = Stat.getByGroups(multGroups);
+        Integer mult = attributes.get(multStat);
+        if (mult != null) {
+            val *= mult;
+        }
+
+        return val;
     }
 }

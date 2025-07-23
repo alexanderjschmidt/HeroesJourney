@@ -48,7 +48,7 @@ import heroes.journey.systems.triggerable.CooldownSystem;
 import heroes.journey.systems.triggerable.EventSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
 import heroes.journey.systems.triggerable.RegionManagementSystem;
-import heroes.journey.utils.gamestate.Utils;
+import heroes.journey.utils.Utils;
 import heroes.journey.utils.serializers.Serializers;
 
 public class GameWorld extends World {

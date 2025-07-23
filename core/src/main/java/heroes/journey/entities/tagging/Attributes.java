@@ -1,49 +1,55 @@
 package heroes.journey.entities.tagging;
 
+import static heroes.journey.mods.Registries.GroupManager;
 import static heroes.journey.mods.Registries.StatManager;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.attributes.IAttributes;
+import heroes.journey.modlib.attributes.IGroup;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Operation;
 
 public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
-    private Operation defaultOperation = Operation.ADD;
-    // Standard order of operations: ADD, SUBTRACT, MULTIPLY, DIVIDE
-    private static final List<Operation> DEFAULT_OPERATIONS_ORDER = Collections.unmodifiableList(
-        Arrays.asList(Operation.ADD, Operation.SUBTRACT, Operation.MULTIPLY, Operation.DIVIDE));
-
-    public static List<Operation> getDefaultOperationsOrder() {
-        return DEFAULT_OPERATIONS_ORDER;
-    }
 
     public Attributes() {
     }
 
-    public Attributes(Operation defaultOperation) {
-        this.defaultOperation = defaultOperation;
-    }
-
-    public void setDefaultOperation(Operation op) {
-        this.defaultOperation = op;
-    }
-
-    public Operation getDefaultOperation() {
-        return defaultOperation;
-    }
-
     public Attributes(Map<? extends Stat,? extends Integer> map) {
         super(map);
+    }
+
+    // ((stat1 * stat1Mult) + (stat2 * stat2Mult)) * (stat1GlobalMult + stat2GlobalMult)
+    // TODO this should also take in strengths and weaknesses and immunities of challenge
+    // or for strengths and weaknesses do a attribute merge operation?
+    // immunities would need to just make the mults for that stat 0
+    public Integer getSum(String... statIds) {
+        int val = 0;
+        for (String statId : statIds) {
+            Integer statVal = this.get(statId);
+            val += statVal == null ? 0 : statVal;
+        }
+        int globalMult = 0;
+        for (String statId : statIds) {
+            IStat stat = StatManager.get(statId);
+            if (stat == null)
+                continue;
+            List<IGroup> globalMultGroups = new ArrayList<>(stat.getGroups());
+            globalMultGroups.add(GroupManager.get(Ids.GROUP_GLOBAL_MULT));
+            IStat globalMultStat = Stat.getByGroups(globalMultGroups);
+            Integer mult = this.getDirect(globalMultStat);
+            if (mult != null) {
+                globalMult += mult;
+            }
+        }
+        return globalMult == 0 ? val : val * globalMult;
     }
 
     @Override
@@ -53,16 +59,20 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
 
     @Override
     public Integer get(IStat stat) {
-        return get(stat.getId());
+        if (stat == null)
+            return null;
+        return ((Stat)stat).get(this);
     }
 
     @Override
     public Integer getDirect(String statId) {
-        Integer val = super.get(StatManager.get(statId));
+        IStat stat = StatManager.get(statId);
+        Integer val = super.get(stat);
         if (val == null) {
             System.out.println(this);
             throw new RuntimeException("Could not find stat for " + statId);
         }
+
         return val;
     }
 
@@ -72,7 +82,18 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
     }
 
     public Attributes put(String statId, Integer value) {
-        this.put(StatManager.get(statId), value);
+        super.put(StatManager.get(statId), value);
+        return this;
+    }
+
+    public Attributes put(Stat stat, Integer value, Operation operation) {
+        if (this.containsKey(stat)) {
+            this.compute(stat,
+                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(this),
+                    stat.getMax(this)));
+        } else {
+            super.put(stat, value);
+        }
         return this;
     }
 
@@ -88,65 +109,11 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
         return put(StatManager.get(stat), value, Operation.ADD);
     }
 
-    public Attributes put(Stat stat, Integer value, Operation operation) {
-        if (this.containsKey(stat)) {
-            this.compute(stat,
-                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(this),
-                    stat.getMax(this)));
-        } else {
-            put(stat, value);
-        }
-        return this;
-    }
-
-    public Attributes applyOperation(Integer valueToApply, Operation operation) {
-        this.forEach((stat, value) -> this.put(stat, valueToApply, operation));
-        return this;
-    }
-
-    public Attributes merge(Attributes attributesToMerge) {
-        return merge(attributesToMerge, defaultOperation);
-    }
-
-    // Multi-merge with order
-    public Attributes merge(List<Attributes> attributesList, List<Operation> operationsOrder) {
-        List<Operation> order = operationsOrder != null ? operationsOrder : DEFAULT_OPERATIONS_ORDER;
-        for (Operation op : order) {
-            for (Attributes attrs : attributesList) {
-                if (attrs.getDefaultOperation() != op)
-                    continue;
-                this.merge(attrs, op);
-            }
-        }
-        return this;
-    }
-
-    // Overload: use default order
-    public Attributes merge(List<Attributes> attributesList) {
-        return merge(attributesList, DEFAULT_OPERATIONS_ORDER);
-    }
-
     public Attributes merge(Attributes attributesToMerge, Operation operation) {
         if (attributesToMerge != null) {
             attributesToMerge.forEach((stat, value) -> this.put(stat, value, operation));
         }
         return this;
-    }
-
-    public Attributes getTagsWithGroup(Group group) {
-        Set<Stat> statsInGroup = Stat.getByGroup(group);
-        if (statsInGroup == null) {
-            return null;
-        }
-        Map<Stat,Integer> filteredMap = this.entrySet()
-            .stream()
-            .filter(entry -> statsInGroup.contains(entry.getKey()))
-            .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
-        return new Attributes(filteredMap);
-    }
-
-    public int getTotal() {
-        return this.values().stream().mapToInt(Integer::intValue).sum();
     }
 }
 

@@ -20,8 +20,8 @@ import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.Random;
+import heroes.journey.utils.Utils;
 import heroes.journey.utils.ai.pathfinding.Cell;
-import heroes.journey.utils.gamestate.Utils;
 
 @All({AIWanderComponent.class, PositionComponent.class, IdComponent.class})
 public class AIWanderSystem extends IteratingSystem {
