@@ -19,9 +19,7 @@ import lombok.Getter;
  * Remove Feats, you will just earn actions (active), or buffs (passive
  * Allow buffs to be permanent
  * Display buffs
- * Make actions have a resource cost (again)
- *  update basemod with costs
- *  Should costs be based fully on attributes? ie action_id_stamina_cost so they are easily modified?
+ * update basemod with costs
  * Have actions with limited uses (this can be refilled) (potions, scrolls)
  * Add Perks (actions or buffs earn from having X of a stat)
  * Update AI so that any non order specific actions dont matter for better efficiency?
