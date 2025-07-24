@@ -1,5 +1,6 @@
 package heroes.journey.modlib.misc
 
+import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.registries.IRegistrable
 
 /**
@@ -11,13 +12,8 @@ interface IChallenge : IRegistrable {
     /** The animation/render ID for the challenge. */
     val render: String
 
-    /** The challenge type (BODY, MIND, MAGIC, CHARISMA) that determines available approaches. */
-    val challengeType: String
-    
-    /**
-     * Get the challenge type object for this challenge.
-     */
-    fun getChallengeType(): IChallengeType
+    /** The stats that can be used to approach this challenge. */
+    val stats: List<IStat>
     
     override fun register(): IChallenge
 }
@@ -28,7 +24,7 @@ interface IChallenge : IRegistrable {
 interface ChallengeBuilder {
     var id: String
     var render: String
-    var challengeType: String
+    fun stat(statId: String)
 }
 
 /**
@@ -55,7 +51,8 @@ object ChallengeDSLProvider {
  * challenge {
  *     id = Ids.MY_CHALLENGE
  *     render = Ids.PLAYER_SPRITE
- *     challengeType = Ids.CHALLENGE_TYPE_BODY
+ *     stat(Ids.STAT_BODY)
+ *     stat(Ids.STAT_MIND)
  * }
  * ```
  */

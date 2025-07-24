@@ -3,10 +3,8 @@ import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
-import heroes.journey.modlib.misc.IChallengeType
 import heroes.journey.modlib.registries.Registries
 import java.util.*
 
@@ -33,30 +31,21 @@ action {
         input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         val stats = input.getStats(input.entityId!!)
-        var primaryAward: Int = stats.get(approach.baseStatId)!!
-        val primaryStat: IStat = Registries.StatManager[approach.baseStatId]!!
-        val primaryResourceStat: IStat =
-            input.statWith(listOf(primaryStat.groups.first().id, Ids.GROUP_RESOURCES))
 
-        var secondaryResourceStat: IStat? = null
-        var secondaryAward = 0
-
-        if (approach.secondaryStatId != null) {
-            primaryAward = maxOf(0, primaryAward - 1)
-            secondaryAward = if (stats.get(approach.secondaryStatId!!)!! < 5) 1 else 2
-            val secondaryStat: IStat = Registries.StatManager[approach.secondaryStatId]!!
-            secondaryResourceStat =
-                input.statWith(listOf(secondaryStat.groups.first().id, Ids.GROUP_RESOURCES))
-            stats.add(secondaryResourceStat, secondaryAward)
-        }
-        stats.add(primaryResourceStat, primaryAward)
-
-        // Build summary string
+        // Calculate rewards based on approach stats
+        var totalAward = 0
         val summary = StringBuilder()
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
-        summary.append("Your ${approach.baseStatId} skill (${stats.get(approach.baseStatId)}) provides ${primaryAward} ${primaryResourceStat}.\n")
-        if (approach.secondaryStatId != null) {
-            summary.append("Your ${approach.secondaryStatId} skill (${stats.get(approach.secondaryStatId!!)}) provides ${secondaryAward} ${secondaryResourceStat}.")
+
+        for (stat in approach.stats) {
+            val statValue = stats.get(stat) ?: 0
+            val award = if (statValue < 5) 1 else 2
+            totalAward += award
+
+            val resourceStat = input.statWith(listOf(stat.groups.first().id, Ids.GROUP_RESOURCES))
+            stats.add(resourceStat, award)
+
+            summary.append("Your ${stat.id} skill (${statValue}) provides ${award} ${resourceStat}.\n")
         }
 
         StringResult(summary.toString())
@@ -78,23 +67,33 @@ targetAction<IApproach> {
         input["challenge"] = input["target"]!!
         val challengeEntityId = UUID.fromString(input["target"])
 
-        // Get the challenge to determine its type
+        // Get the challenge to determine its stats
         val challenge: IChallenge = input.getChallenge(challengeEntityId)
-        val challengeType: IChallengeType = challenge.getChallengeType()
 
-        // Get available approaches for this challenge type
-        val allApproaches: List<IApproach> = challengeType.getApproaches()
+        // Get available approaches that match the challenge's stats
         val availableApproaches: MutableList<IApproach> = mutableListOf()
+        val playerStats: IAttributes = input.getStats(input.entityId!!)
 
-        val stats: IAttributes = input.getStats(input.entityId!!)
+        // Get all approaches from registry
+        val allApproaches = Registries.ApproachManager.values.toList()
 
         for (approach: IApproach in allApproaches) {
-            if (approach.secondaryStatId != null) {
-                if (stats.get(approach.secondaryStatId!!)!! >= 3) {
+            // Check if approach has any stats that match the challenge's stats
+            val hasMatchingStat = approach.stats.any { approachStat ->
+                challenge.stats.any { challengeStat ->
+                    approachStat.id == challengeStat.id
+                }
+            }
+
+            if (hasMatchingStat) {
+                // Check if player has sufficient stats for this approach
+                val hasSufficientStats = approach.stats.all { stat ->
+                    playerStats.get(stat.id) ?: 0 >= 1
+                }
+
+                if (hasSufficientStats) {
                     availableApproaches.add(approach)
                 }
-            } else {
-                availableApproaches.add(approach)
             }
         }
 

@@ -522,12 +522,6 @@ object Ids {
     /** Health Potion item ID  */
     const val ITEM_HEALTH_POTION: String = "health_potion"
 
-    // Challenge Type IDs
-    const val CHALLENGE_TYPE_BODY: String = "challenge_type_body"
-    const val CHALLENGE_TYPE_MIND: String = "challenge_type_mind"
-    const val CHALLENGE_TYPE_MAGIC: String = "challenge_type_magic"
-    const val CHALLENGE_TYPE_CHARISMA: String = "challenge_type_charisma"
-
     // Approach IDs
     const val APPROACH_MIGHT: String = "approach_might"
     const val APPROACH_SKILL: String = "approach_skill"

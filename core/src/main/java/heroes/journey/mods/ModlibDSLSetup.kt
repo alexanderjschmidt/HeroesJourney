@@ -30,7 +30,6 @@ import heroes.journey.mods.misc.ApproachDSLImpl
 import heroes.journey.mods.misc.BuffDSLImpl
 import heroes.journey.mods.misc.FeatDSLImpl
 import heroes.journey.mods.misc.ChallengeDSLImpl
-import heroes.journey.mods.misc.ChallengeTypeDSLImpl
 import heroes.journey.mods.misc.QuestDSLImpl
 import heroes.journey.mods.worldgen.*
 import heroes.journey.utils.Lang
@@ -48,8 +47,6 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.registries.Registries.BuffManager = Registries.BuffManager as Registry<IBuff>
     heroes.journey.modlib.registries.Registries.ChallengeManager =
         Registries.ChallengeManager as Registry<IChallenge>
-    heroes.journey.modlib.registries.Registries.ChallengeTypeManager =
-        Registries.ChallengeTypeManager as Registry<IChallengeType>
     heroes.journey.modlib.registries.Registries.ApproachManager =
         Registries.ApproachManager as Registry<IApproach>
     heroes.journey.modlib.registries.Registries.FeatManager =
@@ -90,7 +87,6 @@ fun setupModlibDSLs() {
     BuffDSLProvider.instance = BuffDSLImpl()
     QuestDSLProvider.instance = QuestDSLImpl()
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
-    ChallengeTypeDSLProvider.instance = ChallengeTypeDSLImpl()
     ApproachDSLProvider.instance = ApproachDSLImpl()
     FeatDSLProvider.instance = FeatDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
