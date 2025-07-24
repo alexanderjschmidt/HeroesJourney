@@ -1,6 +1,7 @@
 package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.registries.IRegistrable
 
 /**
@@ -11,6 +12,9 @@ interface IApproach : IRegistrable {
     /** The stats this approach is associated with. */
     val stats: List<IStat>
     
+    /** The cost attributes required to use this approach. */
+    val cost: IAttributes?
+    
     override fun register(): IApproach
 }
 
@@ -19,6 +23,7 @@ interface IApproach : IRegistrable {
  */
 interface ApproachBuilder {
     var id: String
+    var cost: IAttributes?
     fun stat(statId: String)
 }
 
@@ -47,6 +52,9 @@ object ApproachDSLProvider {
  *     id = Ids.APPROACH_MIGHT
  *     stat(Ids.STAT_BODY)
  *     stat(Ids.STAT_MIND)
+ *     cost = attributes {
+ *         stat(Ids.STAT_STAMINA, 2)
+ *     }
  * }
  * ```
  */

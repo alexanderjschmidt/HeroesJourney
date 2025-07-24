@@ -5,7 +5,7 @@ package heroes.journey.modlib.attributes
  * Mods should only use this interface, not implementation classes.
  * Provides read-only access to stat values by ID or IStat.
  */
-interface IAttributes {
+interface IAttributes : Map<IStat, Int> {
     /**
      * Get the value of a stat by its string ID, applying all formulas and modifiers.
      * @param statId the stat ID (see [Ids])
@@ -18,7 +18,7 @@ interface IAttributes {
      * @param stat the stat
      * @return the calculated value for the stat
      */
-    fun get(stat: IStat): Int?
+    override fun get(stat: IStat): Int?
 
     /**
      * Get the direct (raw) value of a stat by its string ID, ignoring formulas.

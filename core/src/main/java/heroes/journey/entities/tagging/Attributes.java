@@ -17,7 +17,7 @@ import heroes.journey.modlib.attributes.IGroup;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Operation;
 
-public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
+public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
 
     public Attributes() {
     }
@@ -86,7 +86,7 @@ public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
         return this;
     }
 
-    public Attributes put(Stat stat, Integer value, Operation operation) {
+    public Attributes put(IStat stat, Integer value, Operation operation) {
         if (this.containsKey(stat)) {
             this.compute(stat,
                 (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(this),

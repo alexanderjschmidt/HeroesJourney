@@ -3,6 +3,7 @@ import heroes.journey.modlib.Lang
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
+import heroes.journey.modlib.attributes.attributes
 import java.util.*
 
 // Travel Actions - included by basegame mod
@@ -42,4 +43,7 @@ targetAction<UUID> {
         wayfareLocations
     }
     targetAction = Ids.TRAVEL_TO
+    cost = attributes {
+        stat(Ids.STAT_STAMINA, 40)
+    }
 }.register()

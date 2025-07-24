@@ -1,4 +1,5 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
@@ -13,6 +14,23 @@ import java.util.*
 // Choose Approach
 action {
     id = Ids.CHOOSE_APPROACH
+    requirementsMetFn = { input ->
+        val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
+        val stats = input.getStats(input.entityId!!)
+
+        // Check if player can afford the approach cost
+        var show: ShowAction = ShowAction.YES
+        if (approach.cost != null) {
+            for ((stat, requiredAmount) in approach.cost!!) {
+                val currentAmount = stats[stat] ?: 0
+                if (currentAmount < requiredAmount) {
+                    show = ShowAction.GRAYED
+                    break
+                }
+            }
+        }
+        show
+    }
     inputDisplayNameFn = { input ->
         input["target"]!!
     }
@@ -28,9 +46,16 @@ action {
         val challengeEntityId = UUID.fromString(input["challenge"])
         val challenge: IChallenge = input.getChallenge(challengeEntityId)
 
-        input.removeChallengeFromRegion(regionId, challengeEntityId)
-
         val stats = input.getStats(input.entityId!!)
+
+        // Apply the approach cost
+        if (approach.cost != null) {
+            for ((stat, amount) in approach.cost!!) {
+                stats.add(stat, -amount)
+            }
+        }
+
+        input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         // Calculate rewards based on approach stats
         var totalAward = 0
@@ -91,7 +116,14 @@ targetAction<IApproach> {
                     playerStats.get(stat.id) ?: 0 >= 1
                 }
 
-                if (hasSufficientStats) {
+                // Check if player can afford the approach cost
+                val canAffordCost = approach.cost?.let { cost ->
+                    cost.all { (stat, requiredAmount) ->
+                        (playerStats.get(stat) ?: 0) >= requiredAmount
+                    }
+                } ?: true
+
+                if (hasSufficientStats && canAffordCost) {
                     availableApproaches.add(approach)
                 }
             }

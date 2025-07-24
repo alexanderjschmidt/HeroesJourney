@@ -1,5 +1,6 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.*
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.registries.Registries
 import java.util.*
@@ -18,6 +19,10 @@ action {
         input.removeQuest(town, input["target"]!!)
         input.addQuest(input.entityId!!, input["target"]!!)
         EndTurnResult()
+    }
+    cost = attributes {
+        stat(Ids.STAT_STAMINA, 5)
+        stat(Ids.STAT_FOCUS, 5)
     }
 }.register()
 
