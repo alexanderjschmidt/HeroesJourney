@@ -16,3 +16,4 @@ group { id = Ids.GROUP_RESOURCES }.register()
 group { id = Ids.GROUP_REGEN }.register()
 
 group { id = Ids.GROUP_RACE }.register()
+group { id = Ids.GROUP_DESCRIPTOR }.register()

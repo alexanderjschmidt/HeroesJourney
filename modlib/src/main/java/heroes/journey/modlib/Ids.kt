@@ -135,7 +135,7 @@ object Ids {
     const val BASE_TILE_HILLS: String = "base_tile_hills"
     const val BASE_TILE_SAND: String = "base_tile_sand"
 
-    // Stat IDs
+    // Resource Stat IDs
     const val STAT_BODY: String = "body"
     const val STAT_MIND: String = "mind"
     const val STAT_MAGIC: String = "magic"
@@ -162,6 +162,12 @@ object Ids {
     const val STAT_UNDEAD_RACE: String = "undead_race"
     const val STAT_VERMIN_RACE: String = "vermin_race"
 
+    // Descriptor Stat IDs
+    const val STAT_PHYSICAL: String = "physical"
+    const val STAT_INCORPOREAL: String = "incorporeal"
+    const val STAT_FERAL: String = "feral"
+    const val STAT_SENTIENT: String = "sentient"
+
     // Meta Group IDs
     const val GROUP_MAX: String = "max_group"
     const val GROUP_MIN: String = "min_group"
@@ -176,6 +182,7 @@ object Ids {
     const val GROUP_RESOURCES: String = "resources_group"
     const val GROUP_REGEN: String = "regen_group"
     const val GROUP_RACE: String = "race_group"
+    const val GROUP_DESCRIPTOR: String = "descriptor_group"
 
     // Item SubType IDs
     /** Raw Material item subtype ID  */
@@ -213,20 +220,13 @@ object Ids {
     const val ITEM_HEALTH_POTION: String = "health_potion"
 
     // Approach IDs
-    const val APPROACH_MIGHT: String = "approach_might"
-    const val APPROACH_SKILL: String = "approach_skill"
-    const val APPROACH_EMPOWERMENT: String = "approach_empowerment"
-    const val APPROACH_CHIVALRY: String = "approach_chivalry"
-    const val APPROACH_TECHNIQUE: String = "approach_technique"
-    const val APPROACH_LOGIC: String = "approach_logic"
-    const val APPROACH_CONCENTRATION: String = "approach_concentration"
-    const val APPROACH_CUNNING: String = "approach_cunning"
-    const val APPROACH_ENCHANTING: String = "approach_enchanting"
-    const val APPROACH_ILLUSION: String = "approach_illusion"
-    const val APPROACH_SORCERY: String = "approach_sorcery"
-    const val APPROACH_BEWITCHING: String = "approach_bewitching"
-    const val APPROACH_BRAVADO: String = "approach_bravado"
-    const val APPROACH_PERSUASION: String = "approach_persuasion"
-    const val APPROACH_MESMERISM: String = "approach_mesmerism"
-    const val APPROACH_CHARM: String = "approach_charm"
+    const val APPROACH_FIGHT: String = "approach_fight" // physical
+    const val APPROACH_TRICK: String = "approach_trick" // Not Feral
+    const val APPROACH_MAGIC_MISSILE: String = "approach_magic_missile" // physical or incorporeal
+    const val APPROACH_NEGOTIATE: String = "approach_negotiate" // sentient
+
+    const val APPROACH_INTIMIDATE: String = "approach_intimidate" // physical and sentient
+    const val APPROACH_TRAP: String =
+        "approach_trap" // physical and feral (maybe also a rune trap for incorporeal and feral)
+
 }

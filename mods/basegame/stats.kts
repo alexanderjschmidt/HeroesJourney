@@ -130,50 +130,81 @@ stat {
 
 // --- RACE STATS ---
 stat {
-    id = Ids.STAT_DEMON
+    id = Ids.STAT_DEMON_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_DRAGON
+    id = Ids.STAT_DRAGON_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_HOLY
+    id = Ids.STAT_HOLY_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_HUMANOID
+    id = Ids.STAT_HUMANOID_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_MAGICAL
+    id = Ids.STAT_MAGICAL_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_MONSTER
+    id = Ids.STAT_MONSTER_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_UNDEAD
+    id = Ids.STAT_UNDEAD_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
 stat {
-    id = Ids.STAT_VERMIN
+    id = Ids.STAT_VERMIN_RACE
     min = 0
     max = 100
     group(Ids.GROUP_RACE)
 }.register()
+
+// --- Descriptors ---
+// BODY or MAGIC
+stat {
+    id = Ids.STAT_PHYSICAL
+    group(Ids.GROUP_DESCRIPTOR)
+}.register()
+// MAGIC
+stat {
+    id = Ids.STAT_INCORPOREAL
+    group(Ids.GROUP_DESCRIPTOR)
+}.register()
+// MIND (trick wont work)
+stat {
+    id = Ids.STAT_FERAL
+    group(Ids.GROUP_DESCRIPTOR)
+}.register()
+// CHARISMA
+stat {
+    id = Ids.STAT_SENTIENT
+    group(Ids.GROUP_DESCRIPTOR)
+}.register()
+
+// MIND
+// TODO these seem more like bonus on standard challenges to be added at gen time
+/*
+// stealth work worse
+stat {
+    id = Ids.STAT_AWARE
+    group(Ids.GROUP_RACE)
+}.register()*/

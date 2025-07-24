@@ -1,6 +1,7 @@
 package heroes.journey.components;
 
 import static heroes.journey.mods.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ApproachManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
+import heroes.journey.entities.Approach;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
@@ -17,10 +19,12 @@ import heroes.journey.systems.GameWorld;
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
+    private final Set<String> possibleApproaches;
     private final Map<String,Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
+        possibleApproaches = new HashSet<>();
         cooldowns = new HashMap<>();
     }
 
@@ -30,6 +34,10 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
             inputs.put("owner", entityId + "");
             return new ActionEntry(action.getId(), inputs);
         }).toList();
+    }
+
+    public List<Approach> getPossibleApproaches() {
+        return ApproachManager.get(possibleApproaches.stream().toList());
     }
 
     public PossibleActionsComponent addAction(Action action) {
@@ -49,12 +57,14 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     @Override
     protected void reset() {
         possibleActions.clear();
+        possibleApproaches.clear();
         cooldowns.clear();
     }
 
     @Override
     public void copy(PossibleActionsComponent from) {
         possibleActions.addAll(from.possibleActions);
+        possibleApproaches.addAll(from.possibleApproaches);
         cooldowns.putAll(from.cooldowns);
     }
 

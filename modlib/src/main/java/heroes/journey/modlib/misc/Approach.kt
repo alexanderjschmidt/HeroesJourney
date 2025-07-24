@@ -1,7 +1,7 @@
 package heroes.journey.modlib.misc
 
-import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.registries.IRegistrable
 
 /**
@@ -9,12 +9,15 @@ import heroes.journey.modlib.registries.IRegistrable
  * Mods should only use this interface, not implementation classes.
  */
 interface IApproach : IRegistrable {
-    /** The stats this approach is associated with. */
     val stats: List<IStat>
-    
+
+    val requiredAllTags: List<IStat>
+    val requiredAnyTags: List<IStat>
+    val forbiddenTags: List<IStat>
+
     /** The cost attributes required to use this approach. */
     val cost: IAttributes?
-    
+
     override fun register(): IApproach
 }
 
@@ -24,7 +27,10 @@ interface IApproach : IRegistrable {
 interface ApproachBuilder {
     var id: String
     var cost: IAttributes?
-    fun stat(statId: String)
+    fun stat(vararg statIds: String)
+    fun requiresAll(vararg tags: String)
+    fun requiresAny(vararg tags: String)
+    fun forbids(vararg tags: String)
 }
 
 /**
@@ -58,4 +64,4 @@ object ApproachDSLProvider {
  * }
  * ```
  */
-fun approach(init: ApproachBuilder.() -> Unit): IApproach = ApproachDSLProvider.instance.approach(init) 
+fun approach(init: ApproachBuilder.() -> Unit): IApproach = ApproachDSLProvider.instance.approach(init)
