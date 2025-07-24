@@ -540,9 +540,4 @@ object Ids {
     const val APPROACH_MESMERISM: String = "approach_mesmerism"
     const val APPROACH_CHARM: String = "approach_charm"
     const val APPROACH_PURE_BODY: String = "approach_pure_body"
-
-    // Feat IDs
-    const val FEAT_WEAPON_MASTERY: String = "feat_weapon_mastery"
-    const val FEAT_IRON_WILL: String = "feat_iron_will"
-    const val FEAT_BERSERKER_RAGE: String = "feat_berserker_rage"
 }

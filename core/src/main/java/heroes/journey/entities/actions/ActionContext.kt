@@ -58,7 +58,7 @@ class ActionContext(
 
     override fun addBuff(entityId: UUID, buffId: String) {
         val buffsComponent = BuffsComponent.get((gameState as GameState).world, entityId)
-        val buff = Registries.BuffManager.get(buffId)
+        val buff = Registries.BuffManager[buffId]
         buffsComponent.add(buff)
     }
 
