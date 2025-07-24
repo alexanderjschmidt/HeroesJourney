@@ -13,6 +13,7 @@ public class MovementComponent extends PooledClonableComponent<MovementComponent
 
     private Cell path;
     private boolean startedMoving;
+    private float speed;
 
     public MovementComponent() {
         this.startedMoving = false;
@@ -39,11 +40,13 @@ public class MovementComponent extends PooledClonableComponent<MovementComponent
     protected void reset() {
         path = null;
         this.startedMoving = false;
+        speed = 0.2f;
     }
 
     @Override
     public void copy(MovementComponent from) {
         path = Cell.clone(from.path);
+        speed = from.speed;
     }
 
     public Cell path() {
@@ -53,5 +56,15 @@ public class MovementComponent extends PooledClonableComponent<MovementComponent
     public MovementComponent path(Cell path) {
         this.path = path;
         return this;
+    }
+
+    public MovementComponent path(Cell path, float speed) {
+        this.path = path;
+        this.speed = speed;
+        return this;
+    }
+
+    public float getSpeed() {
+        return speed;
     }
 }

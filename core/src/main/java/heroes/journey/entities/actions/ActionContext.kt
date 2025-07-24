@@ -98,7 +98,7 @@ class ActionContext(
         } else {
             gs.world.edit(entityId).create(
                 MovementComponent::class.java
-            ).path(path.reverse())
+            ).path(path.reverse(), .05f)
         }
     }
 

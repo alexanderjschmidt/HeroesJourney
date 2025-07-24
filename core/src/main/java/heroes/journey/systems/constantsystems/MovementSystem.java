@@ -69,7 +69,8 @@ public class MovementSystem extends IteratingSystem {
             }
             //TODO Make duration based on move speed
             actor.addAction(Actions.sequence(
-                Actions.moveTo(movement.path().x - position.getX(), movement.path().y - position.getY(), .2f),
+                Actions.moveTo(movement.path().x - position.getX(), movement.path().y - position.getY(),
+                    movement.getSpeed()),
                 Actions.run(() -> updatePosition(entityId, position, actor, movement))));
         }
     }
