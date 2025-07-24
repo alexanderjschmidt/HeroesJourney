@@ -1,4 +1,5 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.IdsC
 import heroes.journey.modlib.misc.challenge
 
 // Demon Challenges - included by basegame mod
@@ -6,95 +7,110 @@ import heroes.journey.modlib.misc.challenge
 
 // BODY-based demon challenges
 challenge {
-    id = Ids.CHALLENGE_CAPTURE_DEPRAVED_BLACKGUARD
-    render = Ids.DEPRAVED_BLACKGUARD
+    id = IdsC.CHALLENGE_DEPRAVED_BLACKGUARD
+    render = IdsC.RENDER_DEPRAVED_BLACKGUARD
     stat(Ids.STAT_BODY)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_DUEL_PIT_BALOR
-    render = Ids.PIT_BALOR
+    id = IdsC.CHALLENGE_PIT_BALOR
+    render = IdsC.RENDER_PIT_BALOR
     stat(Ids.STAT_BODY)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 // MIND-based demon challenges
 challenge {
-    id = Ids.CHALLENGE_BANISH_ANTLERED_RASCAL
-    render = Ids.ANTLERED_RASCAL
+    id = IdsC.CHALLENGE_ANTLERED_RASCAL
+    render = IdsC.RENDER_ANTLERED_RASCAL
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_TRICK_CRIMSON_IMP
-    render = Ids.CRIMSON_IMP
+    id = IdsC.CHALLENGE_CRIMSON_IMP
+    render = IdsC.RENDER_CRIMSON_IMP
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_OUTWIT_GRINNING_GREMLIN
-    render = Ids.GRINNING_GREMLIN
+    id = IdsC.CHALLENGE_GRINNING_GREMLIN
+    render = IdsC.RENDER_GRINNING_GREMLIN
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_CATCH_NEFARIOUS_SCAMP
-    render = Ids.NEFARIOUS_SCAMP
+    id = IdsC.CHALLENGE_NEFARIOUS_SCAMP
+    render = IdsC.RENDER_NEFARIOUS_SCAMP
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_REFORM_TAINTED_SCOUNDREL
-    render = Ids.TAINTED_SCOUNDREL
+    id = IdsC.CHALLENGE_TAINTED_SCOUNDREL
+    render = IdsC.RENDER_TAINTED_SCOUNDREL
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 // MAGIC-based demon challenges
 challenge {
-    id = Ids.CHALLENGE_SUBDUE_CLAWED_ABOMINATION
-    render = Ids.CLAWED_ABOMINATION
+    id = IdsC.CHALLENGE_CLAWED_ABOMINATION
+    render = IdsC.RENDER_CLAWED_ABOMINATION
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_DESTROY_FLOATING_EYE
-    render = Ids.FLOATING_EYE
+    id = IdsC.CHALLENGE_FLOATING_EYE
+    render = IdsC.RENDER_FLOATING_EYE
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_REDEEM_FLEDGLING_DEMON
-    render = Ids.FLEDGLING_DEMON
+    id = IdsC.CHALLENGE_FLEDGLING_DEMON
+    render = IdsC.RENDER_FLEDGLING_DEMON
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_STOP_FOUL_GOUGER
-    render = Ids.FOUL_GOUGER
+    id = IdsC.CHALLENGE_FOUL_GOUGER
+    render = IdsC.RENDER_FOUL_GOUGER
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 // CHARISMA-based demon challenges
 challenge {
-    id = Ids.CHALLENGE_DISCIPLINE_RASCALLY_DEMONLING
-    render = Ids.RASCALLY_DEMONLING
+    id = IdsC.CHALLENGE_RASCALLY_DEMONLING
+    render = IdsC.RENDER_RASCALLY_DEMONLING
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_HUNT_SKEWERING_STALKER
-    render = Ids.SKEWERING_STALKER
+    id = IdsC.CHALLENGE_SKEWERING_STALKER
+    render = IdsC.RENDER_SKEWERING_STALKER
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_SHATTER_WARP_SKULL
-    render = Ids.WARP_SKULL
+    id = IdsC.CHALLENGE_WARP_SKULL
+    render = IdsC.RENDER_WARP_SKULL
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_BANISH_POINTED_DEMONSPAWN
-    render = Ids.POINTED_DEMONSPAWN
+    id = IdsC.CHALLENGE_POINTED_DEMONSPAWN
+    render = IdsC.RENDER_POINTED_DEMONSPAWN
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DEMON_RACE)
 }.register()
 

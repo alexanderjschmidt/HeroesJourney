@@ -1,20 +1,5 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.attributes.group
 import heroes.journey.modlib.attributes.stat
-
-// --- META GROUPS ---
-group { id = Ids.GROUP_MAX }.register()
-group { id = Ids.GROUP_MIN }.register()
-group { id = Ids.GROUP_MULT }.register()
-group { id = Ids.GROUP_GLOBAL_MULT }.register()
-
-// --- GROUPS ---
-group { id = Ids.GROUP_BODY }.register()
-group { id = Ids.GROUP_MIND }.register()
-group { id = Ids.GROUP_MAGIC }.register()
-group { id = Ids.GROUP_CHARISMA }.register()
-group { id = Ids.GROUP_RESOURCES }.register()
-group { id = Ids.GROUP_REGEN }.register()
 
 // --- BASE STATS ---
 stat {
@@ -141,4 +126,54 @@ stat {
     id = Ids.STAT_CARRY_CAPACITY
     max = 100
     formula = { it.getDirect(Ids.STAT_BODY)!! * 10 }
+}.register()
+
+// --- RACE STATS ---
+stat {
+    id = Ids.STAT_DEMON
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_DRAGON
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_HOLY
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_HUMANOID
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_MAGICAL
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_MONSTER
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_UNDEAD
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
+}.register()
+stat {
+    id = Ids.STAT_VERMIN
+    min = 0
+    max = 100
+    group(Ids.GROUP_RACE)
 }.register()

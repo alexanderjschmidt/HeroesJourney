@@ -1,4 +1,5 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.IdsC
 import heroes.journey.modlib.misc.challenge
 
 // Dragon Challenges - included by basegame mod
@@ -6,94 +7,109 @@ import heroes.journey.modlib.misc.challenge
 
 // BODY-based dragon challenges
 challenge {
-    id = Ids.CHALLENGE_BEFRIEND_AQUA_DRAKE
-    render = Ids.AQUA_DRAKE
+    id = IdsC.CHALLENGE_AQUA_DRAKE
+    render = IdsC.RENDER_AQUA_DRAKE
     stat(Ids.STAT_BODY)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_RESCUE_BABY_BRASS_DRAGON
-    render = Ids.BABY_BRASS_DRAGON
+    id = IdsC.CHALLENGE_BABY_BRASS_DRAGON
+    render = IdsC.RENDER_BABY_BRASS_DRAGON
     stat(Ids.STAT_BODY)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_HEAL_BABY_COPPER_DRAGON
-    render = Ids.BABY_COPPER_DRAGON
+    id = IdsC.CHALLENGE_BABY_COPPER_DRAGON
+    render = IdsC.RENDER_BABY_COPPER_DRAGON
     stat(Ids.STAT_BODY)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 // MIND-based dragon challenges
 challenge {
-    id = Ids.CHALLENGE_GUIDE_BABY_GREEN_DRAGON
-    render = Ids.BABY_GREEN_DRAGON
+    id = IdsC.CHALLENGE_BABY_GREEN_DRAGON
+    render = IdsC.RENDER_BABY_GREEN_DRAGON
     stat(Ids.STAT_MIND)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 // MAGIC-based dragon challenges
 challenge {
-    id = Ids.CHALLENGE_RESCUE_BABY_WHITE_DRAGON
-    render = Ids.BABY_WHITE_DRAGON
+    id = IdsC.CHALLENGE_BABY_WHITE_DRAGON
+    render = IdsC.RENDER_BABY_WHITE_DRAGON
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_TRAIN_JUVENILE_BRONZE_DRAGON
-    render = Ids.JUVENILE_BRONZE_DRAGON
+    id = IdsC.CHALLENGE_JUVENILE_BRONZE_DRAGON
+    render = IdsC.RENDER_JUVENILE_BRONZE_DRAGON
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_CHALLENGE_MATURE_BRONZE_DRAGON
-    render = Ids.MATURE_BRONZE_DRAGON
+    id = IdsC.CHALLENGE_MATURE_BRONZE_DRAGON
+    render = IdsC.RENDER_MATURE_BRONZE_DRAGON
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_DEFEAT_MUD_WYVERN
-    render = Ids.MUD_WYVERN
+    id = IdsC.CHALLENGE_MUD_WYVERN
+    render = IdsC.RENDER_MUD_WYVERN
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_OUTSMART_POISON_DRAKE
-    render = Ids.POISON_DRAKE
+    id = IdsC.CHALLENGE_POISON_DRAKE
+    render = IdsC.RENDER_POISON_DRAKE
     stat(Ids.STAT_MAGIC)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 // CHARISMA-based dragon challenges
 challenge {
-    id = Ids.CHALLENGE_BEFRIEND_PYGMY_WYVERN
-    render = Ids.PYGMY_WYVERN
+    id = IdsC.CHALLENGE_PYGMY_WYVERN
+    render = IdsC.RENDER_PYGMY_WYVERN
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_GUIDE_VIRIDIAN_DRAKE
-    render = Ids.VIRIDIAN_DRAKE
+    id = IdsC.CHALLENGE_VIRIDIAN_DRAKE
+    render = IdsC.RENDER_VIRIDIAN_DRAKE
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_CHALLENGE_YOUNG_BRASS_DRAGON
-    render = Ids.YOUNG_BRASS_DRAGON
+    id = IdsC.CHALLENGE_YOUNG_BRASS_DRAGON
+    render = IdsC.RENDER_YOUNG_BRASS_DRAGON
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_DEFEAT_YOUNG_RED_DRAGON
-    render = Ids.YOUNG_RED_DRAGON
+    id = IdsC.CHALLENGE_YOUNG_RED_DRAGON
+    render = IdsC.RENDER_YOUNG_RED_DRAGON
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_SURVIVE_ADULT_WHITE_DRAGON
-    render = Ids.ADULT_WHITE_DRAGON
+    id = IdsC.CHALLENGE_ADULT_GREEN_DRAGON
+    render = IdsC.RENDER_ADULT_GREEN_DRAGON
     stat(Ids.STAT_CHARISMA)
+    stat(Ids.STAT_DRAGON_RACE)
 }.register()
 
 challenge {
-    id = Ids.CHALLENGE_NEGOTIATE_ADULT_GREEN_DRAGON
-    render = Ids.ADULT_GREEN_DRAGON
+    id = IdsC.CHALLENGE_ADULT_WHITE_DRAGON
+    render = IdsC.RENDER_ADULT_WHITE_DRAGON
     stat(Ids.STAT_CHARISMA)
-}.register() 
+    stat(Ids.STAT_DRAGON_RACE)
+}.register()
