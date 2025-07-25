@@ -14,7 +14,7 @@ interface IChallenge : IRegistrable {
 
     /** The stats that can be used to approach this challenge. */
     val stats: List<IStat>
-    
+
     override fun register(): IChallenge
 }
 
@@ -24,7 +24,7 @@ interface IChallenge : IRegistrable {
 interface ChallengeBuilder {
     var id: String
     var render: String
-    fun stat(statId: String)
+    fun tag(vararg statIdsIn: String)
 }
 
 /**
