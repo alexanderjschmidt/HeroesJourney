@@ -32,7 +32,6 @@ public class RegenSystem extends TriggerableSystem {
             return;
         Attributes attrs = statsComponent.getAttributes();
         for (Stat baseStat : Stat.BASE_STATS) {
-            System.out.println(baseStat);
             // Find the resource stat for this base stat (resource group + base stat group)
             List<String> resourceGroups = new ArrayList<>();
             resourceGroups.add(Ids.GROUP_RESOURCES);
@@ -62,8 +61,6 @@ public class RegenSystem extends TriggerableSystem {
                 continue;
 
             int regenCalc = (int)((regen / 100f) * max);
-            System.out.println(max);
-            System.out.println(regenCalc);
 
             StatsComponent.adjustStat(world, uuid, resourceStat.getId(), regenCalc);
         }

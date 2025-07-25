@@ -69,7 +69,6 @@ public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
         IStat stat = StatManager.get(statId);
         Integer val = super.get(stat);
         if (val == null) {
-            System.out.println(this);
             throw new RuntimeException("Could not find stat for " + statId);
         }
 

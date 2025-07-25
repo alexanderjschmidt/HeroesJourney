@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.MusicManager;
@@ -16,7 +17,11 @@ import lombok.Getter;
 
 /*
  * TODO Features
- * Remove Feats, you will just earn actions (active), or buffs (passive
+ * Give Challenges a health bar
+ * Fix names and descriptions for challenges ids
+ * add names and descriptions for approaches
+ * make choose approach output the calculations made in string.
+ * Add Fame reward to challenges
  * Allow buffs to be permanent
  * Display buffs
  * update basemod with costs

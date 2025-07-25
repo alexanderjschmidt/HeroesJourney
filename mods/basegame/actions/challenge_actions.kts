@@ -61,17 +61,6 @@ action {
         val summary = StringBuilder()
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
 
-        for (stat in approach.stats) {
-            val statValue = stats[stat] ?: 0
-            val award = if (statValue < 5) 1 else 2
-            totalAward += award
-
-            val resourceStat = input.statWith(listOf(stat.groups.first().id, Ids.GROUP_RESOURCES))
-            stats.add(resourceStat, award)
-
-            summary.append("Your ${stat.id} skill (${statValue}) provides ${award} ${resourceStat}.\n")
-        }
-
         StringResult(summary.toString())
     }
 }.register()
@@ -90,10 +79,9 @@ targetAction<IApproach> {
     getTargets = { input ->
         input["challenge"] = input["target"]!!
         val challengeEntityId = UUID.fromString(input["target"])
-
-        input.getApproachesFor(challengeEntityId, input.entityId!!)
+        input.getApproachesFor(input.entityId!!, challengeEntityId)
     }
-    targetAction = heroes.journey.modlib.Ids.CHOOSE_APPROACH
+    targetAction = Ids.CHOOSE_APPROACH
 }.register()
 
 // Face Challenges

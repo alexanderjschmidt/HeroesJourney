@@ -142,7 +142,7 @@ class ActionContext(
 
     override fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach> {
         val possibleActionsComponent: PossibleActionsComponent =
-            PossibleActionsComponent.get(gameState.world, entityId)
+            PossibleActionsComponent.get(gameState.world, entityId) ?: return listOf()
         val possibleApproaches: List<Approach> = possibleActionsComponent.possibleApproaches
 
         val challenge = getChallenge(challengeEntityId)
