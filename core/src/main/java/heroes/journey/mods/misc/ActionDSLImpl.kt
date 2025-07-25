@@ -39,7 +39,7 @@ open class OptionActionBuilder : ActionBuilder(), IOptionActionBuilder {
     override var isReturnsActionList: Boolean
         get() = false
         set(_) {} // Ignore any attempts to set the value
-    
+
     override var cost: IAttributes?
         get() = null
         set(_) {} // Ignore any attempts to set the value
@@ -59,7 +59,7 @@ class BooleanOptionActionBuilder : OptionActionBuilder(), IBooleanOptionActionBu
     override var isReturnsActionList: Boolean
         get() = false
         set(_) {} // Ignore any attempts to set the value
-    
+
     override var cost: IAttributes?
         get() = null
         set(_) {} // Ignore any attempts to set the value
@@ -98,7 +98,7 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                 val actionOptions = getTargets(input).map { option ->
                     val copyInput = (input as? ActionContext)?.getHashMapCopy() ?: hashMapOf<String, String>()
                     copyInput["target"] = option.toString()
-                    heroes.journey.modlib.actions.ActionEntry(targetAction, copyInput)
+                    ActionEntry(targetAction, copyInput)
                 }
                 ActionListResult(actionOptions)
             },

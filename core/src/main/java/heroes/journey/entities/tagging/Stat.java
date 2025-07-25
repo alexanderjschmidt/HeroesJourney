@@ -1,35 +1,34 @@
 package heroes.journey.entities.tagging;
 
-import static heroes.journey.mods.Registries.GroupManager;
-import static heroes.journey.mods.Registries.StatManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.jetbrains.annotations.NotNull;
-
 import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IGroup;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.registries.Registrable;
 import kotlin.jvm.functions.Function1;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static heroes.journey.mods.Registries.GroupManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 public class Stat extends Registrable implements IStat {
 
     public static final List<Stat> BASE_STATS = new ArrayList<>(4);
     private final Integer minValue, maxValue;
     private final List<IGroup> groups;
-    private final Function1<IAttributes,Integer> calc;
+    private final Function1<IAttributes, Integer> calc;
     private final Integer defaultValue;
 
     public Stat(
         @NotNull String id,
         Integer minValue,
         Integer maxValue,
-        Function1<IAttributes,Integer> calc,
+        Function1<IAttributes, Integer> calc,
         List<IGroup> groups,
         Integer defaultValue) {
         super(id);
@@ -96,17 +95,17 @@ public class Stat extends Registrable implements IStat {
     }
 
     @Override
-    public Function1<IAttributes,Integer> getFormula() {
+    public Function1<IAttributes, Integer> getFormula() {
         return calc;
     }
 
     @Override
     public Stat register() {
-        Stat sameGroupsStat = getByGroups(groups);
+        /*Stat sameGroupsStat = getByGroups(groups);
         if (!groups.isEmpty() && sameGroupsStat != null)
             throw new IllegalArgumentException(
                 "You cannot have a stat that registers to the same group combinations. " + sameGroupsStat +
-                    " already has the combination of groups: " + sameGroupsStat.groups);
+                    " already has the combination of groups: " + sameGroupsStat.groups);*/
         if (groups.size() == 1)
             BASE_STATS.add(this);
         return StatManager.register(this);

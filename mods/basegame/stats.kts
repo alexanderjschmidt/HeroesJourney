@@ -199,12 +199,3 @@ stat {
     id = Ids.STAT_SENTIENT
     group(Ids.GROUP_DESCRIPTOR)
 }.register()
-
-// MIND
-// TODO these seem more like bonus on standard challenges to be added at gen time
-/*
-// stealth work worse
-stat {
-    id = Ids.STAT_AWARE
-    group(Ids.GROUP_RACE)
-}.register()*/

@@ -1,15 +1,14 @@
 package heroes.journey.components.character;
 
-import static heroes.journey.mods.Registries.RenderableManager;
-
-import java.util.UUID;
-
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.modlib.Ids;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.art.Renderable;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
+import java.util.UUID;
+
+import static heroes.journey.mods.Registries.RenderableManager;
 
 @Setter
 @Accessors(fluent = true, chain = true)
@@ -27,7 +26,7 @@ public class RenderComponent extends PooledClonableComponent<RenderComponent> {
     public Renderable sprite() {
         Renderable render = RenderableManager.get(sprite);
         if (render == null) {
-            render = RenderableManager.get(Ids.ADVENTUROUS_ADOLESCENT);
+            throw new IllegalArgumentException("Renderable does not exist for id: " + sprite);
         }
         return render;
     }

@@ -11,6 +11,7 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.PlayerComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.IdsC;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.modlib.worldgen.FeatureGenerationData;
 import heroes.journey.systems.EntityFactory;
@@ -179,7 +180,7 @@ public class MapGenPlan {
                 if (region.ringPos() == 0) {
                     UUID playerId = factory.createEntity();
                     factory.addRenderComponents(playerId, "Player", pos.getX(), pos.getY(),
-                        Ids.ADVENTUROUS_ADOLESCENT);
+                        IdsC.RENDER_ADVENTUROUS_ADOLESCENT);
                     factory.addMovableComponents(playerId, WanderType.Region);
                     factory.addPlayerComponents(playerId);
 
@@ -193,7 +194,7 @@ public class MapGenPlan {
                 } else if (region.ringPos() % 2 == 0) {
                     UUID opponentId = factory.createEntity();
                     factory.addRenderComponents(opponentId, "Opponent", pos.getX(), pos.getY(),
-                        Ids.ADVENTUROUS_ADOLESCENT);
+                        IdsC.RENDER_ADVENTUROUS_ADOLESCENT);
                     factory.addMovableComponents(opponentId, WanderType.Region);
                     factory.addPlayerComponents(opponentId);
                 }

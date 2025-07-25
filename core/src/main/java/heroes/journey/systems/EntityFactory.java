@@ -33,8 +33,8 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
+import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.utils.Position;
-import heroes.journey.mods.Registries;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
@@ -86,11 +86,15 @@ public class EntityFactory {
     public void addPlayerComponents(UUID entityId) {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(PossibleActionsComponent.class)
-            .addAction(Registries.ActionManager.get(REST))
-            .addAction(Registries.ActionManager.get(TRAVEL))
-            .addAction(Registries.ActionManager.get(FACE_CHALLENGES))
-            .addAction(Registries.ActionManager.get("complete_quest"))
-            .addAction(Registries.ActionManager.get(TRAINING));
+            .addAction(REST)
+            .addAction(TRAVEL)
+            .addAction(FACE_CHALLENGES)
+            .addAction(Ids.COMPLETE_QUEST)
+            .addAction(TRAINING)
+            .addApproach(Ids.APPROACH_FIGHT)
+            .addApproach(Ids.APPROACH_NEGOTIATE)
+            .addApproach(Ids.APPROACH_TRICK)
+            .addApproach(Ids.APPROACH_MAGIC_MISSILE);
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
@@ -106,7 +110,7 @@ public class EntityFactory {
         region.create(RegionComponent.class).ring(ringIndex).ringPos(ringPos);
         region.create(NamedComponent.class).name(MarkovTownNameGenerator.get().generateTownName());
         region.create(QuestsComponent.class);
-        region.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get(QUEST_BOARD));
+        region.create(PossibleActionsComponent.class).addAction(QUEST_BOARD);
         return regionId;
     }
 
@@ -130,7 +134,7 @@ public class EntityFactory {
             DUNGEON_SPRITE);
 
         EntityEdit dungeon = world.getEntity(dungeonId).edit();
-        dungeon.create(PossibleActionsComponent.class).addAction(Registries.ActionManager.get(DELVE));
+        dungeon.create(PossibleActionsComponent.class).addAction(DELVE);
         dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
         return dungeonId;

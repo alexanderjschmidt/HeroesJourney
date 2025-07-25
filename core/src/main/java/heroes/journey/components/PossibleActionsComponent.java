@@ -40,8 +40,13 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
         return ApproachManager.get(possibleApproaches.stream().toList());
     }
 
-    public PossibleActionsComponent addAction(Action action) {
-        possibleActions.add(action.getId());
+    public PossibleActionsComponent addAction(String actionId) {
+        possibleActions.add(actionId);
+        return this;
+    }
+
+    public PossibleActionsComponent addApproach(String approachId) {
+        possibleApproaches.add(approachId);
         return this;
     }
 

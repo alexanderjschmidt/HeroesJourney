@@ -16,9 +16,11 @@ public class Registry<T extends IRegistrable> extends HashMap<String, T> {
     @Override
     public T get(Object id) {
         T item = super.get(id);
-        if (item == null) {
+        if (item == null && !this.values().isEmpty()) {
             System.out.println("Failed to get item with id " + id + " in registry for " +
                 this.values().stream().findFirst().get().getClass());
+        } else if (item == null) {
+            System.out.println("Failed to get item with id " + id);
         }
         return item;
     }

@@ -3,7 +3,6 @@ import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
-import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.registries.Registries
@@ -63,7 +62,7 @@ action {
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
 
         for (stat in approach.stats) {
-            val statValue = stats.get(stat) ?: 0
+            val statValue = stats[stat] ?: 0
             val award = if (statValue < 5) 1 else 2
             totalAward += award
 
@@ -92,44 +91,7 @@ targetAction<IApproach> {
         input["challenge"] = input["target"]!!
         val challengeEntityId = UUID.fromString(input["target"])
 
-        // Get the challenge to determine its stats
-        val challenge: IChallenge = input.getChallenge(challengeEntityId)
-
-        // Get available approaches that match the challenge's stats
-        val availableApproaches: MutableList<IApproach> = mutableListOf()
-        val playerStats: IAttributes = input.getStats(input.entityId!!)
-
-        // Get all approaches from registry
-        val allApproaches = Registries.ApproachManager.values.toList()
-
-        for (approach: IApproach in allApproaches) {
-            // Check if approach has any stats that match the challenge's stats
-            val hasMatchingStat = approach.stats.any { approachStat ->
-                challenge.stats.any { challengeStat ->
-                    approachStat.id == challengeStat.id
-                }
-            }
-
-            if (hasMatchingStat) {
-                // Check if player has sufficient stats for this approach
-                val hasSufficientStats = approach.stats.all { stat ->
-                    playerStats.get(stat.id) ?: 0 >= 1
-                }
-
-                // Check if player can afford the approach cost
-                val canAffordCost = approach.cost?.let { cost ->
-                    cost.all { (stat, requiredAmount) ->
-                        (playerStats.get(stat) ?: 0) >= requiredAmount
-                    }
-                } ?: true
-
-                if (hasSufficientStats && canAffordCost) {
-                    availableApproaches.add(approach)
-                }
-            }
-        }
-
-        availableApproaches
+        input.getApproachesFor(challengeEntityId, input.entityId!!)
     }
     targetAction = heroes.journey.modlib.Ids.CHOOSE_APPROACH
 }.register()

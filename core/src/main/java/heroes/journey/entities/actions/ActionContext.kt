@@ -3,11 +3,13 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
+import heroes.journey.entities.Approach
 import heroes.journey.entities.Quest
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
@@ -136,6 +138,36 @@ class ActionContext(
         val regionComponent = RegionComponent.get((gameState as GameState).world, regionId)
         regionComponent?.removeChallenge(challengeId)
         (gameState as GameState).world.delete(challengeId)
+    }
+
+    override fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach> {
+        val possibleActionsComponent: PossibleActionsComponent =
+            PossibleActionsComponent.get(gameState.world, entityId)
+        val possibleApproaches: List<Approach> = possibleActionsComponent.possibleApproaches
+
+        val challenge = getChallenge(challengeEntityId)
+        val approaches: MutableList<IApproach> = mutableListOf()
+        for (approach in possibleApproaches) {
+            if (isValidTarget(challenge.stats, approach)) {
+                approaches.add(approach)
+            }
+        }
+        return approaches
+    }
+
+    private fun isValidTarget(targetTags: List<IStat>, approach: Approach): Boolean {
+        // Must contain all requiredAllTags
+        if (!targetTags.containsAll(approach.requiredAllTags)) return false
+
+        // Must contain at least one of requiredAnyTags (if any are defined)
+        if (approach.requiredAnyTags.isNotEmpty() &&
+            targetTags.intersect(approach.requiredAnyTags.toSet()).isEmpty()
+        ) return false
+
+        // Must contain none of the forbiddenTags
+        if (targetTags.any { it in approach.forbiddenTags }) return false
+
+        return true
     }
 
     override fun getStats(entityId: UUID): Attributes {

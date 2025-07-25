@@ -4,7 +4,10 @@ import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.script.experimental.api.*
+import kotlin.script.experimental.api.ResultValue
+import kotlin.script.experimental.api.ScriptCompilationConfiguration
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.valueOrNull
 import kotlin.script.experimental.host.toScriptSource
 import kotlin.script.experimental.jvm.baseClassLoader
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
@@ -99,8 +102,16 @@ object ScriptModLoader {
         executor.submit {
             foundMods.forEach { mod ->
                 currentProcessingMod.set(mod.name)
-                mod.load()
-                modsProcessed.incrementAndGet()
+                try {
+                    println("Loading mod: ${mod.name}")
+                    mod.load()
+                } catch (e: Exception) {
+                    println("ERROR: Exception while loading mod '${mod.name}'")
+                    println("  Exception: ${e.message}")
+                    throw e
+                } finally {
+                    modsProcessed.incrementAndGet()
+                }
             }
         }
     }
@@ -241,7 +252,21 @@ object ScriptModLoader {
                     }
                 }
             }
-            if (debugMode) println("Successfully included: $scriptPath")
+            // ✅ Check for thrown exceptions during evaluation
+            when (val returnValue = result.valueOrNull()?.returnValue) {
+                is ResultValue.Error -> {
+                    println("ERROR: Script threw an exception: ${returnValue.error}")
+                    returnValue.error.printStackTrace()
+                }
+
+                is ResultValue.Value -> {
+                    if (debugMode) println("Successfully included: $scriptPath")
+                }
+
+                else -> {
+                    println("Script did not return a value")
+                }
+            }
         } catch (e: Exception) {
             println("ERROR: Failed to include $scriptPath")
             println("  Exception: ${e.message}")

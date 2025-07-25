@@ -2,6 +2,7 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.utils.IGameState
@@ -46,6 +47,7 @@ abstract class IActionContext(
     abstract fun addQuest(entityId: UUID, questId: String)
     abstract fun removeQuest(entityId: UUID, questId: String)
     abstract fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID)
+    abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach>
     abstract fun getStats(entityId: UUID): IAttributes
     abstract fun getChallenges(regionId: UUID): List<UUID>
     abstract fun setMapPointer(pos: Position)
