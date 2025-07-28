@@ -136,6 +136,7 @@ object Ids {
     const val BASE_TILE_SAND: String = "base_tile_sand"
 
     // Resource Stat IDs
+    const val STAT_FAME: String = "fame"
     const val STAT_BODY: String = "body"
     const val STAT_MIND: String = "mind"
     const val STAT_MAGIC: String = "magic"
@@ -175,6 +176,7 @@ object Ids {
     const val GROUP_GLOBAL_MULT: String = "global_mult_group"
 
     // Group IDs
+    const val GROUP_FAME: String = "fame_group"
     const val GROUP_BODY: String = "body_group"
     const val GROUP_MIND: String = "mind_group"
     const val GROUP_MAGIC: String = "magic_group"

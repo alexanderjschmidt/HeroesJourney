@@ -8,6 +8,7 @@ group { id = Ids.GROUP_MULT }.register()
 group { id = Ids.GROUP_GLOBAL_MULT }.register()
 
 // --- GROUPS ---
+group { id = Ids.GROUP_FAME }.register()
 group { id = Ids.GROUP_BODY }.register()
 group { id = Ids.GROUP_MIND }.register()
 group { id = Ids.GROUP_MAGIC }.register()

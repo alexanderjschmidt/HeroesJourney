@@ -1,10 +1,10 @@
 package heroes.journey.components.character;
 
+import java.util.UUID;
+
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.systems.GameWorld;
 import lombok.experimental.Accessors;
-
-import java.util.UUID;
 
 @Accessors(fluent = true, chain = true)
 public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
@@ -27,10 +27,6 @@ public class PlayerComponent extends PooledClonableComponent<PlayerComponent> {
 
     public PlayerComponent playerId(UUID playerId) {
         this.playerId = playerId;
-        return this;
-    }
-
-    public PlayerComponent fame(int fame) {
         return this;
     }
 

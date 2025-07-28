@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Humanoid II Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 3-6 (mid tier content)
 
 challenge {
     id = IdsC.CHALLENGE_ADVENTUROUS_ADOLESCENT
@@ -11,6 +13,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_BOISTEROUS_YOUTH
@@ -18,6 +24,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ELF_BLADEDANCER
@@ -25,6 +35,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ELF_ENCHANTER
@@ -32,6 +46,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ELF_LORD
@@ -39,6 +57,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ELF_SHARPSHOOTER
@@ -46,6 +68,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ELF_WAYFARER
@@ -53,6 +79,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_JOYFUL_KID
@@ -60,6 +90,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MERFOLK_AQUAMANCER
@@ -67,6 +101,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MERFOLK_IMPALER
@@ -74,6 +112,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MERFOLK_JAVELINEER
@@ -81,6 +123,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MERFOLK_MYSTIC
@@ -88,6 +134,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MERFOLK_SCOUT
@@ -95,6 +145,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_OVERWORKED_VILLAGER
@@ -102,6 +156,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_PLAYFUL_CHILD
@@ -109,4 +167,8 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()

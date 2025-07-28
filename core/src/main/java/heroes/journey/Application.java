@@ -21,10 +21,8 @@ import lombok.Getter;
  * Fix names and descriptions for challenges ids
  * add names and descriptions for approaches
  * make choose approach output the calculations made in string.
- * Add Fame reward to challenges
  * Allow buffs to be permanent
  * Display buffs
- * update basemod with costs
  * Have actions with limited uses (this can be refilled) (potions, scrolls)
  * Add Perks (actions or buffs earn from having X of a stat)
  * Update AI so that any non order specific actions dont matter for better efficiency?

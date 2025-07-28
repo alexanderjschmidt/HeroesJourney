@@ -1,20 +1,20 @@
 package heroes.journey.ui.windows.stats;
 
+import java.util.UUID;
+
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.Ids;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
-import heroes.journey.modlib.Ids;
-
-import java.util.UUID;
 
 public class StatsDisplay extends Table {
 
@@ -51,7 +51,7 @@ public class StatsDisplay extends Table {
         mind.setText("Mind: " + statsComponent.get(Ids.STAT_MIND));
         magic.setText("Magic: " + statsComponent.get(Ids.STAT_MAGIC));
         charisma.setText("Charisma: " + statsComponent.get(Ids.STAT_CHARISMA));
-        fame.setText("Fame: " + StatsComponent.getFame(GameState.global().getWorld(), entityId));
+        fame.setText("Fame: " + statsComponent.get(Ids.STAT_FAME));
     }
 
     // TODO this should be a widget

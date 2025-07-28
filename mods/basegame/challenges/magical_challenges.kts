@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Magical Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 5-8 (mid to high tier content)
 
 challenge {
     id = IdsC.CHALLENGE_MAGICAL_FAIRY
@@ -11,6 +13,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ADEPT_NECROMANCER
@@ -18,6 +24,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_CORRUPTED_TREANT
@@ -25,6 +35,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_DEFT_SORCERESS
@@ -32,6 +46,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_EARTH_ELEMENTAL
@@ -39,6 +57,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_EXPERT_DRUID
@@ -46,6 +68,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_FIRE_ELEMENTAL
@@ -53,6 +79,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_FLUTTERING_PIXIE
@@ -60,6 +90,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GLOWING_WISP
@@ -67,6 +101,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GRIZZLED_TREANT
@@ -74,6 +112,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ICE_GOLEM
@@ -81,6 +123,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_IRON_GOLEM
@@ -88,6 +134,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_NOVICE_PYROMANCER
@@ -95,6 +145,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_VILE_WITCH
@@ -102,6 +156,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_WATER_ELEMENTAL
@@ -109,4 +167,8 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MAGICAL_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()

@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Humanoid Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 2-5 (low to mid tier content)
 
 challenge {
     id = IdsC.CHALLENGE_BESTIAL_LIZARDFOLK
@@ -11,6 +13,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GOBLIN_ARCHER
@@ -18,6 +24,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 2 // 20 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 20)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GOBLIN_FANATIC
@@ -25,6 +35,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GOBLIN_FIGHTER
@@ -32,6 +46,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 2 // 20 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 20)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GOBLIN_OCCULTIST
@@ -39,6 +57,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GOBLIN_WOLF_RIDER
@@ -46,6 +68,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HALFLING_ASSASSIN
@@ -53,6 +79,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HALFLING_BARD
@@ -60,6 +90,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HALFLING_RANGER
@@ -67,6 +101,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HALFLING_ROGUE
@@ -74,6 +112,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HALFLING_SLINGER
@@ -81,6 +123,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 2 // 20 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 20)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_LIZARDFOLK_ARCHER
@@ -88,6 +134,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_LIZARDFOLK_GLADIATOR
@@ -95,6 +145,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_LIZARDFOLK_SCOUT
@@ -102,6 +156,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 3 // 30 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 30)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_LIZARDFOLK_SPEARMAN
@@ -109,4 +167,8 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HUMANOID_RACE)
+    powerTier = 2 // 20 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 20)
+    }
 }.register()

@@ -30,7 +30,7 @@ action {
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_STAMINA, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_STAMINA, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_BODY, 1)
         StringResult("You completed an intense workout! BODY +1")
     }
@@ -47,7 +47,7 @@ action {
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_FOCUS, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_FOCUS, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_MIND, 1)
         StringResult("You completed intensive study! MIND +1")
     }
@@ -64,7 +64,7 @@ action {
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_MANA, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_MANA, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_MAGIC, 1)
         StringResult("You completed magical practice! MAGIC +1")
     }
@@ -81,7 +81,7 @@ action {
         }
     }
     onSelectFn = { input ->
-        input.addStat(input.entityId!!, Ids.STAT_MOXIE, -5)
+        input.adjustStat(input.entityId!!, Ids.STAT_MOXIE, -5)
         input.adjustStat(input.entityId!!, Ids.STAT_CHARISMA, 1)
         StringResult("You completed social training! CHARISMA +1")
     }

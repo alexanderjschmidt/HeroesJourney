@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Demon Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 4-9 (late game content)
 
 // PHYSICAL-based demon challenges
 challenge {
@@ -12,6 +14,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 
 challenge {
@@ -20,6 +26,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 9 // 500 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 90)
+    }
 }.register()
 
 // FERAL-based demon challenges
@@ -29,6 +39,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 
 challenge {
@@ -37,6 +51,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 
 challenge {
@@ -45,6 +63,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 
 challenge {
@@ -53,6 +75,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 
 challenge {
@@ -61,6 +87,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 
 // INCORPOREAL-based demon challenges
@@ -70,6 +100,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 
 challenge {
@@ -78,6 +112,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 
 challenge {
@@ -86,6 +124,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 
 challenge {
@@ -94,6 +136,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 
 // SENTIENT-based demon challenges
@@ -103,6 +149,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 
 challenge {
@@ -111,6 +161,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 
 challenge {
@@ -119,6 +173,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 
 challenge {
@@ -127,5 +185,9 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_DEMON_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 

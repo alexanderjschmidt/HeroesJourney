@@ -22,6 +22,11 @@ stat {
     defaultValue = 1
     group(Ids.GROUP_CHARISMA)
 }.register()
+stat {
+    id = Ids.STAT_FAME
+    defaultValue = 0
+    group(Ids.GROUP_FAME)
+}.register()
 
 // --- RESOURCES STATS ---
 stat {

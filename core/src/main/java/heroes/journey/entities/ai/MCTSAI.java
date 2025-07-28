@@ -12,6 +12,7 @@ import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.QueuedAction;
+import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.actions.ActionListResult;
 import heroes.journey.modlib.actions.ShowAction;
@@ -46,7 +47,7 @@ public class MCTSAI implements AI, Scorer {
 
     @Override
     public int getScore(GameState gameState, UUID playingEntity) {
-        return StatsComponent.getFame(gameState.getWorld(), playingEntity);
+        return StatsComponent.get(gameState.getWorld(), playingEntity).get(Ids.STAT_FAME);
     }
 
     private void addUsableActions(

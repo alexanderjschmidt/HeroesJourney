@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Monster Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 4-7 (mid tier content)
 
 challenge {
     id = IdsC.CHALLENGE_BLINDED_GRIMLOCK
@@ -11,6 +13,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_BLOODSHOT_EYE
@@ -18,6 +24,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_BRAWNY_OGRE
@@ -25,6 +35,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_CRIMSON_SLAAD
@@ -32,6 +46,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_CRUSHING_CYCLOPS
@@ -39,6 +57,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_DEATH_SLIME
@@ -46,6 +68,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_FUNGAL_MYCONID
@@ -53,6 +79,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HUMONGOUS_ETTIN
@@ -60,6 +90,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_MURKY_SLAAD
@@ -67,6 +101,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_OCHRE_JELLY
@@ -74,6 +112,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_OCULAR_WATCHER
@@ -81,6 +123,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_RED_CAP
@@ -88,6 +134,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_SHRIEKER_MUSHROOM
@@ -95,6 +145,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 4 // 50 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 40)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_STONE_TROLL
@@ -102,6 +156,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_SWAMP_TROLL
@@ -109,4 +167,8 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_FERAL)
     tag(Ids.STAT_MONSTER_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()

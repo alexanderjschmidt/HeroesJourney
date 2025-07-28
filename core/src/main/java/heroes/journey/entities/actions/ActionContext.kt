@@ -49,11 +49,6 @@ class ActionContext(
         return stats?.get(statId) ?: 0
     }
 
-    override fun addStat(entityId: UUID, statId: String, delta: Int) {
-        val stats = StatsComponent.get((gameState as GameState).world, entityId)
-        stats?.add(statId, delta)
-    }
-
     override fun adjustStat(entityId: UUID, statId: String, delta: Int) {
         StatsComponent.adjustStat((gameState as GameState).world, entityId, statId, delta)
     }
@@ -66,10 +61,6 @@ class ActionContext(
 
     override fun addItem(entityId: UUID, itemId: String, amount: Int) {
         Utils.addItem(this, ItemManager[itemId], amount)
-    }
-
-    override fun addFame(entityId: UUID, amount: Int) {
-        StatsComponent.addFame((gameState as GameState).world, entityId, amount)
     }
 
     override fun getName(entityId: UUID): String {

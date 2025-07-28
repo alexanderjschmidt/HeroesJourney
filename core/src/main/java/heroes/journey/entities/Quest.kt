@@ -3,10 +3,12 @@ package heroes.journey.entities
 import heroes.journey.components.StatsComponent
 import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.Operation
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.mods.Registries
+import heroes.journey.mods.Registries.StatManager
 import java.util.*
 
 class Quest(
@@ -47,7 +49,7 @@ class Quest(
             playerStats.put(stat, amount, Operation.ADD)
         }
         if (fameReward > 0) {
-            StatsComponent.addFame(actionContext.gameState.getWorld(), actionContext.entityId, fameReward)
+            playerStats.put(StatManager[Ids.STAT_FAME], fameReward, Operation.ADD)
         }
         return true
     }

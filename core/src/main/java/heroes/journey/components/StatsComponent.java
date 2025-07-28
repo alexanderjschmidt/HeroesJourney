@@ -17,8 +17,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
 
     private final Attributes attributes = new Attributes();
 
-    private int fame = 0;
-
     public StatsComponent() {
         for (Stat stat : StatManager.values()) {
             Integer def = stat.getDefaultValue();
@@ -41,16 +39,6 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
             }
         }
         return attr;
-    }
-
-    public static int getFame(GameWorld world, UUID entityId) {
-        StatsComponent stats = world.getEntity(StatsComponent.class, entityId);
-        return stats.fame;
-    }
-
-    public static void addFame(GameWorld world, UUID entityId, int amount) {
-        StatsComponent stats = world.getEntity(StatsComponent.class, entityId);
-        stats.fame += amount;
     }
 
     public static void adjustStat(GameWorld world, UUID entityId, String statId, int count) {

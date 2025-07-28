@@ -1,7 +1,7 @@
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import java.util.*
-import heroes.journey.modlib.Ids
 
 // Delve Actions - included by basegame mod
 
@@ -28,7 +28,7 @@ action {
                     .append("\n")
             }
         }
-        input.addFame(e!!, 5)
+        input.adjustStat(e!!, Ids.STAT_FAME, 5)
         log.append("You have gained ").append(5).append(" fame")
 
         StringResult(log.toString())

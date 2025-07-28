@@ -1,9 +1,11 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.IdsC
+import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.challenge
 
 // Holy Challenges - included by basegame mod
 // Organized by descriptor requirements (PHYSICAL, INCORPOREAL, SENTIENT, FERAL)
+// Power tiers 5-8 (mid to high tier content)
 
 challenge {
     id = IdsC.CHALLENGE_BLESSED_GLADIATOR
@@ -11,6 +13,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_BOLD_MAN_AT_ARMS
@@ -18,6 +24,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_DETERMINED_SOLDIER
@@ -25,6 +35,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_DEVOUT_ACOLYTE
@@ -32,6 +46,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_DIVINE_PLANETAR
@@ -39,6 +57,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_FAVORED_CLERIC
@@ -46,6 +68,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_FLOATING_CHERUB
@@ -53,6 +79,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_GENTLE_SHEPARD
@@ -60,6 +90,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_HOLY_CRUSADER
@@ -67,6 +101,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_JOVIAL_FRIAR
@@ -74,6 +112,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 5 // 75 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 50)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_RESOLUTE_ANGEL
@@ -81,6 +123,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 8 // 350 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 80)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_RIGHTEOUS_DEVA
@@ -88,6 +134,10 @@ challenge {
     tag(Ids.STAT_INCORPOREAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_SWORD_ARCHON
@@ -95,6 +145,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 7 // 200 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 70)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_VETERAN_SWORDSMAN
@@ -102,6 +156,10 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
 challenge {
     id = IdsC.CHALLENGE_ZEALOUS_PRIEST
@@ -109,4 +167,8 @@ challenge {
     tag(Ids.STAT_PHYSICAL)
     tag(Ids.STAT_SENTIENT)
     tag(Ids.STAT_HOLY_RACE)
+    powerTier = 6 // 125 power
+    rewards = attributes {
+        stat(Ids.STAT_FAME, 60)
+    }
 }.register()
