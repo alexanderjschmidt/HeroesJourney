@@ -1,6 +1,6 @@
 package heroes.journey.tilemap
 
-import heroes.journey.tilemap.wavefunctiontiles.Terrain
+import heroes.journey.modlib.worldgen.Terrain
 
 class TerrainBuilder {
     var id: String = ""

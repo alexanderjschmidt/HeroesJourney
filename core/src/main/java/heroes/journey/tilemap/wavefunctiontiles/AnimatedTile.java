@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import heroes.journey.GameCamera;
+import heroes.journey.modlib.worldgen.Terrain;
 
 public class AnimatedTile extends Tile {
 

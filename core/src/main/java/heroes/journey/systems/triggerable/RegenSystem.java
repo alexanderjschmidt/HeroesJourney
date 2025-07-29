@@ -52,6 +52,10 @@ public class RegenSystem extends TriggerableSystem {
             if (maxStat == null)
                 continue;
 
+            Integer resource = attrs.get(resourceStat);
+            if (resource == null)
+                continue;
+
             Integer regen = attrs.get(regenStat);
             if (regen == null)
                 continue;

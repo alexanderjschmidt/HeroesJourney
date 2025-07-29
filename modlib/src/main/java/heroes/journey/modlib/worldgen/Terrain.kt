@@ -1,45 +1,44 @@
 package heroes.journey.modlib.worldgen
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Terrain, used for map tile types.
- * Mods should only use this interface, not implementation classes.
+ * A Terrain, used for map tile types.
+ * This is a simple data container with no complex functions.
  */
-interface ITerrain : IRegistrable {
-    /**
-     * The movement cost for this terrain.
-     */
+class Terrain(
+    id: String,
     val terrainCost: Int
+) : Registrable(id) {
 
-    /**
-     * Register this terrain with the game.
-     * @return the registered terrain
-     */
-    override fun register(): ITerrain
+    override fun register(): Terrain {
+        Registries.TerrainManager.register(this)
+        return this
+    }
 }
 
 /**
- * Interface for the terrain DSL implementation.
+ * Builder for defining a terrain in a natural DSL style.
  */
-interface TerrainDSL {
-    fun terrain(init: TerrainBuilder.() -> Unit): ITerrain
-}
-
-/**
- * Singleton provider for the TerrainDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object TerrainDSLProvider {
-    lateinit var instance: TerrainDSL
-}
-
-/**
- * DSL entrypoint for mods. Always delegates to the core implementation.
- */
-fun terrain(init: TerrainBuilder.() -> Unit): ITerrain = TerrainDSLProvider.instance.terrain(init)
-
 class TerrainBuilder {
     var id: String = ""
     var terrainCost: Int = 1
+}
+
+/**
+ * DSL entrypoint for defining a terrain.
+ *
+ * Example usage:
+ * ```kotlin
+ * terrain {
+ *     id = Ids.TERRAIN_PLAINS
+ *     terrainCost = 1
+ * }
+ * ```
+ */
+fun terrain(init: TerrainBuilder.() -> Unit): Terrain {
+    val builder = TerrainBuilder()
+    builder.init()
+    return Terrain(builder.id, builder.terrainCost)
 }

@@ -1,25 +1,21 @@
 package heroes.journey.mods.art
 
-import heroes.journey.modlib.art.IRenderable
-import heroes.journey.modlib.art.RenderableDSL
+import heroes.journey.modlib.art.*
 import heroes.journey.mods.Registries
 import heroes.journey.utils.art.AnimationRenderable
-import heroes.journey.utils.art.ResourceManager
 import heroes.journey.utils.art.StillRenderable
-import heroes.journey.modlib.art.StillRenderableBuilder
-import heroes.journey.modlib.art.AnimationRenderableBuilder
 
 class RenderableDSLImpl : RenderableDSL {
     override fun stillRenderable(init: StillRenderableBuilder.() -> Unit): IRenderable {
         val builder = StillRenderableBuilder().apply(init)
-        val textureMap = Registries.TextureManager.get(builder.textureMapId)
+        val textureMap = Registries.TextureManager[builder.textureMapId]
             ?: throw IllegalArgumentException("TextureMap with id '${builder.textureMapId}' not found")
         return StillRenderable(builder.id, textureMap, builder.x, builder.y)
     }
 
     override fun animationRenderable(init: AnimationRenderableBuilder.() -> Unit): IRenderable {
         val builder = AnimationRenderableBuilder().apply(init)
-        val textureMap = Registries.TextureManager.get(builder.textureMapId)
+        val textureMap: TextureMap = Registries.TextureManager[builder.textureMapId]
             ?: throw IllegalArgumentException("TextureMap with id '${builder.textureMapId}' not found")
         val frameCoords = mutableListOf<Pair<Int, Int>>()
         frameCoords.addAll(builder.frames)

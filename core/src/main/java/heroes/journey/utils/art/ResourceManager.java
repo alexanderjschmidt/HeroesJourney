@@ -1,5 +1,9 @@
 package heroes.journey.utils.art;
 
+import static heroes.journey.mods.Registries.TextureManager;
+
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -13,7 +17,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import java.util.HashMap;
+import heroes.journey.modlib.art.TextureMap;
 
 public class ResourceManager extends AssetManager {
 
@@ -28,7 +32,7 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font18bold;
     public Skin skin;
 
-    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
     private int totalAssetsQueued = 1;
@@ -91,7 +95,7 @@ public class ResourceManager extends AssetManager {
         loadTexture("Textures/cliffTransition.png");
         loadTexture("Textures/wangEdge.png");
 
-        for (TextureMap map : textureRegions.keySet())
+        for (TextureMap map : TextureManager.values())
             loadTexture(map.getLocation());
     }
 
@@ -110,7 +114,7 @@ public class ResourceManager extends AssetManager {
     }
 
     public void splits() {
-        for (TextureMap map : textureRegions.keySet())
+        for (TextureMap map : TextureManager.values())
             loadTextureMap(map);
     }
 
@@ -142,7 +146,7 @@ public class ResourceManager extends AssetManager {
     // could cause issues from creating file handles over and over
     public Texture getTexture(String path) {
         if (!Gdx.files.internal(path).exists()) {
-            return null;
+            throw new RuntimeException("Cant find Texture at " + path);
         }
         if (!isLoaded(path)) {
             this.load(path, Texture.class);

@@ -67,12 +67,8 @@ public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
     @Override
     public Integer getDirect(String statId) {
         IStat stat = StatManager.get(statId);
-        Integer val = super.get(stat);
-        if (val == null) {
-            throw new RuntimeException("Could not find stat for " + statId);
-        }
 
-        return val;
+        return super.get(stat);
     }
 
     @Override

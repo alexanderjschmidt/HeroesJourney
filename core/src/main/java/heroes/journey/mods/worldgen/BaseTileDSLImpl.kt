@@ -2,7 +2,7 @@ package heroes.journey.mods.worldgen
 
 import heroes.journey.modlib.worldgen.*
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile as CoreBaseTile
-import heroes.journey.tilemap.wavefunctiontiles.Terrain
+import heroes.journey.modlib.worldgen.Terrain
 import heroes.journey.tilemap.TileManager
 
 class BaseTileBuilderImpl : BaseTileBuilder {

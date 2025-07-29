@@ -1,50 +1,54 @@
 package heroes.journey.modlib.art
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a TextureMap, used for sprite sheets and tilemaps.
- * Mods should only use this interface, not implementation classes.
+ * A TextureMap, used for sprite sheets and tilemaps.
+ * This is a simple data container with no complex functions.
  */
-interface ITextureMap : IRegistrable {
-    /** The asset path for the texture map. */
-    val location: String
-
-    /** The width of each tile/sprite in pixels. */
-    val width: Int
-
-    /** The height of each tile/sprite in pixels. */
+class TextureMap(
+    id: String,
+    var location: String,
+    val width: Int,
     val height: Int
-    override fun register(): ITextureMap
+) : Registrable(id) {
+
+    init {
+        location = if (location.startsWith("Textures/")) location else "Textures/$location"
+    }
+
+    override fun register(): TextureMap {
+        Registries.TextureManager.register(this)
+        return this
+    }
 }
 
 /**
- * Interface for the TextureMap DSL implementation.
+ * Builder for defining a texture map in a natural DSL style.
  */
-interface TextureMapDSL {
-    fun textureMap(init: TextureMapBuilder.() -> Unit): ITextureMap
-}
-
-/**
- * Singleton provider for the TextureMapDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object TextureMapDSLProvider {
-    lateinit var instance: TextureMapDSL
-}
-
-/**
- * DSL entrypoint for creating a texture map (sprite sheet or tilemap).
- * @param id unique texture map ID
- * @param location asset path (relative to assets directory)
- * @param width width of each tile/sprite in pixels
- * @param height height of each tile/sprite in pixels
- */
-fun textureMap(init: TextureMapBuilder.() -> Unit): ITextureMap = TextureMapDSLProvider.instance.textureMap(init)
-
 class TextureMapBuilder {
     var id: String = ""
     var location: String = ""
     var width: Int = 0
     var height: Int = 0
+}
+
+/**
+ * DSL entrypoint for creating a texture map (sprite sheet or tilemap).
+ *
+ * Example usage:
+ * ```kotlin
+ * textureMap {
+ *     id = "sprites"
+ *     location = "sprites.png"
+ *     width = 16
+ *     height = 16
+ * }
+ * ```
+ */
+fun textureMap(init: TextureMapBuilder.() -> Unit): TextureMap {
+    val builder = TextureMapBuilder()
+    builder.init()
+    return TextureMap(builder.id, builder.location, builder.width, builder.height)
 }

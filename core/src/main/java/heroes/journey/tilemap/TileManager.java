@@ -10,7 +10,7 @@ import java.util.Map;
 import heroes.journey.mods.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;

@@ -149,7 +149,9 @@ public class Stat extends Registrable implements IStat {
     }
 
     public Integer get(Attributes attributes) {
-        int val = calc.invoke(attributes);
+        Integer val = calc.invoke(attributes);
+        if (val == null)
+            return null;
 
         List<Group> multGroups = new ArrayList<>(getGroups());
         multGroups.add(GroupManager.get(Ids.GROUP_MULT));

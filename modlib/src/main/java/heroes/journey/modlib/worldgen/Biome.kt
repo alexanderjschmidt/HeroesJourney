@@ -1,24 +1,27 @@
 package heroes.journey.modlib.worldgen
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Biome, used for world generation.
- * Mods should only use this interface, not implementation classes.
+ * A Biome, used for world generation.
+ * This is a simple data container with no complex functions.
  */
-interface IBiome : IRegistrable {
-
-    /** The base terrain ID for this biome. */
-    val baseTerrain: String
-
-    /** The list of feature generation data for this biome. */
+class Biome(
+    id: String,
+    val baseTerrain: String,
     val featureGenerationData: List<FeatureGenerationData>
-    override fun register(): IBiome
+) : Registrable(id) {
+
+    override fun register(): Biome {
+        Registries.BiomeManager.register(this)
+        return this
+    }
 }
 
 /**
  * Public interface for feature generation data, used in biomes.
- * Mods should only use this interface, not implementation classes.
+ * This is a simple data container with no complex functions.
  */
 class FeatureGenerationData(
     /** The feature type ID to generate. */
@@ -32,62 +35,80 @@ class FeatureGenerationData(
 )
 
 /**
- * Interface for the Biome DSL implementation.
+ * Builder for defining a biome in a natural DSL style.
  */
-interface BiomeDSL {
-    fun biome(init: BiomeBuilder.() -> Unit): IBiome
+class BiomeBuilder {
+    var id: String = ""
+    var baseTerrain: String = ""
+    private val _features = mutableListOf<FeatureGenerationData>()
+    val features: List<FeatureGenerationData> get() = _features
+
+    fun feature(init: FeatureGenerationDataBuilder.() -> Unit) {
+        val builder = FeatureGenerationDataBuilder().apply(init)
+        _features.add(
+            FeatureGenerationData(
+                builder.featureTypeId,
+                builder.minDist,
+                builder.minInRegion,
+                builder.maxInRegion
+            )
+        )
+    }
 }
 
 /**
- * Interface for the FeatureGenerationData DSL implementation.
+ * Builder for defining feature generation data in a natural DSL style.
  */
-interface FeatureGenerationDataDSL {
-    fun featureGenerationData(init: FeatureGenerationDataBuilder.() -> Unit): FeatureGenerationData
-}
-
-/**
- * Singleton provider for the BiomeDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object BiomeDSLProvider {
-    lateinit var instance: BiomeDSL
-}
-
-/**
- * Singleton provider for the FeatureGenerationDataDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object FeatureGenerationDataDSLProvider {
-    lateinit var instance: FeatureGenerationDataDSL
+class FeatureGenerationDataBuilder {
+    var featureTypeId: String = ""
+    var minDist: Int = 2
+    var minInRegion: Int = 0
+    var maxInRegion: Int = 1
 }
 
 /**
  * DSL entrypoint for creating a biome.
- * @param id unique biome ID
- * @param baseTerrain the ID of the base terrain for this biome
- * @param featureGenerationData list of feature generation data
+ *
+ * Example usage:
+ * ```kotlin
+ * biome {
+ *     id = Ids.BIOME_KINGDOM
+ *     baseTerrain = Ids.TERRAIN_PLAINS
+ *     feature {
+ *         featureTypeId = Ids.KINGDOM
+ *         minDist = 0
+ *         minInRegion = 1
+ *         maxInRegion = 1
+ *     }
+ * }
+ * ```
  */
-fun biome(init: BiomeBuilder.() -> Unit): IBiome = BiomeDSLProvider.instance.biome(init)
+fun biome(init: BiomeBuilder.() -> Unit): Biome {
+    val builder = BiomeBuilder()
+    builder.init()
+    return Biome(builder.id, builder.baseTerrain, builder.features)
+}
 
 /**
  * DSL entrypoint for creating feature generation data.
- * @param featureTypeId the feature type ID
- * @param minDist minimum distance between features
- * @param minInRegion minimum number of features in a region
- * @param maxInRegion maximum number of features in a region
+ *
+ * Example usage:
+ * ```kotlin
+ * featureGenerationData {
+ *     featureTypeId = Ids.KINGDOM
+ *     minDist = 0
+ *     minInRegion = 1
+ *     maxInRegion = 1
+ * }
+ * ```
  */
-fun featureGenerationData(init: FeatureGenerationDataBuilder.() -> Unit): FeatureGenerationData =
-    FeatureGenerationDataDSLProvider.instance.featureGenerationData(init)
-
-interface FeatureGenerationDataBuilder {
-    var featureTypeId: String
-    var minDist: Int
-    var minInRegion: Int
-    var maxInRegion: Int
-}
-
-interface BiomeBuilder {
-    var id: String
-    var baseTerrain: String
-    fun feature(init: FeatureGenerationDataBuilder.() -> Unit)
+fun featureGenerationData(init: FeatureGenerationDataBuilder.() -> Unit): FeatureGenerationData {
+    val builder = FeatureGenerationDataBuilder()
+    builder.init()
+    return FeatureGenerationData(
+        builder.featureTypeId,
+        builder.minDist,
+        builder.minInRegion,
+        builder.maxInRegion
+    )
 }

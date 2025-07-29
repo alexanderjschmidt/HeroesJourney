@@ -14,7 +14,7 @@ import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.RenderBounds;
 import heroes.journey.utils.Utils;

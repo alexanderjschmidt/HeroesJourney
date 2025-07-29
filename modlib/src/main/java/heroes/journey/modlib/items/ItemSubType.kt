@@ -1,55 +1,46 @@
 package heroes.journey.modlib.items
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for an ItemSubType, used for item categorization.
- * Mods should only use this interface, not implementation classes.
+ * An ItemSubType, used for item categorization.
+ * This is a simple data container with no complex functions.
  */
-interface IItemSubType : IRegistrable {
-
-    /** The parent item type (e.g., Weapon, Armor, Misc, Consumable). */
+class ItemSubType(
+    id: String,
     val parentType: ItemType
-    override fun register(): IItemSubType
+) : Registrable(id) {
+
+    override fun register(): ItemSubType {
+        Registries.ItemSubTypeManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining an item subtype in a natural DSL style.
- *
- * Use type to specify the ItemType directly (not by ID).
  */
-interface ItemSubTypeBuilder {
-    var id: String
-    var type: ItemType?
+class ItemSubTypeBuilder {
+    var id: String = ""
+    var type: ItemType? = null
 }
 
 /**
- * Interface for the item subtype DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface ItemSubTypeDSL {
-    fun itemSubType(init: ItemSubTypeBuilder.() -> Unit): IItemSubType
-}
-
-/**
- * Singleton provider for the ItemSubTypeDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object ItemSubTypeDSLProvider {
-    lateinit var instance: ItemSubTypeDSL
-}
-
-/**
- * DSL entrypoint for defining a new item subtype using a builder lambda.
+ * DSL entrypoint for defining a new item subtype.
  *
  * Example usage:
  * ```kotlin
  * itemSubType {
  *     id = Ids.ITEMSUBTYPE_SWORD
- *     typeId = Ids.ITEMTYPE_WEAPON
+ *     type = ItemType.Weapon
  * }
  * ```
  */
-fun itemSubType(init: ItemSubTypeBuilder.() -> Unit): IItemSubType =
-    ItemSubTypeDSLProvider.instance.itemSubType(init)
+fun itemSubType(init: ItemSubTypeBuilder.() -> Unit): ItemSubType {
+    val builder = ItemSubTypeBuilder()
+    builder.init()
+    val coreType = builder.type ?: ItemType.Misc
+    return ItemSubType(builder.id, coreType)
+}
 

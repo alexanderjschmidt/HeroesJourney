@@ -15,7 +15,7 @@ import heroes.journey.modlib.registries.IRegistrable
 interface IItem : IRegistrable {
 
     /** The item subtype (category). */
-    val subType: IItemSubType
+    val subType: ItemSubType
 
     /** The weight of the item. */
     val weight: Int

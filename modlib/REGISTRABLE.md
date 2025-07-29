@@ -11,10 +11,10 @@ The registrable system now supports **two implementation patterns**:
 ### **Basic Registrables** (Simple Data Containers)
 For registrables that are purely data containers with no complex functions or game logic. These have a simplified 4-component pattern:
 
-1. **Interface** (modlib) - Public API for mods
-2. **DSL Interface** (modlib) - Builder pattern for mod definitions  
-3. **DSL Provider** (modlib) - Singleton to wire up the DSL
-4. **Registry Definition** (modlib) - Storage and lookup
+1. **Implementation** (modlib) - Concrete class directly in modlib
+2. **DSL Builder** (modlib) - Builder class for DSL
+3. **Registry Definition** (modlib) - Storage and lookup
+4. **Registry Initialization** (modlib) - Initialize in modlib startup
 
 ### **Advanced Registrables** (Complex Objects with Functions)
 For registrables that have complex game logic, functions, or need to hide implementation details. These use the full 8-component pattern:
@@ -111,29 +111,30 @@ fun [type](init: [Type]Builder.() -> Unit): [Type] {
 }
 ```
 
-### **3. Registry Definition (modlib)**
+### **3. Core Integration (core)**
+
+Update core files to reference the modlib registry:
+
+**In `core/src/main/java/heroes/journey/mods/Registries.java`:**
+```java
+public static Registry<[Type]> [Type]Manager = 
+    heroes.journey.modlib.registries.Registries.INSTANCE.get[Type]Manager();
+```
+
+**Note**: Kotlin automatically creates getters for `open val` properties, so `get[Type]Manager()` is available.
+
+### **4. Registry Definition (modlib)**
 
 Add to `modlib/src/main/java/heroes/journey/modlib/registries/Registries.kt`:
 
 ```kotlin
 object Registries {
     // ... existing registries ...
-    lateinit var [Type]Manager: Registry<[Type]>
+    open val [Type]Manager: Registry<[Type]> = Registry()
 }
 ```
 
-### **4. Registry Initialization (modlib)**
-
-Add to `modlib/src/main/java/heroes/journey/modlib/ModlibDSLSetup.kt`:
-
-```kotlin
-fun setupModlibRegistries() {
-    // ... existing registrations ...
-    
-    // Initialize registries
-    Registries.[Type]Manager = Registry<[Type]>()
-}
-```
+**Note**: Using `open val` with direct initialization eliminates the need for separate initialization.
 
 ---
 
@@ -399,8 +400,8 @@ To convert an existing registrable from Advanced to Basic pattern:
 3. **Remove core DSL implementation** - Delete the core DSL implementation
 4. **Remove core registry registration** - Remove from core Registries.java
 5. **Remove core DSL registration** - Remove from core ModlibDSLSetup.kt
-6. **Add registry initialization** - Add to modlib ModlibDSLSetup.kt
-7. **Update registry type** - Change from `Registry<I[Type]>` to `Registry<[Type]>`
+6. **Update registry definition** - Change from `lateinit var` to `open val` with direct initialization
+7. **Update core integration** - Point core registry to modlib registry via getter
 
 ### **Example: Converting Group to Basic**
 
@@ -412,9 +413,9 @@ To convert an existing registrable from Advanced to Basic pattern:
 // core/src/main/java/heroes/journey/mods/ModlibDSLSetup.kt (registration)
 
 // After (Basic pattern)
-// modlib/src/main/java/heroes/journey/modlib/attributes/Group.kt (concrete class)
-// modlib/src/main/java/heroes/journey/modlib/attributes/Group.kt (builder + DSL function)
-// modlib/src/main/java/heroes/journey/modlib/ModlibDSLSetup.kt (registry initialization)
+// modlib/src/main/java/heroes/journey/modlib/attributes/Group.kt (concrete class + builder + DSL)
+// modlib/src/main/java/heroes/journey/modlib/registries/Registries.kt (open val GroupManager)
+// core/src/main/java/heroes/journey/mods/Registries.java (points to modlib via getter)
 ```
 
 ---
@@ -424,8 +425,8 @@ To convert an existing registrable from Advanced to Basic pattern:
 ### **For Basic Registrables:**
 - [ ] **Implementation** defined in modlib with proper documentation
 - [ ] **DSL Builder** defined with builder pattern
-- [ ] **Registry** added to modlib Registries object
-- [ ] **Registry Initialization** added to modlib ModlibDSLSetup.kt
+- [ ] **Registry** added to modlib Registries object as `open val`
+- [ ] **Core Integration** updated to point to modlib registry
 - [ ] **Documentation** added to modlib README.md
 - [ ] **Tests** created to verify registration and lookup
 - [ ] **Example usage** in mod scripts
@@ -473,5 +474,28 @@ To convert an existing registrable from Advanced to Basic pattern:
 - **Challenge** - Complex with power tier calculations
 - **Approach** - Complex with requirement checking logic
 
-Each follows the appropriate pattern outlined above. 
+Each follows the appropriate pattern outlined above.
+
+---
+
+## 🔧 **Key Insights from Group Migration**
+
+### **Registry Pattern**
+- **Use `open val` with direct initialization**: `open val GroupManager: Registry<Group> = Registry()`
+- **Eliminates need for separate initialization**: No `setupModlibRegistries()` needed
+- **Automatic getter generation**: Kotlin creates `getGroupManager()` automatically
+
+### **Constructor Pattern**
+- **Avoid parameter shadowing**: Use `class Group(id: String)` not `class Group(override val id: String)`
+- **Pass parameter directly**: `Registrable(id)` not `Registrable(this.id)`
+
+### **Core Integration**
+- **Point core to modlib**: `heroes.journey.modlib.registries.Registries.INSTANCE.getGroupManager()`
+- **No DSL registration needed**: Basic registrables don't need provider pattern
+- **Simplified imports**: Direct function calls instead of provider pattern
+
+### **File Structure**
+- **Single file in modlib**: Implementation, builder, and DSL all in one file
+- **No core files needed**: Everything stays in modlib
+- **No registration needed**: Direct function calls work immediately 
 Each follows the same 8-component pattern outlined above. 

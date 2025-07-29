@@ -23,7 +23,11 @@ stat {
     group(Ids.GROUP_RESOURCES)
     group(Ids.GROUP_CHALLENGE)
     group(Ids.GROUP_MAX)
-    formula = { powerLevels[it.getDirect(Ids.STAT_CHALLENGE_POWER_TIER)!!] }
+    formula = {
+        it.getDirect(Ids.STAT_CHALLENGE_POWER_TIER)?.let { tier ->
+            powerLevels[tier]
+        }
+    }
 }.register()
 
 // --- RESOURCE REGEN STATS ---

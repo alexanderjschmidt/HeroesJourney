@@ -10,7 +10,7 @@ import com.badlogic.gdx.ai.pfa.Heuristic;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 
 import heroes.journey.tilemap.TileMap;
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.modlib.worldgen.Terrain;
 
 public class RoadPathing {
 

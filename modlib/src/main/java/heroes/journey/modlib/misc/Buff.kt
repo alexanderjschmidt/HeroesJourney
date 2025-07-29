@@ -1,50 +1,42 @@
 package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.attributes
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Buff, used for temporary stat modifications.
- * Mods should only use this interface, not implementation classes.
+ * A Buff, used for temporary stat modifications.
+ * This is a simple data container with no complex functions.
  */
-interface IBuff : IRegistrable {
-
-    /** The number of turns the buff lasts. */
-    val turnsBuffLasts: Int
-
-    /** The attributes this buff grants. */
+class Buff(
+    id: String,
+    val turnsBuffLasts: Int,
     val attributes: IAttributes
-    override fun register(): IBuff
+) : Registrable(id) {
+
+    override fun register(): Buff {
+        Registries.BuffManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining a buff in a natural DSL style.
  */
-interface BuffBuilder {
-    var id: String
-    var turnsBuffLasts: Int
-    fun attributes(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+class BuffBuilder {
+    var id: String = ""
+    var turnsBuffLasts: Int = 1
+    private var _attributes: IAttributes? = null
+
+    fun attributes(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit) {
+        _attributes = heroes.journey.modlib.attributes.attributes(init)
+    }
+
+    fun builtAttributes(): IAttributes = _attributes ?: heroes.journey.modlib.attributes.attributes {}
 }
 
 /**
- * Interface for the buff DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface BuffDSL {
-    fun buff(init: BuffBuilder.() -> Unit): IBuff
-}
-
-/**
- * Singleton provider for the BuffDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object BuffDSLProvider {
-    lateinit var instance: BuffDSL
-}
-
-/**
- * DSL entrypoint for defining a buff using a builder lambda.
+ * DSL entrypoint for defining a buff.
  *
  * Example usage:
  * ```kotlin
@@ -57,4 +49,8 @@ object BuffDSLProvider {
  * }
  * ```
  */
-fun buff(init: BuffBuilder.() -> Unit): IBuff = BuffDSLProvider.instance.buff(init)
+fun buff(init: BuffBuilder.() -> Unit): Buff {
+    val builder = BuffBuilder()
+    builder.init()
+    return Buff(builder.id, builder.turnsBuffLasts, builder.builtAttributes())
+}

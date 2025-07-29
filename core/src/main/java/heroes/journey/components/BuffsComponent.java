@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.Buff;
 import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.misc.Buff;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
 
@@ -38,7 +38,7 @@ public class BuffsComponent extends PooledClonableComponent<BuffsComponent> {
         List<Attributes> attributes = new ArrayList<>();
         for (String buffId : timeLeft.keySet()) {
             Buff buff = BuffManager.get(buffId);
-            attributes.add(buff.getAttributes());
+            attributes.add((Attributes)buff.getAttributes());
         }
         return attributes;
     }

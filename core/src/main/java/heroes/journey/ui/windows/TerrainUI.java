@@ -8,7 +8,7 @@ import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.modlib.Ids;
 import heroes.journey.mods.Registries;
-import heroes.journey.tilemap.wavefunctiontiles.Terrain;
+import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;

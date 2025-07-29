@@ -1,6 +1,7 @@
 package heroes.journey.utils.art
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import heroes.journey.modlib.art.TextureMap
 
 class StillRenderable(
     id: String,

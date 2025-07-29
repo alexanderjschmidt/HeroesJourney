@@ -1,7 +1,7 @@
 package heroes.journey.mods.items
 
 import heroes.journey.entities.items.Item
-import heroes.journey.entities.items.ItemSubType
+import heroes.journey.modlib.items.ItemSubType
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.attributes

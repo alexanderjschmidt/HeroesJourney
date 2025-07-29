@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.worldgen.utils.WaveFunctionCollapse;
