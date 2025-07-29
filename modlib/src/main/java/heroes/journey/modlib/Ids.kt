@@ -141,16 +141,23 @@ object Ids {
     const val STAT_MIND: String = "mind"
     const val STAT_MAGIC: String = "magic"
     const val STAT_CHARISMA: String = "charisma"
-    const val STAT_STAMINA: String = "stamina"
+    const val STAT_CHALLENGE_POWER_TIER = "power_tier"
     const val STAT_FOCUS: String = "focus"
     const val STAT_MANA: String = "mana"
     const val STAT_MOXIE: String = "moxie"
-    const val STAT_SPEED: String = "speed"
-    const val STAT_VISION: String = "vision"
+    const val STAT_CHALLENGE_HEALTH: String = "challenge_health"
     const val STAT_STAMINA_REGEN: String = "stamina_regen"
     const val STAT_FOCUS_REGEN: String = "focus_regen"
     const val STAT_MANA_REGEN: String = "mana_regen"
     const val STAT_MOXIE_REGEN: String = "moxie_regen"
+    const val STAT_CHALLENGE_HEALTH_REGEN: String = "challenge_health_regen"
+    const val STAT_STAMINA_MAX: String = "stamina_max"
+    const val STAT_FOCUS_MAX: String = "focus_max"
+    const val STAT_MANA_MAX: String = "mana_max"
+    const val STAT_MOXIE_MAX: String = "moxie_max"
+    const val STAT_CHALLENGE_HEALTH_MAX: String = "challenge_health_max"
+    const val STAT_SPEED: String = "speed"
+    const val STAT_VISION: String = "vision"
     const val STAT_CARRY_CAPACITY: String = "carry_capacity"
 
     // Race Stat IDs
@@ -185,6 +192,7 @@ object Ids {
     const val GROUP_REGEN: String = "regen_group"
     const val GROUP_RACE: String = "race_group"
     const val GROUP_DESCRIPTOR: String = "descriptor_group"
+    const val GROUP_CHALLENGE: String = "challenge_group"
 
     // Item SubType IDs
     /** Raw Material item subtype ID  */

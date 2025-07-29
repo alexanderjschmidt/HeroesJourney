@@ -60,28 +60,28 @@ stat {
 
 // --- RESOURCE MAXES ---
 stat {
-    id = "stamina_max"
+    id = Ids.STAT_STAMINA_MAX
     group(Ids.GROUP_RESOURCES)
     group(Ids.GROUP_BODY)
     group(Ids.GROUP_MAX)
     formula = { it.getDirect(Ids.STAT_BODY)!! * 25 + 75 }
 }.register()
 stat {
-    id = "focus_max"
+    id = Ids.STAT_FOCUS_MAX
     group(Ids.GROUP_RESOURCES)
     group(Ids.GROUP_MIND)
     group(Ids.GROUP_MAX)
     formula = { it.getDirect(Ids.STAT_MIND)!! * 25 + 75 }
 }.register()
 stat {
-    id = "mana_max"
+    id = Ids.STAT_MANA_MAX
     group(Ids.GROUP_RESOURCES)
     group(Ids.GROUP_MAGIC)
     group(Ids.GROUP_MAX)
     formula = { it.getDirect(Ids.STAT_MAGIC)!! * 25 + 75 }
 }.register()
 stat {
-    id = "moxie_max"
+    id = Ids.STAT_MOXIE_MAX
     group(Ids.GROUP_RESOURCES)
     group(Ids.GROUP_CHARISMA)
     group(Ids.GROUP_MAX)
@@ -131,76 +131,4 @@ stat {
     id = Ids.STAT_CARRY_CAPACITY
     max = 100
     formula = { it.getDirect(Ids.STAT_BODY)!! * 10 }
-}.register()
-
-// --- RACE STATS ---
-stat {
-    id = Ids.STAT_DEMON_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_DRAGON_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_HOLY_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_HUMANOID_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_MAGICAL_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_MONSTER_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_UNDEAD_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-stat {
-    id = Ids.STAT_VERMIN_RACE
-    min = 0
-    max = 100
-    group(Ids.GROUP_RACE)
-}.register()
-
-// --- Descriptors ---
-// BODY or MAGIC
-stat {
-    id = Ids.STAT_PHYSICAL
-    group(Ids.GROUP_DESCRIPTOR)
-}.register()
-// MAGIC
-stat {
-    id = Ids.STAT_INCORPOREAL
-    group(Ids.GROUP_DESCRIPTOR)
-}.register()
-// MIND (trick wont work)
-stat {
-    id = Ids.STAT_FERAL
-    group(Ids.GROUP_DESCRIPTOR)
-}.register()
-// CHARISMA
-stat {
-    id = Ids.STAT_SENTIENT
-    group(Ids.GROUP_DESCRIPTOR)
 }.register()

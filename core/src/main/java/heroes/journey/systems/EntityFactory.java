@@ -33,6 +33,7 @@ import heroes.journey.components.character.MapComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
+import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.tilemap.TileManager;
@@ -80,6 +81,8 @@ public class EntityFactory {
 
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(ChallengeComponent.class).challenge(challenge);
+
+        Attributes stats = StatsComponent.get(world, entityId);
         return entityId;
     }
 
