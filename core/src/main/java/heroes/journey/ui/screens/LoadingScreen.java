@@ -20,8 +20,8 @@ import heroes.journey.GameCamera;
 import heroes.journey.mods.GameMod;
 import heroes.journey.mods.ScriptModLoader;
 import heroes.journey.tilemap.TileManager;
-import heroes.journey.tilemap.TileBatch;
 import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.TilesetUtils;
 
 public class LoadingScreen implements Screen {
 
@@ -184,7 +184,7 @@ public class LoadingScreen implements Screen {
             if (ResourceManager.get().update() &&
                 assetProgress >= ResourceManager.get().getProgress() - .001f) {
                 ResourceManager.get().splits();
-                TileBatch.finalizeAllBatches();
+                TileManager.finalizeAllBatches();
                 TileManager.finalizeAllBaseTiles();
                 assetsLoaded = true;
             }

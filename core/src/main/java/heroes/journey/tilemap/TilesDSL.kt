@@ -1,6 +1,8 @@
 package heroes.journey.tilemap
 
 import heroes.journey.modlib.worldgen.Terrain
+import heroes.journey.modlib.worldgen.TileBatch
+import heroes.journey.modlib.worldgen.TileLayout
 
 class TerrainBuilder {
     var id: String = ""

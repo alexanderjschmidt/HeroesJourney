@@ -11,14 +11,18 @@ import heroes.journey.mods.Registries;
 import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
 import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
 import heroes.journey.modlib.worldgen.Terrain;
+import heroes.journey.modlib.worldgen.TileBatch;
 import heroes.journey.tilemap.wavefunctiontiles.Tile;
 import heroes.journey.utils.Direction;
 import heroes.journey.utils.art.ResourceManager;
+import heroes.journey.utils.TilesetUtils;
 
 public class TileManager extends ArrayList<Tile> {
 
     public static final Map<String,Tile> BASE_TILES = new HashMap<>();
     private static final List<BaseTileDef> baseTileDefs = new ArrayList<>();
+    private static final Map<String,List<Tile>> BATCH_TILES = new HashMap<>();
+    private static final Map<String,Tile> BATCH_DOTS = new HashMap<>();
     private static TileManager tileManager;
 
     public static TileManager get() {
@@ -64,7 +68,7 @@ public class TileManager extends ArrayList<Tile> {
             Tile tile;
             if (def.getFrameDist() > 0 && def.getFrameCount() > 0) {
                 tile = new AnimatedTile(terrainObj, def.getWeight(), def.getAddToBaseTiles(),
-                    TileLayout.getFrames(tiles, def.getX(), def.getY(), def.getFrameCount(),
+                    TilesetUtils.getFrames(tiles, def.getX(), def.getY(), def.getFrameCount(),
                         def.getFrameDist()), def.getFrameRate());
             } else {
                 tile = new BaseTile(terrainObj, def.getWeight(), def.getAddToBaseTiles(),
@@ -86,5 +90,37 @@ public class TileManager extends ArrayList<Tile> {
             .add(Direction.SOUTH, terrain)
             .add(Direction.SOUTHWEST, terrain)
             .add(Direction.WEST, terrain);
+    }
+
+    /**
+     * Get cached tiles for a tile batch.
+     */
+    public static List<Tile> getBatchTiles(String batchId) {
+        return BATCH_TILES.get(batchId);
+    }
+
+    /**
+     * Get cached dot tile for a tile batch.
+     */
+    public static Tile getBatchDot(String batchId) {
+        return BATCH_DOTS.get(batchId);
+    }
+
+    /**
+     * Finalize all tile batches by generating and caching their tiles.
+     * This is called during the loading process after textures are loaded.
+     */
+    public static void finalizeAllBatches() {
+        for (TileBatch batch : Registries.TileBatchManager.values()) {
+            // Generate tiles for each batch
+            List<Tile> tiles = TilesetUtils.generateTilesForBatch(batch);
+            // Cache the tiles
+            BATCH_TILES.put(batch.getId(), tiles);
+            // Cache the dot tile
+            Tile dot = TilesetUtils.getDot(tiles);
+            if (dot != null) {
+                BATCH_DOTS.put(batch.getId(), dot);
+            }
+        }
     }
 }

@@ -32,6 +32,8 @@ For registrables that have complex game logic, functions, or need to hide implem
 
 ## 🎯 **Classification Guide**
 
+**Note**: TileLayout and TileBatch were converted to Basic pattern after extracting their complex helper functions into `core/src/main/java/heroes/journey/utils/TilesetUtils.java`. This allows them to remain as simple data containers while preserving their functionality.
+
 ### **Basic Registrables** (Move implementation to modlib)
 These are simple data containers with no complex functions:
 
@@ -40,11 +42,11 @@ These are simple data containers with no complex functions:
 - **ItemSubType** - Simple data container (parent type)
 - **Terrain** - Simple data container (cost)
 - **Biome** - Simple data container (base terrain, features)
-- **FeatureType** - Simple data container (render ID)
-- **TileLayout** - Simple data container (path, terrain roles)
-- **TileBatch** - Simple data container (layout, texture, terrains)
-- **TextureMap** - Simple data container (location, dimensions)
-- **Renderable** - Simple data container (texture coordinates, animation data)
+- **FeatureType** - Complex with generateFeature() method requiring core context
+- **TileLayout** - Simple data container (path, terrain roles) ✅ **CONVERTED**
+- **TileBatch** - Simple data container (layout, texture, terrains) ✅ **CONVERTED**
+- **TextureMap** - Simple data container (location, dimensions) ✅ **CONVERTED**
+- **Renderable** - Complex with abstract methods and multiple implementations
 
 ### **Advanced Registrables** (Keep current 8-component pattern)
 These have complex game logic, functions, or need implementation hiding:

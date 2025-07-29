@@ -14,7 +14,9 @@ import heroes.journey.modlib.items.IItem
 import heroes.journey.modlib.items.ItemDSLProvider
 import heroes.journey.modlib.misc.*
 import heroes.journey.modlib.registries.Registry
-import heroes.journey.modlib.worldgen.*
+import heroes.journey.modlib.worldgen.BaseTileDSLProvider
+import heroes.journey.modlib.worldgen.FeatureTypeDSLProvider
+import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.attributes.AttributesDSLImpl
 import heroes.journey.mods.attributes.StatDSLImpl
@@ -25,8 +27,6 @@ import heroes.journey.mods.misc.ChallengeDSLImpl
 import heroes.journey.mods.misc.QuestDSLImpl
 import heroes.journey.mods.worldgen.BaseTileDSLImpl
 import heroes.journey.mods.worldgen.FeatureTypeDSLImpl
-import heroes.journey.mods.worldgen.TileBatchDSLImpl
-import heroes.journey.mods.worldgen.TileLayoutDSLImpl
 import heroes.journey.utils.Lang
 
 /**
@@ -51,10 +51,8 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.registries.Registries.FeatureTypeManager =
         Registries.FeatureTypeManager as Registry<IFeatureType>
 
-    heroes.journey.modlib.registries.Registries.TileLayoutManager =
-        Registries.TileLayoutManager as Registry<ITileLayout>
-    heroes.journey.modlib.registries.Registries.TileBatchManager =
-        Registries.TileBatchManager as Registry<ITileBatch>
+
+
     heroes.journey.modlib.registries.Registries.RenderableManager =
         Registries.RenderableManager as Registry<IRenderable>
 
@@ -62,12 +60,10 @@ fun setupModlibDSLs() {
     GameModProvider.instance = GameModDSLImpl()
 
     // Wire up modlib DSLs
-
     RenderableDSLProvider.instance = RenderableDSLImpl()
 
 
-    TileLayoutDSLProvider.instance = TileLayoutDSLImpl()
-    TileBatchDSLProvider.instance = TileBatchDSLImpl()
+
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
     StatDSLProvider.instance = StatDSLImpl()
 
@@ -78,7 +74,6 @@ fun setupModlibDSLs() {
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
     ApproachDSLProvider.instance = ApproachDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
-
 
     ActionDSLProvider.instance = ActionDSLImpl()
 }

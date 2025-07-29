@@ -1,43 +1,47 @@
 package heroes.journey.modlib.worldgen
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a TileLayout, used for tile arrangement and terrain roles.
- * Mods should only use this interface, not implementation classes.
+ * A TileLayout, used for tile arrangement and terrain roles.
+ * This is a simple data container with no complex functions.
  */
-interface ITileLayout : IRegistrable {
-
-    /** The path for the tile layout. */
-    val path: String
-
-    /** The terrain roles for this layout. */
+class TileLayout(
+    id: String,
+    val path: String,
     val terrainRoles: List<String>
-    override fun register(): ITileLayout
+) : Registrable(id) {
+
+    override fun register(): TileLayout {
+        Registries.TileLayoutManager.register(this)
+        return this
+    }
 }
 
 /**
- * Interface for the tile layout DSL implementation.
+ * Builder for defining a tile layout in a natural DSL style.
  */
-interface TileLayoutDSL {
-    fun tileLayout(init: TileLayoutBuilder.() -> Unit): ITileLayout
-}
-
-/**
- * Singleton provider for the TileLayoutDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object TileLayoutDSLProvider {
-    lateinit var instance: TileLayoutDSL
-}
-
-/**
- * DSL entrypoint for mods. Always delegates to the core implementation.
- */
-fun tileLayout(init: TileLayoutBuilder.() -> Unit): ITileLayout = TileLayoutDSLProvider.instance.tileLayout(init)
-
 class TileLayoutBuilder {
     var id: String = ""
     var path: String = ""
     var terrainRoles: List<String> = emptyList()
+}
+
+/**
+ * DSL entrypoint for creating a tile layout.
+ *
+ * Example usage:
+ * ```kotlin
+ * tileLayout {
+ *     id = "path_edge"
+ *     path = "Textures/path_edge.png"
+ *     terrainRoles = listOf("path", "grass")
+ * }
+ * ```
+ */
+fun tileLayout(init: TileLayoutBuilder.() -> Unit): TileLayout {
+    val builder = TileLayoutBuilder()
+    builder.init()
+    return TileLayout(builder.id, builder.path, builder.terrainRoles)
 }

@@ -1,6 +1,18 @@
-package heroes.journey.tilemap;
+package heroes.journey.utils;
 
-import static heroes.journey.mods.Registries.TileLayoutManager;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+import heroes.journey.modlib.worldgen.Terrain;
+import heroes.journey.modlib.worldgen.TileLayout;
+import heroes.journey.modlib.worldgen.TileBatch;
+import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
+import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
+import heroes.journey.tilemap.wavefunctiontiles.Tile;
+import heroes.journey.utils.Direction;
+import heroes.journey.utils.art.ResourceManager;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -11,61 +23,53 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+/**
+ * Utility class for tile generation and processing functions extracted from TileLayout and TileBatch.
+ * This allows those classes to remain as simple data containers.
+ */
+public class TilesetUtils {
 
-import heroes.journey.modlib.registries.Registrable;
-import heroes.journey.modlib.worldgen.ITileLayout;
-import heroes.journey.tilemap.wavefunctiontiles.AnimatedTile;
-import heroes.journey.tilemap.wavefunctiontiles.BaseTile;
-import heroes.journey.modlib.worldgen.Terrain;
-import heroes.journey.tilemap.wavefunctiontiles.Tile;
-import heroes.journey.utils.Direction;
-import heroes.journey.utils.art.ResourceManager;
-
-public class TileLayout extends Registrable implements ITileLayout {
-    private final String path;
-    private final List<String> terrainRoles;
+    private static final Direction[][] directionGrid = {
+        {Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST}, 
+        {Direction.WEST, null, Direction.EAST},
+        {Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST}
+    };
 
     /**
-     * The coloring of the layout should be 0,0,0 (black) for the first terrain passed in
-     * (which should also be the base/center tile), and then increasing in
-     * rgb (added together) values until 255,255,255 (white) the last terrain
-     * The center tile of a 3x3 area defines its weight multiplier.
-     *
-     * @param path
+     * Generate tiles from a tile layout.
      */
-    public TileLayout(String id, String path, List<String> terrainRoles) {
-        super(id);
-        this.path = path;
-        this.terrainRoles = terrainRoles;
+    public static List<Tile> generateTiles(
+        TileLayout layout,
+        TextureRegion[][] tiles,
+        int weight,
+        int x,
+        int y,
+        boolean addToDefault,
+        Terrain... terrains) {
+        return generateTiles(layout, tiles, weight, x, y, addToDefault, 0, 0, terrains);
     }
 
-    @Override
-    public TileLayout register() {
-        TileLayoutManager.register(this);
-        return this;
+    /**
+     * Generate animated tiles from a tile layout.
+     */
+    public static List<Tile> generateAnimatedTiles(
+        TileLayout layout,
+        TextureRegion[][] tiles,
+        int weight,
+        int x,
+        int y,
+        int frameCount,
+        int dist,
+        boolean addToDefault,
+        Terrain... terrains) {
+        return generateTiles(layout, tiles, weight, x, y, addToDefault, frameCount, dist, terrains);
     }
 
-    public static TileLayout get(String id) {
-        return TileLayoutManager.get(id);
-    }
-
-    @Override
-    public String getPath() {
-        return path;
-    }
-
-    @Override
-    public List<String> getTerrainRoles() {
-        return terrainRoles;
-    }
-
-    // --- All original private and utility methods below ---
-
-    private List<Tile> generateTiles(
+    /**
+     * Internal method for generating tiles with optional animation parameters.
+     */
+    private static List<Tile> generateTiles(
+        TileLayout layout,
         TextureRegion[][] tiles,
         int weight,
         int x,
@@ -74,7 +78,7 @@ public class TileLayout extends Registrable implements ITileLayout {
         int frameCount,
         int dist,
         Terrain... terrains) {
-        Texture texture = ResourceManager.get().getTexture(path);
+        Texture texture = ResourceManager.get().getTexture(layout.getPath());
         TextureData data = texture.getTextureData();
 
         // Make sure it's prepared
@@ -133,50 +137,9 @@ public class TileLayout extends Registrable implements ITileLayout {
     }
 
     /**
-     * @param tiles
-     * @param weight
-     * @param x
-     * @param y
-     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
-     * @param terrains
-     * @return a list of generated tiles
+     * Generate terrain map from pixmap data.
      */
-    public List<Tile> generateTiles(
-        TextureRegion[][] tiles,
-        int weight,
-        int x,
-        int y,
-        boolean addToDefault,
-        Terrain... terrains) {
-        return generateTiles(tiles, weight, x, y, addToDefault, 0, 0, terrains);
-    }
-
-    /**
-     * @param tiles
-     * @param weight
-     * @param x
-     * @param y
-     * @param addToDefault adds to the default list of tiles to pull from for Wave function collapse
-     * @param terrains
-     * @return a list of generated tiles
-     */
-    public List<Tile> generateAnimatedTiles(
-        TextureRegion[][] tiles,
-        int weight,
-        int x,
-        int y,
-        int frameCount,
-        int dist,
-        boolean addToDefault,
-        Terrain... terrains) {
-        return generateTiles(tiles, weight, x, y, addToDefault, frameCount, dist, terrains);
-    }
-
-    private static final Direction[][] directionGrid = {
-        {Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST}, {Direction.WEST, null, Direction.EAST},
-        {Direction.SOUTHWEST, Direction.SOUTH, Direction.SOUTHEAST}};
-
-    private Map<Direction,Terrain> terrainMapFrom(
+    private static Map<Direction,Terrain> terrainMapFrom(
         Pixmap pixmap,
         int offsetX,
         int offsetY,
@@ -202,9 +165,9 @@ public class TileLayout extends Registrable implements ITileLayout {
 
         // Step 2: Sort colors by brightness (or any comparator you prefer)
         List<Integer> sortedColors = new ArrayList<>(uniqueColors);
-        sortedColors.sort(Comparator.comparingDouble(this::colorBrightness));
+        sortedColors.sort(Comparator.comparingDouble(TilesetUtils::colorBrightness));
 
-        // Step 3: MapGenPlan colors to terrain indexes
+        // Step 3: Map colors to terrain indexes
         Map<Integer,Terrain> colorToTerrain = new HashMap<>();
         for (int i = 0; i < sortedColors.size(); i++) {
             int color = sortedColors.get(i);
@@ -229,18 +192,26 @@ public class TileLayout extends Registrable implements ITileLayout {
         return terrainMap;
     }
 
-    // Utility function to calculate brightness of an int-packed RGBA color
-    private double colorBrightness(int color) {
+    /**
+     * Calculate brightness of an int-packed RGBA color.
+     */
+    private static double colorBrightness(int color) {
         int r = (color >> 24) & 0xff;
         int g = (color >> 16) & 0xff;
         int b = (color >> 8) & 0xff;
         return (r + g + b) / (3.0 * 255.0);
     }
 
+    /**
+     * Get frames for animated tiles.
+     */
     public static TextureRegion[] getFrames(TextureRegion[][] tiles, int x, int y, int frameCount, int dist) {
         return getFrames(tiles, x, y, frameCount, dist, false);
     }
 
+    /**
+     * Get frames for animated tiles with optional vertical orientation.
+     */
     public static TextureRegion[] getFrames(
         TextureRegion[][] tiles,
         int x,
@@ -256,4 +227,64 @@ public class TileLayout extends Registrable implements ITileLayout {
         }
         return frames;
     }
-}
+
+    /**
+     * Generate tiles for a TileBatch.
+     */
+    public static List<Tile> generateTilesForBatch(TileBatch batch) {
+        // Look up layout, textureMap, terrains
+        TileLayout layoutObj = heroes.journey.mods.Registries.TileLayoutManager.get(batch.getLayout());
+        if (layoutObj == null)
+            throw new IllegalStateException("No TileLayout with id '" + batch.getLayout() + "'");
+        var textureMapObj = heroes.journey.mods.Registries.TextureManager.get(batch.getTextureMap());
+        if (textureMapObj == null)
+            throw new IllegalStateException("No TextureMap with id '" + batch.getTextureMap() + "'");
+        var tilesArr = ResourceManager.get(textureMapObj);
+        if (tilesArr == null)
+            throw new IllegalStateException("No TextureMap split with id '" + batch.getTextureMap() + "'");
+        var terrainRoles = layoutObj.getTerrainRoles();
+        Terrain[] terrainObjs = new Terrain[terrainRoles.size()];
+        for (int i = 0; i < terrainRoles.size(); i++) {
+            String role = terrainRoles.get(i);
+            String terrainId = batch.getTerrains().get(role);
+            if (terrainId == null)
+                throw new IllegalStateException("Missing terrain for role '" + role + "'");
+            Terrain t = heroes.journey.mods.Registries.TerrainManager.get(terrainId);
+            if (t == null)
+                throw new IllegalStateException("No Terrain with id '" + terrainId + "'");
+            terrainObjs[i] = t;
+        }
+        if (batch.getAnimated()) {
+            return generateAnimatedTiles(layoutObj, tilesArr, batch.getWeight(), batch.getStartX(), batch.getStartY(), 
+                batch.getFrameCount(), batch.getFrameDist(), batch.getAddToDefault(), terrainObjs);
+        } else {
+            return generateTiles(layoutObj, tilesArr, batch.getWeight(), batch.getStartX(), batch.getStartY(), 
+                batch.getAddToDefault(), terrainObjs);
+        }
+    }
+
+    /**
+     * Get a dot tile from a list of tiles.
+     */
+    public static Tile getDot(List<Tile> tiles) {
+        for (Tile tile : tiles) {
+            if (isDot(tile)) {
+                return tile;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check if a tile is a dot (has no matching neighbors).
+     */
+    private static boolean isDot(Tile tile) {
+        for (Direction dir : Direction.getDirections()) {
+            if (tile.getNeighbor(dir) == tile.getTerrain()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+} 

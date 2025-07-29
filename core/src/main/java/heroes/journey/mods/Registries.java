@@ -12,8 +12,8 @@ import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.registries.Registry;
 import heroes.journey.modlib.worldgen.Biome;
 import heroes.journey.tilemap.FeatureType;
-import heroes.journey.tilemap.TileBatch;
-import heroes.journey.tilemap.TileLayout;
+import heroes.journey.modlib.worldgen.TileBatch;
+import heroes.journey.modlib.worldgen.TileLayout;
 import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.utils.art.Renderable;
 import heroes.journey.modlib.art.TextureMap;
@@ -34,8 +34,8 @@ public class Registries {
     public static Registry<FeatureType> FeatureTypeManager = new Registry<>();
 
     public static Registry<Terrain> TerrainManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTerrainManager();
-    public static Registry<TileLayout> TileLayoutManager = new Registry<>();
-    public static Registry<TileBatch> TileBatchManager = new Registry<>();
+    public static Registry<TileLayout> TileLayoutManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTileLayoutManager();
+    public static Registry<TileBatch> TileBatchManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTileBatchManager();
 
     public static Registry<Stat> StatManager = new Registry<>();
     public static Registry<Group> GroupManager = heroes.journey.modlib.registries.Registries.INSTANCE.getGroupManager();

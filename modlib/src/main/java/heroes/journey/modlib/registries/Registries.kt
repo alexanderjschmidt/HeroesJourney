@@ -25,8 +25,8 @@ object Registries {
     open val BiomeManager: Registry<Biome> = Registry()
     lateinit var FeatureTypeManager: Registry<IFeatureType>
     open val TerrainManager: Registry<Terrain> = Registry()
-    lateinit var TileLayoutManager: Registry<ITileLayout>
-    lateinit var TileBatchManager: Registry<ITileBatch>
+    open val TileLayoutManager: Registry<TileLayout> = Registry()
+    open val TileBatchManager: Registry<TileBatch> = Registry()
     open val GroupManager: Registry<Group> = Registry()
     lateinit var RenderableManager: Registry<IRenderable>
     open val TextureManager: Registry<TextureMap> = Registry()
