@@ -2,7 +2,11 @@ import heroes.journey.modlib.gameMod
 
 gameMod("Base Game", 0) {
     includeScript("groups.kts")
-    includeScript("stats.kts")
+    includeScripts(
+        "Stats",
+        "stats.kts",
+        "challenge_stats.kts",
+    )
 
     includeScriptsFromDirectory("Actions", "actions")
 
