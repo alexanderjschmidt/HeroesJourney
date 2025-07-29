@@ -6,7 +6,18 @@ This document outlines the complete pattern for implementing a new registrable t
 
 ## 📋 **Overview**
 
-Every registrable type requires **8 core components** to work properly:
+The registrable system now supports **two implementation patterns**:
+
+### **Basic Registrables** (Simple Data Containers)
+For registrables that are purely data containers with no complex functions or game logic. These have a simplified 4-component pattern:
+
+1. **Interface** (modlib) - Public API for mods
+2. **DSL Interface** (modlib) - Builder pattern for mod definitions  
+3. **DSL Provider** (modlib) - Singleton to wire up the DSL
+4. **Registry Definition** (modlib) - Storage and lookup
+
+### **Advanced Registrables** (Complex Objects with Functions)
+For registrables that have complex game logic, functions, or need to hide implementation details. These use the full 8-component pattern:
 
 1. **Interface** (modlib) - Public API for mods
 2. **DSL Interface** (modlib) - Builder pattern for mod definitions  
@@ -19,7 +30,114 @@ Every registrable type requires **8 core components** to work properly:
 
 ---
 
-## 🧩 **Component Breakdown**
+## 🎯 **Classification Guide**
+
+### **Basic Registrables** (Move implementation to modlib)
+These are simple data containers with no complex functions:
+
+- **Group** - Just an ID, no functions
+- **Buff** - Simple data container (turns, attributes)
+- **ItemSubType** - Simple data container (parent type)
+- **Terrain** - Simple data container (cost)
+- **Biome** - Simple data container (base terrain, features)
+- **FeatureType** - Simple data container (render ID)
+- **TileLayout** - Simple data container (path, terrain roles)
+- **TileBatch** - Simple data container (layout, texture, terrains)
+- **TextureMap** - Simple data container (location, dimensions)
+- **Renderable** - Simple data container (texture coordinates, animation data)
+
+### **Advanced Registrables** (Keep current 8-component pattern)
+These have complex game logic, functions, or need implementation hiding:
+
+- **Action** - Complex with multiple functions, cooldowns, cost deduction
+- **Stat** - Complex with formula calculations, min/max logic
+- **Quest** - Complex with completion logic, cost/reward processing
+- **Challenge** - Complex with power tier calculations
+- **Approach** - Complex with requirement checking logic
+- **Item** - Complex with subtype references and attribute processing
+
+---
+
+## 🧩 **Basic Registrable Pattern (4 Components)**
+
+### **1. Implementation (modlib)**
+
+Define the concrete class directly in modlib. Place in `modlib/src/main/java/heroes/journey/modlib/[category]/[Type].kt`:
+
+```kotlin
+package heroes.journey.modlib.[category]
+
+import heroes.journey.modlib.registries.Registrable
+
+/**
+ * A [Type], used for [description].
+ * This is a simple data container with no complex functions.
+ */
+class [Type](
+    override val id: String,
+    val property1: String,
+    val property2: Int
+) : Registrable(id) {
+    
+    override fun register(): [Type] {
+        Registries.[Type]Manager.register(this)
+        return this
+    }
+}
+```
+
+### **2. DSL Builder (modlib)**
+
+Define the builder class for the DSL. Same file:
+
+```kotlin
+/**
+ * Builder for defining a [type] in a natural DSL style.
+ */
+class [Type]Builder {
+    var id: String = ""
+    var property1: String = ""
+    var property2: Int = 0
+    // Add other properties as needed
+}
+
+/**
+ * DSL entrypoint for defining a [type].
+ */
+fun [type](init: [Type]Builder.() -> Unit): [Type] {
+    val builder = [Type]Builder()
+    builder.init()
+    return [Type](builder.id, builder.property1, builder.property2)
+}
+```
+
+### **3. Registry Definition (modlib)**
+
+Add to `modlib/src/main/java/heroes/journey/modlib/registries/Registries.kt`:
+
+```kotlin
+object Registries {
+    // ... existing registries ...
+    lateinit var [Type]Manager: Registry<[Type]>
+}
+```
+
+### **4. Registry Initialization (modlib)**
+
+Add to `modlib/src/main/java/heroes/journey/modlib/ModlibDSLSetup.kt`:
+
+```kotlin
+fun setupModlibRegistries() {
+    // ... existing registrations ...
+    
+    // Initialize registries
+    Registries.[Type]Manager = Registry<[Type]>()
+}
+```
+
+---
+
+## 🧩 **Advanced Registrable Pattern (8 Components)**
 
 ### **1. Interface (modlib)**
 
@@ -38,6 +156,9 @@ interface I[Type] : IRegistrable {
     // Define properties that mods need to access
     val property1: String
     val property2: Int
+    
+    // Define functions that mods need to call
+    fun complexFunction(input: Any): Result
     
     // Override register() to return the interface type
     override fun register(): I[Type]
@@ -109,6 +230,11 @@ class [Type](
     override val property2: Int
 ) : Registrable(id), I[Type] {
     
+    override fun complexFunction(input: Any): Result {
+        // Complex implementation logic here
+        return Result()
+    }
+    
     override fun register(): I[Type] {
         Registries.[Type]Manager.register(this)
         return this
@@ -173,56 +299,52 @@ fun setupModlibDSLs() {
 
 ---
 
-## 📝 **Complete Example: Weapon Type**
+## 📝 **Complete Example: Basic Weapon Type**
 
-Here's a complete example implementing a `Weapon` registrable:
+Here's a complete example implementing a `Weapon` registrable using the Basic pattern:
 
-### **1. Interface (modlib/src/main/java/heroes/journey/modlib/items/Weapon.kt)**
+### **1. Implementation (modlib/src/main/java/heroes/journey/modlib/items/Weapon.kt)**
 
 ```kotlin
 package heroes.journey.modlib.items
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
 
 /**
- * Public interface for a Weapon, used for combat equipment.
- * Mods should only use this interface, not implementation classes.
+ * A Weapon, used for combat equipment.
+ * This is a simple data container with no complex functions.
  */
-interface IWeapon : IRegistrable {
-    val damage: Int
-    val durability: Int
+class Weapon(
+    override val id: String,
+    val damage: Int,
+    val durability: Int,
     val weaponType: WeaponType
-    override fun register(): IWeapon
+) : Registrable(id) {
+    
+    override fun register(): Weapon {
+        Registries.WeaponManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining a weapon in a natural DSL style.
  */
-interface WeaponBuilder {
-    var id: String
-    var damage: Int
-    var durability: Int
-    var weaponType: WeaponType
-}
-
-/**
- * Interface for the weapon DSL implementation.
- */
-interface WeaponDSL {
-    fun weapon(init: WeaponBuilder.() -> Unit): IWeapon
-}
-
-/**
- * Singleton provider for the WeaponDSL implementation.
- */
-object WeaponDSLProvider {
-    lateinit var instance: WeaponDSL
+class WeaponBuilder {
+    var id: String = ""
+    var damage: Int = 1
+    var durability: Int = 100
+    var weaponType: WeaponType = WeaponType.SWORD
 }
 
 /**
  * DSL entrypoint for defining a weapon.
  */
-fun weapon(init: WeaponBuilder.() -> Unit): IWeapon = WeaponDSLProvider.instance.weapon(init)
+fun weapon(init: WeaponBuilder.() -> Unit): Weapon {
+    val builder = WeaponBuilder()
+    builder.init()
+    return Weapon(builder.id, builder.damage, builder.durability, builder.weaponType)
+}
 
 enum class WeaponType {
     SWORD, AXE, BOW, STAFF
@@ -234,86 +356,22 @@ enum class WeaponType {
 ```kotlin
 object Registries {
     // ... existing registries ...
-    lateinit var WeaponManager: Registry<IWeapon>
+    lateinit var WeaponManager: Registry<Weapon>
 }
 ```
 
-### **3. Core Implementation (core/src/main/java/heroes/journey/entities/items/Weapon.kt)**
+### **3. Registry Initialization (modlib/src/main/java/heroes/journey/modlib/ModlibDSLSetup.kt)**
 
 ```kotlin
-package heroes.journey.entities.items
-
-import heroes.journey.modlib.items.IWeapon
-import heroes.journey.modlib.items.WeaponType
-import heroes.journey.modlib.registries.Registrable
-import heroes.journey.mods.Registries
-
-class Weapon(
-    override val id: String,
-    override val damage: Int,
-    override val durability: Int,
-    override val weaponType: WeaponType
-) : Registrable(id), IWeapon {
-    
-    override fun register(): IWeapon {
-        Registries.WeaponManager.register(this)
-        return this
-    }
-}
-```
-
-### **4. DSL Implementation (core/src/main/java/heroes/journey/mods/items/WeaponDSLImpl.kt)**
-
-```kotlin
-package heroes.journey.mods.items
-
-import heroes.journey.entities.items.Weapon
-import heroes.journey.modlib.items.IWeapon
-import heroes.journey.modlib.items.WeaponBuilder
-import heroes.journey.modlib.items.WeaponDSL
-import heroes.journey.modlib.items.WeaponType
-
-class WeaponBuilderImpl : WeaponBuilder {
-    override var id: String = ""
-    override var damage: Int = 1
-    override var durability: Int = 100
-    override var weaponType: WeaponType = WeaponType.SWORD
-}
-
-class WeaponDSLImpl : WeaponDSL {
-    override fun weapon(init: WeaponBuilder.() -> Unit): IWeapon {
-        val builder = WeaponBuilderImpl()
-        builder.init()
-        return Weapon(builder.id, builder.damage, builder.durability, builder.weaponType)
-    }
-}
-```
-
-### **5. Registry Registration (core/src/main/java/heroes/journey/mods/Registries.java)**
-
-```java
-public class Registries {
-    // ... existing registries ...
-    public static Registry<Weapon> WeaponManager = new Registry<>();
-}
-```
-
-### **6. DSL Registration (core/src/main/java/heroes/journey/mods/ModlibDSLSetup.kt)**
-
-```kotlin
-fun setupModlibDSLs() {
+fun setupModlibRegistries() {
     // ... existing registrations ...
     
-    // Wire up modlib registries to core implementations
-    heroes.journey.modlib.registries.Registries.WeaponManager = 
-        Registries.WeaponManager as Registry<IWeapon>
-    
-    // Wire up modlib DSLs
-    WeaponDSLProvider.instance = WeaponDSLImpl()
+    // Initialize registries
+    Registries.WeaponManager = Registry<Weapon>()
 }
 ```
 
-### **7. Usage in Mod Script**
+### **4. Usage in Mod Script**
 
 ```kotlin
 import heroes.journey.modlib.items.weapon
@@ -330,77 +388,49 @@ weapon {
 
 ---
 
-## 🔧 **Advanced Patterns**
+## 🔧 **Migration Guide**
 
-### **Complex Properties**
+### **Converting Basic Registrables**
 
-For properties that reference other registrables, use IDs in the DSL:
+To convert an existing registrable from Advanced to Basic pattern:
 
-```kotlin
-interface ItemBuilder {
-    var id: String
-    var subTypeId: String?  // Use ID, not direct reference
-    var weight: Int
-}
+1. **Move implementation to modlib** - Create `[Type].kt` in modlib (no interface, just concrete class)
+2. **Remove core implementation** - Delete the core implementation class
+3. **Remove core DSL implementation** - Delete the core DSL implementation
+4. **Remove core registry registration** - Remove from core Registries.java
+5. **Remove core DSL registration** - Remove from core ModlibDSLSetup.kt
+6. **Add registry initialization** - Add to modlib ModlibDSLSetup.kt
+7. **Update registry type** - Change from `Registry<I[Type]>` to `Registry<[Type]>`
 
-class ItemDSLImpl : ItemDSL {
-    override fun item(init: ItemBuilder.() -> Unit): IItem {
-        val builder = ItemBuilderImpl()
-        builder.init()
-        val coreSubType = builder.subTypeId?.let { 
-            Registries.ItemSubTypeManager[it] as ItemSubType 
-        }
-        return Item(builder.id, coreSubType!!, builder.weight)
-    }
-}
-```
-
-### **Nested DSLs**
-
-For complex objects with their own DSLs:
+### **Example: Converting Group to Basic**
 
 ```kotlin
-interface QuestBuilder {
-    var id: String
-    fun cost(init: AttributesBuilder.() -> Unit)
-    fun rewards(init: AttributesBuilder.() -> Unit)
-}
+// Before (Advanced pattern)
+// core/src/main/java/heroes/journey/entities/tagging/Group.java
+// core/src/main/java/heroes/journey/mods/attributes/GroupDSLImpl.kt
+// core/src/main/java/heroes/journey/mods/Registries.java (registration)
+// core/src/main/java/heroes/journey/mods/ModlibDSLSetup.kt (registration)
 
-class QuestBuilderImpl : QuestBuilder {
-    private var _cost: IAttributes? = null
-    private var _rewards: IAttributes? = null
-    
-    override fun cost(init: AttributesBuilder.() -> Unit) {
-        _cost = attributes(init)
-    }
-    
-    override fun rewards(init: AttributesBuilder.() -> Unit) {
-        _rewards = attributes(init)
-    }
-}
-```
-
-### **Enums and Constants**
-
-Move enums to modlib for mod access:
-
-```kotlin
-// In modlib
-enum class ItemType {
-    WEAPON, ARMOR, MISC, CONSUMABLE
-}
-
-// In DSL
-interface ItemSubTypeBuilder {
-    var id: String
-    var type: ItemType?  // Use enum directly
-}
+// After (Basic pattern)
+// modlib/src/main/java/heroes/journey/modlib/attributes/Group.kt (concrete class)
+// modlib/src/main/java/heroes/journey/modlib/attributes/Group.kt (builder + DSL function)
+// modlib/src/main/java/heroes/journey/modlib/ModlibDSLSetup.kt (registry initialization)
 ```
 
 ---
 
 ## ✅ **Checklist for New Registrable**
 
+### **For Basic Registrables:**
+- [ ] **Implementation** defined in modlib with proper documentation
+- [ ] **DSL Builder** defined with builder pattern
+- [ ] **Registry** added to modlib Registries object
+- [ ] **Registry Initialization** added to modlib ModlibDSLSetup.kt
+- [ ] **Documentation** added to modlib README.md
+- [ ] **Tests** created to verify registration and lookup
+- [ ] **Example usage** in mod scripts
+
+### **For Advanced Registrables:**
 - [ ] **Interface** defined in modlib with proper documentation
 - [ ] **DSL Interface** defined with builder pattern
 - [ ] **DSL Provider** singleton created
@@ -408,7 +438,7 @@ interface ItemSubTypeBuilder {
 - [ ] **Core Implementation** class created extending Registrable
 - [ ] **DSL Implementation** created in core/mods package
 - [ ] **Registry** added to core Registries.java
-- [ ] **DSL Registration** added to ModlibDSLSetup.kt
+- [ ] **DSL Registration** added to core ModlibDSLSetup.kt
 - [ ] **Documentation** added to modlib README.md
 - [ ] **Tests** created to verify registration and lookup
 - [ ] **Example usage** in mod scripts
@@ -417,21 +447,31 @@ interface ItemSubTypeBuilder {
 
 ## 🚨 **Common Pitfalls**
 
-1. **Forgetting DSL Registration** - Always add to `setupModlibDSLs()`
+1. **Forgetting DSL Registration** - Always add to appropriate ModlibDSLSetup.kt
 2. **Wrong Package Structure** - Follow the existing pattern exactly
 3. **Missing Interface Properties** - Ensure all needed properties are exposed
 4. **Direct Core References** - Use IDs and interfaces, never direct core classes
 5. **Inconsistent Naming** - Follow the `I[Type]`, `[Type]Builder`, `[Type]DSL` pattern
 6. **Missing Documentation** - Always add KDoc comments for modders
+7. **Wrong Pattern Choice** - Use Basic for data containers, Advanced for complex objects
 
 ---
 
 ## 📚 **Reference Examples**
 
-See these existing implementations for reference:
-- **Simple**: `Group.kt` - Basic registrable with just an ID
-- **Complex**: `Item.kt` - References other registrables and has nested DSLs
-- **Action**: `Action.kt` - Complex with multiple builder types and lambdas
-- **Worldgen**: `Biome.kt` - References other registrables and has complex data
+### **Basic Registrables:**
+- **Group** - Simple ID-only registrable
+- **Buff** - Simple data container with attributes
+- **Terrain** - Simple data container with cost
+- **Biome** - Simple data container with features
+- **TextureMap** - Simple data container with dimensions
 
+### **Advanced Registrables:**
+- **Action** - Complex with multiple functions and game logic
+- **Stat** - Complex with formula calculations and min/max logic
+- **Quest** - Complex with completion logic and cost/reward processing
+- **Challenge** - Complex with power tier calculations
+- **Approach** - Complex with requirement checking logic
+
+Each follows the appropriate pattern outlined above. 
 Each follows the same 8-component pattern outlined above. 

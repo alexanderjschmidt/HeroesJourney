@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.attributes.IAttributes;
-import heroes.journey.modlib.attributes.IGroup;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Operation;
 
@@ -41,7 +41,7 @@ public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
             IStat stat = StatManager.get(statId);
             if (stat == null)
                 continue;
-            List<IGroup> globalMultGroups = new ArrayList<>(stat.getGroups());
+            List<Group> globalMultGroups = new ArrayList<>(stat.getGroups());
             globalMultGroups.add(GroupManager.get(Ids.GROUP_GLOBAL_MULT));
             IStat globalMultStat = Stat.getByGroups(globalMultGroups);
             Integer mult = this.getDirect(globalMultStat);

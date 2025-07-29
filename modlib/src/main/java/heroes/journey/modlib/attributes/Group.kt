@@ -1,36 +1,25 @@
 package heroes.journey.modlib.attributes
 
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Group, used for stat grouping and categorization.
- * Mods should only use this interface, not implementation classes.
+ * A Group, used for stat grouping and categorization.
+ * This is a simple data container with no complex functions.
  */
-interface IGroup : IRegistrable {
-    override fun register(): IGroup
+class Group(id: String) : Registrable(id) {
+
+    override fun register(): Group {
+        Registries.GroupManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining a group in a natural DSL style.
  */
-interface GroupBuilder {
-    var id: String
-}
-
-/**
- * Interface for the group DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface GroupDSL {
-    fun group(init: GroupBuilder.() -> Unit): IGroup
-}
-
-/**
- * Singleton provider for the GroupDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object GroupDSLProvider {
-    lateinit var instance: GroupDSL
+class GroupBuilder {
+    var id: String = ""
 }
 
 /**
@@ -43,4 +32,8 @@ object GroupDSLProvider {
  * }
  * ```
  */
-fun group(init: GroupBuilder.() -> Unit): IGroup = GroupDSLProvider.instance.group(init)
+fun group(init: GroupBuilder.() -> Unit): Group {
+    val builder = GroupBuilder()
+    builder.init()
+    return Group(builder.id)
+}

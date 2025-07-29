@@ -5,7 +5,7 @@ import heroes.journey.modlib.Lang
 abstract class Registrable(override val id: String) : IRegistrable {
 
     init {
-        require(id.isNotBlank()) { "Renderable id must not be blank or empty" }
+        require(id.isNotBlank()) { "Registrable id must not be blank or empty" }
     }
 
     override fun getName(): String {

@@ -1,11 +1,7 @@
 package heroes.journey.mods.attributes
 
-import heroes.journey.entities.tagging.Group
 import heroes.journey.entities.tagging.Stat
-import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.attributes.StatBuilder
-import heroes.journey.modlib.attributes.StatDSL
+import heroes.journey.modlib.attributes.*
 import heroes.journey.mods.Registries
 
 class StatBuilderImpl : StatBuilder {
@@ -21,7 +17,13 @@ class StatBuilderImpl : StatBuilder {
 
     fun build(): Stat {
         val coreGroups = groupIds.map { Registries.GroupManager[it] as Group }
-        val coreFormula: (IAttributes) -> Int? = formula ?: { attrs -> try { attrs.getDirect(id) } catch (_: Exception) { null } }
+        val coreFormula: (IAttributes) -> Int? = formula ?: { attrs ->
+            try {
+                attrs.getDirect(id)
+            } catch (_: Exception) {
+                null
+            }
+        }
         return Stat(id, min, max, coreFormula, coreGroups, defaultValue)
     }
 }

@@ -14,7 +14,7 @@ import heroes.journey.modlib.registries.IRegistrable
 interface IStat : IRegistrable {
     val min: Int
     val max: Int
-    val groups: List<IGroup>
+    val groups: List<Group>
     val formula: (IAttributes) -> Int?
     val defaultValue: Int?
     fun getMin(attributes: IAttributes): Int

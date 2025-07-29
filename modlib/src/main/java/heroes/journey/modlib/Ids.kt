@@ -142,6 +142,7 @@ object Ids {
     const val STAT_MAGIC: String = "magic"
     const val STAT_CHARISMA: String = "charisma"
     const val STAT_CHALLENGE_POWER_TIER = "power_tier"
+    const val STAT_STAMINA: String = "stamina"
     const val STAT_FOCUS: String = "focus"
     const val STAT_MANA: String = "mana"
     const val STAT_MOXIE: String = "moxie"

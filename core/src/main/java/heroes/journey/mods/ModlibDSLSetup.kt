@@ -9,7 +9,9 @@ import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.ITextureMap
 import heroes.journey.modlib.art.RenderableDSLProvider
 import heroes.journey.modlib.art.TextureMapDSLProvider
-import heroes.journey.modlib.attributes.*
+import heroes.journey.modlib.attributes.AttributesDSLProvider
+import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.attributes.StatDSLProvider
 import heroes.journey.modlib.items.IItem
 import heroes.journey.modlib.items.IItemSubType
 import heroes.journey.modlib.items.ItemDSLProvider
@@ -20,15 +22,10 @@ import heroes.journey.modlib.worldgen.*
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.art.TextureMapDSLImpl
 import heroes.journey.mods.attributes.AttributesDSLImpl
-import heroes.journey.mods.attributes.GroupDSLImpl
 import heroes.journey.mods.attributes.StatDSLImpl
 import heroes.journey.mods.items.ItemDSLImpl
 import heroes.journey.mods.items.ItemSubTypeDSLImpl
-import heroes.journey.mods.misc.ActionDSLImpl
-import heroes.journey.mods.misc.ApproachDSLImpl
-import heroes.journey.mods.misc.BuffDSLImpl
-import heroes.journey.mods.misc.ChallengeDSLImpl
-import heroes.journey.mods.misc.QuestDSLImpl
+import heroes.journey.mods.misc.*
 import heroes.journey.mods.worldgen.*
 import heroes.journey.utils.Lang
 
@@ -60,7 +57,6 @@ fun setupModlibDSLs() {
         Registries.TileLayoutManager as Registry<ITileLayout>
     heroes.journey.modlib.registries.Registries.TileBatchManager =
         Registries.TileBatchManager as Registry<ITileBatch>
-    heroes.journey.modlib.registries.Registries.GroupManager = Registries.GroupManager as Registry<IGroup>
     heroes.journey.modlib.registries.Registries.RenderableManager =
         Registries.RenderableManager as Registry<IRenderable>
     heroes.journey.modlib.registries.Registries.TextureManager =
@@ -69,7 +65,7 @@ fun setupModlibDSLs() {
     GameModProvider.instance = GameModDSLImpl()
 
     // Wire up modlib DSLs
-    GroupDSLProvider.instance = GroupDSLImpl()
+
     RenderableDSLProvider.instance = RenderableDSLImpl()
     TextureMapDSLProvider.instance = TextureMapDSLImpl()
     TerrainDSLProvider.instance = TerrainDSLImpl()

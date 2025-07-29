@@ -1,35 +1,36 @@
 package heroes.journey.entities.tagging;
 
-import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.IAttributes;
-import heroes.journey.modlib.attributes.IGroup;
-import heroes.journey.modlib.attributes.IStat;
-import heroes.journey.modlib.registries.Registrable;
-import kotlin.jvm.functions.Function1;
-import org.jetbrains.annotations.NotNull;
+import static heroes.journey.mods.Registries.GroupManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static heroes.journey.mods.Registries.GroupManager;
-import static heroes.journey.mods.Registries.StatManager;
+import org.jetbrains.annotations.NotNull;
+
+import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Group;
+import heroes.journey.modlib.attributes.IAttributes;
+import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.registries.Registrable;
+import kotlin.jvm.functions.Function1;
 
 public class Stat extends Registrable implements IStat {
 
     public static final List<Stat> BASE_STATS = new ArrayList<>(4);
     private final Integer minValue, maxValue;
-    private final List<IGroup> groups;
-    private final Function1<IAttributes, Integer> calc;
+    private final List<Group> groups;
+    private final Function1<IAttributes,Integer> calc;
     private final Integer defaultValue;
 
     public Stat(
         @NotNull String id,
         Integer minValue,
         Integer maxValue,
-        Function1<IAttributes, Integer> calc,
-        List<IGroup> groups,
+        Function1<IAttributes,Integer> calc,
+        List<Group> groups,
         Integer defaultValue) {
         super(id);
         this.minValue = minValue;
@@ -47,8 +48,8 @@ public class Stat extends Registrable implements IStat {
     public int getMin(IAttributes attributes) {
         // Try to find a stat with the same groups + GROUP_MIN
         if (attributes != null) {
-            List<IGroup> minGroups = new java.util.ArrayList<>(groups);
-            IGroup groupMin = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MIN);
+            List<Group> minGroups = new java.util.ArrayList<>(groups);
+            Group groupMin = GroupManager.get(Ids.GROUP_MIN);
             if (groupMin != null && !minGroups.contains(groupMin))
                 minGroups.add(groupMin);
             Stat minStat = Stat.getByGroups(minGroups);
@@ -65,8 +66,8 @@ public class Stat extends Registrable implements IStat {
     public int getMax(IAttributes attributes) {
         // Try to find a stat with the same groups + GROUP_MAX
         if (attributes != null) {
-            List<IGroup> maxGroups = new java.util.ArrayList<>(groups);
-            IGroup groupMax = heroes.journey.mods.Registries.GroupManager.get(Ids.GROUP_MAX);
+            List<Group> maxGroups = new java.util.ArrayList<>(groups);
+            Group groupMax = GroupManager.get(Ids.GROUP_MAX);
             if (groupMax != null && !maxGroups.contains(groupMax))
                 maxGroups.add(groupMax);
             Stat maxStat = Stat.getByGroups(maxGroups);
@@ -90,12 +91,12 @@ public class Stat extends Registrable implements IStat {
     }
 
     @Override
-    public List<IGroup> getGroups() {
+    public List<Group> getGroups() {
         return groups;
     }
 
     @Override
-    public Function1<IAttributes, Integer> getFormula() {
+    public Function1<IAttributes,Integer> getFormula() {
         return calc;
     }
 
@@ -111,21 +112,21 @@ public class Stat extends Registrable implements IStat {
         return StatManager.register(this);
     }
 
-    public boolean has(IGroup group) {
+    public boolean has(Group group) {
         return groups.contains(group);
     }
 
     @NotNull
-    public static Set<Stat> getByGroup(IGroup group) {
+    public static Set<Stat> getByGroup(Group group) {
         return StatManager.values().stream().filter(stat -> stat.has(group)).collect(Collectors.toSet());
     }
 
     public static Set<Stat> getByGroup(String groupId) {
-        IGroup group = GroupManager.get(groupId);
+        Group group = GroupManager.get(groupId);
         return getByGroup(group);
     }
 
-    public static Stat getByGroups(List<IGroup> groups) {
+    public static Stat getByGroups(List<Group> groups) {
         if (groups == null || groups.isEmpty())
             return null;
         return StatManager.values()
@@ -140,7 +141,7 @@ public class Stat extends Registrable implements IStat {
     public static Stat getByGroupIds(List<String> groupIds) {
         if (groupIds == null || groupIds.isEmpty())
             return null;
-        List<IGroup> groups = groupIds.stream()
+        List<Group> groups = groupIds.stream()
             .map(GroupManager::get)
             .filter(java.util.Objects::nonNull)
             .collect(Collectors.toList());
@@ -150,7 +151,7 @@ public class Stat extends Registrable implements IStat {
     public Integer get(Attributes attributes) {
         int val = calc.invoke(attributes);
 
-        List<IGroup> multGroups = new ArrayList<>(getGroups());
+        List<Group> multGroups = new ArrayList<>(getGroups());
         multGroups.add(GroupManager.get(Ids.GROUP_MULT));
         IStat multStat = Stat.getByGroups(multGroups);
         Integer mult = attributes.get(multStat);

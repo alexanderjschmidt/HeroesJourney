@@ -3,13 +3,13 @@ package heroes.journey.modlib.registries
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.ITextureMap
-import heroes.journey.modlib.attributes.IGroup
+import heroes.journey.modlib.attributes.Group
 import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.items.IItem
 import heroes.journey.modlib.items.IItemSubType
+import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IBuff
 import heroes.journey.modlib.misc.IChallenge
-import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.worldgen.*
 
@@ -27,7 +27,7 @@ object Registries {
     lateinit var TerrainManager: Registry<ITerrain>
     lateinit var TileLayoutManager: Registry<ITileLayout>
     lateinit var TileBatchManager: Registry<ITileBatch>
-    lateinit var GroupManager: Registry<IGroup>
+    open val GroupManager: Registry<Group> = Registry()
     lateinit var RenderableManager: Registry<IRenderable>
     lateinit var TextureManager: Registry<ITextureMap>
 }
