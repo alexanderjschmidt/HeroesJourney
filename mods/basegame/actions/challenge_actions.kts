@@ -54,10 +54,12 @@ action {
             }
         }
 
-        input.removeChallengeFromRegion(regionId, challengeEntityId)
+        input.adjustStat(challengeEntityId, Ids.STAT_CHALLENGE_HEALTH, -5)
+
+        if (stats.get(Ids.STAT_CHALLENGE_HEALTH)!! <= 0)
+            input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         // Calculate rewards based on approach stats
-        var totalAward = 0
         val summary = StringBuilder()
         summary.append("You face the ${challenge.getName()} with ${approach.getName()}.\n")
 

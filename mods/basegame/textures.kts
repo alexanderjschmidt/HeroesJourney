@@ -1,13 +1,14 @@
+import heroes.journey.modlib.Ids
+import heroes.journey.modlib.IdsC
 import heroes.journey.modlib.art.animationRenderable
 import heroes.journey.modlib.art.stillRenderable
 import heroes.journey.modlib.art.textureMap
-import heroes.journey.modlib.Ids
-import heroes.journey.modlib.IdsC
 
 // Textures - included by basegame mod
 
 val Sprites = textureMap { id = "sprites"; location = "sprites.png"; width = 16; height = 16 }.register()
-val OverworldTileset = textureMap { id = Ids.OVERWORLD_TILESET; location = "Overworld_Tileset.png"; width = 16; height = 16 }.register()
+val OverworldTileset =
+    textureMap { id = Ids.OVERWORLD_TILESET; location = "Overworld_Tileset.png"; width = 16; height = 16 }.register()
 
 stillRenderable { id = Ids.PLAYER_SPRITE; textureMapId = Sprites.id; x = 1; y = 1 }.register()
 stillRenderable { id = Ids.CAPITAL_SPRITE; textureMapId = OverworldTileset.id; x = 9; y = 14 }.register()
@@ -18,12 +19,18 @@ stillRenderable { id = Ids.LIGHT_FOG; textureMapId = Sprites.id; x = 0; y = 1 }.
 stillRenderable { id = Ids.DENSE_FOG; textureMapId = Sprites.id; x = 0; y = 0 }.register()
 
 stillRenderable { id = Ids.RED; textureMapId = "ui"; x = 2; y = 0 }.register()
+stillRenderable { id = Ids.GREEN; textureMapId = "ui"; x = 3; y = 0 }.register()
+stillRenderable { id = Ids.BLUE; textureMapId = "ui"; x = 2; y = 1 }.register()
 stillRenderable { id = Ids.LIGHT_BLUE; textureMapId = "ui"; x = 4; y = 1 }.register()
 stillRenderable { id = Ids.PURPLE; textureMapId = "ui"; x = 4; y = 0 }.register()
 stillRenderable { id = Ids.YELLOW; textureMapId = "ui"; x = 3; y = 1 }.register()
 
-animationRenderable { id = Ids.CURSOR; textureMapId = "ui"; frameDuration = 0.5f; frames = listOf(0 to 0, 0 to 0, 0 to 1) }.register()
-animationRenderable { id = Ids.MAP_POINTER; textureMapId = "ui"; frameDuration = 0.5f; frames = listOf(3 to 3, 3 to 3, 3 to 4) }.register()
+animationRenderable {
+    id = Ids.CURSOR; textureMapId = "ui"; frameDuration = 0.5f; frames = listOf(0 to 0, 0 to 0, 0 to 1)
+}.register()
+animationRenderable {
+    id = Ids.MAP_POINTER; textureMapId = "ui"; frameDuration = 0.5f; frames = listOf(3 to 3, 3 to 3, 3 to 4)
+}.register()
 
 // Demon Animations
 deepDiveAnimation(IdsC.RENDER_ANTLERED_RASCAL, "Demon", "Antlered Rascal")

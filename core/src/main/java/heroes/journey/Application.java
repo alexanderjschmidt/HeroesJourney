@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import heroes.journey.ui.screens.BattleScreen;
 import heroes.journey.ui.screens.LoadingScreen;
 import heroes.journey.utils.MusicManager;
@@ -17,7 +16,6 @@ import lombok.Getter;
 
 /*
  * TODO Features
- * Give Challenges a health bar
  * Fix names and descriptions for challenges ids
  * add names and descriptions for approaches
  * make choose approach output the calculations made in string.

@@ -26,6 +26,8 @@ object Ids {
     const val DENSE_FOG: String = "dense_fog"
 
     const val RED: String = "red"
+    const val GREEN: String = "green"
+    const val BLUE: String = "blue"
     const val LIGHT_BLUE: String = "light_blue"
     const val PURPLE: String = "purple"
     const val YELLOW: String = "yellow"

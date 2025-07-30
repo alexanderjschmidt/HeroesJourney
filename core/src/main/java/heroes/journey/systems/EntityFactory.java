@@ -1,36 +1,8 @@
 package heroes.journey.systems;
 
-import static heroes.journey.modlib.Ids.BASE_TILE_NULL;
-import static heroes.journey.modlib.Ids.DELVE;
-import static heroes.journey.modlib.Ids.DUNGEON_SPRITE;
-import static heroes.journey.modlib.Ids.FACE_CHALLENGES;
-import static heroes.journey.modlib.Ids.QUEST_BOARD;
-import static heroes.journey.modlib.Ids.REST;
-import static heroes.journey.modlib.Ids.TRAINING;
-import static heroes.journey.modlib.Ids.TRAVEL;
-import static heroes.journey.mods.Registries.ItemManager;
-
-import java.util.UUID;
-
 import com.artemis.EntityEdit;
-
-import heroes.journey.components.BuffsComponent;
-import heroes.journey.components.ChallengeComponent;
-import heroes.journey.components.EquipmentComponent;
-import heroes.journey.components.InventoryComponent;
-import heroes.journey.components.LocationComponent;
-import heroes.journey.components.NamedComponent;
-import heroes.journey.components.PositionComponent;
-import heroes.journey.components.PossibleActionsComponent;
-import heroes.journey.components.QuestsComponent;
-import heroes.journey.components.RegionComponent;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.AITurnComponent;
-import heroes.journey.components.character.AIWanderComponent;
-import heroes.journey.components.character.ActorComponent;
-import heroes.journey.components.character.IdComponent;
-import heroes.journey.components.character.MapComponent;
-import heroes.journey.components.character.RenderComponent;
+import heroes.journey.components.*;
+import heroes.journey.components.character.*;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.tagging.Attributes;
@@ -39,6 +11,11 @@ import heroes.journey.modlib.utils.Position;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
 import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
+
+import java.util.UUID;
+
+import static heroes.journey.modlib.Ids.*;
+import static heroes.journey.mods.Registries.ItemManager;
 
 public class EntityFactory {
 
@@ -82,7 +59,9 @@ public class EntityFactory {
         EntityEdit entity = world.getEntity(entityId).edit();
         entity.create(ChallengeComponent.class).challenge(challenge);
 
-        Attributes stats = StatsComponent.get(world, entityId);
+        Attributes stats = entity.create(StatsComponent.class).getAttributes();
+        stats.add(STAT_CHALLENGE_POWER_TIER, challenge.getPowerTier());
+        stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(Ids.STAT_CHALLENGE_HEALTH_MAX));
         return entityId;
     }
 
