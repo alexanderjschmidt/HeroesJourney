@@ -17,6 +17,7 @@ interface IStat : IRegistrable {
     val groups: List<Group>
     val formula: (IAttributes) -> Int?
     val defaultValue: Int?
+    val parentStats: List<IStat>
     fun getMin(attributes: IAttributes): Int
     fun getMax(attributes: IAttributes): Int
     override fun register(): IStat
@@ -32,6 +33,7 @@ interface StatBuilder {
     var formula: ((IAttributes) -> Int?)?
     var defaultValue: Int?
     fun group(id: String)
+    fun parentStat(id: String)
 }
 
 /**

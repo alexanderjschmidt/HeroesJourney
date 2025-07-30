@@ -117,10 +117,7 @@ public class RenderSystem extends BaseEntitySystem {
             if (stats != null) {
                 Integer health = stats.get(Ids.STAT_CHALLENGE_HEALTH);
                 Integer health_max = stats.get(Ids.STAT_CHALLENGE_HEALTH_MAX);
-                System.out.println(entityId + " " + health + " " + health_max);
                 if (health != null && health_max != null && health < health_max) {
-                    System.out.println(health + " " + health_max);
-                    
                     float tileSize = GameCamera.get().getSize();
                     float barWidth = tileSize * 0.8f;  // 80% of tile width
                     float barHeight = tileSize * 0.1f; // 10% of tile height
@@ -129,7 +126,6 @@ public class RenderSystem extends BaseEntitySystem {
 
                     // Draw background (red)
                     Application.get().getBatch().draw(background, barX, barY, barWidth, barHeight);
-
                     // Draw foreground (green) based on health percentage
                     float healthPercentage = health / 100f;  // Assuming max health is 100
                     Application.get().getBatch().draw(front, barX, barY, barWidth * healthPercentage, barHeight);

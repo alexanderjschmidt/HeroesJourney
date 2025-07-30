@@ -1,55 +1,23 @@
 package heroes.journey.entities.tagging;
 
-import static heroes.journey.mods.Registries.GroupManager;
-import static heroes.journey.mods.Registries.StatManager;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Operation;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
+import java.util.HashMap;
+import java.util.Map;
+
+import static heroes.journey.mods.Registries.StatManager;
+
+public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
 
     public Attributes() {
     }
 
-    public Attributes(Map<? extends Stat,? extends Integer> map) {
+    public Attributes(Map<? extends Stat, ? extends Integer> map) {
         super(map);
-    }
-
-    // ((stat1 * stat1Mult) + (stat2 * stat2Mult)) * (stat1GlobalMult + stat2GlobalMult)
-    // TODO this should also take in strengths and weaknesses and immunities of challenge
-    // or for strengths and weaknesses do a attribute merge operation?
-    // immunities would need to just make the mults for that stat 0
-    public Integer getSum(String... statIds) {
-        int val = 0;
-        for (String statId : statIds) {
-            Integer statVal = this.get(statId);
-            val += statVal == null ? 0 : statVal;
-        }
-        int globalMult = 0;
-        for (String statId : statIds) {
-            IStat stat = StatManager.get(statId);
-            if (stat == null)
-                continue;
-            List<Group> globalMultGroups = new ArrayList<>(stat.getGroups());
-            globalMultGroups.add(GroupManager.get(Ids.GROUP_GLOBAL_MULT));
-            IStat globalMultStat = Stat.getByGroups(globalMultGroups);
-            Integer mult = this.getDirect(globalMultStat);
-            if (mult != null) {
-                globalMult += mult;
-            }
-        }
-        return globalMult == 0 ? val : val * globalMult;
     }
 
     @Override
@@ -61,7 +29,7 @@ public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
     public Integer get(IStat stat) {
         if (stat == null)
             return null;
-        return ((Stat)stat).get(this);
+        return ((Stat) stat).get(this);
     }
 
     @Override
@@ -95,7 +63,7 @@ public class Attributes extends HashMap<IStat,Integer> implements IAttributes {
     @NotNull
     @Override
     public IAttributes add(@NotNull IStat stat, int value) {
-        return put((Stat)stat, value, Operation.ADD);
+        return put((Stat) stat, value, Operation.ADD);
     }
 
     @NotNull

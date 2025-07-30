@@ -1,47 +1,53 @@
 package heroes.journey.entities.tagging;
 
-import static heroes.journey.mods.Registries.GroupManager;
-import static heroes.journey.mods.Registries.StatManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.jetbrains.annotations.NotNull;
-
 import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.registries.Registrable;
 import kotlin.jvm.functions.Function1;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static heroes.journey.mods.Registries.GroupManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 public class Stat extends Registrable implements IStat {
 
     public static final List<Stat> BASE_STATS = new ArrayList<>(4);
     private final Integer minValue, maxValue;
     private final List<Group> groups;
-    private final Function1<IAttributes,Integer> calc;
+    private final List<IStat> parentStats;
+    private final Function1<IAttributes, Integer> calc;
     private final Integer defaultValue;
 
     public Stat(
         @NotNull String id,
         Integer minValue,
         Integer maxValue,
-        Function1<IAttributes,Integer> calc,
+        Function1<IAttributes, Integer> calc,
         List<Group> groups,
-        Integer defaultValue) {
+        Integer defaultValue,
+        List<IStat> parentStats) {
         super(id);
         this.minValue = minValue;
         this.maxValue = maxValue;
         this.groups = groups;
         this.calc = calc;
         this.defaultValue = defaultValue;
+        this.parentStats = parentStats != null ? parentStats : new ArrayList<>();
     }
 
     public Integer getDefaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public List<IStat> getParentStats() {
+        return parentStats;
     }
 
     @Override
@@ -96,7 +102,7 @@ public class Stat extends Registrable implements IStat {
     }
 
     @Override
-    public Function1<IAttributes,Integer> getFormula() {
+    public Function1<IAttributes, Integer> getFormula() {
         return calc;
     }
 
@@ -110,20 +116,6 @@ public class Stat extends Registrable implements IStat {
         if (groups.size() == 1)
             BASE_STATS.add(this);
         return StatManager.register(this);
-    }
-
-    public boolean has(Group group) {
-        return groups.contains(group);
-    }
-
-    @NotNull
-    public static Set<Stat> getByGroup(Group group) {
-        return StatManager.values().stream().filter(stat -> stat.has(group)).collect(Collectors.toSet());
-    }
-
-    public static Set<Stat> getByGroup(String groupId) {
-        Group group = GroupManager.get(groupId);
-        return getByGroup(group);
     }
 
     public static Stat getByGroups(List<Group> groups) {
@@ -150,6 +142,9 @@ public class Stat extends Registrable implements IStat {
 
     public Integer get(Attributes attributes) {
         Integer val = calc.invoke(attributes);
+        for (IStat parentStat : parentStats) {
+            val += ((Stat) parentStat).get(attributes);
+        }
         if (val == null)
             return null;
 

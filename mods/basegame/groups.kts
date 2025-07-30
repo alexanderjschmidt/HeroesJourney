@@ -5,7 +5,6 @@ import heroes.journey.modlib.attributes.group
 group { id = Ids.GROUP_MAX }.register()
 group { id = Ids.GROUP_MIN }.register()
 group { id = Ids.GROUP_MULT }.register()
-group { id = Ids.GROUP_GLOBAL_MULT }.register()
 
 // --- GROUPS ---
 group { id = Ids.GROUP_FAME }.register()

@@ -183,7 +183,6 @@ object Ids {
     const val GROUP_MAX: String = "max_group"
     const val GROUP_MIN: String = "min_group"
     const val GROUP_MULT: String = "mult_group"
-    const val GROUP_GLOBAL_MULT: String = "global_mult_group"
 
     // Group IDs
     const val GROUP_FAME: String = "fame_group"
