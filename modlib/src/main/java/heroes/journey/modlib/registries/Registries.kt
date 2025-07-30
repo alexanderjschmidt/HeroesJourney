@@ -5,8 +5,6 @@ import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.TextureMap
 import heroes.journey.modlib.attributes.Group
 import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.items.IItem
-import heroes.journey.modlib.items.ItemSubType
 import heroes.journey.modlib.misc.Buff
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
@@ -20,8 +18,6 @@ object Registries {
     lateinit var ChallengeManager: Registry<IChallenge>
     lateinit var ApproachManager: Registry<IApproach>
     lateinit var ActionManager: Registry<IAction>
-    lateinit var ItemManager: Registry<IItem>
-    open val ItemSubTypeManager: Registry<ItemSubType> = Registry()
     open val BiomeManager: Registry<Biome> = Registry()
     lateinit var FeatureTypeManager: Registry<IFeatureType>
     open val TerrainManager: Registry<Terrain> = Registry()

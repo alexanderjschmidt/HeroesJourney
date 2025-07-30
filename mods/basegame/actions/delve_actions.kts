@@ -18,16 +18,6 @@ action {
             .append(input.getName(dungeon))
             .append("!\nYour rewards are:\n")
 
-        val inventory = input.getInventory(dungeon)
-        if (inventory != null) {
-            for (item in inventory.keys) {
-                input.addItem(e!!, item, inventory[item]!!)
-                log.append(inventory[item])
-                    .append("x ")
-                    .append(item)
-                    .append("\n")
-            }
-        }
         input.adjustStat(e!!, Ids.STAT_FAME, 5)
         log.append("You have gained ").append(5).append(" fame")
 

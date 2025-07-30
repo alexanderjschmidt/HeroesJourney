@@ -1,14 +1,13 @@
 package heroes.journey.ui.hudstates;
 
-import static heroes.journey.ui.hudstates.States.STATS;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameCamera;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.Display;
 import heroes.journey.utils.input.KeyManager;
 import heroes.journey.utils.input.Options;
+
+import static heroes.journey.ui.hudstates.States.STATS;
 
 class GlobalState extends HUDState {
     @Override
@@ -17,11 +16,7 @@ class GlobalState extends HUDState {
         if (Gdx.input.isKeyJustPressed(KeyManager.DEV_MODE)) {
             Options.INSTANCE.toggle("debug");
         }
-        if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_INVENTORY) && HUD.get().getState() != STATS &&
-            HUD.get().getCursor().getHover() != null) {
-            HUD.get().setState(STATS);
-            HUD.get().getStatsUI().updatePanel(Display.INVENTORY);
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_QUESTS) && HUD.get().getState() != STATS &&
+        if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_QUESTS) && HUD.get().getState() != STATS &&
             HUD.get().getCursor().getHover() != null) {
             HUD.get().setState(STATS);
             HUD.get().getStatsUI().updatePanel(Display.QUESTS);

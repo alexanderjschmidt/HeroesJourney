@@ -10,8 +10,6 @@ import heroes.journey.modlib.art.RenderableDSLProvider
 import heroes.journey.modlib.attributes.AttributesDSLProvider
 import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.attributes.StatDSLProvider
-import heroes.journey.modlib.items.IItem
-import heroes.journey.modlib.items.ItemDSLProvider
 import heroes.journey.modlib.misc.*
 import heroes.journey.modlib.registries.Registry
 import heroes.journey.modlib.worldgen.BaseTileDSLProvider
@@ -20,7 +18,6 @@ import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.attributes.AttributesDSLImpl
 import heroes.journey.mods.attributes.StatDSLImpl
-import heroes.journey.mods.items.ItemDSLImpl
 import heroes.journey.mods.misc.ActionDSLImpl
 import heroes.journey.mods.misc.ApproachDSLImpl
 import heroes.journey.mods.misc.ChallengeDSLImpl
@@ -39,41 +36,27 @@ fun setupModlibDSLs() {
     // Wire up modlib registries to core implementations
     heroes.journey.modlib.registries.Registries.QuestManager = Registries.QuestManager as Registry<IQuest>
     heroes.journey.modlib.registries.Registries.StatManager = Registries.StatManager as Registry<IStat>
-
     heroes.journey.modlib.registries.Registries.ChallengeManager =
         Registries.ChallengeManager as Registry<IChallenge>
     heroes.journey.modlib.registries.Registries.ApproachManager =
         Registries.ApproachManager as Registry<IApproach>
     heroes.journey.modlib.registries.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
-    heroes.journey.modlib.registries.Registries.ItemManager = Registries.ItemManager as Registry<IItem>
-
-
     heroes.journey.modlib.registries.Registries.FeatureTypeManager =
         Registries.FeatureTypeManager as Registry<IFeatureType>
-
-
-
     heroes.journey.modlib.registries.Registries.RenderableManager =
         Registries.RenderableManager as Registry<IRenderable>
-
 
     GameModProvider.instance = GameModDSLImpl()
 
     // Wire up modlib DSLs
     RenderableDSLProvider.instance = RenderableDSLImpl()
 
-
-
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
     StatDSLProvider.instance = StatDSLImpl()
-
-    ItemDSLProvider.instance = ItemDSLImpl()
     AttributesDSLProvider.instance = AttributesDSLImpl()
-
     QuestDSLProvider.instance = QuestDSLImpl()
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
     ApproachDSLProvider.instance = ApproachDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
-
     ActionDSLProvider.instance = ActionDSLImpl()
 }

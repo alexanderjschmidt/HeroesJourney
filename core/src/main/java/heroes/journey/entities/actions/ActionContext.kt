@@ -13,7 +13,6 @@ import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
-import heroes.journey.mods.Registries.ItemManager
 import heroes.journey.ui.HUD
 import heroes.journey.utils.Utils
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
@@ -59,17 +58,8 @@ class ActionContext(
         buffsComponent.add(buff)
     }
 
-    override fun addItem(entityId: UUID, itemId: String, amount: Int) {
-        Utils.addItem(this, ItemManager[itemId], amount)
-    }
-
     override fun getName(entityId: UUID): String {
         return NamedComponent.get((gameState as GameState).world, entityId, "Unknown")
-    }
-
-    override fun getInventory(entityId: UUID): Map<String, Int>? {
-        val inventoryComponent = InventoryComponent.get((gameState as GameState).world, entityId)
-        return inventoryComponent?.inventory?.mapKeys { it.key.id } ?: emptyMap()
     }
 
     override fun getPosition(entityId: UUID): Position {

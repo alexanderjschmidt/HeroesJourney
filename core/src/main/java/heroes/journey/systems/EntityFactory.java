@@ -15,7 +15,6 @@ import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import java.util.UUID;
 
 import static heroes.journey.modlib.Ids.*;
-import static heroes.journey.mods.Registries.ItemManager;
 
 public class EntityFactory {
 
@@ -81,8 +80,6 @@ public class EntityFactory {
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
         entity.create(StatsComponent.class);
-        entity.create(InventoryComponent.class);
-        entity.create(EquipmentComponent.class);
         entity.create(QuestsComponent.class);
     }
 
@@ -117,7 +114,6 @@ public class EntityFactory {
 
         EntityEdit dungeon = world.getEntity(dungeonId).edit();
         dungeon.create(PossibleActionsComponent.class).addAction(DELVE);
-        dungeon.create(InventoryComponent.class).add(ItemManager.get("iron_ore"), 5);
         dungeon.create(StatsComponent.class);
         return dungeonId;
     }

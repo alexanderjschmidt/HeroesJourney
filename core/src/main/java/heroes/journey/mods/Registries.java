@@ -1,27 +1,22 @@
 package heroes.journey.mods;
 
 import heroes.journey.entities.Approach;
-import heroes.journey.modlib.misc.Buff;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.items.Item;
-import heroes.journey.modlib.items.ItemSubType;
 import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.art.TextureMap;
 import heroes.journey.modlib.attributes.Group;
+import heroes.journey.modlib.misc.Buff;
 import heroes.journey.modlib.registries.Registry;
 import heroes.journey.modlib.worldgen.Biome;
-import heroes.journey.tilemap.FeatureType;
+import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.modlib.worldgen.TileBatch;
 import heroes.journey.modlib.worldgen.TileLayout;
-import heroes.journey.modlib.worldgen.Terrain;
+import heroes.journey.tilemap.FeatureType;
 import heroes.journey.utils.art.Renderable;
-import heroes.journey.modlib.art.TextureMap;
 
 public class Registries {
-
-    public static Registry<Item> ItemManager = new Registry<>();
-    public static Registry<ItemSubType> ItemSubTypeManager = heroes.journey.modlib.registries.Registries.INSTANCE.getItemSubTypeManager();
 
     public static Registry<Action> ActionManager = new Registry<>();
     public static Registry<Buff> BuffManager = heroes.journey.modlib.registries.Registries.INSTANCE.getBuffManager();

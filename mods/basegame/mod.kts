@@ -13,7 +13,6 @@ gameMod("Base Game", 0) {
     includeScripts(
         "Misc",
         "textures.kts",
-        "items.kts",
         "quests.kts",
     )
 

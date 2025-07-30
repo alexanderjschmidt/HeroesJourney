@@ -196,41 +196,6 @@ object Ids {
     const val GROUP_DESCRIPTOR: String = "descriptor_group"
     const val GROUP_CHALLENGE: String = "challenge_group"
 
-    // Item SubType IDs
-    /** Raw Material item subtype ID  */
-    const val ITEMSUBTYPE_RAW_MATERIAL: String = "raw_material"
-
-    /** Refined Material item subtype ID  */
-    const val ITEMSUBTYPE_REFINED_MATERIAL: String = "refined_material"
-
-    /** Sword item subtype ID  */
-    const val ITEMSUBTYPE_SWORD: String = "sword"
-
-    /** Chest Armor item subtype ID  */
-    const val ITEMSUBTYPE_CHEST_ARMOR: String = "chest_armor"
-
-    /** Potion item subtype ID  */
-    const val ITEMSUBTYPE_POTION: String = "potion"
-
-    // Item IDs
-    /** Wood item ID  */
-    const val ITEM_WOOD: String = "wood"
-
-    /** Iron Ore item ID  */
-    const val ITEM_IRON_ORE: String = "iron_ore"
-
-    /** Iron Ingot item ID  */
-    const val ITEM_IRON_INGOT: String = "iron_ingot"
-
-    /** Iron Sword item ID  */
-    const val ITEM_IRON_SWORD: String = "iron_sword"
-
-    /** Chest Plate item ID  */
-    const val ITEM_CHEST_PLATE: String = "chest_plate"
-
-    /** Health Potion item ID  */
-    const val ITEM_HEALTH_POTION: String = "health_potion"
-
     // Approach IDs
     const val APPROACH_FIGHT: String = "approach_fight" // physical
     const val APPROACH_TRICK: String = "approach_trick" // Not Feral

@@ -34,9 +34,7 @@ abstract class IActionContext(
     abstract fun getStat(entityId: UUID, statId: String): Int
     abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)
     abstract fun addBuff(entityId: UUID, buffId: String)
-    abstract fun addItem(entityId: UUID, itemId: String, amount: Int)
     abstract fun getName(entityId: UUID): String
-    abstract fun getInventory(entityId: UUID): Map<String, Int>?
     abstract fun getPosition(entityId: UUID): Position
     abstract fun travelTo(entityId: UUID, target: Position)
     abstract fun getRegion(entityId: UUID): UUID

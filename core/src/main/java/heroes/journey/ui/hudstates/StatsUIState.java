@@ -27,12 +27,6 @@ public class StatsUIState extends HUDState {
         HUD.get().getStatsUI().handleInputs();
         if (Gdx.input.isKeyJustPressed(KeyManager.ESCAPE) || Gdx.input.isKeyJustPressed(KeyManager.BACK)) {
             HUD.get().revertToPreviousState();
-        } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_INVENTORY) && !justOpened) {
-            if (HUD.get().getStatsUI().display() == Display.INVENTORY) {
-                HUD.get().revertToPreviousState();
-            } else {
-                HUD.get().getStatsUI().updatePanel(Display.INVENTORY);
-            }
         } else if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_STATS) && !justOpened) {
             if (HUD.get().getStatsUI().display() == Display.STATS) {
                 HUD.get().revertToPreviousState();

@@ -1,16 +1,14 @@
 package heroes.journey.utils;
 
-import static heroes.journey.mods.Registries.ActionManager;
-
-import java.util.UUID;
-
 import heroes.journey.GameState;
-import heroes.journey.components.InventoryComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.items.Item;
+
+import java.util.UUID;
+
+import static heroes.journey.mods.Registries.ActionManager;
 
 public class Utils {
 
@@ -34,17 +32,6 @@ public class Utils {
         if (positionComponent == null)
             return null;
         return gameState.getMap().getRegionMap()[positionComponent.getX()][positionComponent.getY()];
-    }
-
-    public static void addItem(ActionContext input, Item item, int count) {
-        addItem(input.getGameState(), input.getEntityId(), item, count);
-    }
-
-    public static void addItem(GameState gameState, UUID entityId, Item item, int count) {
-        InventoryComponent inventoryComponent = InventoryComponent.get(gameState.getWorld(), entityId);
-        if (inventoryComponent != null) {
-            inventoryComponent.add(item, count);
-        }
     }
 
     public static boolean justCompletedAction(GameState gameState, UUID owner, String actionId) {
