@@ -1,44 +1,41 @@
 package heroes.journey.modlib.attributes
 
 import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Stat, used for character and challenge stats.
+ * Interface for stats that can be registered and used in the game.
  * Mods should only use this interface, not implementation classes.
- *
- * Example usage:
- * ```kotlin
- * stat(id = Ids.MY_STAT, min = 0, max = 10, groups = listOf(group(Ids.MY_GROUP))).register()
- * ```
  */
 interface IStat : IRegistrable {
-    val min: Int
-    val max: Int
-    val groups: List<Group>
     val formula: (IAttributes) -> Int?
     val defaultValue: Int?
-    val parentStats: List<IStat>
-    fun getMin(attributes: IAttributes): Int
-    fun getMax(attributes: IAttributes): Int
+
+    fun getRelation(relation: Relation): IStat?
+    fun getRelation(attributes: IAttributes, relation: Relation): Int?
+    fun getRelatedStats(relation: Relation): List<IStat>
+    fun addRelatedStat(relation: Relation, stat: IStat)
+
     override fun register(): IStat
 }
 
 /**
- * Builder for defining a stat in a natural DSL style.
+ * Builder interface for creating stats using a DSL.
  */
 interface StatBuilder {
     var id: String
-    var min: Int // Direct minimum value if no group-based min stat exists
-    var max: Int // Direct maximum value if no group-based max stat exists
+    var parent: String?
+    var min: Int?
+    var max: Int?
+    var minFormula: ((IAttributes) -> Int?)?
+    var maxFormula: ((IAttributes) -> Int?)?
+    var cap: Int?
     var formula: ((IAttributes) -> Int?)?
     var defaultValue: Int?
-    fun group(id: String)
-    fun parentStat(id: String)
 }
 
 /**
  * Interface for the stat DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
  */
 interface StatDSL {
     fun stat(init: StatBuilder.() -> Unit): IStat
@@ -54,16 +51,17 @@ object StatDSLProvider {
 
 /**
  * DSL entrypoint for defining a new stat using a builder lambda.
- *
- * Example usage:
- * ```kotlin
- * stat {
- *     id = Ids.STAT_BODY
- *     min = 1
- *     max = 10
- *     group(Ids.GROUP_BASESTATS)
- *     group(Ids.GROUP_BODY)
- * }
- * ```
  */
 fun stat(init: StatBuilder.() -> Unit): IStat = StatDSLProvider.instance.stat(init)
+
+/**
+ * DSL function to establish a relationship between two existing stats.
+ * @param statId the ID of the stat that will be related
+ * @param relation the type of relationship
+ * @param targetStatId the ID of the target stat
+ */
+fun relate(statId: String, relation: Relation, targetStatId: String) {
+    val stat = Registries.StatManager[statId] as IStat
+    val targetStat = Registries.StatManager[targetStatId] as IStat
+    targetStat.addRelatedStat(relation, stat)
+}

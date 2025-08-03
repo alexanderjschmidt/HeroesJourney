@@ -3,6 +3,7 @@ package heroes.journey.entities.tagging;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Operation;
+import heroes.journey.modlib.attributes.Relation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 
 import static heroes.journey.mods.Registries.StatManager;
 
+// NOTE this has an error in intellij, but it's not real because HashMap covers IAttributes need for Map implementation
 public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
 
     public Attributes() {
@@ -22,14 +24,46 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
 
     @Override
     public Integer get(String statId) {
-        return StatManager.get(statId).get(this);
+        return this.get(StatManager.get(statId));
     }
 
     @Override
     public Integer get(IStat stat) {
         if (stat == null)
             return null;
-        return ((Stat) stat).get(this);
+
+        // Get the base value from the stat's formula
+        Integer val = stat.getFormula().invoke(this);
+        if (val == null) {
+            // If no value from formula, check if this is a multiplier stat
+            if (stat.getRelation(Relation.MULTIPLICAND) != null) {
+                // This is a multiplier stat, return 1 (multiplication identity)
+                return 1;
+            } else {
+                // This is a regular stat, return 0 (addition identity)
+                return 0;
+            }
+        }
+
+        // Apply parent stat value (additive)
+        IStat parentStat = stat.getRelation(Relation.PARENT);
+        if (parentStat != null) {
+            Integer parentVal = get(parentStat);
+            if (parentVal != null) {
+                val += parentVal;
+            }
+        }
+
+        // Apply multiplier using the new MULTIPLIER relation
+        IStat multiplierStat = stat.getRelation(Relation.MULTIPLIER);
+        if (multiplierStat != null) {
+            Integer multiplier = get(multiplierStat);
+            if (multiplier != null) {
+                val = val * multiplier;
+            }
+        }
+
+        return val;
     }
 
     @Override
@@ -39,21 +73,18 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         return super.get(stat);
     }
 
-    @Override
-    public Integer getDirect(IStat stat) {
-        return super.get(stat);
-    }
-
     public Attributes put(String statId, Integer value) {
-        super.put(StatManager.get(statId), value);
+        IStat stat = StatManager.get(statId);
+        super.put(stat, value);
         return this;
     }
 
-    public Attributes put(IStat stat, Integer value, Operation operation) {
+    public Attributes put(String statId, Integer value, Operation operation) {
+        IStat stat = StatManager.get(statId);
         if (this.containsKey(stat)) {
             this.compute(stat,
-                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getMin(this),
-                    stat.getMax(this)));
+                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getRelation(this, Relation.MIN),
+                    stat.getRelation(this, Relation.MAX)));
         } else {
             super.put(stat, value);
         }
@@ -62,21 +93,16 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
 
     @NotNull
     @Override
-    public IAttributes add(@NotNull IStat stat, int value) {
-        return put((Stat) stat, value, Operation.ADD);
-    }
-
-    @NotNull
-    @Override
-    public IAttributes add(@Nullable String stat, int value) {
-        return put(StatManager.get(stat), value, Operation.ADD);
+    public IAttributes add(@Nullable String statId, int value) {
+        return put(statId, value, Operation.ADD);
     }
 
     public Attributes merge(Attributes attributesToMerge, Operation operation) {
         if (attributesToMerge != null) {
-            attributesToMerge.forEach((stat, value) -> this.put(stat, value, operation));
+            attributesToMerge.forEach((stat, value) -> this.put(stat.getId(), value, operation));
         }
         return this;
     }
+
 }
 

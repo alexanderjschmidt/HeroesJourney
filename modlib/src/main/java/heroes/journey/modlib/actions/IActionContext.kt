@@ -1,7 +1,6 @@
 package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.misc.IQuest
@@ -47,7 +46,6 @@ abstract class IActionContext(
     abstract fun getStats(entityId: UUID): IAttributes
     abstract fun getChallenges(regionId: UUID): List<UUID>
     abstract fun setMapPointer(pos: Position)
-    abstract fun statWith(groupIds: List<String>): IStat
 
     /**
      * Get the challenge object by its entity ID.

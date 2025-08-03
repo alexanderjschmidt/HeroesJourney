@@ -67,19 +67,39 @@ item(
 ).register()
 ```
 
-#### Stats & Groups
+#### Stats
 ```kotlin
 import heroes.journey.modlib.attributes.stat
-import heroes.journey.modlib.attributes.group
+import heroes.journey.modlib.attributes.relate
+import heroes.journey.modlib.attributes.Relation
 import heroes.journey.modlib.Ids
 
-group(Ids.MY_GROUP).register()
-stat(
-    id = Ids.MY_STAT,
-    min = 0,
-    max = 10,
-    groups = listOf(group(Ids.MY_GROUP))
-).register()
+// Base stat with fixed min/max and cap (auto-generates _mult, _max_mult, _max_max stats)
+stat {
+    id = Ids.STAT_BODY
+    defaultValue = 1
+    min = 1
+    max = 10
+    cap = 8  // Caps the max at 8
+}.register()
+
+// Resource stat with formula-based max and cap (auto-generates _mult, _max_mult, _max_max stats)
+stat {
+    id = Ids.STAT_STAMINA
+    min = 0
+    defaultValue = 0
+    maxFormula = { it.getDirect(Ids.STAT_BODY)!! * 25 + 75 }
+    cap = 200  // Caps the calculated max at 200
+}.register()
+
+// Regen stat (auto-generates _mult stat)
+stat {
+    id = Ids.STAT_STAMINA_REGEN
+    defaultValue = 50
+}.register()
+
+// Set up relationships
+relate(Ids.STAT_STAMINA_REGEN, Relation.REGEN, Ids.STAT_STAMINA)
 ```
 
 #### Buffs

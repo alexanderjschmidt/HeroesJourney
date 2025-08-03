@@ -74,7 +74,7 @@ open class Action(
             val costAttributes = cost as? Attributes
             if (costAttributes != null) {
                 for ((stat, amount) in costAttributes) {
-                    entityStats.put(stat, amount, Operation.SUBTRACT)
+                    entityStats.put(stat.id, amount, Operation.SUBTRACT)
                 }
             }
         }

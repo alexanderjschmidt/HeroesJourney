@@ -1,16 +1,16 @@
 package heroes.journey.components;
 
-import static heroes.journey.mods.Registries.StatManager;
-
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.modlib.attributes.Operation;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
+
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.mods.Registries.StatManager;
 
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {
@@ -45,7 +45,7 @@ public class StatsComponent extends PooledClonableComponent<StatsComponent> {
         StatsComponent statsComponent = world.getEntity(StatsComponent.class, entityId);
         if (statsComponent == null)
             return;
-        statsComponent.getAttributes().add(StatManager.get(statId), count);
+        statsComponent.getAttributes().add(statId, count);
     }
 
     @Override

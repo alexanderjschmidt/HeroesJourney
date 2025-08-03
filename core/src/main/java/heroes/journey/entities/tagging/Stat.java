@@ -1,44 +1,36 @@
 package heroes.journey.entities.tagging;
 
-import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.attributes.IAttributes;
 import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.attributes.Relation;
 import heroes.journey.modlib.registries.Registrable;
 import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import static heroes.journey.mods.Registries.GroupManager;
 import static heroes.journey.mods.Registries.StatManager;
 
 public class Stat extends Registrable implements IStat {
 
-    public static final List<Stat> BASE_STATS = new ArrayList<>(4);
-    private final Integer minValue, maxValue;
-    private final List<Group> groups;
-    private final List<IStat> parentStats;
+    private final Map<Relation, IStat> relatedStats; // For ONE relations
+    private final Map<Relation, List<IStat>> relatedStatsMany; // For MANY relations
     private final Function1<IAttributes, Integer> calc;
     private final Integer defaultValue;
 
     public Stat(
         @NotNull String id,
-        Integer minValue,
-        Integer maxValue,
         Function1<IAttributes, Integer> calc,
-        List<Group> groups,
-        Integer defaultValue,
-        List<IStat> parentStats) {
+        Integer defaultValue) {
         super(id);
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.groups = groups;
         this.calc = calc;
         this.defaultValue = defaultValue;
-        this.parentStats = parentStats != null ? parentStats : new ArrayList<>();
+        this.relatedStats = new HashMap<>();
+        this.relatedStatsMany = new HashMap<>();
     }
 
     public Integer getDefaultValue() {
@@ -46,59 +38,32 @@ public class Stat extends Registrable implements IStat {
     }
 
     @Override
-    public List<IStat> getParentStats() {
-        return parentStats;
+    public IStat getRelation(Relation relation) {
+        return relatedStats.get(relation);
     }
 
     @Override
-    public int getMin(IAttributes attributes) {
-        // Try to find a stat with the same groups + GROUP_MIN
-        if (attributes != null) {
-            List<Group> minGroups = new java.util.ArrayList<>(groups);
-            Group groupMin = GroupManager.get(Ids.GROUP_MIN);
-            if (groupMin != null && !minGroups.contains(groupMin))
-                minGroups.add(groupMin);
-            Stat minStat = Stat.getByGroups(minGroups);
-            if (minStat != null && minStat != this) {
-                Integer val = minStat.getFormula().invoke(attributes);
-                if (val != null)
-                    return val;
+    public Integer getRelation(IAttributes attributes, Relation relation) {
+        assert attributes != null;
+
+        if (relation.isOne()) {
+            IStat relatedStat = relatedStats.get(relation);
+            if (relatedStat != null) {
+                return attributes.get(relatedStat);
             }
+        } else if (relation.isMany()) {
+            throw new RuntimeException("This relationship (" + relation + ") has many stats associated to it.");
         }
-        return minValue != null ? minValue : Integer.MIN_VALUE;
+        
+        // Return the default value for this relation type
+        return relation.getDefaultValue();
     }
 
+    @Nullable
     @Override
-    public int getMax(IAttributes attributes) {
-        // Try to find a stat with the same groups + GROUP_MAX
-        if (attributes != null) {
-            List<Group> maxGroups = new java.util.ArrayList<>(groups);
-            Group groupMax = GroupManager.get(Ids.GROUP_MAX);
-            if (groupMax != null && !maxGroups.contains(groupMax))
-                maxGroups.add(groupMax);
-            Stat maxStat = Stat.getByGroups(maxGroups);
-            if (maxStat != null && maxStat != this) {
-                Integer val = maxStat.getFormula().invoke(attributes);
-                if (val != null)
-                    return val;
-            }
-        }
-        return maxValue != null ? maxValue : Integer.MAX_VALUE;
-    }
-
-    @Override
-    public int getMin() {
-        return minValue != null ? minValue : Integer.MIN_VALUE;
-    }
-
-    @Override
-    public int getMax() {
-        return maxValue != null ? maxValue : Integer.MAX_VALUE;
-    }
-
-    @Override
-    public List<Group> getGroups() {
-        return groups;
+    public List<IStat> getRelatedStats(@NotNull Relation relation) {
+        List<IStat> relatedStats = relatedStatsMany.get(relation);
+        return relatedStats != null ? relatedStats : new ArrayList<>();
     }
 
     @Override
@@ -108,54 +73,17 @@ public class Stat extends Registrable implements IStat {
 
     @Override
     public Stat register() {
-        /*Stat sameGroupsStat = getByGroups(groups);
-        if (!groups.isEmpty() && sameGroupsStat != null)
-            throw new IllegalArgumentException(
-                "You cannot have a stat that registers to the same group combinations. " + sameGroupsStat +
-                    " already has the combination of groups: " + sameGroupsStat.groups);*/
-        if (groups.size() == 1)
-            BASE_STATS.add(this);
         return StatManager.register(this);
     }
 
-    public static Stat getByGroups(List<Group> groups) {
-        if (groups == null || groups.isEmpty())
-            return null;
-        return StatManager.values()
-            .stream()
-            .filter(
-                stat -> stat.getGroups().size() == groups.size() && stat.getGroups().containsAll(groups) &&
-                    groups.containsAll(stat.getGroups()))
-            .findFirst()
-            .orElse(null);
-    }
-
-    public static Stat getByGroupIds(List<String> groupIds) {
-        if (groupIds == null || groupIds.isEmpty())
-            return null;
-        List<Group> groups = groupIds.stream()
-            .map(GroupManager::get)
-            .filter(java.util.Objects::nonNull)
-            .collect(Collectors.toList());
-        return getByGroups(groups);
-    }
-
-    public Integer get(Attributes attributes) {
-        Integer val = calc.invoke(attributes);
-        for (IStat parentStat : parentStats) {
-            val += ((Stat) parentStat).get(attributes);
+    @Override
+    public void addRelatedStat(Relation relation, IStat stat) {
+        if (relation.isOne()) {
+            relatedStats.put(relation, stat);
+        } else if (relation.isMany()) {
+            relatedStatsMany.computeIfAbsent(relation, k -> new ArrayList<>()).add(stat);
         }
-        if (val == null)
-            return null;
-
-        List<Group> multGroups = new ArrayList<>(getGroups());
-        multGroups.add(GroupManager.get(Ids.GROUP_MULT));
-        IStat multStat = Stat.getByGroups(multGroups);
-        Integer mult = attributes.get(multStat);
-        if (mult != null) {
-            val *= mult;
-        }
-
-        return val;
     }
 }
+
+

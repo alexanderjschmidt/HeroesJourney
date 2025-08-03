@@ -6,7 +6,6 @@ import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Approach
 import heroes.journey.entities.Quest
 import heroes.journey.entities.tagging.Attributes
-import heroes.journey.entities.tagging.Stat
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.misc.IApproach
@@ -162,10 +161,6 @@ class ActionContext(
 
     override fun setMapPointer(pos: Position) {
         HUD.get().cursor.setMapPointerLoc(pos)
-    }
-
-    override fun statWith(groupIds: List<String>): IStat {
-        return Stat.getByGroupIds(groupIds)
     }
 
     override fun getChallenge(challengeEntityId: UUID): IChallenge {

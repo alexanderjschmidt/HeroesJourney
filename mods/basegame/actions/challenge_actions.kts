@@ -50,7 +50,7 @@ action {
         // Apply the approach cost
         if (approach.cost != null) {
             for ((stat, amount) in approach.cost!!) {
-                stats.add(stat, -amount)
+                stats.add(stat.id, -amount)
             }
         }
 

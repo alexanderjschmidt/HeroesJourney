@@ -7,6 +7,8 @@ import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.Challenge;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.attributes.Relation;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.tilemap.TileManager;
 import heroes.journey.utils.worldgen.namegen.MarkovTownNameGenerator;
@@ -15,6 +17,7 @@ import heroes.journey.utils.worldgen.namegen.SyllableDungeonNameGenerator;
 import java.util.UUID;
 
 import static heroes.journey.modlib.Ids.*;
+import static heroes.journey.mods.Registries.StatManager;
 
 public class EntityFactory {
 
@@ -60,7 +63,9 @@ public class EntityFactory {
 
         Attributes stats = entity.create(StatsComponent.class).getAttributes();
         stats.add(STAT_CHALLENGE_POWER_TIER, challenge.getPowerTier());
-        stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(Ids.STAT_CHALLENGE_HEALTH_MAX));
+        IStat health = StatManager.get(STAT_CHALLENGE_HEALTH);
+        IStat healthMax = health.getRelation(Relation.MAX);
+        stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(healthMax.getId()));
         return entityId;
     }
 

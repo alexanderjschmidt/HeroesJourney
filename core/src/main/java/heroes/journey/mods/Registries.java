@@ -6,7 +6,6 @@ import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.modlib.art.TextureMap;
-import heroes.journey.modlib.attributes.Group;
 import heroes.journey.modlib.misc.Buff;
 import heroes.journey.modlib.registries.Registry;
 import heroes.journey.modlib.worldgen.Biome;
@@ -33,7 +32,6 @@ public class Registries {
     public static Registry<TileBatch> TileBatchManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTileBatchManager();
 
     public static Registry<Stat> StatManager = new Registry<>();
-    public static Registry<Group> GroupManager = heroes.journey.modlib.registries.Registries.INSTANCE.getGroupManager();
 
     public static Registry<Renderable> RenderableManager = new Registry<>();
     public static Registry<TextureMap> TextureManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTextureManager();

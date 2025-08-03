@@ -1,113 +1,124 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.attributes.Relation
+import heroes.journey.modlib.attributes.relate
 import heroes.journey.modlib.attributes.stat
 import heroes.journey.modlib.misc.powerLevels
 
+// --- CHALLENGE POWER TIER (base stat) ---
 stat {
     id = Ids.STAT_CHALLENGE_POWER_TIER
     min = 0
-    group(Ids.GROUP_CHALLENGE)
+    max = 10
+    defaultValue = 0
 }.register()
 
-// --- RESOURCES STATS ---
+// --- CHALLENGE HEALTH (base stat) ---
 stat {
     id = Ids.STAT_CHALLENGE_HEALTH
     min = 0
-    group(Ids.GROUP_RESOURCES)
-    group(Ids.GROUP_CHALLENGE)
-}.register()
-
-// --- RESOURCE MAXES ---
-stat {
-    id = Ids.STAT_CHALLENGE_HEALTH_MAX
-    min = 0
-    group(Ids.GROUP_RESOURCES)
-    group(Ids.GROUP_CHALLENGE)
-    group(Ids.GROUP_MAX)
-    formula = {
+    defaultValue = 0
+    maxFormula = {
         it.getDirect(Ids.STAT_CHALLENGE_POWER_TIER)?.let { tier ->
             powerLevels[tier]
         }
     }
 }.register()
 
-// --- RESOURCE REGEN STATS ---
+// --- CHALLENGE HEALTH REGEN (base stat) ---
 stat {
     id = Ids.STAT_CHALLENGE_HEALTH_REGEN
     min = 0
     defaultValue = 10
-    group(Ids.GROUP_RESOURCES)
-    group(Ids.GROUP_CHALLENGE)
-    group(Ids.GROUP_REGEN)
 }.register()
 
-// --- RACE STATS ---
+// --- RELATIONSHIPS ---
+relate(Ids.STAT_CHALLENGE_HEALTH, Relation.RESOURCE, Ids.STAT_CHALLENGE_POWER_TIER)
+relate(Ids.STAT_CHALLENGE_HEALTH_REGEN, Relation.REGEN, Ids.STAT_CHALLENGE_HEALTH)
+
+// --- RACE PARENT STAT (base stat) ---
+stat {
+    id = Ids.GROUP_RACE
+    defaultValue = 0
+}.register()
+
+// --- RACE STATS (children of RACE parent) ---
 stat {
     id = Ids.STAT_DEMON_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_DRAGON_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_HOLY_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_HUMANOID_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_MAGICAL_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_MONSTER_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_UNDEAD_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 stat {
     id = Ids.STAT_VERMIN_RACE
+    parent = Ids.GROUP_RACE
     min = 0
     max = 100
-    group(Ids.GROUP_RACE)
+    defaultValue = 0
 }.register()
 
-// --- Descriptors ---
-// BODY or MAGIC
+// --- DESCRIPTOR PARENT STAT (base stat) ---
+stat {
+    id = Ids.GROUP_DESCRIPTOR
+    defaultValue = 0
+}.register()
+
+// --- DESCRIPTOR STATS (children of DESCRIPTOR parent) ---
 stat {
     id = Ids.STAT_PHYSICAL
-    group(Ids.GROUP_DESCRIPTOR)
+    parent = Ids.GROUP_DESCRIPTOR
 }.register()
-// MAGIC
 stat {
     id = Ids.STAT_INCORPOREAL
-    group(Ids.GROUP_DESCRIPTOR)
+    parent = Ids.GROUP_DESCRIPTOR
 }.register()
-// MIND (trick wont work)
 stat {
     id = Ids.STAT_FERAL
-    group(Ids.GROUP_DESCRIPTOR)
+    parent = Ids.GROUP_DESCRIPTOR
 }.register()
-// CHARISMA
 stat {
     id = Ids.STAT_SENTIENT
-    group(Ids.GROUP_DESCRIPTOR)
+    parent = Ids.GROUP_DESCRIPTOR
 }.register()

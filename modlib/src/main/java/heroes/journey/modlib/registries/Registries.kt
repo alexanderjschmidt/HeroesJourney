@@ -3,7 +3,6 @@ package heroes.journey.modlib.registries
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.TextureMap
-import heroes.journey.modlib.attributes.Group
 import heroes.journey.modlib.attributes.IStat
 import heroes.journey.modlib.misc.Buff
 import heroes.journey.modlib.misc.IApproach
@@ -23,7 +22,6 @@ object Registries {
     open val TerrainManager: Registry<Terrain> = Registry()
     open val TileLayoutManager: Registry<TileLayout> = Registry()
     open val TileBatchManager: Registry<TileBatch> = Registry()
-    open val GroupManager: Registry<Group> = Registry()
     lateinit var RenderableManager: Registry<IRenderable>
     open val TextureManager: Registry<TextureMap> = Registry()
 }

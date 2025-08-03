@@ -27,19 +27,7 @@ interface IAttributes : Map<IStat, Int> {
      */
     fun getDirect(statId: String): Int?
 
-    /**
-     * Get the direct (raw) value of a stat by its IStat, ignoring formulas.
-     * @param stat the stat
-     * @return the direct value for the stat
-     */
-    fun getDirect(stat: IStat): Int?
-
-    fun add(
-        stat: IStat,
-        value: Int
-    ): IAttributes
-
-    fun add(stat: String?, value: Int): IAttributes
+    fun add(statId: String?, value: Int): IAttributes
 }
 
 /**

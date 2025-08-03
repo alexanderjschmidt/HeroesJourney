@@ -20,6 +20,8 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.attributes.Relation;
 import heroes.journey.mods.Registries;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
@@ -31,7 +33,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+import static heroes.journey.modlib.Ids.STAT_CHALLENGE_HEALTH;
 import static heroes.journey.mods.Registries.RenderableManager;
+import static heroes.journey.mods.Registries.StatManager;
 
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {
@@ -116,7 +120,9 @@ public class RenderSystem extends BaseEntitySystem {
             Attributes stats = StatsComponent.get(world, entityId);
             if (stats != null) {
                 Integer health = stats.get(Ids.STAT_CHALLENGE_HEALTH);
-                Integer health_max = stats.get(Ids.STAT_CHALLENGE_HEALTH_MAX);
+                IStat healthStat = StatManager.get(STAT_CHALLENGE_HEALTH);
+                IStat healthMax = healthStat.getRelation(Relation.MAX);
+                Integer health_max = stats.get(healthMax.getId());
                 if (health != null && health_max != null && health < health_max) {
                     float tileSize = GameCamera.get().getSize();
                     float barWidth = tileSize * 0.8f;  // 80% of tile width

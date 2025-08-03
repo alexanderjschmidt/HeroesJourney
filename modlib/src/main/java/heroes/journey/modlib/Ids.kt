@@ -154,11 +154,6 @@ object Ids {
     const val STAT_MANA_REGEN: String = "mana_regen"
     const val STAT_MOXIE_REGEN: String = "moxie_regen"
     const val STAT_CHALLENGE_HEALTH_REGEN: String = "challenge_health_regen"
-    const val STAT_STAMINA_MAX: String = "stamina_max"
-    const val STAT_FOCUS_MAX: String = "focus_max"
-    const val STAT_MANA_MAX: String = "mana_max"
-    const val STAT_MOXIE_MAX: String = "moxie_max"
-    const val STAT_CHALLENGE_HEALTH_MAX: String = "challenge_health_max"
     const val STAT_SPEED: String = "speed"
     const val STAT_VISION: String = "vision"
     const val STAT_CARRY_CAPACITY: String = "carry_capacity"
@@ -179,17 +174,8 @@ object Ids {
     const val STAT_FERAL: String = "feral"
     const val STAT_SENTIENT: String = "sentient"
 
-    // Meta Group IDs
-    const val GROUP_MAX: String = "max_group"
-    const val GROUP_MIN: String = "min_group"
-    const val GROUP_MULT: String = "mult_group"
-
     // Group IDs
-    const val GROUP_FAME: String = "fame_group"
-    const val GROUP_BODY: String = "body_group"
-    const val GROUP_MIND: String = "mind_group"
-    const val GROUP_MAGIC: String = "magic_group"
-    const val GROUP_CHARISMA: String = "charisma_group"
+    const val GROUP_BASE_STATS: String = "base_stats_group"
     const val GROUP_RESOURCES: String = "resources_group"
     const val GROUP_REGEN: String = "regen_group"
     const val GROUP_RACE: String = "race_group"

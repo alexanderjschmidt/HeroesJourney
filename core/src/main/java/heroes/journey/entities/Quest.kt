@@ -8,7 +8,6 @@ import heroes.journey.modlib.attributes.Operation
 import heroes.journey.modlib.misc.IQuest
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.mods.Registries
-import heroes.journey.mods.Registries.StatManager
 import java.util.*
 
 class Quest(
@@ -43,13 +42,13 @@ class Quest(
             }
         }
         for ((stat, amount) in cost) {
-            playerStats.put(stat, -amount, Operation.ADD)
+            playerStats.put(stat.id, -amount, Operation.ADD)
         }
         for ((stat, amount) in rewards) {
-            playerStats.put(stat, amount, Operation.ADD)
+            playerStats.put(stat.id, amount, Operation.ADD)
         }
         if (fameReward > 0) {
-            playerStats.put(StatManager[Ids.STAT_FAME], fameReward, Operation.ADD)
+            playerStats.put(Ids.STAT_FAME, fameReward, Operation.ADD)
         }
         return true
     }
