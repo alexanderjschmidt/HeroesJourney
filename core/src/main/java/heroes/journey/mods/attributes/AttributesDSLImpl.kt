@@ -20,7 +20,7 @@ class AttributesDSLImpl : AttributesDSL {
         builder.init()
         val attrs = Attributes()
         for ((statId, value) in builder.build()) {
-            attrs.put(statId, value)
+            attrs.put(statId, value, false)
         }
         return attrs
     }

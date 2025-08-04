@@ -9,11 +9,11 @@ abstract class Registrable(override val id: String) : IRegistrable {
     }
 
     override fun getName(): String {
-        return Lang.instance.get("${id}_name")
+        return Lang.instance.name(id)
     }
 
     override fun getDescription(): String {
-        return Lang.instance.get("${id}_description")
+        return Lang.instance.description(id)
     }
 
     override fun toString(): String {

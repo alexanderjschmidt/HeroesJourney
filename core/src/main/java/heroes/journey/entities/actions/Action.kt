@@ -47,7 +47,7 @@ open class Action(
             if (costAttributes != null) {
                 for ((stat, requiredAmount) in costAttributes) {
                     val availableAmount: Int? = entityStats[stat]
-                    if (availableAmount == null || availableAmount < requiredAmount) {
+                    if (requiredAmount != null && (availableAmount == null || availableAmount < requiredAmount)) {
                         return ShowAction.GRAYED
                     }
                 }

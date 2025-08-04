@@ -1,4 +1,5 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.Lang
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
@@ -20,6 +21,7 @@ action {
         // Check if player can afford the approach cost
         var show: ShowAction = ShowAction.YES
         if (approach.cost != null) {
+            println(approach.cost)
             for ((stat, requiredAmount) in approach.cost!!) {
                 val currentAmount = stats[stat] ?: 0
                 if (currentAmount < requiredAmount) {
@@ -32,7 +34,7 @@ action {
         show
     }
     inputDisplayNameFn = { input ->
-        input["target"]!!
+        Lang.instance.name(input["target"]!!)
     }
     inputDescriptionFn = { input ->
         val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
@@ -56,8 +58,9 @@ action {
         }
 
         input.adjustStat(challengeEntityId, Ids.STAT_CHALLENGE_HEALTH, -5)
+        val challengeStats = input.getStats(challengeEntityId)
 
-        if (stats.get(Ids.STAT_CHALLENGE_HEALTH)!! <= 0)
+        if (challengeStats.get(Ids.STAT_CHALLENGE_HEALTH)!! <= 0)
             input.removeChallengeFromRegion(regionId, challengeEntityId)
 
         // Calculate rewards based on approach stats

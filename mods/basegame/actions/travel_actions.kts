@@ -13,7 +13,7 @@ action {
     id = Ids.TRAVEL_TO
     inputDisplayNameFn = { input ->
         val name = input.getName(UUID.fromString(input["target"]))
-        Lang.instance.get("travel_to_description") + name
+        Lang.instance.description("travel_to") + name
     }
     onHoverFn = { input ->
         val locationId = UUID.fromString(input["target"])

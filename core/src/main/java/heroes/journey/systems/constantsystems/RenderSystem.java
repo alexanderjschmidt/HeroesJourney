@@ -135,7 +135,7 @@ public class RenderSystem extends BaseEntitySystem {
                     // Draw background (red)
                     Application.get().getBatch().draw(background, barX, barY, barWidth, barHeight);
                     // Draw foreground (green) based on health percentage
-                    float healthPercentage = health / 100f;  // Assuming max health is 100
+                    float healthPercentage = (float) health / health_max;  // Assuming max health is 100
                     Application.get().getBatch().draw(front, barX, barY, barWidth * healthPercentage, barHeight);
                 }
             }

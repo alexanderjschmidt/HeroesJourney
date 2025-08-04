@@ -74,10 +74,20 @@ object Lang : ILang {
         }
     }
 
-    override fun get(key: String): String {
-        val value = langMap[key]
-        if (value == null && (key.endsWith("_name") || key.endsWith("_description"))) {
-            System.err.println("[Lang] Missing translation for key: '$key' in language '$currentLanguage'")
+    override fun name(key: String): String {
+        val nameKey = key + "_name"
+        val value = langMap[nameKey]
+        if (value == null) {
+            System.err.println("[Lang] Missing translation for key: '$nameKey' in language '$currentLanguage'")
+        }
+        return value ?: key
+    }
+
+    override fun description(key: String): String {
+        val descriptionKey = key + "_description"
+        val value = langMap[descriptionKey]
+        if (value == null) {
+            System.err.println("[Lang] Missing translation for key: '$descriptionKey' in language '$currentLanguage'")
         }
         return value ?: key
     }

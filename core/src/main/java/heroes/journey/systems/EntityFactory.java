@@ -86,11 +86,11 @@ public class EntityFactory {
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
         StatsComponent stats = entity.create(StatsComponent.class);
-        stats.getAttributes().put(STAT_BODY);
-        stats.getAttributes().put(STAT_MIND);
-        stats.getAttributes().put(STAT_MAGIC);
-        stats.getAttributes().put(STAT_CHARISMA);
-        stats.getAttributes().put(STAT_FAME);
+        stats.getAttributes().put(STAT_BODY, true);
+        stats.getAttributes().put(STAT_MIND, true);
+        stats.getAttributes().put(STAT_MAGIC, true);
+        stats.getAttributes().put(STAT_CHARISMA, true);
+        stats.getAttributes().put(STAT_FAME, true);
         System.out.println(stats.getAttributes());
         entity.create(QuestsComponent.class);
     }

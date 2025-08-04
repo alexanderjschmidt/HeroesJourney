@@ -10,7 +10,8 @@ package heroes.journey.modlib
  * ```
  */
 interface ILang {
-    fun get(key: String): String
+    fun name(key: String): String
+    fun description(key: String): String
 }
 
 /**

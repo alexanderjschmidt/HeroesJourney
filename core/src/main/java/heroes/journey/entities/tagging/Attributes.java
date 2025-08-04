@@ -67,26 +67,28 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         return super.get(stat);
     }
 
-    public Attributes put(String statId) {
+    public Attributes put(String statId, boolean cascade) {
         IStat stat = StatManager.get(statId);
-        this.put(statId, stat.getDefaultValue());
+        this.put(statId, stat.getDefaultValue(), cascade);
         return this;
     }
 
-    public Attributes put(String statId, Integer value) {
+    public Attributes put(String statId, Integer value, boolean cascade) {
         IStat stat = StatManager.get(statId);
         super.put(stat, value);
-        for (Relation relation : stat.getRelations()) {
-            if (relation.isOne()) {
-                IStat relatedStat = stat.getRelation(relation);
-                if (!this.containsKey(relatedStat)) {
-                    this.put(relatedStat.getId(), relatedStat.getDefaultValue());
-                }
-            } else {
-                List<IStat> relatedStats = stat.getRelatedStats(relation);
-                for (IStat relatedStat : relatedStats) {
+        if (cascade) {
+            for (Relation relation : stat.getRelations()) {
+                if (relation.isOne()) {
+                    IStat relatedStat = stat.getRelation(relation);
                     if (!this.containsKey(relatedStat)) {
-                        this.put(relatedStat.getId(), relatedStat.getDefaultValue());
+                        this.put(relatedStat.getId(), relatedStat.getDefaultValue(), cascade);
+                    }
+                } else {
+                    List<IStat> relatedStats = stat.getRelatedStats(relation);
+                    for (IStat relatedStat : relatedStats) {
+                        if (!this.containsKey(relatedStat)) {
+                            this.put(relatedStat.getId(), relatedStat.getDefaultValue(), cascade);
+                        }
                     }
                 }
             }
