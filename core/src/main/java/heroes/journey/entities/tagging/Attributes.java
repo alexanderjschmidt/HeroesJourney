@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static heroes.journey.mods.Registries.StatManager;
@@ -35,14 +36,7 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         // Get the base value from the stat's formula
         Integer val = stat.getFormula().invoke(this);
         if (val == null) {
-            // If no value from formula, check if this is a multiplier stat
-            if (stat.getRelation(Relation.MULTIPLICAND) != null) {
-                // This is a multiplier stat, return 1 (multiplication identity)
-                return 1;
-            } else {
-                // This is a regular stat, return 0 (addition identity)
-                return 0;
-            }
+            return null;
         }
 
         // Apply parent stat value (additive)
@@ -73,9 +67,30 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         return super.get(stat);
     }
 
+    public Attributes put(String statId) {
+        IStat stat = StatManager.get(statId);
+        this.put(statId, stat.getDefaultValue());
+        return this;
+    }
+
     public Attributes put(String statId, Integer value) {
         IStat stat = StatManager.get(statId);
         super.put(stat, value);
+        for (Relation relation : stat.getRelations()) {
+            if (relation.isOne()) {
+                IStat relatedStat = stat.getRelation(relation);
+                if (!this.containsKey(relatedStat)) {
+                    this.put(relatedStat.getId(), relatedStat.getDefaultValue());
+                }
+            } else {
+                List<IStat> relatedStats = stat.getRelatedStats(relation);
+                for (IStat relatedStat : relatedStats) {
+                    if (!this.containsKey(relatedStat)) {
+                        this.put(relatedStat.getId(), relatedStat.getDefaultValue());
+                    }
+                }
+            }
+        }
         return this;
     }
 

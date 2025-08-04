@@ -23,6 +23,7 @@ action {
             for ((stat, requiredAmount) in approach.cost!!) {
                 val currentAmount = stats[stat] ?: 0
                 if (currentAmount < requiredAmount) {
+                    println("Not enough " + stat)
                     show = ShowAction.GRAYED
                     break
                 }

@@ -44,37 +44,42 @@ class StatBuilderImpl : StatBuilder {
         if (parent != null) {
             val parentStat = Registries.StatManager[parent!!] as IStat
             mainStat.addRelatedStat(Relation.PARENT, parentStat)
+            parentStat.addRelatedStat(Relation.CHILD, mainStat)
         }
 
         // Automatically create related stats if specified
         if (min != null) {
             val minStat = createRelatedStat("${id}_min", min!!)
             mainStat.addRelatedStat(Relation.MIN, minStat)
+            minStat.addRelatedStat(Relation.BASE, mainStat)
         }
         if (max != null) {
             val maxStat = createRelatedStat("${id}_max", max!!)
             mainStat.addRelatedStat(Relation.MAX, maxStat)
+            maxStat.addRelatedStat(Relation.BASE, mainStat)
         }
         if (minFormula != null) {
             val minStat = createRelatedStatWithFormula("${id}_min", minFormula!!)
             mainStat.addRelatedStat(Relation.MIN, minStat)
+            minStat.addRelatedStat(Relation.BASE, mainStat)
         }
         if (maxFormula != null) {
             val maxStat = createRelatedStatWithFormula("${id}_max", maxFormula!!)
             mainStat.addRelatedStat(Relation.MAX, maxStat)
+            maxStat.addRelatedStat(Relation.BASE, mainStat)
         }
 
         // Auto-generate multiplier stat for the main stat
-        val multStat = createRelatedStat("${id}_mult", 100) // Default 100% = no change
-        mainStat.addRelatedStat(Relation.MULTIPLICAND, multStat)
-        multStat.addRelatedStat(Relation.MULTIPLIER, mainStat)
+        val multStat = createRelatedStat("${id}_mult", 1)
+        mainStat.addRelatedStat(Relation.MULTIPLIER, multStat)
+        multStat.addRelatedStat(Relation.MULTIPLICAND, mainStat)
 
         // If we have a max stat, also create a multiplier for it
         val maxStat = mainStat.getRelation(Relation.MAX)
         if (maxStat != null) {
-            val maxMultStat = createRelatedStat("${id}_max_mult", 100) // Default 100% = no change
-            maxStat.addRelatedStat(Relation.MULTIPLICAND, maxMultStat)
-            maxMultStat.addRelatedStat(Relation.MULTIPLIER, maxStat)
+            val maxMultStat = createRelatedStat("${id}_max_mult", 1)
+            maxStat.addRelatedStat(Relation.MULTIPLIER, maxMultStat)
+            maxMultStat.addRelatedStat(Relation.MULTIPLICAND, maxStat)
         }
 
         // If we have a cap, create a max_max stat and link it to the max stat
@@ -83,7 +88,7 @@ class StatBuilderImpl : StatBuilder {
             val maxStat = mainStat.getRelation(Relation.MAX)
             if (maxStat != null) {
                 maxStat.addRelatedStat(Relation.MAX, maxMaxStat)
-                maxMaxStat.addRelatedStat(Relation.MIN, maxStat)
+                maxMaxStat.addRelatedStat(Relation.BASE, maxStat)
             }
         }
 

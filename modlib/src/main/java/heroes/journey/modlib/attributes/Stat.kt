@@ -11,6 +11,7 @@ interface IStat : IRegistrable {
     val formula: (IAttributes) -> Int?
     val defaultValue: Int?
 
+    fun getRelations(): List<Relation>
     fun getRelation(relation: Relation): IStat?
     fun getRelation(attributes: IAttributes, relation: Relation): Int?
     fun getRelatedStats(relation: Relation): List<IStat>

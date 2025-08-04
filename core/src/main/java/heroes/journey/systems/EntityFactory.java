@@ -66,6 +66,7 @@ public class EntityFactory {
         IStat health = StatManager.get(STAT_CHALLENGE_HEALTH);
         IStat healthMax = health.getRelation(Relation.MAX);
         stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(healthMax.getId()));
+        System.out.println(stats);
         return entityId;
     }
 
@@ -84,7 +85,13 @@ public class EntityFactory {
         entity.create(BuffsComponent.class);
         entity.create(MapComponent.class);
         entity.create(AITurnComponent.class);
-        entity.create(StatsComponent.class);
+        StatsComponent stats = entity.create(StatsComponent.class);
+        stats.getAttributes().put(STAT_BODY);
+        stats.getAttributes().put(STAT_MIND);
+        stats.getAttributes().put(STAT_MAGIC);
+        stats.getAttributes().put(STAT_CHARISMA);
+        stats.getAttributes().put(STAT_FAME);
+        System.out.println(stats.getAttributes());
         entity.create(QuestsComponent.class);
     }
 

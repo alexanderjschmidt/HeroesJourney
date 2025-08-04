@@ -12,6 +12,7 @@ import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
+import heroes.journey.components.ChallengeComponent;
 import heroes.journey.components.LocationComponent;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
@@ -118,7 +119,8 @@ public class RenderSystem extends BaseEntitySystem {
 
             // Draw health bar if entity has health
             Attributes stats = StatsComponent.get(world, entityId);
-            if (stats != null) {
+            ChallengeComponent challengeComponent = ChallengeComponent.get(world, entityId);
+            if (stats != null && challengeComponent != null) {
                 Integer health = stats.get(Ids.STAT_CHALLENGE_HEALTH);
                 IStat healthStat = StatManager.get(STAT_CHALLENGE_HEALTH);
                 IStat healthMax = healthStat.getRelation(Relation.MAX);

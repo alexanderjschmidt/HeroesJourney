@@ -37,6 +37,13 @@ public class Stat extends Registrable implements IStat {
         return defaultValue;
     }
 
+    @NotNull
+    public List<Relation> getRelations() {
+        List<Relation> relations = new ArrayList<>(relatedStats.keySet());
+        relations.addAll(relatedStatsMany.keySet());
+        return relations;
+    }
+
     @Override
     public IStat getRelation(Relation relation) {
         return relatedStats.get(relation);
@@ -54,7 +61,7 @@ public class Stat extends Registrable implements IStat {
         } else if (relation.isMany()) {
             throw new RuntimeException("This relationship (" + relation + ") has many stats associated to it.");
         }
-        
+
         // Return the default value for this relation type
         return relation.getDefaultValue();
     }
