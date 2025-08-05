@@ -1,5 +1,4 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.Lang
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
@@ -33,14 +32,10 @@ action {
         }
         show
     }
-    inputDisplayNameFn = { input ->
-        Lang.instance.name(input["target"]!!)
-    }
-    inputDescriptionFn = { input ->
+    // Return the approach directly since it implements InfoProvider
+    customInfoProviderFn = { input ->
         val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
-        val challengeEntityId = UUID.fromString(input["challenge"])
-        val challenge: IChallenge = input.getChallenge(challengeEntityId)
-        "Use " + approach.getName() + " to " + challenge.getName()
+        approach
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
@@ -74,13 +69,11 @@ action {
 // Face Challenge
 targetAction<IApproach> {
     id = Ids.FACE_CHALLENGE
-    inputDisplayNameFn = { input ->
-        input.getName(UUID.fromString(input["target"]))
-    }
-    inputDescriptionFn = { input ->
+    // Return the challenge directly since it implements InfoProvider
+    customInfoProviderFn = { input ->
         val challengeEntityId = UUID.fromString(input["target"])
         val challenge: IChallenge = input.getChallenge(challengeEntityId)
-        challenge.getDescription()
+        challenge
     }
     getTargets = { input ->
         input["challenge"] = input["target"]!!

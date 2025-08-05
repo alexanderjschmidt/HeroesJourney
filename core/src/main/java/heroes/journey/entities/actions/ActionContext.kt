@@ -13,6 +13,9 @@ import heroes.journey.modlib.misc.IChallenge
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
+import heroes.journey.ui.infoproviders.BasicInfoProvider
+import heroes.journey.ui.infoproviders.LocationInfoProvider
+import heroes.journey.ui.infoproviders.UIInfoProvider
 import heroes.journey.utils.Utils
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import java.util.*
@@ -42,8 +45,18 @@ class ActionContext(
     override val gameState: GameState
         get() = innerGameState
 
+    override fun getInfoProvider(entityId: UUID): UIInfoProvider {
+        val locationComponent: LocationComponent? = LocationComponent.get(gameState.world, entityId)
+        return if (locationComponent != null) {
+            LocationInfoProvider(this, entityId)
+        } else {
+            // TODO split this into player and challenge???
+            BasicInfoProvider(this, entityId)
+        }
+    }
+
     override fun getStat(entityId: UUID, statId: String): Int {
-        val stats = StatsComponent.get((gameState as GameState).world, entityId)
+        val stats = StatsComponent.get(gameState.world, entityId)
         return stats?.get(statId) ?: 0
     }
 

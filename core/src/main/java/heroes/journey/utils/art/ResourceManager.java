@@ -1,9 +1,5 @@
 package heroes.journey.utils.art;
 
-import static heroes.journey.mods.Registries.TextureManager;
-
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetLoaderParameters;
 import com.badlogic.gdx.assets.AssetManager;
@@ -16,8 +12,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import heroes.journey.modlib.art.TextureMap;
+
+import java.util.HashMap;
+
+import static heroes.journey.mods.Registries.TextureManager;
 
 public class ResourceManager extends AssetManager {
 
@@ -25,6 +24,7 @@ public class ResourceManager extends AssetManager {
 
     private FreeTypeFontGenerator generator;
     public NinePatch menu;
+    public BitmapFont font12;
     public BitmapFont font18;
     public BitmapFont font24;
     public BitmapFont font36;
@@ -32,7 +32,7 @@ public class ResourceManager extends AssetManager {
     public BitmapFont font18bold;
     public Skin skin;
 
-    public HashMap<TextureMap,TextureRegion[][]> textureRegions;
+    public HashMap<TextureMap, TextureRegion[][]> textureRegions;
 
     private static ResourceManager manager;
     private int totalAssetsQueued = 1;
@@ -232,6 +232,7 @@ public class ResourceManager extends AssetManager {
         finishLoadingAsset("skin/" + skinName + "/" + skinName + ".atlas");
         skin = new Skin();
         skin.addRegions(get("skin/" + skinName + "/" + skinName + ".atlas", TextureAtlas.class));
+        skin.add("tool-tip", font12);
         skin.add("default-font", font18);
         skin.add("title", font72);
         skin.add("bold18", font18bold);
@@ -244,6 +245,8 @@ public class ResourceManager extends AssetManager {
 
         parameter.color = Color.WHITE;
 
+        parameter.size = 12;
+        font12 = generator.generateFont(parameter);
         parameter.size = 18;
         font18 = generator.generateFont(parameter);
         // Create bold version

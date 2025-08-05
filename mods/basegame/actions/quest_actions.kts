@@ -10,8 +10,9 @@ import java.util.*
 // Quest Action
 action {
     id = Ids.QUEST
-    inputDisplayNameFn = { input ->
-        Registries.QuestManager[input["target"]]!!.getName()
+    customInfoProviderFn = { input ->
+        val questId = input["target"]
+        Registries.QuestManager[questId]!!
     }
     onSelectFn = { input ->
         val town: UUID = UUID.fromString(input["owner"])
@@ -29,10 +30,6 @@ action {
 // Quest Board
 targetAction<IQuest> {
     id = Ids.QUEST_BOARD
-    inputDisplayNameFn = { input ->
-        val locName: String = input.getName(UUID.fromString(input["owner"]))
-        "Quest Board for " + locName
-    }
     getTargets = { input ->
         val town = UUID.fromString(input["owner"])
         input.getQuests(town)
@@ -60,10 +57,9 @@ targetAction<IQuest> {
 // Complete Specific Quest Action
 action {
     id = Ids.COMPLETE_SPECIFIC_QUEST
-    inputDisplayNameFn = { input ->
+    customInfoProviderFn = { input ->
         val questId = input["target"]
-        val quest = Registries.QuestManager[questId]
-        quest?.getName() ?: "Unknown Quest"
+        Registries.QuestManager[questId]!!
     }
     requirementsMetFn = { input ->
         val questId = input["target"]

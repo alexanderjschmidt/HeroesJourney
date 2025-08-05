@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Align;
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.ui.UI;
+import heroes.journey.ui.infoproviders.UIInfoProvider;
 import heroes.journey.utils.art.ResourceManager;
 
 public class InfoUI extends UI {
@@ -21,7 +22,7 @@ public class InfoUI extends UI {
         super();
         this.titleLabel = new Label("", ResourceManager.get().skin);
         this.titleLabel.setWrap(true);
-        this.bodyLabel = new Label("", ResourceManager.get().skin);
+        this.bodyLabel = new Label("", ResourceManager.get().skin, "tool-tip");
         this.bodyLabel.setWrap(true);
         this.bodyLabel.setAlignment(Align.top | Align.left);
         this.contentTable = new Table();
@@ -40,9 +41,10 @@ public class InfoUI extends UI {
         bodyLabel.setText("");
     }
 
-    public void showInfo(InfoProvider provider, Map<String,String> input) {
+    public void showInfo(UIInfoProvider provider, Map<String,String> input) {
         clearContent();
-        titleLabel.setText(provider.getTitle(new ActionContext(GameState.global(), null, false, input)));
+        ActionContext actionContext = new ActionContext(GameState.global(), null, false, input);
+        titleLabel.setText(provider.getTitle(actionContext));
         bodyLabel.setText(provider.getDescription(input));
         provider.fillCustomContent(contentTable, ResourceManager.get().skin, input);
         setVisible(true);

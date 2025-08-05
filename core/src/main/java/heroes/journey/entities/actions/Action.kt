@@ -13,10 +13,11 @@ import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.Operation
+import heroes.journey.modlib.registries.InfoProvider
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
-import heroes.journey.ui.windows.InfoProvider
+import heroes.journey.ui.infoproviders.UIInfoProvider
 import java.util.*
 
 open class Action(
@@ -25,15 +26,11 @@ open class Action(
     override val requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES },
     override val onHoverFn: (IActionContext) -> Unit = {},
     override val onSelectFn: (IActionContext) -> ActionResult,
-    override val inputDisplayNameFn: ((IActionContext) -> String)? = null,
-    override val inputDescriptionFn: ((IActionContext) -> String)? = null,
     override val turnCooldown: Int = 0,
     override val factionCooldown: Boolean = false,
-    override val cost: IAttributes? = null
-) : Registrable(id), InfoProvider, IAction {
-
-    val hasInput: Boolean
-        get() = inputDisplayNameFn != null
+    override val cost: IAttributes? = null,
+    override val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
+) : Registrable(id), UIInfoProvider, IAction {
 
     fun requirementsMet(input: IActionContext): ShowAction {
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
@@ -83,19 +80,47 @@ open class Action(
         return result
     }
 
-    override fun getTitle(input: ActionContext): String {
-        if (inputDisplayNameFn != null) {
-            return inputDisplayNameFn!!.invoke(input)
+    override fun getTitle(input: IActionContext): String {
+        // Use custom InfoProvider if available
+        val customProvider = customInfoProviderFn?.invoke(input)
+        if (customProvider != null) {
+            return customProvider.getTitle(input)
         }
+
         return getName()
     }
 
     override fun getDescription(input: Map<String, String>): String {
-        if (inputDescriptionFn != null) {
-            val ctx = ActionContext(GameState.global(), null, false, input)
-            return inputDescriptionFn!!.invoke(ctx)
+        // Use custom InfoProvider if available
+        val actionContext = ActionContext(GameState.global(), null, false, input)
+        val customProvider = customInfoProviderFn?.invoke(actionContext)
+        if (customProvider != null) {
+            return customProvider.getDescription(input)
         }
+
         return getDescription()
+    }
+
+    override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
+        // Use custom InfoProvider if available and it implements UIInfoProvider
+        val actionContext = ActionContext(GameState.global(), null, false, input)
+        val customProvider = customInfoProviderFn?.invoke(actionContext)
+        if (customProvider is UIInfoProvider) {
+            customProvider.fillCustomContent(table, skin, input)
+            return
+        }
+
+        // Default implementation for cooldown display
+        if (turnCooldown != 0) {
+            if (cooldown == null) {
+                cooldown = Label("", skin)
+            }
+            val cooldownComponent = getCooldownComponent(actionContext)
+            var cooldownVal = cooldownComponent?.cooldowns?.get(id)
+            cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
+            cooldown!!.setText("Cooldown: $cooldownVal/$turnCooldown")
+            table.add(cooldown).fill().row()
+        }
     }
 
     private fun getCooldownComponent(input: ActionContext): PossibleActionsComponent? {
@@ -113,24 +138,6 @@ open class Action(
     }
 
     private var cooldown: Label? = null
-
-    override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
-        if (turnCooldown != 0) {
-            if (cooldown == null) {
-                cooldown = Label("", skin)
-            }
-            val actionContext: ActionContext =
-                ActionContext(GameState.global(), GameState.global().currentEntity, false)
-            actionContext.putAll(input)
-            val cooldownComponent = getCooldownComponent(
-                actionContext
-            )
-            var cooldownVal = cooldownComponent?.cooldowns?.get(id)
-            cooldownVal = if (cooldownVal == null) turnCooldown else (turnCooldown - cooldownVal - 1)
-            cooldown!!.setText("Cooldown: $cooldownVal/$turnCooldown")
-            table.add(cooldown).fill().row()
-        }
-    }
 
     override fun register(): Action {
         return Registries.ActionManager.register(this) as Action

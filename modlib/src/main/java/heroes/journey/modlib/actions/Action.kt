@@ -2,6 +2,7 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.InfoProvider
 
 /**
  * Public interface for an Action, used for player actions and abilities.
@@ -14,7 +15,6 @@ import heroes.journey.modlib.registries.IRegistrable
  *     requirementsMetFn = { ShowAction.YES }
  *     onHoverFn = { }
  *     onSelectFn = { input -> StringResult("You did the thing!") }
- *     inputDisplayNameFn = { "Do the Thing" }
  *     turnCooldown = 0
  *     factionCooldown = false
  *     cost = attributes {
@@ -29,11 +29,10 @@ interface IAction : IRegistrable {
     val requirementsMetFn: (IActionContext) -> ShowAction
     val onHoverFn: (IActionContext) -> Unit
     val onSelectFn: (IActionContext) -> ActionResult
-    val inputDisplayNameFn: ((IActionContext) -> String)?
-    val inputDescriptionFn: ((IActionContext) -> String)?
     val turnCooldown: Int
     val factionCooldown: Boolean
     val cost: IAttributes?
+    val customInfoProviderFn: ((IActionContext) -> InfoProvider)?
     override fun register(): IAction
 }
 
@@ -53,9 +52,8 @@ interface IActionBuilder {
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
     var onSelectFn: (IActionContext) -> ActionResult
-    var inputDisplayNameFn: ((IActionContext) -> String)?
-    var inputDescriptionFn: ((IActionContext) -> String)?
     var cost: IAttributes?
+    var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
 }
 
 interface IOptionActionBuilder : IActionBuilder {
@@ -72,9 +70,8 @@ interface ITargetActionBuilder<I> {
     var targetAction: String
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
-    var inputDisplayNameFn: ((IActionContext) -> String)?
-    var inputDescriptionFn: ((IActionContext) -> String)?
     var cost: IAttributes?
+    var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
 }
 
 interface ActionDSL {

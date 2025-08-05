@@ -66,7 +66,6 @@ public class EntityFactory {
         IStat health = StatManager.get(STAT_CHALLENGE_HEALTH);
         IStat healthMax = health.getRelation(Relation.MAX);
         stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(healthMax.getId()));
-        System.out.println(stats);
         return entityId;
     }
 
@@ -91,7 +90,6 @@ public class EntityFactory {
         stats.getAttributes().put(STAT_MAGIC, true);
         stats.getAttributes().put(STAT_CHARISMA, true);
         stats.getAttributes().put(STAT_FAME, true);
-        System.out.println(stats.getAttributes());
         entity.create(QuestsComponent.class);
     }
 

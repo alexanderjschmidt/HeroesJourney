@@ -65,9 +65,6 @@ fun createCoreActions() {
     // Popup
     action {
         id = "popup"
-        inputDisplayNameFn = { input ->
-            input["message"]!!
-        }
         onSelectFn = { input ->
             StringResult(input["message"]!!)
         }

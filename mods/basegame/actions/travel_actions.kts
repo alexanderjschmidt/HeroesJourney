@@ -1,5 +1,4 @@
 import heroes.journey.modlib.Ids
-import heroes.journey.modlib.Lang
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
@@ -11,9 +10,8 @@ import java.util.*
 // Go Action
 action {
     id = Ids.TRAVEL_TO
-    inputDisplayNameFn = { input ->
-        val name = input.getName(UUID.fromString(input["target"]))
-        Lang.instance.description("travel_to") + name
+    customInfoProviderFn = { input ->
+        input.getInfoProvider(UUID.fromString(input["target"]))
     }
     onHoverFn = { input ->
         val locationId = UUID.fromString(input["target"])

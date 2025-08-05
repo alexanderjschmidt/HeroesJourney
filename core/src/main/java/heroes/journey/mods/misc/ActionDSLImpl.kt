@@ -6,6 +6,7 @@ import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.registries.InfoProvider
 
 // --- Builder Classes ---
 open class ActionBuilder : IActionBuilder {
@@ -14,11 +15,10 @@ open class ActionBuilder : IActionBuilder {
     override var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
     override var onHoverFn: (IActionContext) -> Unit = {}
     override var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
-    override var inputDisplayNameFn: ((IActionContext) -> String)? = null
-    override var inputDescriptionFn: ((IActionContext) -> String)? = null
     override var turnCooldown: Int = 0
     override var factionCooldown: Boolean = false
     override var cost: IAttributes? = null
+    override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
     open fun build(): Action = Action(
         id = id,
@@ -26,11 +26,10 @@ open class ActionBuilder : IActionBuilder {
         requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
         onHoverFn = { ctx -> onHoverFn(ctx) },
         onSelectFn = { ctx -> onSelectFn(ctx) },
-        inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
-        inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } },
         turnCooldown = turnCooldown,
         factionCooldown = factionCooldown,
-        cost = cost
+        cost = cost,
+        customInfoProviderFn = customInfoProviderFn
     )
 }
 
@@ -80,9 +79,8 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
     override var targetAction: String = ""
     override var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
     override var onHoverFn: (IActionContext) -> Unit = {}
-    override var inputDisplayNameFn: ((IActionContext) -> String)? = null
-    override var inputDescriptionFn: ((IActionContext) -> String)? = null
     override var cost: IAttributes? = null
+    override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
     fun build(): Action {
         return Action(
@@ -102,9 +100,8 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                 }
                 ActionListResult(actionOptions)
             },
-            inputDisplayNameFn = inputDisplayNameFn?.let { fn -> { ctx -> fn(ctx) } },
-            inputDescriptionFn = inputDescriptionFn?.let { fn -> { ctx -> fn(ctx) } },
-            cost = cost
+            cost = cost,
+            customInfoProviderFn = customInfoProviderFn
         )
     }
 }
