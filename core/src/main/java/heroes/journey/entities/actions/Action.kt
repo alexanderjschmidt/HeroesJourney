@@ -101,6 +101,9 @@ open class Action(
         return getDescription()
     }
 
+    private var cooldown: Label? = null
+    private var costLabel: Label? = null
+
     override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
         // Use custom InfoProvider if available and it implements UIInfoProvider
         val actionContext = ActionContext(GameState.global(), null, false, input)
@@ -108,6 +111,22 @@ open class Action(
         if (customProvider is UIInfoProvider) {
             customProvider.fillCustomContent(table, skin, input)
             return
+        }
+
+        // Display cost if present
+        if (cost != null) {
+            if (costLabel == null) {
+                costLabel = Label("", skin)
+            }
+            val costText = StringBuilder("Cost: ")
+            var first = true
+            for ((stat, amount) in cost!!) {
+                if (!first) costText.append(", ")
+                costText.append("${stat.getName()}: $amount")
+                first = false
+            }
+            costLabel!!.setText(costText.toString())
+            table.add(costLabel).fill().row()
         }
 
         // Default implementation for cooldown display
@@ -136,8 +155,6 @@ open class Action(
         }
         return cooldownComponent
     }
-
-    private var cooldown: Label? = null
 
     override fun register(): Action {
         return Registries.ActionManager.register(this) as Action
