@@ -1,6 +1,6 @@
 package heroes.journey.modlib.actions
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.registries.IRegistrable
 import heroes.journey.modlib.registries.InfoProvider
 
@@ -31,7 +31,7 @@ interface IAction : IRegistrable {
     val onSelectFn: (IActionContext) -> ActionResult
     val turnCooldown: Int
     val factionCooldown: Boolean
-    val cost: IAttributes?
+    val cost: Attributes?
     val customInfoProviderFn: ((IActionContext) -> InfoProvider)?
     override fun register(): IAction
 }
@@ -52,7 +52,7 @@ interface IActionBuilder {
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
     var onSelectFn: (IActionContext) -> ActionResult
-    var cost: IAttributes?
+    var cost: Attributes?
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
 }
 
@@ -70,7 +70,7 @@ interface ITargetActionBuilder<I> {
     var targetAction: String
     var requirementsMetFn: (IActionContext) -> ShowAction
     var onHoverFn: (IActionContext) -> Unit
-    var cost: IAttributes?
+    var cost: Attributes?
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
 }
 

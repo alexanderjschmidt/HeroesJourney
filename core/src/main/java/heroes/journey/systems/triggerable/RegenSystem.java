@@ -9,8 +9,8 @@ import com.artemis.annotations.All;
 
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.modlib.attributes.Relation;
 import heroes.journey.modlib.attributes.Stat;
 import heroes.journey.systems.GameWorld;

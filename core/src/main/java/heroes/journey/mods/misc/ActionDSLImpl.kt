@@ -5,7 +5,7 @@ import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.*
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.registries.InfoProvider
 
 // --- Builder Classes ---
@@ -17,7 +17,7 @@ open class ActionBuilder : IActionBuilder {
     override var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
     override var turnCooldown: Int = 0
     override var factionCooldown: Boolean = false
-    override var cost: IAttributes? = null
+    override var cost: Attributes? = null
     override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
     open fun build(): Action = Action(
@@ -39,7 +39,7 @@ open class OptionActionBuilder : ActionBuilder(), IOptionActionBuilder {
         get() = false
         set(_) {} // Ignore any attempts to set the value
 
-    override var cost: IAttributes?
+    override var cost: Attributes?
         get() = null
         set(_) {} // Ignore any attempts to set the value
 
@@ -59,7 +59,7 @@ class BooleanOptionActionBuilder : OptionActionBuilder(), IBooleanOptionActionBu
         get() = false
         set(_) {} // Ignore any attempts to set the value
 
-    override var cost: IAttributes?
+    override var cost: Attributes?
         get() = null
         set(_) {} // Ignore any attempts to set the value
 
@@ -79,7 +79,7 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
     override var targetAction: String = ""
     override var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
     override var onHoverFn: (IActionContext) -> Unit = {}
-    override var cost: IAttributes? = null
+    override var cost: Attributes? = null
     override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
     fun build(): Action {

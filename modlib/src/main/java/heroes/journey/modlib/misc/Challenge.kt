@@ -1,6 +1,6 @@
 package heroes.journey.modlib.misc
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.modlib.registries.Registrable
@@ -22,7 +22,7 @@ class Challenge(
     val render: String,
     val stats: List<Stat>,
     val powerTier: Int,
-    val rewards: IAttributes
+    val rewards: Attributes
 ) : Registrable(id) {
     
     override fun register(): Challenge {
@@ -38,7 +38,7 @@ class ChallengeBuilder {
     var id: String = ""
     var render: String = ""
     var powerTier: Int = 1
-    var rewards: IAttributes? = null
+    var rewards: Attributes? = null
     private val _stats = mutableListOf<String>()
     
     fun tag(vararg statIdsIn: String) {
@@ -52,7 +52,7 @@ class ChallengeBuilder {
         }
     }
     
-    fun builtRewards(): IAttributes = rewards ?: heroes.journey.modlib.attributes.attributes { }
+    fun builtRewards(): Attributes = rewards ?: heroes.journey.modlib.attributes.attributes { }
 }
 
 /**

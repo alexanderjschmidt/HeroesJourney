@@ -1,6 +1,6 @@
 package heroes.journey.modlib.actions
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
@@ -35,7 +35,7 @@ abstract class IActionContext(
 
     abstract fun getStat(entityId: UUID, statId: String): Int
     abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)
-    abstract fun getStats(entityId: UUID): IAttributes
+    abstract fun getStats(entityId: UUID): Attributes
 
     abstract fun addBuff(entityId: UUID, buffId: String)
     abstract fun getName(entityId: UUID): String

@@ -1,6 +1,6 @@
 package heroes.journey.modlib.misc
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.registries.Registries
@@ -13,7 +13,7 @@ import heroes.journey.modlib.registries.Registries
 class Approach(
     id: String,
     val stats: List<Stat>,
-    val cost: IAttributes?,
+    val cost: Attributes?,
     val requiredAllTags: List<Stat>,
     val requiredAnyTags: List<Stat>,
     val forbiddenTags: List<Stat>
@@ -30,7 +30,7 @@ class Approach(
  */
 class ApproachBuilder {
     var id: String = ""
-    var cost: IAttributes? = null
+    var cost: Attributes? = null
     private val _stats = mutableListOf<String>()
     private val _requiredAllTags = mutableListOf<String>()
     private val _requiredAnyTags = mutableListOf<String>()

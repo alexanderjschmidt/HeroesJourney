@@ -1,13 +1,13 @@
 package heroes.journey.components;
 
+import java.util.List;
+import java.util.UUID;
+
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.modlib.attributes.Operation;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;
-
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 public class StatsComponent extends PooledClonableComponent<StatsComponent> {

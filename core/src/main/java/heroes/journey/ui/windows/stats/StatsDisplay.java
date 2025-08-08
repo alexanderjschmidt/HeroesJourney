@@ -11,8 +11,8 @@ import heroes.journey.GameCamera;
 import heroes.journey.GameState;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.RenderComponent;
-import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.art.ResourceManager;
 

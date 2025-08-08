@@ -7,13 +7,13 @@ import heroes.journey.modlib.actions.ActionDSLProvider
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.RenderableDSLProvider
-import heroes.journey.modlib.attributes.AttributesDSLProvider
+
 import heroes.journey.modlib.registries.Registry
 import heroes.journey.modlib.worldgen.BaseTileDSLProvider
 import heroes.journey.modlib.worldgen.FeatureTypeDSLProvider
 import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.mods.art.RenderableDSLImpl
-import heroes.journey.mods.attributes.AttributesDSLImpl
+
 import heroes.journey.mods.misc.ActionDSLImpl
 import heroes.journey.mods.worldgen.BaseTileDSLImpl
 import heroes.journey.mods.worldgen.FeatureTypeDSLImpl
@@ -39,7 +39,7 @@ fun setupModlibDSLs() {
     RenderableDSLProvider.instance = RenderableDSLImpl()
 
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
-    AttributesDSLProvider.instance = AttributesDSLImpl()
+
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
     ActionDSLProvider.instance = ActionDSLImpl()
 }

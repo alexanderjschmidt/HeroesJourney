@@ -10,7 +10,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
-import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.modlib.attributes.Stat;
 
 public class AttributesSerializer extends CustomSerializer<Attributes> {

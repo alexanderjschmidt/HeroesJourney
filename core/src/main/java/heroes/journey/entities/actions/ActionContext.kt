@@ -3,8 +3,8 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
-import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.IActionContext
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
@@ -130,7 +130,7 @@ class ActionContext(
         val playerStats = StatsComponent.get((gameState as GameState).world, entityId) ?: return false
 
         for ((stat, requiredAmount) in quest.cost) {
-            val currentAmount = playerStats[stat.id] ?: 0
+            val currentAmount = playerStats[stat] ?: 0
             if (currentAmount < requiredAmount) {
                 return false
             }
@@ -144,7 +144,7 @@ class ActionContext(
 
         // Check if player can afford the quest
         for ((stat, requiredAmount) in quest.cost) {
-            val currentAmount = playerStats[stat.id] ?: 0
+            val currentAmount = playerStats[stat] ?: 0
             if (currentAmount < requiredAmount) {
                 return false
             }

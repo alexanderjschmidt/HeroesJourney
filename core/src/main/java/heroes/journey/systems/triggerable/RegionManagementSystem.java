@@ -49,7 +49,8 @@ public class RegionManagementSystem extends TriggerableSystem {
         while (challenges.size() < 3) {
             String[] keySet;
             try {
-                keySet = Registries.ChallengeManager.keySet().toArray(new String[0]);
+                keySet = Registries.ChallengeManager.keySet()
+                    .toArray(new String[Registries.ChallengeManager.size()]);
             } catch (Exception e) {
                 System.out.println(Registries.ChallengeManager.size());
                 throw e;

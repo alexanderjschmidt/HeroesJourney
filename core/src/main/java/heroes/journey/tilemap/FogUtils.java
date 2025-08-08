@@ -11,8 +11,8 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.components.character.MapComponent;
-import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.utils.Direction;
 

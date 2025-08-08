@@ -6,12 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
 import heroes.journey.components.PossibleActionsComponent
 import heroes.journey.components.StatsComponent
-import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.ActionResult
 import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Operation
 import heroes.journey.modlib.registries.InfoProvider
 import heroes.journey.modlib.registries.Registrable
@@ -28,7 +27,7 @@ open class Action(
     override val onSelectFn: (IActionContext) -> ActionResult,
     override val turnCooldown: Int = 0,
     override val factionCooldown: Boolean = false,
-    override val cost: IAttributes? = null,
+    override val cost: Attributes? = null,
     override val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 ) : Registrable(id), UIInfoProvider, IAction {
 

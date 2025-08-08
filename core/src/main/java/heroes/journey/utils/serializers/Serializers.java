@@ -13,7 +13,7 @@ import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.utils.FogMap;
 import heroes.journey.entities.actions.history.ActionRecord;
-import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;

@@ -1,6 +1,6 @@
 package heroes.journey.modlib.misc
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.registries.Registries
@@ -12,8 +12,8 @@ import heroes.journey.modlib.registries.Registries
  */
 class Quest(
     id: String,
-    val cost: IAttributes,
-    val rewards: IAttributes,
+    val cost: Attributes,
+    val rewards: Attributes,
     val fameReward: Int = 0
 ) : Registrable(id) {
 
@@ -29,8 +29,8 @@ class Quest(
 class QuestBuilder {
     var id: String = ""
     var fameReward: Int = 0
-    private var _cost: IAttributes? = null
-    private var _rewards: IAttributes? = null
+    private var _cost: Attributes? = null
+    private var _rewards: Attributes? = null
 
     fun cost(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit) {
         _cost = attributes(init)
@@ -40,8 +40,8 @@ class QuestBuilder {
         _rewards = attributes(init)
     }
 
-    fun builtCost(): IAttributes = _cost ?: attributes { }
-    fun builtRewards(): IAttributes = _rewards ?: attributes { }
+    fun builtCost(): Attributes = _cost ?: attributes { }
+    fun builtRewards(): Attributes = _rewards ?: attributes { }
 }
 
 /**

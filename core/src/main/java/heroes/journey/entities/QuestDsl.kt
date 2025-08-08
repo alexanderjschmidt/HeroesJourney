@@ -1,6 +1,6 @@
 package heroes.journey.entities
 
-import heroes.journey.entities.tagging.Attributes
+import heroes.journey.modlib.attributes.Attributes
 
 // Helper functions for quest creation
 fun questCost(vararg pairs: Pair<String, Int>): Attributes {

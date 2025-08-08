@@ -1,19 +1,23 @@
 package heroes.journey.ui.windows;
 
+import static heroes.journey.modlib.Ids.LIGHT_BLUE;
+import static heroes.journey.modlib.Ids.PURPLE;
+import static heroes.journey.modlib.Ids.RED;
+import static heroes.journey.modlib.Ids.YELLOW;
+
+import java.util.UUID;
+
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.components.StatsComponent;
-import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.ui.ResourceBar;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
-
-import java.util.UUID;
-
-import static heroes.journey.modlib.Ids.*;
 
 public class EntityUI extends UI {
 

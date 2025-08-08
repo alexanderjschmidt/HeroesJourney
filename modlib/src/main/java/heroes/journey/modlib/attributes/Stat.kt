@@ -9,7 +9,7 @@ import heroes.journey.modlib.registries.Registries
  */
 class Stat(
     id: String,
-    val formula: (IAttributes) -> Int?,
+    val formula: (Attributes) -> Int?,
     val defaultValue: Int?
 ) : Registrable(id) {
     
@@ -32,7 +32,7 @@ class Stat(
         return relatedStats[relation]
     }
     
-    fun getRelation(attributes: IAttributes, relation: Relation): Int? {
+    fun getRelation(attributes: Attributes, relation: Relation): Int? {
         if (relation.isOne()) {
             val relatedStat = relatedStats[relation]
             if (relatedStat != null) {
@@ -67,10 +67,10 @@ class StatBuilder {
     var parent: String? = null
     var min: Int? = null
     var max: Int? = null
-    var minFormula: ((IAttributes) -> Int?)? = null
-    var maxFormula: ((IAttributes) -> Int?)? = null
+    var minFormula: ((Attributes) -> Int?)? = null
+    var maxFormula: ((Attributes) -> Int?)? = null
     var cap: Int? = null
-    var formula: ((IAttributes) -> Int?)? = null
+    var formula: ((Attributes) -> Int?)? = null
     var defaultValue: Int? = null
     
     fun build(): Stat {
@@ -87,7 +87,7 @@ class StatBuilder {
             throw IllegalArgumentException("Cannot specify 'cap' for stat '$id' without either 'max' or 'maxFormula'. Cap requires a max stat to exist.")
         }
         
-        val coreFormula: (IAttributes) -> Int? = formula ?: { attrs ->
+        val coreFormula: (Attributes) -> Int? = formula ?: { attrs ->
             try {
                 attrs.getDirect(id)
             } catch (_: Exception) {
@@ -167,7 +167,7 @@ class StatBuilder {
         return relatedStat
     }
     
-    private fun createRelatedStatWithFormula(relatedStatId: String, formula: (IAttributes) -> Int?): Stat {
+    private fun createRelatedStatWithFormula(relatedStatId: String, formula: (Attributes) -> Int?): Stat {
         // Create the related stat with formula
         val relatedStat = Stat(
             relatedStatId,

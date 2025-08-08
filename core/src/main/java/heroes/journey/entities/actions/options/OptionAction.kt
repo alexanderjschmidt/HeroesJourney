@@ -5,7 +5,7 @@ import heroes.journey.modlib.actions.ActionResult
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.actions.IOptionAction
 import heroes.journey.modlib.actions.ShowAction
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 
 abstract class OptionAction(
     id: String,
@@ -13,7 +13,7 @@ abstract class OptionAction(
     onHoverFn: (IActionContext) -> Unit = {},
     onSelectFn: (IActionContext) -> ActionResult,
     override var value: Any,
-    cost: IAttributes? = null
+    cost: Attributes? = null
 ) : Action(
     id,
     false,

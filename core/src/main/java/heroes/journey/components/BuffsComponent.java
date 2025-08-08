@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.attributes.Attributes;
 import heroes.journey.modlib.misc.Buff;
 import heroes.journey.systems.GameWorld;
 import lombok.Getter;

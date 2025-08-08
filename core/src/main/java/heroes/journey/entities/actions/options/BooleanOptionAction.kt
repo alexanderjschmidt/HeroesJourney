@@ -1,7 +1,7 @@
 package heroes.journey.entities.actions.options
 
 import heroes.journey.modlib.actions.*
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.mods.Registries
 import heroes.journey.utils.input.Options
 
@@ -11,7 +11,7 @@ class BooleanOptionAction(
     onHoverFn: (IActionContext) -> Unit = {},
     onSelectFn: (IActionContext) -> ActionResult,
     override var isTrue: Boolean = true,
-    cost: IAttributes? = null
+    cost: Attributes? = null
 ) : OptionAction(
     id,
     requirementsMetFn,

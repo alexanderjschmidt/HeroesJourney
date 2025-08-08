@@ -1,6 +1,6 @@
 package heroes.journey.modlib.misc
 
-import heroes.journey.modlib.attributes.IAttributes
+import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.registries.Registries
 
@@ -11,7 +11,7 @@ import heroes.journey.modlib.registries.Registries
 class Buff(
     id: String,
     val turnsBuffLasts: Int,
-    val attributes: IAttributes
+    val attributes: Attributes
 ) : Registrable(id) {
 
     override fun register(): Buff {
@@ -26,13 +26,13 @@ class Buff(
 class BuffBuilder {
     var id: String = ""
     var turnsBuffLasts: Int = 1
-    private var _attributes: IAttributes? = null
+    private var _attributes: Attributes? = null
 
     fun attributes(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit) {
         _attributes = heroes.journey.modlib.attributes.attributes(init)
     }
 
-    fun builtAttributes(): IAttributes = _attributes ?: heroes.journey.modlib.attributes.attributes {}
+    fun builtAttributes(): Attributes = _attributes ?: heroes.journey.modlib.attributes.attributes {}
 }
 
 /**
