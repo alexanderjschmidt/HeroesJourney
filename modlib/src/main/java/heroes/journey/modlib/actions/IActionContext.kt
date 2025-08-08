@@ -1,8 +1,8 @@
 package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.misc.IApproach
-import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.misc.Approach
+import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.InfoProvider
 import heroes.journey.modlib.utils.IGameState
@@ -62,8 +62,8 @@ abstract class IActionContext(
     abstract fun completeQuest(quest: Quest, entityId: UUID): Boolean
 
     abstract fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID)
-    abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach>
-    abstract fun getChallenge(challengeEntityId: UUID): IChallenge
+    abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<Approach>
+    abstract fun getChallenge(challengeEntityId: UUID): Challenge
     abstract fun getChallenges(regionId: UUID): List<UUID>
 
     // Turn configuration methods for dynamic game state modification

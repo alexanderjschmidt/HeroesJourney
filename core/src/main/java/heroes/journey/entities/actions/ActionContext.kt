@@ -3,13 +3,12 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
-import heroes.journey.entities.Approach
-import heroes.journey.modlib.misc.Quest
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.misc.IApproach
-import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.misc.Approach
+import heroes.journey.modlib.misc.Challenge
+import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries
 import heroes.journey.ui.HUD
@@ -126,10 +125,10 @@ class ActionContext(
             questsComponent.remove(quest)
         }
     }
-    
+
     override fun canAffordQuest(quest: Quest, entityId: UUID): Boolean {
         val playerStats = StatsComponent.get((gameState as GameState).world, entityId) ?: return false
-        
+
         for ((stat, requiredAmount) in quest.cost) {
             val currentAmount = playerStats[stat.id] ?: 0
             if (currentAmount < requiredAmount) {
@@ -138,11 +137,11 @@ class ActionContext(
         }
         return true
     }
-    
+
     override fun completeQuest(quest: Quest, entityId: UUID): Boolean {
         val playerStats = StatsComponent.get((gameState as GameState).world, entityId)
         if (playerStats == null) return false
-        
+
         // Check if player can afford the quest
         for ((stat, requiredAmount) in quest.cost) {
             val currentAmount = playerStats[stat.id] ?: 0
@@ -150,22 +149,26 @@ class ActionContext(
                 return false
             }
         }
-        
+
         // Apply costs
         for ((stat, amount) in quest.cost) {
             playerStats.put(stat.id, -amount, heroes.journey.modlib.attributes.Operation.ADD)
         }
-        
+
         // Apply rewards
         for ((stat, amount) in quest.rewards) {
             playerStats.put(stat.id, amount, heroes.journey.modlib.attributes.Operation.ADD)
         }
-        
+
         // Apply fame reward
         if (quest.fameReward > 0) {
-            playerStats.put(heroes.journey.modlib.Ids.STAT_FAME, quest.fameReward, heroes.journey.modlib.attributes.Operation.ADD)
+            playerStats.put(
+                heroes.journey.modlib.Ids.STAT_FAME,
+                quest.fameReward,
+                heroes.journey.modlib.attributes.Operation.ADD
+            )
         }
-        
+
         return true
     }
 
@@ -175,13 +178,13 @@ class ActionContext(
         (gameState as GameState).world.delete(challengeId)
     }
 
-    override fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach> {
+    override fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<Approach> {
         val possibleActionsComponent: PossibleActionsComponent =
             PossibleActionsComponent.get(gameState.world, entityId) ?: return listOf()
         val possibleApproaches: List<Approach> = possibleActionsComponent.possibleApproaches
 
         val challenge = getChallenge(challengeEntityId)
-        val approaches: MutableList<IApproach> = mutableListOf()
+        val approaches: MutableList<Approach> = mutableListOf()
         for (approach in possibleApproaches) {
             if (isValidTarget(challenge.stats, approach)) {
                 approaches.add(approach)
@@ -218,7 +221,7 @@ class ActionContext(
         HUD.get().cursor.setMapPointerLoc(pos)
     }
 
-    override fun getChallenge(challengeEntityId: UUID): IChallenge {
+    override fun getChallenge(challengeEntityId: UUID): Challenge {
         val challengeComponent = ChallengeComponent.get(gameState.world, challengeEntityId)
         return challengeComponent?.challenge()
             ?: throw IllegalArgumentException("No challenge found for entity $challengeEntityId")

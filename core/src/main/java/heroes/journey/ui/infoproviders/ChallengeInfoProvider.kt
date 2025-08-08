@@ -1,41 +1,29 @@
-package heroes.journey.entities
+package heroes.journey.ui.infoproviders
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.misc.IChallenge
-import heroes.journey.modlib.registries.Registrable
-import heroes.journey.mods.Registries
-import heroes.journey.ui.infoproviders.UIInfoProvider
+import heroes.journey.modlib.misc.Challenge
 
-class Challenge(
-    id: String,
-    override val render: String,
-    override val stats: List<IStat>,
-    override val powerTier: Int,
-    override val rewards: IAttributes
-) : Registrable(id), IChallenge, UIInfoProvider {
-
-    override fun register(): Challenge {
-        return Registries.ChallengeManager.register(this)
-    }
+/**
+ * Info provider for Challenge objects that builds UI content.
+ */
+class ChallengeInfoProvider(private val challenge: Challenge) : RegistrableInfoProvider(challenge) {
 
     override fun fillCustomContent(table: Table, skin: Skin, input: Map<String, String>) {
         // Display power tier
-        val powerTierLabel = Label("Power Tier: $powerTier", skin)
+        val powerTierLabel = Label("Power Tier: ${challenge.powerTier}", skin)
         table.add(powerTierLabel).fill().row()
 
         // Display stats that can be used
-        if (stats.isNotEmpty()) {
+        if (challenge.stats.isNotEmpty()) {
             val statsLabel = Label("Available Stats:", skin)
             table.add(statsLabel).fill().row()
 
             val statsText = StringBuilder()
-            for (i in stats.indices) {
+            for (i in challenge.stats.indices) {
                 if (i > 0) statsText.append(", ")
-                statsText.append(stats[i].getName())
+                statsText.append(challenge.stats[i].getName())
             }
             val statsListLabel = Label(statsText.toString(), skin)
             statsListLabel.wrap = true
@@ -43,13 +31,13 @@ class Challenge(
         }
 
         // Display rewards
-        if (rewards.isNotEmpty()) {
+        if (challenge.rewards.isNotEmpty()) {
             val rewardsLabel = Label("Rewards:", skin)
             table.add(rewardsLabel).fill().row()
 
             val rewardsText = StringBuilder()
             var first = true
-            for ((stat, amount) in rewards) {
+            for ((stat, amount) in challenge.rewards) {
                 if (!first) rewardsText.append(", ")
                 rewardsText.append("${stat.getName()}: $amount")
                 first = false

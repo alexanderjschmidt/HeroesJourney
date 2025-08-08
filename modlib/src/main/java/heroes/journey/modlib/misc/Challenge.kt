@@ -2,8 +2,8 @@ package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.registries.IRegistrable
-
+import heroes.journey.modlib.registries.Registries
+import heroes.journey.modlib.registries.Registrable
 
 /**
 Fibonacci * 10 with some rounding
@@ -13,70 +13,50 @@ Fibonacci * 10 with some rounding
 val powerLevels = listOf(10, 20, 30, 50, 75, 125, 200, 350, 500, 1000, 1500)
 
 /**
- * Public interface for a Challenge, used for challenge definitions and logic.
- * Mods should only use this interface, not implementation classes.
- *
- * Example usage:
- * ```kotlin
- * challenge {
- *     id = Ids.MY_CHALLENGE
- *     render = Ids.PLAYER_SPRITE
- *     tag(Ids.STAT_PHYSICAL)
- *     tag(Ids.STAT_SENTIENT)
- *     powerTier = 3 // Tier 3 challenge (30 power)
- *     rewards = attributes {
- *         stat(Ids.STAT_GOLD, 50)
- *         stat(Ids.STAT_XP, 100)
- *     }
- * }
- * ```
+ * A Challenge, used for challenge definitions and data storage.
+ * This is a simple data container with no complex functions.
+ * UI rendering is handled by ChallengeInfoProvider in the core module.
  */
-interface IChallenge : IRegistrable {
-
-    /** The animation/render ID for the challenge. */
-    val render: String
-
-    /** The stats that can be used to approach this challenge. */
-    val stats: List<IStat>
-
-    /** The power tier of the challenge (1-11). See powerLevels list for actual power values. */
-    val powerTier: Int
-
-    /** The rewards for completing this challenge. */
+class Challenge(
+    id: String,
+    val render: String,
+    val stats: List<IStat>,
+    val powerTier: Int,
     val rewards: IAttributes
-
-    override fun register(): IChallenge
+) : Registrable(id) {
+    
+    override fun register(): Challenge {
+        Registries.ChallengeManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining a challenge in a natural DSL style.
  */
-interface ChallengeBuilder {
-    var id: String
-    var render: String
-    var powerTier: Int
-    var rewards: IAttributes?
-    fun tag(vararg statIdsIn: String)
+class ChallengeBuilder {
+    var id: String = ""
+    var render: String = ""
+    var powerTier: Int = 1
+    var rewards: IAttributes? = null
+    private val _stats = mutableListOf<String>()
+    
+    fun tag(vararg statIdsIn: String) {
+        _stats.addAll(statIdsIn)
+    }
+    
+    fun builtStats(): List<IStat> {
+        return _stats.map { statId ->
+            Registries.StatManager[statId] 
+                ?: throw IllegalArgumentException("Stat not found: $statId")
+        }
+    }
+    
+    fun builtRewards(): IAttributes = rewards ?: heroes.journey.modlib.attributes.attributes { }
 }
 
 /**
- * Interface for the challenge DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface ChallengeDSL {
-    fun challenge(init: ChallengeBuilder.() -> Unit): IChallenge
-}
-
-/**
- * Singleton provider for the ChallengeDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object ChallengeDSLProvider {
-    lateinit var instance: ChallengeDSL
-}
-
-/**
- * DSL entrypoint for defining a challenge using a builder lambda.
+ * DSL entrypoint for defining a challenge.
  *
  * Example usage:
  * ```kotlin
@@ -93,4 +73,8 @@ object ChallengeDSLProvider {
  * }
  * ```
  */
-fun challenge(init: ChallengeBuilder.() -> Unit): IChallenge = ChallengeDSLProvider.instance.challenge(init)
+fun challenge(init: ChallengeBuilder.() -> Unit): Challenge {
+    val builder = ChallengeBuilder()
+    builder.init()
+    return Challenge(builder.id, builder.render, builder.builtStats(), builder.powerTier, builder.builtRewards())
+}

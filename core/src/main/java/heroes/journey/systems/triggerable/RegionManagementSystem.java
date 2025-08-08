@@ -9,7 +9,7 @@ import com.artemis.annotations.All;
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
-import heroes.journey.entities.Challenge;
+import heroes.journey.modlib.misc.Challenge;
 import heroes.journey.modlib.misc.Quest;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.mods.Registries;

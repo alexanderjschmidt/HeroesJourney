@@ -3,8 +3,8 @@ import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
-import heroes.journey.modlib.misc.IApproach
-import heroes.journey.modlib.misc.IChallenge
+import heroes.journey.modlib.misc.Approach
+import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.registries.Registries
 import java.util.*
 
@@ -14,7 +14,7 @@ import java.util.*
 action {
     id = Ids.CHOOSE_APPROACH
     requirementsMetFn = { input ->
-        val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
+        val approach: Approach = Registries.ApproachManager[input["target"]!!]!!
         val stats = input.getStats(input.entityId!!)
 
         // Check if player can afford the approach cost
@@ -34,14 +34,14 @@ action {
     }
     // Return the approach directly since it implements InfoProvider
     customInfoProviderFn = { input ->
-        val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
+        val approach: Approach = Registries.ApproachManager[input["target"]!!]!!
         approach
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
-        val approach: IApproach = Registries.ApproachManager[input["target"]!!]!!
+        val approach: Approach = Registries.ApproachManager[input["target"]!!]!!
         val challengeEntityId = UUID.fromString(input["challenge"])
-        val challenge: IChallenge = input.getChallenge(challengeEntityId)
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
 
         val stats = input.getStats(input.entityId!!)
 
@@ -67,12 +67,12 @@ action {
 }.register()
 
 // Face Challenge
-targetAction<IApproach> {
+targetAction<Approach> {
     id = Ids.FACE_CHALLENGE
     // Return the challenge directly since it implements InfoProvider
     customInfoProviderFn = { input ->
         val challengeEntityId = UUID.fromString(input["target"])
-        val challenge: IChallenge = input.getChallenge(challengeEntityId)
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
         challenge
     }
     getTargets = { input ->

@@ -5,7 +5,7 @@ import static heroes.journey.mods.Registries.ChallengeManager;
 import java.util.UUID;
 
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.Challenge;
+import heroes.journey.modlib.misc.Challenge;
 import heroes.journey.systems.GameWorld;
 
 public class ChallengeComponent extends PooledClonableComponent<ChallengeComponent> {

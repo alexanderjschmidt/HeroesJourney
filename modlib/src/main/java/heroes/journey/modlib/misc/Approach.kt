@@ -2,55 +2,87 @@ package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for an Approach, used for challenge approach definitions.
- * Mods should only use this interface, not implementation classes.
+ * An Approach, used for challenge approach definitions and data storage.
+ * This is a simple data container with no complex functions.
+ * UI rendering is handled by ApproachInfoProvider in the core module.
  */
-interface IApproach : IRegistrable {
-    val stats: List<IStat>
-
-    val requiredAllTags: List<IStat>
-    val requiredAnyTags: List<IStat>
+class Approach(
+    id: String,
+    val stats: List<IStat>,
+    val cost: IAttributes?,
+    val requiredAllTags: List<IStat>,
+    val requiredAnyTags: List<IStat>,
     val forbiddenTags: List<IStat>
+) : Registrable(id) {
 
-    /** The cost attributes required to use this approach. */
-    val cost: IAttributes?
-
-    override fun register(): IApproach
+    override fun register(): Approach {
+        Registries.ApproachManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining an approach in a natural DSL style.
  */
-interface ApproachBuilder {
-    var id: String
-    var cost: IAttributes?
-    fun stat(vararg statIds: String)
-    fun requiresAll(vararg tags: String)
-    fun requiresAny(vararg tags: String)
-    fun forbids(vararg tags: String)
+class ApproachBuilder {
+    var id: String = ""
+    var cost: IAttributes? = null
+    private val _stats = mutableListOf<String>()
+    private val _requiredAllTags = mutableListOf<String>()
+    private val _requiredAnyTags = mutableListOf<String>()
+    private val _forbiddenTags = mutableListOf<String>()
+
+    fun stat(vararg statIds: String) {
+        _stats.addAll(statIds)
+    }
+
+    fun requiresAll(vararg tags: String) {
+        _requiredAllTags.addAll(tags)
+    }
+
+    fun requiresAny(vararg tags: String) {
+        _requiredAnyTags.addAll(tags)
+    }
+
+    fun forbids(vararg tags: String) {
+        _forbiddenTags.addAll(tags)
+    }
+
+    fun builtStats(): List<IStat> {
+        return _stats.map { statId ->
+            heroes.journey.modlib.registries.Registries.StatManager[statId]
+                ?: throw IllegalArgumentException("Stat not found: $statId")
+        }
+    }
+
+    fun builtRequiredAllTags(): List<IStat> {
+        return _requiredAllTags.map { tagId ->
+            heroes.journey.modlib.registries.Registries.StatManager[tagId]
+                ?: throw IllegalArgumentException("Stat not found: $tagId")
+        }
+    }
+
+    fun builtRequiredAnyTags(): List<IStat> {
+        return _requiredAnyTags.map { tagId ->
+            heroes.journey.modlib.registries.Registries.StatManager[tagId]
+                ?: throw IllegalArgumentException("Stat not found: $tagId")
+        }
+    }
+
+    fun builtForbiddenTags(): List<IStat> {
+        return _forbiddenTags.map { tagId ->
+            heroes.journey.modlib.registries.Registries.StatManager[tagId]
+                ?: throw IllegalArgumentException("Stat not found: $tagId")
+        }
+    }
 }
 
 /**
- * Interface for the approach DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface ApproachDSL {
-    fun approach(init: ApproachBuilder.() -> Unit): IApproach
-}
-
-/**
- * Singleton provider for the ApproachDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object ApproachDSLProvider {
-    lateinit var instance: ApproachDSL
-}
-
-/**
- * DSL entrypoint for defining an approach using a builder lambda.
+ * DSL entrypoint for defining an approach.
  *
  * Example usage:
  * ```kotlin
@@ -64,4 +96,15 @@ object ApproachDSLProvider {
  * }
  * ```
  */
-fun approach(init: ApproachBuilder.() -> Unit): IApproach = ApproachDSLProvider.instance.approach(init)
+fun approach(init: ApproachBuilder.() -> Unit): Approach {
+    val builder = ApproachBuilder()
+    builder.init()
+    return Approach(
+        builder.id,
+        builder.builtStats(),
+        builder.cost,
+        builder.builtRequiredAllTags(),
+        builder.builtRequiredAnyTags(),
+        builder.builtForbiddenTags()
+    )
+}
