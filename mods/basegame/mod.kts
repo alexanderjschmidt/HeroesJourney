@@ -19,6 +19,10 @@ gameMod("Base Game", 0) {
         "Challenges", "challenges"
     )
 
+    includeScriptsFromDirectory(
+        "Config", "config"
+    )
+
     includeScripts(
         "World-Gen",
         "worldgen/terrains.kts",

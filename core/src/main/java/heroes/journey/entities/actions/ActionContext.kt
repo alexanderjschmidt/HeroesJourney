@@ -181,4 +181,33 @@ class ActionContext(
         return challengeComponent?.challenge()
             ?: throw IllegalArgumentException("No challenge found for entity $challengeEntityId")
     }
+
+    // Turn configuration methods for dynamic game state modification
+    override fun setMinChallengePowerTier(tier: Int) {
+        gameState.setMinChallengePowerTier(tier)
+    }
+
+    override fun setMaxChallengePowerTier(tier: Int) {
+        gameState.setMaxChallengePowerTier(tier)
+    }
+
+    override fun setAmbientLighting(lighting: Float) {
+        gameState.setAmbientLighting(lighting)
+    }
+
+    override fun spawnDemonKing() {
+        gameState.spawnDemonKing()
+    }
+
+    override fun getCurrentTurn(): Int {
+        return gameState.getTurnNumber()
+    }
+
+    override fun setGameStateValue(key: String, value: Any) {
+        gameState.setGameStateValue(key, value)
+    }
+
+    override fun getGameStateValue(key: String): Any? {
+        return gameState.getGameStateValue(key)
+    }
 }

@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.modlib.Ids;
-import heroes.journey.mods.Registries;
 import heroes.journey.modlib.worldgen.Terrain;
+import heroes.journey.mods.Registries;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
@@ -32,10 +32,13 @@ public class TerrainUI extends UI {
         Cursor cursor = HUD.get().getCursor();
         Terrain tile = GameState.global().getMap().get(cursor.x, cursor.y);
         Terrain environment = GameState.global().getMap().getEnvironment(cursor.x, cursor.y);
+        String env = (environment == null || environment.getId().equals(Ids.TERRAIN_NULL) ?
+            "" :
+            " and " + environment.getName());
 
         String locationCoords = ((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
             Ids.DEBUG)).isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
-        String name = (tile == null ? "---" : (tile + (environment == null ? "" : " and " + environment)));
+        String name = (tile == null ? "---" : (tile.getName() + env));
         if (environment != null) {
             UUID locationId = GameState.global().getEntities().getLocation(cursor.x, cursor.y);
             if (locationId != null) {

@@ -45,9 +45,9 @@ import heroes.journey.systems.listeners.LocationPositionSyncSystem;
 import heroes.journey.systems.listeners.PositionSyncSystem;
 import heroes.journey.systems.triggerable.BuffSystem;
 import heroes.journey.systems.triggerable.CooldownSystem;
-import heroes.journey.systems.triggerable.EventSystem;
 import heroes.journey.systems.triggerable.RegenSystem;
 import heroes.journey.systems.triggerable.RegionManagementSystem;
+import heroes.journey.systems.triggerable.TurnConfigSystem;
 import heroes.journey.utils.Utils;
 import heroes.journey.utils.serializers.Serializers;
 
@@ -91,7 +91,7 @@ public class GameWorld extends World {
             .with(new RegionManagementSystem())
             .with(new PositionSyncSystem())
             .with(new LocationPositionSyncSystem())
-            .with(new EventSystem())
+            .with(new TurnConfigSystem())
             .with(new RegenSystem())
             .with(new BuffSystem());
         if (!limited) {

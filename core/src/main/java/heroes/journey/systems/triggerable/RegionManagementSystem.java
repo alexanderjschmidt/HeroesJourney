@@ -1,6 +1,11 @@
 package heroes.journey.systems.triggerable;
 
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
 import com.artemis.annotations.All;
+
 import heroes.journey.components.QuestsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.IdComponent;
@@ -12,18 +17,17 @@ import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.utils.Random;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 @All({RegionComponent.class, IdComponent.class})
 public class RegionManagementSystem extends TriggerableSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID regionId = IdComponent.get(world, entityId);
         RegionComponent regionComponent = RegionComponent.get(world, regionId);
+
+        // Get current turn number
+        int currentTurn = world.getGameState().getTurnNumber();
 
         // Get quests for this region (regions can have quest boards)
         QuestsComponent questsComponent = QuestsComponent.get(world, regionId);
@@ -50,10 +54,35 @@ public class RegionManagementSystem extends TriggerableSystem {
                 System.out.println(Registries.ChallengeManager.size());
                 throw e;
             }
-            String randomChallengeId = keySet[Random.get().nextInt(Registries.ChallengeManager.size())];
-            if (randomChallengeId == null)
+
+            // Get turn-based power tier constraints from GameState (set by dynamic turn configs)
+            int minPowerTier = world.getGameState().getMinChallengePowerTier();
+            int maxPowerTier = world.getGameState().getMaxChallengePowerTier();
+
+            // Find a challenge that fits the power tier constraints
+            Challenge randomChallenge = null;
+            int attempts = 0;
+            final int maxAttempts = 50; // Prevent infinite loops
+
+            while (randomChallenge == null && attempts < maxAttempts) {
+                String randomChallengeId = keySet[Random.get().nextInt(keySet.length)];
+                if (randomChallengeId == null) {
+                    attempts++;
+                    continue;
+                }
+
+                Challenge candidate = Registries.ChallengeManager.get(randomChallengeId);
+                if (candidate != null && candidate.getPowerTier() >= minPowerTier &&
+                    candidate.getPowerTier() <= maxPowerTier) {
+                    randomChallenge = candidate;
+                }
+                attempts++;
+            }
+
+            if (randomChallenge == null) {
                 continue;
-            Challenge randomChallenge = Registries.ChallengeManager.get(randomChallengeId);
+            }
+
             Set<Position> regionTiles = regionComponent.getTiles();
 
             // Find a random position from the region tiles
@@ -64,9 +93,11 @@ public class RegionManagementSystem extends TriggerableSystem {
             UUID challengeEntityId = world.getEntityFactory()
                 .createChallenge(randomChallenge, randomPosition.x, randomPosition.y);
             regionComponent.addChallenge(challengeEntityId);
-            System.out.println(
-                "Added random challenge '" + randomChallenge.getName() + "' to region " + regionId +
-                    " at position (" + randomPosition.x + ", " + randomPosition.y + ")");
+            System.out.println("Added random challenge '" + randomChallenge.getName() + "' (Power Tier: " +
+                randomChallenge.getPowerTier() + ") to region " + regionId + " at position (" +
+                randomPosition.x + ", " + randomPosition.y + ") " + "[Turn " + currentTurn +
+                ", Power Tier Range: " + minPowerTier + "-" + maxPowerTier + "]");
+
             // Refresh the challenges list after adding a new challenge
             challenges = regionComponent.getChallenges();
         }

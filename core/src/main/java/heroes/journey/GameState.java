@@ -7,7 +7,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -56,6 +58,12 @@ public class GameState implements Cloneable, IGameState {
     //private Integer currentEntity;
     private List<UUID> entitiesInActionOrder;
     private MapData mapData;
+    
+    // Turn configuration state
+    private int minChallengePowerTier = 1;
+    private int maxChallengePowerTier = 1;
+    private float ambientLighting = 1.0f;
+    private Map<String, Object> gameStateValues = new HashMap<>();
 
     private GameState() {
         entitiesInActionOrder = new ArrayList<>();
@@ -85,6 +93,12 @@ public class GameState implements Cloneable, IGameState {
         WorldEffectManager.get();
 
         turn = 0;
+        
+        // Reset turn configuration state
+        minChallengePowerTier = 1;
+        maxChallengePowerTier = 1;
+        ambientLighting = 1.0f;
+        gameStateValues.clear();
     }
 
     public GameState clone() {
@@ -104,6 +118,13 @@ public class GameState implements Cloneable, IGameState {
         clone.turn = turn;
         clone.currentEntity = currentEntity;
         clone.mapData = mapData;
+        
+        // Clone turn configuration state
+        clone.minChallengePowerTier = minChallengePowerTier;
+        clone.maxChallengePowerTier = maxChallengePowerTier;
+        clone.ambientLighting = ambientLighting;
+        clone.gameStateValues = new HashMap<>(gameStateValues);
+        
         return clone;
     }
 
@@ -275,6 +296,10 @@ public class GameState implements Cloneable, IGameState {
     public int getTurn() {
         return this.turn;
     }
+    
+    public int getTurnNumber() {
+        return this.turn;
+    }
 
     public List<UUID> getEntitiesInActionOrder() {
         return this.entitiesInActionOrder;
@@ -286,5 +311,47 @@ public class GameState implements Cloneable, IGameState {
 
     public MapData getMapData() {
         return this.mapData;
+    }
+    
+    // Turn configuration methods for dynamic game state modification
+    public void setMinChallengePowerTier(int tier) {
+        this.minChallengePowerTier = tier;
+        System.out.println("Set min challenge power tier to: " + tier);
+    }
+    
+    public void setMaxChallengePowerTier(int tier) {
+        this.maxChallengePowerTier = tier;
+        System.out.println("Set max challenge power tier to: " + tier);
+    }
+    
+    public void setAmbientLighting(float lighting) {
+        this.ambientLighting = lighting;
+        System.out.println("Set ambient lighting to: " + lighting);
+    }
+    
+    public void spawnDemonKing() {
+        System.out.println("The Demon King has arrived!");
+        // TODO: Implement demon king spawning logic
+    }
+    
+    public void setGameStateValue(String key, Object value) {
+        this.gameStateValues.put(key, value);
+        System.out.println("Set game state value '" + key + "' to: " + value);
+    }
+    
+    public Object getGameStateValue(String key) {
+        return this.gameStateValues.get(key);
+    }
+    
+    public int getMinChallengePowerTier() {
+        return this.minChallengePowerTier;
+    }
+    
+    public int getMaxChallengePowerTier() {
+        return this.maxChallengePowerTier;
+    }
+    
+    public float getAmbientLighting() {
+        return this.ambientLighting;
     }
 }

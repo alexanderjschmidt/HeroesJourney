@@ -54,4 +54,13 @@ abstract class IActionContext(
     abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach>
     abstract fun getChallenge(challengeEntityId: UUID): IChallenge
     abstract fun getChallenges(regionId: UUID): List<UUID>
+
+    // Turn configuration methods for dynamic game state modification
+    abstract fun setMinChallengePowerTier(tier: Int)
+    abstract fun setMaxChallengePowerTier(tier: Int)
+    abstract fun setAmbientLighting(lighting: Float)
+    abstract fun spawnDemonKing()
+    abstract fun getCurrentTurn(): Int
+    abstract fun setGameStateValue(key: String, value: Any)
+    abstract fun getGameStateValue(key: String): Any?
 }

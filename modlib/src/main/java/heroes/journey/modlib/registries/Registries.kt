@@ -4,6 +4,7 @@ import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.TextureMap
 import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.config.TurnConfig
 import heroes.journey.modlib.misc.Buff
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
@@ -17,6 +18,7 @@ object Registries {
     lateinit var ChallengeManager: Registry<IChallenge>
     lateinit var ApproachManager: Registry<IApproach>
     lateinit var ActionManager: Registry<IAction>
+    open val TurnConfigManager: Registry<TurnConfig> = Registry()
     open val BiomeManager: Registry<Biome> = Registry()
     lateinit var FeatureTypeManager: Registry<IFeatureType>
     open val TerrainManager: Registry<Terrain> = Registry()
