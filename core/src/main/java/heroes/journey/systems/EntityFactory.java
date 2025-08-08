@@ -39,8 +39,8 @@ import heroes.journey.components.character.RenderComponent;
 import heroes.journey.components.utils.WanderType;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Relation;
+import heroes.journey.modlib.attributes.Stat;
 import heroes.journey.modlib.misc.Challenge;
 import heroes.journey.modlib.utils.Position;
 import heroes.journey.tilemap.TileManager;
@@ -91,8 +91,8 @@ public class EntityFactory {
 
         Attributes stats = entity.create(StatsComponent.class).getAttributes();
         stats.add(STAT_CHALLENGE_POWER_TIER, challenge.getPowerTier());
-        IStat health = StatManager.get(STAT_CHALLENGE_HEALTH);
-        IStat healthMax = health.getRelation(Relation.MAX);
+        Stat health = StatManager.get(STAT_CHALLENGE_HEALTH);
+        Stat healthMax = health.getRelation(Relation.MAX);
         stats.add(Ids.STAT_CHALLENGE_HEALTH, stats.get(healthMax.getId()));
         return entityId;
     }

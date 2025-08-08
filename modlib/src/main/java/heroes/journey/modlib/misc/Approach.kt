@@ -1,7 +1,7 @@
 package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.registries.Registries
 
@@ -12,11 +12,11 @@ import heroes.journey.modlib.registries.Registries
  */
 class Approach(
     id: String,
-    val stats: List<IStat>,
+    val stats: List<Stat>,
     val cost: IAttributes?,
-    val requiredAllTags: List<IStat>,
-    val requiredAnyTags: List<IStat>,
-    val forbiddenTags: List<IStat>
+    val requiredAllTags: List<Stat>,
+    val requiredAnyTags: List<Stat>,
+    val forbiddenTags: List<Stat>
 ) : Registrable(id) {
 
     override fun register(): Approach {
@@ -52,28 +52,28 @@ class ApproachBuilder {
         _forbiddenTags.addAll(tags)
     }
 
-    fun builtStats(): List<IStat> {
+    fun builtStats(): List<Stat> {
         return _stats.map { statId ->
             heroes.journey.modlib.registries.Registries.StatManager[statId]
                 ?: throw IllegalArgumentException("Stat not found: $statId")
         }
     }
 
-    fun builtRequiredAllTags(): List<IStat> {
+    fun builtRequiredAllTags(): List<Stat> {
         return _requiredAllTags.map { tagId ->
             heroes.journey.modlib.registries.Registries.StatManager[tagId]
                 ?: throw IllegalArgumentException("Stat not found: $tagId")
         }
     }
 
-    fun builtRequiredAnyTags(): List<IStat> {
+    fun builtRequiredAnyTags(): List<Stat> {
         return _requiredAnyTags.map { tagId ->
             heroes.journey.modlib.registries.Registries.StatManager[tagId]
                 ?: throw IllegalArgumentException("Stat not found: $tagId")
         }
     }
 
-    fun builtForbiddenTags(): List<IStat> {
+    fun builtForbiddenTags(): List<Stat> {
         return _forbiddenTags.map { tagId ->
             heroes.journey.modlib.registries.Registries.StatManager[tagId]
                 ?: throw IllegalArgumentException("Stat not found: $tagId")

@@ -4,7 +4,7 @@ import heroes.journey.modlib.misc.Approach;
 import heroes.journey.modlib.misc.Challenge;
 import heroes.journey.modlib.misc.Quest;
 import heroes.journey.entities.actions.Action;
-import heroes.journey.entities.tagging.Stat;
+import heroes.journey.modlib.attributes.Stat;
 import heroes.journey.modlib.art.TextureMap;
 import heroes.journey.modlib.config.TurnConfig;
 import heroes.journey.modlib.misc.Buff;
@@ -33,7 +33,7 @@ public class Registries {
     public static Registry<TileLayout> TileLayoutManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTileLayoutManager();
     public static Registry<TileBatch> TileBatchManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTileBatchManager();
 
-    public static Registry<Stat> StatManager = new Registry<>();
+    public static Registry<Stat> StatManager = heroes.journey.modlib.registries.Registries.INSTANCE.getStatManager();
 
     public static Registry<Renderable> RenderableManager = new Registry<>();
     public static Registry<TextureMap> TextureManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTextureManager();

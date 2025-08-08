@@ -8,15 +8,12 @@ import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.RenderableDSLProvider
 import heroes.journey.modlib.attributes.AttributesDSLProvider
-import heroes.journey.modlib.attributes.IStat
-import heroes.journey.modlib.attributes.StatDSLProvider
 import heroes.journey.modlib.registries.Registry
 import heroes.journey.modlib.worldgen.BaseTileDSLProvider
 import heroes.journey.modlib.worldgen.FeatureTypeDSLProvider
 import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.mods.art.RenderableDSLImpl
 import heroes.journey.mods.attributes.AttributesDSLImpl
-import heroes.journey.mods.attributes.StatDSLImpl
 import heroes.journey.mods.misc.ActionDSLImpl
 import heroes.journey.mods.worldgen.BaseTileDSLImpl
 import heroes.journey.mods.worldgen.FeatureTypeDSLImpl
@@ -30,7 +27,6 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.Lang.instance = Lang
 
     // Wire up modlib registries to core implementations
-    heroes.journey.modlib.registries.Registries.StatManager = Registries.StatManager as Registry<IStat>
     heroes.journey.modlib.registries.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
     heroes.journey.modlib.registries.Registries.FeatureTypeManager =
         Registries.FeatureTypeManager as Registry<IFeatureType>
@@ -43,7 +39,6 @@ fun setupModlibDSLs() {
     RenderableDSLProvider.instance = RenderableDSLImpl()
 
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
-    StatDSLProvider.instance = StatDSLImpl()
     AttributesDSLProvider.instance = AttributesDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
     ActionDSLProvider.instance = ActionDSLImpl()

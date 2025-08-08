@@ -3,9 +3,9 @@ package heroes.journey.modlib.attributes
 /**
  * Public interface for a stat container, used for character and challenge attributes.
  * Mods should only use this interface, not implementation classes.
- * Provides read-only access to stat values by ID or IStat.
+ * Provides read-only access to stat values by ID or Stat.
  */
-interface IAttributes : Map<IStat, Int> {
+interface IAttributes : Map<Stat, Int> {
     /**
      * Get the value of a stat by its string ID, applying all formulas and modifiers.
      * @param statId the stat ID (see [Ids])
@@ -14,11 +14,11 @@ interface IAttributes : Map<IStat, Int> {
     fun get(statId: String): Int?
 
     /**
-     * Get the value of a stat by its IStat, applying all formulas and modifiers.
+     * Get the value of a stat by its Stat, applying all formulas and modifiers.
      * @param stat the stat
      * @return the calculated value for the stat
      */
-    override fun get(stat: IStat): Int?
+    override fun get(stat: Stat): Int?
 
     /**
      * Get the direct (raw) value of a stat by its string ID, ignoring formulas.

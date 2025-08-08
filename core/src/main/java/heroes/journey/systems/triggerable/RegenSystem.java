@@ -1,25 +1,26 @@
 package heroes.journey.systems.triggerable;
 
-import com.artemis.annotations.All;
-import heroes.journey.components.StatsComponent;
-import heroes.journey.components.character.IdComponent;
-import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.IStat;
-import heroes.journey.modlib.attributes.Relation;
-import heroes.journey.systems.GameWorld;
-import heroes.journey.systems.TriggerableSystem;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.List;
 import java.util.UUID;
 
-import static heroes.journey.mods.Registries.StatManager;
+import com.artemis.annotations.All;
+
+import heroes.journey.components.StatsComponent;
+import heroes.journey.components.character.IdComponent;
+import heroes.journey.entities.tagging.Attributes;
+import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.attributes.Relation;
+import heroes.journey.modlib.attributes.Stat;
+import heroes.journey.systems.GameWorld;
+import heroes.journey.systems.TriggerableSystem;
 
 @All({StatsComponent.class, IdComponent.class})
 public class RegenSystem extends TriggerableSystem {
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         UUID uuid = world.entityMap.entrySet()
             .stream()
             .filter(e -> e.getValue() == entityId)
@@ -32,16 +33,16 @@ public class RegenSystem extends TriggerableSystem {
         if (statsComponent == null)
             return;
         Attributes attrs = statsComponent.getAttributes();
-        IStat regenParentStat = StatManager.get(Ids.GROUP_REGEN);
-        List<IStat> regenStats = regenParentStat.getRelatedStats(Relation.CHILD);
+        Stat regenParentStat = StatManager.get(Ids.GROUP_REGEN);
+        List<Stat> regenStats = regenParentStat.getRelatedStats(Relation.CHILD);
         assert regenStats != null;
-        for (IStat regenStat : regenStats) {
+        for (Stat regenStat : regenStats) {
 
-            IStat resourceStat = regenStat.getRelation(Relation.RESOURCE);
+            Stat resourceStat = regenStat.getRelation(Relation.RESOURCE);
             if (resourceStat == null)
                 continue;
 
-            IStat maxStat = resourceStat.getRelation(Relation.MAX);
+            Stat maxStat = resourceStat.getRelation(Relation.MAX);
             if (maxStat == null)
                 continue;
 
@@ -57,7 +58,7 @@ public class RegenSystem extends TriggerableSystem {
             if (max == null)
                 continue;
 
-            int regenCalc = (int) ((regen / 100f) * max);
+            int regenCalc = (int)((regen / 100f) * max);
 
             StatsComponent.adjustStat(world, uuid, resourceStat.getId(), regenCalc);
         }

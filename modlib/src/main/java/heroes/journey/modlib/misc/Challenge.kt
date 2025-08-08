@@ -1,7 +1,7 @@
 package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
-import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.modlib.registries.Registrable
 
@@ -20,7 +20,7 @@ val powerLevels = listOf(10, 20, 30, 50, 75, 125, 200, 350, 500, 1000, 1500)
 class Challenge(
     id: String,
     val render: String,
-    val stats: List<IStat>,
+    val stats: List<Stat>,
     val powerTier: Int,
     val rewards: IAttributes
 ) : Registrable(id) {
@@ -45,7 +45,7 @@ class ChallengeBuilder {
         _stats.addAll(statIdsIn)
     }
     
-    fun builtStats(): List<IStat> {
+    fun builtStats(): List<Stat> {
         return _stats.map { statId ->
             Registries.StatManager[statId] 
                 ?: throw IllegalArgumentException("Stat not found: $statId")

@@ -11,15 +11,14 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 import heroes.journey.entities.tagging.Attributes;
-import heroes.journey.entities.tagging.Stat;
-import heroes.journey.modlib.attributes.IStat;
+import heroes.journey.modlib.attributes.Stat;
 
 public class AttributesSerializer extends CustomSerializer<Attributes> {
 
     @Override
     public void write(Json json, Attributes attributes, Class aClass) {
         json.writeObjectStart();
-        for (Map.Entry<IStat,Integer> entry : attributes.entrySet()) {
+        for (Map.Entry<Stat,Integer> entry : attributes.entrySet()) {
             json.writeValue(entry.getKey().toString(), entry.getValue());
         }
         json.writeObjectEnd();
@@ -39,7 +38,7 @@ public class AttributesSerializer extends CustomSerializer<Attributes> {
     @Override
     public void write(Kryo kryo, Output output, Attributes attributes) {
         output.writeInt(attributes.size());
-        for (Map.Entry<IStat,Integer> entry : attributes.entrySet()) {
+        for (Map.Entry<Stat,Integer> entry : attributes.entrySet()) {
             output.writeString(entry.getKey().toString());
             output.writeInt(entry.getValue());
         }

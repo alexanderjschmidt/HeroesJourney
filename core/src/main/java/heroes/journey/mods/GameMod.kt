@@ -194,14 +194,3 @@ class GameMod(
         return other.priority.compareTo(this.priority)
     }
 }
-
-// Legacy function for backward compatibility
-fun gameMod(
-    name: String,
-    priority: Int = 0,
-    debug: Boolean = false,
-    onInit: GameMod.() -> Unit
-): GameMod {
-    val modFolder = ScriptModLoader.getCurrentModFolder()
-    return GameMod(name, onInit, priority, debug, modFolder)
-}

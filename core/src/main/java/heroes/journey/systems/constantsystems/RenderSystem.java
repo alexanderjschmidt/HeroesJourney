@@ -1,5 +1,14 @@
 package heroes.journey.systems.constantsystems;
 
+import static heroes.journey.modlib.Ids.STAT_CHALLENGE_HEALTH;
+import static heroes.journey.mods.Registries.RenderableManager;
+import static heroes.journey.mods.Registries.StatManager;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.annotations.All;
@@ -8,6 +17,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import heroes.journey.Application;
 import heroes.journey.GameCamera;
 import heroes.journey.GameState;
@@ -21,22 +31,13 @@ import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.RenderComponent;
 import heroes.journey.entities.tagging.Attributes;
 import heroes.journey.modlib.Ids;
-import heroes.journey.modlib.attributes.IStat;
 import heroes.journey.modlib.attributes.Relation;
+import heroes.journey.modlib.attributes.Stat;
 import heroes.journey.mods.Registries;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.tilemap.Fog;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.RenderBounds;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
-
-import static heroes.journey.modlib.Ids.STAT_CHALLENGE_HEALTH;
-import static heroes.journey.mods.Registries.RenderableManager;
-import static heroes.journey.mods.Registries.StatManager;
 
 @All({PositionComponent.class, RenderComponent.class, IdComponent.class})
 public class RenderSystem extends BaseEntitySystem {
@@ -56,7 +57,7 @@ public class RenderSystem extends BaseEntitySystem {
     }
 
     protected final void processSystem() {
-        GameWorld world = (GameWorld) getWorld();
+        GameWorld world = (GameWorld)getWorld();
         deltaTime += world.getDelta();
         if (deltaTime >= 60)
             deltaTime -= 60;
@@ -83,7 +84,7 @@ public class RenderSystem extends BaseEntitySystem {
 
         PlayerInfo.updateFog();
 
-        if (!((heroes.journey.entities.actions.options.BooleanOptionAction) Registries.ActionManager.get(
+        if (!((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
             Ids.DEBUG)).isTrue())
             renderFog(batch, PlayerInfo.get().getFog());
 
@@ -122,8 +123,8 @@ public class RenderSystem extends BaseEntitySystem {
             ChallengeComponent challengeComponent = ChallengeComponent.get(world, entityId);
             if (stats != null && challengeComponent != null) {
                 Integer health = stats.get(Ids.STAT_CHALLENGE_HEALTH);
-                IStat healthStat = StatManager.get(STAT_CHALLENGE_HEALTH);
-                IStat healthMax = healthStat.getRelation(Relation.MAX);
+                Stat healthStat = StatManager.get(STAT_CHALLENGE_HEALTH);
+                Stat healthMax = healthStat.getRelation(Relation.MAX);
                 Integer health_max = stats.get(healthMax.getId());
                 if (health != null && health_max != null && health < health_max) {
                     float tileSize = GameCamera.get().getSize();
@@ -135,8 +136,10 @@ public class RenderSystem extends BaseEntitySystem {
                     // Draw background (red)
                     Application.get().getBatch().draw(background, barX, barY, barWidth, barHeight);
                     // Draw foreground (green) based on health percentage
-                    float healthPercentage = (float) health / health_max;  // Assuming max health is 100
-                    Application.get().getBatch().draw(front, barX, barY, barWidth * healthPercentage, barHeight);
+                    float healthPercentage = (float)health / health_max;  // Assuming max health is 100
+                    Application.get()
+                        .getBatch()
+                        .draw(front, barX, barY, barWidth * healthPercentage, barHeight);
                 }
             }
         }

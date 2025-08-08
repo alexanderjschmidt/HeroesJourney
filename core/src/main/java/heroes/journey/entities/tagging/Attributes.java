@@ -1,25 +1,26 @@
 package heroes.journey.entities.tagging;
 
-import heroes.journey.modlib.attributes.IAttributes;
-import heroes.journey.modlib.attributes.IStat;
-import heroes.journey.modlib.attributes.Operation;
-import heroes.journey.modlib.attributes.Relation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import static heroes.journey.mods.Registries.StatManager;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static heroes.journey.mods.Registries.StatManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import heroes.journey.modlib.attributes.IAttributes;
+import heroes.journey.modlib.attributes.Operation;
+import heroes.journey.modlib.attributes.Relation;
+import heroes.journey.modlib.attributes.Stat;
 
 // NOTE this has an error in intellij, but it's not real because HashMap covers IAttributes need for Map implementation
-public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
+public class Attributes extends HashMap<Stat,Integer> implements IAttributes {
 
     public Attributes() {
     }
 
-    public Attributes(Map<? extends Stat, ? extends Integer> map) {
+    public Attributes(Map<? extends Stat,? extends Integer> map) {
         super(map);
     }
 
@@ -29,7 +30,7 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
     }
 
     @Override
-    public Integer get(IStat stat) {
+    public Integer get(Stat stat) {
         if (stat == null)
             return null;
 
@@ -40,7 +41,7 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         }
 
         // Apply parent stat value (additive)
-        IStat parentStat = stat.getRelation(Relation.PARENT);
+        Stat parentStat = stat.getRelation(Relation.PARENT);
         if (parentStat != null) {
             Integer parentVal = get(parentStat);
             if (parentVal != null) {
@@ -49,7 +50,7 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
         }
 
         // Apply multiplier using the new MULTIPLIER relation
-        IStat multiplierStat = stat.getRelation(Relation.MULTIPLIER);
+        Stat multiplierStat = stat.getRelation(Relation.MULTIPLIER);
         if (multiplierStat != null) {
             Integer multiplier = get(multiplierStat);
             if (multiplier != null) {
@@ -62,30 +63,30 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
 
     @Override
     public Integer getDirect(String statId) {
-        IStat stat = StatManager.get(statId);
+        Stat stat = StatManager.get(statId);
 
         return super.get(stat);
     }
 
     public Attributes put(String statId, boolean cascade) {
-        IStat stat = StatManager.get(statId);
+        Stat stat = StatManager.get(statId);
         this.put(statId, stat.getDefaultValue(), cascade);
         return this;
     }
 
     public Attributes put(String statId, Integer value, boolean cascade) {
-        IStat stat = StatManager.get(statId);
+        Stat stat = StatManager.get(statId);
         super.put(stat, value);
         if (cascade) {
             for (Relation relation : stat.getRelations()) {
                 if (relation.isOne()) {
-                    IStat relatedStat = stat.getRelation(relation);
+                    Stat relatedStat = stat.getRelation(relation);
                     if (!this.containsKey(relatedStat)) {
                         this.put(relatedStat.getId(), relatedStat.getDefaultValue(), cascade);
                     }
                 } else {
-                    List<IStat> relatedStats = stat.getRelatedStats(relation);
-                    for (IStat relatedStat : relatedStats) {
+                    List<Stat> relatedStats = stat.getRelatedStats(relation);
+                    for (Stat relatedStat : relatedStats) {
                         if (!this.containsKey(relatedStat)) {
                             this.put(relatedStat.getId(), relatedStat.getDefaultValue(), cascade);
                         }
@@ -97,11 +98,10 @@ public class Attributes extends HashMap<IStat, Integer> implements IAttributes {
     }
 
     public Attributes put(String statId, Integer value, Operation operation) {
-        IStat stat = StatManager.get(statId);
+        Stat stat = StatManager.get(statId);
         if (this.containsKey(stat)) {
-            this.compute(stat,
-                (k, currentValue) -> Math.clamp(operation.apply(currentValue, value), stat.getRelation(this, Relation.MIN),
-                    stat.getRelation(this, Relation.MAX)));
+            this.compute(stat, (k, currentValue) -> Math.clamp(operation.apply(currentValue, value),
+                stat.getRelation(this, Relation.MIN), stat.getRelation(this, Relation.MAX)));
         } else {
             super.put(stat, value);
         }

@@ -5,7 +5,7 @@ import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.IActionContext
-import heroes.journey.modlib.attributes.IStat
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
@@ -193,7 +193,7 @@ class ActionContext(
         return approaches
     }
 
-    private fun isValidTarget(targetTags: List<IStat>, approach: Approach): Boolean {
+    private fun isValidTarget(targetTags: List<Stat>, approach: Approach): Boolean {
         // Must contain all requiredAllTags
         if (!targetTags.containsAll(approach.requiredAllTags)) return false
 
