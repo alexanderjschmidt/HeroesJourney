@@ -1,7 +1,7 @@
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.attributes.attributes
-import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.Registries
 import java.util.*
 
@@ -28,7 +28,7 @@ action {
 }.register()
 
 // Quest Board
-targetAction<IQuest> {
+targetAction<Quest> {
     id = Ids.QUEST_BOARD
     getTargets = { input ->
         val town = UUID.fromString(input["owner"])
@@ -38,7 +38,7 @@ targetAction<IQuest> {
 }.register()
 
 // Complete Quest Action (shows list of available quests)
-targetAction<IQuest> {
+targetAction<Quest> {
     id = Ids.COMPLETE_QUEST
     requirementsMetFn = { input ->
         val quests = input.getQuests(input.entityId!!)
@@ -66,7 +66,7 @@ action {
         val quests = input.getQuests(input.entityId!!)
         val quest = quests.find { it.id == questId }
 
-        if (quest != null && quest.canAfford(input)) {
+        if (quest != null && input.canAffordQuest(quest, input.entityId!!)) {
             ShowAction.YES
         } else if (quest != null) {
             ShowAction.GRAYED // Can't afford
@@ -80,7 +80,7 @@ action {
         val quest = quests.find { it.id == questId }
 
         if (quest != null) {
-            val success = quest.onComplete(input)
+            val success = input.completeQuest(quest, input.entityId!!)
             if (success) {
                 input.removeQuest(input.entityId!!, questId!!)
                 // TODO make this use registrables getName()

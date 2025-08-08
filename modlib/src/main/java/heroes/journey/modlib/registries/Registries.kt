@@ -8,11 +8,11 @@ import heroes.journey.modlib.config.TurnConfig
 import heroes.journey.modlib.misc.Buff
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
-import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.worldgen.*
 
 object Registries {
-    lateinit var QuestManager: Registry<IQuest>
+    open val QuestManager: Registry<Quest> = Registry()
     lateinit var StatManager: Registry<IStat>
     open val BuffManager: Registry<Buff> = Registry()
     lateinit var ChallengeManager: Registry<IChallenge>

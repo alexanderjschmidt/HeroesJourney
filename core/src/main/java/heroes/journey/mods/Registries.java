@@ -2,7 +2,7 @@ package heroes.journey.mods;
 
 import heroes.journey.entities.Approach;
 import heroes.journey.entities.Challenge;
-import heroes.journey.entities.Quest;
+import heroes.journey.modlib.misc.Quest;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.tagging.Stat;
 import heroes.journey.modlib.art.TextureMap;
@@ -21,7 +21,7 @@ public class Registries {
     public static Registry<Action> ActionManager = new Registry<>();
     public static Registry<Buff> BuffManager = heroes.journey.modlib.registries.Registries.INSTANCE.getBuffManager();
 
-    public static Registry<Quest> QuestManager = new Registry<>();
+    public static Registry<Quest> QuestManager = heroes.journey.modlib.registries.Registries.INSTANCE.getQuestManager();
     public static Registry<Challenge> ChallengeManager = new Registry<>();
     public static Registry<Approach> ApproachManager = new Registry<>();
     public static Registry<TurnConfig> TurnConfigManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTurnConfigManager();

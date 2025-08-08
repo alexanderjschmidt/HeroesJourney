@@ -21,7 +21,7 @@ import heroes.journey.mods.attributes.StatDSLImpl
 import heroes.journey.mods.misc.ActionDSLImpl
 import heroes.journey.mods.misc.ApproachDSLImpl
 import heroes.journey.mods.misc.ChallengeDSLImpl
-import heroes.journey.mods.misc.QuestDSLImpl
+
 import heroes.journey.mods.worldgen.BaseTileDSLImpl
 import heroes.journey.mods.worldgen.FeatureTypeDSLImpl
 import heroes.journey.utils.Lang
@@ -34,7 +34,6 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.Lang.instance = Lang
 
     // Wire up modlib registries to core implementations
-    heroes.journey.modlib.registries.Registries.QuestManager = Registries.QuestManager as Registry<IQuest>
     heroes.journey.modlib.registries.Registries.StatManager = Registries.StatManager as Registry<IStat>
     heroes.journey.modlib.registries.Registries.ChallengeManager =
         Registries.ChallengeManager as Registry<IChallenge>
@@ -54,7 +53,6 @@ fun setupModlibDSLs() {
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
     StatDSLProvider.instance = StatDSLImpl()
     AttributesDSLProvider.instance = AttributesDSLImpl()
-    QuestDSLProvider.instance = QuestDSLImpl()
     ChallengeDSLProvider.instance = ChallengeDSLImpl()
     ApproachDSLProvider.instance = ApproachDSLImpl()
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()

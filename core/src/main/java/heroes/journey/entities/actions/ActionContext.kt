@@ -4,7 +4,7 @@ import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
 import heroes.journey.entities.Approach
-import heroes.journey.entities.Quest
+import heroes.journey.modlib.misc.Quest
 import heroes.journey.entities.tagging.Attributes
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.IStat
@@ -125,6 +125,48 @@ class ActionContext(
         if (questsComponent != null && quest != null) {
             questsComponent.remove(quest)
         }
+    }
+    
+    override fun canAffordQuest(quest: Quest, entityId: UUID): Boolean {
+        val playerStats = StatsComponent.get((gameState as GameState).world, entityId) ?: return false
+        
+        for ((stat, requiredAmount) in quest.cost) {
+            val currentAmount = playerStats[stat.id] ?: 0
+            if (currentAmount < requiredAmount) {
+                return false
+            }
+        }
+        return true
+    }
+    
+    override fun completeQuest(quest: Quest, entityId: UUID): Boolean {
+        val playerStats = StatsComponent.get((gameState as GameState).world, entityId)
+        if (playerStats == null) return false
+        
+        // Check if player can afford the quest
+        for ((stat, requiredAmount) in quest.cost) {
+            val currentAmount = playerStats[stat.id] ?: 0
+            if (currentAmount < requiredAmount) {
+                return false
+            }
+        }
+        
+        // Apply costs
+        for ((stat, amount) in quest.cost) {
+            playerStats.put(stat.id, -amount, heroes.journey.modlib.attributes.Operation.ADD)
+        }
+        
+        // Apply rewards
+        for ((stat, amount) in quest.rewards) {
+            playerStats.put(stat.id, amount, heroes.journey.modlib.attributes.Operation.ADD)
+        }
+        
+        // Apply fame reward
+        if (quest.fameReward > 0) {
+            playerStats.put(heroes.journey.modlib.Ids.STAT_FAME, quest.fameReward, heroes.journey.modlib.attributes.Operation.ADD)
+        }
+        
+        return true
     }
 
     override fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID) {

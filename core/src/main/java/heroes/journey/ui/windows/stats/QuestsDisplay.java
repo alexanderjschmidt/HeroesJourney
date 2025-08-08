@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 import heroes.journey.GameState;
 import heroes.journey.components.QuestsComponent;
-import heroes.journey.entities.Quest;
 import heroes.journey.entities.actions.ActionContext;
+import heroes.journey.modlib.misc.Quest;
 import heroes.journey.utils.art.ResourceManager;
 
 public class QuestsDisplay extends Table {
@@ -64,14 +64,9 @@ public class QuestsDisplay extends Table {
             sb.append("\n");
         }
 
-        // Show fame reward if any
-        if (quest.getFameReward() > 0) {
-            sb.append("  Fame: +").append(quest.getFameReward()).append("\n");
-        }
-
         // Show affordability status
-        ActionContext input = new ActionContext(GameState.global(), entityId, false);
-        if (quest.canAfford(input)) {
+        ActionContext actionContext = new ActionContext(GameState.global(), entityId, false);
+        if (actionContext.canAffordQuest(quest, actionContext.getEntityId())) {
             sb.append("  [CAN AFFORD]");
         } else {
             sb.append("  [CANNOT AFFORD]");

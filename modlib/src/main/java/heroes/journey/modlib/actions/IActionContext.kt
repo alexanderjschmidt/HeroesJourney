@@ -3,7 +3,7 @@ package heroes.journey.modlib.actions
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.misc.IApproach
 import heroes.journey.modlib.misc.IChallenge
-import heroes.journey.modlib.misc.IQuest
+import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.InfoProvider
 import heroes.journey.modlib.utils.IGameState
 import heroes.journey.modlib.utils.Position
@@ -46,9 +46,20 @@ abstract class IActionContext(
     abstract fun getNeighbors(regionId: UUID): List<UUID>
     abstract fun setMapPointer(pos: Position)
 
-    abstract fun getQuests(entityId: UUID): List<IQuest>
+    abstract fun getQuests(entityId: UUID): List<Quest>
     abstract fun addQuest(entityId: UUID, questId: String)
     abstract fun removeQuest(entityId: UUID, questId: String)
+    
+    /**
+     * Check if a quest can be afforded by the given entity.
+     */
+    abstract fun canAffordQuest(quest: Quest, entityId: UUID): Boolean
+    
+    /**
+     * Complete a quest for the given entity, applying costs and rewards.
+     * Returns true if successful.
+     */
+    abstract fun completeQuest(quest: Quest, entityId: UUID): Boolean
 
     abstract fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID)
     abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<IApproach>

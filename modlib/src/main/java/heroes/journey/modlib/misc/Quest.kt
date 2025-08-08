@@ -2,58 +2,50 @@ package heroes.journey.modlib.misc
 
 import heroes.journey.modlib.attributes.IAttributes
 import heroes.journey.modlib.attributes.attributes
-import heroes.journey.modlib.registries.IRegistrable
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
 /**
- * Public interface for a Quest, used for quest definitions and completion logic.
- * Mods should only use this interface, not implementation classes.
+ * A Quest, used for quest definitions and data storage.
+ * This is a simple data container with no complex functions.
+ * Quest logic is handled by QuestUtils in the core module.
  */
-interface IQuest : IRegistrable {
-    /** The cost attributes required to complete the quest. */
-    val cost: IAttributes
+class Quest(
+    id: String,
+    val cost: IAttributes,
+    val rewards: IAttributes,
+    val fameReward: Int = 0
+) : Registrable(id) {
 
-    /** The reward attributes granted by the quest. */
-    val rewards: IAttributes
-
-    /** The fame reward granted by the quest. */
-    val fameReward: Int
-
-    /** Check if the quest can be afforded by the given input (game-specific context). */
-    fun canAfford(input: Any): Boolean
-
-    /** Complete the quest, applying costs and rewards. Returns true if successful. */
-    fun onComplete(input: Any): Boolean
-    override fun register(): IQuest
+    override fun register(): Quest {
+        Registries.QuestManager.register(this)
+        return this
+    }
 }
 
 /**
  * Builder for defining a quest in a natural DSL style.
  */
-interface QuestBuilder {
-    var id: String
-    var fameReward: Int
-    fun cost(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
-    fun rewards(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit)
+class QuestBuilder {
+    var id: String = ""
+    var fameReward: Int = 0
+    private var _cost: IAttributes? = null
+    private var _rewards: IAttributes? = null
+
+    fun cost(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit) {
+        _cost = attributes(init)
+    }
+
+    fun rewards(init: heroes.journey.modlib.attributes.AttributesBuilder.() -> Unit) {
+        _rewards = attributes(init)
+    }
+
+    fun builtCost(): IAttributes = _cost ?: attributes { }
+    fun builtRewards(): IAttributes = _rewards ?: attributes { }
 }
 
 /**
- * Interface for the quest DSL implementation.
- * Now uses a builder lambda for a more natural DSL.
- */
-interface QuestDSL {
-    fun quest(init: QuestBuilder.() -> Unit): IQuest
-}
-
-/**
- * Singleton provider for the QuestDSL implementation.
- * The core game must set this before any mods are loaded.
- */
-object QuestDSLProvider {
-    lateinit var instance: QuestDSL
-}
-
-/**
- * DSL entrypoint for defining a quest using a builder lambda.
+ * DSL entrypoint for defining a quest.
  *
  * Example usage:
  * ```kotlin
@@ -69,4 +61,8 @@ object QuestDSLProvider {
  * }
  * ```
  */
-fun quest(init: QuestBuilder.() -> Unit): IQuest = QuestDSLProvider.instance.quest(init)
+fun quest(init: QuestBuilder.() -> Unit): Quest {
+    val builder = QuestBuilder()
+    builder.init()
+    return Quest(builder.id, builder.builtCost(), builder.builtRewards(), builder.fameReward)
+}
