@@ -44,13 +44,13 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
         ActionContext input = new ActionContext(gameState, playingEntity, true);
-        Stat forbiddenTag = Registries.StatManager.get(Ids.GROUP_APPROACHES);
+        Stat mainActionTag = Registries.StatManager.get(Ids.GROUP_MAIN_ACTION);
 
         List<Action> actions;
-        if (forbiddenTag != null) {
+        if (mainActionTag != null) {
             actions = input.findActionsByTags(
-                input.getEntityId(), new ArrayList<>(), new ArrayList<>(),
-                Collections.singletonList(forbiddenTag)
+                input.getEntityId(),
+                Collections.singletonList(mainActionTag), new ArrayList<>(), new ArrayList<>()
             );
         } else {
             actions = Collections.emptyList();

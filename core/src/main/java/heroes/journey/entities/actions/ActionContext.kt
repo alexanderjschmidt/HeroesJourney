@@ -62,21 +62,21 @@ class ActionContext(
     }
 
     override fun adjustStat(entityId: UUID, statId: String, delta: Int) {
-        StatsComponent.adjustStat((gameState as GameState).world, entityId, statId, delta)
+        StatsComponent.adjustStat(gameState.world, entityId, statId, delta)
     }
 
     override fun addBuff(entityId: UUID, buffId: String) {
-        val buffsComponent = BuffsComponent.get((gameState as GameState).world, entityId)
+        val buffsComponent = BuffsComponent.get(gameState.world, entityId)
         val buff = CoreRegistries.BuffManager[buffId]
         buffsComponent.add(buff)
     }
 
     override fun getName(entityId: UUID): String {
-        return NamedComponent.get((gameState as GameState).world, entityId, "Unknown")
+        return NamedComponent.get(gameState.world, entityId, "Unknown")
     }
 
     override fun getPosition(entityId: UUID): Position {
-        val pos = PositionComponent.get((gameState as GameState).world, entityId)
+        val pos = PositionComponent.get(gameState.world, entityId)
         return Position(pos.x, pos.y)
     }
 
@@ -108,12 +108,12 @@ class ActionContext(
     }
 
     override fun getQuests(entityId: UUID): List<Quest> {
-        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        val questsComponent = QuestsComponent.get(gameState.world, entityId)
         return questsComponent?.quests ?: emptyList()
     }
 
     override fun addQuest(entityId: UUID, questId: String) {
-        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        val questsComponent = QuestsComponent.get(gameState.world, entityId)
         val quest = CoreRegistries.QuestManager[questId]
         if (questsComponent != null && quest != null) {
             questsComponent.addQuest(quest)
@@ -121,7 +121,7 @@ class ActionContext(
     }
 
     override fun removeQuest(entityId: UUID, questId: String) {
-        val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
+        val questsComponent = QuestsComponent.get(gameState.world, entityId)
         val quest = CoreRegistries.QuestManager[questId]
         if (questsComponent != null && quest != null) {
             questsComponent.remove(quest)
@@ -129,7 +129,7 @@ class ActionContext(
     }
 
     override fun canAffordQuest(quest: Quest, entityId: UUID): Boolean {
-        val playerStats = StatsComponent.get((gameState as GameState).world, entityId) ?: return false
+        val playerStats = StatsComponent.get(gameState.world, entityId) ?: return false
 
         for ((stat, requiredAmount) in quest.cost) {
             val currentAmount = playerStats[stat] ?: 0
@@ -141,7 +141,7 @@ class ActionContext(
     }
 
     override fun completeQuest(quest: Quest, entityId: UUID): Boolean {
-        val playerStats = StatsComponent.get((gameState as GameState).world, entityId)
+        val playerStats = StatsComponent.get(gameState.world, entityId)
         if (playerStats == null) return false
 
         // Check if player can afford the quest
@@ -175,13 +175,13 @@ class ActionContext(
     }
 
     override fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID) {
-        val regionComponent = RegionComponent.get((gameState as GameState).world, regionId)
+        val regionComponent = RegionComponent.get(gameState.world, regionId)
         regionComponent?.removeChallenge(challengeId)
-        (gameState as GameState).world.delete(challengeId)
+        gameState.world.delete(challengeId)
     }
 
     override fun getStats(entityId: UUID): Attributes {
-        return StatsComponent.get((gameState as GameState).world, entityId)
+        return StatsComponent.get(gameState.world, entityId)
     }
 
     override fun getChallenges(regionId: UUID): List<UUID> {

@@ -3,7 +3,6 @@ import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.Registries
-import java.util.*
 
 // Quest Actions - included by basegame mod
 
@@ -15,9 +14,9 @@ action {
         Registries.QuestManager[questId]!!
     }
     onSelectFn = { input ->
-        val town: UUID = UUID.fromString(input["owner"])
+        val regionId = input.getRegion(input.entityId!!)
 
-        input.removeQuest(town, input["target"]!!)
+        input.removeQuest(regionId, input["target"]!!)
         input.addQuest(input.entityId!!, input["target"]!!)
         EndTurnResult()
     }
@@ -30,9 +29,10 @@ action {
 // Quest Board
 targetAction<Quest> {
     id = Ids.QUEST_BOARD
+    tag(Ids.GROUP_MAIN_ACTION)
     getTargets = { input ->
-        val town = UUID.fromString(input["owner"])
-        input.getQuests(town)
+        val regionId = input.getRegion(input.entityId!!)
+        input.getQuests(regionId)
     }
     targetAction = Ids.QUEST
 }.register()
@@ -40,6 +40,7 @@ targetAction<Quest> {
 // Complete Quest Action (shows list of available quests)
 targetAction<Quest> {
     id = Ids.COMPLETE_QUEST
+    tag(Ids.GROUP_MAIN_ACTION)
     requirementsMetFn = { input ->
         val quests = input.getQuests(input.entityId!!)
         if (quests.isNotEmpty()) {

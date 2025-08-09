@@ -16,12 +16,12 @@ fun createCoreActions() {
         isReturnsActionList = true
         requirementsMetFn = { ShowAction.NO }
         onSelectFn = { input ->
-            val forbiddenTag = Registries.StatManager[Ids.GROUP_APPROACHES]
-            val actions = if (forbiddenTag != null) {
-                input.findActionsByTags(input.entityId!!, forbiddenTags = listOf(forbiddenTag))
+            val mainActionTag = Registries.StatManager[Ids.GROUP_MAIN_ACTION]
+            val actions = if (mainActionTag != null) {
+                input.findActionsByTags(input.entityId!!, requiredAllTags = listOf(mainActionTag))
             } else emptyList()
-            val options = actions.map { a -> ActionEntry(a.id, input.getHashMapCopy()) }
-            ActionListResult(options)
+            val actionEntries = actions.map { a -> ActionEntry(a.id, input.getHashMapCopy()) }
+            ActionListResult(actionEntries)
         }
     }.register()
 

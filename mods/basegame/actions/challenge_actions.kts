@@ -32,6 +32,7 @@ action {
 // Face Challenges
 targetAction<UUID> {
     id = Ids.FACE_CHALLENGES
+    tag(Ids.GROUP_MAIN_ACTION)
     getTargets = { input ->
         val regionId = input.getRegion(input.entityId!!)
         input.getChallenges(regionId)

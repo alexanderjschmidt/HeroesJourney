@@ -31,6 +31,7 @@ action {
 // Travel Action
 targetAction<UUID> {
     id = Ids.TRAVEL
+    tag(Ids.GROUP_MAIN_ACTION)
     getTargets = { input ->
         val regionId = input.getRegion(input.entityId!!)
         val neighbors = input.getNeighbors(regionId)

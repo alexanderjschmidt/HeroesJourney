@@ -13,6 +13,7 @@
 package heroes.journey.modlib
 
 object Ids {
+
     // TextureMaps
     const val OVERWORLD_TILESET: String = "overworld_tileset"
 
@@ -177,6 +178,8 @@ object Ids {
     // Group IDs
     const val GROUP_OPTION: String = "options_group"
     const val GROUP_APPROACHES: String = "approaches_group"
+    const val GROUP_TRAINING: String = "training_group"
+    const val GROUP_MAIN_ACTION: String = "main_action_group"
     const val GROUP_BASE_STATS: String = "base_stats_group"
     const val GROUP_RESOURCES: String = "resources_group"
     const val GROUP_REGEN: String = "regen_group"
