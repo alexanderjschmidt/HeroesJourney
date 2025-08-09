@@ -16,7 +16,7 @@ action {
     customInfoProviderFn = { input ->
         val challengeEntityId = UUID.fromString(input["target"])
         val challenge: Challenge = input.getChallenge(challengeEntityId)
-        challenge
+        input.getInfoProvider(challenge)
     }
     onSelectFn = { input ->
         input["challenge"] = input["target"]!!

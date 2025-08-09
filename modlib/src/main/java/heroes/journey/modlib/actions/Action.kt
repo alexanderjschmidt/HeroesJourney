@@ -12,7 +12,7 @@ open class Action(
     val requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES },
     val onHoverFn: (IActionContext) -> Unit = {},
     val onSelectFn: (IActionContext) -> ActionResult,
-    val turnCooldown: Int = 0,
+    val turnCooldown: Int = -1,
     val cost: Attributes? = null,
     val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null,
     val tags: List<Stat> = emptyList(),
@@ -51,7 +51,7 @@ open class ActionBuilder {
     var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
     var onHoverFn: (IActionContext) -> Unit = {}
     var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
-    var turnCooldown: Int = 0
+    var turnCooldown: Int = -1
     open var cost: Attributes? = null
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 

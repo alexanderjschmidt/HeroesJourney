@@ -5,6 +5,7 @@ import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.InfoProvider
+import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.utils.IGameState
 import heroes.journey.modlib.utils.Position
 import java.util.*
@@ -32,6 +33,7 @@ abstract class IActionContext(
     }
 
     abstract fun getInfoProvider(entityId: UUID): InfoProvider
+    abstract fun getInfoProvider(registrable: Registrable): InfoProvider
 
     abstract fun getStat(entityId: UUID, statId: String): Int
     abstract fun adjustStat(entityId: UUID, statId: String, delta: Int)

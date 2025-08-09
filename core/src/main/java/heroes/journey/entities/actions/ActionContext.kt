@@ -9,11 +9,14 @@ import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
+import heroes.journey.modlib.registries.InfoProvider
+import heroes.journey.modlib.registries.Registrable
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.modlib.utils.Position
 import heroes.journey.mods.Registries.ActionManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.infoproviders.BasicInfoProvider
+import heroes.journey.ui.infoproviders.ChallengeInfoProvider
 import heroes.journey.ui.infoproviders.LocationInfoProvider
 import heroes.journey.ui.infoproviders.UIInfoProvider
 import heroes.journey.utils.Utils
@@ -53,6 +56,14 @@ class ActionContext(
         } else {
             // TODO split this into player and challenge???
             BasicInfoProvider(this, entityId)
+        }
+    }
+
+    override fun getInfoProvider(registrable: Registrable): InfoProvider {
+        return if (registrable is Challenge) {
+            ChallengeInfoProvider(registrable)
+        } else {
+            registrable
         }
     }
 

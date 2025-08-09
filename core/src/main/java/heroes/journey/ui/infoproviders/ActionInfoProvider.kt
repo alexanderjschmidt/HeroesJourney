@@ -40,7 +40,7 @@ class ActionInfoProvider(private val action: Action) : RegistrableInfoProvider(a
         }
 
         // Default implementation for cooldown display
-        if (action.turnCooldown != 0) {
+        if (action.turnCooldown > 0) {
             if (cooldown == null) {
                 cooldown = Label("", skin)
             }

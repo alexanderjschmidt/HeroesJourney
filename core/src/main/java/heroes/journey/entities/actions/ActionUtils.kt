@@ -44,8 +44,10 @@ object ActionUtils {
             return NullResult()
         }
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
-        val cooldownComponent = getCooldownComponent(ctx)
-        cooldownComponent?.cooldowns?.set(action.id, action.turnCooldown)
+        if (action.turnCooldown > -1) {
+            val cooldownComponent = getCooldownComponent(ctx)
+            cooldownComponent?.cooldowns?.set(action.id, action.turnCooldown)
+        }
 
         // Deduct the cost from the entity's stats
         val cost = action.cost

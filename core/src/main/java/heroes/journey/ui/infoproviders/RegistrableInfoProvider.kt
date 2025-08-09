@@ -11,10 +11,10 @@ open class RegistrableInfoProvider(private val registrable: Registrable) : UIInf
     }
 
     override fun getTitle(input: IActionContext): String {
-        return registrable.getName()
+        return registrable.getTitle(input)
     }
 
     override fun getDescription(input: IActionContext): String {
-        return registrable.getDescription()
+        return registrable.getDescription(input)
     }
 }
