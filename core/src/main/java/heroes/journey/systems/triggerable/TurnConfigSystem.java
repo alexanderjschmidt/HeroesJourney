@@ -1,7 +1,6 @@
 package heroes.journey.systems.triggerable;
 
 import com.artemis.annotations.All;
-
 import heroes.journey.systems.GameWorld;
 import heroes.journey.systems.TriggerableSystem;
 import heroes.journey.utils.TurnConfigManager;
@@ -10,11 +9,12 @@ import heroes.journey.utils.TurnConfigManager;
 public class TurnConfigSystem extends TriggerableSystem {
 
     protected void processSystem() {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
         int currentTurn = world.getGameState().getTurnNumber();
 
         // Apply turn configurations for the current turn
         TurnConfigManager.INSTANCE.applyTurnConfigurations(currentTurn);
+        setEnabled(false);
     }
 
     @Override
