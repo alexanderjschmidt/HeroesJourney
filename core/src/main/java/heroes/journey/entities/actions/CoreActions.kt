@@ -3,6 +3,7 @@ package heroes.journey.entities.actions
 import heroes.journey.Application
 import heroes.journey.GameState
 import heroes.journey.components.character.ActionComponent
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.ui.HUD
@@ -73,7 +74,14 @@ fun createCoreActions() {
         id = "options"
         isReturnsActionList = true
         onSelectFn = { input ->
-            ActionListResult(emptyList())
+            val optionTag = Registries.StatManager[Ids.GROUP_OPTION]
+            val actions = if (optionTag != null) {
+                input.findActionsByTags(requiredAllTags = listOf(optionTag))
+            } else {
+                emptyList()
+            }
+            val entries = actions.map { a -> ActionEntry(a.id, input.getHashMapCopy()) }
+            ActionListResult(entries)
         }
     }.register().also { TeamActions.addTeamAction(it) }
 }

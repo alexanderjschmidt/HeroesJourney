@@ -1,6 +1,8 @@
 package heroes.journey.modlib.actions
 
+import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.Attributes
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.Registries
 
 class BooleanOptionAction(
@@ -16,7 +18,8 @@ class BooleanOptionAction(
     onHoverFn = onHoverFn,
     onSelectFn = onSelectFn,
     value = isTrue,
-    cost = cost
+    cost = cost,
+    tags = listOfNotNull(Registries.StatManager[Ids.GROUP_OPTION])
 ) {
     override fun register(): Action {
         Registries.ActionManager.register(this)

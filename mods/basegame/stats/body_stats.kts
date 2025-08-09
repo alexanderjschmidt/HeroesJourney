@@ -1,3 +1,5 @@
+package stats
+
 import heroes.journey.modlib.Ids
 import heroes.journey.modlib.attributes.Relation
 import heroes.journey.modlib.attributes.relate

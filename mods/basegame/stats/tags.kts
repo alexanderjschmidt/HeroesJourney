@@ -1,0 +1,10 @@
+import heroes.journey.modlib.Ids
+import heroes.journey.modlib.attributes.stat
+
+stat {
+    id = Ids.GROUP_OPTION
+}.register()
+
+stat {
+    id = Ids.GROUP_APPROACHES
+}.register()

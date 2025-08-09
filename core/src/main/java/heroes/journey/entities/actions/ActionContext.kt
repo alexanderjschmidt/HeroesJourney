@@ -3,14 +3,16 @@ package heroes.journey.entities.actions
 import heroes.journey.GameState
 import heroes.journey.components.*
 import heroes.journey.components.character.MovementComponent
+import heroes.journey.modlib.actions.Action
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
+import heroes.journey.modlib.registries.Registries
 import heroes.journey.modlib.utils.Position
-import heroes.journey.mods.Registries
+import heroes.journey.mods.Registries as CoreRegistries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.infoproviders.BasicInfoProvider
 import heroes.journey.ui.infoproviders.LocationInfoProvider
@@ -65,7 +67,7 @@ class ActionContext(
 
     override fun addBuff(entityId: UUID, buffId: String) {
         val buffsComponent = BuffsComponent.get((gameState as GameState).world, entityId)
-        val buff = Registries.BuffManager[buffId]
+        val buff = CoreRegistries.BuffManager[buffId]
         buffsComponent.add(buff)
     }
 
@@ -112,7 +114,7 @@ class ActionContext(
 
     override fun addQuest(entityId: UUID, questId: String) {
         val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
-        val quest = Registries.QuestManager[questId]
+        val quest = CoreRegistries.QuestManager[questId]
         if (questsComponent != null && quest != null) {
             questsComponent.addQuest(quest)
         }
@@ -120,7 +122,7 @@ class ActionContext(
 
     override fun removeQuest(entityId: UUID, questId: String) {
         val questsComponent = QuestsComponent.get((gameState as GameState).world, entityId)
-        val quest = Registries.QuestManager[questId]
+        val quest = CoreRegistries.QuestManager[questId]
         if (questsComponent != null && quest != null) {
             questsComponent.remove(quest)
         }
@@ -225,6 +227,20 @@ class ActionContext(
         val challengeComponent = ChallengeComponent.get(gameState.world, challengeEntityId)
         return challengeComponent?.challenge()
             ?: throw IllegalArgumentException("No challenge found for entity $challengeEntityId")
+    }
+
+    override fun findActionsByTags(
+        requiredAllTags: List<Stat>,
+        requiredAnyTags: List<Stat>,
+        forbiddenTags: List<Stat>
+    ): List<Action> {
+        val actions = Registries.ActionManager.values
+        return actions.filter { action ->
+            if (!action.tags.containsAll(requiredAllTags)) return@filter false
+            if (requiredAnyTags.isNotEmpty() && action.tags.intersect(requiredAnyTags.toSet()).isEmpty()) return@filter false
+            if (action.tags.any { it in forbiddenTags }) return@filter false
+            true
+        }
     }
 
     // Turn configuration methods for dynamic game state modification

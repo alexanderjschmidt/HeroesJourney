@@ -16,6 +16,8 @@ open class Action(
     val factionCooldown: Boolean = false,
     val cost: Attributes? = null,
     val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null,
+    val tags: List<Stat> = emptyList(),
+    // These are target tags (Tags a target must, could, cant have)
     val requiredAllTags: List<Stat> = emptyList(),
     val requiredAnyTags: List<Stat> = emptyList(),
     val forbiddenTags: List<Stat> = emptyList()
@@ -55,9 +57,14 @@ open class ActionBuilder {
     open var cost: Attributes? = null
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
+    private val tagIds = mutableListOf<String>()
     private val requiredAllTagIds = mutableListOf<String>()
     private val requiredAnyTagIds = mutableListOf<String>()
     private val forbiddenTagIds = mutableListOf<String>()
+
+    fun tag(vararg tags: String) {
+        tagIds.addAll(tags)
+    }
 
     fun requiresAll(vararg tags: String) {
         requiredAllTagIds.addAll(tags)
@@ -85,6 +92,7 @@ open class ActionBuilder {
         factionCooldown = factionCooldown,
         cost = cost,
         customInfoProviderFn = customInfoProviderFn,
+        tags = resolveTags(tagIds),
         requiredAllTags = resolveTags(requiredAllTagIds),
         requiredAnyTags = resolveTags(requiredAnyTagIds),
         forbiddenTags = resolveTags(forbiddenTagIds)
@@ -139,9 +147,14 @@ class TargetActionBuilder<I> {
     var cost: Attributes? = null
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
+    private val tagIds = mutableListOf<String>()
     private val requiredAllTagIds = mutableListOf<String>()
     private val requiredAnyTagIds = mutableListOf<String>()
     private val forbiddenTagIds = mutableListOf<String>()
+
+    fun tag(vararg tags: String) {
+        tagIds.addAll(tags)
+    }
 
     fun requiresAll(vararg tags: String) {
         requiredAllTagIds.addAll(tags)
@@ -180,6 +193,7 @@ class TargetActionBuilder<I> {
             },
             cost = cost,
             customInfoProviderFn = customInfoProviderFn,
+            tags = resolveTags(tagIds),
             requiredAllTags = resolveTags(requiredAllTagIds),
             requiredAnyTags = resolveTags(requiredAnyTagIds),
             forbiddenTags = resolveTags(forbiddenTagIds)

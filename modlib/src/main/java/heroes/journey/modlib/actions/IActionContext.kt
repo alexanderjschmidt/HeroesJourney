@@ -1,6 +1,7 @@
 package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.Attributes
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
@@ -65,6 +66,13 @@ abstract class IActionContext(
     abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<Approach>
     abstract fun getChallenge(challengeEntityId: UUID): Challenge
     abstract fun getChallenges(regionId: UUID): List<UUID>
+
+    // Tag-based action discovery for mods
+    abstract fun findActionsByTags(
+        requiredAllTags: List<Stat> = emptyList(),
+        requiredAnyTags: List<Stat> = emptyList(),
+        forbiddenTags: List<Stat> = emptyList()
+    ): List<Action>
 
     // Turn configuration methods for dynamic game state modification
     abstract fun setMinChallengePowerTier(tier: Int)

@@ -175,6 +175,8 @@ object Ids {
     const val STAT_SENTIENT: String = "sentient"
 
     // Group IDs
+    const val GROUP_OPTION: String = "options_group"
+    const val GROUP_APPROACHES: String = "approaches_group"
     const val GROUP_BASE_STATS: String = "base_stats_group"
     const val GROUP_RESOURCES: String = "resources_group"
     const val GROUP_REGEN: String = "regen_group"
