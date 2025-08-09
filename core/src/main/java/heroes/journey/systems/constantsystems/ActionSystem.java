@@ -43,7 +43,7 @@ public class ActionSystem extends IteratingSystem {
         ActionComponent actionComponent = ActionComponent.get(world, id);
         ActionContext input = new ActionContext(world.getGameState(), id, false, actionComponent.input());
         Action action = actionComponent.getAction();
-        ActionResult result = action.onSelect(input);
+        ActionResult result = heroes.journey.entities.actions.ActionUtils.onSelect(action, input);
         if (result != null) {
             switch (result) {
                 case StringResult str -> {

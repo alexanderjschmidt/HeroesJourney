@@ -137,8 +137,10 @@ public class GameState implements Cloneable, IGameState {
         // Apply chosen Action
         ActionEntry actionEntry = queuedAction.getAction();
         history.add(actionEntry, e);
-        ActionManager.get(actionEntry.getActionId())
-            .onSelect(new ActionContext(this, e, true, actionEntry.getInput()));
+        heroes.journey.entities.actions.ActionUtils.onSelect(
+            ActionManager.get(actionEntry.getActionId()),
+            new ActionContext(this, e, true, actionEntry.getInput())
+        );
         // If action adds movement
         // TODO remove this, onSelect should handle this
         MovementComponent movement = MovementComponent.get(world, e);

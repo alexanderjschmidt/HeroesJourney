@@ -1,16 +1,11 @@
 package heroes.journey.entities.ai;
 
-import static heroes.journey.mods.Registries.ActionManager;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.StatsComponent;
 import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
+import heroes.journey.entities.actions.ActionUtils;
 import heroes.journey.entities.actions.QueuedAction;
 import heroes.journey.modlib.Ids;
 import heroes.journey.modlib.actions.ActionEntry;
@@ -19,6 +14,12 @@ import heroes.journey.modlib.actions.ShowAction;
 import heroes.journey.ui.windows.ActionMenu;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.mods.Registries.ActionManager;
 
 public class MCTSAI implements AI, Scorer {
 
@@ -60,11 +61,11 @@ public class MCTSAI implements AI, Scorer {
                 action.getInput());
             Action act = ActionManager.get(action.getActionId());
             if (act.isReturnsActionList()) {
-                ActionListResult result = (ActionListResult)act.onSelect(input);
+                ActionListResult result = (ActionListResult) ActionUtils.onSelect(act, input);
                 assert result != null;
                 addUsableActions(possibleActions, result.getList(), input, position);
             } else {
-                if (act.requirementsMet(input) == ShowAction.YES) {
+                if (ActionUtils.requirementsMet(act, input) == ShowAction.YES) {
                     possibleActions.add(new QueuedAction(action, input.getEntityId()));
                 }
             }

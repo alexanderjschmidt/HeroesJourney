@@ -1,20 +1,20 @@
 package heroes.journey.ui.hudstates;
 
-import static heroes.journey.mods.Registries.ActionManager;
-
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.UUID;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionContext;
+import heroes.journey.entities.actions.ActionUtils;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.actions.ShowAction;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.UUID;
+
+import static heroes.journey.mods.Registries.ActionManager;
 
 public class ActionSelectState extends HUDState {
 
@@ -29,8 +29,8 @@ public class ActionSelectState extends HUDState {
     private List<ScrollPaneEntry<ActionEntry>> filter(List<ActionEntry> input, UUID entityId) {
         return input.stream()
             .map(action -> {
-                ShowAction result = ActionManager.get(action.getActionId())
-                    .requirementsMet(
+                ShowAction result = ActionUtils
+                    .requirementsMet(ActionManager.get(action.getActionId()),
                         new ActionContext(GameState.global(), entityId, false, action.getInput()));
                 return new AbstractMap.SimpleEntry<>(action, result);
             })

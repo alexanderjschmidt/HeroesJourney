@@ -1,6 +1,7 @@
 package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.Attributes
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.IRegistrable
 import heroes.journey.modlib.registries.InfoProvider
 
@@ -33,6 +34,10 @@ interface IAction : IRegistrable {
     val factionCooldown: Boolean
     val cost: Attributes?
     val customInfoProviderFn: ((IActionContext) -> InfoProvider)?
+    // Tag constraints moved from Approach
+    val requiredAllTags: List<Stat>
+    val requiredAnyTags: List<Stat>
+    val forbiddenTags: List<Stat>
     override fun register(): IAction
 }
 
@@ -54,6 +59,10 @@ interface IActionBuilder {
     var onSelectFn: (IActionContext) -> ActionResult
     var cost: Attributes?
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
+    // Tag DSL
+    fun requiresAll(vararg tags: String)
+    fun requiresAny(vararg tags: String)
+    fun forbids(vararg tags: String)
 }
 
 interface IOptionActionBuilder : IActionBuilder {
@@ -72,6 +81,10 @@ interface ITargetActionBuilder<I> {
     var onHoverFn: (IActionContext) -> Unit
     var cost: Attributes?
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
+    // Tag DSL for target actions as well
+    fun requiresAll(vararg tags: String)
+    fun requiresAny(vararg tags: String)
+    fun forbids(vararg tags: String)
 }
 
 interface ActionDSL {

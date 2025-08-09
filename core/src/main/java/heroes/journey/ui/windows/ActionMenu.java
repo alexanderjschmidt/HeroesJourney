@@ -23,6 +23,8 @@ import heroes.journey.ui.ScrollPane;
 import heroes.journey.ui.ScrollPaneEntry;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.Utils;
+import heroes.journey.ui.infoproviders.ActionInfoProvider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public class ActionMenu extends UI {
 
@@ -124,8 +126,8 @@ public class ActionMenu extends UI {
             ActionContext input = new ActionContext(GameState.global(), HUD.get().getCursor().getSelected(),
                 false, actionEntry.getInput());
             Action action = ActionManager.get(actionEntry.getActionId());
-            action.onHover(input);
-            infoUI.showInfo(action, actionEntry.getInput());
+            heroes.journey.entities.actions.ActionUtils.onHover(action, input);
+            HUD.get().getActionDetailedUI().showInfo(new ActionInfoProvider(action), actionEntry.getInput());
         }
     }
 

@@ -6,7 +6,9 @@ import heroes.journey.entities.actions.options.BooleanOptionAction
 import heroes.journey.entities.actions.options.OptionAction
 import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.attributes.Attributes
+import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.registries.InfoProvider
+import heroes.journey.modlib.registries.Registries
 
 // --- Builder Classes ---
 open class ActionBuilder : IActionBuilder {
@@ -20,6 +22,18 @@ open class ActionBuilder : IActionBuilder {
     override var cost: Attributes? = null
     override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
+    private val requiredAllTagIds = mutableListOf<String>()
+    private val requiredAnyTagIds = mutableListOf<String>()
+    private val forbiddenTagIds = mutableListOf<String>()
+
+    override fun requiresAll(vararg tags: String) { requiredAllTagIds.addAll(tags) }
+    override fun requiresAny(vararg tags: String) { requiredAnyTagIds.addAll(tags) }
+    override fun forbids(vararg tags: String) { forbiddenTagIds.addAll(tags) }
+
+    protected fun resolveTags(ids: List<String>): List<Stat> = ids.map { tagId ->
+        Registries.StatManager[tagId] ?: throw IllegalArgumentException("Stat not found: $tagId")
+    }
+
     open fun build(): Action = Action(
         id = id,
         isReturnsActionList = isReturnsActionList,
@@ -29,7 +43,10 @@ open class ActionBuilder : IActionBuilder {
         turnCooldown = turnCooldown,
         factionCooldown = factionCooldown,
         cost = cost,
-        customInfoProviderFn = customInfoProviderFn
+        customInfoProviderFn = customInfoProviderFn,
+        requiredAllTags = resolveTags(requiredAllTagIds),
+        requiredAnyTags = resolveTags(requiredAnyTagIds),
+        forbiddenTags = resolveTags(forbiddenTagIds)
     )
 }
 
@@ -82,6 +99,18 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
     override var cost: Attributes? = null
     override var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
+    private val requiredAllTagIds = mutableListOf<String>()
+    private val requiredAnyTagIds = mutableListOf<String>()
+    private val forbiddenTagIds = mutableListOf<String>()
+
+    override fun requiresAll(vararg tags: String) { requiredAllTagIds.addAll(tags) }
+    override fun requiresAny(vararg tags: String) { requiredAnyTagIds.addAll(tags) }
+    override fun forbids(vararg tags: String) { forbiddenTagIds.addAll(tags) }
+
+    private fun resolveTags(ids: List<String>): List<Stat> = ids.map { tagId ->
+        Registries.StatManager[tagId] ?: throw IllegalArgumentException("Stat not found: $tagId")
+    }
+
     fun build(): Action {
         return Action(
             id = id,
@@ -101,7 +130,10 @@ class TargetActionBuilder<I> : ITargetActionBuilder<I> {
                 ActionListResult(actionOptions)
             },
             cost = cost,
-            customInfoProviderFn = customInfoProviderFn
+            customInfoProviderFn = customInfoProviderFn,
+            requiredAllTags = resolveTags(requiredAllTagIds),
+            requiredAnyTags = resolveTags(requiredAnyTagIds),
+            forbiddenTags = resolveTags(forbiddenTagIds)
         )
     }
 }
