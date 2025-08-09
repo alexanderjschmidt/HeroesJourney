@@ -13,7 +13,6 @@ open class Action(
     val onHoverFn: (IActionContext) -> Unit = {},
     val onSelectFn: (IActionContext) -> ActionResult,
     val turnCooldown: Int = 0,
-    val factionCooldown: Boolean = false,
     val cost: Attributes? = null,
     val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null,
     val tags: List<Stat> = emptyList(),
@@ -53,7 +52,6 @@ open class ActionBuilder {
     var onHoverFn: (IActionContext) -> Unit = {}
     var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
     var turnCooldown: Int = 0
-    var factionCooldown: Boolean = false
     open var cost: Attributes? = null
     var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
 
@@ -89,7 +87,6 @@ open class ActionBuilder {
         onHoverFn = { ctx -> onHoverFn(ctx) },
         onSelectFn = { ctx -> onSelectFn(ctx) },
         turnCooldown = turnCooldown,
-        factionCooldown = factionCooldown,
         cost = cost,
         customInfoProviderFn = customInfoProviderFn,
         tags = resolveTags(tagIds),

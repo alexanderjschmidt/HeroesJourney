@@ -49,7 +49,7 @@ public class MCTSAI implements AI, Scorer {
         List<Action> actions;
         if (forbiddenTag != null) {
             actions = input.findActionsByTags(
-                input.getEntityId(), null, null,
+                input.getEntityId(), new ArrayList<>(), new ArrayList<>(),
                 Collections.singletonList(forbiddenTag)
             );
         } else {

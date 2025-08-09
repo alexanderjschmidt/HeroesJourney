@@ -5,14 +5,13 @@ import heroes.journey.components.StatsComponent
 import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Operation
-import java.util.*
 
 object ActionUtils {
 
     @JvmStatic
     fun requirementsMet(action: Action, input: IActionContext): ShowAction {
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
-        val cooldownComponent = getCooldownComponent(action, ctx)
+        val cooldownComponent = getCooldownComponent(ctx)
         if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(action.id)) return ShowAction.GRAYED
 
         // Check if entity can afford the cost
@@ -45,7 +44,7 @@ object ActionUtils {
             return NullResult()
         }
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
-        val cooldownComponent = getCooldownComponent(action, ctx)
+        val cooldownComponent = getCooldownComponent(ctx)
         cooldownComponent?.cooldowns?.set(action.id, action.turnCooldown)
 
         // Deduct the cost from the entity's stats
@@ -61,17 +60,10 @@ object ActionUtils {
     }
 
     @JvmStatic
-    fun getCooldownComponent(action: Action, input: ActionContext): PossibleActionsComponent? {
-        val cooldownComponent: PossibleActionsComponent?
-        if (action.factionCooldown) {
-            val faction = UUID.fromString(input["owner"])
-            cooldownComponent = PossibleActionsComponent.get(input.gameState.world, faction)
-        } else {
-            cooldownComponent = PossibleActionsComponent.get(
-                input.gameState.world,
-                input.entityId
-            )
-        }
-        return cooldownComponent
+    fun getCooldownComponent(input: ActionContext): PossibleActionsComponent? {
+        return PossibleActionsComponent.get(
+            input.gameState.world,
+            input.entityId
+        )
     }
 }

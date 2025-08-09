@@ -44,7 +44,7 @@ class ActionInfoProvider(private val action: Action) : RegistrableInfoProvider(a
             if (cooldown == null) {
                 cooldown = Label("", skin)
             }
-            val cooldownComponent = ActionUtils.getCooldownComponent(action, actionContext)
+            val cooldownComponent = ActionUtils.getCooldownComponent(actionContext)
             var cooldownVal = cooldownComponent?.cooldowns?.get(action.id)
             cooldownVal = if (cooldownVal == null) action.turnCooldown else (action.turnCooldown - cooldownVal - 1)
             cooldown!!.setText("Cooldown: $cooldownVal/${action.turnCooldown}")
