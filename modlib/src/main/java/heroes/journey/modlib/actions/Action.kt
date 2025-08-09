@@ -2,127 +2,212 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
-import heroes.journey.modlib.registries.IRegistrable
 import heroes.journey.modlib.registries.InfoProvider
+import heroes.journey.modlib.registries.Registrable
+import heroes.journey.modlib.registries.Registries
 
-/**
- * Public interface for an Action, used for player actions and abilities.
- * Mods should only use this interface, not implementation classes.
- *
- * Example usage:
- * ```kotlin
- * action {
- *     id = Ids.MY_ACTION
- *     requirementsMetFn = { ShowAction.YES }
- *     onHoverFn = { }
- *     onSelectFn = { input -> StringResult("You did the thing!") }
- *     turnCooldown = 0
- *     factionCooldown = false
- *     cost = attributes {
- *         stat(Ids.STAT_VALOR, 2)
- *         stat(Ids.STAT_INSIGHT, 1)
- *     }
- * }.register()
- * ```
- */
-interface IAction : IRegistrable {
-    val isReturnsActionList: Boolean
-    val requirementsMetFn: (IActionContext) -> ShowAction
-    val onHoverFn: (IActionContext) -> Unit
-    val onSelectFn: (IActionContext) -> ActionResult
-    val turnCooldown: Int
-    val factionCooldown: Boolean
-    val cost: Attributes?
-    val customInfoProviderFn: ((IActionContext) -> InfoProvider)?
-    // Tag constraints moved from Approach
-    val requiredAllTags: List<Stat>
-    val requiredAnyTags: List<Stat>
-    val forbiddenTags: List<Stat>
-    override fun register(): IAction
+open class Action(
+    id: String,
+    val isReturnsActionList: Boolean = false,
+    val requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES },
+    val onHoverFn: (IActionContext) -> Unit = {},
+    val onSelectFn: (IActionContext) -> ActionResult,
+    val turnCooldown: Int = 0,
+    val factionCooldown: Boolean = false,
+    val cost: Attributes? = null,
+    val customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null,
+    val requiredAllTags: List<Stat> = emptyList(),
+    val requiredAnyTags: List<Stat> = emptyList(),
+    val forbiddenTags: List<Stat> = emptyList()
+) : Registrable(id) {
+
+    override fun getTitle(input: IActionContext): String {
+        val customProvider = customInfoProviderFn?.invoke(input)
+        if (customProvider != null) {
+            return customProvider.getTitle(input)
+        }
+        return super.getTitle(input)
+    }
+
+    override fun getDescription(input: IActionContext): String {
+        val customProvider = customInfoProviderFn?.invoke(input)
+        if (customProvider != null) {
+            return customProvider.getDescription(input)
+        }
+        return super.getDescription(input)
+    }
+
+    override fun register(): Action {
+        Registries.ActionManager.register(this)
+        return this
+    }
 }
 
-interface IOptionAction : IAction {
-    var value: Any
+// --- Builder Classes ---
+open class ActionBuilder {
+    var id: String = ""
+    open var isReturnsActionList: Boolean = false
+    var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (IActionContext) -> Unit = {}
+    var onSelectFn: (IActionContext) -> ActionResult = { NullResult() }
+    var turnCooldown: Int = 0
+    var factionCooldown: Boolean = false
+    open var cost: Attributes? = null
+    var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
+
+    private val requiredAllTagIds = mutableListOf<String>()
+    private val requiredAnyTagIds = mutableListOf<String>()
+    private val forbiddenTagIds = mutableListOf<String>()
+
+    fun requiresAll(vararg tags: String) {
+        requiredAllTagIds.addAll(tags)
+    }
+
+    fun requiresAny(vararg tags: String) {
+        requiredAnyTagIds.addAll(tags)
+    }
+
+    fun forbids(vararg tags: String) {
+        forbiddenTagIds.addAll(tags)
+    }
+
+    protected fun resolveTags(ids: List<String>): List<Stat> = ids.map { tagId ->
+        Registries.StatManager[tagId] ?: throw IllegalArgumentException("Stat not found: $tagId")
+    }
+
+    open fun build(): Action = Action(
+        id = id,
+        isReturnsActionList = isReturnsActionList,
+        requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
+        onHoverFn = { ctx -> onHoverFn(ctx) },
+        onSelectFn = { ctx -> onSelectFn(ctx) },
+        turnCooldown = turnCooldown,
+        factionCooldown = factionCooldown,
+        cost = cost,
+        customInfoProviderFn = customInfoProviderFn,
+        requiredAllTags = resolveTags(requiredAllTagIds),
+        requiredAnyTags = resolveTags(requiredAnyTagIds),
+        forbiddenTags = resolveTags(forbiddenTagIds)
+    )
 }
 
-interface IBooleanOptionAction : IOptionAction {
-    var isTrue: Boolean
+open class OptionActionBuilder : ActionBuilder() {
+    override var isReturnsActionList: Boolean
+        get() = false
+        set(_) {}
+
+    override var cost: Attributes?
+        get() = null
+        set(_) {}
+
+    override fun build(): OptionAction = object : OptionAction(
+        id = id,
+        requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
+        onHoverFn = { ctx -> onHoverFn(ctx) },
+        onSelectFn = { ctx -> onSelectFn(ctx) },
+        1,
+        cost = null
+    ) {}
 }
 
-interface IActionBuilder {
-    var id: String
-    var isReturnsActionList: Boolean
-    var turnCooldown: Int
-    var factionCooldown: Boolean
-    var requirementsMetFn: (IActionContext) -> ShowAction
-    var onHoverFn: (IActionContext) -> Unit
-    var onSelectFn: (IActionContext) -> ActionResult
-    var cost: Attributes?
-    var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
-    // Tag DSL
-    fun requiresAll(vararg tags: String)
-    fun requiresAny(vararg tags: String)
-    fun forbids(vararg tags: String)
+class BooleanOptionActionBuilder : OptionActionBuilder() {
+    var isTrue: Boolean = true
+    override var isReturnsActionList: Boolean
+        get() = false
+        set(_) {}
+
+    override var cost: Attributes?
+        get() = null
+        set(_) {}
+
+    override fun build(): BooleanOptionAction = BooleanOptionAction(
+        id = id,
+        requirementsMetFn = { ctx -> requirementsMetFn(ctx) },
+        onHoverFn = { ctx -> onHoverFn(ctx) },
+        onSelectFn = { ctx -> onSelectFn(ctx) },
+        isTrue = isTrue,
+        cost = null
+    )
 }
 
-interface IOptionActionBuilder : IActionBuilder {
-    // OptionAction-specific properties can be added here if needed
+class TargetActionBuilder<I> {
+    var id: String = ""
+    var getTargets: (IActionContext) -> List<I> = { emptyList() }
+    var targetAction: String = ""
+    var requirementsMetFn: (IActionContext) -> ShowAction = { ShowAction.YES }
+    var onHoverFn: (IActionContext) -> Unit = {}
+    var cost: Attributes? = null
+    var customInfoProviderFn: ((IActionContext) -> InfoProvider)? = null
+
+    private val requiredAllTagIds = mutableListOf<String>()
+    private val requiredAnyTagIds = mutableListOf<String>()
+    private val forbiddenTagIds = mutableListOf<String>()
+
+    fun requiresAll(vararg tags: String) {
+        requiredAllTagIds.addAll(tags)
+    }
+
+    fun requiresAny(vararg tags: String) {
+        requiredAnyTagIds.addAll(tags)
+    }
+
+    fun forbids(vararg tags: String) {
+        forbiddenTagIds.addAll(tags)
+    }
+
+    private fun resolveTags(ids: List<String>): List<Stat> = ids.map { tagId ->
+        Registries.StatManager[tagId] ?: throw IllegalArgumentException("Stat not found: $tagId")
+    }
+
+    fun build(): Action {
+        return Action(
+            id = id,
+            isReturnsActionList = true,
+            requirementsMetFn = { input ->
+                val targets = getTargets(input)
+                val targetShowAction = if (targets.isEmpty()) ShowAction.GRAYED else ShowAction.YES
+                requirementsMetFn(input).and(targetShowAction)
+            },
+            onHoverFn = { ctx -> onHoverFn(ctx) },
+            onSelectFn = { input ->
+                val actionOptions = getTargets(input).map { option ->
+                    val copyInput = (input as? IActionContext)?.getHashMapCopy()
+                        ?: hashMapOf<String, String>()
+                    copyInput["target"] = option.toString()
+                    ActionEntry(targetAction, copyInput)
+                }
+                ActionListResult(actionOptions)
+            },
+            cost = cost,
+            customInfoProviderFn = customInfoProviderFn,
+            requiredAllTags = resolveTags(requiredAllTagIds),
+            requiredAnyTags = resolveTags(requiredAnyTagIds),
+            forbiddenTags = resolveTags(forbiddenTagIds)
+        )
+    }
 }
 
-interface IBooleanOptionActionBuilder : IOptionActionBuilder {
-    var isTrue: Boolean
+// --- DSL entrypoints ---
+fun action(init: ActionBuilder.() -> Unit): Action {
+    val builder = ActionBuilder()
+    builder.apply(init)
+    return builder.build()
 }
 
-interface ITargetActionBuilder<I> {
-    var id: String
-    var getTargets: (IActionContext) -> List<I>
-    var targetAction: String
-    var requirementsMetFn: (IActionContext) -> ShowAction
-    var onHoverFn: (IActionContext) -> Unit
-    var cost: Attributes?
-    var customInfoProviderFn: ((IActionContext) -> InfoProvider)?
-    // Tag DSL for target actions as well
-    fun requiresAll(vararg tags: String)
-    fun requiresAny(vararg tags: String)
-    fun forbids(vararg tags: String)
+fun optionAction(init: OptionActionBuilder.() -> Unit): OptionAction {
+    val builder = OptionActionBuilder()
+    builder.apply(init)
+    return builder.build()
 }
 
-interface ActionDSL {
-    fun action(init: IActionBuilder.() -> Unit): IAction
-    fun optionAction(init: IOptionActionBuilder.() -> Unit): IOptionAction
-    fun booleanOptionAction(init: IBooleanOptionActionBuilder.() -> Unit): IBooleanOptionAction
-    fun <I> targetAction(init: ITargetActionBuilder<I>.() -> Unit): IAction
+fun booleanOptionAction(init: BooleanOptionActionBuilder.() -> Unit): BooleanOptionAction {
+    val builder = BooleanOptionActionBuilder()
+    builder.apply(init)
+    return builder.build()
 }
 
-object ActionDSLProvider : ActionDSL {
-    lateinit var instance: ActionDSL
-    override fun action(init: IActionBuilder.() -> Unit) = instance.action(init)
-    override fun optionAction(init: IOptionActionBuilder.() -> Unit) = instance.optionAction(init)
-    override fun booleanOptionAction(init: IBooleanOptionActionBuilder.() -> Unit) =
-        instance.booleanOptionAction(init)
-
-    override fun <I> targetAction(init: ITargetActionBuilder<I>.() -> Unit) = instance.targetAction(init)
+fun <I> targetAction(init: TargetActionBuilder<I>.() -> Unit): Action {
+    val builder = TargetActionBuilder<I>()
+    builder.apply(init)
+    return builder.build()
 }
-
-/**
- * DSL entrypoint for defining a new action.
- * @param init The initialization block for the action builder.
- * @return The created [IAction] instance.
- *
- * Example usage:
- * ```kotlin
- * action {
- *     id = Ids.MY_ACTION
- *     cost = attributes {
- *         stat(Ids.STAT_VALOR, 2)
- *     }
- *     ...
- * }.register()
- * ```
- */
-fun action(init: IActionBuilder.() -> Unit) = ActionDSLProvider.action(init)
-fun optionAction(init: IOptionActionBuilder.() -> Unit) = ActionDSLProvider.optionAction(init)
-fun booleanOptionAction(init: IBooleanOptionActionBuilder.() -> Unit) =
-    ActionDSLProvider.booleanOptionAction(init)
-
-fun <I> targetAction(init: ITargetActionBuilder<I>.() -> Unit) = ActionDSLProvider.targetAction(init)

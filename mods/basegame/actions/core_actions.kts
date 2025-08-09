@@ -14,7 +14,7 @@ action {
 
 object TrainingOptions {
     val optionsList: MutableList<ActionEntry> = ArrayList(4)
-    fun addOption(option: IAction) {
+    fun addOption(option: Action) {
         optionsList.add(ActionEntry(option.id, hashMapOf()))
     }
 }

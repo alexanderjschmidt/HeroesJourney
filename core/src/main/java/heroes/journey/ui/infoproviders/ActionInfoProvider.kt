@@ -4,9 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import heroes.journey.GameState
-import heroes.journey.entities.actions.Action
 import heroes.journey.entities.actions.ActionContext
 import heroes.journey.entities.actions.ActionUtils
+import heroes.journey.modlib.actions.Action
 
 class ActionInfoProvider(private val action: Action) : RegistrableInfoProvider(action) {
 

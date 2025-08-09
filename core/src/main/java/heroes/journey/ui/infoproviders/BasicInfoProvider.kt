@@ -16,7 +16,7 @@ open class BasicInfoProvider(private val context: ActionContext, private val ent
         return NamedComponent.get(context.gameState.world, entityId, "---")
     }
 
-    override fun getDescription(input: Map<String, String>): String {
+    override fun getDescription(input: IActionContext): String {
         return "";
     }
 }

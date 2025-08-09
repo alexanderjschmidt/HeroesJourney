@@ -1,27 +1,27 @@
 package heroes.journey.systems.constantsystems;
 
-import java.util.Objects;
-import java.util.UUID;
-
 import com.artemis.annotations.All;
 import com.artemis.systems.IteratingSystem;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
 import heroes.journey.components.PositionComponent;
 import heroes.journey.components.character.ActorComponent;
 import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.actions.BooleanOptionAction;
 import heroes.journey.mods.Registries;
 import heroes.journey.systems.GameWorld;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @All({PositionComponent.class, ActorComponent.class, MovementComponent.class, IdComponent.class})
 public class MovementSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
         UUID id = IdComponent.get(world, entityId);
         PositionComponent position = PositionComponent.get(world, id);
         MovementComponent movement = MovementComponent.get(world, id);
@@ -36,7 +36,7 @@ public class MovementSystem extends IteratingSystem {
 
     @Override
     public void removed(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
 
         // Try to get the ID component - if it doesn't exist, all components are gone
         UUID id = null;
@@ -63,7 +63,7 @@ public class MovementSystem extends IteratingSystem {
         ActorComponent actor,
         MovementComponent movement) {
         if (movement.hasPath() && actor != null && !actor.hasActions()) {
-            if (((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
+            if (((BooleanOptionAction) Registries.ActionManager.get(
                 Ids.DEBUG)).isTrue()) {
                 System.out.println("Moving " + movement.path());
             }
@@ -86,7 +86,7 @@ public class MovementSystem extends IteratingSystem {
         if (movement.hasPath()) {
             return;
         }
-        if (((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
+        if (((BooleanOptionAction) Registries.ActionManager.get(
             Ids.DEBUG)).isTrue()) {
             System.out.println("Finished Moving");
         }

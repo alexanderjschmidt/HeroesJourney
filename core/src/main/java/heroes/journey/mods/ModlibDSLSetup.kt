@@ -3,8 +3,6 @@
 package heroes.journey.mods
 
 import heroes.journey.modlib.GameModProvider
-import heroes.journey.modlib.actions.ActionDSLProvider
-import heroes.journey.modlib.actions.IAction
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.RenderableDSLProvider
 
@@ -14,7 +12,6 @@ import heroes.journey.modlib.worldgen.FeatureTypeDSLProvider
 import heroes.journey.modlib.worldgen.IFeatureType
 import heroes.journey.mods.art.RenderableDSLImpl
 
-import heroes.journey.mods.misc.ActionDSLImpl
 import heroes.journey.mods.worldgen.BaseTileDSLImpl
 import heroes.journey.mods.worldgen.FeatureTypeDSLImpl
 import heroes.journey.utils.Lang
@@ -27,7 +24,6 @@ fun setupModlibDSLs() {
     heroes.journey.modlib.Lang.instance = Lang
 
     // Wire up modlib registries to core implementations
-    heroes.journey.modlib.registries.Registries.ActionManager = Registries.ActionManager as Registry<IAction>
     heroes.journey.modlib.registries.Registries.FeatureTypeManager =
         Registries.FeatureTypeManager as Registry<IFeatureType>
     heroes.journey.modlib.registries.Registries.RenderableManager =
@@ -37,9 +33,6 @@ fun setupModlibDSLs() {
 
     // Wire up modlib DSLs
     RenderableDSLProvider.instance = RenderableDSLImpl()
-
     BaseTileDSLProvider.instance = BaseTileDSLImpl()
-
     FeatureTypeDSLProvider.instance = FeatureTypeDSLImpl()
-    ActionDSLProvider.instance = ActionDSLImpl()
 }

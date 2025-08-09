@@ -1,26 +1,21 @@
 package heroes.journey.components;
 
-import static heroes.journey.mods.Registries.ActionManager;
-import static heroes.journey.mods.Registries.ApproachManager;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
 import heroes.journey.components.utils.PooledClonableComponent;
-import heroes.journey.entities.actions.Action;
+import heroes.journey.modlib.actions.Action;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.misc.Approach;
 import heroes.journey.systems.GameWorld;
+
+import java.util.*;
+
+import static heroes.journey.mods.Registries.ActionManager;
+import static heroes.journey.mods.Registries.ApproachManager;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
     private final Set<String> possibleApproaches;
-    private final Map<String,Integer> cooldowns;
+    private final Map<String, Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
@@ -30,7 +25,7 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
 
     public List<ActionEntry> getPossibleActions(UUID entityId) {
         return ActionManager.get(possibleActions.stream().toList()).stream().map(action -> {
-            Map<String,String> inputs = new HashMap<>(1);
+            Map<String, String> inputs = new HashMap<>(1);
             inputs.put("owner", entityId + "");
             return new ActionEntry(action.getId(), inputs);
         }).toList();
@@ -73,7 +68,7 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
         cooldowns.putAll(from.cooldowns);
     }
 
-    public Map<String,Integer> getCooldowns() {
+    public Map<String, Integer> getCooldowns() {
         return this.cooldowns;
     }
 }

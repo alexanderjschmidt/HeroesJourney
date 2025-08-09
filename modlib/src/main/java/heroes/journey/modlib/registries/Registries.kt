@@ -1,6 +1,6 @@
 package heroes.journey.modlib.registries
 
-import heroes.journey.modlib.actions.IAction
+import heroes.journey.modlib.actions.Action
 import heroes.journey.modlib.art.IRenderable
 import heroes.journey.modlib.art.TextureMap
 import heroes.journey.modlib.attributes.Stat
@@ -17,7 +17,7 @@ object Registries {
     open val BuffManager: Registry<Buff> = Registry()
     open val ChallengeManager: Registry<Challenge> = Registry()
     open val ApproachManager: Registry<Approach> = Registry()
-    lateinit var ActionManager: Registry<IAction>
+    open val ActionManager: Registry<Action> = Registry()
     open val TurnConfigManager: Registry<TurnConfig> = Registry()
     open val BiomeManager: Registry<Biome> = Registry()
     lateinit var FeatureTypeManager: Registry<IFeatureType>

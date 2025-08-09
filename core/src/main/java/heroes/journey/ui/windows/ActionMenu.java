@@ -1,7 +1,5 @@
 package heroes.journey.ui.windows;
 
-import static heroes.journey.mods.Registries.ActionManager;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +12,7 @@ import heroes.journey.components.PositionComponent;
 import heroes.journey.components.PossibleActionsComponent;
 import heroes.journey.components.RegionComponent;
 import heroes.journey.components.character.ActionComponent;
-import heroes.journey.entities.actions.Action;
+import heroes.journey.modlib.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.systems.GameWorld;
@@ -103,7 +101,7 @@ public class ActionMenu extends UI {
 
         @Override
         public String getText(ActionEntry option) {
-            return ActionManager.get(option.getActionId())
+            return heroes.journey.modlib.registries.Registries.INSTANCE.getActionManager().get(option.getActionId())
                 .getTitle(new ActionContext(GameState.global(), GameState.global().getCurrentEntity(), false,
                     option.getInput()));
         }
@@ -125,10 +123,9 @@ public class ActionMenu extends UI {
             ActionEntry actionEntry = actions.getSelected().entry();
             ActionContext input = new ActionContext(GameState.global(), HUD.get().getCursor().getSelected(),
                 false, actionEntry.getInput());
-            Action action = ActionManager.get(actionEntry.getActionId());
+            Action action = heroes.journey.modlib.registries.Registries.INSTANCE.getActionManager().get(actionEntry.getActionId());
             heroes.journey.entities.actions.ActionUtils.onHover(action, input);
             HUD.get().getActionDetailedUI().showInfo(new ActionInfoProvider(action), actionEntry.getInput());
         }
     }
-
 }

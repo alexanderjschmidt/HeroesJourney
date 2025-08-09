@@ -4,11 +4,10 @@ import heroes.journey.Application
 import heroes.journey.GameState
 import heroes.journey.components.character.ActionComponent
 import heroes.journey.modlib.actions.*
-import heroes.journey.mods.Registries
+import heroes.journey.modlib.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
 import heroes.journey.ui.windows.ActionMenu
-import heroes.journey.utils.input.Options
 
 fun createCoreActions() {
     // Open Action Menu
@@ -74,7 +73,7 @@ fun createCoreActions() {
         id = "options"
         isReturnsActionList = true
         onSelectFn = { input ->
-            ActionListResult(Options.optionsList)
+            ActionListResult(emptyList())
         }
     }.register().also { TeamActions.addTeamAction(it) }
 }

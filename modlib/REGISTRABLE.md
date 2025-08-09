@@ -43,15 +43,15 @@ These are simple data containers with no complex functions:
 - **Terrain** - Simple data container (cost)
 - **Biome** - Simple data container (base terrain, features)
 - **FeatureType** - Complex with generateFeature() method requiring core context
+- **Action** - Now simplified; follows Basic Registrable pattern (implementation in modlib)
 - **TileLayout** - Simple data container (path, terrain roles) ✅ **CONVERTED**
 - **TileBatch** - Simple data container (layout, texture, terrains) ✅ **CONVERTED**
 - **TextureMap** - Simple data container (location, dimensions) ✅ **CONVERTED**
 - **Renderable** - Complex with abstract methods and multiple implementations
 
-### **Advanced Registrables** (Keep current 8-component pattern)
-These have complex game logic, functions, or need implementation hiding:
+### **Advanced Registrables** (Keep current 8-component pattern) — excluding Action (now Basic)
+These have complex game logic, functions, or need implementation hiding (now fewer types after simplifying Actions):
 
-- **Action** - Complex with multiple functions, cooldowns, cost deduction
 - **Stat** - Complex with formula calculations, min/max logic
 - **Quest** - Complex with completion logic, cost/reward processing
 - **Challenge** - Complex with power tier calculations
@@ -137,6 +137,25 @@ object Registries {
 ```
 
 **Note**: Using `open val` with direct initialization eliminates the need for separate initialization.
+
+---
+
+## 🔁 Action now uses Basic pattern
+
+- Implementation and DSL live entirely in modlib under `modlib/src/main/java/heroes/journey/modlib/actions/`.
+- The core module no longer implements the Action type.
+- Include `optionAction` and `booleanOptionAction` as part of the modlib DSL alongside `action`.
+
+Example file organization:
+- `modlib/src/main/java/heroes/journey/modlib/actions/Action.kt` (DSL, interfaces not needed for basic)
+- `modlib/src/main/java/heroes/journey/modlib/actions/OptionAction.kt` (basic concrete)
+- `modlib/src/main/java/heroes/journey/modlib/actions/BooleanOptionAction.kt` (basic concrete)
+
+Migration steps from Advanced to Basic for Action:
+1. Move core `OptionAction` and `BooleanOptionAction` into modlib (keep packages consistent under `modlib/.../actions`).
+2. Ensure the DSL functions `action`, `optionAction`, `booleanOptionAction` are exposed from modlib.
+3. Remove any core DSL implementation glue and `UIInfoProvider` inheritance from Action (now handled by `ActionInfoProvider`).
+4. Keep registry access in core via `heroes.journey.modlib.registries.Registries.getActionManager()`.
 
 ---
 

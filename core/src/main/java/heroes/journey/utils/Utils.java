@@ -2,9 +2,9 @@ package heroes.journey.utils;
 
 import heroes.journey.GameState;
 import heroes.journey.components.PositionComponent;
-import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.entities.actions.history.ActionRecord;
+import heroes.journey.modlib.actions.Action;
 
 import java.util.UUID;
 

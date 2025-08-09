@@ -1,11 +1,11 @@
 package heroes.journey.entities.actions;
 
+import heroes.journey.modlib.actions.Action;
+import heroes.journey.modlib.actions.ActionEntry;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import heroes.journey.modlib.actions.ActionEntry;
-import heroes.journey.modlib.actions.IAction;
 
 public class TeamActions extends ArrayList<ActionEntry> {
 
@@ -18,7 +18,7 @@ public class TeamActions extends ArrayList<ActionEntry> {
         return actionManager;
     }
 
-    public static void addTeamAction(IAction action) {
+    public static void addTeamAction(Action action) {
         actionManager.addFirst(new ActionEntry(action.getId(), new HashMap<>(0)));
     }
 

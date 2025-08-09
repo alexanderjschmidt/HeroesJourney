@@ -1,9 +1,6 @@
 package heroes.journey.ui.hudstates;
 
-import java.util.Objects;
-
 import com.badlogic.gdx.Gdx;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.character.AITurnComponent;
@@ -13,6 +10,8 @@ import heroes.journey.modlib.Ids;
 import heroes.journey.mods.Registries;
 import heroes.journey.ui.HUD;
 import heroes.journey.utils.input.KeyManager;
+
+import java.util.Objects;
 
 class CursorMoveState extends HUDState {
     @Override
@@ -35,7 +34,7 @@ class CursorMoveState extends HUDState {
                     .getWorld()
                     .edit(hud.getCursor().getSelected())
                     .create(ActionComponent.class)
-                    .action((heroes.journey.entities.actions.Action)Registries.ActionManager.get(
+                    .action(Registries.ActionManager.get(
                         Ids.OPEN_ACTION_MENU));
             } else if (hud.getCursor().getHover() == null) {
                 HUD.get().setState(new ActionSelectState(TeamActions.getTeamActions()));

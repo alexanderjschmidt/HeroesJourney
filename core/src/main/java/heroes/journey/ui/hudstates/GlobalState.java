@@ -2,11 +2,15 @@ package heroes.journey.ui.hudstates;
 
 import com.badlogic.gdx.Gdx;
 import heroes.journey.GameCamera;
+import heroes.journey.GameState;
+import heroes.journey.entities.actions.ActionContext;
+import heroes.journey.entities.actions.ActionUtils;
+import heroes.journey.modlib.Ids;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.windows.Display;
 import heroes.journey.utils.input.KeyManager;
-import heroes.journey.utils.input.Options;
 
+import static heroes.journey.mods.Registries.ActionManager;
 import static heroes.journey.ui.hudstates.States.STATS;
 
 class GlobalState extends HUDState {
@@ -14,7 +18,12 @@ class GlobalState extends HUDState {
     public void update(HUD hud) {
         HUD.get().getCursor().update();
         if (Gdx.input.isKeyJustPressed(KeyManager.DEV_MODE)) {
-            Options.INSTANCE.toggle("debug");
+            ActionUtils.onSelect(
+                ActionManager.get(Ids.DEBUG),
+                new ActionContext(
+                    GameState.global(), false
+                )
+            );
         }
         if (Gdx.input.isKeyJustPressed(KeyManager.SHOW_QUESTS) && HUD.get().getState() != STATS &&
             HUD.get().getCursor().getHover() != null) {

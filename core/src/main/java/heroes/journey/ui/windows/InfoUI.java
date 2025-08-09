@@ -1,16 +1,15 @@
 package heroes.journey.ui.windows;
 
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-
 import heroes.journey.GameState;
 import heroes.journey.entities.actions.ActionContext;
 import heroes.journey.ui.UI;
 import heroes.journey.ui.infoproviders.UIInfoProvider;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.Map;
 
 public class InfoUI extends UI {
 
@@ -41,11 +40,11 @@ public class InfoUI extends UI {
         bodyLabel.setText("");
     }
 
-    public void showInfo(UIInfoProvider provider, Map<String,String> input) {
+    public void showInfo(UIInfoProvider provider, Map<String, String> input) {
         clearContent();
         ActionContext actionContext = new ActionContext(GameState.global(), null, false, input);
         titleLabel.setText(provider.getTitle(actionContext));
-        bodyLabel.setText(provider.getDescription(input));
+        bodyLabel.setText(provider.getDescription(actionContext));
         provider.fillCustomContent(contentTable, ResourceManager.get().skin, input);
         setVisible(true);
         pack();

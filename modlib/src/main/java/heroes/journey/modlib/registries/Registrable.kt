@@ -22,7 +22,7 @@ abstract class Registrable(override val id: String) : IRegistrable {
         return getName()
     }
 
-    override fun getDescription(input: Map<String, String>): String {
+    override fun getDescription(input: IActionContext): String {
         return getDescription()
     }
 
@@ -40,5 +40,5 @@ interface IRegistrable : InfoProvider {
 
 interface InfoProvider {
     fun getTitle(input: IActionContext): String
-    fun getDescription(input: Map<String, String>): String
+    fun getDescription(input: IActionContext): String
 }

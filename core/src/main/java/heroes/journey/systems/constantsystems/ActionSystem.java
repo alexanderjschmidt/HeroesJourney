@@ -1,12 +1,8 @@
 package heroes.journey.systems.constantsystems;
 
-import java.util.Objects;
-import java.util.UUID;
-
 import com.artemis.annotations.All;
 import com.artemis.annotations.Exclude;
 import com.artemis.systems.IteratingSystem;
-
 import heroes.journey.GameState;
 import heroes.journey.PlayerInfo;
 import heroes.journey.components.PositionComponent;
@@ -14,17 +10,15 @@ import heroes.journey.components.character.ActionComponent;
 import heroes.journey.components.character.EventQueueComponent;
 import heroes.journey.components.character.IdComponent;
 import heroes.journey.components.character.MovementComponent;
-import heroes.journey.entities.actions.Action;
 import heroes.journey.entities.actions.ActionContext;
-import heroes.journey.modlib.actions.ActionListResult;
-import heroes.journey.modlib.actions.ActionResult;
-import heroes.journey.modlib.actions.EndTurnResult;
-import heroes.journey.modlib.actions.NullResult;
-import heroes.journey.modlib.actions.StringResult;
+import heroes.journey.modlib.actions.*;
 import heroes.journey.systems.GameWorld;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.hudstates.ActionSelectState;
 import heroes.journey.ui.hudstates.States;
+
+import java.util.Objects;
+import java.util.UUID;
 
 @All({PositionComponent.class, IdComponent.class, ActionComponent.class})
 @Exclude({MovementComponent.class})
@@ -32,7 +26,7 @@ public class ActionSystem extends IteratingSystem {
 
     @Override
     protected void process(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
         UUID id = IdComponent.get(world, entityId);
         PositionComponent positionComponent = PositionComponent.get(world, id);
 
@@ -76,7 +70,7 @@ public class ActionSystem extends IteratingSystem {
 
     @Override
     public void removed(int entityId) {
-        GameWorld world = (GameWorld)getWorld();
+        GameWorld world = (GameWorld) getWorld();
 
         // Try to get the ID component - if it doesn't exist, all components are gone
         UUID id = null;

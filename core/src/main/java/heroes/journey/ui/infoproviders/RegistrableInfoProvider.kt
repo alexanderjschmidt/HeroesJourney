@@ -14,7 +14,7 @@ open class RegistrableInfoProvider(private val registrable: Registrable) : UIInf
         return registrable.getName()
     }
 
-    override fun getDescription(input: Map<String, String>): String {
+    override fun getDescription(input: IActionContext): String {
         return registrable.getDescription()
     }
 }

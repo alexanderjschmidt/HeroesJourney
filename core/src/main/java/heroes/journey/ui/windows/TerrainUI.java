@@ -1,18 +1,18 @@
 package heroes.journey.ui.windows;
 
-import java.util.UUID;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
 import heroes.journey.GameState;
 import heroes.journey.components.NamedComponent;
 import heroes.journey.modlib.Ids;
+import heroes.journey.modlib.actions.BooleanOptionAction;
 import heroes.journey.modlib.worldgen.Terrain;
 import heroes.journey.mods.Registries;
 import heroes.journey.ui.Cursor;
 import heroes.journey.ui.HUD;
 import heroes.journey.ui.UI;
 import heroes.journey.utils.art.ResourceManager;
+
+import java.util.UUID;
 
 public class TerrainUI extends UI {
 
@@ -36,7 +36,7 @@ public class TerrainUI extends UI {
             "" :
             " and " + environment.getName());
 
-        String locationCoords = ((heroes.journey.entities.actions.options.BooleanOptionAction)Registries.ActionManager.get(
+        String locationCoords = ((BooleanOptionAction) Registries.ActionManager.get(
             Ids.DEBUG)).isTrue() ? " (" + cursor.x + ", " + cursor.y + ")" : "";
         String name = (tile == null ? "---" : (tile.getName() + env));
         if (environment != null) {
