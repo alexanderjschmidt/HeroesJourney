@@ -2,7 +2,6 @@ package heroes.journey.modlib.actions
 
 import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
-import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.InfoProvider
@@ -50,12 +49,12 @@ abstract class IActionContext(
     abstract fun getQuests(entityId: UUID): List<Quest>
     abstract fun addQuest(entityId: UUID, questId: String)
     abstract fun removeQuest(entityId: UUID, questId: String)
-    
+
     /**
      * Check if a quest can be afforded by the given entity.
      */
     abstract fun canAffordQuest(quest: Quest, entityId: UUID): Boolean
-    
+
     /**
      * Complete a quest for the given entity, applying costs and rewards.
      * Returns true if successful.
@@ -63,16 +62,24 @@ abstract class IActionContext(
     abstract fun completeQuest(quest: Quest, entityId: UUID): Boolean
 
     abstract fun removeChallengeFromRegion(regionId: UUID, challengeId: UUID)
-    abstract fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<Approach>
     abstract fun getChallenge(challengeEntityId: UUID): Challenge
     abstract fun getChallenges(regionId: UUID): List<UUID>
 
     // Tag-based action discovery for mods
     abstract fun findActionsByTags(
+        entityId: UUID,
         requiredAllTags: List<Stat> = emptyList(),
         requiredAnyTags: List<Stat> = emptyList(),
         forbiddenTags: List<Stat> = emptyList()
     ): List<Action>
+
+    abstract fun findActionsByTags(
+        requiredAllTags: List<Stat> = emptyList(),
+        requiredAnyTags: List<Stat> = emptyList(),
+        forbiddenTags: List<Stat> = emptyList()
+    ): List<Action>
+
+    abstract fun isValidTarget(actionId: String, tags: List<Stat> = emptyList()): Boolean
 
     // Turn configuration methods for dynamic game state modification
     abstract fun setMinChallengePowerTier(tier: Int)

@@ -11,13 +11,16 @@ import heroes.journey.modlib.actions.Action;
 import heroes.journey.modlib.actions.ActionEntry;
 import heroes.journey.modlib.actions.ActionListResult;
 import heroes.journey.modlib.actions.ShowAction;
-import heroes.journey.ui.windows.ActionMenu;
+import heroes.journey.modlib.attributes.Stat;
+import heroes.journey.mods.Registries;
 import heroes.journey.utils.ai.MCTS;
 import heroes.journey.utils.ai.Scorer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static heroes.journey.mods.Registries.ActionManager;
 
@@ -41,7 +44,22 @@ public class MCTSAI implements AI, Scorer {
         PositionComponent position = PositionComponent.get(gameState.getWorld(), playingEntity);
 
         ActionContext input = new ActionContext(gameState, playingEntity, true);
-        addUsableActions(possibleActions, ActionMenu.getActionsFor(gameState, playingEntity), input,
+        Stat forbiddenTag = Registries.StatManager.get(Ids.GROUP_APPROACHES);
+
+        List<Action> actions;
+        if (forbiddenTag != null) {
+            actions = input.findActionsByTags(
+                input.getEntityId(), null, null,
+                Collections.singletonList(forbiddenTag)
+            );
+        } else {
+            actions = Collections.emptyList();
+        }
+
+        List<ActionEntry> options = actions.stream()
+            .map(a -> new ActionEntry(a.getId(), input.getHashMapCopy()))
+            .collect(Collectors.toList());
+        addUsableActions(possibleActions, options, input,
             position);
         return possibleActions;
     }

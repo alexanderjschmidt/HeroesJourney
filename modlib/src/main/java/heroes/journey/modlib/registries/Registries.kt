@@ -6,7 +6,6 @@ import heroes.journey.modlib.art.TextureMap
 import heroes.journey.modlib.attributes.Stat
 import heroes.journey.modlib.config.TurnConfig
 import heroes.journey.modlib.misc.Buff
-import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.worldgen.*
@@ -16,7 +15,6 @@ object Registries {
     open val StatManager: Registry<Stat> = Registry()
     open val BuffManager: Registry<Buff> = Registry()
     open val ChallengeManager: Registry<Challenge> = Registry()
-    open val ApproachManager: Registry<Approach> = Registry()
     open val ActionManager: Registry<Action> = Registry()
     open val TurnConfigManager: Registry<TurnConfig> = Registry()
     open val BiomeManager: Registry<Biome> = Registry()

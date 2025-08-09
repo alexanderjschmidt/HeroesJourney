@@ -8,7 +8,6 @@ import heroes.journey.modlib.actions.*
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.ui.HUD
 import heroes.journey.ui.screens.MainMenuScreen
-import heroes.journey.ui.windows.ActionMenu
 
 fun createCoreActions() {
     // Open Action Menu
@@ -17,7 +16,12 @@ fun createCoreActions() {
         isReturnsActionList = true
         requirementsMetFn = { ShowAction.NO }
         onSelectFn = { input ->
-            ActionListResult(ActionMenu.getActionsFor(input.gameState as GameState?, input.entityId))
+            val forbiddenTag = Registries.StatManager[Ids.GROUP_APPROACHES]
+            val actions = if (forbiddenTag != null) {
+                input.findActionsByTags(input.entityId!!, forbiddenTags = listOf(forbiddenTag))
+            } else emptyList()
+            val options = actions.map { a -> ActionEntry(a.id, input.getHashMapCopy()) }
+            ActionListResult(options)
         }
     }.register()
 

@@ -1,4 +1,6 @@
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.ActionEntry
+import heroes.journey.modlib.actions.ActionListResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.actions.targetAction
 import heroes.journey.modlib.misc.Challenge
@@ -17,14 +19,13 @@ action {
         challenge
     }
     onSelectFn = { input ->
-        val challengeEntityId = UUID.fromString(input["target"])
         input["challenge"] = input["target"]!!
         val optTag = Registries.StatManager[Ids.GROUP_APPROACHES]
         val actions = if (optTag != null) {
-            input.findActionsByTags(requiredAllTags = listOf(optTag))
+            input.findActionsByTags(input.entityId!!, requiredAllTags = listOf(optTag))
         } else emptyList()
-        val options = actions.map { a -> heroes.journey.modlib.actions.ActionEntry(a.id, input.getHashMapCopy()) }
-        heroes.journey.modlib.actions.ActionListResult(options)
+        val options = actions.map { a -> ActionEntry(a.id, input.getHashMapCopy()) }
+        ActionListResult(options)
     }
 }.register()
 
@@ -35,5 +36,5 @@ targetAction<UUID> {
         val regionId = input.getRegion(input.entityId!!)
         input.getChallenges(regionId)
     }
-    targetAction = heroes.journey.modlib.Ids.FACE_CHALLENGE
+    targetAction = Ids.FACE_CHALLENGE
 }.register()

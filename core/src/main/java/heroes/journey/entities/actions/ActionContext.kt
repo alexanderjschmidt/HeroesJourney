@@ -7,12 +7,11 @@ import heroes.journey.modlib.actions.Action
 import heroes.journey.modlib.actions.IActionContext
 import heroes.journey.modlib.attributes.Attributes
 import heroes.journey.modlib.attributes.Stat
-import heroes.journey.modlib.misc.Approach
 import heroes.journey.modlib.misc.Challenge
 import heroes.journey.modlib.misc.Quest
 import heroes.journey.modlib.registries.Registries
 import heroes.journey.modlib.utils.Position
-import heroes.journey.mods.Registries as CoreRegistries
+import heroes.journey.mods.Registries.ActionManager
 import heroes.journey.ui.HUD
 import heroes.journey.ui.infoproviders.BasicInfoProvider
 import heroes.journey.ui.infoproviders.LocationInfoProvider
@@ -20,6 +19,7 @@ import heroes.journey.ui.infoproviders.UIInfoProvider
 import heroes.journey.utils.Utils
 import heroes.journey.utils.ai.pathfinding.EntityCursorPathing
 import java.util.*
+import heroes.journey.mods.Registries as CoreRegistries
 
 class ActionContext(
     private val innerGameState: GameState,
@@ -180,36 +180,6 @@ class ActionContext(
         (gameState as GameState).world.delete(challengeId)
     }
 
-    override fun getApproachesFor(entityId: UUID, challengeEntityId: UUID): List<Approach> {
-        val possibleActionsComponent: PossibleActionsComponent =
-            PossibleActionsComponent.get(gameState.world, entityId) ?: return listOf()
-        val possibleApproaches: List<Approach> = possibleActionsComponent.possibleApproaches
-
-        val challenge = getChallenge(challengeEntityId)
-        val approaches: MutableList<Approach> = mutableListOf()
-        for (approach in possibleApproaches) {
-            if (isValidTarget(challenge.stats, approach)) {
-                approaches.add(approach)
-            }
-        }
-        return approaches
-    }
-
-    private fun isValidTarget(targetTags: List<Stat>, approach: Approach): Boolean {
-        // Must contain all requiredAllTags
-        if (!targetTags.containsAll(approach.requiredAllTags)) return false
-
-        // Must contain at least one of requiredAnyTags (if any are defined)
-        if (approach.requiredAnyTags.isNotEmpty() &&
-            targetTags.intersect(approach.requiredAnyTags.toSet()).isEmpty()
-        ) return false
-
-        // Must contain none of the forbiddenTags
-        if (targetTags.any { it in approach.forbiddenTags }) return false
-
-        return true
-    }
-
     override fun getStats(entityId: UUID): Attributes {
         return StatsComponent.get((gameState as GameState).world, entityId)
     }
@@ -237,10 +207,45 @@ class ActionContext(
         val actions = Registries.ActionManager.values
         return actions.filter { action ->
             if (!action.tags.containsAll(requiredAllTags)) return@filter false
-            if (requiredAnyTags.isNotEmpty() && action.tags.intersect(requiredAnyTags.toSet()).isEmpty()) return@filter false
+            if (requiredAnyTags.isNotEmpty() && action.tags.intersect(requiredAnyTags.toSet())
+                    .isEmpty()
+            ) return@filter false
             if (action.tags.any { it in forbiddenTags }) return@filter false
             true
         }
+    }
+
+    override fun findActionsByTags(
+        entityId: UUID,
+        requiredAllTags: List<Stat>,
+        requiredAnyTags: List<Stat>,
+        forbiddenTags: List<Stat>
+    ): List<Action> {
+        val actions = PossibleActionsComponent.get(gameState.world, entityId).possibleActions
+        return actions.filter { action ->
+            if (!action.tags.containsAll(requiredAllTags)) return@filter false
+            if (requiredAnyTags.isNotEmpty() && action.tags.intersect(requiredAnyTags.toSet())
+                    .isEmpty()
+            ) return@filter false
+            if (action.tags.any { it in forbiddenTags }) return@filter false
+            true
+        }
+    }
+
+    override fun isValidTarget(actionId: String, tags: List<Stat>): Boolean {
+        val action: Action = ActionManager[actionId]!!
+        // Must contain all requiredAllTags
+        if (!tags.containsAll(action.requiredAllTags)) return false
+
+        // Must contain at least one of requiredAnyTags (if any are defined)
+        if (action.requiredAnyTags.isNotEmpty() &&
+            tags.intersect(action.requiredAnyTags.toSet()).isEmpty()
+        ) return false
+
+        // Must contain none of the forbiddenTags
+        if (tags.any { it in action.forbiddenTags }) return false
+
+        return true
     }
 
     // Turn configuration methods for dynamic game state modification

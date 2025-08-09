@@ -1,11 +1,11 @@
-package challenges
+package actions
 
 import heroes.journey.modlib.Ids
+import heroes.journey.modlib.actions.ShowAction
 import heroes.journey.modlib.actions.StringResult
 import heroes.journey.modlib.actions.action
 import heroes.journey.modlib.attributes.attributes
 import heroes.journey.modlib.misc.Challenge
-import heroes.journey.modlib.registries.Registries
 import java.util.*
 
 // Approach Actions - independent actions tagged with GROUP_APPROACHES
@@ -16,6 +16,12 @@ action {
     tag(Ids.GROUP_APPROACHES)
     cost = attributes {
         stat(Ids.STAT_STAMINA, 30)
+    }
+    requiresAll(Ids.STAT_PHYSICAL)
+    requirementsMetFn = { input ->
+        val challengeEntityId = UUID.fromString(input["challenge"])
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
+        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
@@ -40,6 +46,13 @@ action {
         stat(Ids.STAT_STAMINA, 10)
         stat(Ids.STAT_FOCUS, 10)
     }
+    requiresAll(Ids.STAT_PHYSICAL)
+    forbids(Ids.STAT_FERAL)
+    requirementsMetFn = { input ->
+        val challengeEntityId = UUID.fromString(input["challenge"])
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
+        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
+    }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
         val challengeEntityId = UUID.fromString(input["challenge"])
@@ -62,6 +75,12 @@ action {
         stat(Ids.STAT_STAMINA, 5)
         stat(Ids.STAT_MANA, 20)
     }
+    requiresAny(Ids.STAT_PHYSICAL, Ids.STAT_INCORPOREAL)
+    requirementsMetFn = { input ->
+        val challengeEntityId = UUID.fromString(input["challenge"])
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
+        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
+    }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
         val challengeEntityId = UUID.fromString(input["challenge"])
@@ -83,6 +102,12 @@ action {
     cost = attributes {
         stat(Ids.STAT_STAMINA, 10)
         stat(Ids.STAT_MOXIE, 10)
+    }
+    requiresAll(Ids.STAT_SENTIENT)
+    requirementsMetFn = { input ->
+        val challengeEntityId = UUID.fromString(input["challenge"])
+        val challenge: Challenge = input.getChallenge(challengeEntityId)
+        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)

@@ -4,7 +4,6 @@ import heroes.journey.modlib.actions.Action;
 import heroes.journey.modlib.art.TextureMap;
 import heroes.journey.modlib.attributes.Stat;
 import heroes.journey.modlib.config.TurnConfig;
-import heroes.journey.modlib.misc.Approach;
 import heroes.journey.modlib.misc.Buff;
 import heroes.journey.modlib.misc.Challenge;
 import heroes.journey.modlib.misc.Quest;
@@ -23,7 +22,6 @@ public class Registries {
 
     public static Registry<Quest> QuestManager = heroes.journey.modlib.registries.Registries.INSTANCE.getQuestManager();
     public static Registry<Challenge> ChallengeManager = heroes.journey.modlib.registries.Registries.INSTANCE.getChallengeManager();
-    public static Registry<Approach> ApproachManager = heroes.journey.modlib.registries.Registries.INSTANCE.getApproachManager();
     public static Registry<TurnConfig> TurnConfigManager = heroes.journey.modlib.registries.Registries.INSTANCE.getTurnConfigManager();
 
     public static Registry<Biome> BiomeManager = heroes.journey.modlib.registries.Registries.INSTANCE.getBiomeManager();

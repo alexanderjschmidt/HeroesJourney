@@ -3,23 +3,19 @@ package heroes.journey.components;
 import heroes.journey.components.utils.PooledClonableComponent;
 import heroes.journey.modlib.actions.Action;
 import heroes.journey.modlib.actions.ActionEntry;
-import heroes.journey.modlib.misc.Approach;
 import heroes.journey.systems.GameWorld;
 
 import java.util.*;
 
 import static heroes.journey.mods.Registries.ActionManager;
-import static heroes.journey.mods.Registries.ApproachManager;
 
 public class PossibleActionsComponent extends PooledClonableComponent<PossibleActionsComponent> {
 
     private final Set<String> possibleActions;
-    private final Set<String> possibleApproaches;
     private final Map<String, Integer> cooldowns;
 
     public PossibleActionsComponent() {
         possibleActions = new HashSet<>();
-        possibleApproaches = new HashSet<>();
         cooldowns = new HashMap<>();
     }
 
@@ -31,17 +27,12 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
         }).toList();
     }
 
-    public List<Approach> getPossibleApproaches() {
-        return ApproachManager.get(possibleApproaches.stream().toList());
+    public List<Action> getPossibleActions() {
+        return ActionManager.get(possibleActions.stream().toList());
     }
 
     public PossibleActionsComponent addAction(String actionId) {
         possibleActions.add(actionId);
-        return this;
-    }
-
-    public PossibleActionsComponent addApproach(String approachId) {
-        possibleApproaches.add(approachId);
         return this;
     }
 
@@ -57,14 +48,12 @@ public class PossibleActionsComponent extends PooledClonableComponent<PossibleAc
     @Override
     protected void reset() {
         possibleActions.clear();
-        possibleApproaches.clear();
         cooldowns.clear();
     }
 
     @Override
     public void copy(PossibleActionsComponent from) {
         possibleActions.addAll(from.possibleActions);
-        possibleApproaches.addAll(from.possibleApproaches);
         cooldowns.putAll(from.cooldowns);
     }
 
