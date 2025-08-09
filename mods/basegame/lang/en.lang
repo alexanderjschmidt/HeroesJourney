@@ -60,8 +60,8 @@ TOWN_name=Town
 TOWN_description=
 DUNGEON_name=Dungeon
 DUNGEON_description=
-MINE_name=Mine
-MINE_description=
+mine_name=Mine
+mine_description=
 
 # Actions (sample, add more as needed)
 delve_name=Delve

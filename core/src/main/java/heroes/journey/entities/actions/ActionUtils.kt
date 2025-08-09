@@ -11,8 +11,9 @@ object ActionUtils {
     @JvmStatic
     fun requirementsMet(action: Action, input: IActionContext): ShowAction {
         val ctx = input as? ActionContext ?: error("Expected ActionContext")
+        val show = action.requirementsMetFn(ctx)
         val cooldownComponent = getCooldownComponent(ctx)
-        if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(action.id)) return ShowAction.GRAYED
+        if (cooldownComponent != null && cooldownComponent.cooldowns.containsKey(action.id)) return show.and(ShowAction.GRAYED)
 
         // Check if entity can afford the cost
         val cost = action.cost
@@ -21,12 +22,12 @@ object ActionUtils {
             for ((stat, requiredAmount) in cost) {
                 val availableAmount: Int? = entityStats[stat]
                 if (requiredAmount != null && (availableAmount == null || availableAmount < requiredAmount)) {
-                    return ShowAction.GRAYED
+                    return show.and(ShowAction.GRAYED)
                 }
             }
         }
 
-        return action.requirementsMetFn(ctx)
+        return show
     }
 
     @JvmStatic

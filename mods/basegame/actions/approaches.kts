@@ -21,7 +21,7 @@ action {
     requirementsMetFn = { input ->
         val challengeEntityId = UUID.fromString(input["challenge"])
         val challenge: Challenge = input.getChallenge(challengeEntityId)
-        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
+        if (input.isValidTarget(Ids.APPROACH_FIGHT, challenge.stats)) ShowAction.YES else ShowAction.NO
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
@@ -51,7 +51,7 @@ action {
     requirementsMetFn = { input ->
         val challengeEntityId = UUID.fromString(input["challenge"])
         val challenge: Challenge = input.getChallenge(challengeEntityId)
-        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
+        if (input.isValidTarget(Ids.APPROACH_TRICK, challenge.stats)) ShowAction.YES else ShowAction.NO
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
@@ -79,7 +79,7 @@ action {
     requirementsMetFn = { input ->
         val challengeEntityId = UUID.fromString(input["challenge"])
         val challenge: Challenge = input.getChallenge(challengeEntityId)
-        if (input.isValidTarget(Ids.APPROACH_NEGOTIATE, challenge.stats)) ShowAction.YES else ShowAction.NO
+        if (input.isValidTarget(Ids.APPROACH_MAGIC_MISSILE, challenge.stats)) ShowAction.YES else ShowAction.NO
     }
     onSelectFn = { input ->
         val regionId = input.getRegion(input.entityId!!)
